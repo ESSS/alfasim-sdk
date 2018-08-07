@@ -1,0 +1,13 @@
+name: alfasim-sdk
+
+
+dependencies:
+    - click
+    - pytest
+    - pytest-cov
+    - pytest-datadir
+    - pytest-mock
+
+environment:
+  PYTHONPATH:
+    - {{ os.path.join(root) }}
