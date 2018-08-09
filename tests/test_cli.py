@@ -28,8 +28,8 @@ def test_command_package(tmpdir):
         f'--dst={Path(tmpdir)}',
     ])
 
-    # Creating a fake build.py file and a fake shared library
-    (plugin_dir / 'build.py').write_text(data='', encoding='utf-8')
+    # Creating a fake compile.py file and a fake shared library
+    (plugin_dir / 'compile.py').write_text(data='', encoding='utf-8')
     artifacts_dir.mkdir()
     lib_file.write_text('', encoding='utf-8')
 
@@ -62,9 +62,9 @@ def test_command_template(tmpdir):
 def test_compile_command(tmpdir):
     runner = CliRunner()
     result = runner.invoke(cli.main, ['compile', '--plugin-dir', tmpdir])
-    assert f"Was not possible to find a build.py file in {tmpdir}" == result.exception.args[0]
+    assert f"Was not possible to find a compile.py file in {tmpdir}" == result.exception.args[0]
 
-    (tmpdir / 'build.py').write_text(data='', encoding='utf-8')
+    (tmpdir / 'compile.py').write_text(data='', encoding='utf-8')
     result = runner.invoke(cli.main, ['compile', '--plugin-dir', tmpdir])
     assert result.exception is None
     assert result.output == ''

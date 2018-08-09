@@ -54,11 +54,11 @@ def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
     help='Path to the plugin directory')
 def _compile(plugin_dir):
     plugin_dir = Path(plugin_dir)
-    build_script = plugin_dir / 'build.py'
-    if not build_script.is_file():
-        raise FileNotFoundError(f"Was not possible to find a build.py file in {plugin_dir}")
+    compile_script = plugin_dir / 'compile.py'
+    if not compile_script.is_file():
+        raise FileNotFoundError(f"Was not possible to find a compile.py file in {plugin_dir}")
 
-    subprocess.run(['python', str(build_script)])
+    subprocess.run(['python', str(compile_script)])
 
 @main.command()
 @click.option('--plugin-dir',
