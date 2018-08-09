@@ -42,7 +42,7 @@ def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
     hm.generate_plugin_template(plugin_name, shared_lib_name, author_email, author_name, dst)
 
 
-@main.command()
+@main.command(name='compile',)
 @click.option('--plugin-dir',
     default=os.getcwd(),
     type=click.Path(
@@ -52,7 +52,7 @@ def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
         resolve_path=True
     ),
     help='Path to the plugin directory')
-def compile(plugin_dir):
+def _compile(plugin_dir):
     plugin_dir = Path(plugin_dir)
     build_script = plugin_dir / 'build.py'
     if not build_script.is_file():
@@ -82,7 +82,7 @@ def compile(plugin_dir):
 @click.option('--package-name', prompt='-- Package Name', help='Name of the package')
 @click.pass_context
 def package(ctx, plugin_dir, package_name, dst):
-    ctx.invoke(compile, plugin_dir=plugin_dir)
+    ctx.invoke(_compile, plugin_dir=plugin_dir)
     plugin_dir = Path(plugin_dir)
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
