@@ -14,7 +14,7 @@ install:
 build: false  # Not a C# project, build stuff at the test step instead.
 
 test_script:
-  - python -m tox
+  - "%PYTHON%/Scripts/tox -e %TOX_ENV%"
 
 
 
