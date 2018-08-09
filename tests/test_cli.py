@@ -28,6 +28,8 @@ def test_command_package(tmpdir):
         f'--dst={Path(tmpdir)}',
     ])
 
+    # Creating a fake build.py file and a fake shared library
+    (plugin_dir / 'build.py').write_text(data='', encoding='utf-8')
     artifacts_dir.mkdir()
     lib_file.write_text('', encoding='utf-8')
 

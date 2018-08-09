@@ -80,7 +80,9 @@ def compile(plugin_dir):
     ),
     help='A path to where the output package should be created.')
 @click.option('--package-name', prompt='-- Package Name', help='Name of the package')
-def package(plugin_dir, package_name, dst):
+@click.pass_context
+def package(ctx, plugin_dir, package_name, dst):
+    ctx.invoke(compile, plugin_dir=plugin_dir)
     plugin_dir = Path(plugin_dir)
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
