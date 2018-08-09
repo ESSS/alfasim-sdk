@@ -91,10 +91,8 @@ def package(ctx, plugin_dir, package_name, dst):
 
 
 def _get_hook_specs_file_path():
-    import importlib
-    hook_spec = importlib.util.find_spec('alfasim_sdk.hook_specs')
-    hook_spec_path = Path(hook_spec.origin)
-    return hook_spec_path
+    import alfasim_sdk.hook_specs
+    return Path(alfasim_sdk.hook_specs.__file__)
 
 
 if __name__ == "__main__":
