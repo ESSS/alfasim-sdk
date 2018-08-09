@@ -4,11 +4,30 @@ import sys
 from pathlib import Path
 
 import click
-
 from hookman.hookman_generator import HookManGenerator
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
+plugin_dir_option = click.option('--plugin-dir',
+    default=os.getcwd(),
+    type=click.Path(
+        exists=True,
+        file_okay=False,
+        writable=True,
+        resolve_path=True
+    ),
+    help='Path to the plugin directory, where configuration and the shared library is located.')
+
+def destination_option(*, help):
+    return click.option('--dst',
+        default=os.getcwd(),
+        type=click.Path(
+            exists=True,
+            file_okay=False,
+            writable=True,
+            resolve_path=True
+        ),
+        help=help)
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 def main():
@@ -19,20 +38,12 @@ def main():
 
 
 @main.command()
-@click.option('--dst',
-    default=os.getcwd(),
-    type=click.Path(
-        exists=True,
-        file_okay=False,
-        writable=True,
-        resolve_path=True
-    ),
-    help='Path to where the template generated should be placed')
+@destination_option(help='A path to where the output package should be created.')
 @click.option('--plugin-name', prompt='-- Plugin Name', help='Name of the plugin to be displayed')
 @click.option('--shared-lib-name', prompt='-- Shared Library Name', help='The filename of the compiled plugin')
 @click.option('--author-name', prompt='-- Author Name', help='Name of the plugin author to be displayed')
 @click.option('--author-email', prompt='-- Author Email', help='Email of the plugin author to be displayed')
-def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
+def template(dst, plugin_name, shared_lib_name, author_name, author_email, ):
     """
     Console script for alfasim_sdk.
     """
@@ -42,16 +53,8 @@ def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
     hm.generate_plugin_template(plugin_name, shared_lib_name, author_email, author_name, dst)
 
 
-@main.command(name='compile',)
-@click.option('--plugin-dir',
-    default=os.getcwd(),
-    type=click.Path(
-        exists=True,
-        file_okay=False,
-        writable=True,
-        resolve_path=True
-    ),
-    help='Path to the plugin directory')
+@main.command(name='compile')
+@plugin_dir_option
 def _compile(plugin_dir):
     plugin_dir = Path(plugin_dir)
     compile_script = plugin_dir / 'compile.py'
@@ -60,27 +63,12 @@ def _compile(plugin_dir):
 
     subprocess.run(['python', str(compile_script)])
 
+
 @main.command()
-@click.option('--plugin-dir',
-    default=os.getcwd(),
-    type=click.Path(
-        exists=True,
-        file_okay=False,
-        writable=True,
-        resolve_path=True
-    ),
-    help='Path to the plugin directory, where configuration and the shared library is located.')
-@click.option('--dst',
-    default=os.getcwd(),
-    type=click.Path(
-        exists=True,
-        file_okay=False,
-        writable=True,
-        resolve_path=True
-    ),
-    help='A path to where the output package should be created.')
-@click.option('--package-name', prompt='-- Package Name', help='Name of the package')
 @click.pass_context
+@plugin_dir_option
+@destination_option(help='A path to where the output package should be created.')
+@click.option('--package-name', prompt='-- Package Name', help='Name of the package')
 def package(ctx, plugin_dir, package_name, dst):
     ctx.invoke(_compile, plugin_dir=plugin_dir)
     plugin_dir = Path(plugin_dir)
