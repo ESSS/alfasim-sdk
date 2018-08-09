@@ -21,7 +21,12 @@ def main():
 @main.command()
 @click.option('--dst',
     default=os.getcwd(),
-    type=click.Path(exists=True, file_okay=False, writable=True, resolve_path=True),
+    type=click.Path(
+        exists=True,
+        file_okay=False,
+        writable=True,
+        resolve_path=True
+    ),
     help='Path to where the template generated should be placed')
 @click.option('--plugin-name', prompt='-- Plugin Name', help='Name of the plugin to be displayed')
 @click.option('--shared-lib-name', prompt='-- Shared Library Name', help='The filename of the compiled plugin')
@@ -38,31 +43,50 @@ def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
 
 
 @main.command()
-@click.option('--src',
+@click.option('--plugin-dir',
     default=os.getcwd(),
-    type=click.Path(exists=True, file_okay=False, writable=True, resolve_path=True),
-    help='Path to where the plugin folder is located')
-def compile(src):
-    src = Path(src)
-    build_script = src / 'build.py'
+    type=click.Path(
+        exists=True,
+        file_okay=False,
+        writable=True,
+        resolve_path=True
+    ),
+    help='Path to the plugin directory')
+def compile(plugin_dir):
+    plugin_dir = Path(plugin_dir)
+    build_script = plugin_dir / 'build.py'
     if not build_script.is_file():
-        raise FileNotFoundError(f"Was not possible to find a build.py file in {src}")
+        raise FileNotFoundError(f"Was not possible to find a build.py file in {plugin_dir}")
 
     subprocess.run(['python', str(build_script)])
 
-
+@main.command()
 @click.option('--plugin-dir',
-    type=click.Path(exists=True,resolve_path=True),
-    help='Path to the plugin directory, where configuration and the shared library is located.' )
-def package(plugin_dir):
-    if plugin_dir is None:
-        plugin_dir = Path(os.getcwd())
+    default=os.getcwd(),
+    type=click.Path(
+        exists=True,
+        file_okay=False,
+        writable=True,
+        resolve_path=True
+    ),
+    help='Path to the plugin directory, where configuration and the shared library is located.')
+@click.option('--dst',
+    default=os.getcwd(),
+    type=click.Path(
+        exists=True,
+        file_okay=False,
+        writable=True,
+        resolve_path=True
+    ),
+    help='A path to where the output package should be created.')
+@click.option('--package-name', prompt='-- Package Name', help='Name of the package')
+def package(plugin_dir, package_name, dst):
     plugin_dir = Path(plugin_dir)
-
+    dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    hm.generate_plugin_package(plugin_dir)
-    return 0
+    hm.generate_plugin_package(package_name, plugin_dir, dst)
+
 
 def _get_hook_specs_file_path():
     import importlib
