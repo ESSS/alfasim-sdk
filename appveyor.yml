@@ -3,7 +3,7 @@ skip_branch_with_pr: true
 environment:
   matrix:
     - PYTHON: "C:\\Python36"
-      TOXENV: "py36"
+      TOX_ENV: "py36"
 
 platform:
     - x64
