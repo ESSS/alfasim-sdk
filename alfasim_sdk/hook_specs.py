@@ -1,4 +1,4 @@
-from hookman.hooks import HooksSpecs
+from hookman.hooks import HookSpecs
 
 
 def friction_factor(v1: 'int', v2: 'int') -> 'int':
@@ -35,7 +35,7 @@ def calculate_entrained_liquid_fraction(
     """
 
 
-specs = HooksSpecs(
+specs = HookSpecs(
     project_name='Alfasim',
     version='1',
     pyd_name='_alfasim_hooks',
