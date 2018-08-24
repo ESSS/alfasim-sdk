@@ -3,6 +3,8 @@
 	<name>alfasim-sdk</name>
 	<comment></comment>
 	<projects>
+		<project>eden</project>
+		<project>hookman</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
