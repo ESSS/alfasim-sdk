@@ -1,25 +1,20 @@
 language: python
 python:
-  - 3.6
-
+- 3.6
 install:
-  - pip install -U pip
-  - pip install -U tox-travis
-
-# Command to run tests, e.g. python setup.py test
+- pip install -U pip tox-travis
 script: tox
-
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: esss
+  user: williamjamir
   password:
-    secure: PLEASE_REPLACE_ME
+    secure: dp+xPpqF+Uvft7tZGAh1oZaVyCMJza2pmGqmJcmNOIfTvra/NJmyAc34uC84pJ/wWQydVapncZVvRrK53Fy6Qg/k6yC63/OBnvHlLXQNkNLOx/xZZeojY94RYS6kyPeaoRFhdp3vRCF+KAp401ubUX8DZA4dBmtdqLuZ/bIbgUF9OH8/Wh3R/Ep4Cgn0oHnplYTJ21rPrnRdpuSnPmc7pJZraDBbTsBYBxT30qMxoKgx+3DzDBxsGd9YFVk2s6geO4Pvv3mMONzvCilEXOicNRfkJ2IvhxZyrPrFMt2TpmiqPRYE+SxR35NGx2X9/6A0uC7l2F6lLlhVnzf7rTq4fo9xT7pVPryjO56jvP5wHiMhWC7ihVGRdYAehFKAo+X8veWgXYpBDxGmg8mpYd7epyvUshtZFKvAHT01UnE1a1RUtPsVZH4KMfmRsUgbziCU1vyij+1mQJGYHrjdG+qQ8kxgYTrfnLK4iTrO0Mg02mnrgzJLTErZK+RZOoeZnLT01knlGXz1aHehlFEihSJv3N8OBhitCKFZi6qCo+NQJSEXv4FLSfnKVTFHIabbBbfrXdsDD3bT86Ltm9C1i0CQvKfMfPpQCb4JQkdk6RdxQmZY/SGcyN0TBJKNpkgE0JtNh4VDQGIzT9tQRuOT2gGjZQhh5Hk6wreE7ycaMNdASa4=
   on:
     tags: true
-    repo: esss/alfasim_sdk
+    repo: ESSS/alfasim_sdk
     python: 3.6
+branches:
+  only:
+  - master
+  - "/v(\\d+\\.)*\\d/"
