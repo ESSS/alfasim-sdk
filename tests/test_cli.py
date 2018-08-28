@@ -13,7 +13,7 @@ def test_command_package(tmpdir):
     import sys
     from pathlib import Path
     runner = CliRunner()
-    plugin_dir = Path(tmpdir / 'Acme')
+    plugin_dir = Path(tmpdir / 'acme')
     artifacts_dir = plugin_dir / 'artifacts'
 
     lib_name = 'acme.dll' if sys.platform == 'win32' else 'libacme.so'
