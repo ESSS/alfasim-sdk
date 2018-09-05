@@ -11,10 +11,6 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['Click>=6.0', ]
 
-setup_requirements = ['pytest-runner', ]
-
-test_requirements = ['pytest', ]
-
 setup(
     author="ESSS",
     author_email='foss@esss.co',
@@ -40,10 +36,8 @@ setup(
     keywords='alfasim-sdk',
     name='alfasim-sdk',
     packages=find_packages(include=['alfasim-sdk']),
-    setup_requires=setup_requirements,
-    test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/esss/alfasim-sdk',
-    version='0.1.0',
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     zip_safe=False,
 )
