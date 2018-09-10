@@ -14,9 +14,9 @@ def env_temperature(v3: 'float', v4: 'float') -> 'float':
 
 
 def calculate_entrained_liquid_fraction(
-    U_S: 'double[2]',
-    rho: 'double[2]',
-    mu: 'double[2]',
+    U_S: 'const double[2]',
+    rho: 'const double[2]',
+    mu: 'const double[2]',
     sigma: 'double',
     D: 'double',
     ) -> 'double':
