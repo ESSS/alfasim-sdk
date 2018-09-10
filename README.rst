@@ -3,11 +3,11 @@ alfasim-sdk
 ===========
 
 
-.. image:: https://img.shields.io/pypi/v/alfasim_sdk.svg
-        :target: https://pypi.python.org/pypi/alfasim_sdk
+.. image:: https://img.shields.io/pypi/v/alfasim-sdk.svg
+        :target: https://pypi.python.org/pypi/alfasim-sdk
 
-.. image:: https://img.shields.io/travis/esss/alfasim_sdk.svg
-        :target: https://travis-ci.org/esss/alfasim_sdk
+.. image:: https://img.shields.io/travis/ESSS/alfasim-sdk.svg
+        :target: https://travis-ci.org/ESSS/alfasim-sdk
 
 .. image:: https://readthedocs.org/projects/alfasim-sdk/badge/?version=latest
         :target: https://alfasim-sdk.readthedocs.io/en/latest/?badge=latest
