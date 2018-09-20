@@ -8,11 +8,27 @@ from attr.validators import instance_of, optional
 
 @attr.s
 class BaseField:
-    CAPTION: str = attrib(validator=instance_of(str))
+    """
+    Base class for all widget fields available at alfasim.
+    """
+    caption: str = attrib(validator=instance_of(str))
 
 
 @attr.s
 class String(BaseField):
+    """
+    The String represents an input that the user can provide a string text for the application.
+
+    GUI Representation:
+    On the GUI interface, the String represent an text input with a one-line text editor.
+
+    Properties:
+    caption - property used as a label for the text input.
+    value   - property that holds the value informed from the user, or the default value that
+              should be displayed for the user.
+
+
+    """
     value: str = attrib(validator=instance_of(str))
 
 
