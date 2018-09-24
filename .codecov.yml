@@ -31,3 +31,5 @@ ignore:
   - "tasks.py"
   - "setup.py"
   - "hook_specs_*.py"
+  - "hook_specs_gui.py"
+
