@@ -18,17 +18,17 @@ def test_enum():
         Enum(value=['s'], initial='')
 
     with pytest.raises(TypeError,
-        match="value must be a sequence type \(list or set only\), got a <class 'str'>."):
+        match="value must be a sequence type \(list only\), got a <class 'str'>."):
         Enum(value='', caption='')
 
     with pytest.raises(TypeError, match="value must be a \(list or tuple\) of string."):
         Enum(value=[1], caption='')
 
-    enumerate = Enum(value=[''], caption='')
-    assert enumerate.initial is None
+    enum = Enum(value=[''], caption='')
+    assert enum.initial is None
 
-    enumerate = Enum(value=[''], initial='', caption='')
-    assert enumerate.initial == ''
+    enum = Enum(value=[''], initial='', caption='')
+    assert enum.initial == ''
 
     with pytest.raises(TypeError, match="The initial condition must be within the declared values"):
         Enum(value=['value1, value2'], initial='', caption='')
@@ -71,7 +71,7 @@ def test_table():
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
         Table(value='')
 
-    with pytest.raises(TypeError, match="value must be a sequence type \(list or set only\)"):
+    with pytest.raises(TypeError, match="value must be a sequence type \(list only\)"):
         Table(value='', caption='')
 
     with pytest.raises(TypeError, match="value must be a \(list or tuple\) of Quantity."):

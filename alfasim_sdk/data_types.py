@@ -39,8 +39,8 @@ class Enum(BaseField):
 
     @value.validator
     def check(self, attr, values):
-        if not isinstance(values, (list, set)):
-            raise TypeError(f"{attr.name} must be a sequence type (list or set only), got a {type(values)}.")
+        if not isinstance(values, list):
+            raise TypeError(f"{attr.name} must be a sequence type (list only), got a {type(values)}.")
 
         if not all(isinstance(value, str) for value in values):
             raise TypeError(f"{attr.name} must be a (list or tuple) of string.")
@@ -72,8 +72,8 @@ class Table(BaseField):
 
     @value.validator
     def check(self, attr, values):
-        if not isinstance(values, (list, set)):
-            raise TypeError(f"{attr.name} must be a sequence type (list or set only), got a {type(values)}.")
+        if not isinstance(values, list):
+            raise TypeError(f"{attr.name} must be a sequence type (list only), got a {type(values)}.")
 
         if not all(isinstance(value, Quantity) for value in values):
             raise TypeError(f"{attr.name} must be a (list or tuple) of Quantity.")

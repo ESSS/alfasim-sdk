@@ -30,4 +30,4 @@ ignore:
   - "build/**/*"
   - "tasks.py"
   - "setup.py"
-  - "alfasim_sdk\hook_specs_gui.py"
+  - "hook_specs_*.py"
