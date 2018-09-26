@@ -18,10 +18,10 @@ def test_enum():
         Enum(value=['s'], initial='')
 
     with pytest.raises(TypeError,
-        match="value must be a sequence type \(list only\), got a <class 'str'>."):
+        match="value must be a list, got a <class 'str'>."):
         Enum(value='', caption='')
 
-    with pytest.raises(TypeError, match="value must be a \(list or tuple\) of string."):
+    with pytest.raises(TypeError, match="value must be a list of string."):
         Enum(value=[1], caption='')
 
     enum = Enum(value=[''], caption='')
@@ -46,7 +46,7 @@ def test_data_reference():
     with pytest.raises(TypeError, match="arg 1 must be a class"):
         DataReference(value='', caption='')
 
-    with pytest.raises(TypeError, match="value must be a valid AlfaSim type"):
+    with pytest.raises(TypeError, match="value must be a valid ALFASim type"):
         DataReference(value=Data1, caption='')
 
     assert DataReference(value=TracerType, caption='') is not None
@@ -69,13 +69,26 @@ def test_table():
     from alfasim_sdk.data_types import Table
 
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
-        Table(value='')
+        Table(rows=[])
 
-    with pytest.raises(TypeError, match="value must be a sequence type \(list only\)"):
-        Table(value='', caption='')
+    with pytest.raises(TypeError, match="rows must be a list, got a <class 'str'>."):
+        Table(rows='', caption='')
 
-    with pytest.raises(TypeError, match="value must be a \(list or tuple\) of Quantity."):
-        Table(value=[''], caption='')
+    with pytest.raises(TypeError, match="rows must be a list with TableColumn."):
+        Table(rows=[], caption='')
+
+    with pytest.raises(TypeError, match="rows must be a list of TableColumn."):
+        Table(rows=[''], caption='')
+
+
+def test_table_column():
+    from alfasim_sdk.data_types import TableColumn, Quantity
+
+    with pytest.raises(TypeError, match="value must be a Quantity, got a <class 'str'>."):
+        TableColumn(id='', value='')
+
+    column = TableColumn(id='', value=Quantity(value=1, unit='m', caption='CAPTION FOR COLUMN'))
+    assert column.caption == column.value.caption
 
 
 def test_boolean():

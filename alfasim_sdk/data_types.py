@@ -40,10 +40,10 @@ class Enum(BaseField):
     @value.validator
     def check(self, attr, values):
         if not isinstance(values, list):
-            raise TypeError(f"{attr.name} must be a sequence type (list only), got a {type(values)}.")
+            raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
         if not all(isinstance(value, str) for value in values):
-            raise TypeError(f"{attr.name} must be a (list or tuple) of string.")
+            raise TypeError(f"{attr.name} must be a list of string.")
 
         if self.initial is not None:
             if self.initial not in values:
@@ -57,7 +57,7 @@ class DataReference(BaseField):
     @value.validator
     def check(self, attr, value):
         if not issubclass(value, AlfaSimType):
-            raise TypeError(f"{attr.name} must be a valid AlfaSim type")
+            raise TypeError(f"{attr.name} must be a valid ALFASim type")
 
 
 @attr.s
@@ -67,16 +67,34 @@ class Quantity(BaseField):
 
 
 @attr.s
-class Table(BaseField):
-    value: List[Quantity] = attrib()
+class TableColumn(BaseField):
+    id: str = attrib(validator=instance_of(str))
+    value: Quantity = attrib()
+    caption = attrib(init=False, default='')
+
+    def __attrs_post_init__(self):
+        self.caption = self.value.caption
 
     @value.validator
     def check(self, attr, values):
-        if not isinstance(values, list):
-            raise TypeError(f"{attr.name} must be a sequence type (list only), got a {type(values)}.")
+        if not isinstance(values, Quantity):
+            raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
-        if not all(isinstance(value, Quantity) for value in values):
-            raise TypeError(f"{attr.name} must be a (list or tuple) of Quantity.")
+
+@attr.s
+class Table(BaseField):
+    rows: List[TableColumn] = attrib()
+
+    @rows.validator
+    def check(self, attr, values):
+        if not isinstance(values, list):
+            raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
+
+        if not values:
+            raise TypeError(f"{attr.name} must be a list with TableColumn.")
+
+        if not all(isinstance(value, TableColumn) for value in values):
+            raise TypeError(f"{attr.name} must be a list of TableColumn.")
 
 
 @attr.s
