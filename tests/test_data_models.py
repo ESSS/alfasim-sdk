@@ -9,7 +9,7 @@ def user_data_model():
     class ValidType(BaseField):
         pass
 
-    @data_model(icon="model.png", caption='PLUGIN DEVELOPER MODEL')
+    @data_model(icon="model.png", caption='PLUGIN DEV MODEL')
     class Model:
         valid_attribute = ValidType(caption="valid")
         _invalid_attribute = ValidType(caption="invalid")
@@ -25,8 +25,7 @@ def user_data_container(user_data_model):
     class ValidType(BaseField):
         pass
 
-    @container_model(
-        model=user_data_model, icon="container.png", caption='PLUGIN DEVELOPER CONTAINER')
+    @container_model(model=user_data_model, icon="container.png", caption='PLUGIN DEV CONTAINER')
     class Container:
         container_valid_attribute = ValidType(caption="valid")
         _container_invalid_attribute = ValidType(caption="invalid")
@@ -37,12 +36,14 @@ def user_data_container(user_data_model):
 def test_data_model(user_data_model):
     import attr
 
+    # Attributes from the class, should be accessed by _alfasim_metadata
+    assert user_data_model._alfasim_metadata['caption'] == 'PLUGIN DEV MODEL'
+    assert user_data_model._alfasim_metadata['icon'] == 'model.png'
+
     # "data_model" should not have references to others model
-    assert attr.fields(user_data_model).model.default is None
+    assert user_data_model._alfasim_metadata['model'] is None
 
-    assert attr.fields(user_data_model).caption.default == 'PLUGIN DEVELOPER MODEL'
-    assert attr.fields(user_data_model).icon.default == 'model.png'
-
+    # Attributes defined from the user should be accessed by attr fields
     assert attr.fields(user_data_model).valid_attribute is not None
 
     # Attributes with "_" at the beginning are reserved for application usage
@@ -52,11 +53,11 @@ def test_data_model(user_data_model):
 def test_data_container(user_data_container):
     import attr
 
-    assert attr.fields(user_data_container).model.default is not None
-    assert 'Model' in str(attr.fields(user_data_container).model.default)
+    assert user_data_container._alfasim_metadata['model'] is not None
+    assert 'Model' in str(user_data_container._alfasim_metadata['model'])
 
-    assert attr.fields(user_data_container).caption.default == 'PLUGIN DEVELOPER CONTAINER'
-    assert attr.fields(user_data_container).icon.default == 'container.png'
+    assert user_data_container._alfasim_metadata['caption'] == 'PLUGIN DEV CONTAINER'
+    assert user_data_container._alfasim_metadata['icon'] == 'container.png'
 
     assert attr.fields(user_data_container).container_valid_attribute is not None
     assert not hasattr(attr.fields(user_data_container), '_container_invalid_attribute')

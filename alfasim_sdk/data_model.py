@@ -17,20 +17,23 @@ def container_model(*, model: type, caption: str, icon: Optional[str]):
     for this user-declared model.
 
     1) Application Required:
+    All properties that are required from the application can be accessed from _alfasim_metadata.
+
+    Currently the following options are available:
         - caption: A text to be displayed
         - icon: Name of the icon available at resource folder to be used over the TreeStructure
         - model: A reference for a user-declared class that has the @data_model decorator.
 
     2) User described:
-       Check the module alfasim_sdk.data_types to verify all properties that the user can describe
+        All properties defined from the user can be accessed by attrs fields.
+        Check the module alfasim_sdk.data_types to verify all properties that the user can describe.
     """
 
     def apply(class_):
-        setattr(class_, 'model', attr.ib(default=model))
 
         @functools.wraps(class_)
         def wrap_class(class_, caption, icon):
-            return _wrap(caption, icon, class_)
+            return _wrap(caption, icon, model, class_)
 
         return wrap_class(class_, caption, icon)
 
@@ -45,11 +48,16 @@ def data_model(*, caption: str, icon: Optional[str]=None):
         2) User described.
 
     1) Application Required:
+    All properties that are required from the application can be accessed from _alfasim_metadata.
+
+    Currently the following options are available:
         - caption: A text to be displayed
         - icon: Name of the icon available at resource folder to be used over the TreeStructure
+        - model: None (data_model cannot reference another model).
 
     2) User described:
-       Check the module alfasim_sdk.data_types to verify all properties that the user can describe
+        All properties defined from the user can be accessed by attrs fields.
+        Check the module alfasim_sdk.data_types to verify all properties that the user can describe.
     """
 
     def apply(class_: type):
@@ -57,22 +65,27 @@ def data_model(*, caption: str, icon: Optional[str]=None):
 
         @functools.wraps(class_)
         def wrap_class(class_: type, caption: str, icon: Optional[str]):
-            return _wrap(caption, icon, class_)
+            return _wrap(caption, icon, None, class_)
 
         return wrap_class(class_, caption, icon)
 
     return apply
 
 
-def _wrap(caption: str, icon: Optional[str], class_: type):
+def _wrap(caption: str, icon: Optional[str], model: Optional[type], class_: type):
     for name in dir(class_):
         value = getattr(class_, name)
 
         if isinstance(value, BaseField):
             if name.startswith('_'):
                 continue
+                # raise error
             new_value = attr.ib(default=value)
             setattr(class_, name, new_value)
-    setattr(class_, 'caption', attr.ib(default=caption))
-    setattr(class_, 'icon', attr.ib(default=icon))
+
+    class_._alfasim_metadata = {
+        'caption': caption,
+        'icon': icon,
+        'model': model,
+    }
     return attr.s(class_)
