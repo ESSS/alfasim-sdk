@@ -3,8 +3,8 @@ import pytest
 
 @pytest.fixture
 def user_data_model():
-    from alfasim_sdk.data_model import data_model
-    from alfasim_sdk.data_types import BaseField
+    from alfasim_sdk.models import data_model
+    from alfasim_sdk.types import BaseField
 
     class ValidType(BaseField):
         pass
@@ -19,8 +19,8 @@ def user_data_model():
 
 @pytest.fixture
 def user_data_container(user_data_model):
-    from alfasim_sdk.data_model import container_model
-    from alfasim_sdk.data_types import BaseField
+    from alfasim_sdk.models import container_model
+    from alfasim_sdk.types import BaseField
 
     class ValidType(BaseField):
         pass

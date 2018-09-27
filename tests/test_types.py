@@ -2,7 +2,7 @@ import pytest
 
 
 def test_string():
-    from alfasim_sdk.data_types import String
+    from alfasim_sdk.types import String
 
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
         String(value='acme')
@@ -12,7 +12,7 @@ def test_string():
 
 
 def test_enum():
-    from alfasim_sdk.data_types import Enum
+    from alfasim_sdk.types import Enum
 
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
         Enum(value=['s'], initial='')
@@ -35,7 +35,7 @@ def test_enum():
 
 
 def test_data_reference():
-    from alfasim_sdk.data_types import DataReference, TracerType
+    from alfasim_sdk.types import DataReference, TracerType
 
     class Data1:
         pass
@@ -53,7 +53,7 @@ def test_data_reference():
 
 
 def test_quantity():
-    from alfasim_sdk.data_types import Quantity
+    from alfasim_sdk.types import Quantity
 
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
         Quantity(value='', unit='')
@@ -66,7 +66,7 @@ def test_quantity():
 
 
 def test_table():
-    from alfasim_sdk.data_types import Table
+    from alfasim_sdk.types import Table
 
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
         Table(rows=[])
@@ -82,7 +82,7 @@ def test_table():
 
 
 def test_table_column():
-    from alfasim_sdk.data_types import TableColumn, Quantity
+    from alfasim_sdk.types import TableColumn, Quantity
 
     with pytest.raises(TypeError, match="value must be a Quantity, got a <class 'str'>."):
         TableColumn(id='', value='')
@@ -92,7 +92,7 @@ def test_table_column():
 
 
 def test_boolean():
-    from alfasim_sdk.data_types import Boolean
+    from alfasim_sdk.types import Boolean
 
     with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
         Boolean(value='')
