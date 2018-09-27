@@ -3,7 +3,7 @@ from typing import Optional
 
 import attr
 
-from alfasim_sdk.data_types import BaseField
+from alfasim_sdk.types import BaseField
 
 
 def container_model(*, model: type, caption: str, icon: Optional[str]):
