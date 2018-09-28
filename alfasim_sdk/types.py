@@ -1,20 +1,35 @@
 import numbers
-from typing import List
+from typing import Callable, List, Optional
 
 import attr
 from attr import attrib
 from attr.validators import instance_of, optional
 
 
-@attr.s
+@attr.s(kw_only=True)
 class BaseField:
     """
     Base class for all widget fields available at alfasim.
+
+    The BaseField class and all others classes that inheritance from BaseField must use kw_only=True
+    for all attributes.
+    This is due to the necessity to make enable_expr is an optional value and the
+    only way to have properties with default values mixed with required properties is with
+    key-word only arguments.
     """
     caption: str = attrib(validator=instance_of(str))
+    enable_expr: Optional[Callable] = attrib(default=None)
+
+    @enable_expr.validator
+    def check(self, attr, value):
+        if value is None:
+            return
+
+        if not callable(value):
+            raise TypeError(f'enable_expr must be a function, got a {type(value)}.')
 
 
-@attr.s
+@attr.s(kw_only=True)
 class String(BaseField):
     """
     The String represents an input that the user can provide a string text for the application.
@@ -32,7 +47,7 @@ class String(BaseField):
     value: str = attrib(validator=instance_of(str))
 
 
-@attr.s
+@attr.s(kw_only=True)
 class Enum(BaseField):
     value: List[str] = attrib()
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
@@ -50,7 +65,7 @@ class Enum(BaseField):
                 raise TypeError(f"The initial condition must be within the declared values")
 
 
-@attr.s
+@attr.s(kw_only=True)
 class DataReference(BaseField):
     value = attrib()
 
@@ -60,13 +75,13 @@ class DataReference(BaseField):
             raise TypeError(f"{attr.name} must be a valid ALFASim type")
 
 
-@attr.s
+@attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
     unit: str = attrib(validator=instance_of(str))
 
 
-@attr.s
+@attr.s(kw_only=True)
 class TableColumn(BaseField):
     id: str = attrib(validator=instance_of(str))
     value: Quantity = attrib()
@@ -81,7 +96,7 @@ class TableColumn(BaseField):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
 
-@attr.s
+@attr.s(kw_only=True)
 class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
@@ -97,16 +112,16 @@ class Table(BaseField):
             raise TypeError(f"{attr.name} must be a list of TableColumn.")
 
 
-@attr.s
+@attr.s(kw_only=True)
 class Boolean(BaseField):
     value: bool = attrib(validator=instance_of(bool))
 
 
-@attr.s
+@attr.s(kw_only=True)
 class AlfaSimType:
     name = attrib(default='alfasim')
 
 
-@attr.s
+@attr.s(kw_only=True)
 class TracerType(AlfaSimType):
     type = attrib(default='tracer')

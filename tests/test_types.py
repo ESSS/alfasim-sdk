@@ -1,10 +1,23 @@
 import pytest
 
 
+def test_enable_expr():
+    from alfasim_sdk.types import String
+
+    with pytest.raises(TypeError, match="enable_expr must be a function, got a <class 'str'>"):
+        String(value='', caption='', enable_expr='')
+
+    def function_definition():
+        pass
+
+    String(value='', caption='', enable_expr=None)
+    String(value='', caption='', enable_expr=function_definition)
+
+
 def test_string():
     from alfasim_sdk.types import String
 
-    with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
+    with pytest.raises(TypeError):
         String(value='acme')
 
     with pytest.raises(TypeError, match="'value' must be <class 'str'>"):
@@ -14,11 +27,10 @@ def test_string():
 def test_enum():
     from alfasim_sdk.types import Enum
 
-    with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
+    with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
         Enum(value=['s'], initial='')
 
-    with pytest.raises(TypeError,
-        match="value must be a list, got a <class 'str'>."):
+    with pytest.raises(TypeError, match="value must be a list, got a <class 'str'>."):
         Enum(value='', caption='')
 
     with pytest.raises(TypeError, match="value must be a list of string."):
@@ -40,7 +52,7 @@ def test_data_reference():
     class Data1:
         pass
 
-    with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
+    with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
         DataReference(value='')
 
     with pytest.raises(TypeError, match="arg 1 must be a class"):
@@ -55,7 +67,7 @@ def test_data_reference():
 def test_quantity():
     from alfasim_sdk.types import Quantity
 
-    with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
+    with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
         Quantity(value='', unit='')
 
     with pytest.raises(TypeError, match="'value' must be <class 'numbers.Real'>"):
@@ -68,7 +80,7 @@ def test_quantity():
 def test_table():
     from alfasim_sdk.types import Table
 
-    with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
+    with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
         Table(rows=[])
 
     with pytest.raises(TypeError, match="rows must be a list, got a <class 'str'>."):
@@ -94,7 +106,7 @@ def test_table_column():
 def test_boolean():
     from alfasim_sdk.types import Boolean
 
-    with pytest.raises(TypeError, match="missing 1 required positional argument: 'caption'"):
+    with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
         Boolean(value='')
 
     with pytest.raises(TypeError, match="'value' must be <class 'bool'"):
