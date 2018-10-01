@@ -61,7 +61,6 @@ def data_model(*, caption: str, icon: Optional[str]=None):
     """
 
     def apply(class_: type):
-        setattr(class_, 'model', attr.ib(default=None))
 
         @functools.wraps(class_)
         def wrap_class(class_: type, caption: str, icon: Optional[str]):
