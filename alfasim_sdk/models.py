@@ -72,15 +72,12 @@ def data_model(*, caption: str, icon: Optional[str]=None):
 
 
 def _wrap(caption: str, icon: Optional[str], model: Optional[type], class_: type):
-    for name in dir(class_):
-        value = getattr(class_, name)
-
+    for key, value in class_.__dict__.items():
         if isinstance(value, BaseField):
-            if name.startswith('_'):
-                continue
-                # raise error
+            if key.startswith('_'):
+                raise TypeError(f"Error defining {key}, attributes starting with '_' are not allowed")
             new_value = attr.ib(default=value)
-            setattr(class_, name, new_value)
+            setattr(class_, key, new_value)
 
     class_._alfasim_metadata = {
         'caption': caption,
