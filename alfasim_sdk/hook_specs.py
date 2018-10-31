@@ -1,6 +1,12 @@
 from hookman.hooks import HookSpecs
 
 
+def initialize(v1: 'double') -> 'void':
+    """
+    Docs for plugin initialization
+    """
+
+
 def friction_factor(v1: 'int', v2: 'int') -> 'int':
     """
     Docs for Friction Factor
@@ -40,6 +46,7 @@ specs = HookSpecs(
     version='1',
     pyd_name='_alfasim_hooks',
     hooks=[
+        initialize,
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
