@@ -1,7 +1,13 @@
 from hookman.hooks import HookSpecs
 
 
-def initialize(v1: 'double') -> 'void':
+def initialize(ctx: 'void*', v1: 'double') -> 'void':
+    """
+    Docs for plugin initialization
+    """
+
+
+def finalize(arg_: 'double') -> 'void':
     """
     Docs for plugin initialization
     """
@@ -47,6 +53,7 @@ specs = HookSpecs(
     pyd_name='_alfasim_hooks',
     hooks=[
         initialize,
+        finalize,
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
