@@ -1,0 +1,6 @@
+#ifndef _H_ALFASIM_SDK_BOOTSTRAP_LINUX
+#define _H_ALFASIM_SDK_BOOTSTRAP_LINUX
+
+// TODO
+
+#endif
