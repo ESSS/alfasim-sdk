@@ -36,7 +36,9 @@ struct alfasim_sdk_bootstrap {
         asprintf(&full_filepath, "%s%s", alfasim_executable_dir, SO_FILENAME);
         this->m_handle = dlopen(full_filepath, RTLD_LAZY);
 
+        // Register alfasim API
         set_plugin_data = (set_plugin_data_func)dlsym(this->m_handle, "set_plugin_data");
+        get_plugin_data = (get_plugin_data_func)dlsym(this->m_handle, "get_plugin_data");
     }
 
     ~alfasim_sdk_bootstrap()

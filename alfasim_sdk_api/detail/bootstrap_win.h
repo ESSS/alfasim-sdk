@@ -51,6 +51,7 @@ struct alfasim_sdk_bootstrap {
 
         // Register alfasim API
         set_plugin_data = (set_plugin_data_func)GetProcAddress(this->dllHandle, "set_plugin_data");
+        get_plugin_data = (get_plugin_data_func)GetProcAddress(this->dllHandle, "get_plugin_data");
 
         free(executable_dir_from_env);
     }
