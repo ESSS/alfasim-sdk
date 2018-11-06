@@ -7,7 +7,7 @@ def initialize(ctx: 'void*', v1: 'double') -> 'void':
     """
 
 
-def finalize(arg_: 'double') -> 'void':
+def finalize(ctx: 'void*') -> 'void':
     """
     Docs for plugin initialization
     """
