@@ -4,6 +4,7 @@
 #include <alfasim_sdk_api/detail/api_pointers.h>
 #include <windows.h>
 #include <stdlib.h>
+#include <strsafe.h>
 
 struct alfasim_sdk_bootstrap {
     alfasim_sdk_bootstrap()
@@ -41,7 +42,12 @@ struct alfasim_sdk_bootstrap {
             alfasim_executable_dir = current_exe_dir;
         }
 
-        this->dllHandle = LoadLibraryW(alfasim_executable_dir);
+        // Load shared object
+        WCHAR full_filepath[MAX_PATH];
+        full_filepath[0] = '\0';
+        StringCchCatW(full_filepath, MAX_PATH, alfasim_executable_dir);
+        StringCchCatW(full_filepath, MAX_PATH, DLL_FILENAME);
+        this->dllHandle = LoadLibraryW(full_filepath);
 
         // Register alfasim API
         set_plugin_data = (set_plugin_data_func)GetProcAddress(this->dllHandle, "set_plugin_data");
