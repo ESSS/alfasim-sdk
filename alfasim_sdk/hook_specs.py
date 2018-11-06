@@ -3,13 +3,15 @@ from hookman.hooks import HookSpecs
 
 def initialize(ctx: 'void*', v1: 'double') -> 'void':
     """
-    Docs for plugin initialization
+    This Hook can be used to initialize plugin internal data and also some
+    simulator configurations available via API.
     """
 
 
 def finalize(ctx: 'void*') -> 'void':
     """
-    Docs for plugin initialization
+    This Hook must be used to delete all plugin internal data. Otherwise, a memory
+    leak could occur in your plugin.
     """
 
 
