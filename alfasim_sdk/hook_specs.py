@@ -1,6 +1,20 @@
 from hookman.hooks import HookSpecs
 
 
+def initialize(ctx: 'void*', v1: 'double') -> 'void':
+    """
+    This Hook can be used to initialize plugin internal data and also some
+    simulator configurations available via API.
+    """
+
+
+def finalize(ctx: 'void*') -> 'void':
+    """
+    This Hook must be used to delete all plugin internal data. Otherwise, a memory
+    leak could occur in your plugin.
+    """
+
+
 def friction_factor(v1: 'int', v2: 'int') -> 'int':
     """
     Docs for Friction Factor
@@ -40,6 +54,8 @@ specs = HookSpecs(
     version='1',
     pyd_name='_alfasim_hooks',
     hooks=[
+        initialize,
+        finalize,
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
