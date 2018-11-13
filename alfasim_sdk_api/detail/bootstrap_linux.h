@@ -39,6 +39,9 @@ struct alfasim_sdk_bootstrap {
         // Register alfasim API
         set_plugin_data = (set_plugin_data_func)dlsym(this->m_handle, "set_plugin_data");
         get_plugin_data = (get_plugin_data_func)dlsym(this->m_handle, "get_plugin_data");
+        get_plugin_input_data_bool = (get_plugin_input_data_bool_func)dlsym(this->m_handle, "get_plugin_input_data_bool");
+        get_plugin_input_data_int = (get_plugin_input_data_int_func)dlsym(this->m_handle, "get_plugin_input_data_int");
+        get_plugin_input_data_double = (get_plugin_input_data_double_func)dlsym(this->m_handle, "get_plugin_input_data_double");
     }
 
     ~alfasim_sdk_bootstrap()
