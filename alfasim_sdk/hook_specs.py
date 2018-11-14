@@ -8,7 +8,7 @@ def initialize(ctx: 'void*') -> 'int':
 
     :param ctx: ALFASim's plugins context
     
-    :returns: Error code: 0 for success initialization and -1 if something goes wrong.
+    :returns: Return OK if successful or anything different if failed
     """
 
 
@@ -19,7 +19,7 @@ def finalize(ctx: 'void*') -> 'int':
 
     :param ctx: ALFASim's plugins context
     
-    :returns: Error code: 0 for success finalization and -1 if something goes wrong.
+    :returns: Return OK if successful or anything different if failed
     """
 
 
