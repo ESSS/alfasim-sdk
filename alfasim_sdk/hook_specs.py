@@ -1,17 +1,25 @@
 from hookman.hooks import HookSpecs
 
 
-def initialize(ctx: 'void*', v1: 'double') -> 'void':
+def initialize(ctx: 'void*') -> 'int':
     """
     This Hook can be used to initialize plugin internal data and also some
     simulator configurations available via API.
+
+    :param ctx: ALFASim's plugins context
+
+    :returns: Return OK if successful or anything different if failed
     """
 
 
-def finalize(ctx: 'void*') -> 'void':
+def finalize(ctx: 'void*') -> 'int':
     """
     This Hook must be used to delete all plugin internal data. Otherwise, a memory
     leak could occur in your plugin.
+
+    :param ctx: ALFASim's plugins context
+
+    :returns: Return OK if successful or anything different if failed
     """
 
 
