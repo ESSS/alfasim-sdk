@@ -7,7 +7,7 @@ def initialize(ctx: 'void*') -> 'int':
     simulator configurations available via API.
 
     :param ctx: ALFASim's plugins context
-    
+
     :returns: Return OK if successful or anything different if failed
     """
 
@@ -18,7 +18,7 @@ def finalize(ctx: 'void*') -> 'int':
     leak could occur in your plugin.
 
     :param ctx: ALFASim's plugins context
-    
+
     :returns: Return OK if successful or anything different if failed
     """
 
