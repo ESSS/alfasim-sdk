@@ -16,4 +16,6 @@ DLL_EXPORT int get_plugin_input_data_bool(void* ctx, const char* plugin_name, co
 DLL_EXPORT int get_plugin_input_data_int(void* ctx, const char* plugin_name, const char* var_name, int* out);
 DLL_EXPORT int get_plugin_input_data_double(void* ctx, const char* plugin_name, const char* var_name, double* out);
 
+DLL_EXPORT int get_plugin_variable(void* ctx, const char* variable_name, int line_index, int* size, void** out);
+
 #endif

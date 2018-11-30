@@ -23,6 +23,17 @@ def finalize(ctx: 'void*') -> 'int':
     """
 
 
+def update_plugins_secondary_variables(ctx: 'void*') -> 'int':
+    """
+    Internal simulator hook to update plugin's secondary variables.
+    This is called as the last step on Alfasim's update internal variables workflow.
+
+    :param ctx:
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def friction_factor(v1: 'int', v2: 'int') -> 'int':
     """
     Docs for Friction Factor
@@ -67,5 +78,6 @@ specs = HookSpecs(
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
+        update_plugins_secondary_variables,
     ]
 )

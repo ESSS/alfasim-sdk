@@ -16,4 +16,7 @@ get_plugin_input_data_int_func get_plugin_input_data_int;
 typedef int (*get_plugin_input_data_double_func)(void*, const char*, const char*, double*);
 get_plugin_input_data_double_func get_plugin_input_data_double;
 
+typedef int (*get_plugin_variable_func)(void* ctx, const char* variable_name, int line_index, int* size, void** out);
+get_plugin_variable_func get_plugin_variable;
+
 #endif
