@@ -22,6 +22,19 @@ def finalize(ctx: 'void*') -> 'int':
     :returns: Return OK if successful or anything different if failed
     """
 
+def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'void*', energy_source: 'void*', phi_source: 'void*') -> 'int':
+    """
+    Internal simulator hook to compute source terms of mass, momentum and energy equations.
+    This is called after all residual functions are evaluated.
+
+    :param ctx: ALFASim's plugins context
+    :param mass_source: Source term of mass equation
+    :param momentum_source: Source term of momentum equation
+    :param energy_source: Source term of energy equation
+    :param phi_source: Source term of tracers mass equation
+
+    :returns: Return OK if successful or anything different if failed
+    """
 
 def update_plugins_secondary_variables(ctx: 'void*') -> 'int':
     """
@@ -75,9 +88,10 @@ specs = HookSpecs(
     hooks=[
         initialize,
         finalize,
+        compute_source_terms,
+        update_plugins_secondary_variables,
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
-        update_plugins_secondary_variables,
     ]
 )
