@@ -22,13 +22,7 @@ def finalize(ctx: 'void*') -> 'int':
     :returns: Return OK if successful or anything different if failed
     """
 
-def compute_source_terms(
-    ctx: 'void*', 
-    mass_source: 'void*', 
-    momentum_source: 'void*', 
-    energy_source: 'void*', 
-    phi_source: 'void*',
-    ) -> 'int':
+def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'void*', energy_source: 'void*', phi_source: 'void*') -> 'int':
     """
     Internal simulator hook to compute source terms of mass, momentum and energy equations.
     This is called after all residual functions are evaluated.
