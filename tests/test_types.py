@@ -58,7 +58,7 @@ def test_data_reference():
     with pytest.raises(TypeError, match="arg 1 must be a class"):
         DataReference(value='', caption='')
 
-    with pytest.raises(TypeError, match="value must be a valid ALFASim type"):
+    with pytest.raises(TypeError, match="value must be a valid ALFAsim type"):
         DataReference(value=Data1, caption='')
 
     assert DataReference(value=TracerType, caption='') is not None

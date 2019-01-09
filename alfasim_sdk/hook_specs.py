@@ -6,7 +6,7 @@ def initialize(ctx: 'void*') -> 'int':
     This Hook can be used to initialize plugin internal data and also some
     simulator configurations available via API.
 
-    :param ctx: ALFASim's plugins context
+    :param ctx: ALFAsim's plugins context
 
     :returns: Return OK if successful or anything different if failed
     """
@@ -17,7 +17,7 @@ def finalize(ctx: 'void*') -> 'int':
     This Hook must be used to delete all plugin internal data. Otherwise, a memory
     leak could occur in your plugin.
 
-    :param ctx: ALFASim's plugins context
+    :param ctx: ALFAsim's plugins context
 
     :returns: Return OK if successful or anything different if failed
     """
@@ -27,7 +27,7 @@ def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'v
     Internal simulator hook to compute source terms of mass, momentum and energy equations.
     This is called after all residual functions are evaluated.
 
-    :param ctx: ALFASim's plugins context
+    :param ctx: ALFAsim's plugins context
     :param mass_source: Source term of mass equation
     :param momentum_source: Source term of momentum equation
     :param energy_source: Source term of energy equation

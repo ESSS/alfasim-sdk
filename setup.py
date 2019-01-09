@@ -22,7 +22,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="ALFASim API/SDK",
+    description="ALFAsim API/SDK",
     entry_points={
         'console_scripts': [
             'alfasim-sdk=alfasim_sdk.cli:main',
