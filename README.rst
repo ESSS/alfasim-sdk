@@ -22,7 +22,7 @@ alfasim-sdk
 
 
 
-ALFASim API/SDK
+ALFAsim API/SDK
 
 
 * Free software: MIT license

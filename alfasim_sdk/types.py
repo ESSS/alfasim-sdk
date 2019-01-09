@@ -71,8 +71,8 @@ class DataReference(BaseField):
 
     @value.validator
     def check(self, attr, value):
-        if not issubclass(value, AlfaSimType):
-            raise TypeError(f"{attr.name} must be a valid ALFASim type")
+        if not issubclass(value, ALFAsimType):
+            raise TypeError(f"{attr.name} must be a valid ALFAsim type")
 
 
 @attr.s(kw_only=True)
@@ -118,10 +118,10 @@ class Boolean(BaseField):
 
 
 @attr.s(kw_only=True)
-class AlfaSimType:
+class ALFAsimType:
     name = attrib(default='alfasim')
 
 
 @attr.s(kw_only=True)
-class TracerType(AlfaSimType):
+class TracerType(ALFAsimType):
     type = attrib(default='tracer')
