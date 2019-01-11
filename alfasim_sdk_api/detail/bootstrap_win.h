@@ -56,6 +56,7 @@ struct alfasim_sdk_bootstrap {
         get_plugin_input_data_enum = (get_plugin_input_data_enum_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_enum");
         get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_quantity");
         get_plugin_input_data_string = (get_plugin_input_data_string_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_string");
+        get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_string_size");
         get_plugin_variable = (get_plugin_variable_func)GetProcAddress(this->dllHandle, "get_plugin_variable");
 
         free(executable_dir_from_env);

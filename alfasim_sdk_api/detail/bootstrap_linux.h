@@ -43,6 +43,7 @@ struct alfasim_sdk_bootstrap {
         get_plugin_input_data_enum = (get_plugin_input_data_enum_func)dlsym(this->m_handle, "get_plugin_input_data_enum");
         get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_quantity");
         get_plugin_input_data_string = (get_plugin_input_data_string_func)dlsym(this->m_handle, "get_plugin_input_data_string");
+        get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)dlsym(this->m_handle, "get_plugin_input_data_string_size");
         get_plugin_variable = (get_plugin_variable_func)dlsym(this->m_handle, "get_plugin_variable");
     }
 

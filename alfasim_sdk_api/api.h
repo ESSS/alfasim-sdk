@@ -15,7 +15,8 @@ DLL_EXPORT int get_plugin_data(void* ctx, const char* plugin_name, void** out);
 DLL_EXPORT int get_plugin_input_data_boolean(void* ctx, const char* plugin_name, const char* var_name, bool* out);
 DLL_EXPORT int get_plugin_input_data_enum(void* ctx, const char* plugin_name, const char* var_name, int* out);
 DLL_EXPORT int get_plugin_input_data_quantity(void* ctx, const char* plugin_name, const char* var_name, double* out);
-DLL_EXPORT int get_plugin_input_data_string(void* ctx, const char* plugin_name, const char* var_name, char* out);
+DLL_EXPORT int get_plugin_input_data_string(void* ctx, const char* plugin_name, const char* var_name, int size, char* out);
+DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, const char* plugin_name, const char* var_name, int* out);
 
 DLL_EXPORT int get_plugin_variable(void* ctx, const char* variable_name, int line_index, int* size, void** out);
 

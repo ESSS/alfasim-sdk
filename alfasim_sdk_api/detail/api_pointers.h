@@ -47,8 +47,15 @@ get_plugin_input_data_quantity_func get_plugin_input_data_quantity;
 *   Get the data provided from the user on a String input field.
 *       For more detail about the string input field check alfasim_sdk.types.String
 */
-typedef int (*get_plugin_input_data_string_func)(void*, const char*, const char*, char*);
+typedef int (*get_plugin_input_data_string_func)(void*, const char*, const char*, int, char*);
 get_plugin_input_data_string_func get_plugin_input_data_string;
+
+/**
+*   get_plugin_input_data_string_size()
+*   Get the size of the data provided from the user on a String input field.
+**/
+typedef int (*get_plugin_input_data_string_size_func)(void*, const char*, const char*, int*);
+get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 
 typedef int (*get_plugin_variable_func)(void* ctx, const char* variable_name, int line_index, int* size, void** out);
 get_plugin_variable_func get_plugin_variable;
