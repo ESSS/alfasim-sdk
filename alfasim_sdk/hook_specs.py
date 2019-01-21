@@ -22,6 +22,7 @@ def finalize(ctx: 'void*') -> 'int':
     :returns: Return OK if successful or anything different if failed
     """
 
+
 def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'void*', energy_source: 'void*', phi_source: 'void*') -> 'int':
     """
     Internal simulator hook to compute source terms of mass, momentum and energy equations.
@@ -36,10 +37,11 @@ def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'v
     :returns: Return OK if successful or anything different if failed
     """
 
+
 def update_plugins_secondary_variables(ctx: 'void*') -> 'int':
     """
     Internal simulator hook to update plugin's secondary variables.
-    This is called as the last step on Alfasim's update internal variables workflow.
+    This is called as the last step on ALFAsim's update internal variables workflow.
 
     :param ctx:
 
@@ -82,7 +84,7 @@ def calculate_entrained_liquid_fraction(
 
 
 specs = HookSpecs(
-    project_name='Alfasim',
+    project_name='ALFAsim',
     version='1',
     pyd_name='_alfasim_hooks',
     hooks=[

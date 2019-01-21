@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import click
+
 from hookman.hookman_generator import HookManGenerator
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -18,6 +19,7 @@ plugin_dir_option = click.option('--plugin-dir',
     ),
     help='Path to the plugin directory, where configuration and the shared library is located.')
 
+
 def destination_option(*, help):
     return click.option('--dst',
         default=os.getcwd(),
@@ -28,6 +30,7 @@ def destination_option(*, help):
             resolve_path=True
         ),
         help=help)
+
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 def main():
@@ -43,9 +46,9 @@ def main():
 @click.option('--shared-lib-name', prompt='-- Shared Library Name', help='The filename of the compiled plugin')
 @click.option('--author-name', prompt='-- Author Name', help='Name of the plugin author to be displayed')
 @click.option('--author-email', prompt='-- Author Email', help='Email of the plugin author to be displayed')
-def template(dst, plugin_name, shared_lib_name, author_name, author_email, ):
+def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
     """
-    Console script for alfasim_sdk.
+    Console script for ALFAsim_sdk.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()

@@ -9,7 +9,7 @@ from attr.validators import instance_of, optional
 @attr.s(kw_only=True)
 class BaseField:
     """
-    Base class for all widget fields available at alfasim.
+    Base class for all widget fields available at ALFAsim.
 
     The BaseField class and all others classes that inheritance from BaseField must use kw_only=True
     for all attributes.
@@ -119,7 +119,7 @@ class Boolean(BaseField):
 
 @attr.s(kw_only=True)
 class ALFAsimType:
-    name = attrib(default='alfasim')
+    name = attrib(default='ALFAsim')
 
 
 @attr.s(kw_only=True)
