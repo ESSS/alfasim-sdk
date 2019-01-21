@@ -10,3 +10,8 @@ def alfasim_get_data_model_type():
     """
 
 
+@hookspec
+def alfasim_get_additional_variables():
+    """
+    Add additional variables in ALFAsim
+    """
