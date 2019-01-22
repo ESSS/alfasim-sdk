@@ -19,7 +19,7 @@ def test_additional_variable():
         unit='?',
         visibility=Visibility.Output,
         location=Location.Center,
-        multifield_scope=Scope.ContinuousField,
+        multifield_scope=Scope.Global,
         checked_on_gui_default=False,
     )
 

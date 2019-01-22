@@ -16,13 +16,14 @@ class Location(Enum):
 
 
 class Scope(Enum):
-    # ContinuousField = 'continuous_field'
-    # DispersedField = 'dispersed_field'
     Energy = 'energy'
     Field = 'field'
     Global = 'global'
     Layer = 'layer'
     Phase = 'phase'
+    # TODO ASIM - 2348 Add Scope.ContinuousField and Scope.DispersedField
+    # ContinuousField = 'continuous_field'
+    # DispersedField = 'dispersed_field'
 
 
 @attr.s(kw_only=True)
