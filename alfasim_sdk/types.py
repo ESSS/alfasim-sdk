@@ -5,7 +5,7 @@ import attr
 from attr import attrib
 from attr.validators import instance_of, optional
 
-from alfasim_sdk._validators import string_is_not_empty
+from alfasim_sdk._validators import check_for_valid_unit, check_string_is_not_empty
 
 
 @attr.s(kw_only=True)
@@ -19,7 +19,7 @@ class BaseField:
     only way to have properties with default values mixed with required properties is with
     key-word only arguments.
     """
-    caption: str = attrib(validator=[instance_of(str), string_is_not_empty])
+    caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     enable_expr: Optional[Callable] = attrib(default=None)
 
     @enable_expr.validator
@@ -46,7 +46,7 @@ class String(BaseField):
 
 
     """
-    value: str = attrib(validator=[instance_of(str), string_is_not_empty])
+    value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
 
 
 @attr.s(kw_only=True)
@@ -63,7 +63,7 @@ class Enum(BaseField):
             raise TypeError(f"{attr.name} must be a list of string.")
 
         for value in user_values:
-            string_is_not_empty(self, attr, value)
+            check_string_is_not_empty(self, attr, value)
 
         if self.initial is not None:
             if self.initial not in user_values:
@@ -83,12 +83,12 @@ class DataReference(BaseField):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(validator=[instance_of(str), string_is_not_empty])
+    unit: str = attrib(validator=[instance_of(str), check_string_is_not_empty, check_for_valid_unit])
 
 
 @attr.s(kw_only=True)
 class TableColumn(BaseField):
-    id: str = attrib(validator=[instance_of(str), string_is_not_empty])
+    id: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     value: Quantity = attrib()
     caption = attrib(init=False, default='')
 
