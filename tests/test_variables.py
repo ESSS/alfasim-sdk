@@ -32,4 +32,11 @@ def test_additional_variable():
         checked_on_gui_default=False,
     )
 
-    assert variable
+    assert variable.category == 'length'
+    assert variable.default_value == None
+
+    with pytest.raises(TypeError, match="'default_value' must be <class 'numbers.Real'>"):
+        Variable(name='name', caption='caption', unit='m', default_value='1')
+
+    var2 = Variable(name='name', caption='caption', unit='m', default_value=1)
+    assert var2.default_value == 1
