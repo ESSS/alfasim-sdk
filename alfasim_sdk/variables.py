@@ -43,3 +43,7 @@ class Variable():
     def check_unit(self, attribute, value):
         if UnitDatabase.GetSingleton().GetDefaultCategory(value) is None:
             raise ValueError(f"{value} is not a valid unit")
+
+    @property
+    def category(self):
+        return UnitDatabase.GetSingleton().GetDefaultCategory(self.unit)
