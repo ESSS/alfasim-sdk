@@ -4,17 +4,23 @@ import pytest
 def test_additional_variable():
     from alfasim_sdk.variables import Variable, Visibility, Location, Scope
 
+    with pytest.raises(ValueError, match='The field "name" cannot be empty'):
+        Variable(name='', caption='caption', unit='m')
+
+    with pytest.raises(ValueError, match='The field "caption" cannot be empty'):
+        Variable(name='name', caption='  ', unit='m')
+
     with pytest.raises(TypeError, match="'visibility' must be <enum 'Visibility'>"):
-        Variable(name='', caption='', unit='m', visibility='')
+        Variable(name='name', caption='caption', unit='m', visibility='')
 
     with pytest.raises(TypeError, match="'location' must be <enum 'Location'>"):
-        Variable(name='', caption='', unit='m', location='')
+        Variable(name='name', caption='caption', unit='m', location='')
 
     with pytest.raises(TypeError, match="'multifield_scope' must be <enum 'Scope'>"):
-        Variable(name='', caption='', unit='m', multifield_scope='')
+        Variable(name='name', caption='caption', unit='m', multifield_scope='')
 
     with pytest.raises(ValueError, match="foo is not a valid unit"):
-        Variable(name='', caption='', unit='foo')
+        Variable(name='name', caption='caption', unit='foo')
 
     variable = Variable(
         name='var_name',

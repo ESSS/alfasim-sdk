@@ -5,6 +5,8 @@ import attr
 from attr import attrib
 from attr.validators import instance_of, optional
 
+from alfasim_sdk._validators import string_is_not_empty
+
 
 @attr.s(kw_only=True)
 class BaseField:
@@ -17,7 +19,7 @@ class BaseField:
     only way to have properties with default values mixed with required properties is with
     key-word only arguments.
     """
-    caption: str = attrib(validator=instance_of(str))
+    caption: str = attrib(validator=[instance_of(str), string_is_not_empty])
     enable_expr: Optional[Callable] = attrib(default=None)
 
     @enable_expr.validator
@@ -44,24 +46,27 @@ class String(BaseField):
 
 
     """
-    value: str = attrib(validator=instance_of(str))
+    value: str = attrib(validator=[instance_of(str), string_is_not_empty])
 
 
 @attr.s(kw_only=True)
 class Enum(BaseField):
-    value: List[str] = attrib()
+    values: List[str] = attrib()
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
-    @value.validator
-    def check(self, attr, values):
-        if not isinstance(values, list):
-            raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
+    @values.validator
+    def check(self, attr, user_values):
+        if not isinstance(user_values, list):
+            raise TypeError(f"{attr.name} must be a list, got a {type(user_values)}.")
 
-        if not all(isinstance(value, str) for value in values):
+        if not all(isinstance(value, str) for value in user_values):
             raise TypeError(f"{attr.name} must be a list of string.")
 
+        for value in user_values:
+            string_is_not_empty(self, attr, value)
+
         if self.initial is not None:
-            if self.initial not in values:
+            if self.initial not in user_values:
                 raise TypeError(f"The initial condition must be within the declared values")
 
 
@@ -78,12 +83,12 @@ class DataReference(BaseField):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(validator=instance_of(str))
+    unit: str = attrib(validator=[instance_of(str), string_is_not_empty])
 
 
 @attr.s(kw_only=True)
 class TableColumn(BaseField):
-    id: str = attrib(validator=instance_of(str))
+    id: str = attrib(validator=[instance_of(str), string_is_not_empty])
     value: Quantity = attrib()
     caption = attrib(init=False, default='')
 
