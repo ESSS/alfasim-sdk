@@ -5,18 +5,21 @@ def test_additional_variable():
     from alfasim_sdk.variables import Variable, Visibility, Location, Scope
 
     with pytest.raises(TypeError, match="'visibility' must be <enum 'Visibility'>"):
-        Variable(name='', caption='', unit='', visibility='')
+        Variable(name='', caption='', unit='m', visibility='')
 
     with pytest.raises(TypeError, match="'location' must be <enum 'Location'>"):
-        Variable(name='', caption='', unit='', location='')
+        Variable(name='', caption='', unit='m', location='')
 
     with pytest.raises(TypeError, match="'multifield_scope' must be <enum 'Scope'>"):
-        Variable(name='', caption='', unit='', multifield_scope='')
+        Variable(name='', caption='', unit='m', multifield_scope='')
+
+    with pytest.raises(ValueError, match="foo is not a valid unit"):
+        Variable(name='', caption='', unit='foo')
 
     variable = Variable(
         name='var_name',
         caption='Var Name',
-        unit='?',
+        unit='m',
         visibility=Visibility.Output,
         location=Location.Center,
         multifield_scope=Scope.Global,

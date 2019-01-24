@@ -3,6 +3,7 @@ from enum import Enum
 import attr
 from attr import attrib
 from attr.validators import instance_of
+from barril.units import UnitDatabase
 
 
 class Visibility(Enum):
@@ -35,3 +36,8 @@ class Variable():
     location: Location = attrib(validator=instance_of(Location), default=Location.Center)
     multifield_scope: Scope = attrib(validator=instance_of(Scope), default=Scope.Global)
     checked_on_gui_default: bool = attrib(validator=instance_of(bool), default=True)
+
+    @unit.validator
+    def check(self, attribute, value):
+        if UnitDatabase.GetSingleton().GetDefaultCategory(value) is None:
+            raise ValueError(f"{value} is not a valid unit")

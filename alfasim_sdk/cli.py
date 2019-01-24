@@ -48,7 +48,7 @@ def main():
 @click.option('--author-email', prompt='-- Author Email', help='Email of the plugin author to be displayed')
 def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
     """
-    Console script for ALFAsim_sdk.
+    Console script for alfasim_sdk.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
