@@ -11,6 +11,11 @@ from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_val
 
 
 class Visibility(Enum):
+    """
+    Controls the visibility of the variable.
+        - Internal: The variable should only be used by the plugin, but not available to the end user.
+        - Output: The variable should be available to the end user, as a Property on Plot Window
+    """
     Internal = 'internal'
     Output = 'output'
 

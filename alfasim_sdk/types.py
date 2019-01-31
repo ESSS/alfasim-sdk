@@ -1,11 +1,22 @@
 import numbers
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Type, Union
 
 import attr
 from attr import attrib
+from attr._make import Attribute
 from attr.validators import instance_of, optional
 
 from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
+
+
+@attr.s(kw_only=True)
+class ALFAsimType:
+    name = attrib(default='ALFAsim')
+
+
+@attr.s(kw_only=True)
+class TracerType(ALFAsimType):
+    type = attrib(default='tracer')
 
 
 @attr.s(kw_only=True)
@@ -23,7 +34,7 @@ class BaseField:
     enable_expr: Optional[Callable] = attrib(default=None)
 
     @enable_expr.validator
-    def check(self, attr, value):
+    def check(self, attr: Attribute, value: Optional[Callable]) -> None:
         if value is None:
             return
 
@@ -55,18 +66,19 @@ class Enum(BaseField):
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
-    def check(self, attr, user_values):
-        if not isinstance(user_values, list):
-            raise TypeError(f"{attr.name} must be a list, got a {type(user_values)}.")
+    def check(self, attr: Attribute, values: List[str]) -> None:
+        if not isinstance(values, list):
+            raise TypeError(f"{attr.name} must be a list, got a '{type(values).__name__}'.")
 
-        if not all(isinstance(value, str) for value in user_values):
-            raise TypeError(f"{attr.name} must be a list of string.")
-
-        for value in user_values:
+        for value in values:
+            if not isinstance(value, str):
+                raise TypeError(
+                    f"{attr.name} must be a list of string, the item '{value}' is a '{type(
+                        value).__name__}'")
             check_string_is_not_empty(self, attr, value)
 
         if self.initial is not None:
-            if self.initial not in user_values:
+            if self.initial not in values:
                 raise TypeError(f"The initial condition must be within the declared values")
 
 
@@ -75,7 +87,7 @@ class DataReference(BaseField):
     value = attrib()
 
     @value.validator
-    def check(self, attr, value):
+    def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
         if not issubclass(value, ALFAsimType):
             raise TypeError(f"{attr.name} must be a valid ALFAsim type")
 
@@ -92,11 +104,11 @@ class TableColumn(BaseField):
     value: Quantity = attrib()
     caption = attrib(init=False, default='')
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         self.caption = self.value.caption
 
     @value.validator
-    def check(self, attr, values):
+    def check(self, attr: Attribute, values: Quantity) -> None:
         if not isinstance(values, Quantity):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
@@ -106,7 +118,7 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr, values):
+    def check(self, attr: Attribute, values: Union[List[str], str]):
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
@@ -120,13 +132,3 @@ class Table(BaseField):
 @attr.s(kw_only=True)
 class Boolean(BaseField):
     value: bool = attrib(validator=instance_of(bool))
-
-
-@attr.s(kw_only=True)
-class ALFAsimType:
-    name = attrib(default='ALFAsim')
-
-
-@attr.s(kw_only=True)
-class TracerType(ALFAsimType):
-    type = attrib(default='tracer')

@@ -81,7 +81,7 @@ def package(ctx, plugin_dir, package_name, dst):
     hm.generate_plugin_package(package_name, plugin_dir, dst)
 
 
-def _get_hook_specs_file_path():
+def _get_hook_specs_file_path() -> Path:
     import alfasim_sdk.hook_specs
     return Path(alfasim_sdk.hook_specs.__file__)
 

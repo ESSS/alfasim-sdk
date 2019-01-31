@@ -1,5 +1,5 @@
 import functools
-from typing import Optional
+from typing import Callable, Optional
 
 import attr
 
@@ -40,7 +40,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]):
     return apply
 
 
-def data_model(*, caption: str, icon: Optional[str]=None):
+def data_model(*, caption: str, icon: Optional[str]=None) -> Callable:
     """
     Data model is a container object that keeps together many different properties.
     There are two kinds of properties that could be used with the "data_model" object:
