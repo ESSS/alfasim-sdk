@@ -16,28 +16,29 @@ class Visibility(Enum):
         - Internal: The variable should only be used by the plugin, but not available to the end user.
         - Output: The variable should be available to the end user, as a Property on Plot Window
     """
-    Internal = 'internal'
-    Output = 'output'
+
+    Internal = "internal"
+    Output = "output"
 
 
 class Location(Enum):
-    Center = 'center'
-    Face = 'face'
+    Center = "center"
+    Face = "face"
 
 
 class Scope(Enum):
-    Energy = 'energy'
-    Field = 'field'
-    Global = 'global'
-    Layer = 'layer'
-    Phase = 'phase'
+    Energy = "energy"
+    Field = "field"
+    Global = "global"
+    Layer = "layer"
+    Phase = "phase"
     # TODO ASIM - 2348 Add Scope.ContinuousField and Scope.DispersedField
     # ContinuousField = 'continuous_field'
     # DispersedField = 'dispersed_field'
 
 
 @attr.s(kw_only=True)
-class SecondaryVariable():
+class SecondaryVariable:
     name: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     unit = attrib(validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid])

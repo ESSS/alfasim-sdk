@@ -11,12 +11,12 @@ from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_val
 
 @attr.s(kw_only=True)
 class ALFAsimType:
-    name = attrib(default='ALFAsim')
+    name = attrib(default="ALFAsim")
 
 
 @attr.s(kw_only=True)
 class TracerType(ALFAsimType):
-    type = attrib(default='tracer')
+    type = attrib(default="tracer")
 
 
 @attr.s(kw_only=True)
@@ -30,6 +30,7 @@ class BaseField:
     only way to have properties with default values mixed with required properties is with
     key-word only arguments.
     """
+
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     enable_expr: Optional[Callable] = attrib(default=None)
 
@@ -39,7 +40,7 @@ class BaseField:
             return
 
         if not callable(value):
-            raise TypeError(f'enable_expr must be a function, got a {type(value)}.')
+            raise TypeError(f"enable_expr must be a function, got a {type(value)}.")
 
 
 @attr.s(kw_only=True)
@@ -57,6 +58,7 @@ class String(BaseField):
 
 
     """
+
     value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
 
 
@@ -68,18 +70,22 @@ class Enum(BaseField):
     @values.validator
     def check(self, attr: Attribute, values: List[str]) -> None:
         if not isinstance(values, list):
-            raise TypeError(f"{attr.name} must be a list, got a '{type(values).__name__}'.")
+            raise TypeError(
+                f"{attr.name} must be a list, got a '{type(values).__name__}'."
+            )
 
         for value in values:
             if not isinstance(value, str):
                 raise TypeError(
-                    f"{attr.name} must be a list of string, the item '{value}' is a '{type(
-                        value).__name__}'")
+                    f"{attr.name} must be a list of string, the item '{value}' is a '{type(value).__name__}'"
+                )
             check_string_is_not_empty(self, attr, value)
 
         if self.initial is not None:
             if self.initial not in values:
-                raise TypeError(f"The initial condition must be within the declared values")
+                raise TypeError(
+                    f"The initial condition must be within the declared values"
+                )
 
 
 @attr.s(kw_only=True)
@@ -95,14 +101,16 @@ class DataReference(BaseField):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid])
+    unit: str = attrib(
+        validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid]
+    )
 
 
 @attr.s(kw_only=True)
 class TableColumn(BaseField):
     id: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     value: Quantity = attrib()
-    caption = attrib(init=False, default='')
+    caption = attrib(init=False, default="")
 
     def __attrs_post_init__(self) -> None:
         self.caption = self.value.caption
