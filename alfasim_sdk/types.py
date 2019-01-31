@@ -5,7 +5,7 @@ import attr
 from attr import attrib
 from attr.validators import instance_of, optional
 
-from alfasim_sdk._validators import check_for_valid_unit, check_string_is_not_empty
+from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 
 
 @attr.s(kw_only=True)
@@ -83,7 +83,7 @@ class DataReference(BaseField):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(validator=[instance_of(str), check_string_is_not_empty, check_for_valid_unit])
+    unit: str = attrib(validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid])
 
 
 @attr.s(kw_only=True)
