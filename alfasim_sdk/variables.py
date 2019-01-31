@@ -32,7 +32,7 @@ class Scope(Enum):
 
 
 @attr.s(kw_only=True)
-class Variable():
+class SecondaryVariable():
     name: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     unit = attrib(validator=[instance_of(str), check_string_is_not_empty, check_for_valid_unit])
