@@ -10,7 +10,7 @@ def check_string_is_not_empty(self: Any, attribute: Attribute, value: str) -> No
     if not value or value.isspace():
         from alfasim_sdk.types import Enum
 
-        if type(self) is Enum:
+        if isinstance(self, Enum):
             raise ValueError(
                 f'Enum type cannot have an empty string on field "{attribute.name}"'
             )
