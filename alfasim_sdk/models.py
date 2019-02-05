@@ -1,5 +1,5 @@
 import functools
-from typing import Optional
+from typing import Callable, Optional
 
 import attr
 
@@ -40,7 +40,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]):
     return apply
 
 
-def data_model(*, caption: str, icon: Optional[str]=None):
+def data_model(*, caption: str, icon: Optional[str]=None) -> Callable:
     """
     Data model is a container object that keeps together many different properties.
     There are two kinds of properties that could be used with the "data_model" object:
@@ -74,14 +74,12 @@ def data_model(*, caption: str, icon: Optional[str]=None):
 def _wrap(caption: str, icon: Optional[str], model: Optional[type], class_: type):
     for key, value in class_.__dict__.items():
         if isinstance(value, BaseField):
-            if key.startswith('_'):
-                raise TypeError(f"Error defining {key}, attributes starting with '_' are not allowed")
+            if key.startswith("_"):
+                raise TypeError(
+                    f"Error defining {key}, attributes starting with '_' are not allowed"
+                )
             new_value = attr.ib(default=value)
             setattr(class_, key, new_value)
 
-    class_._alfasim_metadata = {
-        'caption': caption,
-        'icon': icon,
-        'model': model,
-    }
+    class_._alfasim_metadata = {"caption": caption, "icon": icon, "model": model}
     return attr.s(class_)

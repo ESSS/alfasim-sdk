@@ -1,7 +1,7 @@
 from hookman.hooks import HookSpecs
 
 
-def initialize(ctx: 'void*') -> 'int':
+def initialize(ctx: "void*") -> "int":
     """
     This Hook can be used to initialize plugin internal data and also some
     simulator configurations available via API.
@@ -12,7 +12,7 @@ def initialize(ctx: 'void*') -> 'int':
     """
 
 
-def finalize(ctx: 'void*') -> 'int':
+def finalize(ctx: "void*") -> "int":
     """
     This Hook must be used to delete all plugin internal data. Otherwise, a memory
     leak could occur in your plugin.
@@ -22,7 +22,14 @@ def finalize(ctx: 'void*') -> 'int':
     :returns: Return OK if successful or anything different if failed
     """
 
-def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'void*', energy_source: 'void*', phi_source: 'void*') -> 'int':
+
+def compute_source_terms(
+    ctx: "void*",
+    mass_source: "void*",
+    momentum_source: "void*",
+    energy_source: "void*",
+    phi_source: "void*",
+) -> "int":
     """
     Internal simulator hook to compute source terms of mass, momentum and energy equations.
     This is called after all residual functions are evaluated.
@@ -36,10 +43,11 @@ def compute_source_terms(ctx: 'void*', mass_source: 'void*', momentum_source: 'v
     :returns: Return OK if successful or anything different if failed
     """
 
-def update_plugins_secondary_variables(ctx: 'void*') -> 'int':
+
+def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
     Internal simulator hook to update plugin's secondary variables.
-    This is called as the last step on Alfasim's update internal variables workflow.
+    This is called as the last step on ALFAsim's update internal variables workflow.
 
     :param ctx:
 
@@ -47,25 +55,25 @@ def update_plugins_secondary_variables(ctx: 'void*') -> 'int':
     """
 
 
-def friction_factor(v1: 'int', v2: 'int') -> 'int':
+def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
     """
 
 
-def env_temperature(v3: 'float', v4: 'float') -> 'float':
+def env_temperature(v3: "float", v4: "float") -> "float":
     """
     Docs for Environment Temperature
     """
 
 
 def calculate_entrained_liquid_fraction(
-    U_S: 'const double[2]',
-    rho: 'const double[2]',
-    mu: 'const double[2]',
-    sigma: 'double',
-    D: 'double',
-    ) -> 'double':
+    U_S: "const double[2]",
+    rho: "const double[2]",
+    mu: "const double[2]",
+    sigma: "double",
+    D: "double",
+) -> "double":
     """
     Hook for droplet entrainment model when in annular flow (in unit cell model)
 
@@ -82,9 +90,9 @@ def calculate_entrained_liquid_fraction(
 
 
 specs = HookSpecs(
-    project_name='Alfasim',
-    version='1',
-    pyd_name='_alfasim_hooks',
+    project_name="ALFAsim",
+    version="1",
+    pyd_name="_alfasim_hooks",
     hooks=[
         initialize,
         finalize,
@@ -93,5 +101,5 @@ specs = HookSpecs(
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
-    ]
+    ],
 )

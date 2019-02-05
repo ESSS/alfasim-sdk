@@ -69,7 +69,7 @@ def test_invalid_attribute():
     with pytest.raises(TypeError, match=error_msg):
 
         @data_model(icon="model.png", caption='PLUGIN DEV MODEL')
-        class Model: # pylint: disable=unused-variable
+        class Model:  # pylint: disable=unused-variable
             _invalid_attribute = ValidType(caption="invalid")
 
 
@@ -77,13 +77,13 @@ def test_attribute_order():
     from alfasim_sdk.models import data_model
     from alfasim_sdk.types import Boolean, DataReference, TracerType, Enum, String, Quantity
 
-    @data_model(icon="", caption='')
+    @data_model(icon="", caption='caption')
     class Model:
-        boolean = Boolean(value=True, caption='')
-        data_reference = DataReference(value=TracerType, caption='')
-        enum = Enum(value=['', ''], caption='')
-        string = String(value='', caption='')
-        quantity = Quantity(value=1, unit='', caption='')
+        boolean = Boolean(value=True, caption='caption')
+        data_reference = DataReference(value=TracerType, caption='caption')
+        enum = Enum(values=['value_1', 'value_2'], caption='caption')
+        string = String(value='value', caption='caption')
+        quantity = Quantity(value=1, unit='m', caption='caption')
 
     expected_order = ['boolean', 'data_reference', 'enum', 'string', 'quantity']
     assert [attr.name for attr in Model.__attrs_attrs__] == expected_order
