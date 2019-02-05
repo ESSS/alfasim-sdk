@@ -68,7 +68,7 @@ class Enum(BaseField):
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
-    def check(self, attr: Attribute, values: List[str]) -> None:
+    def check(self, attr: Attribute, values: List[str]) -> None: # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(
                 f"{attr.name} must be a list, got a '{type(values).__name__}'."
@@ -116,7 +116,7 @@ class TableColumn(BaseField):
         self.caption = self.value.caption
 
     @value.validator
-    def check(self, attr: Attribute, values: Quantity) -> None:
+    def check(self, attr: Attribute, values: Quantity) -> None: # pylint: disable=arguments-differ
         if not isinstance(values, Quantity):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
@@ -126,7 +126,7 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr: Attribute, values: Union[List[str], str]):
+    def check(self, attr: Attribute, values: Union[List[str], str]): # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
