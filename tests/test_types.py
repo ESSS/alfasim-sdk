@@ -50,21 +50,21 @@ def test_enum():
 
 
 def test_data_reference():
-    from alfasim_sdk.types import DataReference, TracerType
+    from alfasim_sdk.types import Reference, TracerType
 
     class Data1:
         pass
 
     with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
-        DataReference(value='')
+        Reference(value='')
 
     with pytest.raises(TypeError, match="arg 1 must be a class"):
-        DataReference(value='', caption='caption')
+        Reference(value='', caption='caption')
 
     with pytest.raises(TypeError, match="value must be a valid ALFAsim type"):
-        DataReference(value=Data1, caption='caption')
+        Reference(value=Data1, caption='caption')
 
-    assert DataReference(value=TracerType, caption='caption') is not None
+    assert Reference(value=TracerType, caption='caption') is not None
 
 
 def test_quantity():

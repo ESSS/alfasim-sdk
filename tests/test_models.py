@@ -75,12 +75,12 @@ def test_invalid_attribute():
 
 def test_attribute_order():
     from alfasim_sdk.models import data_model
-    from alfasim_sdk.types import Boolean, DataReference, TracerType, Enum, String, Quantity
+    from alfasim_sdk.types import Boolean, Reference, TracerType, Enum, String, Quantity
 
     @data_model(icon="", caption='caption')
     class Model:
         boolean = Boolean(value=True, caption='caption')
-        data_reference = DataReference(value=TracerType, caption='caption')
+        data_reference = Reference(value=TracerType, caption='caption')
         enum = Enum(values=['value_1', 'value_2'], caption='caption')
         string = String(value='value', caption='caption')
         quantity = Quantity(value=1, unit='m', caption='caption')

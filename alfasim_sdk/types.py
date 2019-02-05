@@ -89,7 +89,7 @@ class Enum(BaseField):
 
 
 @attr.s(kw_only=True)
-class DataReference(BaseField):
+class Reference(BaseField):
     value = attrib()
 
     @value.validator
