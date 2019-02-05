@@ -80,7 +80,7 @@ def test_attribute_order():
     @data_model(icon="", caption='caption')
     class Model:
         boolean = Boolean(value=True, caption='caption')
-        data_reference = Reference(value=TracerType, caption='caption')
+        data_reference = Reference(ref_type=TracerType, caption='caption')
         enum = Enum(values=['value_1', 'value_2'], caption='caption')
         string = String(value='value', caption='caption')
         quantity = Quantity(value=1, unit='m', caption='caption')

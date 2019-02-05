@@ -90,9 +90,9 @@ class Enum(BaseField):
 
 @attr.s(kw_only=True)
 class Reference(BaseField):
-    value = attrib()
+    ref_type = attrib()
 
-    @value.validator
+    @ref_type.validator
     def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
         if not issubclass(value, ALFAsimType):
             raise TypeError(f"{attr.name} must be a valid ALFAsim type")

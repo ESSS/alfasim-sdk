@@ -56,15 +56,15 @@ def test_data_reference():
         pass
 
     with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
-        Reference(value='')
+        Reference(ref_type='')
 
     with pytest.raises(TypeError, match="arg 1 must be a class"):
-        Reference(value='', caption='caption')
+        Reference(ref_type='', caption='caption')
 
-    with pytest.raises(TypeError, match="value must be a valid ALFAsim type"):
-        Reference(value=Data1, caption='caption')
+    with pytest.raises(TypeError, match="ref_type must be a valid ALFAsim type"):
+        Reference(ref_type=Data1, caption='caption')
 
-    assert Reference(value=TracerType, caption='caption') is not None
+    assert Reference(ref_type=TracerType, caption='caption') is not None
 
 
 def test_quantity():
