@@ -77,7 +77,7 @@ class Enum(BaseField):
         for value in values:
             if not isinstance(value, str):
                 raise TypeError(
-                    f"{attr.name} must be a list of string, the item '{value}' is a '{type(value).__name__}'"
+                    f"{attr.name} must be a list of strings, the item '{value}' is a '{type(value).__name__}'"
                 )
             check_string_is_not_empty(self, attr, value)
 

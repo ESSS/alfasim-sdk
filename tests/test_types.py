@@ -33,7 +33,7 @@ def test_enum():
     with pytest.raises(TypeError, match="values must be a list, got a 'str'."):
         Enum(values='', caption='caption')
 
-    with pytest.raises(TypeError, match="values must be a list of string, the item '1' is a 'int'"):
+    with pytest.raises(TypeError, match="values must be a list of strings, the item '1' is a 'int'"):
         Enum(values=[1], caption='caption')
 
     with pytest.raises(ValueError, match='Enum type cannot have an empty string on field "values"'):
