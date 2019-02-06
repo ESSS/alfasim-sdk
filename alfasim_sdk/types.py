@@ -99,6 +99,26 @@ class Reference(BaseField):
 
 
 @attr.s(kw_only=True)
+class ReferenceSelection(BaseField):
+    list_type = attrib()
+
+    @list_type.validator
+    def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
+        if not isinstance(value, type):
+            raise TypeError(f"{attr.name} must be a class, got {type(value).__name__}")
+
+        if not hasattr(value, "_alfasim_metadata"):
+            raise TypeError(
+                f"{attr.name} must be a class decorated with 'container_model'"
+            )
+
+        if value._alfasim_metadata["model"] is None:
+            raise TypeError(
+                f"{attr.name} must be a class decorated with 'container_model'"
+            )
+
+
+@attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
     unit: str = attrib(
