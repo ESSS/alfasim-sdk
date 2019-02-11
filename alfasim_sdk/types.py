@@ -68,7 +68,7 @@ class Enum(BaseField):
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
-    def check(self, attr: Attribute, values: List[str]) -> None: # pylint: disable=arguments-differ
+    def check(self, attr: Attribute, values: List[str]) -> None:  # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(
                 f"{attr.name} must be a list, got a '{type(values).__name__}'."
@@ -89,13 +89,45 @@ class Enum(BaseField):
 
 
 @attr.s(kw_only=True)
-class DataReference(BaseField):
-    value = attrib()
+class Reference(BaseField):
+    ref_type = attrib()
 
-    @value.validator
+    @ref_type.validator
     def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
         if not issubclass(value, ALFAsimType):
             raise TypeError(f"{attr.name} must be a valid ALFAsim type")
+
+
+@attr.s(kw_only=True)
+class MultipleReference(BaseField):
+    """
+    MultipleReference allows the user to select multiples references of objects.
+
+    In order to use the MultipleReference model, the container_type need to be initialize with other
+    models that are Container Models "alfasim_sdk.models.container_models"
+
+    Properties:
+        caption   - property used as a label for the text input.
+        container_type - property that holds the container_model selected.
+
+    """
+
+    container_type = attrib()
+
+    @container_type.validator
+    def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
+        if not isinstance(value, type):
+            raise TypeError(f"{attr.name} must be a class, got {type(value).__name__}")
+
+        if not hasattr(value, "_alfasim_metadata"):
+            raise TypeError(
+                f"{attr.name} must be a class decorated with 'container_model'"
+            )
+
+        if value._alfasim_metadata["model"] is None:
+            raise TypeError(
+                f"{attr.name} must be a class decorated with 'container_model'"
+            )
 
 
 @attr.s(kw_only=True)
@@ -116,7 +148,7 @@ class TableColumn(BaseField):
         self.caption = self.value.caption
 
     @value.validator
-    def check(self, attr: Attribute, values: Quantity) -> None: # pylint: disable=arguments-differ
+    def check(self, attr: Attribute, values: Quantity) -> None:  # pylint: disable=arguments-differ
         if not isinstance(values, Quantity):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
@@ -126,7 +158,8 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr: Attribute, values: Union[List[str], str]): # pylint: disable=arguments-differ
+    def check(self, attr: Attribute,
+        values: Union[List[str], str]):  # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
