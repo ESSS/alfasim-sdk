@@ -67,8 +67,8 @@ def test_reference():
     assert Reference(ref_type=TracerType, caption="caption") is not None
 
 
-def test_reference_selection():
-    from alfasim_sdk.types import ReferenceSelection
+def test_multiple_reference():
+    from alfasim_sdk.types import MultipleReference
     from alfasim_sdk.models import data_model, container_model
 
     @data_model(caption="Model")
@@ -82,16 +82,16 @@ def test_reference_selection():
     class FooClass:
         pass
 
-    with pytest.raises(TypeError, match="list_type must be a class, got list"):
-        ReferenceSelection(list_type=[], caption="test_reference_selection")
+    with pytest.raises(TypeError, match="container_type must be a class, got list"):
+        MultipleReference(container_type=[], caption="test_multiple_reference")
 
-    with pytest.raises(TypeError, match="list_type must be a class decorated with 'container_model'"):
-        ReferenceSelection(list_type=FooClass, caption="test_reference_selection")
+    with pytest.raises(TypeError, match="container_type must be a class decorated with 'container_model'"):
+        MultipleReference(container_type=FooClass, caption="test_multiple_reference")
 
-    with pytest.raises(TypeError, match="list_type must be a class decorated with 'container_model'"):
-        ReferenceSelection(list_type=DataModelClass, caption="test_reference_selection")
+    with pytest.raises(TypeError, match="container_type must be a class decorated with 'container_model'"):
+        MultipleReference(container_type=DataModelClass, caption="test_multiple_reference")
 
-    ReferenceSelection(list_type=ContainerModelClass, caption="test_reference_selection")
+    MultipleReference(container_type=ContainerModelClass, caption="test_multiple_reference")
 
 
 def test_quantity():

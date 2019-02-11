@@ -99,19 +99,22 @@ class Reference(BaseField):
 
 
 @attr.s(kw_only=True)
-class ReferenceSelection(BaseField):
+class MultipleReference(BaseField):
     """
-    ReferenceSelection allows the user to select multiples models as a "checklist" component.
-    This components only lists models that are Container Models "alfasim_sdk.models.container_models"
+    MultipleReference allows the user to select multiples references of objects.
+
+    In order to use the MultipleReference model, the container_type need to be initialize with other
+    models that are Container Models "alfasim_sdk.models.container_models"
 
     Properties:
         caption   - property used as a label for the text input.
-        list_type - property that holds the container_model selected.
+        container_type - property that holds the container_model selected.
 
     """
-    list_type = attrib()
 
-    @list_type.validator
+    container_type = attrib()
+
+    @container_type.validator
     def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
         if not isinstance(value, type):
             raise TypeError(f"{attr.name} must be a class, got {type(value).__name__}")
@@ -155,7 +158,8 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr: Attribute, values: Union[List[str], str]):  # pylint: disable=arguments-differ
+    def check(self, attr: Attribute,
+        values: Union[List[str], str]):  # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
