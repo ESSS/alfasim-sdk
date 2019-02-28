@@ -73,6 +73,7 @@ def calculate_entrained_liquid_fraction(
     mu: "const double[2]",
     sigma: "double",
     D: "double",
+    theta: "double",
 ) -> "double":
     """
     Hook for droplet entrainment model when in annular flow (in unit cell model)
@@ -82,6 +83,7 @@ def calculate_entrained_liquid_fraction(
     :param mu: Phase viscosities [Pa.s]
     :param sigma: Surface tension [N.m]
     :param D: Pipe diameter [m]
+    :param theta: Pipe inclination [rad]
 
     :returns:
         Entrainment fraction, defined as the ratio between the droplet mass flow rate and the total liquid
