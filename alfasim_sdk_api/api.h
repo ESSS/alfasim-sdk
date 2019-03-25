@@ -1,7 +1,7 @@
 #ifndef _H_ALFASIM_SDK_API_PTRS
 #define _H_ALFASIM_SDK_API_PTRS
 
-#include <alfasim_sdk_api/commom.h>
+#include <alfasim_sdk_api/common.h>
 
 #if defined(_WIN32) && defined(_ALFASIM_EXPORT_SYMBOLS)
 #define DLL_EXPORT __declspec(dllexport)
