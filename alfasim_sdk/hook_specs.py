@@ -44,6 +44,53 @@ def compute_source_terms(
     """
 
 
+def calculate_slip_velocity(
+    ctx: "void*",
+    U_fields: "void*",
+    α_f: "void*",
+    d_disp_fields: "void*",
+    P: "void*",
+    ρ_f: "void*",
+    μ_f: "void*",
+    sinθ_f: "void*",
+    Δx_f: "void*",
+) -> "int":
+    """
+    Internal simulator hook to calculate slip velocity between fluids
+    and solids.
+
+    :param ctx: ALFAsim's plugins context
+    :param U_fields: Field velocities,
+    :param α_f: Field Volume fractions on faces,
+    :param d_disp_fields: Diameter of dispersed fields,
+    :param P: Pressure,
+    :param ρ_f: Field densities on faces,
+    :param μ_f: Field viscosities on faces,
+    :param sinθ_f: Sin of θ on faces in which θ is the angle between the Pipe and the Y-Axis,
+    :param Δx_f: The control volume lenght related to the faces,
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def calculate_slurry_viscosity(
+    ctx: "void*",
+    α_f: "void*",
+    μ_f: "void*",
+    μ_f_layer: "void*",
+) -> "int":
+    """
+    Internal simulator hook to calculate slurry viscosity of layer(s).
+
+    :param ctx: ALFAsim's plugins context
+    :param α_f: Fields Volume fractions on faces,
+    :param μ_f: Field viscosities on faces,
+    :param μ_f_layer: Layer Viscosities on faces,
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
     Internal simulator hook to update plugin's secondary variables.
