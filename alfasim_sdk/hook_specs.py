@@ -44,6 +44,58 @@ def compute_source_terms(
     """
 
 
+def calculate_slip_velocity(
+    ctx: "void*",
+    U_fields: "void*",
+    alpha_f: "void*",
+    d_disp_fields: "void*",
+    P: "void*",
+    rho_f: "void*",
+    mu_f: "void*",
+    sin_theta_f: "void*",
+    delta_x_f: "void*",
+) -> "int":
+    """
+    Internal simulator hook to calculate slip velocity between fluids
+    and solid phase.
+
+    :param ctx: ALFAsim's plugins context
+    :param U_fields: Field velocities,
+    :param alpha_f: Field Volume fractions on faces,
+    :param d_disp_fields: Diameter of dispersed fields,
+    :param P: Pressure,
+    :param rho_f: Field densities on faces,
+    :param mu_f: Field viscosities on faces,
+    :param sin_theta_f: Sin of Theta on faces in which Theta is the angle between the Pipe and the Y-Axis,
+    :param delta_x_f: The control volume lenght related to the faces,
+
+    :returns: Return OK if successful or anything different if failed
+
+    It is expected to be changed the U_fields of solid phase, whose index will be available via API.
+    """
+
+
+def calculate_slurry_viscosity(
+    ctx: "void*",
+    alpha_f: "void*",
+    mu_f: "void*",
+    mu_f_layer: "void*",
+) -> "int":
+    """
+    Internal simulator hook to calculate slurry viscosity of layer(s).
+
+    :param ctx: ALFAsim's plugins context
+    :param alpha_f: Fields Volume fractions on faces,
+    :param mu_f: Field viscosities on faces,
+    :param mu_f_layer: Layer Viscosities on faces,
+
+    :returns: Return OK if successful or anything different if failed
+
+    It is expected to be changed the mu_f_layer of liquid layer(continuous liquid and dispersed solid),
+    whose index will be available via API.
+    """
+
+
 def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
     Internal simulator hook to update plugin's secondary variables.
@@ -99,6 +151,8 @@ specs = HookSpecs(
         initialize,
         finalize,
         compute_source_terms,
+        calculate_slip_velocity,
+        calculate_slurry_viscosity,
         update_plugins_secondary_variables,
         friction_factor,
         env_temperature,
