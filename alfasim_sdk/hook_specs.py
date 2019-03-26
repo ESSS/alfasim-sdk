@@ -57,7 +57,7 @@ def calculate_slip_velocity(
 ) -> "int":
     """
     Internal simulator hook to calculate slip velocity between fluids
-    and solids.
+    and solid phase.
 
     :param ctx: ALFAsim's plugins context
     :param U_fields: Field velocities,
@@ -70,6 +70,8 @@ def calculate_slip_velocity(
     :param delta_x_f: The control volume lenght related to the faces,
 
     :returns: Return OK if successful or anything different if failed
+
+    It is expected to be changed the U_fields of solid phase, whose index will be available via API.
     """
 
 
@@ -88,6 +90,9 @@ def calculate_slurry_viscosity(
     :param mu_f_layer: Layer Viscosities on faces,
 
     :returns: Return OK if successful or anything different if failed
+
+    It is expected to be changed the mu_f_layer of liquid layer(continuous liquid and dispersed solid),
+    whose index will be available via API.
     """
 
 
