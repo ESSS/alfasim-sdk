@@ -23,21 +23,60 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_source_terms(
+def compute_mass_source_term(
     ctx: "void*",
     mass_source: "void*",
-    momentum_source: "void*",
-    energy_source: "void*",
-    phi_source: "void*",
 ) -> "int":
     """
-    Internal simulator hook to compute source terms of mass, momentum and energy equations.
+    Internal simulator hook to compute source terms of mass equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
     :param mass_source: Source term of mass equation
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def compute_momentum_source_term(
+    ctx: "void*",
+    momentum_source: "void*",
+) -> "int":
+    """
+    Internal simulator hook to compute source terms of momentum equation.
+    This is called after all residual functions are evaluated.
+
+    :param ctx: ALFAsim's plugins context
     :param momentum_source: Source term of momentum equation
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def compute_energy_source_term(
+    ctx: "void*",
+    energy_source: "void*",
+) -> "int":
+    """
+    Internal simulator hook to compute source terms of energy equation
+    This is called after all residual functions are evaluated.
+
+    :param ctx: ALFAsim's plugins context
     :param energy_source: Source term of energy equation
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def compute_tracer_source_term(
+    ctx: "void*",
+    phi_source: "void*",
+) -> "int":
+    """
+    Internal simulator hook to compute source terms of tracer transport equation.
+    This is called after all residual functions are evaluated.
+
+    :param ctx: ALFAsim's plugins context
     :param phi_source: Source term of tracers mass equation
 
     :returns: Return OK if successful or anything different if failed
@@ -150,7 +189,10 @@ specs = HookSpecs(
     hooks=[
         initialize,
         finalize,
-        compute_source_terms,
+        compute_mass_source_term,
+        compute_momentum_source_term,
+        compute_energy_source_term,
+        compute_tracer_source_term,
         calculate_slip_velocity,
         calculate_slurry_viscosity,
         update_plugins_secondary_variables,
