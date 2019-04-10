@@ -149,7 +149,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
 def update_plugins_secondary_variables_extra(ctx: "void*") -> "int":
     """
     Internal simulator hook to update plugin's secondary variables in the ExtraVarSolver scope.
-    ExtraVarsolver is used to solve the tracer transport equation.
+    ExtraVarSolver is used to solve the tracer transport equation.
     This is called as the last step on ALFAsim's ExtraVarSolver update variables workflow.
 
     :param ctx:
