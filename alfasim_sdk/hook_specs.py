@@ -158,6 +158,20 @@ def update_plugins_secondary_variables_extra(ctx: "void*") -> "int":
     """
 
 
+def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
+    """
+    Internal simulator hook to update plugin's secondary variables on the first timestep.
+    This is called as the first step on ALFAsim's update internal variables workflow.
+    This method is specially important when you have a plugin which the secondary variables depend
+    on `old` values. In the first timestep, there is no `old` values, so you may use this hook
+    to initialize your variables contents.
+
+    :param ctx:
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -212,5 +226,6 @@ specs = HookSpecs(
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
+        update_plugins_secondary_variables_on_first_timestep,
     ],
 )
