@@ -18,7 +18,7 @@ DLL_EXPORT int get_plugin_input_data_quantity(void* ctx, double* out, const char
 DLL_EXPORT int get_plugin_input_data_string(void* ctx, char* out, const char* plugin_name, const char* var_name, int size);
 DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, int* out, const char* plugin_name, const char* var_name);
 
-DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, int* size);
+DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, int timestep, int* size);
 
 DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_primary_field_id_of_phase(void* ctx, int* out, const char* name);

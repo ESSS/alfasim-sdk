@@ -64,7 +64,7 @@ get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 *
 *   Gets the contents of a plugin-defined variable (Given by name)
 **/
-typedef int (*get_plugin_variable_func)(void* ctx, void** out, const char* variable_name, int line_index, int* size);
+typedef int (*get_plugin_variable_func)(void* ctx, void** out, const char* variable_name, int line_index, int timestep, int* size);
 get_plugin_variable_func get_plugin_variable;
 
 /**
