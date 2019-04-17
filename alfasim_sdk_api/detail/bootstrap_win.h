@@ -58,6 +58,14 @@ struct alfasim_sdk_bootstrap {
         get_plugin_input_data_string = (get_plugin_input_data_string_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_string");
         get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_string_size");
         get_plugin_variable = (get_plugin_variable_func)GetProcAddress(this->dllHandle, "get_plugin_variable");
+        get_field_id = (get_field_id_func)GetProcAddress(this->dllHandle, "get_field_id");
+        get_primary_field_id_of_phase = (get_primary_field_id_of_phase_func)GetProcAddress(this->dllHandle, "get_primary_field_id_of_phase");
+        get_phase_id = (get_phase_id_func)GetProcAddress(this->dllHandle, "get_phase_id");
+        get_layer_id = (get_layer_id_func)GetProcAddress(this->dllHandle, "get_layer_id");
+        get_simulation_array = (get_simulation_array_func)GetProcAddress(this->dllHandle, "get_simulation_array");
+        get_simulation_quantity = (get_simulation_quantity_func)GetProcAddress(this->dllHandle, "get_simulation_quantity");
+        get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)GetProcAddress(this->dllHandle, "get_wall_interfaces_temperature");
+        get_number_of_control_volumes = (get_number_of_control_volumes_func)GetProcAddress(this->dllHandle, "get_number_of_control_volumes");
 
         free(executable_dir_from_env);
     }

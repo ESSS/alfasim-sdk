@@ -20,4 +20,31 @@ DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, int* out, const char
 
 DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, int* size);
 
+DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_primary_field_id_of_phase(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_layer_id(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_simulation_array(
+    void* ctx,
+    double** out,
+    char* variable_name,
+    int line_index,
+    int timestep,
+    int* size
+);
+DLL_EXPORT int get_simulation_quantity(
+    void* ctx,
+    double* out,
+    char* variable_name_c,
+    int timestep
+);
+DLL_EXPORT int get_wall_interfaces_temperature(
+    void* ctx,
+    double** out,
+    int control_volume,
+    int timestep,
+    int* size
+);
+DLL_EXPORT int get_number_of_control_volumes(void* ctx, int* out);
+
 #endif
