@@ -146,6 +146,18 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
 
 
+def update_plugins_secondary_variables_extra(ctx: "void*") -> "int":
+    """
+    Internal simulator hook to update plugin's secondary variables in the ExtraVarSolver scope.
+    ExtraVarSolver is used to solve the tracer transport equation.
+    This is called as the last step on ALFAsim's ExtraVarSolver update variables workflow.
+
+    :param ctx:
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -196,6 +208,7 @@ specs = HookSpecs(
         calculate_slip_velocity,
         calculate_slurry_viscosity,
         update_plugins_secondary_variables,
+        update_plugins_secondary_variables_extra,
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
