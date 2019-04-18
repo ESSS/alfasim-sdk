@@ -45,5 +45,12 @@ DLL_EXPORT int get_wall_interfaces_temperature(
     enum TimestepScope ts_scope,
     int* size
 );
+DLL_EXPORT int get_flow_pattern(
+    void* ctx,
+    int** out,
+    enum GridScope grid_scope,
+    enum TimestepScope ts_scope,
+    int* size
+);
 
 #endif

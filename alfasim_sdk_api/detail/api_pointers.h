@@ -161,4 +161,19 @@ typedef int (*get_wall_interfaces_temperature_func)(
 get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
 
 
+/**
+*   get_flow_pattern
+*
+*   Get the flow pattern for each control volume.
+*/
+typedef int (*get_flow_pattern_func)(
+    void* ctx,
+    int** out,
+    enum GridScope grid_scope,
+    enum TimestepScope ts_scope,
+    int* size
+);
+get_flow_pattern_func get_flow_pattern;
+
+
 #endif

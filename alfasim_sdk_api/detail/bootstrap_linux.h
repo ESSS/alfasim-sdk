@@ -52,6 +52,7 @@ struct alfasim_sdk_bootstrap {
         get_simulation_array = (get_simulation_array_func)dlsym(this->m_handle, "get_simulation_array");
         get_simulation_quantity = (get_simulation_quantity_func)dlsym(this->m_handle, "get_simulation_quantity");
         get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)dlsym(this->m_handle, "get_wall_interfaces_temperature");
+        get_flow_pattern = (get_flow_pattern_func)dlsym(this->m_handle, "get_flow_pattern");
     }
 
     ~alfasim_sdk_bootstrap()
