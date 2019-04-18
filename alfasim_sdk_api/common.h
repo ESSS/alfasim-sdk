@@ -6,7 +6,35 @@ enum error_code
     BUFFER_SIZE_INSUFFICIENT=-3,
     UNDEFINED_DATA=-2,
     NOT_IMPLEMENTED=-1,
-    OK = 0,
+    OK = 0
+};
+
+enum GridScope
+{
+    CENTER=0,
+    FACE=1
+};
+
+enum MultiFieldDescriptionScope
+{
+    MIXTURE=0,
+    GLOBAL=0,
+    FIELD=1,
+    LAYER=2,
+    PHASE=3
+};
+
+enum TimestepScope
+{
+    CURRENT=0,
+    PREVIOUS=1
+};
+
+struct VariableScope
+{
+    enum GridScope grid_scope;
+    enum MultiFieldDescriptionScope mfd_scope;
+    enum TimestepScope ts_scope;
 };
 
 #define FIELD_GAS "gas"
@@ -22,6 +50,3 @@ enum error_code
 #define LAYER_GAS "gas"
 #define LAYER_LIQUID "liquid"
 #define LAYER_WATER "water"
-
-#define TIMESTEP_CURRENT 0
-#define TIMESTEP_OLD 1

@@ -123,8 +123,8 @@ typedef int (*get_simulation_array_func)(
     void* ctx,
     double** out,
     char* variable_name,
+    struct VariableScope var_scope,
     int line_index,
-    int timestep,
     int* size
 );
 get_simulation_array_func get_simulation_array;
@@ -140,8 +140,8 @@ get_simulation_array_func get_simulation_array;
 typedef int (*get_simulation_quantity_func)(
     void* ctx,
     double* out,
-    char* variable_name_c,
-    int timestep
+    enum TimestepScope ts_scope,
+    char* variable_name_c
 );
 get_simulation_quantity_func get_simulation_quantity;
 
@@ -155,23 +155,10 @@ typedef int (*get_wall_interfaces_temperature_func)(
     void* ctx,
     double** out,
     int control_volume,
-    int timestep,
+    enum TimestepScope ts_scope,
     int* size
 );
 get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
-
-/**
-*   get_number_of_control_volumes
-*
-*   Gets the number of control volumes in the current context. If in a pipe context, this will be
-*   the number of control volumes in the pipe. If in a node, this will be 1 on an internal node
-*   and 0 on a boundary.
-*/
-typedef int (*get_number_of_control_volumes_func)(
-    void* ctx,
-    int* out
-);
-get_number_of_control_volumes_func get_number_of_control_volumes;
 
 
 #endif
