@@ -2,11 +2,10 @@ import numbers
 from typing import Callable, List, Optional, Type, Union
 
 import attr
+from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 from attr import attrib
 from attr._make import Attribute
 from attr.validators import instance_of, optional
-
-from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 
 
 @attr.s(kw_only=True)
@@ -18,6 +17,21 @@ class ALFAsimType:
 class TracerType(ALFAsimType):
     type = attrib(default="tracer")
 
+
+@attr.s(kw_only=True)
+class Tab():
+    """
+    Base class for tab attributes available at ALFAsim.
+    """
+    pass
+
+
+@attr.s(kw_only=True)
+class Tabs():
+    """
+    Base class for tabs attributes available at ALFAsim.
+    """
+    pass
 
 @attr.s(kw_only=True)
 class BaseField:
@@ -58,12 +72,21 @@ class String(BaseField):
 
 
     """
-
     value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
 
 
 @attr.s(kw_only=True)
 class Enum(BaseField):
+    """
+    The Enum field provides list of options to the user, showing  only the select item but providing a way to displays
+    list of all option trough a pop up.
+
+    Properties:
+        caption - A string to be displayed on the right side of the component.
+        values  - A list of strings to be added into the component as options to be selected.
+        initial - An optional property to indicate which one of the options should be selected per default.
+
+    """
     values: List[str] = attrib()
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
@@ -158,8 +181,7 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr: Attribute,
-        values: Union[List[str], str]):  # pylint: disable=arguments-differ
+    def check(self, attr: Attribute, values: Union[List[str], str]):  # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
