@@ -23,7 +23,6 @@ class Tab():
     """
     Base class for tab attributes available at ALFAsim.
     """
-    pass
 
 
 @attr.s(kw_only=True)
@@ -31,7 +30,6 @@ class Tabs():
     """
     Base class for tabs attributes available at ALFAsim.
     """
-    pass
 
 @attr.s(kw_only=True)
 class BaseField:

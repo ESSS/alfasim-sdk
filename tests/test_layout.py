@@ -9,7 +9,7 @@ def test_tabs():
     error_msg = "Error on attribute 'a' expecting a class decorated with @tab but received a String type"
     with pytest.raises(TypeError, match=error_msg):
         @data_model(caption='Foo')
-        class A:
+        class InvalidClass: # pylint: disable=unused-variable
             @tabs()
             class Main:
                 a = String(caption='1', value='2')
@@ -26,7 +26,7 @@ def test_tabs():
 
 
     @data_model(caption='Foo')
-    class B:
+    class ValidClass:
         string_from_main = String(caption='main', value='2')
 
 
@@ -44,12 +44,12 @@ def test_tabs():
 
     import attr
     # Checking the Model has all attributes
-    assert len(attr.fields(B)) == 2
-    assert attr.fields(B)[0].name == 'string_from_main'
-    assert attr.fields(B)[1].name == 'TabsMain'
+    assert len(attr.fields(ValidClass)) == 2
+    assert attr.fields(ValidClass)[0].name == 'string_from_main'
+    assert attr.fields(ValidClass)[1].name == 'TabsMain'
 
     # Checking attributes from the @tabs
-    tabs_main_class = attr.fields(B)[1].default
+    tabs_main_class = attr.fields(ValidClass)[1].default
     assert len(attr.fields(tabs_main_class)) == 2
     assert attr.fields(tabs_main_class)[0].name == "Tab1"
     assert attr.fields(tabs_main_class)[1].name == "Tab2"

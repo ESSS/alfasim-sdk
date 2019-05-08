@@ -69,7 +69,7 @@ def test_invalid_attribute():
     with pytest.raises(TypeError, match=error_msg):
 
         @data_model(icon="model.png", caption='PLUGIN DEV MODEL')
-        class Model:  # pylint: disable=unused-variable
+        class ModelPrivateAttribute:  # pylint: disable=unused-variable
             _invalid_attribute = ValidType(caption="invalid")
 
 
