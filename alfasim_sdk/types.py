@@ -84,7 +84,7 @@ class Enum(BaseField):
     Properties:
         caption - A string to be displayed on the right side of the component.
         values  - A list of strings to be added into the component as options to be selected.
-        initial - An optional property to indicate which one of the options should be selected per default.
+        :ivar str initial: Indicates which one of the options should be selected per default. If not given, the first item in ``values`` will be used as default.
 
     """
     values: List[str] = attrib()
