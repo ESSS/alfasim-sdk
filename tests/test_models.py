@@ -69,9 +69,19 @@ def test_invalid_attribute():
     with pytest.raises(TypeError, match=error_msg):
 
         @data_model(icon="model.png", caption='PLUGIN DEV MODEL')
-        class Model:  # pylint: disable=unused-variable
+        class ModelPrivateAttribute:  # pylint: disable=unused-variable
             _invalid_attribute = ValidType(caption="invalid")
 
+
+    class Invalid(object):
+        pass
+
+
+    error_msg = "Error defining invalid, attributes must be a valid type defined by alfasim_sdk"
+    with pytest.raises(TypeError, match=error_msg):
+        @data_model(icon="model.png", caption='PLUGIN DEV MODEL')
+        class Model:  # pylint: disable=unused-variable
+            invalid = Invalid()
 
 def test_attribute_order():
     from alfasim_sdk.models import data_model

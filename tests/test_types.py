@@ -141,3 +141,4 @@ def test_boolean():
 
     with pytest.raises(TypeError, match="'value' must be <class 'bool'"):
         Boolean(value=1, caption="caption")
+
