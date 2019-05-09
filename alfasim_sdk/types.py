@@ -2,10 +2,11 @@ import numbers
 from typing import Callable, List, Optional, Type, Union
 
 import attr
-from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 from attr import attrib
 from attr._make import Attribute
 from attr.validators import instance_of, optional
+
+from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 
 
 @attr.s(kw_only=True)
@@ -30,6 +31,7 @@ class Tabs():
     """
     Base class for tabs attributes available at ALFAsim.
     """
+
 
 @attr.s(kw_only=True)
 class BaseField:
@@ -121,15 +123,14 @@ class Reference(BaseField):
 @attr.s(kw_only=True)
 class MultipleReference(BaseField):
     """
-    MultipleReference allows the user to select multiples references of objects.
+    MultipleReference allows the user to select multiples objects at the same time.
 
-    In order to use the MultipleReference model, the container_type need to be initialize with other
-    models that are Container Models "alfasim_sdk.models.container_models"
+    The MultipleReference model, only works with some pre-defined types of data, currently only TracerType is available.
 
-    Properties:
-        caption   - property used as a label for the text input.
-        container_type - property that holds the container_model selected.
-
+    :ivar str caption:
+        Property used as a label for the text input.
+    :ivar alfasim_sdk.types.ALFAsimType container_type:
+        Property that indicates which type of data the MultipleReference should hold.
     """
 
     container_type = attrib()
@@ -139,15 +140,8 @@ class MultipleReference(BaseField):
         if not isinstance(value, type):
             raise TypeError(f"{attr.name} must be a class, got {type(value).__name__}")
 
-        if not hasattr(value, "_alfasim_metadata"):
-            raise TypeError(
-                f"{attr.name} must be a class decorated with 'container_model'"
-            )
-
-        if value._alfasim_metadata["model"] is None:
-            raise TypeError(
-                f"{attr.name} must be a class decorated with 'container_model'"
-            )
+        if not issubclass(value, ALFAsimType):
+            raise TypeError(f"{attr.name} must be a valid ALFAsimType, got {type(value).__name__}")
 
 
 @attr.s(kw_only=True)

@@ -69,29 +69,18 @@ def test_reference():
 
 def test_multiple_reference():
     from alfasim_sdk.types import MultipleReference
-    from alfasim_sdk.models import data_model, container_model
 
-    @data_model(caption="Model")
-    class DataModelClass:
-        pass
-
-    @container_model(model=DataModelClass, caption="Container", icon="")
-    class ContainerModelClass:
-        pass
-
-    class FooClass:
+    class DummyClass:
         pass
 
     with pytest.raises(TypeError, match="container_type must be a class, got list"):
         MultipleReference(container_type=[], caption="test_multiple_reference")
 
-    with pytest.raises(TypeError, match="container_type must be a class decorated with 'container_model'"):
-        MultipleReference(container_type=FooClass, caption="test_multiple_reference")
+    with pytest.raises(TypeError, match="container_type must be a valid ALFAsimType, got type"):
+        MultipleReference(container_type=DummyClass, caption="test_multiple_reference")
 
-    with pytest.raises(TypeError, match="container_type must be a class decorated with 'container_model'"):
-        MultipleReference(container_type=DataModelClass, caption="test_multiple_reference")
-
-    MultipleReference(container_type=ContainerModelClass, caption="test_multiple_reference")
+    from alfasim_sdk.types import TracerType
+    MultipleReference(container_type=TracerType, caption="test_multiple_reference")
 
 
 def test_quantity():
@@ -141,4 +130,3 @@ def test_boolean():
 
     with pytest.raises(TypeError, match="'value' must be <class 'bool'"):
         Boolean(value=1, caption="caption")
-
