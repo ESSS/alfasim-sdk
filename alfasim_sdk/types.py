@@ -79,9 +79,9 @@ class Enum(BaseField):
     The Enum field provides list of options to the user, showing  only the select item but providing a way to display
     a list of all options through a combo-box.
 
-        :ivar str caption: A string to be displayed on the right side of the component.
-        :ivar List[str] values: A list of strings with the available options.
-        :ivar str initial: Indicates which one of the options should be selected per default. If not given, the first item in ``values`` will be used as default.
+    :ivar str caption: A string to be displayed on the right side of the component.
+    :ivar List[str] values: A list of strings with the available options.
+    :ivar str initial: Indicates which one of the options should be selected per default. If not given, the first item in ``values`` will be used as default.
 
     """
     values: List[str] = attrib()
