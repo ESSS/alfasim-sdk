@@ -16,10 +16,14 @@ class Visibility(Enum):
         - Internal: The variable should only be used by the plugin, but not available to the end user.
         - Output: The variable should be available to the end user, as a Property on Plot Window
     """
-
     Internal = "internal"
     Output = "output"
+    
 
+class Type(Enum):
+    Double = "Double"
+    Int = "Int"
+    
 
 class Location(Enum):
     Center = "center"
@@ -41,6 +45,7 @@ class Scope(Enum):
 class SecondaryVariable:
     name: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    type = attrib(validator=instance_of(Type), default=Type.Double)
     unit = attrib(validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid])
     visibility: Visibility = attrib(validator=instance_of(Visibility), default=Visibility.Output)
     location: Location = attrib(validator=instance_of(Location), default=Location.Center)
