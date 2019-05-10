@@ -18,12 +18,12 @@ class Visibility(Enum):
     """
     Internal = "internal"
     Output = "output"
-    
+
 
 class Type(Enum):
     Double = "Double"
     Int = "Int"
-    
+
 
 class Location(Enum):
     Center = "center"
