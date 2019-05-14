@@ -1,12 +1,10 @@
 import functools
 from typing import Callable, Optional
 
-import attr
-
-from alfasim_sdk.types import BaseField
+from alfasim_sdk._alfasim_sdk_utils import get_attr_class
 
 
-def container_model(*, model: type, caption: str, icon: Optional[str]):
+def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callable:
     """
     Container model is a container object that keeps together many different properties.
     Similar to "data_model", the "container_model" can hold properties that are required
@@ -32,7 +30,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]):
     def apply(class_):
         @functools.wraps(class_)
         def wrap_class(class_, caption, icon):
-            return _wrap(caption, icon, model, class_)
+            return get_attr_class(class_, caption, icon, model)
 
         return wrap_class(class_, caption, icon)
 
@@ -62,22 +60,10 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
     def apply(class_: type):
         @functools.wraps(class_)
         def wrap_class(class_: type, caption: str, icon: Optional[str]):
-            return _wrap(caption, icon, None, class_)
+            return get_attr_class(class_, caption, icon, model=None)
 
         return wrap_class(class_, caption, icon)
 
     return apply
 
 
-def _wrap(caption: str, icon: Optional[str], model: Optional[type], class_: type):
-    for key, value in class_.__dict__.items():
-        if isinstance(value, BaseField):
-            if key.startswith("_"):
-                raise TypeError(
-                    f"Error defining {key}, attributes starting with '_' are not allowed"
-                )
-            new_value = attr.ib(default=value)
-            setattr(class_, key, new_value)
-
-    class_._alfasim_metadata = {"caption": caption, "icon": icon, "model": model}
-    return attr.s(class_)

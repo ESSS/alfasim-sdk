@@ -20,6 +20,20 @@ class TracerType(ALFAsimType):
 
 
 @attr.s(kw_only=True)
+class Tab():
+    """
+    Base class for tab attributes available at ALFAsim.
+    """
+
+
+@attr.s(kw_only=True)
+class Tabs():
+    """
+    Base class for tabs attributes available at ALFAsim.
+    """
+
+
+@attr.s(kw_only=True)
 class BaseField:
     """
     Base class for all widget fields available at ALFAsim.
@@ -58,12 +72,20 @@ class String(BaseField):
 
 
     """
-
     value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
 
 
 @attr.s(kw_only=True)
 class Enum(BaseField):
+    """
+    The Enum field provides list of options to the user, showing  only the select item but providing a way to display
+    a list of all options through a combo-box.
+
+    :ivar str caption: A string to be displayed on the right side of the component.
+    :ivar List[str] values: A list of strings with the available options.
+    :ivar str initial: Indicates which one of the options should be selected per default. If not given, the first item in ``values`` will be used as default.
+
+    """
     values: List[str] = attrib()
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
@@ -101,15 +123,14 @@ class Reference(BaseField):
 @attr.s(kw_only=True)
 class MultipleReference(BaseField):
     """
-    MultipleReference allows the user to select multiples references of objects.
+    MultipleReference allows the user to select multiples objects at the same time.
 
-    In order to use the MultipleReference model, the container_type need to be initialize with other
-    models that are Container Models "alfasim_sdk.models.container_models"
+    The MultipleReference model, only works with some pre-defined types of data, currently only TracerType is available.
 
-    Properties:
-        caption   - property used as a label for the text input.
-        container_type - property that holds the container_model selected.
-
+    :ivar str caption:
+        Property used as a label for the text input.
+    :ivar alfasim_sdk.types.ALFAsimType container_type:
+        Property that indicates which type of data the MultipleReference should hold.
     """
 
     container_type = attrib()
@@ -119,15 +140,8 @@ class MultipleReference(BaseField):
         if not isinstance(value, type):
             raise TypeError(f"{attr.name} must be a class, got {type(value).__name__}")
 
-        if not hasattr(value, "_alfasim_metadata"):
-            raise TypeError(
-                f"{attr.name} must be a class decorated with 'container_model'"
-            )
-
-        if value._alfasim_metadata["model"] is None:
-            raise TypeError(
-                f"{attr.name} must be a class decorated with 'container_model'"
-            )
+        if not issubclass(value, ALFAsimType):
+            raise TypeError(f"{attr.name} must be a valid ALFAsimType, got {type(value).__name__}")
 
 
 @attr.s(kw_only=True)
@@ -158,8 +172,7 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr: Attribute,
-        values: Union[List[str], str]):  # pylint: disable=arguments-differ
+    def check(self, attr: Attribute, values: Union[List[str], str]):  # pylint: disable=arguments-differ
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 
