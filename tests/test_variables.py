@@ -9,13 +9,14 @@ import pytest
     (dict(location=''), TypeError, "'location' must be <enum 'Location'>"),
     (dict(multifield_scope=''), TypeError, "'multifield_scope' must be <enum 'Scope'>"),
     (dict(default_value='1'), TypeError, "'default_value' must be <class 'numbers.Real'>"),
-
+    (dict(type=''), TypeError, "'type' must be <enum 'Type'>"),
 ])
 def test_validation(attr, expected_type_error, expected_message):
-    from alfasim_sdk.variables import Visibility, Location, Scope, SecondaryVariable
+    from alfasim_sdk.variables import Visibility, Location, Scope, SecondaryVariable, Type
     attrs = dict(
         name='var_name',
         caption='Var Name',
+        type=Type.Int,
         unit='m',
         visibility=Visibility.Output,
         location=Location.Center,
