@@ -1,10 +1,11 @@
 from typing import Optional, Tuple
 
 import attr
+
 from alfasim_sdk.types import BaseField, Tab, Tabs
 
 
-def get_attr_class(class_: type, caption: str, icon: Optional[str], model: Optional[type], bases: Optional[Tuple] = ()):
+def get_attr_class(class_: type, caption: str, icon: Optional[str], model: Optional[type], bases: Optional[Tuple]=()):
     attributes = get_all_attributes(class_)
 
     attr_class = attr.make_class(name=class_.__name__, attrs=attributes, bases=bases)
