@@ -152,13 +152,14 @@ class MultipleReference(BaseField):
     ref_type = attrib()
     container_type = attrib(default=None, validator=[optional(instance_of(str)), optional(check_string_is_not_empty)])
 
+
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
-            self.container_type = attr.fields(self.ref_type).container_type.default
+            self.container_type = self.ref_type._CONTAINER_TYPE
         else:
             if self.container_type is None:
                 raise TypeError(
-                    f"The container_type field must be filled when ref_type is a class decorated with 'container_model'")
+                    f"The container_type field must be given when ref_type is a class decorated with 'data_model'")
 
     @ref_type.validator
     def check(self, attr: Attribute, value) -> None:
