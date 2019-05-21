@@ -1,4 +1,5 @@
 import pytest
+from alfasim_sdk.types import MultipleReference, Reference
 
 
 def test_enable_expr():
@@ -49,38 +50,44 @@ def test_enum():
         Enum(values=["value1, value2"], initial="", caption="caption")
 
 
-def test_reference():
-    from alfasim_sdk.types import Reference, TracerType
+@pytest.mark.parametrize('class_', [Reference, MultipleReference])
+def test_reference(class_):
+    from alfasim_sdk.types import TracerType
+    from alfasim_sdk.models import data_model, container_model
 
-    class Data1:
+    @data_model(caption='caption')
+    class Data:
+        pass
+
+    @container_model(caption='caption', model=Data, icon='')
+    class DataContainer:
+        pass
+
+    class InvalidClass:
         pass
 
     with pytest.raises(TypeError, match="missing 1 required keyword-only argument: 'caption'"):
-        Reference(ref_type="")
+        class_(ref_type="")
 
-    with pytest.raises(TypeError, match="arg 1 must be a class"):
-        Reference(ref_type="", caption="caption")
+    with pytest.raises(TypeError, match='ref_type must be a class'):
+        class_(ref_type="", caption="caption")
 
-    with pytest.raises(TypeError, match="ref_type must be a valid ALFAsim type"):
-        Reference(ref_type=Data1, caption="caption")
+    with pytest.raises(TypeError, match="ref_type must be an ALFAsim type or a class decorated with 'data_model'"):
+        class_(ref_type=InvalidClass, caption="caption")
 
-    assert Reference(ref_type=TracerType, caption="caption") is not None
+    error_msg = "ref_type must be an ALFAsim type or a class decorated with 'data_model', got a class decorated with 'container_model'"
+    with pytest.raises(TypeError, match=error_msg):
+        class_(ref_type=DataContainer, caption='caption')
 
+    error_msg = "The container_type field must be given when ref_type is a class decorated with 'data_model'"
+    with pytest.raises(TypeError, match=error_msg):
+        class_(ref_type=Data, caption="caption")
 
-def test_multiple_reference():
-    from alfasim_sdk.types import MultipleReference
+    with pytest.raises(ValueError, match='The field "container_type" cannot be empty'):
+        class_(ref_type=Data, container_type='', caption="caption")
 
-    class DummyClass:
-        pass
-
-    with pytest.raises(TypeError, match="container_type must be a class, got list"):
-        MultipleReference(container_type=[], caption="test_multiple_reference")
-
-    with pytest.raises(TypeError, match="container_type must be a valid ALFAsimType, got type"):
-        MultipleReference(container_type=DummyClass, caption="test_multiple_reference")
-
-    from alfasim_sdk.types import TracerType
-    MultipleReference(container_type=TracerType, caption="test_multiple_reference")
+    assert class_(ref_type=Data, container_type='DataContainer', caption="caption") is not None
+    assert class_(ref_type=TracerType, caption="caption") is not None
 
 
 def test_quantity():

@@ -2,6 +2,7 @@ import functools
 from typing import Callable
 
 import attr
+
 from alfasim_sdk._alfasim_sdk_utils import get_attr_class
 from alfasim_sdk.types import Tab, Tabs
 
@@ -13,7 +14,9 @@ def tabs() -> Callable:
 
     NOte.: tabs is considered a layout component, therefore, the final model will have any attribute related with the tabs
     """
+
     def apply(class_: type):
+
         @functools.wraps(class_)
         def wrap_class(class_: type):
             attr_class = get_attr_class(class_, caption='', icon=None, model=None, bases=(Tabs,))
@@ -35,7 +38,9 @@ def tab(*, caption: str) -> Callable:
 
     Note.: tab is considered a layout component, therefore, the final model will have any attribute related with the tabs
     """
+
     def apply(class_: type):
+
         @functools.wraps(class_)
         def wrap_class(class_: type, caption: str):
             return get_attr_class(class_, caption, icon=None, model=None, bases=(Tab,))

@@ -28,6 +28,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
     """
 
     def apply(class_):
+
         @functools.wraps(class_)
         def wrap_class(class_, caption, icon):
             return get_attr_class(class_, caption, icon, model)
@@ -37,7 +38,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
     return apply
 
 
-def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
+def data_model(*, caption: str, icon: Optional[str]=None) -> Callable:
     """
     Data model is a container object that keeps together many different properties.
     There are two kinds of properties that could be used with the "data_model" object:
@@ -58,6 +59,7 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
     """
 
     def apply(class_: type):
+
         @functools.wraps(class_)
         def wrap_class(class_: type, caption: str, icon: Optional[str]):
             return get_attr_class(class_, caption, icon, model=None)
@@ -65,5 +67,3 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
         return wrap_class(class_, caption, icon)
 
     return apply
-
-

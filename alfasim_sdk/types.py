@@ -1,12 +1,11 @@
 import numbers
-from typing import Callable, List, Optional, Type, Union
+from typing import Callable, List, Optional, Union
 
 import attr
+from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 from attr import attrib
 from attr._make import Attribute
 from attr.validators import instance_of, optional
-
-from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 
 
 @attr.s(kw_only=True)
@@ -16,7 +15,7 @@ class ALFAsimType:
 
 @attr.s(kw_only=True)
 class TracerType(ALFAsimType):
-    type = attrib(default="tracer")
+    _CONTAINER_TYPE = "TracerModelContainer"
 
 
 @attr.s(kw_only=True)
@@ -111,37 +110,78 @@ class Enum(BaseField):
 
 
 @attr.s(kw_only=True)
-class Reference(BaseField):
+class BaseReference(BaseField):
     ref_type = attrib()
+    container_type = attrib(default=None, validator=[optional(instance_of(str)), optional(check_string_is_not_empty)])
+
+    def __attrs_post_init__(self):
+        if issubclass(self.ref_type, ALFAsimType):
+            self.container_type = self.ref_type._CONTAINER_TYPE
+        else:
+            if self.container_type is None:
+                raise TypeError(
+                    f"The container_type field must be given when ref_type is a class decorated with 'data_model'")
 
     @ref_type.validator
-    def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
+    def check(self, attr: Attribute, value) -> None:
+        if not isinstance(value, type) :
+            raise TypeError(f"{attr.name} must be a class")
+
         if not issubclass(value, ALFAsimType):
-            raise TypeError(f"{attr.name} must be a valid ALFAsim type")
+            if not hasattr(value, "_alfasim_metadata"):
+                raise TypeError(f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model'")
+
+            if value._alfasim_metadata["model"] is not None:
+                raise TypeError(
+                    f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model', got a class decorated with 'container_model'")
+
+@attr.s(kw_only=True)
+class Reference(BaseReference):
+    """
+    The Reference field stores a reference to another model available at the application.
+    The are two types of models supported by this field.
+        - ALFAsimTypes: models from ALFAsim, example Tracers.
+        - Custom Data: a model defined withing the plugin.
+            Note.: In order to reference a custom data the model must be inside a container.
+
+    GUI representation:
+        The reference field provides a list of options to the user and displays the current item selected.
+
+    :ivar str caption:
+        Property used as a label for the field.
+
+    :ivar Union[alfasim_sdk.types.ALFAsimType, type] ref_type:
+        Property that indicates which type of data the Reference will hold.
+
+    :ivar Optional[str] container_type:
+        The name of the class that holds the ref_type, this property must be used when the ref_type references model from the plugin.
+    """
 
 
 @attr.s(kw_only=True)
-class MultipleReference(BaseField):
+class MultipleReference(BaseReference):
     """
-    MultipleReference allows the user to select multiples objects at the same time.
+    The MultipleReference field stores a reference to another model in a container, providing a way to store
+    multiples references of the same type.
 
-    The MultipleReference model, only works with some pre-defined types of data, currently only TracerType is available.
+    The are two types of models supported by this field.
+        - ALFAsimTypes: models from ALFAsim, example Tracers.
+        - Custom Data: a model defined withing the plugin.
+            Note.: In order to reference a custom data the model must be inside a container.
+
+    GUI representation:
+        The MultipleReference field provides a list of selectable options to the user which can select one or mode items.
 
     :ivar str caption:
-        Property used as a label for the text input.
-    :ivar alfasim_sdk.types.ALFAsimType container_type:
-        Property that indicates which type of data the MultipleReference should hold.
+        Property used as a label for the field.
+
+    :ivar Union[alfasim_sdk.types.ALFAsimType, type] ref_type:
+        Property that indicates which type of data the Reference will hold.
+
+    :ivar Optional[str] container_type:
+        The name of the class that holds the ref_type, this property must be used when the ref_type references model from the plugin.
     """
 
-    container_type = attrib()
-
-    @container_type.validator
-    def check(self, attr: Attribute, value: Type[ALFAsimType]) -> None:
-        if not isinstance(value, type):
-            raise TypeError(f"{attr.name} must be a class, got {type(value).__name__}")
-
-        if not issubclass(value, ALFAsimType):
-            raise TypeError(f"{attr.name} must be a valid ALFAsimType, got {type(value).__name__}")
 
 
 @attr.s(kw_only=True)
