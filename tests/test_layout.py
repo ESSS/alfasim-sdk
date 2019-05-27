@@ -1,4 +1,64 @@
 import pytest
+from alfasim_sdk.layout import tabs, tab
+from alfasim_sdk.types import String
+
+
+def test_group():
+    from alfasim_sdk.models import data_model
+    from alfasim_sdk.layout import group
+    @data_model(caption='Foo')
+    class ValidClass:
+        string_from_main = String(caption='Caption from Root', value='Root')
+
+
+        @group(caption='This is a Group')
+        class GroupMain:
+            string_from_group = String(caption='Caption From Group', value='Inside Group')
+
+
+    import attr
+    # Checking the Model has all attributes
+    assert len(attr.fields(ValidClass)) == 2
+    assert attr.fields(ValidClass)[0].name == 'string_from_main'
+    assert attr.fields(ValidClass)[1].name == 'GroupMain'
+
+    # Checking attributes from the GroupMain
+    group_class = attr.fields(ValidClass)[1].default
+    assert len(attr.fields(group_class)) == 1
+    assert attr.fields(group_class)[0].name == "string_from_group"
+
+
+    # A Group inside a tab is valid
+    @data_model(caption='Foo')
+    class ValidClassTabGroup:
+        @tabs()
+        class TabsMain:
+            @tab(caption='Fist Tab')
+            class Tab1:
+                string_from_first_tab = String(caption='first', value='1')
+                @group(caption='This is a Group')
+                class GroupMain:
+                    string_from_first_tab_inside_group = String(caption='Caption From Group', value='Inside Group')
+
+
+            @tab(caption='Second Tab')
+            class Tab2:
+                string_from_second_tab = String(caption='second', value='2')
+
+    tabs_main = attr.fields(ValidClassTabGroup)[0].default
+    tab_1 = attr.fields(tabs_main)[0].default
+    tab_2 = attr.fields(tabs_main)[1].default
+    string_from_first_tab = attr.fields(tab_1)[0].default
+    string_from_second_tab = attr.fields(tab_2)[0].default
+
+    group_main = attr.fields(tab_1)[1].default
+    string_from_group_main = attr.fields(group_main)[0].default
+
+    assert string_from_first_tab.caption == 'first'
+    assert string_from_second_tab.caption == 'second'
+    assert string_from_group_main.caption == 'Caption From Group'
+
+
 
 
 def test_tabs():

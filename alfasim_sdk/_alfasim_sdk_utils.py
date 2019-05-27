@@ -1,8 +1,7 @@
 from typing import Optional, Tuple
 
 import attr
-
-from alfasim_sdk.types import BaseField, Tab, Tabs
+from alfasim_sdk.types import BaseField, Tab, Tabs, Group
 
 
 def get_attr_class(class_: type, caption: str, icon: Optional[str], model: Optional[type], bases: Optional[Tuple]=()):
@@ -26,6 +25,9 @@ def is_a_valid_field(value) -> bool:
         valid_field = True
 
     if isinstance(value, type) and (issubclass(value, Tab) or issubclass(value, Tabs)):
+        valid_field = True
+
+    if isinstance(value, type) and issubclass(value, Group):
         valid_field = True
 
     return valid_field

@@ -31,6 +31,11 @@ class Tabs():
     Base class for tabs attributes available at ALFAsim.
     """
 
+@attr.s(kw_only=True)
+class Group():
+    """
+    Base class for Group attribute available at ALFAsim.
+    """
 
 @attr.s(kw_only=True)
 class BaseField:
