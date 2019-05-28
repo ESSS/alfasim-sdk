@@ -1,7 +1,8 @@
 from typing import Optional, Tuple
 
 import attr
-from alfasim_sdk.types import BaseField, Tab, Tabs, Group
+
+from alfasim_sdk.types import BaseField, Group, Tab, Tabs
 
 
 def get_attr_class(class_: type, caption: str, icon: Optional[str], model: Optional[type], bases: Optional[Tuple]=()):
