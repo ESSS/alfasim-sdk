@@ -61,5 +61,13 @@ DLL_EXPORT int get_flow_pattern(
     enum TimestepScope ts_scope,
     int* size
 );
+DLL_EXPORT int get_plugin_input_data_table_quantity(
+    void* ctx,
+    double** out,
+    int* size,
+    const char* column_id,
+    const char* plugin_name,
+    const char* var_name
+);
 
 #endif
