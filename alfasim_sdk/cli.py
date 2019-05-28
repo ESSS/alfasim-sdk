@@ -4,12 +4,12 @@ import sys
 from pathlib import Path
 
 import click
-
 from hookman.hookman_generator import HookManGenerator
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
-plugin_dir_option = click.option('--plugin-dir',
+plugin_dir_option = click.option(
+    "--plugin-dir",
     default=os.getcwd(),
     type=click.Path(exists=True, file_okay=False, writable=True, resolve_path=True),
     help="Path to the plugin directory, where configuration and the shared library is located.",
@@ -35,18 +35,34 @@ def main():
 
 @main.command()
 @destination_option(help="A path to where the output package should be created.")
-@click.option("--plugin-name", prompt="-- Plugin Name", help="Name of the plugin to be displayed")
-@click.option("--shared-lib-name", prompt="-- Shared Library Name", help="The filename of the compiled plugin")
-@click.option("--author-name", prompt="-- Author Name", help="Name of the plugin author to be displayed")
-@click.option("--author-email", prompt="-- Author Email", help="Email of the plugin author to be displayed")
-def template(dst, plugin_name, shared_lib_name, author_name, author_email,):
+@click.option(
+    "--plugin-name", prompt="-- Plugin Name", help="Name of the plugin to be displayed"
+)
+@click.option(
+    "--shared-lib-name",
+    prompt="-- Shared Library Name",
+    help="The filename of the compiled plugin",
+)
+@click.option(
+    "--author-name",
+    prompt="-- Author Name",
+    help="Name of the plugin author to be displayed",
+)
+@click.option(
+    "--author-email",
+    prompt="-- Author Email",
+    help="Email of the plugin author to be displayed",
+)
+def template(dst, plugin_name, shared_lib_name, author_name, author_email):
     """
     Console script for alfasim_sdk.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    hm.generate_plugin_template(plugin_name, shared_lib_name, author_email, author_name, dst)
+    hm.generate_plugin_template(
+        plugin_name, shared_lib_name, author_email, author_name, dst
+    )
 
 
 @main.command(name="compile")
@@ -55,9 +71,11 @@ def _compile(plugin_dir):
     plugin_dir = Path(plugin_dir)
     compile_script = plugin_dir / "compile.py"
     if not compile_script.is_file():
-        raise FileNotFoundError(f"Was not possible to find a compile.py file in {plugin_dir}")
+        raise FileNotFoundError(
+            f"Was not possible to find a compile.py file in {plugin_dir}"
+        )
 
-    subprocess.run(['python', str(compile_script)])
+    subprocess.run(["python", str(compile_script)])
 
 
 @main.command()
