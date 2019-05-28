@@ -1,6 +1,7 @@
 import pytest
 
-from alfasim_sdk.types import MultipleReference, Reference
+from alfasim_sdk.types import MultipleReference
+from alfasim_sdk.types import Reference
 
 
 def test_enable_expr():

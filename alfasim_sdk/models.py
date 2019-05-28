@@ -1,5 +1,6 @@
 import functools
-from typing import Callable, Optional
+from typing import Callable
+from typing import Optional
 
 from alfasim_sdk._alfasim_sdk_utils import get_attr_class
 
