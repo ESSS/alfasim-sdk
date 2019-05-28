@@ -60,6 +60,41 @@ typedef int (*get_plugin_input_data_string_size_func)(void*, int*, const char*, 
 get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 
 /**
+*   get_plugin_input_data_table_quantity
+*
+*   Get the values from a column of an input table. Column_id is the string defined in the plugin's
+*   configuration file. If the var_name or the column_id are invalid, UNDEFINED_DATA is returned.
+*
+*   This function is only available for the following hooks:
+*   - HOOK_INITIALIZE
+*
+*   Example usage:
+*   int size = -1;
+*   double* values = NULL;
+*   int errcode = get_plugin_input_data_table_quantity(
+*       ctx,
+*       &values,
+*       &size,
+*       "temperature",
+*       plugin_name,
+*       "some_table"
+*    );
+*    for (int i = 0; i < size; ++i) {
+*        // Make calcs and/or store values[i]
+*        some_plugin_data = 1.1 * values[i];
+*    }
+*/
+typedef int (*get_plugin_input_data_table_quantity_func)(
+    void* ctx,
+    double** out,
+    int* size,
+    const char* column_id,
+    const char* plugin_name,
+    const char* var_name
+);
+get_plugin_input_data_table_quantity_func get_plugin_input_data_table_quantity;
+
+/**
 *   get_plugin_variable
 *
 *   Gets the contents of a plugin-defined variable (Given by name)
@@ -128,6 +163,34 @@ typedef int (*get_simulation_array_func)(
     int* size
 );
 get_simulation_array_func get_simulation_array;
+
+/**
+*   get_simulation_tracer_array
+*
+*   Get the current contents of a given tracer mass fraction (For an array data pointer).
+*   A  tracer mass fraction is calculated in the extra solver iterative procedure.
+*   Note that not all tracer mass fraction are available at any time.
+*   If a given tracer mass fraction (in an inexistent field) is not available,
+*   a NOT_AVAILABLE_DATA error is returned.
+*
+*   The line_index determines the multifield scope of the tracer mass fraction being get.
+*   Use the get_[field|phase]_id to determine this number or use 0 if it is GLOBAL.
+*   The tracer_index determines the tracer that the mass fraction is being get.
+*   Use the get_tracer_id to determine this number.
+*
+*   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
+*   The user must **NEVER** change the contents returned by this function.
+*/
+typedef int (*get_simulation_tracer_array_func)(
+    void* ctx,
+    double** out,
+    char* variable_name,
+    struct VariableScope var_scope,
+    int tracer_index,
+    int line_index,
+    int* size
+);
+get_simulation_tracer_array_func get_simulation_tracer_array;
 
 /**
 *   get_simulation_quantity
