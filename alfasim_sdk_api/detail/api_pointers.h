@@ -165,6 +165,34 @@ typedef int (*get_simulation_array_func)(
 get_simulation_array_func get_simulation_array;
 
 /**
+*   get_simulation_tracer_array
+*
+*   Get the current contents of a given tracer mass fraction (For an array data pointer).
+*   A  tracer mass fraction is calculated in the extra solver iterative procedure.
+*   Note that not all tracer mass fraction are available at any time.
+*   If a given tracer mass fraction (in an inexistent field) is not available,
+*   a NOT_AVAILABLE_DATA error is returned.
+*
+*   The line_index determines the multifield scope of the tracer mass fraction being get.
+*   Use the get_[field|phase]_id to determine this number or use 0 if it is GLOBAL.
+*   The tracer_index determines the tracer that the mass fraction is being get.
+*   Use the get_tracer_id to determine this number.
+*
+*   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
+*   The user must **NEVER** change the contents returned by this function.
+*/
+typedef int (*get_simulation_tracer_array_func)(
+    void* ctx,
+    double** out,
+    char* variable_name,
+    struct VariableScope var_scope,
+    int tracer_index,
+    int line_index,
+    int* size
+);
+get_simulation_tracer_array_func get_simulation_tracer_array;
+
+/**
 *   get_simulation_quantity
 *
 *   Get the current contents of a given secondary variable (For a single quantity).

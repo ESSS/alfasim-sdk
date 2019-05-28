@@ -32,6 +32,15 @@ DLL_EXPORT int get_simulation_array(
     int line_index,
     int* size
 );
+DLL_EXPORT int get_simulation_tracer_array(
+    void* ctx,
+    double** out,
+    char* variable_name_c,
+    struct VariableScope var_scope,
+    int tracer_index,
+    int line_index,
+    int* size
+);
 DLL_EXPORT int get_simulation_quantity(
     void* ctx,
     double* out,
