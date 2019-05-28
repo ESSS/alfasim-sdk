@@ -75,7 +75,7 @@ def _compile(plugin_dir):
             f"Was not possible to find a compile.py file in {plugin_dir}"
         )
 
-    subprocess.run(["python", str(compile_script)])
+    subprocess.run(["python", str(compile_script)])  # nosec
 
 
 @main.command()

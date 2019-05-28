@@ -1,4 +1,5 @@
 import pytest
+
 from alfasim_sdk.types import MultipleReference, Reference
 
 

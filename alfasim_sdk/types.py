@@ -2,10 +2,11 @@ import numbers
 from typing import Callable, List, Optional, Union
 
 import attr
-from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 from attr import attrib
 from attr._make import Attribute
 from attr.validators import instance_of, optional
+
+from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 
 
 @attr.s(kw_only=True)
@@ -220,9 +221,9 @@ class TableColumn(BaseField):
         self.caption = self.value.caption
 
     @value.validator
-    def check(
+    def check(  # pylint: disable=arguments-differ
         self, attr: Attribute, values: Quantity
-    ) -> None:  # pylint: disable=arguments-differ
+    ) -> None:
         if not isinstance(values, Quantity):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 

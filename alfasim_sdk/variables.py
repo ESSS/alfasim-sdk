@@ -3,10 +3,11 @@ from enum import Enum
 from typing import Optional
 
 import attr
-from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 from attr import attrib
 from attr.validators import instance_of, optional
 from barril.units import UnitDatabase
+
+from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 
 
 class Visibility(Enum):
