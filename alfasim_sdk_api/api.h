@@ -17,6 +17,7 @@ DLL_EXPORT int get_plugin_input_data_enum(void* ctx, int* out, const char* plugi
 DLL_EXPORT int get_plugin_input_data_quantity(void* ctx, double* out, const char* plugin_name, const char* var_name);
 DLL_EXPORT int get_plugin_input_data_string(void* ctx, char* out, const char* plugin_name, const char* var_name, int size);
 DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, int* out, const char* plugin_name, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_reference(void* ctx, void** out, const char* plugin_name, const char* var_name);
 
 DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, enum TimestepScope ts_scope, int* size);
 
@@ -69,5 +70,10 @@ DLL_EXPORT int get_plugin_input_data_table_quantity(
     const char* plugin_name,
     const char* var_name
 );
+
+DLL_EXPORT int get_tracer_id(void* ctx, int* tracer_id, void* reference);
+DLL_EXPORT int get_tracer_name_size(void* ctx, int* tracer_name_size, void* reference);
+DLL_EXPORT int get_tracer_name(void* ctx, char* out, void* reference, int size);
+DLL_EXPORT int get_tracer_partition_coefficient(void* ctx, double* out, void* reference, int phase_id);
 
 #endif

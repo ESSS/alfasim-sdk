@@ -44,6 +44,7 @@ struct alfasim_sdk_bootstrap {
         get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_quantity");
         get_plugin_input_data_string = (get_plugin_input_data_string_func)dlsym(this->m_handle, "get_plugin_input_data_string");
         get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)dlsym(this->m_handle, "get_plugin_input_data_string_size");
+        get_plugin_input_data_reference = (get_plugin_input_data_reference_func)dlsym(this->m_handle, "get_plugin_input_data_reference");
         get_plugin_variable = (get_plugin_variable_func)dlsym(this->m_handle, "get_plugin_variable");
         get_field_id = (get_field_id_func)dlsym(this->m_handle, "get_field_id");
         get_primary_field_id_of_phase = (get_field_id_func)dlsym(this->m_handle, "get_primary_field_id_of_phase");
@@ -55,6 +56,10 @@ struct alfasim_sdk_bootstrap {
         get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)dlsym(this->m_handle, "get_wall_interfaces_temperature");
         get_flow_pattern = (get_flow_pattern_func)dlsym(this->m_handle, "get_flow_pattern");
         get_plugin_input_data_table_quantity = (get_plugin_input_data_table_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_table_quantity");
+        get_tracer_id = (get_tracer_id_func)dlsym(this->m_handle, "get_tracer_id");
+        get_tracer_name_size = (get_tracer_name_size_func)dlsym(this->m_handle, "get_tracer_name_size");
+        get_tracer_name = (get_tracer_name_func)dlsym(this->m_handle, "get_tracer_name");
+        get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)dlsym(this->m_handle, "get_tracer_partition_coefficient");
     }
 
     ~alfasim_sdk_bootstrap()
