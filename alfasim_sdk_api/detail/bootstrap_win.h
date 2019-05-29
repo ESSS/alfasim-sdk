@@ -80,4 +80,3 @@ struct alfasim_sdk_bootstrap {
 alfasim_sdk_bootstrap _;
 
 #endif
-

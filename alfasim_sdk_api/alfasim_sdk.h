@@ -7,4 +7,3 @@
 #else
 #error "Unknown host (Alfasim SDK will only work on Linux and Windows)"
 #endif
-
