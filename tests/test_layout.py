@@ -22,7 +22,10 @@ def test_group():
     import attr
 
     # Checking the Model has all attributes
-    assert [x.name for x in attr.fields(ValidClass)] == ['string_from_main', 'GroupMain']
+    assert [x.name for x in attr.fields(ValidClass)] == [
+        "string_from_main",
+        "GroupMain",
+    ]
 
     # Checking attributes from the GroupMain
     group_class = attr.fields(ValidClass)[1].default
