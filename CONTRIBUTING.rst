@@ -8,6 +8,37 @@ Contributions are welcome, and they are greatly appreciated! Every little bit
 helps, and credit will always be given.
 
 
+Developing inside the ESSS
+--------------------------
+
+Here's how to set up `alfasim_sdk` for local development, when developing inside ESSS
+
+
+#. Create a branch for local development from your main project::
+
+    $ mu checkout -b fb-[PROJECT-KEY]-[ISSUE-NUMBER]-name-of-your-bugfix-or-feature
+
+#. Install pre-commit::
+
+    $ pre-commit install
+
+#. When you're done making changes, run the tests::
+
+    $ pytest
+
+#. Commit your changes and push your branch to GitHub::
+
+    $ git add .
+    $ git commit -m "Your detailed description of your changes."
+    $ git push origin fb-[PROJECT-KEY]-[ISSUE-NUMBER]-name-of-your-bugfix-or-feature
+
+    Notice that after the commit, the hooks from pre-commit will be run automatically, 
+    if a fix it's required you need to add the modification to the stage area again.
+    $ git add .
+    
+#. Submit a pull request through the GitHub website.
+
+
 Get Started!
 ------------
 
