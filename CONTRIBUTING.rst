@@ -1,5 +1,3 @@
-.. highlight:: shell
-
 ============
 Contributing
 ============
@@ -13,14 +11,17 @@ Developing inside the ESSS
 
 Here's how to set up `alfasim_sdk` for local development, when developing inside ESSS
 
-
-#. Create a branch for local development from your main project::
-
-    $ mu checkout -b fb-[PROJECT-KEY]-[ISSUE-NUMBER]-name-of-your-bugfix-or-feature
+The first step is to activate the  `pre-commit <https://pre-commit.com>`_ hook, this only needs to be executed once.
 
 #. Install pre-commit::
 
     $ pre-commit install
+
+Afterward, you can follow the same workflow as always.
+
+#. Create a branch for local development from your main project::
+
+    $ mu checkout -b fb-[PROJECT-KEY]-[ISSUE-NUMBER]-name-of-your-bugfix-or-feature
 
 #. When you're done making changes, run the tests::
 
@@ -32,12 +33,17 @@ Here's how to set up `alfasim_sdk` for local development, when developing inside
     $ git commit -m "Your detailed description of your changes."
     $ git push origin fb-[PROJECT-KEY]-[ISSUE-NUMBER]-name-of-your-bugfix-or-feature
 
-    Notice that after the commit, the hooks from pre-commit will be run automatically, 
-    if a fix it's required you need to add the modification to the stage area again.
-    $ git add .
-    
 #. Submit a pull request through the GitHub website.
 
+An important note here it's that when committing, ``pre-commit`` will re-format the files if necessary.
+
+After the re-format, you need to add the modifications to the stage area again before proceeding with the commit, otherwise, the check will still fail.
+
+Just as a side note, the pre-commit runs by default when committing only against the currently staged files.
+
+You can run it at any time by typing ``pre-commit`` and it will run against all staged files.
+
+If you want to explicitly run against all the files (like on CI) you can execute ```pre-commit run --all-files``
 
 Get Started!
 ------------
@@ -82,12 +88,6 @@ Ready to contribute? Here's how to set up `alfasim_sdk` for local development.
 #. When you're done making changes, run the tests::
 
     $ pytest
-
-#. If you want to check the modification made on the documentation, you can generate the docs locally::
-
-    $ tox -e docs
-
-   The documentation files will be generated in ``docs/_build``.
 
 #. Commit your changes and push your branch to GitHub::
 
