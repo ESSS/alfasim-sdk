@@ -32,6 +32,15 @@ DLL_EXPORT int get_simulation_array(
     int line_index,
     int* size
 );
+DLL_EXPORT int get_simulation_tracer_array(
+    void* ctx,
+    double** out,
+    char* variable_name_c,
+    struct VariableScope var_scope,
+    int tracer_index,
+    int line_index,
+    int* size
+);
 DLL_EXPORT int get_simulation_quantity(
     void* ctx,
     double* out,
@@ -51,6 +60,14 @@ DLL_EXPORT int get_flow_pattern(
     enum GridScope grid_scope,
     enum TimestepScope ts_scope,
     int* size
+);
+DLL_EXPORT int get_plugin_input_data_table_quantity(
+    void* ctx,
+    double** out,
+    int* size,
+    const char* column_id,
+    const char* plugin_name,
+    const char* var_name
 );
 
 #endif

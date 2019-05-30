@@ -63,9 +63,11 @@ struct alfasim_sdk_bootstrap {
         get_phase_id = (get_phase_id_func)GetProcAddress(this->dllHandle, "get_phase_id");
         get_layer_id = (get_layer_id_func)GetProcAddress(this->dllHandle, "get_layer_id");
         get_simulation_array = (get_simulation_array_func)GetProcAddress(this->dllHandle, "get_simulation_array");
+        get_simulation_tracer_array = (get_simulation_tracer_array_func)GetProcAddress(this->dllHandle, "get_simulation_tracer_array");
         get_simulation_quantity = (get_simulation_quantity_func)GetProcAddress(this->dllHandle, "get_simulation_quantity");
         get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)GetProcAddress(this->dllHandle, "get_wall_interfaces_temperature");
         get_flow_pattern = (get_flow_pattern_func)GetProcAddress(this->dllHandle, "get_flow_pattern");
+        get_plugin_input_data_table_quantity = (get_plugin_input_data_table_quantity_func)GetProcAddress(this->dllHandle, "get_plugin_input_data_table_quantity");
 
         free(executable_dir_from_env);
     }
