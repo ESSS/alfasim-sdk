@@ -3,6 +3,7 @@ name: alfasim-sdk
 
 dependencies:
 - click
+- attrs >= 19.1.0
 - pytest
 - pytest-cov
 - pytest-datadir

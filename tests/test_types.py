@@ -2,17 +2,20 @@ import pytest
 from alfasim_sdk.types import MultipleReference, Reference
 
 
-def test_enable_expr():
+@pytest.mark.parametrize('expression_type', ['enable_expr', 'visible_expr'])
+def test_enable_expr_and_visible_expr(expression_type):
     from alfasim_sdk.types import String
-
-    with pytest.raises(TypeError, match="enable_expr must be a function, got a <class 'str'>"):
-        String(value="value", caption="caption", enable_expr="")
+    inputs = {'value': 'value', 'caption': 'caption', expression_type: ''}
+    with pytest.raises(TypeError, match=f"'{expression_type}' must be callable"):
+        String(**inputs)
 
     def function_definition():
         pass
 
-    String(value="value", caption="caption", enable_expr=None)
-    String(value="value", caption="caption", enable_expr=function_definition)
+    valid_input_1 = {'value': 'value', 'caption': 'caption', expression_type: None}
+    valid_input_2 = {'value': 'value', 'caption': 'caption', expression_type: function_definition}
+    String(**valid_input_1)
+    String(**valid_input_2)
 
 
 def test_string():
