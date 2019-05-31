@@ -3,15 +3,17 @@ Contributing
 ============
 
 Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.
+helps, and a credit will always be given.
 
 
 Developing inside the ESSS
 --------------------------
 
-Here's how to set up `alfasim_sdk` for local development, when developing inside ESSS
+Here's how to set up `alfasim_sdk` for local development, when developing inside ESSS.
 
-The first step is to activate the  `pre-commit <https://pre-commit.com>`_ hook, this only needs to be executed once.
+You don't need to create a new environment for ALFAsim-SDK, the workflow proceded, as usual, go to the app repository and activate the app environment.
+
+The only thing that nows you need to execute ``pre-commit install`` from inside the alfasim-SDK repository to enable the git commit hook. commit, notice that this only needs to be executed once.
 
 #. Install pre-commit::
 
@@ -45,7 +47,17 @@ You can run it at any time by typing ``pre-commit`` and it will run against all 
 
 If you want to explicitly run against all the files (like on CI) you can execute ```pre-commit run --all-files``
 
-Get Started!
+FAQ for developing inside ESSS
+------------------------------
+
+How do I create the environment?
+ - You don't need to create a new environment for ALFAsim-SDK, the workflow proceded, as usual, go to the app repository and activate the app environment.
+ 
+Do I need to install any external dependency?
+ - No, If you have the app environment activate everything will work smoothly because he has already the dependency installed on the requirements.
+
+
+Developing outside the ESSS
 ------------
 
 Ready to contribute? Here's how to set up `alfasim_sdk` for local development.
