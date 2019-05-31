@@ -60,6 +60,25 @@ typedef int (*get_plugin_input_data_string_size_func)(void*, int*, const char*, 
 get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 
 /**
+*   get_plugin_input_data_reference
+*
+*   Get an ALFAsim input data internal Reference. Note that a Reference is a specific concept of
+*   ALFAsim SDK and plugins - It is a way to retrieve data from an input outside of the current
+*   model. See the ALFAsim's SDK python configuration file for more information.
+*
+*   Example usage:
+*
+*   void* tracer_ref = nullptr;
+*   errcode = get_plugin_input_data_reference(
+*       ctx, &tracer_ref, plugin_name, "Model.tracer_reference");
+*
+*   int tracer_id = -1;
+*   errcode = get_tracer_id(ctx, &tracer_id, tracer_ref);
+**/
+typedef int (*get_plugin_input_data_reference_func)(void*, void**, const char*, const char*);
+get_plugin_input_data_reference_func get_plugin_input_data_reference;
+
+/**
 *   get_plugin_input_data_table_quantity
 *
 *   Get the values from a column of an input table. Column_id is the string defined in the plugin's
@@ -238,5 +257,57 @@ typedef int (*get_flow_pattern_func)(
 );
 get_flow_pattern_func get_flow_pattern;
 
+
+/**
+*   get_tracer_id
+*
+*   Retrieves the tracer ID given a tracer reference. A tracer reference may be obtained from the
+*   user input data (See get_plugin_input_data_reference API function for an example).
+*/
+typedef int (*get_tracer_id_func)(void* ctx, int* tracer_id, void* reference);
+get_tracer_id_func get_tracer_id;
+
+
+/**
+*   get_tracer_name_size
+*
+*   Retrieves the size of the tracer name, given a tracer reference. A tracer reference may be
+*   obtained from the user input data (See get_plugin_input_data_reference API function for an
+*   example).
+*/
+typedef int (*get_tracer_name_size_func)(void* ctx, int* tracer_name_size, void* reference);
+get_tracer_name_size_func get_tracer_name_size;
+
+
+/**
+*   get_tracer_name
+*
+*   Retrieves the tracer name, given a tracer reference. The tracer_name parameter must be a valid
+*   and pre-allocated memory region where the name string will be copied to. A tracer reference may
+*   be obtained from the user input data (See get_plugin_input_data_reference API function for an
+*   example).
+*
+*   Example usage:
+*   int tracer_name_size = -1;
+*   errcode = get_tracer_name_size(ctx, &tracer_name_size, tracer_ref);
+*
+*   char* tracer_name = (char*)malloc(sizeof(char) * tracer_name_size);
+*   errcode = get_tracer_name(ctx, tracer_name, tracer_ref, tracer_name_size);
+*   std::cout << "TRACER NAME: " << tracer_name << std::endl;
+*   free(tracer_name);
+*/
+typedef int (*get_tracer_name_func)(void* ctx, char* tracer_name, void* reference, int size);
+get_tracer_name_func get_tracer_name;
+
+
+/**
+*   get_tracer_partition_coefficient
+*
+*   Get the partition coefficient input data for a given tracer reference. The phase_id must also
+*   be given (See get_phase_id API function). A tracer reference may be obtained from the user
+*   input data (See get_plugin_input_data_reference API function for an example).
+*/
+typedef int (*get_tracer_partition_coefficient_func)(void* ctx, double* out, void* reference, int phase_id);
+get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
 
 #endif
