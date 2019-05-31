@@ -52,7 +52,7 @@ FAQ for developing inside ESSS
 
 How do I create the environment?
  - You don't need to create a new environment for ALFAsim-SDK, the workflow proceded, as usual, go to the app repository and activate the app environment.
- 
+
 Do I need to install any external dependency?
  - No, If you have the app environment activate everything will work smoothly because he has already the dependency installed on the requirements.
 
