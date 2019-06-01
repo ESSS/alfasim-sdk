@@ -3,6 +3,9 @@ skip_branch_with_pr: true
 environment:
   matrix:
     - PYTHON: "C:\\Python36"
+      TOXENV: "linting"
+
+    - PYTHON: "C:\\Python36"
       TOX_ENV: "py36"
 
 platform:
@@ -14,7 +17,4 @@ install:
 build: false  # Not a C# project, build stuff at the test step instead.
 
 test_script:
-  - "%PYTHON%/Scripts/tox -e %TOX_ENV%"
-
-
-
+  - "%PYTHON%/Scripts/tox"
