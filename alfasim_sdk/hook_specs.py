@@ -208,6 +208,99 @@ def calculate_entrained_liquid_fraction(
     """
 
 
+def initialize_state_variables_calculator(
+    ctx: "void*",
+    P: "double*",
+    T: "double*",
+    T_mix: "double*",
+    n_control_volumes: "int",
+    n_layers: "int"
+) -> 'int':
+    """
+    Hook for the state variables calculator initialization.
+    To define a function that'll calculate the state variables for a given phase on ALFAsim,
+    two main steps must be performed:
+
+    1) In the plugin python configuration file, define the
+       alfasim_get_phase_properties_calculated_from_plugin function to set which phases
+       the current plugin is able to calculate state variables.
+
+    2) The plugin must, then, implement three hooks:
+    - HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR
+    - HOOK_CALCULATE_STATE_VARIABLE
+    - HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR
+
+    The first and last hooks are called immediately before the state variables are calculated.
+    At this point, it is possible to pre-calculate and cache any relevant information.
+    Then, for each state variable of the phases in the python configuration file, the hook
+    HOOK_CALCULATE_STATE_VARIABLE is called.
+    """
+
+
+def calculate_state_variable(
+    ctx: "void*",
+    P: "double*",
+    T: "double*",
+    T_mix: "double*",
+    n_control_volumes: "int",
+    n_layers: "int",
+    phase_id: "int",
+    property_id: "int",
+    output: "double*"
+) -> 'int':
+    """
+    Hook to calculate the state variable given by the `property_id` (See alfasim_sdk_api common
+    headers to retrieve the available property ids), for the phase `phase_id` (Note that the phase
+    id is the same as the one retrieved from the `get_phase_id()` API function - It is not advisable
+    to use hardcoded numbers).
+
+    The output parameter must be filled with the calculated property for each control volume. The
+    pressure (P), temperature per layer (T) and mixture temperature (T_mix) are given in order to
+    perform the calculation. The number of control volumes and the number of layers are also given
+    for convenience.
+
+    The programmer must NOT change any variable other than the output. The output size is
+    n_control_volumes.
+    """
+
+
+def calculate_phase_pair_state_variable(
+    ctx: "void*",
+    P: "double*",
+    T: "double*",
+    T_mix: "double*",
+    n_control_volumes: "int",
+    n_layers: "int",
+    phase1_id: "int",
+    phase2_id: "int",
+    property_id: "int",
+    output: "double*"
+) -> 'int':
+    """
+    Hook to calculate the state variable given by the `property_id` (See alfasim_sdk_api common
+    headers to retrieve the available property ids), for the phase pair `(phase1_id, phase2_id)`
+    (Note that the phase id is the same as the one retrieved from the `get_phase_id()` API function
+    - It is not advisable to use hardcoded numbers).
+
+    The output parameter must be filled with the calculated property for each control volume. The
+    pressure (P), temperature per layer (T) and mixture temperature (T_mix) are given in order to
+    perform the calculation. The number of control volumes and the number of layers are also given
+    for convenience.
+
+    The programmer must NOT change any variable other than the output. The output size is
+    n_control_volumes.
+    """
+
+
+def finalize_state_variables_calculator(
+    ctx: "void*"
+) -> 'int':
+    """
+    Hook for the state variables calculator finalization.
+    The programmer should free/delete any allocated data from the initialization hook.
+    """
+
+
 specs = HookSpecs(
     project_name="ALFAsim",
     version="1",
@@ -227,5 +320,9 @@ specs = HookSpecs(
         env_temperature,
         calculate_entrained_liquid_fraction,
         update_plugins_secondary_variables_on_first_timestep,
+        initialize_state_variables_calculator,
+        calculate_state_variable,
+        calculate_phase_pair_state_variable,
+        finalize_state_variables_calculator,
     ],
 )
