@@ -1,11 +1,18 @@
 import numbers
-from typing import Callable, List, Optional, Union
+from typing import Callable
+from typing import List
+from typing import Optional
+from typing import Union
 
 import attr
-from alfasim_sdk._validators import check_string_is_not_empty, check_unit_is_valid
 from attr import attrib
 from attr._make import Attribute
-from attr.validators import instance_of, optional, is_callable
+from attr.validators import instance_of
+from attr.validators import is_callable
+from attr.validators import optional
+
+from alfasim_sdk._validators import check_string_is_not_empty
+from alfasim_sdk._validators import check_unit_is_valid
 
 
 @attr.s(kw_only=True)
@@ -19,23 +26,25 @@ class TracerType(ALFAsimType):
 
 
 @attr.s(kw_only=True)
-class Tab():
+class Tab:
     """
     Base class for tab attributes available at ALFAsim.
     """
 
 
 @attr.s(kw_only=True)
-class Tabs():
+class Tabs:
     """
     Base class for tabs attributes available at ALFAsim.
     """
 
+
 @attr.s(kw_only=True)
-class Group():
+class Group:
     """
     Base class for Group attribute available at ALFAsim.
     """
+
 
 @attr.s(kw_only=True)
 class BaseField:
@@ -50,8 +59,13 @@ class BaseField:
     """
 
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
-    enable_expr: Optional[Callable] = attrib(default=None, validator=optional(is_callable()))
-    visible_expr: Optional[Callable] = attrib(default=None, validator=optional(is_callable()))
+    enable_expr: Optional[Callable] = attrib(
+        default=None, validator=optional(is_callable())
+    )
+    visible_expr: Optional[Callable] = attrib(
+        default=None, validator=optional(is_callable())
+    )
+
 
 @attr.s(kw_only=True)
 class String(BaseField):
@@ -68,6 +82,7 @@ class String(BaseField):
 
 
     """
+
     value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
 
 
@@ -82,11 +97,14 @@ class Enum(BaseField):
     :ivar str initial: Indicates which one of the options should be selected per default. If not given, the first item in ``values`` will be used as default.
 
     """
+
     values: List[str] = attrib()
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
-    def check(self, attr: Attribute, values: List[str]) -> None:  # pylint: disable=arguments-differ
+    def check(  # pylint: disable=arguments-differ
+        self, attr: Attribute, values: List[str]
+    ) -> None:
         if not isinstance(values, list):
             raise TypeError(
                 f"{attr.name} must be a list, got a '{type(values).__name__}'."
@@ -109,7 +127,10 @@ class Enum(BaseField):
 @attr.s(kw_only=True)
 class BaseReference(BaseField):
     ref_type = attrib()
-    container_type = attrib(default=None, validator=[optional(instance_of(str)), optional(check_string_is_not_empty)])
+    container_type = attrib(
+        default=None,
+        validator=[optional(instance_of(str)), optional(check_string_is_not_empty)],
+    )
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
@@ -117,20 +138,25 @@ class BaseReference(BaseField):
         else:
             if self.container_type is None:
                 raise TypeError(
-                    f"The container_type field must be given when ref_type is a class decorated with 'data_model'")
+                    f"The container_type field must be given when ref_type is a class decorated with 'data_model'"
+                )
 
     @ref_type.validator
     def check(self, attr: Attribute, value) -> None:
-        if not isinstance(value, type) :
+        if not isinstance(value, type):
             raise TypeError(f"{attr.name} must be a class")
 
         if not issubclass(value, ALFAsimType):
             if not hasattr(value, "_alfasim_metadata"):
-                raise TypeError(f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model'")
+                raise TypeError(
+                    f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model'"
+                )
 
             if value._alfasim_metadata["model"] is not None:
                 raise TypeError(
-                    f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model', got a class decorated with 'container_model'")
+                    f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model', got a class decorated with 'container_model'"
+                )
+
 
 @attr.s(kw_only=True)
 class Reference(BaseReference):
@@ -180,7 +206,6 @@ class MultipleReference(BaseReference):
     """
 
 
-
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
@@ -199,7 +224,9 @@ class TableColumn(BaseField):
         self.caption = self.value.caption
 
     @value.validator
-    def check(self, attr: Attribute, values: Quantity) -> None:  # pylint: disable=arguments-differ
+    def check(  # pylint: disable=arguments-differ
+        self, attr: Attribute, values: Quantity
+    ) -> None:
         if not isinstance(values, Quantity):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
@@ -209,7 +236,9 @@ class Table(BaseField):
     rows: List[TableColumn] = attrib()
 
     @rows.validator
-    def check(self, attr: Attribute, values: Union[List[str], str]):  # pylint: disable=arguments-differ
+    def check(  # pylint: disable=arguments-differ
+        self, attr: Attribute, values: Union[List[str], str]
+    ):
         if not isinstance(values, list):
             raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
 

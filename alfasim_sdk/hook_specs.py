@@ -23,10 +23,7 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_source_term(
-    ctx: "void*",
-    mass_source: "void*",
-) -> "int":
+def compute_mass_source_term(ctx: "void*", mass_source: "void*") -> "int":
     """
     Internal simulator hook to compute source terms of mass equation.
     This is called after all residual functions are evaluated.
@@ -38,10 +35,7 @@ def compute_mass_source_term(
     """
 
 
-def compute_momentum_source_term(
-    ctx: "void*",
-    momentum_source: "void*",
-) -> "int":
+def compute_momentum_source_term(ctx: "void*", momentum_source: "void*") -> "int":
     """
     Internal simulator hook to compute source terms of momentum equation.
     This is called after all residual functions are evaluated.
@@ -53,10 +47,7 @@ def compute_momentum_source_term(
     """
 
 
-def compute_energy_source_term(
-    ctx: "void*",
-    energy_source: "void*",
-) -> "int":
+def compute_energy_source_term(ctx: "void*", energy_source: "void*") -> "int":
     """
     Internal simulator hook to compute source terms of energy equation
     This is called after all residual functions are evaluated.
@@ -68,10 +59,7 @@ def compute_energy_source_term(
     """
 
 
-def compute_tracer_source_term(
-    ctx: "void*",
-    phi_source: "void*",
-) -> "int":
+def compute_tracer_source_term(ctx: "void*", phi_source: "void*") -> "int":
     """
     Internal simulator hook to compute source terms of tracer transport equation.
     This is called after all residual functions are evaluated.
@@ -115,10 +103,7 @@ def calculate_slip_velocity(
 
 
 def calculate_slurry_viscosity(
-    ctx: "void*",
-    alpha_f: "void*",
-    mu_f: "void*",
-    mu_f_layer: "void*",
+    ctx: "void*", alpha_f: "void*", mu_f: "void*", mu_f_layer: "void*"
 ) -> "int":
     """
     Internal simulator hook to calculate slurry viscosity of layer(s).

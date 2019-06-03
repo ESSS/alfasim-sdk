@@ -1,5 +1,6 @@
 enum error_code
 {
+    UNKNOWN_REFERENCE_TYPE=-7,
     OUT_OF_BOUNDS=-6,
     UNKNOWN_CONTEXT=-5,
     NOT_AVAILABLE_DATA=-4,

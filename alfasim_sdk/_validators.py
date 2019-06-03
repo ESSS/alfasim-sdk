@@ -2,15 +2,6 @@ from typing import Any
 
 from attr._make import Attribute
 
-def check_if_is_callable(self: Any, attribute: Attribute, value: str) -> None:
-    """
-    A validator that raises a ValueError if the initializer is called with a empty string '' or '  '
-    """
-    if value is None:
-        return
-
-    if not callable(value):
-        raise TypeError(f"enable_expr must be a function, got a {type(value)}.")
 
 def check_string_is_not_empty(self: Any, attribute: Attribute, value: str) -> None:
     """
