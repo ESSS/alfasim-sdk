@@ -8,6 +8,7 @@ import attr
 from attr import attrib
 from attr._make import Attribute
 from attr.validators import instance_of
+from attr.validators import is_callable
 from attr.validators import optional
 
 from alfasim_sdk._validators import check_string_is_not_empty
@@ -52,21 +53,18 @@ class BaseField:
 
     The BaseField class and all others classes that inheritance from BaseField must use kw_only=True
     for all attributes.
-    This is due to the necessity to make enable_expr is an optional value and the
+    This is due to the necessity to make enable_expr and visible_expr an optional value and the
     only way to have properties with default values mixed with required properties is with
     key-word only arguments.
     """
 
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
-    enable_expr: Optional[Callable] = attrib(default=None)
-
-    @enable_expr.validator
-    def check(self, attr: Attribute, value: Optional[Callable]) -> None:
-        if value is None:
-            return
-
-        if not callable(value):
-            raise TypeError(f"enable_expr must be a function, got a {type(value)}.")
+    enable_expr: Optional[Callable] = attrib(
+        default=None, validator=optional(is_callable())
+    )
+    visible_expr: Optional[Callable] = attrib(
+        default=None, validator=optional(is_callable())
+    )
 
 
 @attr.s(kw_only=True)
