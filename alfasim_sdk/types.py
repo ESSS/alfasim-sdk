@@ -59,6 +59,7 @@ class BaseField:
     """
 
     caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    tooltip: Optional[Callable] = attrib(default="", validator=instance_of(str))
     enable_expr: Optional[Callable] = attrib(
         default=None, validator=optional(is_callable())
     )
