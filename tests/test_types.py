@@ -173,3 +173,20 @@ def test_boolean():
 
     with pytest.raises(TypeError, match="'value' must be <class 'bool'"):
         Boolean(value=1, caption="caption")
+
+
+def test_tooltips():
+    from alfasim_sdk.types import Boolean
+
+    field = Boolean(value=True, caption="caption")
+    assert field.tooltip is ""
+
+    field = Boolean(value=True, caption="caption", tooltip="Test123")
+    assert field.tooltip is "Test123"
+
+    expected_msg = "'tooltip' must be <class 'str'> \(got 2 that is a <class 'int'>\)."
+    with pytest.raises(TypeError, match=expected_msg):
+        Boolean(value=True, caption="caption", tooltip=2)
+
+    field = Boolean(value=True, caption="caption", tooltip="∩ ∪ ∫ ∬ ∭ ∮")
+    assert field.tooltip is "∩ ∪ ∫ ∬ ∭ ∮"
