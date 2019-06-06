@@ -31,6 +31,17 @@ enum TimestepScope
     PREVIOUS=1
 };
 
+enum StateVariable {
+    RHO, // Density
+    MU, // Viscosity
+    CP, // Heat Capacity
+    DRHO_DP, // Partial derivative of density in relation to pressure
+    DRHO_DT, // Partial derivative of density in relation to temperature
+    H, // Enthalpy
+    K, // Thermal Conductivity
+    SIGMA // Interfacial tension
+};
+
 struct VariableScope
 {
     enum GridScope grid_scope;
