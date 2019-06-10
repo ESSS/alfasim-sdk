@@ -160,6 +160,32 @@ typedef int (*get_layer_id_func)(void* ctx, int* out, const char* name);
 get_layer_id_func get_layer_id;
 
 /**
+*   get_state_variable_array
+*
+*   Get the current contents of a given state variable (For an array data pointer).
+*   A state variable is any variable calculated from pressure and temperature,
+*   as any thermaldynamic variable.
+*
+*   The state_var determines which variable is being retrived.
+*
+*   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
+*   The user must **NEVER** change the contents returned by this function.
+*   
+*   Example usage:
+*   
+*   errcode = get_state_variable_array(ctx, enthalpy, StateVariable::H, FIELD_GAS, size);
+*
+*/
+typedef int (*get_state_variable_array_func)(
+    void* ctx,
+    double** out,
+    enum StateVariable state_var,
+    int field_index,
+    int* size
+);
+get_state_variable_array_func get_state_variable_array;
+
+/**
 *   get_simulation_array
 *
 *   Get the current contents of a given secondary variable (For an array data pointer).

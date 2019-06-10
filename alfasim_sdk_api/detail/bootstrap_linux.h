@@ -50,6 +50,7 @@ struct alfasim_sdk_bootstrap {
         get_primary_field_id_of_phase = (get_field_id_func)dlsym(this->m_handle, "get_primary_field_id_of_phase");
         get_phase_id = (get_phase_id_func)dlsym(this->m_handle, "get_phase_id");
         get_layer_id = (get_layer_id_func)dlsym(this->m_handle, "get_layer_id");
+        get_state_variable_array = (get_state_variable_array_func)dlsym(this->m_handle, "get_state_variable_array");
         get_simulation_array = (get_simulation_array_func)dlsym(this->m_handle, "get_simulation_array");
         get_simulation_tracer_array = (get_simulation_tracer_array_func)dlsym(this->m_handle, "get_simulation_tracer_array");
         get_simulation_quantity = (get_simulation_quantity_func)dlsym(this->m_handle, "get_simulation_quantity");

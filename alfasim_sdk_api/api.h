@@ -25,6 +25,13 @@ DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_primary_field_id_of_phase(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_layer_id(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_state_variable_array(
+    void* ctx,
+    double** out,
+    enum StateVariable state_var,
+    int field_index,
+    int* size
+);
 DLL_EXPORT int get_simulation_array(
     void* ctx,
     double** out,
