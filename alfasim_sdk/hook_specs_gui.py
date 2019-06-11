@@ -1,4 +1,10 @@
+from typing import List
+
 from pluggy import HookspecMarker
+
+from alfasim_sdk.status import ErrorMessage
+from alfasim_sdk.status import WarningMessage
+
 
 hookspec = HookspecMarker("ALFAsim")
 
@@ -20,7 +26,7 @@ def alfasim_get_additional_variables():
 
 
 @hookspec
-def alfasim_get_status(ctx):
+def alfasim_get_status(ctx) -> List[WarningMessage, ErrorMessage]:
     """
     Allows plugins to execute custom checks on ALFAsim.
     This checks can be used to guarantee the consistency of the data,
