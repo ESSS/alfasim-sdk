@@ -28,10 +28,19 @@ def test_enable_expr_and_visible_expr(expression_type):
 def test_string():
     from alfasim_sdk.types import String
 
-    with pytest.raises(TypeError):
+    with pytest.raises(
+        TypeError, match="missing 1 required keyword-only argument: 'caption'"
+    ):
         String(value="acme")
 
-    with pytest.raises(TypeError, match="'value' must be <class 'str'>"):
+    with pytest.raises(
+        TypeError, match="'caption' must be 'str' \(got 1 that is a 'int'\)"
+    ):
+        String(value="acme", caption=1)
+
+    with pytest.raises(
+        TypeError, match="'value' must be 'str' \(got 1 that is a 'int'\)"
+    ):
         String(value=1, caption="caption")
 
 
@@ -127,7 +136,9 @@ def test_quantity():
     with pytest.raises(TypeError, match="'value' must be <class 'numbers.Real'>"):
         Quantity(value="", unit="", caption="caption")
 
-    with pytest.raises(TypeError, match="'unit' must be <class 'str'>"):
+    with pytest.raises(
+        TypeError, match="'unit' must be 'str' \(got 1 that is a 'int'\)"
+    ):
         Quantity(value=1, unit=1, caption="caption")
 
 

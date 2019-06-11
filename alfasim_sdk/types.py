@@ -58,7 +58,7 @@ class BaseField:
     key-word only arguments.
     """
 
-    caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    caption: str = attrib(validator=check_string_is_not_empty)
     tooltip: Optional[Callable] = attrib(default="", validator=instance_of(str))
     enable_expr: Optional[Callable] = attrib(
         default=None, validator=optional(is_callable())
@@ -84,7 +84,7 @@ class String(BaseField):
 
     """
 
-    value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    value: str = attrib(validator=check_string_is_not_empty)
 
 
 @attr.s(kw_only=True)
@@ -128,10 +128,7 @@ class Enum(BaseField):
 @attr.s(kw_only=True)
 class BaseReference(BaseField):
     ref_type = attrib()
-    container_type = attrib(
-        default=None,
-        validator=[optional(instance_of(str)), optional(check_string_is_not_empty)],
-    )
+    container_type = attrib(default=None, validator=optional(check_string_is_not_empty))
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
@@ -210,14 +207,12 @@ class MultipleReference(BaseReference):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(
-        validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid]
-    )
+    unit: str = attrib(validator=[check_string_is_not_empty, check_unit_is_valid])
 
 
 @attr.s(kw_only=True)
 class TableColumn(BaseField):
-    id: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    id: str = attrib(validator=check_string_is_not_empty)
     value: Quantity = attrib()
     caption = attrib(init=False, default="")
 

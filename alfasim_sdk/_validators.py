@@ -7,6 +7,11 @@ def check_string_is_not_empty(self: Any, attribute: Attribute, value: str) -> No
     """
     A validator that raises a ValueError if the initializer is called with a empty string '' or '  '
     """
+    if not isinstance(value, str):
+        raise TypeError(
+            f"'{attribute.name}' must be 'str' (got {value} that is a '{type(value).__name__}')"
+        )
+
     if not value or value.isspace():
         from alfasim_sdk.types import Enum
 
