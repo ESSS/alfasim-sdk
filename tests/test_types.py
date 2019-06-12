@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 from alfasim_sdk.types import MultipleReference
@@ -34,12 +36,12 @@ def test_string():
         String(value="acme")
 
     with pytest.raises(
-        TypeError, match=r"'caption' must be 'str' \(got 1 that is a 'int'\)"
+        TypeError, match=re.escape("'caption' must be 'str' (got 1 that is a 'int')")
     ):
         String(value="acme", caption=1)
 
     with pytest.raises(
-        TypeError, match=r"'value' must be 'str' \(got 1 that is a 'int'\)"
+        TypeError, match=re.escape("'value' must be 'str' (got 1 that is a 'int')")
     ):
         String(value=1, caption="caption")
 
@@ -137,7 +139,7 @@ def test_quantity():
         Quantity(value="", unit="", caption="caption")
 
     with pytest.raises(
-        TypeError, match=r"'unit' must be 'str' \(got 1 that is a 'int'\)"
+        TypeError, match=re.escape("'unit' must be 'str' (got 1 that is a 'int')")
     ):
         Quantity(value=1, unit=1, caption="caption")
 
@@ -195,7 +197,9 @@ def test_tooltips():
     field = Boolean(value=True, caption="caption", tooltip="Test123")
     assert field.tooltip is "Test123"
 
-    expected_msg = r"'tooltip' must be <class 'str'> \(got 2 that is a <class 'int'>\)."
+    expected_msg = re.escape(
+        "'tooltip' must be <class 'str'> (got 2 that is a <class 'int'>)."
+    )
     with pytest.raises(TypeError, match=expected_msg):
         Boolean(value=True, caption="caption", tooltip=2)
 
