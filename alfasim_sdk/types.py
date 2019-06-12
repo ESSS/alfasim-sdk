@@ -11,8 +11,8 @@ from attr.validators import instance_of
 from attr.validators import is_callable
 from attr.validators import optional
 
-from alfasim_sdk._validators import check_unit_is_valid
 from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk._validators import valid_unit
 
 
 @attr.s(kw_only=True)
@@ -207,7 +207,7 @@ class MultipleReference(BaseReference):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(validator=[non_empty_str, check_unit_is_valid])
+    unit: str = attrib(validator=[non_empty_str, valid_unit])
 
 
 @attr.s(kw_only=True)

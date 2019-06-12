@@ -23,7 +23,7 @@ def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:
         raise ValueError(f'The field "{attribute.name}" cannot be empty')
 
 
-def check_unit_is_valid(self: Any, attribute: Attribute, value: str) -> None:
+def valid_unit(self: Any, attribute: Attribute, value: str) -> None:
     """
     A validator that raises a ValueError if the initializer is called with a non-valid unit
     """
