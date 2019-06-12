@@ -17,11 +17,11 @@ def test_status(status_class):
         status_class(model_name="Test", message="")
 
     with pytest.raises(
-        TypeError, match="'model_name' must be 'str' \(got 42 that is a 'int'\)"
+        TypeError, match=r"'model_name' must be 'str' \(got 42 that is a 'int'\)"
     ):
         status_class(model_name=42, message="Foo")
 
     with pytest.raises(
-        TypeError, match="'message' must be 'str' \(got 42 that is a 'int'\)"
+        TypeError, match=r"'message' must be 'str' \(got 42 that is a 'int'\)"
     ):
         status_class(model_name="Foo", message=42)
