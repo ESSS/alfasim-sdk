@@ -32,6 +32,47 @@ def alfasim_get_status(ctx) -> List[Union[WarningMessage, ErrorMessage]]:
     Allows plugins to execute custom checks on ALFAsim.
     This checks can be used to guarantee the consistency of the data,
     or compatibility with some configuration made on ALFAsim.
+
+    Example:
+        from alfasim_sdk.status import ErrorMessage
+        @alfasim_sdk.hookimpl
+        def alfasim_get_status(ctx):
+            results = []
+
+            plugin_info_2 = [plugin for plugin in ctx.GetPluginsInfo() if plugin.name.endswith('Plugin2')][0]
+            if plugin_info_2.enabled:
+                if ctx.GetModel('MyModel').distance.value < 0:
+                    results.append(ErrorMessage(model_name="MyModel", message='Distance must be greater than 0'))
+
+            return results
+
+
+    :param ctx: ALFAsim's plugins context
+        The ctx parameter has the following attributes:
+
+            GetPluginInfo:
+                Method that return a list of PluginInfo, with the name of the plugin and its current state
+
+            GetModel:
+                Method to access the Models registry, it receives a single argument that should be name of the class defined.
+
+                Example.:
+
+                @data_model
+                Class MyModel
+                    distance = Quantity(value=1, unit='m', caption='Distance')
+
+                @alfasim_sdk.hookimpl
+                def alfasim_get_status(ctx):
+                    results = []
+
+                    if ctx.GetModel('MyModel').distance.value < 0:
+                        results.append(ErrorMessage(model_name="MyModel", message='Distance must be greater than 0'))
+
+                :param str model_name: Name of the class to access
+                :raises TypeError: When the model informed is not available.
+
+    :returns: A list of status message either WarningMessage or ErrorMessage
     """
 
 
