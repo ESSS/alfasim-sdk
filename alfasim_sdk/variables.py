@@ -8,8 +8,8 @@ from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import UnitDatabase
 
-from alfasim_sdk._validators import check_string_is_not_empty
 from alfasim_sdk._validators import check_unit_is_valid
+from alfasim_sdk._validators import non_empty_str
 
 
 class Visibility(Enum):
@@ -46,12 +46,10 @@ class Scope(Enum):
 
 @attr.s(kw_only=True)
 class SecondaryVariable:
-    name: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
-    caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    name: str = attrib(validator=non_empty_str)
+    caption: str = attrib(validator=non_empty_str)
     type = attrib(validator=instance_of(Type), default=Type.Double)
-    unit = attrib(
-        validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid]
-    )
+    unit = attrib(validator=[non_empty_str, check_unit_is_valid])
     visibility: Visibility = attrib(
         validator=instance_of(Visibility), default=Visibility.Output
     )

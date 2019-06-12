@@ -3,7 +3,7 @@ from typing import Any
 from attr._make import Attribute
 
 
-def check_string_is_not_empty(self: Any, attribute: Attribute, value: str) -> None:
+def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:
     """
     A validator that raises a ValueError if the initializer is called with a empty string '' or '  '
     """
