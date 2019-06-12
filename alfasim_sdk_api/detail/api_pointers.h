@@ -170,11 +170,9 @@ get_layer_id_func get_layer_id;
 *
 *   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
 *   The user must **NEVER** change the contents returned by this function.
-*   
-*   Example usage:
-*   
-*   errcode = get_state_variable_array(ctx, enthalpy, StateVariable::H, FIELD_GAS, size);
 *
+*   Example usage:
+*   errcode = get_state_variable_array(ctx, enthalpy, StateVariable::H, FIELD_GAS, size);
 */
 typedef int (*get_state_variable_array_func)(
     void* ctx,
