@@ -52,6 +52,7 @@ struct VariableScope
 #define FIELD_GAS "gas"
 #define FIELD_LIQUID "liquid"
 #define FIELD_WATER "water"
+#define FIELD_WATER_DROPLET_IN_LIQUID "water_in_liquid_droplet"
 #define FIELD_DROPLET "droplet"
 #define FIELD_BUBBLE "bubble"
 
