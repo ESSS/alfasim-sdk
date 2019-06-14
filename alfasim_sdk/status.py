@@ -1,5 +1,7 @@
 import attr
 from attr import attrib
+from attr.validators import deep_iterable
+from attr.validators import instance_of
 
 from alfasim_sdk._validators import non_empty_str
 
@@ -24,3 +26,14 @@ class WarningMessage:
 
     model_name: str = attrib(validator=non_empty_str)
     message: str = attrib(validator=non_empty_str)
+
+
+@attr.s(frozen=True)
+class PluginInfo:
+    name = attr.attrib(validator=non_empty_str)
+    enabled = attr.attrib(validator=instance_of(bool))
+    models = attr.attrib(
+        validator=deep_iterable(
+            member_validator=instance_of(str), iterable_validator=instance_of(list)
+        )
+    )

@@ -28,3 +28,27 @@ def test_status(status_class):
         TypeError, match=re.escape("'message' must be 'str' (got 42 that is a 'int')")
     ):
         status_class(model_name="Foo", message=42)
+
+
+def test_plugin_info():
+    from alfasim_sdk.status import PluginInfo
+
+    error_msg = "'name' must be 'str' (got 1 that is a 'int')"
+    with pytest.raises(TypeError, match=re.escape(error_msg)):
+        PluginInfo(name=1, enabled="True", models="Anything")
+
+    error_msg = "'enabled' must be <class 'bool'> (got 'True' that is a <class 'str'>)."
+    with pytest.raises(TypeError, match=re.escape(error_msg)):
+        PluginInfo(name="Acme", enabled="True", models="Anything")
+
+    error_msg = (
+        "'models' must be <class 'list'> (got 'Anything' that is a <class 'str'>)."
+    )
+    with pytest.raises(TypeError, match=re.escape(error_msg)):
+        PluginInfo(name="Acme", enabled=True, models="Anything")
+
+    error_msg = "'models' must be <class 'str'> (got 1 that is a <class 'int'>)."
+    with pytest.raises(TypeError, match=re.escape(error_msg)):
+        PluginInfo(name="Acme", enabled=True, models=[1, 2, 3])
+
+    PluginInfo(name="Acme", enabled=True, models=["1", "2"])
