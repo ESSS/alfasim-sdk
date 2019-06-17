@@ -2,6 +2,7 @@ import attr
 from attr import attrib
 from attr.validators import deep_iterable
 from attr.validators import instance_of
+from barril.units import Scalar
 
 from alfasim_sdk._validators import non_empty_str
 
@@ -37,3 +38,10 @@ class PluginInfo:
             member_validator=instance_of(str), iterable_validator=instance_of(list)
         )
     )
+
+
+@attr.s(frozen=True)
+class PipelineSegmentInfo:
+    edge_name = attr.attrib(validator=non_empty_str)
+    inner_diameter = attr.attrib(validator=instance_of(Scalar))
+    start_position = attr.attrib(validator=instance_of(Scalar))
