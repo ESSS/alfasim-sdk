@@ -3,10 +3,15 @@ from typing import Any
 from attr._make import Attribute
 
 
-def check_string_is_not_empty(self: Any, attribute: Attribute, value: str) -> None:
+def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:
     """
     A validator that raises a ValueError if the initializer is called with a empty string '' or '  '
     """
+    if not isinstance(value, str):
+        raise TypeError(
+            f"'{attribute.name}' must be 'str' (got {value} that is a '{type(value).__name__}')"
+        )
+
     if not value or value.isspace():
         from alfasim_sdk.types import Enum
 
@@ -18,7 +23,7 @@ def check_string_is_not_empty(self: Any, attribute: Attribute, value: str) -> No
         raise ValueError(f'The field "{attribute.name}" cannot be empty')
 
 
-def check_unit_is_valid(self: Any, attribute: Attribute, value: str) -> None:
+def valid_unit(self: Any, attribute: Attribute, value: str) -> None:
     """
     A validator that raises a ValueError if the initializer is called with a non-valid unit
     """

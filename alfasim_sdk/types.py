@@ -11,8 +11,8 @@ from attr.validators import instance_of
 from attr.validators import is_callable
 from attr.validators import optional
 
-from alfasim_sdk._validators import check_string_is_not_empty
-from alfasim_sdk._validators import check_unit_is_valid
+from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk._validators import valid_unit
 
 
 @attr.s(kw_only=True)
@@ -58,7 +58,7 @@ class BaseField:
     key-word only arguments.
     """
 
-    caption: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    caption: str = attrib(validator=non_empty_str)
     tooltip: Optional[Callable] = attrib(default="", validator=instance_of(str))
     enable_expr: Optional[Callable] = attrib(
         default=None, validator=optional(is_callable())
@@ -84,7 +84,7 @@ class String(BaseField):
 
     """
 
-    value: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    value: str = attrib(validator=non_empty_str)
 
 
 @attr.s(kw_only=True)
@@ -116,7 +116,7 @@ class Enum(BaseField):
                 raise TypeError(
                     f"{attr.name} must be a list of strings, the item '{value}' is a '{type(value).__name__}'"
                 )
-            check_string_is_not_empty(self, attr, value)
+            non_empty_str(self, attr, value)
 
         if self.initial is not None:
             if self.initial not in values:
@@ -128,10 +128,7 @@ class Enum(BaseField):
 @attr.s(kw_only=True)
 class BaseReference(BaseField):
     ref_type = attrib()
-    container_type = attrib(
-        default=None,
-        validator=[optional(instance_of(str)), optional(check_string_is_not_empty)],
-    )
+    container_type = attrib(default=None, validator=optional(non_empty_str))
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
@@ -210,14 +207,12 @@ class MultipleReference(BaseReference):
 @attr.s(kw_only=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
-    unit: str = attrib(
-        validator=[instance_of(str), check_string_is_not_empty, check_unit_is_valid]
-    )
+    unit: str = attrib(validator=[non_empty_str, valid_unit])
 
 
 @attr.s(kw_only=True)
 class TableColumn(BaseField):
-    id: str = attrib(validator=[instance_of(str), check_string_is_not_empty])
+    id: str = attrib(validator=non_empty_str)
     value: Quantity = attrib()
     caption = attrib(init=False, default="")
 
