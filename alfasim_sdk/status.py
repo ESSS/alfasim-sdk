@@ -1,3 +1,6 @@
+from enum import Enum
+from typing import List
+
 import attr
 from attr import attrib
 from attr.validators import deep_iterable
@@ -45,3 +48,38 @@ class PipelineSegmentInfo:
     edge_name = attr.attrib(validator=non_empty_str)
     inner_diameter = attr.attrib(validator=instance_of(Scalar))
     start_position = attr.attrib(validator=instance_of(Scalar))
+
+
+class EmulsionModelType(Enum):
+    boxall2012 = "EmulsionModelType.boxall2012"
+    brauner2001 = "EmulsionModelType.brauner2001"
+    brinkman1952 = "EmulsionModelType.brinkman1952"
+    brinkman1952_and_yeh1964 = "EmulsionModelType.brinkman1952_and_yeh1964"
+    hinze1955 = "EmulsionModelType.hinze1955"
+    model_default = "EmulsionModelType.model_default"
+    mooney1951a = "EmulsionModelType.mooney1951a"
+    mooney1951b = "EmulsionModelType.mooney1951b"
+    no_model = "EmulsionModelType.no_model"
+    sleicher1962 = "EmulsionModelType.sleicher1962"
+    taylor1932 = "EmulsionModelType.taylor1932"
+
+
+class SolidsModelType(Enum):
+    mills1985_equilibrium = "SolidsModelType.mills1985_equilibrium"
+    no_model = "SolidsModelType.no_model"
+    santamaria2010_equilibrium = "SolidsModelType.santamaria2010_equilibrium"
+    thomas1965_equilibrium = "SolidsModelType.thomas1965_equilibrium"
+
+
+@attr.s(frozen=True)
+class HydrodynamicModelInfo:
+    phases: List[str] = attr.attrib()
+    fields: List[str] = attr.attrib()
+    layers: List[str] = attr.attrib()
+
+
+@attr.s(frozen=True)
+class PhysicsOptionsInfo:
+    emulsion_model = attr.attrib(validator=instance_of(EmulsionModelType))
+    solids_model = attr.attrib(validator=instance_of(SolidsModelType))
+    hydrodynamic_model = attr.attrib(validator=instance_of(HydrodynamicModelInfo))
