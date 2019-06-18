@@ -50,6 +50,18 @@ class PipelineSegmentInfo:
     start_position = attr.attrib(validator=instance_of(Scalar))
 
 
+@attr.s(frozen=True)
+class NodesInfo:
+    name = attr.attrib(validator=non_empty_str)
+    number_of_phases = attr.attrib(validator=instance_of(int))
+
+
+@attr.s(frozen=True)
+class EdgesInfo:
+    name = attr.attrib(validator=non_empty_str)
+    number_of_phases = attr.attrib(validator=instance_of(int))
+
+
 class EmulsionModelType(Enum):
     boxall2012 = "EmulsionModelType.boxall2012"
     brauner2001 = "EmulsionModelType.brauner2001"
