@@ -44,6 +44,7 @@ class PipelineSegmentInfo:
     edge_name = attr.attrib(validator=non_empty_str)
     inner_diameter = attr.attrib(validator=instance_of(Scalar))
     start_position = attr.attrib(validator=instance_of(Scalar))
+    roughness = attr.attrib(validator=instance_of(Scalar))
 
 
 @attr.s(frozen=True)
@@ -59,6 +60,7 @@ class EdgesInfo:
 
 
 class EmulsionModelType(Enum):
+    no_model = "EmulsionModelType.no_model"
     boxall2012 = "EmulsionModelType.boxall2012"
     brauner2001 = "EmulsionModelType.brauner2001"
     brinkman1952 = "EmulsionModelType.brinkman1952"
@@ -67,14 +69,13 @@ class EmulsionModelType(Enum):
     model_default = "EmulsionModelType.model_default"
     mooney1951a = "EmulsionModelType.mooney1951a"
     mooney1951b = "EmulsionModelType.mooney1951b"
-    no_model = "EmulsionModelType.no_model"
     sleicher1962 = "EmulsionModelType.sleicher1962"
     taylor1932 = "EmulsionModelType.taylor1932"
 
 
 class SolidsModelType(Enum):
-    mills1985_equilibrium = "SolidsModelType.mills1985_equilibrium"
     no_model = "SolidsModelType.no_model"
+    mills1985_equilibrium = "SolidsModelType.mills1985_equilibrium"
     santamaria2010_equilibrium = "SolidsModelType.santamaria2010_equilibrium"
     thomas1965_equilibrium = "SolidsModelType.thomas1965_equilibrium"
 
