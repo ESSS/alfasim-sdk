@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from barril.units import Scalar
 
 from alfasim_sdk.status import EdgesInfo
 from alfasim_sdk.status import EmulsionModelType
@@ -8,6 +9,7 @@ from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import HydrodynamicModelInfo
 from alfasim_sdk.status import NodesInfo
 from alfasim_sdk.status import PhysicsOptionsInfo
+from alfasim_sdk.status import PipelineSegmentInfo
 from alfasim_sdk.status import SolidsModelType
 from alfasim_sdk.status import WarningMessage
 
@@ -61,29 +63,44 @@ def test_plugin_info():
 
 
 def test_pipeline_segments():
-    from alfasim_sdk.status import PipelineSegmentInfo
-
-    error_msg = "'edge_name' must be 'str' (got 1 that is a 'int')"
-    with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PipelineSegmentInfo(edge_name=1, inner_diameter=1, start_position=1)
-
-    error_msg = "'inner_diameter' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
-    with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PipelineSegmentInfo(edge_name="Foo", inner_diameter=1, start_position=1)
-
-    error_msg = "'start_position' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
-    from barril.units import Scalar
-
-    with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PipelineSegmentInfo(
-            edge_name="Foo", inner_diameter=Scalar(0.15, "m"), start_position=1
-        )
-
-    PipelineSegmentInfo(
+    pipeline_segment_info = PipelineSegmentInfo(
         edge_name="Foo",
         inner_diameter=Scalar(0.15, "m"),
         start_position=Scalar(0.0, "m"),
+        roughness=Scalar(0.0, "m"),
     )
+    assert pipeline_segment_info
+
+    edge_msg = "'edge_name' must be 'str' (got 1 that is a 'int')"
+    diameter_msg = "'inner_diameter' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
+    position_msg = "'start_position' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
+    roughness_msg = "'roughness' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
+
+    with pytest.raises(TypeError, match=re.escape(edge_msg)):
+        PipelineSegmentInfo(
+            edge_name=1, inner_diameter=1, start_position=1, roughness=1
+        )
+
+    with pytest.raises(TypeError, match=re.escape(diameter_msg)):
+        PipelineSegmentInfo(
+            edge_name="Foo", inner_diameter=1, start_position=1, roughness=1
+        )
+
+    with pytest.raises(TypeError, match=re.escape(position_msg)):
+        PipelineSegmentInfo(
+            edge_name="Foo",
+            inner_diameter=Scalar(0.15, "m"),
+            start_position=1,
+            roughness=1,
+        )
+
+    with pytest.raises(TypeError, match=re.escape(roughness_msg)):
+        PipelineSegmentInfo(
+            edge_name="Foo",
+            inner_diameter=Scalar(0.15, "m"),
+            start_position=Scalar(0.0, "m"),
+            roughness=1,
+        )
 
 
 @pytest.mark.parametrize("class_with_info", [NodesInfo, EdgesInfo])
