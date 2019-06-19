@@ -108,7 +108,7 @@ def test_nodes_and_edges_info(class_with_info):
     assert class_with_info(name="Foo", number_of_phases=1)
     assert class_with_info(name="Foo", number_of_phases=None)
 
-    # number_of_phases must be int or None
+    # number_of_phases_from_associated_pvt must be int or None
     with pytest.raises(TypeError):
         class_with_info(name="Foo", number_of_phases="1")
 

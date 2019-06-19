@@ -50,13 +50,17 @@ class PipelineSegmentInfo:
 @attr.s(frozen=True)
 class NodeInfo:
     name = attr.attrib(validator=non_empty_str)
-    number_of_phases = attr.attrib(validator=optional(instance_of(int)))
+    number_of_phases_from_associated_pvt = attr.attrib(
+        validator=optional(instance_of(int))
+    )
 
 
 @attr.s(frozen=True)
 class EdgeInfo:
     name = attr.attrib(validator=non_empty_str)
-    number_of_phases = attr.attrib(validator=optional(instance_of(int)))
+    number_of_phases_from_associated_pvt = attr.attrib(
+        validator=optional(instance_of(int))
+    )
 
 
 class EmulsionModelType(Enum):
