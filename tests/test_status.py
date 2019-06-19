@@ -3,11 +3,11 @@ import re
 import pytest
 from barril.units import Scalar
 
-from alfasim_sdk.status import EdgesInfo
+from alfasim_sdk.status import EdgeInfo
 from alfasim_sdk.status import EmulsionModelType
 from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import HydrodynamicModelInfo
-from alfasim_sdk.status import NodesInfo
+from alfasim_sdk.status import NodeInfo
 from alfasim_sdk.status import PhysicsOptionsInfo
 from alfasim_sdk.status import PipelineSegmentInfo
 from alfasim_sdk.status import SolidsModelType
@@ -103,7 +103,7 @@ def test_pipeline_segments():
         )
 
 
-@pytest.mark.parametrize("class_with_info", [NodesInfo, EdgesInfo])
+@pytest.mark.parametrize("class_with_info", [NodeInfo, EdgeInfo])
 def test_nodes_and_edges_info(class_with_info):
     assert class_with_info(name="Foo", number_of_phases=1)
     assert class_with_info(name="Foo", number_of_phases=None)

@@ -48,13 +48,13 @@ class PipelineSegmentInfo:
 
 
 @attr.s(frozen=True)
-class NodesInfo:
+class NodeInfo:
     name = attr.attrib(validator=non_empty_str)
     number_of_phases = attr.attrib(validator=optional(instance_of(int)))
 
 
 @attr.s(frozen=True)
-class EdgesInfo:
+class EdgeInfo:
     name = attr.attrib(validator=non_empty_str)
     number_of_phases = attr.attrib(validator=optional(instance_of(int)))
 
