@@ -9,6 +9,7 @@ from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import HydrodynamicModelInfo
 from alfasim_sdk.status import NodeInfo
 from alfasim_sdk.status import PhysicsOptionsInfo
+from alfasim_sdk.status import PipelineInfo
 from alfasim_sdk.status import PipelineSegmentInfo
 from alfasim_sdk.status import SolidsModelType
 from alfasim_sdk.status import WarningMessage
@@ -62,63 +63,86 @@ def test_plugin_info():
     PluginInfo(name="Acme", enabled=True, models=["1", "2"])
 
 
-def test_pipeline_segments():
+def test_pipeline_info():
     pipeline_segment_info = PipelineSegmentInfo(
-        edge_name="Foo",
         inner_diameter=Scalar(0.15, "m"),
         start_position=Scalar(0.0, "m"),
+        is_custom=True,
         roughness=Scalar(0.0, "m"),
     )
+
+    pipeline_info = PipelineInfo(
+        name="Foo",
+        edge_name="Foo 2",
+        segments=[pipeline_segment_info],
+        total_length=Scalar(0.0, "m"),
+    )
+    assert pipeline_info
+
+
+def test_pipeline_segments():
+    pipeline_segment_info = PipelineSegmentInfo(
+        inner_diameter=Scalar(0.15, "m"),
+        start_position=Scalar(0.0, "m"),
+        is_custom=True,
+        roughness=Scalar(0.0, "m"),
+    )
+
     assert pipeline_segment_info
 
-    edge_msg = "'edge_name' must be 'str' (got 1 that is a 'int')"
     diameter_msg = "'inner_diameter' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
     position_msg = "'start_position' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
+    is_custom_msg = (
+        "'is_custom' must be <class 'bool'> (got None that is a <class 'NoneType'>)."
+    )
     roughness_msg = "'roughness' must be <class 'barril.units._scalar.Scalar'> (got 1 that is a <class 'int'>)."
-
-    with pytest.raises(TypeError, match=re.escape(edge_msg)):
-        PipelineSegmentInfo(
-            edge_name=1, inner_diameter=1, start_position=1, roughness=1
-        )
 
     with pytest.raises(TypeError, match=re.escape(diameter_msg)):
         PipelineSegmentInfo(
-            edge_name="Foo", inner_diameter=1, start_position=1, roughness=1
+            inner_diameter=1, start_position=1, is_custom=None, roughness=1
         )
 
     with pytest.raises(TypeError, match=re.escape(position_msg)):
         PipelineSegmentInfo(
-            edge_name="Foo",
             inner_diameter=Scalar(0.15, "m"),
             start_position=1,
+            is_custom=None,
+            roughness=1,
+        )
+
+    with pytest.raises(TypeError, match=re.escape(is_custom_msg)):
+        PipelineSegmentInfo(
+            inner_diameter=Scalar(0.15, "m"),
+            start_position=Scalar(0.0, "m"),
+            is_custom=None,
             roughness=1,
         )
 
     with pytest.raises(TypeError, match=re.escape(roughness_msg)):
         PipelineSegmentInfo(
-            edge_name="Foo",
             inner_diameter=Scalar(0.15, "m"),
             start_position=Scalar(0.0, "m"),
+            is_custom=True,
             roughness=1,
         )
 
 
 @pytest.mark.parametrize("class_with_info", [NodeInfo, EdgeInfo])
 def test_nodes_and_edges_info(class_with_info):
-    assert class_with_info(name="Foo", number_of_phases=1)
-    assert class_with_info(name="Foo", number_of_phases=None)
+    assert class_with_info(name="Foo", number_of_phases_from_associated_pvt=1)
+    assert class_with_info(name="Foo", number_of_phases_from_associated_pvt=None)
 
     # number_of_phases_from_associated_pvt must be int or None
     with pytest.raises(TypeError):
-        class_with_info(name="Foo", number_of_phases="1")
+        class_with_info(name="Foo", number_of_phases_from_associated_pvt="1")
 
     # name must be string and not empty
     with pytest.raises(TypeError):
-        class_with_info(name=None, number_of_phases=1)
+        class_with_info(name=None, number_of_phases_from_associated_pvt=1)
 
     # name must be string and not empty
     with pytest.raises(ValueError):
-        class_with_info(name="", number_of_phases=1)
+        class_with_info(name="", number_of_phases_from_associated_pvt=1)
 
 
 def test_physics_option():

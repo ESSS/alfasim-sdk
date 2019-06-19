@@ -1,7 +1,9 @@
 from enum import Enum
+from typing import List
 
 import attr
 from attr import attrib
+from attr.validators import deep_iterable
 from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import Scalar
@@ -41,10 +43,24 @@ class PluginInfo:
 
 @attr.s(frozen=True)
 class PipelineSegmentInfo:
-    edge_name = attr.attrib(validator=non_empty_str)
     inner_diameter = attr.attrib(validator=instance_of(Scalar))
     start_position = attr.attrib(validator=instance_of(Scalar))
+    is_custom = attr.attrib(validator=instance_of(bool))
     roughness = attr.attrib(validator=instance_of(Scalar))
+
+
+list_of_segments = deep_iterable(
+    member_validator=instance_of(PipelineSegmentInfo),
+    iterable_validator=instance_of(list),
+)
+
+
+@attr.s(frozen=True)
+class PipelineInfo:
+    name = attr.attrib(type=str, validator=non_empty_str)
+    edge_name = attr.attrib(type=str, validator=non_empty_str)
+    segments = attr.attrib(type=List[PipelineSegmentInfo], validator=list_of_segments)
+    total_length = attr.attrib(type=Scalar, validator=instance_of(Scalar))
 
 
 @attr.s(frozen=True)
