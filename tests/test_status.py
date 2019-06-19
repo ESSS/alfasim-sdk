@@ -150,6 +150,9 @@ def test_physics_option():
         emulsion_model=EmulsionModelType.boxall2012,
         solids_model=SolidsModelType.no_model,
         hydrodynamic_model=HydrodynamicModelInfo(
-            phases=["1", "2"], fields=["3", "4"], layers=["5", "6"]
+            phases=["1", "2"],
+            fields=["3", "4"],
+            layers=["5", "6"],
+            has_water_phase=True,
         ),
     )

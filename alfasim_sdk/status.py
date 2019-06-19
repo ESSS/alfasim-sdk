@@ -105,6 +105,7 @@ class HydrodynamicModelInfo:
     phases = attr.attrib(validator=list_of_strings)
     fields = attr.attrib(validator=list_of_strings)
     layers = attr.attrib(validator=list_of_strings)
+    has_water_phase = attr.attrib(type=bool, validator=instance_of(bool))
 
 
 @attr.s(frozen=True)
