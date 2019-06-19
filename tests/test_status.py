@@ -2,7 +2,13 @@ import re
 
 import pytest
 
+from alfasim_sdk.status import EdgesInfo
+from alfasim_sdk.status import EmulsionModelType
 from alfasim_sdk.status import ErrorMessage
+from alfasim_sdk.status import HydrodynamicModelInfo
+from alfasim_sdk.status import NodesInfo
+from alfasim_sdk.status import PhysicsOptionsInfo
+from alfasim_sdk.status import SolidsModelType
 from alfasim_sdk.status import WarningMessage
 
 
@@ -77,4 +83,32 @@ def test_pipeline_segments():
         edge_name="Foo",
         inner_diameter=Scalar(0.15, "m"),
         start_position=Scalar(0.0, "m"),
+    )
+
+
+@pytest.mark.parametrize("class_with_info", [NodesInfo, EdgesInfo])
+def test_nodes_and_edges_info(class_with_info):
+    assert class_with_info(name="Foo", number_of_phases=1)
+    assert class_with_info(name="Foo", number_of_phases=None)
+
+    # number_of_phases must be int or None
+    with pytest.raises(TypeError):
+        class_with_info(name="Foo", number_of_phases="1")
+
+    # name must be string and not empty
+    with pytest.raises(TypeError):
+        class_with_info(name=None, number_of_phases=1)
+
+    # name must be string and not empty
+    with pytest.raises(ValueError):
+        class_with_info(name="", number_of_phases=1)
+
+
+def test_physics_option():
+    assert PhysicsOptionsInfo(
+        emulsion_model=EmulsionModelType.boxall2012,
+        solids_model=SolidsModelType.no_model,
+        hydrodynamic_model=HydrodynamicModelInfo(
+            phases=["1", "2"], fields=["3", "4"], layers=["5", "6"]
+        ),
     )

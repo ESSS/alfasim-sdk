@@ -1,12 +1,12 @@
 from enum import Enum
-from typing import List
 
 import attr
 from attr import attrib
-from attr.validators import deep_iterable
 from attr.validators import instance_of
+from attr.validators import optional
 from barril.units import Scalar
 
+from alfasim_sdk._validators import list_of_strings
 from alfasim_sdk._validators import non_empty_str
 
 
@@ -36,11 +36,7 @@ class WarningMessage:
 class PluginInfo:
     name = attr.attrib(validator=non_empty_str)
     enabled = attr.attrib(validator=instance_of(bool))
-    models = attr.attrib(
-        validator=deep_iterable(
-            member_validator=instance_of(str), iterable_validator=instance_of(list)
-        )
-    )
+    models = attr.attrib(validator=list_of_strings)
 
 
 @attr.s(frozen=True)
@@ -53,13 +49,13 @@ class PipelineSegmentInfo:
 @attr.s(frozen=True)
 class NodesInfo:
     name = attr.attrib(validator=non_empty_str)
-    number_of_phases = attr.attrib(validator=instance_of(int))
+    number_of_phases = attr.attrib(validator=optional(instance_of(int)))
 
 
 @attr.s(frozen=True)
 class EdgesInfo:
     name = attr.attrib(validator=non_empty_str)
-    number_of_phases = attr.attrib(validator=instance_of(int))
+    number_of_phases = attr.attrib(validator=optional(instance_of(int)))
 
 
 class EmulsionModelType(Enum):
@@ -85,9 +81,9 @@ class SolidsModelType(Enum):
 
 @attr.s(frozen=True)
 class HydrodynamicModelInfo:
-    phases: List[str] = attr.attrib()
-    fields: List[str] = attr.attrib()
-    layers: List[str] = attr.attrib()
+    phases = attr.attrib(validator=list_of_strings)
+    fields = attr.attrib(validator=list_of_strings)
+    layers = attr.attrib(validator=list_of_strings)
 
 
 @attr.s(frozen=True)
