@@ -39,7 +39,7 @@ def alfasim_get_status(ctx) -> List[Union[WarningMessage, ErrorMessage]]:
         def alfasim_get_status(ctx):
             results = []
 
-            plugin_info_2 = [plugin for plugin in ctx.GetPluginsInfo() if plugin.name.endswith('Plugin2')][0]
+            plugin_info_2 = ctx.GetPluginByName('Plugin2')
             if plugin_info_2.enabled:
                 if ctx.GetModel('MyModel').distance.value < 0:
                     results.append(ErrorMessage(model_name="MyModel", message='Distance must be greater than 0'))
@@ -52,6 +52,7 @@ def alfasim_get_status(ctx) -> List[Union[WarningMessage, ErrorMessage]]:
 
             GetPluginInfo:
                 Method that return a list of PluginInfo, with the name of the plugin and its current state
+                Check :class:`alfasim_sdk.status.PluginInfo` for more details about the returned value.
 
             GetModel:
                 Method to access the Models registry, it receives a single argument that should be name of the class defined.
