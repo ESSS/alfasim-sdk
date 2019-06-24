@@ -32,3 +32,4 @@ ignore:
   - "setup.py"
   - "hook_specs_*.py"
   - "alfasim_sdk/hook_specs_gui.py"
+  - "alfasim_sdk/constants.py"

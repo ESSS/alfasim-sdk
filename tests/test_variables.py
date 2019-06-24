@@ -41,6 +41,8 @@ def test_validation(attr, expected_type_error, expected_message):
         multifield_scope=Scope.Global,
         checked_on_gui_default=False,
     )
+    assert SecondaryVariable(**attrs).category == "length"
+
     attrs.update(attr)
     with pytest.raises(expected_type_error, match=expected_message):
         SecondaryVariable(**attrs)
