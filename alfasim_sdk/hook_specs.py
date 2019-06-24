@@ -23,13 +23,15 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_source_term(ctx: "void*", mass_source: "void*") -> "int":
+def compute_mass_source_term(ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int") -> "int":
     """
     Internal simulator hook to compute source terms of mass equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
     :param mass_source: Source term of mass equation
+    :param n_fields: Number of fields
+    :param n_control_volumes: Number of control volumes
 
     :returns: Return OK if successful or anything different if failed
     """
