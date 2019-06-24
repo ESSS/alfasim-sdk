@@ -226,7 +226,7 @@ class Context:
         For more information about the options available check ``alfasim_sdk.context.PipelineInfo``
         """
 
-    def GetPluginsInfo(self) -> List[PluginInfo]:
+    def GetPluginsInfos(self) -> List[PluginInfo]:
         """
         Return a list of all plugins available on ALFAsim.
         Each plugin is represented by an instance of  ``alfasim_sdk.context.PluginInfo``.
