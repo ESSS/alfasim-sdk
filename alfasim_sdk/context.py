@@ -30,7 +30,7 @@ class PipelineSegmentInfo:
     The PipelineSegmentInfo provides information about a segments associated with a pipeline.
 
     PipelineSegmentInfo provides the following attributes:
-        edge_name: name of the edge that the segment is associate with
+        edge_name: name of the edge that the segment is associated with
 
         start_position: Defines point where this segment starts in MD (measured depth).
 
@@ -61,9 +61,9 @@ class PipelineInfo:
     The PipelineInfo provides information about the geometry of a pipeline.
 
     PipelineSegmentInfo provides the following attributes:
-        name: Name associate with this ``Pipeline`` on ALFAsim
+        name: Name associated with this ``Pipeline`` on ALFAsim
 
-        edge_name: Name of the edge that this ``Pipeline`` is associate with.
+        edge_name: Name of the edge that this ``Pipeline`` is associated with.
 
         segments: List of segments associates with this ``Pipeline``
         For more information check `alfasim_sdk.context.PipelineSegmentInfo`
@@ -133,7 +133,7 @@ class SolidsModelType(Enum):
         Employs the equilibrium slip velocity model and the Mills (1985) effective dynamic viscosity expression.
 
     - santamaria2010_equilibrium - Santamaría-Holek (2010):
-        This model is more appropriate to use when the solid phase has properties similar or equal to hydrate.
+        This model is more appropriate to use when the solid phase has properties similar to or equal to hydrate.
         It was fitted by Qin et al. (2018) for hydrates.
 
     - thomas1965_equilibrium - Thomas (1965):
@@ -256,7 +256,7 @@ class Context:
     def GetNodes(self) -> Optional[List[NodeInfo]]:
         """
         Return a list of all Nodes available on ALFAsim.
-        Each Node is represent by an instance of ``alfasim_sdk.context.NodeInfo``.
+        Each Node is represented by an instance of ``alfasim_sdk.context.NodeInfo``.
 
         The values from NodeInfo are read-only, they cannot be modified
         For more information about the options available check ``alfasim_sdk.context.NodeInfo``
