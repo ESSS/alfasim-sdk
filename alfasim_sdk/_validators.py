@@ -1,6 +1,8 @@
 from typing import Any
 
 from attr._make import Attribute
+from attr.validators import deep_iterable
+from attr.validators import instance_of
 
 
 def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:
@@ -31,3 +33,8 @@ def valid_unit(self: Any, attribute: Attribute, value: str) -> None:
 
     if UnitDatabase.GetSingleton().GetDefaultCategory(value) is None:
         raise ValueError(f"{value} is not a valid unit")
+
+
+list_of_strings = deep_iterable(
+    member_validator=instance_of(str), iterable_validator=instance_of(list)
+)
