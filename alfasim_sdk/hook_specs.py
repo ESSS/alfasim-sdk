@@ -23,7 +23,9 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_source_term(ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int") -> "int":
+def compute_mass_source_term(
+    ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int"
+) -> "int":
     """
     Internal simulator hook to compute source terms of mass equation.
     This is called after all residual functions are evaluated.
