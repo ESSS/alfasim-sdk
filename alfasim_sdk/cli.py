@@ -85,6 +85,15 @@ def _compile(plugin_dir):
 @click.option("--package-name", prompt="-- Package Name", help="Name of the package")
 def package(ctx, plugin_dir, package_name, dst):
     ctx.invoke(_compile, plugin_dir=plugin_dir)
+    ctx.invoke(package_only, plugin_dir=plugin_dir, package_name=package_name, dst=dst)
+
+
+@main.command()
+@click.pass_context
+@plugin_dir_option
+@destination_option(help="A path to where the output package should be created.")
+@click.option("--package-name", prompt="-- Package Name", help="Name of the package")
+def package_only(ctx, plugin_dir, package_name, dst):
     plugin_dir = Path(plugin_dir)
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
