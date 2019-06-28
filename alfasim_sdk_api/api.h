@@ -17,6 +17,8 @@ DLL_EXPORT int get_plugin_input_data_enum(void* ctx, int* out, const char* plugi
 DLL_EXPORT int get_plugin_input_data_quantity(void* ctx, double* out, const char* plugin_name, const char* var_name);
 DLL_EXPORT int get_plugin_input_data_string(void* ctx, char* out, const char* plugin_name, const char* var_name, int size);
 DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, int* out, const char* plugin_name, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_filepath(void* ctx, char* out, const char* plugin_name, const char* var_name, int size);
+DLL_EXPORT int get_plugin_input_data_filepath_size(void* ctx, int* out, const char* plugin_name, const char* var_name);
 DLL_EXPORT int get_plugin_input_data_reference(void* ctx, void** out, const char* plugin_name, const char* var_name);
 
 DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, enum TimestepScope ts_scope, int* size);
