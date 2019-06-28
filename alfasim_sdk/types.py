@@ -248,3 +248,19 @@ class Table(BaseField):
 @attr.s(kw_only=True)
 class Boolean(BaseField):
     value: bool = attrib(validator=instance_of(bool))
+
+
+@attr.s(kw_only=True)
+class FilePath(BaseField):
+    """
+    The FilePath component provides a platform-native file dialog to the user to be able to select a file.
+    The name of the selected file will be available over the GUI e be enabled to be manually changed.
+    Be aware that the provided file from the user could be wrong, or not available when the application
+    is closed and opened again, therefore, is recommended to include a status monitor in your plugin
+    to make sure that the file selected is valid and has the desired format.
+
+    For more details about status monitor check alfasim_sdk.status.ErrorMessage
+
+    Properties:
+        caption - label to be used on the left side of the component, that informs the selected file.
+    """
