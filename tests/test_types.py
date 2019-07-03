@@ -152,9 +152,6 @@ def test_table():
     ):
         Table(rows=[])
 
-    with pytest.raises(TypeError, match="rows must be a list, got a <class 'str'>."):
-        Table(rows="", caption="caption")
-
     with pytest.raises(TypeError, match="rows must be a list with TableColumn."):
         Table(rows=[], caption="caption")
 
