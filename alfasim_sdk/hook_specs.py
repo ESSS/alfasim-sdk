@@ -23,49 +23,57 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_source_term(ctx: "void*", mass_source: "void*") -> "int":
+def compute_mass_source_term(ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int") -> "int":
     """
     Internal simulator hook to compute source terms of mass equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
     :param mass_source: Source term of mass equation
+    :param n_fields: Number of fields
+    :param n_control_volumes: Number of control volumes
 
     :returns: Return OK if successful or anything different if failed
     """
 
 
-def compute_momentum_source_term(ctx: "void*", momentum_source: "void*") -> "int":
+def compute_momentum_source_term(ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int") -> "int":
     """
     Internal simulator hook to compute source terms of momentum equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
     :param momentum_source: Source term of momentum equation
+    :param n_layers: Number of layers
+    :param n_faces: Number of faces (equal to n_control_volumes minus 1)
 
     :returns: Return OK if successful or anything different if failed
     """
 
 
-def compute_energy_source_term(ctx: "void*", energy_source: "void*") -> "int":
+def compute_energy_source_term(ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int") -> "int":
     """
     Internal simulator hook to compute source terms of energy equation
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
     :param energy_source: Source term of energy equation
+    :param n_layers: Number of layers
+    :param n_control_volumes: Number of control volumes
 
     :returns: Return OK if successful or anything different if failed
     """
 
 
-def compute_tracer_source_term(ctx: "void*", phi_source: "void*") -> "int":
+def compute_tracer_source_term(ctx: "void*", phi_source: "void*", n_tracers: "int", n_control_volumes: "int") -> "int":
     """
     Internal simulator hook to compute source terms of tracer transport equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
     :param phi_source: Source term of tracers mass equation
+    :param n_tracers: Number of tracers
+    :param n_control_volumes: Number of control volumes
 
     :returns: Return OK if successful or anything different if failed
     """
