@@ -42,6 +42,17 @@ enum StateVariable {
     SIGMA // Interfacial tension
 };
 
+enum WallLayerProperty {
+    THICKNESS=0,
+    DENSITY=1,
+    THERMAL_CONDUCTIVITY=2,
+    HEAT_CAPACITY=3,
+    INNER_EMISSIVITY=4,
+    OUTER_EMISSIVITY=5,
+    EXPANSION=6,
+    VISCOSITY=7
+};
+
 struct VariableScope
 {
     enum GridScope grid_scope;

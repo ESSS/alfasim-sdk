@@ -83,4 +83,7 @@ DLL_EXPORT int get_tracer_name_size(void* ctx, int* tracer_name_size, void* refe
 DLL_EXPORT int get_tracer_name(void* ctx, char* out, void* reference, int size);
 DLL_EXPORT int get_tracer_partition_coefficient(void* ctx, double* out, void* reference, int phase_id);
 
+DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* material_name, int* out);
+DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
+
 #endif
