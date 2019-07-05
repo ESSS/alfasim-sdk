@@ -230,7 +230,7 @@ class TableColumn(BaseField):
 
 @attr.s(kw_only=True, frozen=True)
 class Table(BaseField):
-    rows: FrozenSet[TableColumn] = attrib(converter=frozenset)
+    rows: FrozenSet[TableColumn] = attrib(converter=tuple)
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ
