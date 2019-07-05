@@ -258,6 +258,6 @@ class FilePath(BaseField):
     to make sure that that a file is selected.
 
     For more details about status monitor check alfasim_sdk.status.ErrorMessage
-    Properties:
-        :ivar caption: caption - label to be used on the left side of the component, that informs the selected file.
+
+    :ivar caption: caption - label to be used on the left side of the component, that informs the selected file.
     """
