@@ -63,6 +63,8 @@ struct alfasim_sdk_bootstrap {
         get_tracer_name_size = (get_tracer_name_size_func)dlsym(this->m_handle, "get_tracer_name_size");
         get_tracer_name = (get_tracer_name_func)dlsym(this->m_handle, "get_tracer_name");
         get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)dlsym(this->m_handle, "get_tracer_partition_coefficient");
+        get_wall_layer_id = (get_wall_layer_id_func)dlsym(this->m_handle, "get_wall_layer_id");
+        set_wall_layer_property = (set_wall_layer_property_func)dlsym(this->m_handle, "set_wall_layer_property");
     }
 
     ~alfasim_sdk_bootstrap()

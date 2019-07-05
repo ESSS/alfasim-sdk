@@ -351,4 +351,24 @@ get_tracer_name_func get_tracer_name;
 typedef int (*get_tracer_partition_coefficient_func)(void* ctx, double* out, void* reference, int phase_id);
 get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
 
+
+/**
+*   get_wall_layer_id
+*
+*   Get the wall layer id in the given control volume, with a given material name.
+*   The layer id is output in the "out" variable.
+*/
+typedef int (*get_wall_layer_id_func)(void* ctx, int control_volume, const char* material_name, int* out);
+get_wall_layer_id_func get_wall_layer_id;
+
+/**
+*   set_wall_layer_property
+*
+*   Set a property in the given wall layer (Use get_wall_layer_id to get it), in a given control
+*   volume. Please note that the new value is assumed to be physical, as no sanity check is
+*   performed by the solver.
+*/
+typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
+set_wall_layer_property_func set_wall_layer_property;
+
 #endif
