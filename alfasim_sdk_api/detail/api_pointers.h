@@ -43,6 +43,23 @@ typedef int (*get_plugin_input_data_quantity_func)(void*, double*, const char*, 
 get_plugin_input_data_quantity_func get_plugin_input_data_quantity;
 
 /**
+*   get_plugin_input_data_filepath
+*
+*   Get the data provided from the user on a FilePath input field.
+*       For more detail about the Filepath input field check alfasim_sdk.types.Filepath
+*/
+typedef int (*get_plugin_input_data_filepath_func)(void*, char*, const char*, const char*, int);
+get_plugin_input_data_filepath_func get_plugin_input_data_filepath;
+
+/**
+*   get_plugin_input_data_filepath_size
+*
+*   Get the size of the data provided from the user on a FilePath input field.
+**/
+typedef int (*get_plugin_input_data_filepath_size_func)(void*, int*, const char*, const char*);
+get_plugin_input_data_filepath_size_func get_plugin_input_data_filepath_size;
+
+/**
 *   get_plugin_input_data_string
 *
 *   Get the data provided from the user on a String input field.
