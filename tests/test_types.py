@@ -152,9 +152,6 @@ def test_table():
     ):
         Table(rows=[])
 
-    with pytest.raises(TypeError, match="rows must be a list, got a <class 'str'>."):
-        Table(rows="", caption="caption")
-
     with pytest.raises(TypeError, match="rows must be a list with TableColumn."):
         Table(rows=[], caption="caption")
 
@@ -186,6 +183,12 @@ def test_boolean():
 
     with pytest.raises(TypeError, match="'value' must be <class 'bool'"):
         Boolean(value=1, caption="caption")
+
+
+def test_filepath():
+    from alfasim_sdk.types import FilePath
+
+    FilePath(caption="Test")
 
 
 def test_tooltips():
