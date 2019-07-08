@@ -44,6 +44,8 @@ struct alfasim_sdk_bootstrap {
         get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_quantity");
         get_plugin_input_data_string = (get_plugin_input_data_string_func)dlsym(this->m_handle, "get_plugin_input_data_string");
         get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)dlsym(this->m_handle, "get_plugin_input_data_string_size");
+        get_plugin_input_data_filepath = (get_plugin_input_data_filepath_func)dlsym(this->m_handle, "get_plugin_input_data_filepath");
+        get_plugin_input_data_filepath_size = (get_plugin_input_data_filepath_size_func)dlsym(this->m_handle, "get_plugin_input_data_filepath_size");
         get_plugin_input_data_reference = (get_plugin_input_data_reference_func)dlsym(this->m_handle, "get_plugin_input_data_reference");
         get_plugin_variable = (get_plugin_variable_func)dlsym(this->m_handle, "get_plugin_variable");
         get_field_id = (get_field_id_func)dlsym(this->m_handle, "get_field_id");
@@ -61,6 +63,8 @@ struct alfasim_sdk_bootstrap {
         get_tracer_name_size = (get_tracer_name_size_func)dlsym(this->m_handle, "get_tracer_name_size");
         get_tracer_name = (get_tracer_name_func)dlsym(this->m_handle, "get_tracer_name");
         get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)dlsym(this->m_handle, "get_tracer_partition_coefficient");
+        get_wall_layer_id = (get_wall_layer_id_func)dlsym(this->m_handle, "get_wall_layer_id");
+        set_wall_layer_property = (set_wall_layer_property_func)dlsym(this->m_handle, "set_wall_layer_property");
     }
 
     ~alfasim_sdk_bootstrap()

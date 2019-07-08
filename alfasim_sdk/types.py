@@ -1,5 +1,6 @@
 import numbers
 from typing import Callable
+from typing import FrozenSet
 from typing import List
 from typing import Optional
 from typing import Union
@@ -204,20 +205,20 @@ class MultipleReference(BaseReference):
     """
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Quantity(BaseField):
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
     unit: str = attrib(validator=[non_empty_str, valid_unit])
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class TableColumn(BaseField):
     id: str = attrib(validator=non_empty_str)
     value: Quantity = attrib()
     caption = attrib(init=False, default="")
 
     def __attrs_post_init__(self) -> None:
-        self.caption = self.value.caption
+        object.__setattr__(self, "caption", self.value.caption)
 
     @value.validator
     def check(  # pylint: disable=arguments-differ
@@ -227,17 +228,14 @@ class TableColumn(BaseField):
             raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Table(BaseField):
-    rows: List[TableColumn] = attrib()
+    rows: FrozenSet[TableColumn] = attrib(converter=tuple)
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ
         self, attr: Attribute, values: Union[List[str], str]
     ):
-        if not isinstance(values, list):
-            raise TypeError(f"{attr.name} must be a list, got a {type(values)}.")
-
         if not values:
             raise TypeError(f"{attr.name} must be a list with TableColumn.")
 
@@ -248,3 +246,18 @@ class Table(BaseField):
 @attr.s(kw_only=True)
 class Boolean(BaseField):
     value: bool = attrib(validator=instance_of(bool))
+
+
+@attr.s(kw_only=True)
+class FilePath(BaseField):
+    """
+    The FilePath component provides a platform-native file dialog to the user to be able to select a file.
+    The name of the selected file will be available over the GUI and be enabled to be manually changed.
+
+    If you want to make the file mandatory is recommended to include a status monitor in your plugin
+    to make sure that that a file is selected.
+
+    For more details about status monitor check alfasim_sdk.status.ErrorMessage
+
+    :ivar caption: caption - label to be used on the left side of the component, that informs the selected file.
+    """

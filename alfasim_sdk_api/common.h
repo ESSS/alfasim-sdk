@@ -1,5 +1,6 @@
 enum error_code
 {
+    REFERENCE_NOT_SET=-8,
     UNKNOWN_REFERENCE_TYPE=-7,
     OUT_OF_BOUNDS=-6,
     UNKNOWN_CONTEXT=-5,
@@ -40,6 +41,17 @@ enum StateVariable {
     H, // Enthalpy
     K, // Thermal Conductivity
     SIGMA // Interfacial tension
+};
+
+enum WallLayerProperty {
+    THICKNESS=0,
+    DENSITY=1,
+    THERMAL_CONDUCTIVITY=2,
+    HEAT_CAPACITY=3,
+    INNER_EMISSIVITY=4,
+    OUTER_EMISSIVITY=5,
+    EXPANSION=6,
+    VISCOSITY=7
 };
 
 struct VariableScope

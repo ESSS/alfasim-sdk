@@ -43,6 +43,23 @@ typedef int (*get_plugin_input_data_quantity_func)(void*, double*, const char*, 
 get_plugin_input_data_quantity_func get_plugin_input_data_quantity;
 
 /**
+*   get_plugin_input_data_filepath
+*
+*   Get the data provided from the user on a FilePath input field.
+*       For more detail about the Filepath input field check alfasim_sdk.types.Filepath
+*/
+typedef int (*get_plugin_input_data_filepath_func)(void*, char*, const char*, const char*, int);
+get_plugin_input_data_filepath_func get_plugin_input_data_filepath;
+
+/**
+*   get_plugin_input_data_filepath_size
+*
+*   Get the size of the data provided from the user on a FilePath input field.
+**/
+typedef int (*get_plugin_input_data_filepath_size_func)(void*, int*, const char*, const char*);
+get_plugin_input_data_filepath_size_func get_plugin_input_data_filepath_size;
+
+/**
 *   get_plugin_input_data_string
 *
 *   Get the data provided from the user on a String input field.
@@ -333,5 +350,25 @@ get_tracer_name_func get_tracer_name;
 */
 typedef int (*get_tracer_partition_coefficient_func)(void* ctx, double* out, void* reference, int phase_id);
 get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
+
+
+/**
+*   get_wall_layer_id
+*
+*   Get the wall layer id in the given control volume, with a given material name.
+*   The layer id is output in the "out" variable.
+*/
+typedef int (*get_wall_layer_id_func)(void* ctx, int control_volume, const char* material_name, int* out);
+get_wall_layer_id_func get_wall_layer_id;
+
+/**
+*   set_wall_layer_property
+*
+*   Set a property in the given wall layer (Use get_wall_layer_id to get it), in a given control
+*   volume. Please note that the new value is assumed to be physical, as no sanity check is
+*   performed by the solver.
+*/
+typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
+set_wall_layer_property_func set_wall_layer_property;
 
 #endif
