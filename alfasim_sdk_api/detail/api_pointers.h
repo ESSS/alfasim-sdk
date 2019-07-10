@@ -371,4 +371,40 @@ get_wall_layer_id_func get_wall_layer_id;
 typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 set_wall_layer_property_func set_wall_layer_property;
 
+
+/**
+*   get_plugin_input_data_multiplereference_selected_indexes_size
+*
+*   Get the number of selected references in a multiple-reference selection. To be used with
+*   the get_plugin_input_data_multiplereference_selected_indexes function (To allocate the
+*   output vector before using it). See the former function for an example.
+*/
+typedef int (*get_plugin_input_data_multiplereference_selected_indexes_size_func)(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
+get_plugin_input_data_multiplereference_selected_indexes_size_func get_plugin_input_data_multiplereference_selected_indexes_size;
+
+
+/**
+*   get_plugin_input_data_multiplereference_selected_indexes_size
+*
+*   Get the index of the selected items in a multiple-reference selection. To get the array size,
+*   you should use get_plugin_input_data_multiplereference_selected_indexes_size.
+*
+*   Example usage:
+*   int errcode = -1;
+*
+*   int indexes_size = -1;
+*   errcode = get_plugin_input_data_multiplereference_selected_indexes_size(ctx, &indexes_size, "Model.multiple_reference");
+*   int* indexes = (int*) malloc(sizeof(int) * indexes_size);
+*   errcode = get_plugin_input_data_multiplereference_selected_indexes(ctx, &indexes, "Model.multiple_reference");
+*   void* tracer_ref = nullptr;
+*   for (int i = 0; i < indexes_size; ++i) {
+*       auto reference_str = std::string("Model.multiple_reference[" + std::to_string(indexes[i]) + "]");
+*       errcode = get_plugin_input_data_reference(ctx, &tracer_ref, plugin_name, reference_str.c_str());
+*   }
+*   free(indexes);
+*/
+typedef int (*get_plugin_input_data_multiplereference_selected_indexes_func)(void* ctx, int* indexes, const char* plugin_name, const char* var_name);
+get_plugin_input_data_multiplereference_selected_indexes_func get_plugin_input_data_multiplereference_selected_indexes;
+
+
 #endif
