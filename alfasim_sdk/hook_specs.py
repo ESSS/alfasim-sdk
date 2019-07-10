@@ -23,7 +23,9 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_source_term(ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int") -> "int":
+def compute_mass_source_term(
+    ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int"
+) -> "int":
     """
     Internal simulator hook to compute source terms of mass equation.
     This is called after all residual functions are evaluated.
@@ -37,7 +39,9 @@ def compute_mass_source_term(ctx: "void*", mass_source: "void*", n_fields: "int"
     """
 
 
-def compute_momentum_source_term(ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int") -> "int":
+def compute_momentum_source_term(
+    ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int"
+) -> "int":
     """
     Internal simulator hook to compute source terms of momentum equation.
     This is called after all residual functions are evaluated.
@@ -51,7 +55,9 @@ def compute_momentum_source_term(ctx: "void*", momentum_source: "void*", n_layer
     """
 
 
-def compute_energy_source_term(ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int") -> "int":
+def compute_energy_source_term(
+    ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int"
+) -> "int":
     """
     Internal simulator hook to compute source terms of energy equation
     This is called after all residual functions are evaluated.
@@ -65,7 +71,9 @@ def compute_energy_source_term(ctx: "void*", energy_source: "void*", n_layers: "
     """
 
 
-def compute_tracer_source_term(ctx: "void*", phi_source: "void*", n_tracers: "int", n_control_volumes: "int") -> "int":
+def compute_tracer_source_term(
+    ctx: "void*", phi_source: "void*", n_tracers: "int", n_control_volumes: "int"
+) -> "int":
     """
     Internal simulator hook to compute source terms of tracer transport equation.
     This is called after all residual functions are evaluated.
