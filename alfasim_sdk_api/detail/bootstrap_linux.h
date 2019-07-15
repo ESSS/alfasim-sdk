@@ -65,8 +65,7 @@ struct alfasim_sdk_bootstrap {
         get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)dlsym(this->m_handle, "get_tracer_partition_coefficient");
         get_wall_layer_id = (get_wall_layer_id_func)dlsym(this->m_handle, "get_wall_layer_id");
         set_wall_layer_property = (set_wall_layer_property_func)dlsym(this->m_handle, "set_wall_layer_property");
-        get_plugin_input_data_multiplereference_selected_indexes_size = (get_plugin_input_data_multiplereference_selected_indexes_size_func)dlsym(this->m_handle, "get_plugin_input_data_multiplereference_selected_indexes_size");
-        get_plugin_input_data_multiplereference_selected_indexes = (get_plugin_input_data_multiplereference_selected_indexes_func)dlsym(this->m_handle, "get_plugin_input_data_multiplereference_selected_indexes");
+        get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)dlsym(this->m_handle, "get_plugin_input_data_multiplereference_selected_size");
     }
 
     ~alfasim_sdk_bootstrap()

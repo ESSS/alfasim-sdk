@@ -88,7 +88,6 @@ DLL_EXPORT int get_tracer_partition_coefficient(void* ctx, double* out, void* re
 DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* material_name, int* out);
 DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 
-DLL_EXPORT int get_plugin_input_data_multiplereference_selected_indexes_size(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
-DLL_EXPORT int get_plugin_input_data_multiplereference_selected_indexes(void* ctx, int* indexes, const char* plugin_name, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_multiplereference_selected_size(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
 
 #endif

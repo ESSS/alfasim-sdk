@@ -373,38 +373,29 @@ set_wall_layer_property_func set_wall_layer_property;
 
 
 /**
-*   get_plugin_input_data_multiplereference_selected_indexes_size
+*   get_plugin_input_data_multiplereference_selected_size
 *
-*   Get the number of selected references in a multiple-reference selection. To be used with
-*   the get_plugin_input_data_multiplereference_selected_indexes function (To allocate the
-*   output vector before using it). See the former function for an example.
-*/
-typedef int (*get_plugin_input_data_multiplereference_selected_indexes_size_func)(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
-get_plugin_input_data_multiplereference_selected_indexes_size_func get_plugin_input_data_multiplereference_selected_indexes_size;
-
-
-/**
-*   get_plugin_input_data_multiplereference_selected_indexes_size
-*
-*   Get the index of the selected items in a multiple-reference selection. To get the array size,
-*   you should use get_plugin_input_data_multiplereference_selected_indexes_size.
+*   Get the number of selected references in a multiple-reference selection. User should be able to
+*   iterate over the selections to get information.
 *
 *   Example usage:
-*   int errcode = -1;
+*        int errcode = -1;
+*        int indexes_size = -1;
+*        errcode = get_plugin_input_data_multiplereference_selected_size(
+*            ctx, &indexes_size, plugin_name, "Model.internal_multiple_reference");
 *
-*   int indexes_size = -1;
-*   errcode = get_plugin_input_data_multiplereference_selected_indexes_size(ctx, &indexes_size, "Model.multiple_reference");
-*   int* indexes = (int*) malloc(sizeof(int) * indexes_size);
-*   errcode = get_plugin_input_data_multiplereference_selected_indexes(ctx, &indexes, "Model.multiple_reference");
-*   void* tracer_ref = nullptr;
-*   for (int i = 0; i < indexes_size; ++i) {
-*       auto reference_str = std::string("Model.multiple_reference[" + std::to_string(indexes[i]) + "]");
-*       errcode = get_plugin_input_data_reference(ctx, &tracer_ref, plugin_name, reference_str.c_str());
-*   }
-*   free(indexes);
+*        for (int i = 0; i < indexes_size; ++i) {
+*            auto value = -1.0;
+*            auto reference_str = std::string(
+*                "Model.internal_multiple_reference[" + std::to_string(i) + "]->quantity");
+*
+*            errcode = get_plugin_input_data_quantity(
+*                ctx, &value, plugin_name, reference_str.c_str());
+*            }
+*        }
+*
 */
-typedef int (*get_plugin_input_data_multiplereference_selected_indexes_func)(void* ctx, int* indexes, const char* plugin_name, const char* var_name);
-get_plugin_input_data_multiplereference_selected_indexes_func get_plugin_input_data_multiplereference_selected_indexes;
-
+typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
+get_plugin_input_data_multiplereference_selected_size_func get_plugin_input_data_multiplereference_selected_size;
 
 #endif
