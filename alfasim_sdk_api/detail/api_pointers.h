@@ -1,7 +1,12 @@
 #ifndef _H_ALFASIM_SDK_API
 #define _H_ALFASIM_SDK_API
 
-typedef int (*set_plugin_data_func)(void*, const char*, void*);
+/**
+*   set_plugin_data_func
+*
+*   This function is used to set the data provided from the user
+*/
+typedef int (*set_plugin_data_func)(void*, const char*, void*, int);
 set_plugin_data_func set_plugin_data;
 
 
@@ -10,8 +15,26 @@ set_plugin_data_func set_plugin_data;
 *
 *   This function is used to get the data provided from the user
 */
-typedef int (*get_plugin_data_func)(void*, void**, const char*);
+typedef int (*get_plugin_data_func)(void*, void**, const char*, int);
 get_plugin_data_func get_plugin_data;
+
+
+/**
+*   get_number_of_threads
+*
+*   Gives the number of running threads on the solver
+*/
+typedef int (*get_number_of_threads_func)(void*, int*);
+get_number_of_threads_func get_number_of_threads;
+
+
+/**
+*   get_thread_id
+*
+*   Gives the current running thread id (in the solver process)
+*/
+typedef int (*get_thread_id_func)(void*, int*);
+get_thread_id_func get_thread_id;
 
 
 /**

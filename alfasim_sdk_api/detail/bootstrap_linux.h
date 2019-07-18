@@ -39,6 +39,8 @@ struct alfasim_sdk_bootstrap {
         // Register alfasim API
         set_plugin_data = (set_plugin_data_func)dlsym(this->m_handle, "set_plugin_data");
         get_plugin_data = (get_plugin_data_func)dlsym(this->m_handle, "get_plugin_data");
+        get_number_of_threads = (get_number_of_threads_func)dlsym(this->m_handle, "get_number_of_threads");
+        get_thread_id = (get_thread_id_func)dlsym(this->m_handle, "get_thread_id");
         get_plugin_input_data_boolean = (get_plugin_input_data_boolean_func)dlsym(this->m_handle, "get_plugin_input_data_boolean");
         get_plugin_input_data_enum = (get_plugin_input_data_enum_func)dlsym(this->m_handle, "get_plugin_input_data_enum");
         get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_quantity");
