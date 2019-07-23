@@ -381,4 +381,31 @@ get_wall_layer_id_func get_wall_layer_id;
 typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 set_wall_layer_property_func set_wall_layer_property;
 
+
+/**
+*   get_plugin_input_data_multiplereference_selected_size
+*
+*   Get the number of selected references in a multiple-reference selection. User should be able to
+*   iterate over the selections to get information.
+*
+*   Example usage:
+*        int errcode = -1;
+*        int indexes_size = -1;
+*        errcode = get_plugin_input_data_multiplereference_selected_size(
+*            ctx, &indexes_size, plugin_name, "Model.internal_multiple_reference");
+*
+*        for (int i = 0; i < indexes_size; ++i) {
+*            auto value = -1.0;
+*            auto reference_str = std::string(
+*                "Model.internal_multiple_reference[" + std::to_string(i) + "]->quantity");
+*
+*            errcode = get_plugin_input_data_quantity(
+*                ctx, &value, plugin_name, reference_str.c_str());
+*            }
+*        }
+*
+*/
+typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
+get_plugin_input_data_multiplereference_selected_size_func get_plugin_input_data_multiplereference_selected_size;
+
 #endif
