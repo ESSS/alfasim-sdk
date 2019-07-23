@@ -75,6 +75,7 @@ struct alfasim_sdk_bootstrap {
         get_tracer_id = (get_tracer_id_func)GetProcAddress(this->dllHandle, "get_tracer_id");
         get_tracer_name_size = (get_tracer_name_size_func)GetProcAddress(this->dllHandle, "get_tracer_name_size");
         get_tracer_name = (get_tracer_name_func)GetProcAddress(this->dllHandle, "get_tracer_name");
+        get_tracer_ref_by_name = (get_tracer_ref_by_name_func)GetProcAddress(this->dllHandle, "get_tracer_ref_by_name");
         get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)GetProcAddress(this->dllHandle, "get_tracer_partition_coefficient");
         get_wall_layer_id = (get_wall_layer_id_func)GetProcAddress(this->dllHandle, "get_wall_layer_id");
         set_wall_layer_property = (set_wall_layer_property_func)GetProcAddress(this->dllHandle, "set_wall_layer_property");
