@@ -6,7 +6,6 @@ from pluggy import HookspecMarker
 from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import WarningMessage
 
-
 hookspec = HookspecMarker("ALFAsim")
 
 
@@ -102,4 +101,16 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
         (GAS_PHASE, LIQUID_PHASE),
         (GAS_PHASE, WATER_PHASE),
     ]
+    """
+
+
+@hookspec
+def alfasim_get_user_defined_tracers_from_plugin():
+    """
+    Must return a list of tracers in which the internal tracer model hooks will be implemented for.
+    the HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE, HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_FIELD
+    and UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER must be implemented on the C plugin.
+
+    Example:
+    return ['my_tracer']
     """
