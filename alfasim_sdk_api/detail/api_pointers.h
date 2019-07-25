@@ -365,6 +365,16 @@ get_tracer_name_func get_tracer_name;
 
 
 /**
+*   get_tracer_ref_by_name
+*
+*   Get the tracer reference for a given tracer name. This function is important to obtain the
+*   tracer reference of a user defined tracer added by the plugin.
+*/
+typedef int (*get_tracer_ref_by_name_func)(void* ctx, void** reference, const char* tracer_name, const char* plugin_name);
+get_tracer_ref_by_name_func get_tracer_ref_by_name;
+
+
+/**
 *   get_tracer_partition_coefficient
 *
 *   Get the partition coefficient input data for a given tracer reference. The phase_id must also

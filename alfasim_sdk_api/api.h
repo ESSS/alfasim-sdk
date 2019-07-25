@@ -86,6 +86,7 @@ DLL_EXPORT int get_plugin_input_data_table_quantity(
 DLL_EXPORT int get_tracer_id(void* ctx, int* tracer_id, void* reference);
 DLL_EXPORT int get_tracer_name_size(void* ctx, int* tracer_name_size, void* reference);
 DLL_EXPORT int get_tracer_name(void* ctx, char* out, void* reference, int size);
+DLL_EXPORT int get_tracer_ref_by_name(void* ctx, void** reference, const char* tracer_name, const char* plugin_name);
 DLL_EXPORT int get_tracer_partition_coefficient(void* ctx, double* out, void* reference, int phase_id);
 
 DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* material_name, int* out);
