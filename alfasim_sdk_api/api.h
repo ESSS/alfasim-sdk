@@ -9,8 +9,11 @@
 #define DLL_EXPORT
 #endif
 
-DLL_EXPORT int set_plugin_data(void* ctx, const char* plugin_name, void* data);
-DLL_EXPORT int get_plugin_data(void* ctx, void** out, const char* plugin_name);
+DLL_EXPORT int set_plugin_data(void* ctx, const char* plugin_name, void* data, int thread_id);
+DLL_EXPORT int get_plugin_data(void* ctx, void** out, const char* plugin_name, int thread_id);
+
+DLL_EXPORT int get_number_of_threads(void* ctx, int* n_threads);
+DLL_EXPORT int get_thread_id(void* ctx, int* thread_id);
 
 DLL_EXPORT int get_plugin_input_data_boolean(void* ctx, bool* out, const char* plugin_name, const char* var_name);
 DLL_EXPORT int get_plugin_input_data_enum(void* ctx, int* out, const char* plugin_name, const char* var_name);
