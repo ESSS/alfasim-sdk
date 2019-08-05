@@ -344,12 +344,20 @@ def compute_mass_fraction_of_tracer_in_field(
 
 
 def update_boundary_condition_of_mass_fraction_of_tracer(
-    ctx: "void*", phi_presc: "void*", tracer_index: "int"
+    ctx: "void*",
+    phi_presc: "void*",
+    tracer_index: "int",
+    vol_frac_bound: "void*",
+    n_fields: "int",
 ) -> "int":
     """
     Internal tracer model Hook to compute the update of the prescribed mass fraction of tracer, given by
     `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
     in respect to the mass of the mixture.
+
+    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
+    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
+    calculated.
 
     :returns: Return OK if successful or anything different if failed
     """
