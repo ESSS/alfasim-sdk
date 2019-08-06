@@ -368,7 +368,7 @@ def initialize_mass_fraction_of_tracer(
 
 
 def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
-    phi_presc: "void*", tracer_index: "int"
+    ctx: "void*", phi_presc: "void*", tracer_index: "int"
 ) -> "int":
     """
     Internal tracer model Hook to set the initial prescribed bondary condition of mass fraction of tracer,
