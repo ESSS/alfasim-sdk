@@ -1,3 +1,6 @@
+#ifndef _H_ASIM_SDK_COMMON
+#define _H_ASIM_SDK_COMMON
+
 enum error_code
 {
     REFERENCE_NOT_SET=-8,
@@ -75,3 +78,5 @@ struct VariableScope
 #define LAYER_GAS "gas"
 #define LAYER_LIQUID "liquid"
 #define LAYER_WATER "water"
+
+#endif
