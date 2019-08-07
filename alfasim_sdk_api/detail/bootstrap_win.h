@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <strsafe.h>
+#include <cwchar>
 
 inline void alfasim_sdk_open(ALFAsimSDK_API* api)
 {
@@ -15,7 +16,7 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
     {
         WCHAR current_exe_fullpath[MAX_PATH];
         GetModuleFileNameW(NULL, current_exe_fullpath, MAX_PATH);
-        int size; for (size = 0; current_exe_fullpath[size] != '\0'; ++size);
+        int size = wcslen(current_exe_fullpath);
         if (size > 0) {
             int i = size;
             int j = 0;
@@ -47,6 +48,7 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
     StringCchCatW(full_filepath, MAX_PATH, alfasim_executable_dir);
     StringCchCatW(full_filepath, MAX_PATH, DLL_FILENAME);
     api->handle = LoadLibraryW(full_filepath);
+    free(executable_dir_from_env);
 
     // Register alfasim API
     api->set_plugin_data = (set_plugin_data_func)GetProcAddress(api->handle, "set_plugin_data");
@@ -81,8 +83,6 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_wall_layer_id = (get_wall_layer_id_func)GetProcAddress(api->handle, "get_wall_layer_id");
     api->set_wall_layer_property = (set_wall_layer_property_func)GetProcAddress(api->handle, "set_wall_layer_property");
     api->get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)GetProcAddress(api->handle, "get_plugin_input_data_multiplereference_selected_size");
-
-    free(executable_dir_from_env);
 }
 
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)

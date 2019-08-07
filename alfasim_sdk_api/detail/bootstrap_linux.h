@@ -34,6 +34,7 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
     char *full_filepath = NULL;
     asprintf(&full_filepath, "%s%s", alfasim_executable_dir, SO_FILENAME);
     api->handle = dlopen(full_filepath, RTLD_LAZY);
+    free(full_filepath);
 
     // Register alfasim API
     api->set_plugin_data = (set_plugin_data_func)dlsym(api->handle, "set_plugin_data");
@@ -68,8 +69,6 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_wall_layer_id = (get_wall_layer_id_func)dlsym(api->handle, "get_wall_layer_id");
     api->set_wall_layer_property = (set_wall_layer_property_func)dlsym(api->handle, "set_wall_layer_property");
     api->get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)dlsym(api->handle, "get_plugin_input_data_multiplereference_selected_size");
-
-    free(full_filepath);
 }
 
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)
