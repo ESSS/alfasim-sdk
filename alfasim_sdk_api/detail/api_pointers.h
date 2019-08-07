@@ -1,6 +1,10 @@
 #ifndef _H_ALFASIM_SDK_API
 #define _H_ALFASIM_SDK_API
 
+#if defined(_WIN32)
+#include <windows.h>
+#endif
+
 typedef int (*set_plugin_data_func)(void*, const char*, void*, int);
 typedef int (*get_thread_id_func)(void*, int*);
 typedef int (*get_plugin_input_data_boolean_func)(void*, bool*, const char*, const char*);
@@ -80,7 +84,13 @@ typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int w
 typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
 
 struct ALFAsimSDK_API {
+#if defined(_WIN32)
+    HINSTANCE handle;
+#elif defined(unix) || defined(__unix__) || defined(__unix)
     void* handle;
+#else
+#error "Unknown host (Alfasim SDK will only work on Linux and Windows)"
+#endif
 
     /**
     *   set_plugin_data_func
