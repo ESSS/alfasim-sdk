@@ -19,6 +19,7 @@ class PluginInfo:
     models defined from this plugin.
     """
 
+    caption = attr.attrib(validator=non_empty_str)
     name = attr.attrib(validator=non_empty_str)
     enabled = attr.attrib(validator=instance_of(bool))
     models = attr.attrib(validator=list_of_strings)
