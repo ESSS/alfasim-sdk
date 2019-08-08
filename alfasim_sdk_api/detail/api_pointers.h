@@ -110,7 +110,7 @@ get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 *
 *   void* tracer_ref = nullptr;
 *   errcode = get_plugin_input_data_reference(
-*       ctx, &tracer_ref, plugin_name, "Model.tracer_reference");
+*       ctx, &tracer_ref, plugin_id, "Model.tracer_reference");
 *
 *   int tracer_id = -1;
 *   errcode = get_tracer_id(ctx, &tracer_id, tracer_ref);
@@ -135,7 +135,7 @@ get_plugin_input_data_reference_func get_plugin_input_data_reference;
 *       &values,
 *       &size,
 *       "temperature",
-*       plugin_name,
+*       plugin_id,
 *       "some_table"
 *    );
 *    for (int i = 0; i < size; ++i) {
@@ -148,7 +148,7 @@ typedef int (*get_plugin_input_data_table_quantity_func)(
     double** out,
     int* size,
     const char* column_id,
-    const char* plugin_name,
+    const char* plugin_id,
     const char* var_name
 );
 get_plugin_input_data_table_quantity_func get_plugin_input_data_table_quantity;
@@ -370,7 +370,7 @@ get_tracer_name_func get_tracer_name;
 *   Get the tracer reference for a given tracer name. This function is important to obtain the
 *   tracer reference of a user defined tracer added by the plugin.
 */
-typedef int (*get_tracer_ref_by_name_func)(void* ctx, void** reference, const char* tracer_name, const char* plugin_name);
+typedef int (*get_tracer_ref_by_name_func)(void* ctx, void** reference, const char* tracer_name, const char* plugin_id);
 get_tracer_ref_by_name_func get_tracer_ref_by_name;
 
 
@@ -415,7 +415,7 @@ set_wall_layer_property_func set_wall_layer_property;
 *        int errcode = -1;
 *        int indexes_size = -1;
 *        errcode = get_plugin_input_data_multiplereference_selected_size(
-*            ctx, &indexes_size, plugin_name, "Model.internal_multiple_reference");
+*            ctx, &indexes_size, plugin_id, "Model.internal_multiple_reference");
 *
 *        for (int i = 0; i < indexes_size; ++i) {
 *            auto value = -1.0;
@@ -423,12 +423,12 @@ set_wall_layer_property_func set_wall_layer_property;
 *                "Model.internal_multiple_reference[" + std::to_string(i) + "]->quantity");
 *
 *            errcode = get_plugin_input_data_quantity(
-*                ctx, &value, plugin_name, reference_str.c_str());
+*                ctx, &value, plugin_id, reference_str.c_str());
 *            }
 *        }
 *
 */
-typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
+typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_id, const char* var_name);
 get_plugin_input_data_multiplereference_selected_size_func get_plugin_input_data_multiplereference_selected_size;
 
 #endif

@@ -9,20 +9,20 @@
 #define DLL_EXPORT
 #endif
 
-DLL_EXPORT int set_plugin_data(void* ctx, const char* plugin_name, void* data, int thread_id);
-DLL_EXPORT int get_plugin_data(void* ctx, void** out, const char* plugin_name, int thread_id);
+DLL_EXPORT int set_plugin_data(void* ctx, const char* plugin_id, void* data, int thread_id);
+DLL_EXPORT int get_plugin_data(void* ctx, void** out, const char* plugin_id, int thread_id);
 
 DLL_EXPORT int get_number_of_threads(void* ctx, int* n_threads);
 DLL_EXPORT int get_thread_id(void* ctx, int* thread_id);
 
-DLL_EXPORT int get_plugin_input_data_boolean(void* ctx, bool* out, const char* plugin_name, const char* var_name);
-DLL_EXPORT int get_plugin_input_data_enum(void* ctx, int* out, const char* plugin_name, const char* var_name);
-DLL_EXPORT int get_plugin_input_data_quantity(void* ctx, double* out, const char* plugin_name, const char* var_name);
-DLL_EXPORT int get_plugin_input_data_string(void* ctx, char* out, const char* plugin_name, const char* var_name, int size);
-DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, int* out, const char* plugin_name, const char* var_name);
-DLL_EXPORT int get_plugin_input_data_filepath(void* ctx, char* out, const char* plugin_name, const char* var_name, int size);
-DLL_EXPORT int get_plugin_input_data_filepath_size(void* ctx, int* out, const char* plugin_name, const char* var_name);
-DLL_EXPORT int get_plugin_input_data_reference(void* ctx, void** out, const char* plugin_name, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_boolean(void* ctx, bool* out, const char* plugin_id, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_enum(void* ctx, int* out, const char* plugin_id, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_quantity(void* ctx, double* out, const char* plugin_id, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_string(void* ctx, char* out, const char* plugin_id, const char* var_name, int size);
+DLL_EXPORT int get_plugin_input_data_string_size(void* ctx, int* out, const char* plugin_id, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_filepath(void* ctx, char* out, const char* plugin_id, const char* var_name, int size);
+DLL_EXPORT int get_plugin_input_data_filepath_size(void* ctx, int* out, const char* plugin_id, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_reference(void* ctx, void** out, const char* plugin_id, const char* var_name);
 
 DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, enum TimestepScope ts_scope, int* size);
 
@@ -79,19 +79,19 @@ DLL_EXPORT int get_plugin_input_data_table_quantity(
     double** out,
     int* size,
     const char* column_id,
-    const char* plugin_name,
+    const char* plugin_id,
     const char* var_name
 );
 
 DLL_EXPORT int get_tracer_id(void* ctx, int* tracer_id, void* reference);
 DLL_EXPORT int get_tracer_name_size(void* ctx, int* tracer_name_size, void* reference);
 DLL_EXPORT int get_tracer_name(void* ctx, char* out, void* reference, int size);
-DLL_EXPORT int get_tracer_ref_by_name(void* ctx, void** reference, const char* tracer_name, const char* plugin_name);
+DLL_EXPORT int get_tracer_ref_by_name(void* ctx, void** reference, const char* tracer_name, const char* plugin_id);
 DLL_EXPORT int get_tracer_partition_coefficient(void* ctx, double* out, void* reference, int phase_id);
 
 DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* material_name, int* out);
 DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 
-DLL_EXPORT int get_plugin_input_data_multiplereference_selected_size(void* ctx, int* indexes_size, const char* plugin_name, const char* var_name);
+DLL_EXPORT int get_plugin_input_data_multiplereference_selected_size(void* ctx, int* indexes_size, const char* plugin_id, const char* var_name);
 
 #endif
