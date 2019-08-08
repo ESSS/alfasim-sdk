@@ -212,7 +212,7 @@ class Context:
             assert model.name == 'acme'
 
         It also possible to use ``alfasim_sdk.context.PluginInfo.models`` to check models available for a given Plugin
-        For more information check ``alfasim_sdk.context.Context.GetPluginInfoByName``
+        For more information check ``alfasim_sdk.context.Context.GetPluginInfoById``
 
         The values from the returned Model are read-only, they cannot be modified.
         If the model informed cannot be found, a  :class:`TypeError` exception is raised.
@@ -236,9 +236,9 @@ class Context:
         For more information about the options available check ``alfasim_sdk.context.PluginInfo``
         """
 
-    def GetPluginInfoByName(self, plugin_name: str) -> PluginInfo:
+    def GetPluginInfoById(self, plugin_id: str) -> PluginInfo:
         """
-        Return a instance of ``alfasim_sdk.context.PluginInfo`` for the given ``plugin_name``.
+        Return a instance of ``alfasim_sdk.context.PluginInfo`` for the given ``plugin_id``.
         If the plugin informed cannot be found, a  :class:`ValueError` exception is raised.
 
         The values from PluginInfo are read-only, they cannot be modified

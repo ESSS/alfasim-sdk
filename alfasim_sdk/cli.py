@@ -36,13 +36,11 @@ def main():
 @main.command()
 @destination_option(help="A path to where the output package should be created.")
 @click.option(
-    "--plugin-name", prompt="-- Plugin Name", help="Name of the plugin to be displayed"
+    "--caption",
+    prompt="-- Plugin Caption",
+    help="Caption to be used across the application to identify the plugin",
 )
-@click.option(
-    "--shared-lib-name",
-    prompt="-- Shared Library Name",
-    help="The filename of the compiled plugin",
-)
+@click.option("--plugin-id", prompt="-- Plugin Id", help="The name of the plugin")
 @click.option(
     "--author-name",
     prompt="-- Author Name",
@@ -53,16 +51,14 @@ def main():
     prompt="-- Author Email",
     help="Email of the plugin author to be displayed",
 )
-def template(dst, plugin_name, shared_lib_name, author_name, author_email):
+def template(dst, caption, plugin_id, author_name, author_email):
     """
     Console script for alfasim_sdk.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    hm.generate_plugin_template(
-        plugin_name, shared_lib_name, author_email, author_name, dst
-    )
+    hm.generate_plugin_template(caption, plugin_id, author_email, author_name, dst)
 
 
 @main.command(name="compile")
