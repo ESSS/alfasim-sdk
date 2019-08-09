@@ -87,6 +87,44 @@ def compute_tracer_source_term(
     """
 
 
+def initialize_particle_diameter_of_solids_fields(
+    ctx: "void*",
+    particle_diameter: "void*",
+    n_control_volumes: "int",
+    solid_field_id: "int",
+) -> "int":
+    """
+    Internal simulator hook to initialize particle diameter of solids fields.
+
+    :param ctx: ALFAsim's plugins context
+    :param particle_diameter: Particle diameter of a given solid field,
+    :param n_control_volumes: Number of control volumes,
+    :param solid_field_id: Index of the solid field in which the `particle_diameter`
+                           Should be calculated.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def update_particle_diameter_of_solids_fields(
+    ctx: "void*",
+    particle_diameter: "void*",
+    n_control_volumes: "int",
+    solid_field_id: "int",
+) -> "int":
+    """
+    Internal simulator hook to update/calculate particle diameter of solids fields.
+
+    :param ctx: ALFAsim's plugins context
+    :param particle_diameter: Particle diameter of a given solid field,
+    :param n_control_volumes: Number of control volumes,
+    :param solid_field_id: Index of the solid field in which the `particle_diameter`
+                           Should be calculated.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def calculate_slip_velocity(
     ctx: "void*",
     U_fields: "void*",
@@ -405,6 +443,8 @@ specs = HookSpecs(
         compute_momentum_source_term,
         compute_energy_source_term,
         compute_tracer_source_term,
+        initialize_particle_diameter_of_solids_fields,
+        update_particle_diameter_of_solids_fields,
         calculate_slip_velocity,
         calculate_slurry_viscosity,
         update_plugins_secondary_variables,
