@@ -1,3 +1,6 @@
+#ifndef _H_ASIM_SDK_COMMON
+#define _H_ASIM_SDK_COMMON
+
 enum error_code
 {
     REFERENCE_NOT_SET=-8,
@@ -61,6 +64,12 @@ struct VariableScope
     enum TimestepScope ts_scope;
 };
 
+enum sdk_load_error_code {
+    SDK_DLL_PATH_TOO_LONG=-2,
+    SDK_ALREADY_OPEN_ERROR=-1,
+    SDK_OK=0
+};
+
 #define FIELD_GAS "gas"
 #define FIELD_LIQUID "liquid"
 #define FIELD_WATER "water"
@@ -75,3 +84,5 @@ struct VariableScope
 #define LAYER_GAS "gas"
 #define LAYER_LIQUID "liquid"
 #define LAYER_WATER "water"
+
+#endif

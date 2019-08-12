@@ -8,76 +8,78 @@
 #include <unistd.h>
 #include <string.h>
 
-#define MAX_PATH 4096
+#define MAX_PATH 32767
 
-struct alfasim_sdk_bootstrap {
-    alfasim_sdk_bootstrap()
-    {
-        char SO_FILENAME[] = "/alfasim_plugins_api.so";
-
-        // Extract the folder from the executable's full path
-        char current_exe_dir[MAX_PATH];
-        getcwd(current_exe_dir, sizeof(current_exe_dir));
-
-        // Extract the folder from the environment variable
-        char* executable_dir_from_env = getenv("ALFASIM_PATH");
-
-        // Find the alfasim installation path: Prefer the environment variable ALFASIM_PATH, but, if not found,
-        // try the same path as the executable
-        char *alfasim_executable_dir;
-        if (executable_dir_from_env != NULL) {
-            alfasim_executable_dir = executable_dir_from_env;
-        } else {
-            alfasim_executable_dir = current_exe_dir;
-        }
-
-        // Load shared object
-        char *full_filepath = NULL;
-        asprintf(&full_filepath, "%s%s", alfasim_executable_dir, SO_FILENAME);
-        this->m_handle = dlopen(full_filepath, RTLD_LAZY);
-
-        // Register alfasim API
-        set_plugin_data = (set_plugin_data_func)dlsym(this->m_handle, "set_plugin_data");
-        get_plugin_data = (get_plugin_data_func)dlsym(this->m_handle, "get_plugin_data");
-        get_number_of_threads = (get_number_of_threads_func)dlsym(this->m_handle, "get_number_of_threads");
-        get_thread_id = (get_thread_id_func)dlsym(this->m_handle, "get_thread_id");
-        get_plugin_input_data_boolean = (get_plugin_input_data_boolean_func)dlsym(this->m_handle, "get_plugin_input_data_boolean");
-        get_plugin_input_data_enum = (get_plugin_input_data_enum_func)dlsym(this->m_handle, "get_plugin_input_data_enum");
-        get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_quantity");
-        get_plugin_input_data_string = (get_plugin_input_data_string_func)dlsym(this->m_handle, "get_plugin_input_data_string");
-        get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)dlsym(this->m_handle, "get_plugin_input_data_string_size");
-        get_plugin_input_data_filepath = (get_plugin_input_data_filepath_func)dlsym(this->m_handle, "get_plugin_input_data_filepath");
-        get_plugin_input_data_filepath_size = (get_plugin_input_data_filepath_size_func)dlsym(this->m_handle, "get_plugin_input_data_filepath_size");
-        get_plugin_input_data_reference = (get_plugin_input_data_reference_func)dlsym(this->m_handle, "get_plugin_input_data_reference");
-        get_plugin_variable = (get_plugin_variable_func)dlsym(this->m_handle, "get_plugin_variable");
-        get_field_id = (get_field_id_func)dlsym(this->m_handle, "get_field_id");
-        get_primary_field_id_of_phase = (get_field_id_func)dlsym(this->m_handle, "get_primary_field_id_of_phase");
-        get_phase_id = (get_phase_id_func)dlsym(this->m_handle, "get_phase_id");
-        get_layer_id = (get_layer_id_func)dlsym(this->m_handle, "get_layer_id");
-        get_state_variable_array = (get_state_variable_array_func)dlsym(this->m_handle, "get_state_variable_array");
-        get_simulation_array = (get_simulation_array_func)dlsym(this->m_handle, "get_simulation_array");
-        get_simulation_tracer_array = (get_simulation_tracer_array_func)dlsym(this->m_handle, "get_simulation_tracer_array");
-        get_simulation_quantity = (get_simulation_quantity_func)dlsym(this->m_handle, "get_simulation_quantity");
-        get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)dlsym(this->m_handle, "get_wall_interfaces_temperature");
-        get_flow_pattern = (get_flow_pattern_func)dlsym(this->m_handle, "get_flow_pattern");
-        get_plugin_input_data_table_quantity = (get_plugin_input_data_table_quantity_func)dlsym(this->m_handle, "get_plugin_input_data_table_quantity");
-        get_tracer_id = (get_tracer_id_func)dlsym(this->m_handle, "get_tracer_id");
-        get_tracer_name_size = (get_tracer_name_size_func)dlsym(this->m_handle, "get_tracer_name_size");
-        get_tracer_name = (get_tracer_name_func)dlsym(this->m_handle, "get_tracer_name");
-        get_tracer_ref_by_name = (get_tracer_ref_by_name_func)dlsym(this->m_handle, "get_tracer_ref_by_name");
-        get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)dlsym(this->m_handle, "get_tracer_partition_coefficient");
-        get_wall_layer_id = (get_wall_layer_id_func)dlsym(this->m_handle, "get_wall_layer_id");
-        set_wall_layer_property = (set_wall_layer_property_func)dlsym(this->m_handle, "set_wall_layer_property");
-        get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)dlsym(this->m_handle, "get_plugin_input_data_multiplereference_selected_size");
+inline int alfasim_sdk_open(ALFAsimSDK_API* api)
+{
+    if (api->handle != nullptr) {
+        return SDK_ALREADY_OPEN_ERROR;
     }
 
-    ~alfasim_sdk_bootstrap()
-    {
-        dlclose(this->m_handle);
+    char SO_FILENAME[] = "/alfasim_plugins_api.so";
+
+    // Extract the folder from the executable's full path
+    char current_exe_dir[MAX_PATH];
+    getcwd(current_exe_dir, sizeof(current_exe_dir));
+
+    // Extract the folder from the environment variable
+    char* executable_dir_from_env = getenv("ALFASIM_PATH");
+
+    // Find the alfasim installation path: Prefer the environment variable ALFASIM_PATH, but, if not found,
+    // try the same path as the executable
+    char *alfasim_executable_dir;
+    if (executable_dir_from_env != NULL) {
+        alfasim_executable_dir = executable_dir_from_env;
+    } else {
+        alfasim_executable_dir = current_exe_dir;
     }
 
-    void* m_handle;
-};
-alfasim_sdk_bootstrap _;
+    // Load shared object
+    char *full_filepath = NULL;
+    asprintf(&full_filepath, "%s%s", alfasim_executable_dir, SO_FILENAME);
+    api->handle = dlopen(full_filepath, RTLD_LAZY);
+    free(full_filepath);
+
+    // Register alfasim API
+    api->set_plugin_data = (set_plugin_data_func)dlsym(api->handle, "set_plugin_data");
+    api->get_plugin_data = (get_plugin_data_func)dlsym(api->handle, "get_plugin_data");
+    api->get_number_of_threads = (get_number_of_threads_func)dlsym(api->handle, "get_number_of_threads");
+    api->get_thread_id = (get_thread_id_func)dlsym(api->handle, "get_thread_id");
+    api->get_plugin_input_data_boolean = (get_plugin_input_data_boolean_func)dlsym(api->handle, "get_plugin_input_data_boolean");
+    api->get_plugin_input_data_enum = (get_plugin_input_data_enum_func)dlsym(api->handle, "get_plugin_input_data_enum");
+    api->get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(api->handle, "get_plugin_input_data_quantity");
+    api->get_plugin_input_data_string = (get_plugin_input_data_string_func)dlsym(api->handle, "get_plugin_input_data_string");
+    api->get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)dlsym(api->handle, "get_plugin_input_data_string_size");
+    api->get_plugin_input_data_filepath = (get_plugin_input_data_filepath_func)dlsym(api->handle, "get_plugin_input_data_filepath");
+    api->get_plugin_input_data_filepath_size = (get_plugin_input_data_filepath_size_func)dlsym(api->handle, "get_plugin_input_data_filepath_size");
+    api->get_plugin_input_data_reference = (get_plugin_input_data_reference_func)dlsym(api->handle, "get_plugin_input_data_reference");
+    api->get_plugin_variable = (get_plugin_variable_func)dlsym(api->handle, "get_plugin_variable");
+    api->get_field_id = (get_field_id_func)dlsym(api->handle, "get_field_id");
+    api->get_primary_field_id_of_phase = (get_field_id_func)dlsym(api->handle, "get_primary_field_id_of_phase");
+    api->get_phase_id = (get_phase_id_func)dlsym(api->handle, "get_phase_id");
+    api->get_layer_id = (get_layer_id_func)dlsym(api->handle, "get_layer_id");
+    api->get_state_variable_array = (get_state_variable_array_func)dlsym(api->handle, "get_state_variable_array");
+    api->get_simulation_array = (get_simulation_array_func)dlsym(api->handle, "get_simulation_array");
+    api->get_simulation_tracer_array = (get_simulation_tracer_array_func)dlsym(api->handle, "get_simulation_tracer_array");
+    api->get_simulation_quantity = (get_simulation_quantity_func)dlsym(api->handle, "get_simulation_quantity");
+    api->get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)dlsym(api->handle, "get_wall_interfaces_temperature");
+    api->get_flow_pattern = (get_flow_pattern_func)dlsym(api->handle, "get_flow_pattern");
+    api->get_plugin_input_data_table_quantity = (get_plugin_input_data_table_quantity_func)dlsym(api->handle, "get_plugin_input_data_table_quantity");
+    api->get_tracer_id = (get_tracer_id_func)dlsym(api->handle, "get_tracer_id");
+    api->get_tracer_name_size = (get_tracer_name_size_func)dlsym(api->handle, "get_tracer_name_size");
+    api->get_tracer_name = (get_tracer_name_func)dlsym(api->handle, "get_tracer_name");
+    api->get_tracer_ref_by_name = (get_tracer_ref_by_name_func)dlsym(api->handle, "get_tracer_ref_by_name");
+    api->get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)dlsym(api->handle, "get_tracer_partition_coefficient");
+    api->get_wall_layer_id = (get_wall_layer_id_func)dlsym(api->handle, "get_wall_layer_id");
+    api->set_wall_layer_property = (set_wall_layer_property_func)dlsym(api->handle, "set_wall_layer_property");
+    api->get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)dlsym(api->handle, "get_plugin_input_data_multiplereference_selected_size");
+
+    return SDK_OK;
+}
+
+inline void alfasim_sdk_close(ALFAsimSDK_API* api)
+{
+    dlclose(api->handle);
+}
 
 #endif
