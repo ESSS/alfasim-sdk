@@ -1,10 +1,8 @@
-from typing import List
-from typing import Union
+from typing import List, Union
 
 from pluggy import HookspecMarker
 
-from alfasim_sdk.status import ErrorMessage
-from alfasim_sdk.status import WarningMessage
+from alfasim_sdk.status import ErrorMessage, WarningMessage
 
 hookspec = HookspecMarker("ALFAsim")
 
@@ -73,6 +71,45 @@ def alfasim_get_status(ctx) -> List[Union[WarningMessage, ErrorMessage]]:
                 :raises TypeError: When the model informed is not available.
 
     :returns: A list of status message either WarningMessage or ErrorMessage
+    """
+
+
+@hookspec
+def alfasim_configure_fields():
+    """
+    Configure new fields to be added in ALFAsim's hydrodynamic model.
+    Example:
+
+    return [
+        AddField(name='plugin_continuous_field'),
+        AddField(name='plugin_dispersed_field')
+    ]
+    """
+
+
+@hookspec
+def alfasim_configure_layers():
+    """
+    Configure new or update layers for ALFAsim's hydrodynamic model.
+    Example:
+
+    return [
+        AddLayer(name='plugin_layer', fields=['plugin_continuous_field', DROPLET_FIELD], continuous_field='plugin_continuous_field'),
+        UpdateLayer(name=WATER_FIELD, additional_fields=['plugin_dispersed_field']),
+    ]
+    """
+
+
+@hookspec
+def alfasim_configure_phases():
+    """
+    Configure new or update phases for ALFAsim's hydrodynamic model.
+    Example:
+
+    return [
+        AddPhase(name='plugin_phase', fields=['plugin_continuous_field', DROPLET_FIELD], primary_field='plugin_continuous_field'),
+        UpdatePhase(name=WATER_PHASE, additional_fields=['plugin_dispersed_field']),
+    ]
     """
 
 
