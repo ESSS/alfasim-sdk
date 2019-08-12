@@ -5,10 +5,16 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <strsafe.h>
-#include <cwchar>
+#include <wchar.h>
 
-inline void alfasim_sdk_open(ALFAsimSDK_API* api)
+#define MAX_PATH 32767
+
+inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
+    if (api->handle != nullptr) {
+        return SDK_ALREADY_OPEN_ERROR;
+    }
+
     WCHAR DLL_FILENAME[] = L"/alfasim_plugins_api.dll";
 
     // Extract the folder from the executable's full path
@@ -18,7 +24,7 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
         GetModuleFileNameW(NULL, current_exe_fullpath, MAX_PATH);
         int size = wcslen(current_exe_fullpath);
         if (size > 0) {
-            int i = size;
+            int i = size - 1;
             int j = 0;
             for (; i > 0 && current_exe_fullpath[i] != '\\' && current_exe_fullpath[i] != '/'; --i);
             for (j = 0; j < i; j++) {
@@ -40,6 +46,10 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
         alfasim_executable_dir = executable_dir_from_env;
     } else {
         alfasim_executable_dir = current_exe_dir;
+    }
+
+    if (wcslen(alfasim_executable_dir) + wcslen(DLL_FILENAME) > MAX_PATH) {
+        return SDK_DLL_PATH_TOO_LONG;
     }
 
     // Load shared object
@@ -83,6 +93,8 @@ inline void alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_wall_layer_id = (get_wall_layer_id_func)GetProcAddress(api->handle, "get_wall_layer_id");
     api->set_wall_layer_property = (set_wall_layer_property_func)GetProcAddress(api->handle, "set_wall_layer_property");
     api->get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)GetProcAddress(api->handle, "get_plugin_input_data_multiplereference_selected_size");
+
+    return SDK_OK;
 }
 
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)

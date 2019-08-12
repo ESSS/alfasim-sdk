@@ -64,6 +64,12 @@ struct VariableScope
     enum TimestepScope ts_scope;
 };
 
+enum sdk_load_error_code {
+    SDK_DLL_PATH_TOO_LONG=-2,
+    SDK_ALREADY_OPEN_ERROR=-1,
+    SDK_OK=0
+};
+
 #define FIELD_GAS "gas"
 #define FIELD_LIQUID "liquid"
 #define FIELD_WATER "water"
