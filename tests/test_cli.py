@@ -25,8 +25,8 @@ def test_command_package(tmpdir):
         cli.main,
         [
             "template",
-            "--plugin-name=Acme",
-            "--shared-lib-name=acme",
+            "--caption=Acme",
+            "--plugin-id=acme",
             "--author-email=acme@acme.com",
             "--author-name=ACME",
             f"--dst={Path(tmpdir)}",
@@ -60,8 +60,8 @@ def test_command_template(tmpdir):
         cli.main,
         [
             "template",
-            "--plugin-name=Acme",
-            "--shared-lib-name=acme",
+            "--caption=Acme",
+            "--plugin-id=acme",
             "--author-email=acme@acme.com",
             "--author-name=ACME",
             f"--dst={Path(tmpdir)}",
