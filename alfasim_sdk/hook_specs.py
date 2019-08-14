@@ -87,6 +87,44 @@ def compute_tracer_source_term(
     """
 
 
+def initialize_particle_diameter_of_solids_fields(
+    ctx: "void*",
+    particle_diameter: "void*",
+    n_control_volumes: "int",
+    solid_field_id: "int",
+) -> "int":
+    """
+    Internal simulator hook to initialize particle diameter of solids fields.
+
+    :param ctx: ALFAsim's plugins context
+    :param particle_diameter: Particle diameter of a given solid field,
+    :param n_control_volumes: Number of control volumes,
+    :param solid_field_id: Index of the solid field in which the `particle_diameter`
+                           Should be calculated.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def update_particle_diameter_of_solids_fields(
+    ctx: "void*",
+    particle_diameter: "void*",
+    n_control_volumes: "int",
+    solid_field_id: "int",
+) -> "int":
+    """
+    Internal simulator hook to update/calculate particle diameter of solids fields.
+
+    :param ctx: ALFAsim's plugins context
+    :param particle_diameter: Particle diameter of a given solid field,
+    :param n_control_volumes: Number of control volumes,
+    :param solid_field_id: Index of the solid field in which the `particle_diameter`
+                           Should be calculated.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def calculate_slip_velocity(
     ctx: "void*",
     U_fields: "void*",
@@ -344,12 +382,20 @@ def compute_mass_fraction_of_tracer_in_field(
 
 
 def update_boundary_condition_of_mass_fraction_of_tracer(
-    ctx: "void*", phi_presc: "void*", tracer_index: "int"
+    ctx: "void*",
+    phi_presc: "void*",
+    tracer_index: "int",
+    vol_frac_bound: "void*",
+    n_fields: "int",
 ) -> "int":
     """
     Internal tracer model Hook to compute the update of the prescribed mass fraction of tracer, given by
     `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
     in respect to the mass of the mixture.
+
+    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
+    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
+    calculated.
 
     :returns: Return OK if successful or anything different if failed
     """
@@ -397,6 +443,8 @@ specs = HookSpecs(
         compute_momentum_source_term,
         compute_energy_source_term,
         compute_tracer_source_term,
+        initialize_particle_diameter_of_solids_fields,
+        update_particle_diameter_of_solids_fields,
         calculate_slip_velocity,
         calculate_slurry_viscosity,
         update_plugins_secondary_variables,
