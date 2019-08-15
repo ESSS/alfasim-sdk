@@ -279,6 +279,7 @@ class AddPhase():
     name: str = attr.ib()
     fields: list = attr.ib()
     primary_field: str = attr.ib()
+    is_solid: bool = attr.ib(default=False)
 
 
 @attr.s(kw_only=True, frozen=True)
