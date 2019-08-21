@@ -1,12 +1,19 @@
 import numbers
-from typing import Callable, FrozenSet, List, Optional, Union
+from typing import Callable
+from typing import FrozenSet
+from typing import List
+from typing import Optional
+from typing import Union
 
 import attr
 from attr import attrib
 from attr._make import Attribute
-from attr.validators import instance_of, is_callable, optional
+from attr.validators import instance_of
+from attr.validators import is_callable
+from attr.validators import optional
 
-from alfasim_sdk._validators import non_empty_str, valid_unit
+from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk._validators import valid_unit
 
 
 @attr.s(kw_only=True)
@@ -97,7 +104,7 @@ class Enum(BaseField):
     initial: str = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
-    def check(# pylint: disable=arguments-differ
+    def check(  # pylint: disable=arguments-differ
         self, attr: Attribute, values: List[str]
     ) -> None:
         if not isinstance(values, list):
@@ -214,7 +221,7 @@ class TableColumn(BaseField):
         object.__setattr__(self, "caption", self.value.caption)
 
     @value.validator
-    def check(# pylint: disable=arguments-differ
+    def check(  # pylint: disable=arguments-differ
         self, attr: Attribute, values: Quantity
     ) -> None:
         if not isinstance(values, Quantity):
@@ -226,7 +233,7 @@ class Table(BaseField):
     rows: FrozenSet[TableColumn] = attrib(converter=tuple)
 
     @rows.validator
-    def check(# pylint: disable=arguments-differ
+    def check(  # pylint: disable=arguments-differ
         self, attr: Attribute, values: Union[List[str], str]
     ):
         if not values:
@@ -257,25 +264,25 @@ class FilePath(BaseField):
 
 
 @attr.s(kw_only=True, frozen=True)
-class AddField():
+class AddField:
     name: str = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
-class AddLayer():
+class AddLayer:
     name: str = attr.ib()
     fields: list = attr.ib()
     continuous_field: str = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
-class UpdateLayer():
+class UpdateLayer:
     name: str = attr.ib()
     additional_fields: list = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
-class AddPhase():
+class AddPhase:
     name: str = attr.ib()
     fields: list = attr.ib()
     primary_field: str = attr.ib()
@@ -283,6 +290,6 @@ class AddPhase():
 
 
 @attr.s(kw_only=True, frozen=True)
-class UpdatePhase():
+class UpdatePhase:
     name: str = attr.ib()
     additional_fields: list = attr.ib()
