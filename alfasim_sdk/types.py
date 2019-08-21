@@ -261,3 +261,35 @@ class FilePath(BaseField):
 
     :ivar caption: caption - label to be used on the left side of the component, that informs the selected file.
     """
+
+
+@attr.s(kw_only=True, frozen=True)
+class AddField:
+    name: str = attr.ib()
+
+
+@attr.s(kw_only=True, frozen=True)
+class AddLayer:
+    name: str = attr.ib()
+    fields: list = attr.ib()
+    continuous_field: str = attr.ib()
+
+
+@attr.s(kw_only=True, frozen=True)
+class UpdateLayer:
+    name: str = attr.ib()
+    additional_fields: list = attr.ib()
+
+
+@attr.s(kw_only=True, frozen=True)
+class AddPhase:
+    name: str = attr.ib()
+    fields: list = attr.ib()
+    primary_field: str = attr.ib()
+    is_solid: bool = attr.ib(default=False)
+
+
+@attr.s(kw_only=True, frozen=True)
+class UpdatePhase:
+    name: str = attr.ib()
+    additional_fields: list = attr.ib()
