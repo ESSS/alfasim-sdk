@@ -1,3 +1,5 @@
+import os
+
 from click.testing import CliRunner
 
 from alfasim_sdk import cli
@@ -10,12 +12,11 @@ def test_command_line_interface():
     assert "--help  Show this message and exit." in help_result.output
 
 
-def test_command_package(tmpdir):
+def test_command_package(tmp_path):
     import sys
-    from pathlib import Path
 
     runner = CliRunner()
-    plugin_dir = Path(tmpdir / "acme")
+    plugin_dir = tmp_path / "acme"
     artifacts_dir = plugin_dir / "artifacts"
 
     lib_name = "acme.dll" if sys.platform == "win32" else "libacme.so"
@@ -29,7 +30,7 @@ def test_command_package(tmpdir):
             "--plugin-id=acme",
             "--author-email=acme@acme.com",
             "--author-name=ACME",
-            f"--dst={Path(tmpdir)}",
+            f"--dst={tmp_path}",
         ],
     )
 
@@ -42,7 +43,7 @@ def test_command_package(tmpdir):
         cli.main,
         [
             "package",
-            "--package-name=Acme",
+            "--package-name=acme",
             f"--plugin-dir={plugin_dir}",
             f"--dst={plugin_dir}",
         ],
@@ -50,11 +51,12 @@ def test_command_package(tmpdir):
 
     assert result.output == ""
     assert result.exit_code == 0
+    os_type = "win" if os.sys.platform == "win32" else "linux"
+    package_filename = f"acme-1.0.0-{os_type}64.hmplugin"
+    assert (plugin_dir / package_filename).is_file()
 
 
-def test_command_template(tmpdir):
-    from pathlib import Path
-
+def test_command_template(tmp_path):
     runner = CliRunner()
     result = runner.invoke(
         cli.main,
@@ -64,22 +66,22 @@ def test_command_template(tmpdir):
             "--plugin-id=acme",
             "--author-email=acme@acme.com",
             "--author-name=ACME",
-            f"--dst={Path(tmpdir)}",
+            f"--dst={tmp_path}",
         ],
     )
     assert result.output == ""
     assert result.exit_code == 0
 
 
-def test_compile_command(tmpdir):
+def test_compile_command(tmp_path):
     runner = CliRunner()
-    result = runner.invoke(cli.main, ["compile", "--plugin-dir", tmpdir])
+    result = runner.invoke(cli.main, ["compile", "--plugin-dir", tmp_path])
     assert (
-        f"Was not possible to find a compile.py file in {tmpdir}"
+        f"Was not possible to find a compile.py file in {tmp_path}"
         == result.exception.args[0]
     )
 
-    (tmpdir / "compile.py").write_text(data="", encoding="utf-8")
-    result = runner.invoke(cli.main, ["compile", "--plugin-dir", tmpdir])
+    (tmp_path / "compile.py").write_text(data="", encoding="utf-8")
+    result = runner.invoke(cli.main, ["compile", "--plugin-dir", tmp_path])
     assert result.exception is None
     assert result.output == ""
