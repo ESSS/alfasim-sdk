@@ -100,6 +100,7 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)
 {
     FreeLibrary(api->handle);
+    api->handle = nullptr;
 }
 
 #endif
