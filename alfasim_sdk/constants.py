@@ -6,6 +6,7 @@ SOLID_PHASE = "solid"
 GAS_FIELD = "gas"
 LIQUID_FIELD = "liquid"
 WATER_FIELD = "water"
+WATER_DROPLET_IN_LIQUID_FIELD = "water_in_liquid_droplet"
 DROPLET_FIELD = "droplet"
 BUBBLE_FIELD = "bubble"
 
