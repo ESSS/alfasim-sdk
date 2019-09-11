@@ -158,7 +158,7 @@ class HydrodynamicModelType(Enum):
         Three phase (gas, liquid and water) with five fields (continuous gas, continuous liquid, continuous water,dispersed gas bubble and dispersed liquid droplet).
 
     - two_phase_two_field_slug_capturing - 'Two-fluid, Regime Capturing (gas-liquid)':
-        Three phase (gas and liquid) with two fields (continuous gas and continuous liquid) using Regime Capturing strategy.
+        Two phase (gas and liquid) with two fields (continuous gas and continuous liquid) using Regime Capturing strategy.
 
     """
 
