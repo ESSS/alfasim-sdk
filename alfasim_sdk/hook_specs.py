@@ -23,11 +23,11 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_source_term(
+def calculate_mass_source_term(
     ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int"
 ) -> "int":
     """
-    Internal simulator hook to compute source terms of mass equation.
+    Internal simulator hook to calculate source terms of mass equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
@@ -39,11 +39,11 @@ def compute_mass_source_term(
     """
 
 
-def compute_momentum_source_term(
+def calculate_momentum_source_term(
     ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int"
 ) -> "int":
     """
-    Internal simulator hook to compute source terms of momentum equation.
+    Internal simulator hook to calculate source terms of momentum equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
@@ -55,11 +55,11 @@ def compute_momentum_source_term(
     """
 
 
-def compute_energy_source_term(
+def calculate_energy_source_term(
     ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int"
 ) -> "int":
     """
-    Internal simulator hook to compute source terms of energy equation
+    Internal simulator hook to calculate source terms of energy equation
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
@@ -71,11 +71,11 @@ def compute_energy_source_term(
     """
 
 
-def compute_tracer_source_term(
+def calculate_tracer_source_term(
     ctx: "void*", phi_source: "void*", n_tracers: "int", n_control_volumes: "int"
 ) -> "int":
     """
-    Internal simulator hook to compute source terms of tracer transport equation.
+    Internal simulator hook to calculate source terms of tracer transport equation.
     This is called after all residual functions are evaluated.
 
     :param ctx: ALFAsim's plugins context
@@ -174,6 +174,20 @@ def calculate_slurry_viscosity(
     """
 
 
+def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
+    """
+    Internal simulator hook to update plugin's secondary variables on the first timestep.
+    This is called as the first step on ALFAsim's update internal variables workflow.
+    This method is specially important when you have a plugin which the secondary variables depend
+    on `old` values. In the first timestep, there is no `old` values, so you may use this hook
+    to initialize your variables contents.
+
+    :param ctx:
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
     Internal simulator hook to update plugin's secondary variables.
@@ -185,25 +199,11 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
 
 
-def update_plugins_secondary_variables_extra(ctx: "void*") -> "int":
+def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
     """
-    Internal simulator hook to update plugin's secondary variables in the ExtraVarSolver scope.
-    ExtraVarSolver is used to solve the tracer transport equation.
-    This is called as the last step on ALFAsim's ExtraVarSolver update variables workflow.
-
-    :param ctx:
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
-    """
-    Internal simulator hook to update plugin's secondary variables on the first timestep.
-    This is called as the first step on ALFAsim's update internal variables workflow.
-    This method is specially important when you have a plugin which the secondary variables depend
-    on `old` values. In the first timestep, there is no `old` values, so you may use this hook
-    to initialize your variables contents.
+    Internal simulator hook to update plugin's secondary variables in the TracerSolver scope.
+    TracerSolver is used to solve the tracer transport equation.
+    This is called as the last step on ALFAsim's TracerSolver update variables workflow.
 
     :param ctx:
 
@@ -338,7 +338,7 @@ def finalize_state_variables_calculator(ctx: "void*") -> "int":
     """
 
 
-def compute_mass_fraction_of_tracer_in_phase(
+def calculate_mass_fraction_of_tracer_in_phase(
     ctx: "void*",
     phi: "void*",
     phi_phase: "void*",
@@ -347,7 +347,7 @@ def compute_mass_fraction_of_tracer_in_phase(
     n_control_volumes: "int",
 ) -> "int":
     """
-    Internal tracer model Hook to compute the mass fraction of tracer, given by `tracer_id`, in phase,
+    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in phase,
     given by `phase_id`. The input variable `phi` is the mass fraction of the given tracer in respect to
     the mass of the mixture. The output variable `phi_phase` is the mass fraction of the given tracer in
     respect to the mass of the given phase.
@@ -359,7 +359,7 @@ def compute_mass_fraction_of_tracer_in_phase(
     """
 
 
-def compute_mass_fraction_of_tracer_in_field(
+def calculate_mass_fraction_of_tracer_in_field(
     ctx: "void*",
     phi_phase: "void*",
     phi_field: "void*",
@@ -369,7 +369,7 @@ def compute_mass_fraction_of_tracer_in_field(
     n_control_volumes: "int",
 ) -> "int":
     """
-    Internal tracer model Hook to compute the mass fraction of tracer, given by `tracer_id`, in field,
+    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in field,
     given by `field_id`. The input variable `phi_phase` is the mass fraction of the given tracer in
     respect to the mass of the given phase, in which the id is `phase_id_of_field`. The output variable
     `phi_field` is the mass fraction of the given tracer in respect to the mass of the given field.
@@ -389,9 +389,9 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
     n_fields: "int",
 ) -> "int":
     """
-    Internal tracer model Hook to compute the update of the prescribed mass fraction of tracer, given by
-    `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
-    in respect to the mass of the mixture.
+    Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
+    The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
+    the mass of the mixture.
 
     The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
     `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
@@ -439,28 +439,34 @@ specs = HookSpecs(
     hooks=[
         initialize,
         finalize,
-        compute_mass_source_term,
-        compute_momentum_source_term,
-        compute_energy_source_term,
-        compute_tracer_source_term,
+        # Update secondary variables registered by plugin
+        update_plugins_secondary_variables_on_first_timestep,
+        update_plugins_secondary_variables,
+        update_plugins_secondary_variables_on_tracer_solver,
+        # Calculate source terms
+        calculate_mass_source_term,
+        calculate_momentum_source_term,
+        calculate_energy_source_term,
+        calculate_tracer_source_term,
+        # State variables calculation of phases added by plugin
+        initialize_state_variables_calculator,
+        finalize_state_variables_calculator,
+        calculate_state_variable,
+        calculate_phase_pair_state_variable,
+        # Hooks related to solids phases
         initialize_particle_diameter_of_solids_fields,
         update_particle_diameter_of_solids_fields,
         calculate_slip_velocity,
         calculate_slurry_viscosity,
-        update_plugins_secondary_variables,
-        update_plugins_secondary_variables_extra,
+        # Hooks related to Tracer added by plugin
+        initialize_mass_fraction_of_tracer,
+        calculate_mass_fraction_of_tracer_in_phase,
+        calculate_mass_fraction_of_tracer_in_field,
+        set_prescribed_boundary_condition_of_mass_fraction_of_tracer,
+        update_boundary_condition_of_mass_fraction_of_tracer,
+        # Extra Hooks
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
-        update_plugins_secondary_variables_on_first_timestep,
-        initialize_state_variables_calculator,
-        calculate_state_variable,
-        calculate_phase_pair_state_variable,
-        finalize_state_variables_calculator,
-        compute_mass_fraction_of_tracer_in_phase,
-        compute_mass_fraction_of_tracer_in_field,
-        update_boundary_condition_of_mass_fraction_of_tracer,
-        initialize_mass_fraction_of_tracer,
-        set_prescribed_boundary_condition_of_mass_fraction_of_tracer,
     ],
 )
