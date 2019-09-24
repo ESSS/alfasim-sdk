@@ -6,6 +6,7 @@ from barril.units import Scalar
 from alfasim_sdk.context import EdgeInfo
 from alfasim_sdk.context import EmulsionModelType
 from alfasim_sdk.context import HydrodynamicModelInfo
+from alfasim_sdk.context import HydrodynamicModelType
 from alfasim_sdk.context import NodeInfo
 from alfasim_sdk.context import PhysicsOptionsInfo
 from alfasim_sdk.context import PipelineInfo
@@ -124,6 +125,7 @@ def test_physics_option():
         emulsion_model=EmulsionModelType.boxall2012,
         solids_model=SolidsModelType.no_model,
         hydrodynamic_model=HydrodynamicModelInfo(
+            selected_base_type=HydrodynamicModelType.three_phase_five_field_ucm,
             phases=["1", "2"],
             fields=["3", "4"],
             layers=["5", "6"],
