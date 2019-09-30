@@ -185,10 +185,10 @@ def test_boolean():
         Boolean(value=1, caption="caption")
 
 
-def test_filepath():
-    from alfasim_sdk.types import FilePath
+def test_file_content():
+    from alfasim_sdk.types import FileContent
 
-    FilePath(caption="Test")
+    FileContent(caption="Test")
 
 
 def test_tooltips():

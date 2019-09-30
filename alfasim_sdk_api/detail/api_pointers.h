@@ -10,8 +10,8 @@ typedef int (*get_thread_id_func)(void*, int*);
 typedef int (*get_plugin_input_data_boolean_func)(void*, bool*, const char*, const char*);
 typedef int (*get_plugin_input_data_enum_func)(void*, int*, const char*, const char*);
 typedef int (*get_plugin_input_data_quantity_func)(void*, double*, const char*, const char*);
-typedef int (*get_plugin_input_data_filepath_func)(void*, char*, const char*, const char*, int);
-typedef int (*get_plugin_input_data_filepath_size_func)(void*, int*, const char*, const char*);
+typedef int (*get_plugin_input_data_file_content_func)(void*, char*, const char*, const char*, int);
+typedef int (*get_plugin_input_data_file_content_size_func)(void*, int*, const char*, const char*);
 typedef int (*get_plugin_input_data_string_func)(void*, char*, const char*, const char*, int);
 typedef int (*get_plugin_input_data_string_size_func)(void*, int*, const char*, const char*);
 typedef int (*get_plugin_input_data_reference_func)(void*, void**, const char*, const char*);
@@ -150,19 +150,19 @@ struct ALFAsimSDK_API {
     get_plugin_input_data_quantity_func get_plugin_input_data_quantity;
 
     /**
-    *   get_plugin_input_data_filepath
+    *   get_plugin_input_data_file_content
     *
-    *   Get the data provided from the user on a FilePath input field.
-    *       For more detail about the Filepath input field check alfasim_sdk.types.Filepath
+    *   Get the data provided from the user on a FileContent input field.
+    *       For more detail about the FileContent input field check alfasim_sdk.types.FileContent
     */
-    get_plugin_input_data_filepath_func get_plugin_input_data_filepath;
+    get_plugin_input_data_file_content_func get_plugin_input_data_file_content;
 
     /**
-    *   get_plugin_input_data_filepath_size
+    *   get_plugin_input_data_file_content_size
     *
-    *   Get the size of the data provided from the user on a FilePath input field.
+    *   Get the size of the data provided from the user on a FileContent input field.
     **/
-    get_plugin_input_data_filepath_size_func get_plugin_input_data_filepath_size;
+    get_plugin_input_data_file_content_size_func get_plugin_input_data_file_content_size;
 
     /**
     *   get_plugin_input_data_string

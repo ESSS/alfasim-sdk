@@ -12,7 +12,7 @@ def test_command_line_interface():
     assert "--help  Show this message and exit." in help_result.output
 
 
-def test_command_package(tmp_path):
+def test_command_package(tmp_path, mocker):
     import sys
 
     runner = CliRunner()
@@ -38,6 +38,15 @@ def test_command_package(tmp_path):
     (plugin_dir / "compile.py").write_text(data="", encoding="utf-8")
     artifacts_dir.mkdir()
     lib_file.write_text("", encoding="utf-8")
+
+    # Mocking _get_plugin_id_from_dll to pretend that the same plugin_id from yaml is the same inside the DLL
+    from hookman.plugin_config import PluginInfo
+
+    mocker.patch.object(
+        PluginInfo,
+        "_get_plugin_id_from_dll",
+        side_effect=(lambda id_from_config_file: id_from_config_file),
+    )
 
     result = runner.invoke(
         cli.main,

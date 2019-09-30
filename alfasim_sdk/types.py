@@ -249,9 +249,9 @@ class Boolean(BaseField):
 
 
 @attr.s(kw_only=True)
-class FilePath(BaseField):
+class FileContent(BaseField):
     """
-    The FilePath component provides a platform-native file dialog to the user to be able to select a file.
+    The FileContent component provides a platform-native file dialog to the user to be able to select a file.
     The name of the selected file will be available over the GUI and be enabled to be manually changed.
 
     If you want to make the file mandatory is recommended to include a status monitor in your plugin
