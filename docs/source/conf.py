@@ -101,6 +101,7 @@ html_static_path = ["_static"]
 #
 html_sidebars = {"**": ["about.html", "searchbox.html", "navigation.html"]}
 
+html_favicon = "_static/alfasim_gui.ico"
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
