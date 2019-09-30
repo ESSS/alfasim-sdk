@@ -92,9 +92,10 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-html_sidebars = {"**": ["about.html", "searchbox.html", "navigation.html"]}
+html_sidebars = {"**": ["searchbox.html", "about.html", "navigation.html"]}
 
 html_favicon = "_static/alfasim_gui.ico"
+html_logo = "_static/logo-alfasim.svg"
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
