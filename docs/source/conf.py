@@ -15,7 +15,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
-project = "ALFAsim - Software Development Kit"
+project = ""
 copyright = "2019, ESSS"
 author = "ESSS"
 
@@ -74,13 +74,6 @@ html_theme = "alabaster"
 # documentation.
 #
 html_theme_options = {
-    "logo": "logo-alfasim.svg",
-    "logo_name": False,
-    "logo_text_align": "center",
-    "description": "Software Development Kit",
-    "github_banner": False,
-    "github_button": False,
-    "show_powered_by": False,
     "analytics_id": "UA-149094345-1",
     "link": "#3782BE",
     "link_hover": "#3782BE",
