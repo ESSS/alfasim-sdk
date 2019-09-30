@@ -77,6 +77,9 @@ html_theme_options = {
     "analytics_id": "UA-149094345-1",
     "link": "#3782BE",
     "link_hover": "#3782BE",
+    "head_font_family": "Poppins, sans-serif",
+    "caption_font_family": "Poppins, sans-serif",
+    "font_family": "Roboto, sans-serif",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
