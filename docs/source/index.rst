@@ -33,6 +33,7 @@ After reading the quick start section, check out these additional resources to h
     :glob:
 
     concepts/creating_plugins
+    concepts/solver_hooks
 
 Dig deeper into specific topics:
 
