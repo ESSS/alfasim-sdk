@@ -13,8 +13,12 @@ Layout
 .. automodule:: alfasim_sdk.layout
     :members:
 
+
 Models
 ------
+
+.. autofunction:: alfasim_sdk.models.container_model
+
 
 .. automodule:: alfasim_sdk.models
     :members:
@@ -26,25 +30,25 @@ Status
     :members:
 
 Types
-------
+-----
 
 .. automodule:: alfasim_sdk.types
     :members:
 
 Variables
-------
+---------
 
 .. automodule:: alfasim_sdk.variables
     :members:
 
 Context
-------
+-------
 
 .. automodule:: alfasim_sdk.context
     :members:
 
 Constants
-------
+---------
 
 .. automodule:: alfasim_sdk.constants
     :members:
