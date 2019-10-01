@@ -1,0 +1,10 @@
+div.sphinxsidebar h3 {
+    margin-top: 20px;
+}
+h3#searchlabel {
+    display: none;
+}
+
+div.sphinxsidebar ul {
+    margin: 0;
+}
