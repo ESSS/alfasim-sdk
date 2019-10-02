@@ -182,7 +182,7 @@ def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
     on `old` values. In the first timestep, there is no `old` values, so you may use this hook
     to initialize your variables contents.
 
-    :param ctx:
+    :param ctx: ALFAsim's plugins context
 
     :returns: Return OK if successful or anything different if failed
     """
@@ -193,7 +193,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
     Internal simulator hook to update plugin's secondary variables.
     This is called as the last step on ALFAsim's update internal variables workflow.
 
-    :param ctx:
+    :param ctx: ALFAsim's plugins context
 
     :returns: Return OK if successful or anything different if failed
     """
@@ -205,7 +205,7 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
     TracerSolver is used to solve the tracer transport equation.
     This is called as the last step on ALFAsim's TracerSolver update variables workflow.
 
-    :param ctx:
+    :param ctx: ALFAsim's plugins context
 
     :returns: Return OK if successful or anything different if failed
     """
@@ -389,10 +389,6 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
     n_fields: "int",
 ) -> "int":
     """
-
-
-
-
     Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
     The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
     the mass of the mixture.
