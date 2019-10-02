@@ -50,8 +50,8 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_plugin_input_data_quantity = (get_plugin_input_data_quantity_func)dlsym(api->handle, "get_plugin_input_data_quantity");
     api->get_plugin_input_data_string = (get_plugin_input_data_string_func)dlsym(api->handle, "get_plugin_input_data_string");
     api->get_plugin_input_data_string_size = (get_plugin_input_data_string_size_func)dlsym(api->handle, "get_plugin_input_data_string_size");
-    api->get_plugin_input_data_filepath = (get_plugin_input_data_filepath_func)dlsym(api->handle, "get_plugin_input_data_filepath");
-    api->get_plugin_input_data_filepath_size = (get_plugin_input_data_filepath_size_func)dlsym(api->handle, "get_plugin_input_data_filepath_size");
+    api->get_plugin_input_data_file_content = (get_plugin_input_data_file_content_func)dlsym(api->handle, "get_plugin_input_data_file_content");
+    api->get_plugin_input_data_file_content_size = (get_plugin_input_data_file_content_size_func)dlsym(api->handle, "get_plugin_input_data_file_content_size");
     api->get_plugin_input_data_reference = (get_plugin_input_data_reference_func)dlsym(api->handle, "get_plugin_input_data_reference");
     api->get_plugin_variable = (get_plugin_variable_func)dlsym(api->handle, "get_plugin_variable");
     api->get_field_id = (get_field_id_func)dlsym(api->handle, "get_field_id");
