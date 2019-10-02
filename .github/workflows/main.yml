@@ -68,17 +68,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
         python-version: "3.7"
-    - name: Install wheel
+
+    - name: Build Package
       run: |
         python -m pip install --upgrade pip
-        pip install wheel
-    - name: Build package
-      run: |
-        python setup.py sdist bdist_wheel
+        curl -fsS -o get-poetry.py https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py
+        python get-poetry.py --preview -y
+        source $HOME/.poetry/env
+        poetry install -v
+        poetry build -v
+
     - name: pypi-publish
       if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@v1.0.0a0
