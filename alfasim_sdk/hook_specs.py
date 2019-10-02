@@ -264,11 +264,12 @@ def initialize_state_variables_calculator(
        alfasim_get_phase_properties_calculated_from_plugin function to set which phases
        the current plugin is able to calculate state variables.
 
-    2) The plugin must, then, implement three hooks:
-    - HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR
-    - HOOK_CALCULATE_STATE_VARIABLE
-    - HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE
-    - HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR
+    2) The plugin must, then, implement four hooks:
+
+     - HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR
+     - HOOK_CALCULATE_STATE_VARIABLE
+     - HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE
+     - HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR
 
     The first and last hooks are called immediately before and after the state variables are
     calculated, respectively.

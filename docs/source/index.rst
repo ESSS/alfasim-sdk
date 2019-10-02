@@ -42,4 +42,4 @@ Dig deeper into specific topics:
     :maxdepth: 2
     :glob:
 
-    api/*
+    api/reference

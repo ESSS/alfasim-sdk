@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
-#
-# Configuration file for the Sphinx documentation builder.
-#
-# This file does only contain a selection of the most common options. For a
-# full list see the documentation:
-# http://www.sphinx-doc.org/en/stable/config
-# -- Path setup --------------------------------------------------------------
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+# -- Breathe Configs  -------------------------------------------------------
+import os
+
+from eden._utils.conda import get_project_name_and_root_for_cwd
+
+_, project_root = get_project_name_and_root_for_cwd()
+alfasim_sdk_api_project_folder = os.path.join(project_root, "alfasim_sdk_api")
+
+breathe_default_project = "alfasim_sdk_api"
+breathe_projects = {"alfasim_sdk_api": "../build/breathe/doxygen/alfasim_sdk_api/xml"}
+breathe_projects_source = {
+    "alfasim_sdk_api": (alfasim_sdk_api_project_folder, ["common.h", "api.h"])
+}
+breathe_doxygen_config_options = {
+    "MACRO_EXPANSION": "YES",
+    "EXPAND_ONLY_PREDEF": "YES",
+    "PREDEFINED": "DLL_EXPORT= DOXYGEN_SHOULD_SKIP_THIS",
+}
+
 # -- Project information -----------------------------------------------------
 
 project = ""
@@ -33,7 +38,7 @@ release = ""
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc"]
+extensions = ["sphinx.ext.autodoc", "breathe"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -57,7 +62,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = []
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "breathe/*"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"

@@ -9,6 +9,15 @@
 #define DLL_EXPORT
 #endif
 
+/*!
+    Set the data provided from plugin developer
+
+    @param[in] ctx ALFAsim's plugins context
+    @param[in] plugin_id Plugin ID
+    @param[in] data Plugin internal data
+    @param[in] thread_id Thread ID (see **get_thread_id**)
+    @return OK if there was no problem
+*/
 DLL_EXPORT int set_plugin_data(void* ctx, const char* plugin_id, void* data, int thread_id);
 DLL_EXPORT int get_plugin_data(void* ctx, void** out, const char* plugin_id, int thread_id);
 
