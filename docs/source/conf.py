@@ -77,9 +77,11 @@ html_theme_options = {
     "analytics_id": "UA-149094345-1",
     "link": "#3782BE",
     "link_hover": "#3782BE",
-    "head_font_family": "sans-serif",
-    "caption_font_family": "sans-serif",
-    "font_family": "sans-serif",
+    "font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
+    "head_font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
+    "font_size": "18px",
+    "page_width": "980px",
+    "show_relbars": True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

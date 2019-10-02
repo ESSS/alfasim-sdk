@@ -8,3 +8,9 @@ h3#searchlabel {
 div.sphinxsidebar ul {
     margin: 0;
 }
+
+/* Style for an inline image on sphinx to be aligned with the text */
+p img {
+    vertical-align:middle;
+    display:inline;
+}
