@@ -4,7 +4,7 @@ Solver Hooks
 The present section describes all solver `Hooks` available on ALFAsim plugin infrastructure.
 Solver `Hooks` are ALFAsim's pre-defined functions that allows the plugin developer to add/update ALFAsim Solver.
 As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``template`` option
-on ALFAsim's CLI a new file named ``plugin.c`` will be available to implement those `hooks`.
+on ALFAsim-SDK's CLI a new file named ``plugin.c`` will be available to implement those `hooks`.
 
 .. Note::
     There is no need to implement all solver `hooks` in the plugin. It depends on which functionality the developer wants

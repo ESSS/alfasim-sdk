@@ -1,6 +1,8 @@
 #ifndef _H_ASIM_SDK_COMMON
 #define _H_ASIM_SDK_COMMON
 
+/*! @file */
+
 /*! It holds the possible returning error code from ALFAsim-SDK-API functions.*/
 enum error_code
 {

@@ -92,210 +92,34 @@ struct ALFAsimSDK_API {
 #error "Unknown host (Alfasim SDK will only work on Linux and Windows)"
 #endif
 
-    /**
-    *   set_plugin_data_func
-    *
-    *   This function is used to set the data provided from the user
-    */
     set_plugin_data_func set_plugin_data;
-
-
-    /**
-    *   get_plugin_input_data
-    *
-    *   This function is used to get the data provided from the user
-    */
     get_plugin_data_func get_plugin_data;
 
-
-    /**
-    *   get_number_of_threads
-    *
-    *   Gives the number of running threads on the solver
-    */
     get_number_of_threads_func get_number_of_threads;
-
-
-    /**
-    *   get_thread_id
-    *
-    *   Gives the current running thread id (in the solver process)
-    */
     get_thread_id_func get_thread_id;
 
-
-    /**
-    *   get_plugin_input_data_boolean
-    *
-    *   Get the data provided from the user on a Boolean input field.
-    *       For more detail about the Boolean input field check alfasim_sdk.types.Boolean
-    */
     get_plugin_input_data_boolean_func get_plugin_input_data_boolean;
-
-
-    /**
-    *   get_plugin_input_data_enum
-    *
-    *   Get the data provided from the user on a Enum input field.
-    *       For more detail about the Enum input field check alfasim_sdk.types.Enum
-    */
     get_plugin_input_data_enum_func get_plugin_input_data_enum;
-
-    /**
-    *   get_plugin_input_data_quantity
-    *
-    *   Get the data provided from the user on a Quantity input field.
-    *       For more detail about the quantity input field check alfasim_sdk.types.Quantity
-    */
     get_plugin_input_data_quantity_func get_plugin_input_data_quantity;
 
-    /**
-    *   get_plugin_input_data_file_content
-    *
-    *   Get the data provided from the user on a FileContent input field.
-    *       For more detail about the FileContent input field check alfasim_sdk.types.FileContent
-    */
     get_plugin_input_data_file_content_func get_plugin_input_data_file_content;
-
-    /**
-    *   get_plugin_input_data_file_content_size
-    *
-    *   Get the size of the data provided from the user on a FileContent input field.
-    **/
     get_plugin_input_data_file_content_size_func get_plugin_input_data_file_content_size;
 
-    /**
-    *   get_plugin_input_data_string
-    *
-    *   Get the data provided from the user on a String input field.
-    *       For more detail about the string input field check alfasim_sdk.types.String
-    */
     get_plugin_input_data_string_func get_plugin_input_data_string;
-
-    /**
-    *   get_plugin_input_data_string_size
-    *
-    *   Get the size of the data provided from the user on a String input field.
-    **/
     get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 
-    /**
-    *   get_plugin_input_data_reference
-    *
-    *   Get an ALFAsim input data internal Reference. Note that a Reference is a specific concept of
-    *   ALFAsim SDK and plugins - It is a way to retrieve data from an input outside of the current
-    *   model. See the ALFAsim's SDK python configuration file for more information.
-    *
-    *   Example usage:
-    *
-    *   void* tracer_ref = nullptr;
-    *   errcode = get_plugin_input_data_reference(
-    *       ctx, &tracer_ref, plugin_id, "Model.tracer_reference");
-    *
-    *   int tracer_id = -1;
-    *   errcode = get_tracer_id(ctx, &tracer_id, tracer_ref);
-    **/
     get_plugin_input_data_reference_func get_plugin_input_data_reference;
 
-    /**
-    *   get_plugin_input_data_table_quantity
-    *
-    *   Get the values from a column of an input table. Column_id is the string defined in the plugin's
-    *   configuration file. If the var_name or the column_id are invalid, UNDEFINED_DATA is returned.
-    *
-    *   This function is only available for the following hooks:
-    *   - HOOK_INITIALIZE
-    *
-    *   Example usage:
-    *   int size = -1;
-    *   double* values = NULL;
-    *   int errcode = get_plugin_input_data_table_quantity(
-    *       ctx,
-    *       &values,
-    *       &size,
-    *       "temperature",
-    *       plugin_id,
-    *       "some_table"
-    *    );
-    *    for (int i = 0; i < size; ++i) {
-    *        // Make calcs and/or store values[i]
-    *        some_plugin_data = 1.1 * values[i];
-    *    }
-    */
     get_plugin_input_data_table_quantity_func get_plugin_input_data_table_quantity;
 
-    /**
-    *   get_plugin_variable
-    *
-    *   Gets the contents of a plugin-defined variable (Given by name)
-    **/
     get_plugin_variable_func get_plugin_variable;
 
-    /**
-    *   get_field_id
-    *
-    *   Gets the field ID of the given name. Althought this depends on the hydrodynamic model
-    *   being solved, common values include "gas", "liquid", "droplet" and "bubble".
-    **/
     get_field_id_func get_field_id;
-
-    /**
-    *   get_primary_field_of_phase
-    *
-    *   Gets the primary field ID of the phase with given name. For example, the "liquid" phase has
-    *   primary field "liquid". Different phases may have different primary fields. Use this function
-    *   when you need a variable from a field, but you aren't sure about the field name, but you know
-    *   the phase name.
-    **/
     get_primary_field_id_of_phase_func get_primary_field_id_of_phase;
-
-    /**
-    *   get_phase_id
-    *
-    *   Gets the phase ID of the given name. Althought this depends on the hydrodynamic model
-    *   being solved, common values include "gas", "liquid" and "water"
-    **/
     get_phase_id_func get_phase_id;
-
-    /**
-    *   get_layer_id
-    *
-    *   Gets the layer ID of the given name. Althought this depends on the hydrodynamic model
-    *   being solved, common values include "gas", "liquid" and "water"
-    **/
     get_layer_id_func get_layer_id;
 
-    /**
-    *   get_state_variable_array
-    *
-    *   Get the current contents of a given state variable (For an array data pointer).
-    *   A state variable is any variable calculated from pressure and temperature,
-    *   as any thermaldynamic variable.
-    *
-    *   The state_var determines which variable is being retrived.
-    *
-    *   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
-    *   The user must **NEVER** change the contents returned by this function.
-    *
-    *   Example usage:
-    *   errcode = get_state_variable_array(ctx, enthalpy, StateVariable::H, FIELD_GAS, size);
-    */
     get_state_variable_array_func get_state_variable_array;
-
-    /**
-    *   get_simulation_array
-    *
-    *   Get the current contents of a given secondary variable (For an array data pointer).
-    *   A secondary variable is any variable calculated in the solver iterative procedure.
-    *   Note that not all variables are available at any time. If a given variable is not available,
-    *   a NOT_AVAILABLE_DATA error is returned.
-    *
-    *   The line_index determines the multifield scope of the variable being get. Use the
-    *   get_[field|layer|phase]_id to determine this number or use 0 if it is GLOBAL.
-    *
-    *   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
-    *   The user must **NEVER** change the contents returned by this function.
-    */
     get_simulation_array_func get_simulation_array;
 
     /**
