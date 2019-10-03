@@ -58,7 +58,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    alfasim_sdk_include = ["#include <alfasim_sdk_api/alfasim_sdk.h>"]
+    alfasim_sdk_include = ["<alfasim_sdk_api/alfasim_sdk.h>"]
     hm.generate_plugin_template(
         caption,
         plugin_id,
