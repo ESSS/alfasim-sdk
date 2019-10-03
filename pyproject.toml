@@ -35,7 +35,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6.0"
-Click = "^6.0"
+pluggy = '^0.13.0'
+Click = "^7.0"
 barril = "^1.5.0"
 python-hookman = {git = "https://github.com/ESSS/hookman.git"}
 
