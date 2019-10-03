@@ -70,8 +70,11 @@ def _compile(plugin_dir):
         raise FileNotFoundError(
             f"Was not possible to find a compile.py file in {plugin_dir}"
         )
+    import alfasim_sdk
 
-    subprocess.run(["python", str(compile_script)])  # nosec
+    _env = os.environ.copy()
+    _env["SDK_INCLUDE_DIR"] = alfasim_sdk.get_alfasim_sdk_api_path()
+    subprocess.check_call(["python", str(compile_script)], env=_env)  # nosec
 
 
 @main.command()
