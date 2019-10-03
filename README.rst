@@ -6,11 +6,7 @@ alfasim-sdk
 .. image:: https://img.shields.io/pypi/v/alfasim-sdk.svg
         :target: https://pypi.python.org/pypi/alfasim-sdk
 
-.. image:: https://img.shields.io/travis/ESSS/alfasim-sdk.svg
-        :target: https://travis-ci.org/ESSS/alfasim-sdk
-
-.. image:: https://ci.appveyor.com/api/projects/status/github/ESSS/alfasim-sdk?branch=master
-        :target: https://ci.appveyor.com/project/ESSS/alfasim-sdk/?branch=master&svg=true
+.. image:: https://github.com/ESSS/alfasim-sdk/workflows/test/badge.svg
 
 .. image:: https://codecov.io/gh/ESSS/alfasim-sdk/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/ESSS/alfasim-sdk
