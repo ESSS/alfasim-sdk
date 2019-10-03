@@ -85,9 +85,9 @@ def _compile(plugin_dir):
         )
     import alfasim_sdk
 
-    _env = os.environ.copy()
-    _env["SDK_INCLUDE_DIR"] = alfasim_sdk.get_alfasim_sdk_api_path()
-    subprocess.check_call(["python", str(compile_script)], env=_env)  # nosec
+    env = os.environ.copy()
+    env["SDK_INCLUDE_DIR"] = alfasim_sdk.get_alfasim_sdk_api_path()
+    subprocess.check_call(["python", str(compile_script)], env=env)  # nosec
 
 
 @main.command()
