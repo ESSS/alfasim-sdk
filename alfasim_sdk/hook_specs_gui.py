@@ -97,7 +97,7 @@ def alfasim_configure_layers():
 
     return [
         AddLayer(name='plugin_layer', fields=['plugin_continuous_field', DROPLET_FIELD], continuous_field='plugin_continuous_field'),
-        UpdateLayer(name=WATER_FIELD, additional_fields=['plugin_dispersed_field']),
+        UpdateLayer(name=WATER_LAYER, additional_fields=['plugin_dispersed_field']),
     ]
     """
 
