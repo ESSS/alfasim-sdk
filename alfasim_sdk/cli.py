@@ -60,6 +60,11 @@ def template(dst, caption, plugin_id, author_name, author_email):
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
     hm.generate_plugin_template(caption, plugin_id, author_email, author_name, dst)
 
+    source_folder = dst / plugin_id / "src"
+    python_folder = dst / plugin_id / "python"
+    python_folder.mkdir()
+    Path(source_folder / f"{plugin_id}.py").write_text("")
+
 
 @main.command(name="compile")
 @plugin_dir_option
