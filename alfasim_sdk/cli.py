@@ -81,9 +81,9 @@ def template(dst, caption, plugin_id, author_name, author_email):
     )
 
     source_folder = dst / plugin_id / "src"
-    python_folder = dst / plugin_id / "python"
+    python_folder = source_folder / "python"
     python_folder.mkdir()
-    Path(source_folder / f"{plugin_id}.py").touch()
+    Path(python_folder / f"{plugin_id}.py").touch()
 
 
 @main.command(name="compile")
