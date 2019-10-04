@@ -96,8 +96,8 @@ def alfasim_configure_layers():
     Example:
 
     return [
-        AddLayer(name='plugin_layer', fields=['plugin_continuous_field', DROPLET_FIELD], continuous_field='plugin_continuous_field'),
-        UpdateLayer(name=WATER_FIELD, additional_fields=['plugin_dispersed_field']),
+        AddLayer(name='plugin_layer', fields=['plugin_continuous_field'], continuous_field='plugin_continuous_field'),
+        UpdateLayer(name=WATER_LAYER, additional_fields=['plugin_dispersed_field']),
     ]
     """
 
@@ -109,7 +109,7 @@ def alfasim_configure_phases():
     Example:
 
     return [
-        AddPhase(name='plugin_phase', fields=['plugin_continuous_field', DROPLET_FIELD], primary_field='plugin_continuous_field'),
+        AddPhase(name='plugin_phase', fields=['plugin_continuous_field', 'plugin_dispersed_field'], primary_field='plugin_continuous_field'),
         UpdatePhase(name=WATER_PHASE, additional_fields=['plugin_dispersed_field']),
     ]
     """
@@ -123,7 +123,7 @@ def alfasim_get_phase_properties_calculated_from_plugin():
 
     Example:
     from alfasim_sdk.constants import GAS_PHASE
-    return [GAS_PHASE, 'solid,]
+    return [GAS_PHASE, 'solid']
     """
 
 
