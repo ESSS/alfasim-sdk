@@ -1,3 +1,5 @@
+.. _user_interface_hooks-section:
+
 User Interface Hooks
 ====================
 

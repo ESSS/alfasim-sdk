@@ -1,54 +1,9 @@
-API
-===
+Full API Reference
+==================
 
 This page contains the full reference to ``ALFAsim-SDK`` API.
 
-.. contents::
-    :depth: 3
-    :local:
+.. toctree::
 
-Layout
-------
-
-.. automodule:: alfasim_sdk.layout
-    :members:
-
-
-Models
-------
-
-.. autofunction:: alfasim_sdk.models.container_model
-
-
-.. automodule:: alfasim_sdk.models
-    :members:
-
-Status
-------
-
-.. automodule:: alfasim_sdk.status
-    :members:
-
-Types
------
-
-.. automodule:: alfasim_sdk.types
-    :members:
-
-Variables
----------
-
-.. automodule:: alfasim_sdk.variables
-    :members:
-
-Context
--------
-
-.. automodule:: alfasim_sdk.context
-    :members:
-
-Constants
----------
-
-.. automodule:: alfasim_sdk.constants
-    :members:
+    solver_api_reference
+    user_interface_reference
