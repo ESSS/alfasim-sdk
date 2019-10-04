@@ -61,8 +61,12 @@ def template(dst, caption, plugin_id, author_name, author_email):
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
     alfasim_sdk_include = ["<alfasim_sdk_api/alfasim_sdk.h>"]
     default_impls_for_hooks = [
-        "HOOK_INITIALIZE(ctx){" "    return 0;" "}",
-        "HOOK_FINALIZE(ctx){" "    return 0;" "}",
+        "HOOK_INITIALIZE(ctx){",
+        "    return 0;",
+        "}",
+        "HOOK_FINALIZE(ctx){",
+        "    return 0;",
+        "}",
     ]
 
     hm.generate_plugin_template(
