@@ -108,9 +108,10 @@ struct ALFAsimSDK_API {
     get_plugin_input_data_string_func get_plugin_input_data_string;
     get_plugin_input_data_string_size_func get_plugin_input_data_string_size;
 
-    get_plugin_input_data_reference_func get_plugin_input_data_reference;
-
     get_plugin_input_data_table_quantity_func get_plugin_input_data_table_quantity;
+
+    get_plugin_input_data_reference_func get_plugin_input_data_reference;
+    get_plugin_input_data_multiplereference_selected_size_func get_plugin_input_data_multiplereference_selected_size;
 
     get_plugin_variable_func get_plugin_variable;
 
@@ -121,153 +122,21 @@ struct ALFAsimSDK_API {
 
     get_state_variable_array_func get_state_variable_array;
     get_simulation_array_func get_simulation_array;
-
-    /**
-    *   get_simulation_tracer_array
-    *
-    *   Get the current contents of a given tracer mass fraction (For an array data pointer).
-    *   A  tracer mass fraction is calculated in the extra solver iterative procedure.
-    *   Note that not all tracer mass fraction are available at any time.
-    *   If a given tracer mass fraction (in an inexistent field) is not available,
-    *   a NOT_AVAILABLE_DATA error is returned.
-    *
-    *   The line_index determines the multifield scope of the tracer mass fraction being get.
-    *   Use the get_[field|phase]_id to determine this number or use 0 if it is GLOBAL.
-    *   The tracer_index determines the tracer that the mass fraction is being get.
-    *   Use the get_tracer_id to determine this number.
-    *
-    *   WARNING: Changing the contents returned by this function has **UNDEFINED BEHAVIOR**.
-    *   The user must **NEVER** change the contents returned by this function.
-    */
     get_simulation_tracer_array_func get_simulation_tracer_array;
-
-    /**
-    *   get_simulation_quantity
-    *
-    *   Get the current contents of a given secondary variable (For a single quantity).
-    *   A secondary variable is any variable calculated in the solver iterative procedure.
-    *   Note that not all variables are available at any time. If a given variable is not available,
-    *   a NOT_AVAILABLE_DATA error is returned.
-    */
     get_simulation_quantity_func get_simulation_quantity;
 
-    /**
-    *   get_wall_interfaces_temperature
-    *
-    *   Get the wall interface temperature for a given control volume. Each control volume has an array
-    *   of temperatures, one for each wall layer. The temperatures are given in the wall interfaces.
-    */
-    get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
-
-
-    /**
-    *   get_flow_pattern
-    *
-    *   Get the flow pattern for each control volume.
-    */
     get_flow_pattern_func get_flow_pattern;
 
-
-    /**
-    *   get_tracer_id
-    *
-    *   Retrieves the tracer ID given a tracer reference. A tracer reference may be obtained from the
-    *   user input data (See get_plugin_input_data_reference API function for an example).
-    */
     get_tracer_id_func get_tracer_id;
-
-
-    /**
-    *   get_tracer_name_size
-    *
-    *   Retrieves the size of the tracer name, given a tracer reference. A tracer reference may be
-    *   obtained from the user input data (See get_plugin_input_data_reference API function for an
-    *   example).
-    */
     get_tracer_name_size_func get_tracer_name_size;
-
-
-    /**
-    *   get_tracer_name
-    *
-    *   Retrieves the tracer name, given a tracer reference. The tracer_name parameter must be a valid
-    *   and pre-allocated memory region where the name string will be copied to. A tracer reference may
-    *   be obtained from the user input data (See get_plugin_input_data_reference API function for an
-    *   example).
-    *
-    *   Example usage:
-    *   int tracer_name_size = -1;
-    *   errcode = get_tracer_name_size(ctx, &tracer_name_size, tracer_ref);
-    *
-    *   char* tracer_name = (char*)malloc(sizeof(char) * tracer_name_size);
-    *   errcode = get_tracer_name(ctx, tracer_name, tracer_ref, tracer_name_size);
-    *   std::cout << "TRACER NAME: " << tracer_name << std::endl;
-    *   free(tracer_name);
-    */
     get_tracer_name_func get_tracer_name;
-
-
-    /**
-    *   get_tracer_ref_by_name
-    *
-    *   Get the tracer reference for a given tracer name. This function is important to obtain the
-    *   tracer reference of a user defined tracer added by the plugin.
-    */
     get_tracer_ref_by_name_func get_tracer_ref_by_name;
-
-
-    /**
-    *   get_tracer_partition_coefficient
-    *
-    *   Get the partition coefficient input data for a given tracer reference. The phase_id must also
-    *   be given (See get_phase_id API function). A tracer reference may be obtained from the user
-    *   input data (See get_plugin_input_data_reference API function for an example).
-    */
     get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
 
-
-    /**
-    *   get_wall_layer_id
-    *
-    *   Get the wall layer id in the given control volume, with a given material name.
-    *   The layer id is output in the "out" variable.
-    */
+    get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
     get_wall_layer_id_func get_wall_layer_id;
-
-    /**
-    *   set_wall_layer_property
-    *
-    *   Set a property in the given wall layer (Use get_wall_layer_id to get it), in a given control
-    *   volume. Please note that the new value is assumed to be physical, as no sanity check is
-    *   performed by the solver.
-    */
     set_wall_layer_property_func set_wall_layer_property;
 
-
-    /**
-    *   get_plugin_input_data_multiplereference_selected_size
-    *
-    *   Get the number of selected references in a multiple-reference selection. User should be able to
-    *   iterate over the selections to get information.
-    *
-    *   Example usage:
-    *        int errcode = -1;
-    *        int indexes_size = -1;
-    *        errcode = get_plugin_input_data_multiplereference_selected_size(
-    *            ctx, &indexes_size, plugin_id, "Model.internal_multiple_reference");
-    *
-    *        for (int i = 0; i < indexes_size; ++i) {
-    *            auto value = -1.0;
-    *            auto reference_str = std::string(
-    *                "Model.internal_multiple_reference[" + std::to_string(i) + "]->quantity");
-    *
-    *            errcode = get_plugin_input_data_quantity(
-    *                ctx, &value, plugin_id, reference_str.c_str());
-    *            }
-    *        }
-    *
-    */
-    get_plugin_input_data_multiplereference_selected_size_func get_plugin_input_data_multiplereference_selected_size;
 };
 
 #endif

@@ -20,6 +20,8 @@ Enums
 
 .. doxygenenum:: StateVariable
 
+.. doxygenenum:: WallLayerProperty
+
 Structs
 -------
 
@@ -49,6 +51,8 @@ Plugin Input Data (From user interface)
 .. doxygenfunction:: get_plugin_input_data_table_quantity
 
 .. doxygenfunction:: get_plugin_input_data_reference
+
+.. doxygenfunction:: get_plugin_input_data_multiplereference_selected_size
 
 Plugin Internal Data
 ~~~~~~~~~~~~~~~~~~~~
@@ -85,3 +89,29 @@ ALFAsim's Solver Data
 .. warning::
     Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
     The user must **NEVER** change the contents returned by this function.
+
+.. doxygenfunction:: get_simulation_tracer_array
+
+.. warning::
+    Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
+    The user must **NEVER** change the contents returned by this function.
+
+.. doxygenfunction:: get_simulation_quantity
+
+.. doxygenfunction:: get_tracer_id
+
+.. doxygenfunction:: get_tracer_name_size
+
+.. doxygenfunction:: get_tracer_name
+
+.. doxygenfunction:: get_tracer_ref_by_name
+
+.. doxygenfunction:: get_tracer_partition_coefficient
+
+.. doxygenfunction:: get_wall_interfaces_temperature
+
+.. doxygenfunction:: get_wall_layer_id
+
+.. doxygenfunction:: set_wall_layer_property
+
+.. doxygenfunction:: get_flow_pattern

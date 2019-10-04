@@ -64,15 +64,19 @@ enum StateVariable {
     SIGMA /*!< Interfacial tension*/
 };
 
+/*!
+    It holds the possible wall layer property that can be obtained from ALFAsim's solver.
+    This `Enum` is used by The #set_wall_layer_property API function.
+*/
 enum WallLayerProperty {
-    THICKNESS=0,
-    DENSITY=1,
-    THERMAL_CONDUCTIVITY=2,
-    HEAT_CAPACITY=3,
-    INNER_EMISSIVITY=4,
-    OUTER_EMISSIVITY=5,
-    EXPANSION=6,
-    VISCOSITY=7
+    THICKNESS=0, /*!< Wall layer tickness*/
+    DENSITY=1, /*!< Wall layer material density*/
+    THERMAL_CONDUCTIVITY=2, /*!< Wall layer material thermal conductivity*/
+    HEAT_CAPACITY=3, /*!< Wall layer material specifc heat capacity*/
+    INNER_EMISSIVITY=4, /*!< Wall layer material inner emissivity*/
+    OUTER_EMISSIVITY=5, /*!< Wall layer material outer emissivity*/
+    EXPANSION=6, /*!< Wall layer material thermal expansion coefficient*/
+    VISCOSITY=7 /*!< Wall layer material viscosity (if it is a deposit layer)*/
 };
 
 /*!
@@ -94,6 +98,8 @@ struct VariableScope
     enum TimestepScope ts_scope;
 };
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
 enum sdk_load_error_code {
     SDK_DLL_PATH_TOO_LONG=-2,
     SDK_ALREADY_OPEN_ERROR=-1,
@@ -114,5 +120,7 @@ enum sdk_load_error_code {
 #define LAYER_GAS "gas"
 #define LAYER_LIQUID "liquid"
 #define LAYER_WATER "water"
+
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #endif
