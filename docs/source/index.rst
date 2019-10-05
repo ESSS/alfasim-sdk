@@ -1,7 +1,7 @@
 ALFASIM-SDK
 ===========
 
-The ALFAsim-SDK is a tool to help developers to create a new plugin for ALFAsim application.
+The ALFAsim-SDK help developers to create plugins for an ALFAsim application.
 Plugins can extend the ALFAsim capabilities in a lot of ways, from adding a simple input to a custom calculation of solver equations.
 
 Some examples of the capabilities that can be extended are:
@@ -12,12 +12,16 @@ Some examples of the capabilities that can be extended are:
   * Support for calculating source terms to solver equations.
   * Support for calculating/updating plugin-defined Simulation Variables
 
-For a list of all capabilities that can be expanded check the API reference section in the documentation.
+For a list of all capabilities that can be expanded check the :ref:`api-reference-section` in the documentation.
 
-Anyone with programming skills can create a Plugin, for that, alfasim-SDK provides an API in `C` that can be easily used by C/C++ programs.
-For user interface customization, it's provided as well as an API that allows the developers to declare models and their fields.
+Anyone with programming skills can create a Plugin for ALFAsim, for that,
+alfasim-SDK provides hooks to customize the solver and the user interface.
+In order to customize the solver, an API in `C` is provided for application writeen in C/C++, while,
+for user interface customization, an API in Python allows the developer to customize the interface in a declarative way,
 
-To get quick and running with ``ALFAsim-SDK`` you can read the :ref:`quick-start-section` and the :ref:`plugin-by-example-section` sections
+
+To get quick and running with ``ALFAsim-SDK`` you can read the :ref:`quick-start-section` and the
+:ref:`plugin-by-example-section` sections
 
 .. toctree::
     :maxdepth: 2
@@ -26,7 +30,8 @@ To get quick and running with ``ALFAsim-SDK`` you can read the :ref:`quick-start
     quick_start
     alfasim_sdk_by_example
 
-After reading the quick start section, check out these additional resources to help better understand the project flow:
+After reading the quick start section and the plugin by example section,
+check out these additional resources to help better understand the plugin workflow:
 
 .. toctree::
     :maxdepth: 2
