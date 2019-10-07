@@ -114,6 +114,7 @@ With the ``HOOK_INITIALIZE`` it's possible to initialize any custom routine for 
 with the alfasim_sdk_open [ details about alfasim_sdk_open]
 
 .. code-block:: cpp
+
     ALFAsimSDK_API alfasim_sdk_api;
 
      HOOK_INITIALIZE(ctx)
