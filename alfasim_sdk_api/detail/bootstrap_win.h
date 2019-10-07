@@ -8,7 +8,14 @@
 #include <wchar.h>
 
 #define MAX_PATH 32767
+/*! @file */
 
+/*!
+    Load ALFAsim-SDK API dll.
+
+    @param[out] api ALFAsim-SDK API.
+    @return An #sdk_load_error_code value.
+*/
 inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
     if (api->handle != nullptr) {
@@ -97,6 +104,12 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     return SDK_OK;
 }
 
+/*!
+    Unload ALFAsim-SDK API dll.
+
+    @param[in] api ALFAsim-SDK API.
+    @return An #sdk_load_error_code value.
+*/
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)
 {
     FreeLibrary(api->handle);
