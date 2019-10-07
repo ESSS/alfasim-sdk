@@ -7,10 +7,7 @@ from pathlib import Path
 
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 if on_rtd:
-    subprocess.call("cd ..; make html")
-    subprocess.call(
-        "cd ..; doxygen _build/breathe/doxygen/alfasim_sdk_api.cfg", shell=True
-    )
+    subprocess.run("cd ..; doxygen alfasim_sdk_api.cfg", shell=True)
 
 breathe_default_project = "alfasim_sdk_api"
 breathe_projects = {"alfasim_sdk_api": "../_build/breathe/doxygen/alfasim_sdk_api/xml"}
