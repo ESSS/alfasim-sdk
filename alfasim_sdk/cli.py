@@ -6,6 +6,7 @@ from pathlib import Path
 import click
 from hookman.hookman_generator import HookManGenerator
 
+
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 plugin_dir_option = click.option(
@@ -58,7 +59,31 @@ def template(dst, caption, plugin_id, author_name, author_email):
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    hm.generate_plugin_template(caption, plugin_id, author_email, author_name, dst)
+    alfasim_sdk_include = ["<alfasim_sdk_api/alfasim_sdk.h>"]
+    default_impls_for_hooks = [
+        "HOOK_INITIALIZE(ctx){",
+        "    return 0;",
+        "}",
+        "HOOK_FINALIZE(ctx){",
+        "    return 0;",
+        "}",
+    ]
+
+    hm.generate_plugin_template(
+        caption,
+        plugin_id,
+        author_email,
+        author_name,
+        dst,
+        extra_includes=alfasim_sdk_include,
+        extra_body_lines=default_impls_for_hooks,
+        exclude_hooks=["HOOK_FINALIZE", "HOOK_INITIALIZE"],
+    )
+
+    source_folder = dst / plugin_id / "src"
+    python_folder = source_folder / "python"
+    python_folder.mkdir()
+    Path(python_folder / f"{plugin_id}.py").touch()
 
 
 @main.command(name="compile")
@@ -70,8 +95,11 @@ def _compile(plugin_dir):
         raise FileNotFoundError(
             f"Was not possible to find a compile.py file in {plugin_dir}"
         )
+    import alfasim_sdk
 
-    subprocess.run(["python", str(compile_script)])  # nosec
+    env = os.environ.copy()
+    env["SDK_INCLUDE_DIR"] = alfasim_sdk.get_alfasim_sdk_api_path()
+    subprocess.check_call(["python", str(compile_script)], env=env)  # nosec
 
 
 @main.command()
