@@ -93,7 +93,7 @@ The highlights here are for:
 
 
 Check out the :ref:`Plugin Structure section <plugin_structure-section>` for more details about how the folder and files are structured, and
-also, check the :ref:`plugin-by-example-section` that shows how to create simple plugins that make use of the :option:`User Interface Hooks` and the :option:`Solver Hooks`.
+also, check the :ref:`plugin-by-example-section` that shows how to create simple plugins that make use of the `User Interface Hooks` and the `Solver Hooks`.
 
 Creating a package
 ------------------
@@ -165,4 +165,3 @@ Restart the application and check the recently installed plugin available over t
 
 .. image:: _static/quick_start/tree_with_plugin.png
     :target: _static/quick_start/tree_with_plugin.png
-

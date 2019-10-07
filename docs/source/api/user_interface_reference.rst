@@ -29,11 +29,15 @@ Status
 .. automodule:: alfasim_sdk.status
     :members:
 
+.. _api-types-section:
+
 Types
 -----
 
 .. automodule:: alfasim_sdk.types
     :members:
+
+.. _api-variables-section:
 
 Variables
 ---------
