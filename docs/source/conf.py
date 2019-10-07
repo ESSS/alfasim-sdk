@@ -8,8 +8,6 @@ from pathlib import Path
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 if on_rtd:
     subprocess.run("cd ..; doxygen alfasim_sdk_api.cfg", shell=True)
-    for i in Path(os.getcwd()).parent.glob("**/*"):
-        print(i)
     breathe_projects = {"alfasim_sdk_api": "../alfasim_sdk_api/xml"}
 else:
     breathe_projects = {
