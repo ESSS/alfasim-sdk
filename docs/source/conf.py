@@ -10,9 +10,7 @@ if on_rtd:
     subprocess.run("cd ..; doxygen alfasim_sdk_api.cfg", shell=True)
     for i in Path(os.getcwd()).parent.glob("**/*"):
         print(i)
-    breathe_projects = {
-        "alfasim_sdk_api": "../_build/breathe/doxygen/alfasim_sdk_api/xml"
-    }
+    breathe_projects = {"alfasim_sdk_api": "../alfasim_sdk_api/xml"}
 else:
     breathe_projects = {
         "alfasim_sdk_api": "../_build/breathe/doxygen/alfasim_sdk_api/xml"
