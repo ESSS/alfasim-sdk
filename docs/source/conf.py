@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 # -- Breathe Configs  -------------------------------------------------------
 import os
+import subprocess
 from pathlib import Path
 
-# from eden._utils.conda import get_project_name_and_root_for_cwd
-alfasim_sdk_api_project_folder = Path(os.getcwd()).parents[1] / "alfasim_sdk_api"
+
+on_rtd = os.environ.get("READTHEDOCS", None) == "True"
+if on_rtd:
+    subprocess.call("cd ..; doxygen", shell=True)
 
 breathe_default_project = "alfasim_sdk_api"
 breathe_projects = {"alfasim_sdk_api": "../build/breathe/doxygen/alfasim_sdk_api/xml"}
+
+alfasim_sdk_api_project_folder = Path(os.getcwd()).parents[1] / "alfasim_sdk_api"
 breathe_projects_source = {
     "alfasim_sdk_api": (
         alfasim_sdk_api_project_folder,
