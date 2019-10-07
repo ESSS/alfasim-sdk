@@ -10,6 +10,7 @@
 
 #define MAX_PATH 32767
 
+// See DOCs in bootstrap_win.h
 inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
     if (api->handle != nullptr) {

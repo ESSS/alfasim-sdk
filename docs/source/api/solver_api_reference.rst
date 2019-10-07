@@ -22,6 +22,8 @@ Enums
 
 .. doxygenenum:: WallLayerProperty
 
+.. doxygenenum:: sdk_load_error_code
+
 Structs
 -------
 
@@ -30,6 +32,18 @@ Structs
 
 Functions
 ---------
+
+ALFAsim-SDK API Loading
+~~~~~~~~~~~~~~~~~~~~~~~
+.. Note::
+    The ALFAsim-SDK API must be loaded with :cpp:func:`alfasim_sdk_open` inside `hook` :py:func:`alfasim_sdk.hook_specs.initialize`
+    of any plugin, otherwise the plugin will not be able to use any function available in the API. In addition, to avoid memory
+    leak it is important to unload the ALFAsim-SDK API in the last called `hook`, :py:func:`alfasim_sdk.hook_specs.finalize`,
+    using the :cpp:func:`alfasim_sdk_close` function.
+
+.. doxygenfunction:: alfasim_sdk_open
+
+.. doxygenfunction:: alfasim_sdk_close
 
 Plugin Input Data (From user interface)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

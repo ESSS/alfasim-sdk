@@ -10,7 +10,10 @@ alfasim_sdk_api_project_folder = os.path.join(project_root, "alfasim_sdk_api")
 breathe_default_project = "alfasim_sdk_api"
 breathe_projects = {"alfasim_sdk_api": "../build/breathe/doxygen/alfasim_sdk_api/xml"}
 breathe_projects_source = {
-    "alfasim_sdk_api": (alfasim_sdk_api_project_folder, ["common.h", "api.h"])
+    "alfasim_sdk_api": (
+        alfasim_sdk_api_project_folder,
+        ["common.h", "api.h", "detail/bootstrap_win.h"],
+    )
 }
 breathe_doxygen_config_options = {
     "MACRO_EXPANSION": "YES",

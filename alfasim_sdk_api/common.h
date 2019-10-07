@@ -3,7 +3,9 @@
 
 /*! @file */
 
-/*! It holds the possible returning error code from ALFAsim-SDK-API functions.*/
+/*!
+    It holds the possible returning error code from ALFAsim-SDK-API functions.
+*/
 enum error_code
 {
     REFERENCE_NOT_SET=-8, /*!< Some reference from input data wasn't set.*/
@@ -14,7 +16,7 @@ enum error_code
     BUFFER_SIZE_INSUFFICIENT=-3, /*!< Buffer size is insufficient.*/
     UNDEFINED_DATA=-2, /*!< Plugin internal data is undefined.*/
     NOT_IMPLEMENTED=-1, /*!< A feature is not implemented in an API function.*/
-    OK = 0 /*!<  Everything was fine.*/
+    OK = 0 /*!< Everything was fine.*/
 };
 
 /*!
@@ -98,13 +100,16 @@ struct VariableScope
     enum TimestepScope ts_scope;
 };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
+/*!
+    It holds the possible returning error code when trying to open ALFAsim-SDK API.
+*/
 enum sdk_load_error_code {
-    SDK_DLL_PATH_TOO_LONG=-2,
-    SDK_ALREADY_OPEN_ERROR=-1,
-    SDK_OK=0
+    SDK_DLL_PATH_TOO_LONG=-2, /*!< Path to SDK dll too long (Windows limitation).*/
+    SDK_ALREADY_OPEN_ERROR=-1, /*!< SDK dll already Opened.*/
+    SDK_OK=0 /*!< Everything was fine.*/
 };
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define FIELD_GAS "gas"
 #define FIELD_LIQUID "liquid"
