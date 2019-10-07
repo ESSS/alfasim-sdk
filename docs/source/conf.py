@@ -8,7 +8,8 @@ from pathlib import Path
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 if on_rtd:
     subprocess.call(
-        "cd ..; doxygen _build/breathe/doxygen/alfasim_sdk_api.cfg", shell=True
+        "cd ..; pwd; ls -lh; doxygen _build/breathe/doxygen/alfasim_sdk_api.cfg",
+        shell=True,
     )
 
 breathe_default_project = "alfasim_sdk_api"
