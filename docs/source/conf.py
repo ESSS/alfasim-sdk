@@ -8,12 +8,12 @@ from pathlib import Path
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 if on_rtd:
     subprocess.call(
-        "cd ..; pwd; ls -lh; doxygen _build/breathe/doxygen/alfasim_sdk_api.cfg",
+        "cd ..; make html; doxygen _build/breathe/doxygen/alfasim_sdk_api.cfg",
         shell=True,
     )
 
 breathe_default_project = "alfasim_sdk_api"
-breathe_projects = {"alfasim_sdk_api": "../build/breathe/doxygen/alfasim_sdk_api/xml"}
+breathe_projects = {"alfasim_sdk_api": "../_build/breathe/doxygen/alfasim_sdk_api/xml"}
 
 alfasim_sdk_api_project_folder = Path(os.getcwd()).parents[1] / "alfasim_sdk_api"
 breathe_projects_source = {
