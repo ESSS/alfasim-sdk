@@ -293,3 +293,11 @@ class AddPhase:
 class UpdatePhase:
     name: str = attr.ib()
     additional_fields: list = attr.ib()
+
+        
+class TEST_ONLY_WITHOUT_COVERAGE:
+    
+    def __init__(self):
+        without_coverage = 1
+        
+    
