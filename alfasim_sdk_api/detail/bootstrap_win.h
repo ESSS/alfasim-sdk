@@ -6,9 +6,13 @@
 #include <stdlib.h>
 #include <strsafe.h>
 #include <wchar.h>
+/*! @file */
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define MAX_PATH 32767
-/*! @file */
+
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 /*!
     Load ALFAsim-SDK API dll.

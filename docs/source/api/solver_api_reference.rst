@@ -33,12 +33,14 @@ Structs
 Functions
 ---------
 
+.. _sdk_api_loading:
+
 ALFAsim-SDK API Loading
 ~~~~~~~~~~~~~~~~~~~~~~~
 .. Note::
-    The ALFAsim-SDK API must be loaded with :cpp:func:`alfasim_sdk_open` inside `hook` :py:func:`alfasim_sdk.hook_specs.initialize`
+    The ALFAsim-SDK API must be loaded with :cpp:func:`alfasim_sdk_open` inside :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>`
     of any plugin, otherwise the plugin will not be able to use any function available in the API. In addition, to avoid memory
-    leak it is important to unload the ALFAsim-SDK API in the last called `hook`, :py:func:`alfasim_sdk.hook_specs.finalize`,
+    leak it is important to unload the ALFAsim-SDK API in the last called `hook`, :py:func:`HOOK_FINALIZE<alfasim_sdk.hook_specs.finalize>`,
     using the :cpp:func:`alfasim_sdk_close` function.
 
 .. doxygenfunction:: alfasim_sdk_open

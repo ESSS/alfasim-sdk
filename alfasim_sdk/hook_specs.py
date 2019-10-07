@@ -3,23 +3,71 @@ from hookman.hooks import HookSpecs
 
 def initialize(ctx: "void*") -> "int":
     """
-    This Hook can be used to initialize plugin internal data and also some
-    simulator configurations available via API.
+    **c++ signature** : ``HOOK_INITIALIZE(void* ctx)``
+
+    This `hook` allows the plugin to initialize its internal data and also some
+    simulator configurations available via API. If any API function is used
+    the `ALFAsim-SDK` API must be loaded, see :ref:`sdk_api_loading` section
+    for more information.
 
     :param ctx: ALFAsim's plugins context
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 4
+
+        const char* plugin_id = "myplugin";
+        ALFAsimSDK_API alfasim_sdk_api;
+
+        HOOK_INITIALIZE(ctx) {
+            // Loading ALFAsim-SDK API
+            int load_error_code = alfasim_sdk_open(alfasim_sdk_api)
+            if (load_error_code != 0){
+                return load_error_code;
+            }
+            // Threads Information
+            int n_threads = -1;
+            int errcode = alfasim_sdk_api.get_number_of_threads(
+                ctx, &n_threads);
+            if (errcode != 0){
+                return errcode;
+            }
+            // Setting internal data to each thread
+            for (int thread_id = 0; thread_id < n_threads; ++thread_id){
+                double value;
+                alfasim_sdk_api.get_plugin_input_data_quantity(
+                    ctx, &data, plugin_id, thread_id);
+                void* data = new double(value);
+                alfasim_sdk_api.set_plugin_data(
+                    ctx, plugin_id, data, thread_id);
+            }
+            return 0;
+        }
     """
 
 
 def finalize(ctx: "void*") -> "int":
     """
+    **c++ signature** : ``HOOK_FINALIZE(void* ctx)``
+
     This Hook must be used to delete all plugin internal data. Otherwise, a memory
     leak could occur in your plugin.
 
     :param ctx: ALFAsim's plugins context
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_FINALIZE(ctx) {
+            get_plugin_data(ctx)
+        }
     """
 
 
@@ -27,6 +75,8 @@ def calculate_mass_source_term(
     ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int"
 ) -> "int":
     """
+    **c++ signature** : ``calculate_mass_source_term(void* ctx, void* mass_source, int n_fields, int n_control_volumes)``
+
     Internal simulator hook to calculate source terms of mass equation.
     This is called after all residual functions are evaluated.
 
@@ -43,6 +93,8 @@ def calculate_momentum_source_term(
     ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int"
 ) -> "int":
     """
+    **c++ signature** : ``calculate_momentum_source_term(void* ctx, void* mass_source, int n_layers, int n_faces)``
+
     Internal simulator hook to calculate source terms of momentum equation.
     This is called after all residual functions are evaluated.
 
@@ -59,6 +111,8 @@ def calculate_energy_source_term(
     ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int"
 ) -> "int":
     """
+     **c++ signature** : ``calculate_energy_source_term(void* ctx, void* energy_source, int n_layers, int n_control_volumes)``
+
     Internal simulator hook to calculate source terms of energy equation
     This is called after all residual functions are evaluated.
 
@@ -75,6 +129,8 @@ def calculate_tracer_source_term(
     ctx: "void*", phi_source: "void*", n_tracers: "int", n_control_volumes: "int"
 ) -> "int":
     """
+    **c++ signature** : ``calculate_tracer_source_term(void* ctx, void* phi_source, int n_tracers, int n_control_volumes)``
+
     Internal simulator hook to calculate source terms of tracer transport equation.
     This is called after all residual functions are evaluated.
 
