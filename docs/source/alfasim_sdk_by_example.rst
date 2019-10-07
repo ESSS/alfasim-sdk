@@ -72,13 +72,13 @@ on the user interface of |alfasim|.
 Pre-solver Customization
 ------------------------
 
-|alfasim| provides hooks to customize the internal settings of the application that interacts directly with the solver,
+|alfasim| provides hooks to customize the internal settings of the application that interacts internally with the solver and the application,
 some of this configurations are: creation of new secondary variables, and  or new phases/fields/layers to be used.
 
 For this sample plugin, a new |s_variable| will be created, to track the temperature of [ ... needs more details ...].
 In order to create this variables, the hook |s_variable_hook| must be implemented from :file:`myplugin.py` file.
 
-A ```SecondaryVariable``` can be used to [...], because [...].
+A ``SecondaryVariable`` can be used to [...], because [...].
 For the full documentation of the SecondaryVariable check the :ref:`api-variables-section` section.
 
 .. code-block:: python
@@ -109,21 +109,22 @@ make use of the `ALFAsim-SDK API` in order to fetch information from the applica
 Given sequence for the sample plugin, in this last step we are going to implements the hook that update the secondary variable
 declared from :file:`myplugin.py` file.
 
-For this, first we need to implement two hooks that are mandatory, the :py:func:`alfasim_sdk.hook_specs.hook_initialize` and :py:func:`alfasim_sdk.hook_specs.hook_finalize`
+For this, first we need to implement two hooks that are mandatory, the :py:func:`HOOK_INITIALIZE <alfasim_sdk.hook_specs.initialize>` and :py:func:`alfasim_sdk.hook_specs.hook_finalize`
 With the ``HOOK_INITIALIZE`` it's possible to initialize any custom routine for [ fill with more details ], also
 with the alfasim_sdk_open [ details about alfasim_sdk_open]
 
 .. code-block:: cpp
+    ALFAsimSDK_API alfasim_sdk_api;
 
      HOOK_INITIALIZE(ctx)
     {
-        alfasim_sdk_open(&alfasim);
+        alfasim_sdk_open(&alfasim_sdk_api);
         return OK;
     }
 
     HOOK_FINALIZE(ctx)
     {
-        alfasim_sdk_close(&alfasim);
+        alfasim_sdk_close(&alfasim_sdk_api);
         return OK;
     }
 
@@ -139,7 +140,8 @@ In order to get [ details about the desired information ], you can get the infor
         // for internal nodes
         double* dummy_ptr = nullptr;
         int n_control_volumes = -1;
-        errcode = alfasim.get_simulation_array(
+
+        errcode = alfasim_sdk_api.get_simulation_array(
             ctx,
             &dummy_ptr,
             (char*) "rho",
@@ -153,7 +155,7 @@ In order to get [ details about the desired information ], you can get the infor
 
         int size = -1;
         void* annulus_temperature_void_ptr = nullptr;
-        errcode = alfasim.get_plugin_variable(
+        errcode = alfasim_sdk_api.get_plugin_variable(
             ctx,
             &annulus_temperature_void_ptr,
             "annulus_temperature",
@@ -169,7 +171,7 @@ In order to get [ details about the desired information ], you can get the infor
         int n_interfaces = -1;
         double* T_wall_interfaces = nullptr;
         for (int i = 0; i < size; ++i) {
-            errcode = alfasim.get_wall_interfaces_temperature(
+            errcode = alfasim_sdk_api.get_wall_interfaces_temperature(
                 ctx, &T_wall_interfaces, i, TimestepScope::CURRENT, &n_interfaces);
             if (errcode != 0) {
                 throw std::runtime_error("Error on get_wall_interfaces_temperature");
