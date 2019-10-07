@@ -3,12 +3,15 @@ from hookman.hooks import HookSpecs
 
 def initialize(ctx: "void*") -> "int":
     """
+    **c++ signature** : ``HOOK_INITIALIZE(void* ctx)``
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
     This Hook can be used to initialize plugin internal data and also some
     simulator configurations available via API.
 
-    :param ctx: ALFAsim's plugins context
 
-    :returns: Return OK if successful or anything different if failed
     """
 
 

@@ -7,8 +7,8 @@ from pathlib import Path
 
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 if on_rtd:
-    subprocess.call("cd ..; make html")
-    subprocess.call(
+    subprocess.run("cd ..; make html", shell=True)
+    subprocess.run(
         "cd ..; doxygen _build/breathe/doxygen/alfasim_sdk_api.cfg", shell=True
     )
 
