@@ -57,11 +57,30 @@ data for each `thread` identified as ``thread_id``.
 Update plugin variables
 -----------------------
 
-The `hooks` described in this section are related to plugin secondary variables ().
+The `hooks` described in this section are related to plugin secondary variables that were registered in the python config
+file, as already explained in :ref:`pre_solver_customization` section. They are called `secondary variables` because they
+are not obtained from |alfasim|'s Solver, these ones are called primary variables and examples of those variables are `pressure`,
+`temperature`, `volume fractions` and `velocities`.
+
+Using the following `hooks` the plugin is able to calculate/update those variables in three different moments of the
+simulation step. Two of them are called in the `Hydrodynamic Solver` scope and the last one is called in the
+`Tracers Solver` scope. Once the solver obtain results for primary variables, it updates all secondary variables in which
+depend on primary variables. After that, :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES<alfasim_sdk.hook_specs.update_plugins_secondary_variables>`
+is called, but if it is running the `first time step`
+:py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`
+is called before. It is necessary because usually during the `first time step` some initialization tasks are needed. Then,
+if the plugin needs to initialize with some value different from ``nan``, this hook is the place to do that.
+
+.. note::
+    Different from plugin internal data, the secondary variables registered by plugins are allocated, deallocated and
+    held by |alfasim|'s Solver. It is necessary because the variables arrays are dependent on `network` with its
+    discretization and on `hydrodynamic model`, which defines the fluid flow's `phases`, `fields` and `layers`.
+
+.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables
 
 .. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep
 
-.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables
+The last `hook` related to the plugins secondary variables is [.....]
 
 .. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver
 
