@@ -19,8 +19,6 @@ classification which identifies what part of the solver workflow is related to.
 Initial configuration and plugin internal data
 ----------------------------------------------
 
-
-
 In the :ref:`User Interface Hooks <user_interface_hooks-section>` section is explained that the plugins are allowed to
 customize the |alfasim|'s user interface extending it in order to get some input data from the user. Using the solver
 :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>` the developer can obtain the input data from user interface and use it to
@@ -35,12 +33,37 @@ will be used during the simulation, and also by other `hooks`.
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize
 
-As can be seen in the example above the function :cpp:func:`set_plugin_data`
+As can be seen in the example above the function :cpp:func:`set_plugin_data` is used to tell the |alfasim|'s solver to
+hold the plugin internal data.
+
+.. note::
+    Since |alfasim|'s solver uses multi-threads to perform all possible parallelizable calculation, it is important that
+    the plugins provide internal data to each `thread` to avoid data access concurrency problems. As can be seen the
+    ``HOOK_INITIALIZE`` example above, a ``for-loop`` is performed over the `threads` to set the plugin internal data.
+    The ``ALFAsim-SDK`` API function :cpp:func:`get_number_of_threads` is used to do it properly. See
+    :ref:`plugin_internal_data` section for more information.
 
 .. autofunction:: alfasim_sdk.hook_specs.finalize
 
-As can be seen in the example above the function :cpp:func:`get_plugin_data`
+As can be seen in the example above the function :cpp:func:`get_plugin_data` is used to retrieved the plugin internal
+data for each `thread` identified as ``thread_id``.
 
+.. note::
+    In the examples of usage of both :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>` and :py:func:`HOOK_FINALIZE<alfasim_sdk.hook_specs.finalize>`
+    there are many times where an error code is returned (``return errcode;`` or ``return OK;``). As can be seen, it is
+    possible to return error codes from |sdk| API functions, however the developer can intercept this error code and
+    handle it instead of returning it to the |alfasim|'s Solver.
+
+Update plugin variables
+-----------------------
+
+The `hooks` described in this section are related to plugin secondary variables ().
+
+.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep
+
+.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables
+
+.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver
 
 Source Terms
 ------------
@@ -53,111 +76,20 @@ Source Terms
 
 .. autofunction:: alfasim_sdk.hook_specs.calculate_tracer_source_term
 
-Update plugin variables
------------------------
-
-.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep
-
-    For example:
-
-    .. code-block::
-
-        update_plugins_secondary_variables_on_first_timestep(ctx)
-        {
-
-        }
-
-.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables
-
-    For example:
-
-    .. code-block::
-
-        update_plugins_secondary_variables(ctx)
-        {
-
-        }
-
-.. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver
-
-    For example:
-
-    .. code-block::
-
-        update_plugins_secondary_variables_on_tracer_solver(ctx)
-        {
-
-        }
-
 State Variables for additional phases
 -------------------------------------
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize_state_variables_calculator
 
-    For example:
-
-    .. code-block::
-
-        initialize_state_variables_calculator(ctx, P, T, T_mix, n_control_volumes, n_layers)
-        {
-
-        }
-
 .. autofunction:: alfasim_sdk.hook_specs.calculate_state_variable
-
-    For example:
-
-    .. code-block::
-
-        calculate_state_variable(ctx, P, T, n_control_volumes, phase_id, property_id, output)
-        {
-
-        }
 
 .. autofunction:: alfasim_sdk.hook_specs.calculate_phase_pair_state_variable
 
-    For example:
-
-    .. code-block::
-
-        calculate_phase_pair_state_variable(ctx, P, T, T_mix, n_control_volumes, phase1_id, phase2_id, property_id, output)
-        {
-
-        }
-
 .. autofunction:: alfasim_sdk.hook_specs.finalize_state_variables_calculator
-
-    For example:
-
-    .. code-block::
-
-        finalize_state_variables_calculator(ctx)
-        {
-
-        }
-
 
 Additional solid phase
 ----------------------
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize_particle_diameter_of_solids_fields
 
-    For example:
-
-    .. code-block::
-
-        initialize_particle_diameter_of_solids_fields(ctx, particle_diameter, n_control_volumes, solid_field_id)
-        {
-
-        }
-
 .. autofunction:: alfasim_sdk.hook_specs.update_particle_diameter_of_solids_fields
-
-    For example:
-
-    .. code-block::
-
-        update_particle_diameter_of_solids_fields(ctx, particle_diameter, n_control_volumes, solid_field_id)
-        {
-
-        }
