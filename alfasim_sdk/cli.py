@@ -28,9 +28,6 @@ def destination_option(*, help):
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 def main():
-    """
-    Console script for alfasim-sdk.
-    """
     pass
 
 
@@ -54,7 +51,9 @@ def main():
 )
 def template(dst, caption, plugin_id, author_name, author_email):
     """
-    Console script for alfasim_sdk.
+    Template command:
+
+
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
