@@ -1,3 +1,6 @@
+.. _api-reference-section:
+
+
 Full API Reference
 ==================
 
