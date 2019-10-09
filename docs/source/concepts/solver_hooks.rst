@@ -80,9 +80,21 @@ if the plugin needs to initialize with some value different from ``nan``, this h
 
 .. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep
 
-The last `hook` related to the plugins secondary variables is [.....]
+The |alfasim|'s Solver is divided in two *Newton* solvers that will solve different group of equations. The first one is
+the `hydrodynamic solver` which solves the Mass Conservation of fields, Momentum Conservation of layers and Energy Conservation
+equations all together for all elements in the network. The second one is the `Tracer Solver` which solves the Mass Conservation
+Equation for each added tracer. Since the tracers mass conservation is a transport equation it is solved after `hydrodynamic solver`
+and using its results (such as `velocities`) as input data in the `Tracer Solver`.
+
+To complete the group of `hooks` related to the plugins secondary variables there is the :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver>`.
+This `hook` is used to update plugin's variables that depends on Tracer's mass fractions and has to be updated in the
+`Tracer Solver` scope.
 
 .. autofunction:: alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver
+
+.. warning::
+    It is important that the plugin developer take care of plugin's variables registered, since their values will be set
+    equal to ``nan`` at first place and it will not changed by |alfasim|'s Solver.
 
 Source Terms
 ------------

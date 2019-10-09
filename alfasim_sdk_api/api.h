@@ -392,9 +392,9 @@ DLL_EXPORT int get_simulation_array(
     @param[in] var_scope It must be configured to determine all scopes in which the variable will be
                          retrieved. See #VariableScope for more information.
     @param[in] tracer_index Tracer ID, it can be retrieved by #get_tracer_id.
-    @param[in] line_index It can represent Layer/Field/Phase ID, since the secondary variables can
-                          be associated to different #MultiFieldDescriptionScope. When it is a
-                          #GLOBAL variable `line_index` must be 0.
+    @param[in] line_index It can represent Field or Phase ID, since the tracer masss fraction can
+                          be calculated related to Field or Phase. When it is the mass fraction on
+                          mixture the `line_index` must be 0.
     @param[out] size Size of the `out` array of values.
     @return An #error_code value.
 */
