@@ -56,7 +56,10 @@ def main():
 )
 def template(dst, caption, plugin_id, author_name, author_email):
     """
-    Creates a new directory on the given destination with all files and structure necessary to create a ALFAsim plugin package.
+    Generate a template with the necessary files and structure to create a plugin.
+
+    The template folder will be place on the ``dst`` option, that per default the current directory from where the command
+    was invoked.
 
     The files generated and their contents are ready to be used, or customized and have the following structured.
 
@@ -78,7 +81,6 @@ def template(dst, caption, plugin_id, author_name, author_email):
             \---python
                     myplugin.py
 
-    The option ``dst`` is optional, and when not informed the current directory is used.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
@@ -113,6 +115,12 @@ def template(dst, caption, plugin_id, author_name, author_email):
 @main.command(name="compile")
 @plugin_dir_option
 def _compile(plugin_dir):
+    """
+    Compile the plugin from the given plugin-dir option, when not provided, plugin-dir will be the current folder location.
+
+    This command basically calls the compile.py informing the location of the header files of alfasim_sdk_api.
+    For more details about the build steps check the compile.py generated for your plugin project.
+    """
     plugin_dir = Path(plugin_dir)
     compile_script = plugin_dir / "compile.py"
     if not compile_script.is_file():
@@ -135,17 +143,15 @@ def package(ctx, plugin_dir, package_name, dst):
     """
     Creates a new ``<package-name>.hmplugin`` file containing all the necessary files.
 
-    This command will first invoke the compile command to generate all artifacts necessary and
-    after that
-     the packa-only and the package-only command, generating an ``hmplugin`` file as output.
-    All content from the directory assets and artifacts will be placed inside the plugin package.
+    This command will first invoke the compile command to generate the shared library, and after that the plugin
+    package will be generated  with all the content available from the directory assets and artifacts.
 
-    Per default, the package command will assume that plugin project is in the current directory and the generated file will be
-    place also in the current directory.
+    Per default, the package command will assume that plugin project is the current directory and the generated file
+    will be placed also in the current directory.
 
-    It's possible to configure this options by providing:
+    In order to change that, it's possible to pass the following options:
 
-     --plugin-dir with the path to where the plugin directory, where configuration and the shared library is located.
+     -- plugin-dir with the path to where the plugin directory, where configuration and the shared library is located.
      -- dst with the path to where the output package should be located
 
     """
@@ -160,16 +166,10 @@ def package(ctx, plugin_dir, package_name, dst):
 @click.option("--package-name", prompt="-- Package Name", help="Name of the package")
 def package_only(ctx, plugin_dir, package_name, dst):
     """
-    The file ``<package_name>.hmplugin`` will be created with the content from the folder assets and artifacts.
-
-    In order to successfully creates a plugin, at least the following files should be present:
-        - plugin.yml
-        - shared library (.ddl or .so)
-        - readme.md
+    Generate a ``<package_name>.hmplugin`` file with all the content from the directory assets and artifacts.
 
     Per default, the package will be created inside the folder plugin_dir, however it's possible
-    to give another path filling the dst argument
-
+    to give another path filling the dst argument.
     """
     plugin_dir = Path(plugin_dir)
     dst = Path(dst)
