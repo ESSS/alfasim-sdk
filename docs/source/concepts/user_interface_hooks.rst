@@ -19,28 +19,6 @@ be customized will be located on: :menuselection:`myplugin --> src --> python --
 Customizing the user interface
 ------------------------------
 
-.. |m_1| image:: ../_static/marker_1.png
-    :scale: 80%
-
-.. |m_2| image:: ../_static/marker_2.png
-    :scale: 80%
-
-In order to customize the user interface of |alfasim| by adding custom models on the application,  is necessary to
-implement th hook :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type`. The image bellow shows
-the locations where a custom model can be inserted implementing the hook.
-
-.. image:: ../_static/tree_plugin_marker.png
-    :target: ../_static/tree_plugin_marker.png
-
-.. image:: ../_static/model_explorer_with_marker.png
-    :target: ../_static/model_explorer_with_marker.png
-
-
-|m_1| Location to where the models :func:`~alfasim_sdk.models.container_model` or :func:`~alfasim_sdk.models.data_model` will be placed. |br|
-|m_2| Location to where the :ref:`inputs fields <api-types-section>` will be placed.
-
-
-
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type
 
 
@@ -60,6 +38,7 @@ Additional variables
 
 Multi-field description
 -----------------------
+
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_fields
 

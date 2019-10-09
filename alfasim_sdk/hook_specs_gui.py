@@ -26,6 +26,107 @@ def alfasim_get_data_model_type():
 
     - :func:`alfasim_sdk.models.container_model`
     - :func:`alfasim_sdk.models.data_model`
+
+    The image bellow shows the locations where a custom model can be inserted implementing the hook.
+
+    .. image:: ../_static/tree_plugin_marker.png
+        :scale: 80%
+        :target: ../_static/tree_plugin_marker.png
+
+    .. image:: ../_static/model_explorer_with_marker.png
+        :scale: 80%
+        :target: ../_static/model_explorer_with_marker.png
+
+    .. |m_1| image:: ../_static/marker_1.png
+        :scale: 80%
+
+    .. |m_2| image:: ../_static/marker_2.png
+        :scale: 80%
+
+    |m_1| Location to where the models :func:`~alfasim_sdk.models.container_model` or :func:`~alfasim_sdk.models.data_model` will be placed. |br|
+    |m_2| Location to where the :ref:`inputs fields <api-types-section>` will be placed.
+
+    Example 1: The following example shows how to create a new model.
+
+    .. code-block:: python
+
+        import alfasim_sdk
+        from alfasim_sdk.models import data_model
+        from alfasim_sdk.types import Quantity
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            distance = Quantity(value=1, unit="m", caption="Distance")
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModel]
+
+    The image below shows the output of example 1 when executing on ALFAsim.
+
+    .. image:: ../_static/alfasim_get_data_model_type_example_1.png
+        :scale: 70%
+
+
+    Example 2: This second example shows hot to create a new container model.
+
+    Notice that when using the :func:`~alfasim_sdk.models.container_model` you only need to inform the container class
+    to the :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type` hook
+
+    .. code-block:: python
+
+        import alfasim_sdk
+        from alfasim_sdk.models import data_model, container_model
+        from alfasim_sdk.types import Quantity, String
+
+        @data_model(icon="", caption="My Child")
+        class ChildModel:
+            distance = Quantity(value=1, unit="m", caption="Distance")
+
+
+        @container_model(icon='', caption='My Container', model=ChildModel)
+        class MyModelContainer:
+            my_string = String(value='Initial Value', caption='My String')
+
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModelContainer]
+
+    The image below shows the output of example 2 when executing on ALFAsim.
+
+    .. image:: ../_static/alfasim_get_data_model_type_example_2.png
+        :scale: 70%
+
+    Example 3: This third example demonstrates that it's possible to create multiple models within the plugin
+
+    .. code-block:: python
+
+        import alfasim_sdk
+        from alfasim_sdk.models import data_model, container_model
+        from alfasim_sdk.types import Quantity, String
+
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            distance = Quantity(value=1, unit="m", caption="Distance")
+
+        @data_model(icon="", caption="My Child")
+        class ChildModel:
+            distance = Quantity(value=1, unit="m", caption="Distance")
+
+        @container_model(icon='', caption='My Container', model=ChildModel)
+        class MyModelContainer:
+            my_string = String(value='Initial Value', caption='My String')
+
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModelContainer, MyModel]
+
+    The image below shows the output of example 3 when executing on ALFAsim.
+
+    .. image:: ../_static/alfasim_get_data_model_type_example_3.png
+        :scale: 70%
     """
 
 
@@ -44,7 +145,8 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
 
     .. code-block:: python
 
-        from alfasim_sdk.variables import SecondaryVariable, Visibility, Location, Scope
+        from alfasim_sdk.variables import SecondaryVariable, Visibility
+        from alfasim_sdk.variables import Location, Scope
 
         @alfasim_sdk.hookimpl
         def alfasim_get_additional_variables():
