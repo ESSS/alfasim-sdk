@@ -120,6 +120,174 @@ def finalize(ctx: "void*") -> "int":
     """
 
 
+def update_plugins_secondary_variables(ctx: "void*") -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(void* ctx)``
+
+    Internal simulator hook to update plugin's secondary variables.
+    This is called as the last step on ALFAsim's update internal secondary variables workflow.
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(ctx) {
+            int errcode = -1;
+            int size_U = -1;
+            int size_E = -1;
+            int liq_id = -1;
+            errcode = get_field_id(ctx, &liquid_id, "liquid");
+            double* vel;
+            VariableScope Fields_OnFaces = {
+                GridScope::FACE,
+                MultiFieldDescriptionScope::FIELD,
+                TimestepScope::CURRENT
+            }
+            errcode = alfasim.get_simulation_array(
+                ctx, &vel, (char*) "U", Fields_OnFaces, liq_id, &size_U);
+            double* kinetic_energy;
+            char* name = "kinetic_energy_of_liquid";
+            int global_idx = 0;
+            errcode = alfasim.get_plugin_variable(
+                ctx,
+                (void**) (&kinetic_energy),
+                name,
+                global_idx,
+                TimestepScope::CURRENT,
+                &size_E);
+            if (size_U != size_E){
+                return OUT_OF_BOUNDS;
+            }
+            for (int i =0; i < size_U; ++i){
+                kinetic_energy[i] = vel[i] * vel[i] / 2.;
+            }
+            return OK;
+        }
+
+    In the example above the variable ``kinetic_energy_of_liquid`` was registered as a global variable, but its value is
+    obtained for `liquid field`. If this variable would calculated to all fields then the ``global_idx`` would be
+    substituted by ``field_idx`` and it would be performed to each `field`.
+    """
+
+
+def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP(void* ctx)``
+
+    Internal simulator hook to update plugin's secondary variables on the first timestep.
+    This is called as the first step on ALFAsim's update internal variables workflow.
+    This method is specially important when you have a plugin which the secondary variables depend
+    on `old` values. In the first timestep, there is no `old` values, so you may use this hook
+    to initialize your variables contents.
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP(ctx) {
+            int errcode = -1;
+            int size_E = -1;
+            double* kinetic_energy;
+            char* name = "kinetic_energy_of_liquid";
+            int global_idx = 0;
+            errcode = alfasim.get_plugin_variable(
+                ctx,
+                (void**) (&kinetic_energy),
+                name,
+                global_idx,
+                TimestepScope::CURRENT,
+                &size_E);
+            for (int i =0; i < size_U; ++i){
+                kinetic_energy[i] = 0.0;
+            }
+            return OK;
+        }
+
+    """
+
+
+def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER(void* ctx)``
+
+    Internal simulator hook to update plugin's secondary variables in the Tracer Solver scope.
+    Tracer Solver is used to solve the tracer transport equation.
+    This is called as the last step on ALFAsim's Tracer Solver update variables workflow.
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(ctx) {
+            const char* plugin_id = get_plugin_id()
+            int errcode = -1;
+            int size_t = -1;
+            int size_p_var = -1;
+            int liq_id = -1;
+            errcode = get_field_id(ctx, &liquid_id, "liquid");
+            double* tracer_mass_fraction;
+            VariableScope global_OnCenters = {
+                GridScope::FACE,
+                MultiFieldDescriptionScope::FIELD,
+                TimestepScope::CURRENT
+            }
+            // Tracer information
+            void* tracer_ref;
+            errcode = alfasim.get_tracer_ref_by_name(
+                ctx,
+                &tracer_ref,
+                "my_tracer", // Added by User interface
+                plugin_id);
+            int tracer_id = -1;
+            errcode = alfasim.get_tracer_id(ctx, &tracer_id, tracer_ref);
+            double *tracer_mass_fraction
+            errcode = alfasim.get_simulation_tracer_array(
+                ctx,
+                &tracer_mass_fraction,
+                (char*) "phi",
+                global_OnCenters,
+                tracer_id,
+                0,  // GLOBAL
+                &size_t);
+            // Plugin secondary variable array
+            double* plugin_var;
+            errcode = alfasim.get_plugin_variable(
+                ctx,
+                (void**) (&plugin_var),
+                name,
+                0,  // GLOBAL
+                TimestepScope::CURRENT,
+                &size_p_var);
+            if (size_t != size_p_var){
+                return OUT_OF_BOUNDS;
+            }
+            for (int i =0; i < size_t; ++i){
+                // Do some calculations with plugin_var
+                // using tracer_mass_fraction values
+            }
+            return OK;
+        }
+
+    Note that functions like :cpp:func:`get_tracer_ref_by_name`, :cpp:func:`get_tracer_id` and
+    :cpp:func:`get_simulation_tracer_array` were used to obtain information related to tracers.
+    """
+
+
 def calculate_mass_source_term(
     ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int"
 ) -> "int":
@@ -276,49 +444,6 @@ def calculate_slurry_viscosity(
 
     It is expected to be changed the mu_f_layer of liquid layer(continuous liquid and dispersed solid),
     whose index will be available via API.
-    """
-
-
-def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
-    """
-    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP(void* ctx)``
-
-    Internal simulator hook to update plugin's secondary variables on the first timestep.
-    This is called as the first step on ALFAsim's update internal variables workflow.
-    This method is specially important when you have a plugin which the secondary variables depend
-    on `old` values. In the first timestep, there is no `old` values, so you may use this hook
-    to initialize your variables contents.
-
-    :param ctx: ALFAsim's plugins context
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def update_plugins_secondary_variables(ctx: "void*") -> "int":
-    """
-    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(void* ctx)``
-
-    Internal simulator hook to update plugin's secondary variables.
-    This is called as the last step on ALFAsim's update internal variables workflow.
-
-    :param ctx: ALFAsim's plugins context
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
-    """
-    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER(void* ctx)``
-
-    Internal simulator hook to update plugin's secondary variables in the TracerSolver scope.
-    TracerSolver is used to solve the tracer transport equation.
-    This is called as the last step on ALFAsim's TracerSolver update variables workflow.
-
-    :param ctx: ALFAsim's plugins context
-
-    :returns: Return OK if successful or anything different if failed
     """
 
 
