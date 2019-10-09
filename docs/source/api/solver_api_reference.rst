@@ -70,6 +70,8 @@ Plugin Input Data (From user interface)
 
 .. doxygenfunction:: get_plugin_input_data_multiplereference_selected_size
 
+.. _plugin_internal_data:
+
 Plugin Internal Data
 ~~~~~~~~~~~~~~~~~~~~
 

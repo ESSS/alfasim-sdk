@@ -13,16 +13,40 @@ def initialize(ctx: "void*") -> "int":
     :param ctx: ALFAsim's plugins context
     :returns: Return OK if successful or anything different if failed
 
-    Example of usage:
+    Examples of usage:
+
+    A minimal `HOOK_INITIALIZE` needed could be:
 
     .. code-block:: c++
         :linenos:
-        :emphasize-lines: 4
+        :emphasize-lines: 3
 
-        const char* plugin_id = "myplugin";
         ALFAsimSDK_API alfasim_sdk_api;
 
         HOOK_INITIALIZE(ctx) {
+            const char* plugin_id = get_plugin_id()
+            // Loading ALFAsim-SDK API
+            int load_error_code = alfasim_sdk_open(alfasim_sdk_api)
+            if (load_error_code != 0){
+                return load_error_code;
+            }
+            return OK;
+        }
+
+    Where ``OK`` is an :cpp:enum:`error_code` value and ``get_plugin_id()`` function is created automatically
+    to each plugin template and accessible from ``hook_specs.h`` file. As can be seen in the example above at
+    least the ``ALFAsim-SDK`` API should be loaded.
+
+    However, if the plugin has internal data the minimal ``HOOK_INITIALIZE`` implementation would be
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 3
+
+        ALFAsimSDK_API alfasim_sdk_api;
+
+        HOOK_INITIALIZE(ctx) {
+            const char* plugin_id = get_plugin_id()
             // Loading ALFAsim-SDK API
             int load_error_code = alfasim_sdk_open(alfasim_sdk_api)
             if (load_error_code != 0){
@@ -39,13 +63,16 @@ def initialize(ctx: "void*") -> "int":
             for (int thread_id = 0; thread_id < n_threads; ++thread_id){
                 double value;
                 alfasim_sdk_api.get_plugin_input_data_quantity(
-                    ctx, &data, plugin_id, thread_id);
+                    ctx, &value, plugin_id, thread_id);
                 void* data = new double(value);
                 alfasim_sdk_api.set_plugin_data(
                     ctx, plugin_id, data, thread_id);
             }
-            return 0;
+            return OK;
         }
+
+    It is important to note that ``void* data`` at line 22 could be a more complex data structure, like a
+    class object for example.
     """
 
 
@@ -53,8 +80,8 @@ def finalize(ctx: "void*") -> "int":
     """
     **c++ signature** : ``HOOK_FINALIZE(void* ctx)``
 
-    This Hook must be used to delete all plugin internal data. Otherwise, a memory
-    leak could occur in your plugin.
+    This Hook must be used to delete all plugin internal data and unload the `ALFAsim-SDK` API.
+    Otherwise, a memory leak could occur from your plugin.
 
     :param ctx: ALFAsim's plugins context
     :returns: Return OK if successful or anything different if failed
@@ -65,9 +92,31 @@ def finalize(ctx: "void*") -> "int":
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_FINALIZE(ctx) {
-            get_plugin_data(ctx)
+        HOOK_FINALIZE(ctx)
+        {
+            // Threads information
+            int n_threads = -1;
+            int errcode = alfasim.get_number_of_threads(ctx, &n_threads);
+            f (errcode != 0){ // or errcode != OK
+                return errcode;
+            }
+            const char* plugin_id = get_plugin_id();
+            // Plugin internal data
+            for (int thread_id = 0; thread_id < n_threads; ++thread_id) {
+                void* data = nullptr;
+                errcode = alfasim.get_plugin_data(
+                    ctx, &data, plugin_id, thread_id);
+                delete data;
+            }
+            // Unloading ALFAsim-SDK API
+            int load_error_code = alfasim_sdk_close(alfasim_sdk_api)
+            if (load_error_code != 0){
+                return load_error_code;
+            }
+            return OK;
         }
+
+    Where ``OK`` is an :cpp:enum:`error_code` value.
     """
 
 
@@ -75,7 +124,7 @@ def calculate_mass_source_term(
     ctx: "void*", mass_source: "void*", n_fields: "int", n_control_volumes: "int"
 ) -> "int":
     """
-    **c++ signature** : ``calculate_mass_source_term(void* ctx, void* mass_source, int n_fields, int n_control_volumes)``
+    **c++ signature** : ``HOOK_CALCULATE_MASS_SOURCE_TERM(void* ctx, void* mass_source, int n_fields, int n_control_volumes)``
 
     Internal simulator hook to calculate source terms of mass equation.
     This is called after all residual functions are evaluated.
@@ -93,7 +142,7 @@ def calculate_momentum_source_term(
     ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int"
 ) -> "int":
     """
-    **c++ signature** : ``calculate_momentum_source_term(void* ctx, void* mass_source, int n_layers, int n_faces)``
+    **c++ signature** : ``HOOK_CALCULATE_MOMENTUM_SOURCE_TERM(void* ctx, void* mass_source, int n_layers, int n_faces)``
 
     Internal simulator hook to calculate source terms of momentum equation.
     This is called after all residual functions are evaluated.
@@ -111,7 +160,7 @@ def calculate_energy_source_term(
     ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int"
 ) -> "int":
     """
-     **c++ signature** : ``calculate_energy_source_term(void* ctx, void* energy_source, int n_layers, int n_control_volumes)``
+     **c++ signature** : ``HOOK_CALCULATE_ENERGY_SOURCE_TERM(void* ctx, void* energy_source, int n_layers, int n_control_volumes)``
 
     Internal simulator hook to calculate source terms of energy equation
     This is called after all residual functions are evaluated.
@@ -129,7 +178,7 @@ def calculate_tracer_source_term(
     ctx: "void*", phi_source: "void*", n_tracers: "int", n_control_volumes: "int"
 ) -> "int":
     """
-    **c++ signature** : ``calculate_tracer_source_term(void* ctx, void* phi_source, int n_tracers, int n_control_volumes)``
+    **c++ signature** : ``HOOK_CALCULATE_TRACER_SOURCE_TERM(void* ctx, void* phi_source, int n_tracers, int n_control_volumes)``
 
     Internal simulator hook to calculate source terms of tracer transport equation.
     This is called after all residual functions are evaluated.
@@ -232,6 +281,8 @@ def calculate_slurry_viscosity(
 
 def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
     """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP(void* ctx)``
+
     Internal simulator hook to update plugin's secondary variables on the first timestep.
     This is called as the first step on ALFAsim's update internal variables workflow.
     This method is specially important when you have a plugin which the secondary variables depend
@@ -246,6 +297,8 @@ def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
 
 def update_plugins_secondary_variables(ctx: "void*") -> "int":
     """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(void* ctx)``
+
     Internal simulator hook to update plugin's secondary variables.
     This is called as the last step on ALFAsim's update internal variables workflow.
 
@@ -257,6 +310,8 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
 
 def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
     """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER(void* ctx)``
+
     Internal simulator hook to update plugin's secondary variables in the TracerSolver scope.
     TracerSolver is used to solve the tracer transport equation.
     This is called as the last step on ALFAsim's TracerSolver update variables workflow.

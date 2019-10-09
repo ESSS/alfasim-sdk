@@ -52,6 +52,7 @@ From :file:`myplugin.py` inside the :file:`myplugin/src/python` folder.
 Notice the hook |gui_hook| from the example above, only the models inside the list return by this hook will be included
 on the user interface of |alfasim|.
 
+.. _pre_solver_customization:
 
 Pre-solver Customization
 ------------------------
