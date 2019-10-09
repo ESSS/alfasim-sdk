@@ -1,10 +1,14 @@
 from typing import List
+from typing import Optional
 from typing import Union
 
 from pluggy import HookspecMarker
 
+from alfasim_sdk.context import Context
 from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import WarningMessage
+from alfasim_sdk.variables import SecondaryVariable
+
 
 hookspec = HookspecMarker("ALFAsim")
 
@@ -12,67 +16,123 @@ hookspec = HookspecMarker("ALFAsim")
 @hookspec
 def alfasim_get_data_model_type():
     """
-    Entry point for the creation of models in ALFAsim
+    This hook allows the creation of models in ALFAsim, models can:
+
+    - Customize items on ALFAsim application, by adding new components over the Tree.
+    - Hold input data information to be accessed from the solver.
+    - Validate input data or configuration made on ALFAsim, to ensure that the plugin has all configuration necessary to be run successfully.
+
+    This hook needs to return a class decorated with one of the following options:
+
+    - :func:`alfasim_sdk.models.container_model`
+    - :func:`alfasim_sdk.models.data_model`
     """
 
 
 @hookspec
-def alfasim_get_additional_variables():
+def alfasim_get_additional_variables() -> List[SecondaryVariable]:
     """
     Allows plugins to register new additional variables on ALFAsim.
-    This variable can be used to store internal data from the plugin,
-    or it can be used to expose data to the user in the plot window.
+
+    This variable can be used to store internal data from the plugin, (on solver)
+    or it can be used to expose data to the user in the plot window (on application).
+
+    This method expects to return a list of :func:`alfasim_sdk.variables.SecondaryVariable`, for more details checkout
+    the reference section with all details about :ref:`variables <api-variables-section>`
+
+    Usage example:
+
+    .. code-block:: python
+
+        from alfasim_sdk.variables import SecondaryVariable, Visibility, Location, Scope
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_additional_variables():
+            return [
+                SecondaryVariable(
+                    name='dummy_variable',
+                    caption='Plugin 1',
+                    unit='m',
+                    visibility=Visibility.Internal,
+                    location=Location.Center,
+                    multifield_scope=Scope.Global,
+                    checked_on_gui_default=True,
+                )]
     """
 
 
 @hookspec
-def alfasim_get_status(ctx) -> List[Union[WarningMessage, ErrorMessage]]:
+def alfasim_get_status(
+    ctx: Context
+) -> Optional[List[Union[WarningMessage, ErrorMessage]]]:
     """
     Allows plugins to execute custom checks on ALFAsim.
-    This checks can be used to guarantee the consistency of the data,
-    or compatibility with some configuration made on ALFAsim.
+    These checks can be used to guarantee the consistency of the data or compatibility with some configuration made on ALFAsim.
 
-    Example:
+    The status monitor accepts two types of message:
+
+     - :func:`~alfasim_sdk.status.ErrorMessage`:
+        Signalize the application to lock the simulation until the error is fixed.
+
+     - :func:`~alfasim_sdk.status.WarningMessage`:
+        Signalize the application that the user needs to fix this problem, but does not need to block the simulation.
+
+    When no errors are detected, an empty list must be returned.
+
+    The ``alfasim_get_status`` will be called for:
+
+     - Each time an input from the plugin model is modified.
+     - Each time a ``Physics options`` from ALFAsim are modified. |br|
+       Ex.: Hydrodynamic model changed
+
+    The ``ctx`` parameter is provided in order to retrieve information about the current state of the application and the curretn value
+    of the models implemented by the user.
+
+    Checkout the full documentation of :class:`alfasim_sdk.context.Context` for more details.
+
+    The following example shows how to display an ErrorMessage when a :func:`~alfasim_sdk.types.Quantity` field does not have a desired value.
+
+    .. code-block:: python
+
+        import alfasim_sdk
+        from alfasim_sdk.models import data_model
+        from alfasim_sdk.types import Quantity
         from alfasim_sdk.status import ErrorMessage
+
+        # Define MyModel used in this plugin
+        @data_model(icon="", caption="My Plugin Model")
+        class MyModel:
+            distance = Quantity(
+                value=1, unit="m", caption="Distance"
+            )
+
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModel]
+
+
+        # Add status monitor in the plugin
         @alfasim_sdk.hookimpl
         def alfasim_get_status(ctx):
             results = []
+            distance = ctx.GetModel("MyModel").distance.value
+            if distance < 0:
+                message = f"Distance must be greater than 0, got {distance}"
 
-            plugin_info_2 = ctx.GetPluginByName('Plugin2')
-            if plugin_info_2.enabled:
-                if ctx.GetModel('MyModel').distance.value < 0:
-                    results.append(ErrorMessage(model_name="MyModel", message='Distance must be greater than 0'))
-
+                results.append(
+                    ErrorMessage(
+                        model_name="MyModel",
+                        message=message,
+                    )
+                )
             return results
 
 
-    :param ctx: ALFAsim's plugins context
-        The ctx parameter has the following attributes:
+    For the status monitor above the application will show the following message, when the distance is lower than 0:
 
-            GetPluginInfo:
-                Method that return a list of PluginInfo, with the name of the plugin and its current state
-                Check :class:`alfasim_sdk.status.PluginInfo` for more details about the returned value.
+    .. image:: ../_static/status_monitor_with_distance_error.png
 
-            GetModel:
-                Method to access the Models registry, it receives a single argument that should be name of the class defined.
-
-                Example.:
-
-                @data_model
-                Class MyModel
-                    distance = Quantity(value=1, unit='m', caption='Distance')
-
-                @alfasim_sdk.hookimpl
-                def alfasim_get_status(ctx):
-                    results = []
-
-                    if ctx.GetModel('MyModel').distance.value < 0:
-                        results.append(ErrorMessage(model_name="MyModel", message='Distance must be greater than 0'))
-
-                :param str model_name: Name of the class to access
-                :raises TypeError: When the model informed is not available.
-
-    :returns: A list of status message either WarningMessage or ErrorMessage
     """
 
 
@@ -86,6 +146,7 @@ def alfasim_configure_fields():
         AddField(name='plugin_continuous_field'),
         AddField(name='plugin_dispersed_field')
     ]
+
     """
 
 
@@ -99,6 +160,7 @@ def alfasim_configure_layers():
         AddLayer(name='plugin_layer', fields=['plugin_continuous_field'], continuous_field='plugin_continuous_field'),
         UpdateLayer(name=WATER_LAYER, additional_fields=['plugin_dispersed_field']),
     ]
+
     """
 
 
@@ -112,6 +174,7 @@ def alfasim_configure_phases():
         AddPhase(name='plugin_phase', fields=['plugin_continuous_field', 'plugin_dispersed_field'], primary_field='plugin_continuous_field'),
         UpdatePhase(name=WATER_PHASE, additional_fields=['plugin_dispersed_field']),
     ]
+
     """
 
 
@@ -124,6 +187,7 @@ def alfasim_get_phase_properties_calculated_from_plugin():
     Example:
     from alfasim_sdk.constants import GAS_PHASE
     return [GAS_PHASE, 'solid']
+
     """
 
 
@@ -140,6 +204,7 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
         (GAS_PHASE, LIQUID_PHASE),
         (GAS_PHASE, WATER_PHASE),
     ]
+
     """
 
 
@@ -152,4 +217,5 @@ def alfasim_get_user_defined_tracers_from_plugin():
 
     Example:
     return ['my_tracer']
+
     """

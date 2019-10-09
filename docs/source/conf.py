@@ -52,6 +52,8 @@ release = ""
 # ones.
 extensions = ["sphinx.ext.autodoc", "breathe", "sphinx_click.ext"]
 
+autodoc_typehints = "none"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
