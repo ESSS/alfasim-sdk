@@ -3,10 +3,6 @@
 Quick Start
 ===========
 
-.. |alfasim| replace:: :program:`ALFAsim`
-.. |sdk| replace:: :program:`ALFAsim-SDK`
-
-
 In this section, it's showed how to create a plugin from scratch with the template command provided by |sdk|.
 With this template, you can easily customize your application to extended |alfasim| functionality.
 
@@ -42,7 +38,6 @@ The package :program:`alfasim-sdk` has a number of commands, and you can explore
 
 Creating a Plugin Project
 -------------------------
-.. |template-command| replace:: :ref:`Template Command <alfasim_sdk_cli_template_section>`
 
 To create new project, run:
 
@@ -61,7 +56,7 @@ After the execution of the command above, you will be prompted to fill the follo
     ... -- Author Email: alfasim@esss.co
 
 
-:Plugin Caption: Caption to be used across the user interface to identify the plugin.
+:Plugin Caption: Caption to be used across the application to identify the plugin.
 :Plugin Id: The name of the plugin to be referenced during the development.
 :Author Name: Name of the plugin author to be displayed.
 :Author Email: Email of the plugin author to be displayed.

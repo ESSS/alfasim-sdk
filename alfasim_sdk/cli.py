@@ -32,7 +32,12 @@ def main():
 
 
 @main.command()
-@destination_option(help="A path to where the output package should be created.")
+@destination_option(
+    help="""
+    A path to where the plugin project should be created.
+    Default: Current directory
+    """
+)
 @click.option(
     "--caption",
     prompt="-- Plugin Caption",
@@ -42,18 +47,38 @@ def main():
 @click.option(
     "--author-name",
     prompt="-- Author Name",
-    help="Name of the plugin author to be displayed",
+    help="Name of the plugin author, this value is stored in plugin metadata and not displayed on the application explicitly",
 )
 @click.option(
     "--author-email",
     prompt="-- Author Email",
-    help="Email of the plugin author to be displayed",
+    help="Email of the plugin author,this value is stored in plugin metadata and not displayed on the application explicitly",
 )
 def template(dst, caption, plugin_id, author_name, author_email):
     """
-    Template command:
+    Creates a new directory on the given destination with all files and structure necessary to create a ALFAsim plugin package.
 
+    The files generated and their contents are ready to be used, or customized and have the following structured.
 
+    .. code-block:: bash
+
+        \---myplugin
+        |   CMakeLists.txt
+        |   compile.py
+        |
+        +---assets
+        |       plugin.yaml
+        |       README.md
+        |
+        \---src
+            |   CMakeLists.txt
+            |   hook_specs.h
+            |   myplugin.cpp
+            |
+            \---python
+                    myplugin.py
+
+    The option ``dst`` is optional, and when not informed the current directory is used.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
@@ -107,6 +132,23 @@ def _compile(plugin_dir):
 @destination_option(help="A path to where the output package should be created.")
 @click.option("--package-name", prompt="-- Package Name", help="Name of the package")
 def package(ctx, plugin_dir, package_name, dst):
+    """
+    Creates a new ``<package-name>.hmplugin`` file containing all the necessary files.
+
+    This command will first invoke the compile command to generate all artifacts necessary and
+    after that
+     the packa-only and the package-only command, generating an ``hmplugin`` file as output.
+    All content from the directory assets and artifacts will be placed inside the plugin package.
+
+    Per default, the package command will assume that plugin project is in the current directory and the generated file will be
+    place also in the current directory.
+
+    It's possible to configure this options by providing:
+
+     --plugin-dir with the path to where the plugin directory, where configuration and the shared library is located.
+     -- dst with the path to where the output package should be located
+
+    """
     ctx.invoke(_compile, plugin_dir=plugin_dir)
     ctx.invoke(package_only, plugin_dir=plugin_dir, package_name=package_name, dst=dst)
 
@@ -117,6 +159,18 @@ def package(ctx, plugin_dir, package_name, dst):
 @destination_option(help="A path to where the output package should be created.")
 @click.option("--package-name", prompt="-- Package Name", help="Name of the package")
 def package_only(ctx, plugin_dir, package_name, dst):
+    """
+    The file ``<package_name>.hmplugin`` will be created with the content from the folder assets and artifacts.
+
+    In order to successfully creates a plugin, at least the following files should be present:
+        - plugin.yml
+        - shared library (.ddl or .so)
+        - readme.md
+
+    Per default, the package will be created inside the folder plugin_dir, however it's possible
+    to give another path filling the dst argument
+
+    """
     plugin_dir = Path(plugin_dir)
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
