@@ -1,1 +1,2 @@
 breathe==4.13.1
+sphinx-click==2.3.0

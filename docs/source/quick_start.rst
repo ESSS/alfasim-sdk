@@ -3,10 +3,6 @@
 Quick Start
 ===========
 
-.. |alfasim| replace:: :program:`ALFAsim`
-.. |sdk| replace:: :program:`ALFAsim-SDK`
-
-
 In this section, it's showed how to create a plugin from scratch with the template command provided by |sdk|.
 With this template, you can easily customize your application to extended |alfasim| functionality.
 
@@ -17,8 +13,8 @@ Set up the environment
 ----------------------
 
 The |sdk| is a Python package that helps developers in the process to create a Plugin for |alfasim|, to use
-this tool it's necessary to have a Python Interpreter with at least version 3.6. For more details on `how to install Python check
-the docs <https://www.python.org/downloads/>`_
+this tool it's necessary to have a Python Interpreter with at least version 3.6. For more details on how to install Python `check
+the official docs <https://www.python.org/downloads/>`_.
 
 .. note::
 
@@ -29,39 +25,52 @@ From a terminal, install the |sdk| with :command:`pip` command.
 
 .. code-block:: console
 
-    pip install alfasim-sdk
+    >>> pip install alfasim-sdk
 
 
 Also, make sure to have `CMake` at least version `3.5.2` installed and the `Ninja` package.
 
+The package :program:`alfasim-sdk` has a number of commands, and you can explore them all by running:
 
-Creating a Plugin
------------------
+.. code-block:: bash
 
-Execute the |sdk| template command, to generate an empty plugin.
+   >>> alfasim-sdk --help
 
-.. code-block:: console
+Creating a Plugin Project
+-------------------------
 
-    alfasim-sdk template
+To create new project, run:
 
-A series of information will be requested:
+.. code-block:: bash
 
-  * **Plugin Caption**: Caption to be used across the user interface to identify the plugin.
-  * **Plugin Id**: The name of the plugin to be referenced during the development.
-  * **Author Name**: Name of the plugin author to be displayed.
-  * **Author Email**: Email of the plugin author to be displayed.
+   >>> alfasim-sdk template
 
-.. code-block:: console
+After the execution of the command above, you will be prompted to fill the following options (all required):
+
+.. code-block:: bash
 
     >>> alfasim-sdk template
-    -- Plugin Caption: Myplugin
-    -- Plugin Id: myplugin
-    -- Author Name: ESSS
-    -- Author Email: alfasim@esss.co
+    ... -- Plugin Caption: Myplugin
+    ... -- Plugin Id: myplugin
+    ... -- Author Name: ESSS
+    ... -- Author Email: alfasim@esss.co
 
-The generated plugin template will contain the following structure:
 
-.. code-block:: console
+:Plugin Caption: Caption to be used across the application to identify the plugin.
+:Plugin Id: The name of the plugin to be referenced during the development.
+:Author Name: Name of the plugin author to be displayed.
+:Author Email: Email of the plugin author to be displayed.
+
+
+In order to check all available options, you can execute:
+
+.. code-block:: bash
+
+   >>> alfasim-sdk template --help
+
+After the execution of the :program:`template` command the generated plugin project will have the following structure:
+
+.. code-block:: bash
 
     \---myplugin
         |   CMakeLists.txt
@@ -81,15 +90,9 @@ The generated plugin template will contain the following structure:
 
 The highlights here are for:
 
-:guilabel:`plugin.yaml`
-    File with all information about the plugin that will be used by |alfasim|.
-
-
-:guilabel:`myplugin.py`
-    Implementation of the hooks for customization of the UI interface, or the pre-solver hooks
-
-:guilabel:`myplugin.c`
-    Implementation of the hooks for customization of solver
+:plugin.yaml: File with all information about the plugin that will be used by |alfasim|.
+:myplugin.py: Implementation of the hooks for customization of the UI interface, or the pre-solver hooks
+:myplugin.c:  Implementation of the hooks for customization of solver
 
 
 Check out the :ref:`Plugin Structure section <plugin_structure-section>` for more details about how the folder and files are structured, and
@@ -102,15 +105,15 @@ From the root directory of the plugin, execute the command `alfasim-sdk package`
 This command will compile your C/C++ implementation and include the shared libraries inside a `artifacts` directory and
 the generated plugin on the root directory with the extension `hmplugin`.
 
-.. code-block:: console
+.. code-block:: bash
 
     >>> cd myplugin
     >>> alfasim-sdk package
-    -- Package Name: myplugin
+    ... -- Package Name: myplugin
 
 The plugin directory will have the following structure when executing from a `Windows Operating System`:
 
-.. code-block:: console
+.. code-block:: bash
 
     \---myplugin
         |   CMakeLists.txt

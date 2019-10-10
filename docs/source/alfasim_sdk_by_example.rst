@@ -4,22 +4,6 @@
 Plugin by Example
 =================
 
-.. Defining the substitution variables used across this file
-.. |alfasim| replace:: :program:`ALFAsim`
-.. |sdk| replace:: :program:`ALFAsim-SDK`
-
-.. |gui_hook| replace:: :py:func:`alfasim_get_data_model_type`
-.. |container| replace:: :py:func:`alfasim_sdk.models.container_model`
-.. |model| replace:: :py:func:`alfasim_sdk.models.data_model`
-.. |s_variable| replace:: :py:func:`alfasim_sdk.variables.SecondaryVariable`
-.. |s_variable_hook| replace:: :py:func:`alfasim_get_additional_variables`
-
-.. |marker_1| image:: _static/marker_1.png
-    :scale: 80%
-
-.. |marker_2| image:: _static/marker_2.png
-    :scale: 80%
-
 
 In this section, we will continue to customize the template plugin create from the previous section,
 this plugin example will have a simple input on the user interface application and issues a custom variable on

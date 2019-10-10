@@ -42,6 +42,9 @@ Types
 Variables
 ---------
 
+.. py:module:: alfasim_sdk.variables
+
+
 .. automodule:: alfasim_sdk.variables
     :members:
 

@@ -46,6 +46,20 @@ class Scope(Enum):
 
 @attr.s(kw_only=True)
 class SecondaryVariable:
+    """
+    SOME TEXT
+
+    :param str name:
+    :param str caption:
+    :param alfasim_sdk.variables.Type type:
+    :param str unit:
+    :param alfasim_sdk.variables.Visibility visibility:
+    :param alfasim_sdk.variables.Location location:
+    :param alfasim_sdk.variables.Scope multifield_scope:
+    :param number.Real default_value:
+    :param bool checked_on_gui_default:
+    """
+
     name: str = attrib(validator=non_empty_str)
     caption: str = attrib(validator=non_empty_str)
     type = attrib(validator=instance_of(Type), default=Type.Double)
