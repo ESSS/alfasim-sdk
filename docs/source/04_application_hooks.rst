@@ -37,22 +37,33 @@ Additional variables
 
 .. _multi-field-description:
 
-Multi-field description
------------------------
+Hydrodynamic model
+-------------------
 
+|alfasim| provides way to customize the hydrodynamic model available within the application, if the usage of
+the hook listed bellow, the plugin can:
+
+ - Add new fields
+ - Add/update phases
+ - Add/update layers
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_fields
 
-.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_layers
-
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_phases
 
+.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_layers
 
-???
----
+In order to complement the ``Hydrodynamic model`` customization, it's possible to inform to |alfasim| which phases
+(added from plugin or not) will have the state variables calculated by plugin.
 
 .. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin
 
 .. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
+
+User defined Tracers
+--------------------
+
+.. warning::
+    This is an advanced customization. We strongly encourage the plugin developer to read the |alfasim|'s Technical Report
 
 .. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin

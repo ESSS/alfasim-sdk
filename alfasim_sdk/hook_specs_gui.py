@@ -241,13 +241,25 @@ def alfasim_get_status(
 @hookspec
 def alfasim_configure_fields():
     """
-    Configure new fields to be added in ALFAsim's hydrodynamic model.
-    Example:
+    Allows plugins to configure new fields to be added in ALFAsim's hydrodynamic model.
 
-    return [
-        AddField(name='plugin_continuous_field'),
-        AddField(name='plugin_dispersed_field')
-    ]
+    An added ``field`` must be associated with:
+
+     - Phase, defined by :func:`~alfasim_sdk.types.AddPhase` or :func:`~alfasim_sdk.types.UpdatePhase`.
+     - Layer, defined by :func:`~alfasim_sdk.types.AddLayer` or :func:`~alfasim_sdk.types.UpdateLayer`.
+
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @alfasim_sdk.hookimpl
+        def alfasim_configure_fields():
+           return [
+                   AddField(name='plugin_continuous_field'),
+                   AddField(name='plugin_dispersed_field'),
+           ]
+
 
     """
 
@@ -255,13 +267,36 @@ def alfasim_configure_fields():
 @hookspec
 def alfasim_configure_layers():
     """
-    Configure new or update layers for ALFAsim's hydrodynamic model.
-    Example:
+    Allows plugins to configure new layers or associate a new field with a existing layer for ALFAsim's hydrodynamic model
 
-    return [
-        AddLayer(name='plugin_layer', fields=['plugin_continuous_field'], continuous_field='plugin_continuous_field'),
-        UpdateLayer(name=WATER_LAYER, additional_fields=['plugin_dispersed_field']),
-    ]
+    In order to configure a new layer is necessary to return an :func:`~alfasim_sdk.types.AddLayer` object defining the
+    required fields.
+
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @alfasim_sdk.hookimpl
+        def alfasim_configure_layers():
+           return [
+                   AddLayer(
+                       name='plugin_layer',
+                       fields=['plugin_continuous_field'],
+                       continuous_field='plugin_continuous_field',
+                   ),
+                   UpdateLayer(
+                       name=LIQUID_LAYER,
+                       additional_fields=['plugin_dispersed_field'],
+                   ),
+           ]
+
+    The image bellow shows the new added phase on the application.
+
+    .. image:: _static/alfasim_configure_layer_example_1.png
+        :scale: 80%
+
+
 
     """
 
@@ -269,13 +304,55 @@ def alfasim_configure_layers():
 @hookspec
 def alfasim_configure_phases():
     """
-    Configure new or update phases for ALFAsim's hydrodynamic model.
-    Example:
+    Allows plugins to configure new phases or associate a new field with a existing phase from the application.
+    In order to configure a new phases is necessary to return an :func:`~alfasim_sdk.types.AddPhase` object defining the
+    required fields.
 
-    return [
-        AddPhase(name='plugin_phase', fields=['plugin_continuous_field', 'plugin_dispersed_field'], primary_field='plugin_continuous_field'),
-        UpdatePhase(name=WATER_PHASE, additional_fields=['plugin_dispersed_field']),
-    ]
+    Example of usage:
+
+    .. code-block:: python
+
+        @alfasim_sdk.hookimpl
+        def alfasim_configure_phases():
+            return [
+                AddPhase(
+                    name='plugin_phase',
+                    fields=[
+                        'plugin_continuous_field',
+                        'plugin_dispersed_field',
+                    ],
+                    primary_field='plugin_continuous_field',
+                )
+            ]
+
+    With this new phase, all existing hydrodynamic models from the application will have this additional phase.
+    Notice that the ``fields`` parameter must be a field registered from the hook :func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_fields`.
+
+    .. note:
+
+        If your plugin cannot work with an existing ALFAsim phase, for example the water phase.
+        Your can restrict the ALFAsim application through the status monitor, by checking the current hydrodynamic model
+        from the Physic option, for more details checkout the documentation of :ref:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
+
+    The image bellow shows the new added phase on the application.
+
+    .. image:: _static/alfasim_configure_phase_example_1.png
+        :scale: 80%
+
+    Is also possible to add additional fields to an existent phases using the :func:`~alfasim_sdk.types.UpdatePhase`.
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @alfasim_sdk.hookimpl
+        def alfasim_configure_phases():
+            return [
+                UpdatePhase(
+                name=LIQUID_PHASE,
+                additional_fields=['plugin_dispersed_field'],
+                )
+            ]
 
     """
 
