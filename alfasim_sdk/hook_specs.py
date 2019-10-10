@@ -294,15 +294,40 @@ def calculate_mass_source_term(
     """
     **c++ signature** : ``HOOK_CALCULATE_MASS_SOURCE_TERM(void* ctx, void* mass_source, int n_fields, int n_control_volumes)``
 
-    Internal simulator hook to calculate source terms of mass equation.
-    This is called after all residual functions are evaluated.
+    Internal simulator hook to calculate source terms of mass equation. This is called after all residual functions are
+    evaluated.
+
+    The plugin is supposed to change the given ``mass_source`` array pointer. Its values is contiguous in memory
+    and the dimensions are given by ``n_fields`` and ``n_control_volumes``. It has unit equal to ``[kg/s]``.
 
     :param ctx: ALFAsim's plugins context
     :param mass_source: Source term of mass equation
     :param n_fields: Number of fields
     :param n_control_volumes: Number of control volumes
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_MASS_SOURCE_TERM(
+            ctx, mass_source, n_fields, n_control_volumes) {
+            int liq_id = -1;
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &liquid_id, "liquid");
+            // Convertion from void* to double* and getting the
+            // array range related to liquid field
+            double* liquid_mass_source =
+                (double*) mass_source + n_control_volumes * liq_id;
+            // Make some calculations and add it to liquid_mass_source
+            return OK;
+        }
+
+    In the example above is shown how to manage the ``mass_source`` array to get the mass source term array related to a
+    specific field (`liquid field` in this case). Note that ``liquid_mass_source`` has size equal to ``n_control_volumes``.
+
     """
 
 
@@ -310,17 +335,43 @@ def calculate_momentum_source_term(
     ctx: "void*", momentum_source: "void*", n_layers: "int", n_faces: "int"
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_MOMENTUM_SOURCE_TERM(void* ctx, void* mass_source, int n_layers, int n_faces)``
+    **c++ signature** : ``HOOK_CALCULATE_MOMENTUM_SOURCE_TERM(void* ctx, void* momentum_source, int n_layers, int n_faces)``
 
-    Internal simulator hook to calculate source terms of momentum equation.
-    This is called after all residual functions are evaluated.
+    Internal simulator hook to calculate source terms of momentum equation. This is called after all residual functions
+    are evaluated.
+
+    The plugin is supposed to change the given ``momentum_source`` array pointer. Its values is contiguous in memory
+    and the dimensions are given by ``n_layers`` and ``n_faces``. It has unit equal to ``[N]``.
 
     :param ctx: ALFAsim's plugins context
     :param momentum_source: Source term of momentum equation
     :param n_layers: Number of layers
     :param n_faces: Number of faces (equal to n_control_volumes minus 1)
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_MOMENTUM_SOURCE_TERM(
+            ctx, momentum_source, n_layers, n_faces) {
+            int gas_id = -1;
+            errcode = alfasim_sdk_api.get_layer_id(
+                ctx, &gas_id, "gas");
+            // Convertion from void* to double* and getting the
+            // array range related to gas layer
+            double* gas_momentum_source =
+                (double*) momentum_source + n_faces * gas_id;
+            // Make some calculations and add it to gas_momentum_source
+            return OK;
+        }
+
+    In the example above is shown how to manage the ``momentum_source`` array to get the momentum source term array
+    related to a specific layer (`gas layer` in this case). Note that ``gas_momentum_source`` has size equal to
+    ``n_faces``.
+
     """
 
 
@@ -330,15 +381,56 @@ def calculate_energy_source_term(
     """
      **c++ signature** : ``HOOK_CALCULATE_ENERGY_SOURCE_TERM(void* ctx, void* energy_source, int n_layers, int n_control_volumes)``
 
-    Internal simulator hook to calculate source terms of energy equation
-    This is called after all residual functions are evaluated.
+    Internal simulator hook to calculate source terms of energy equation. This is called after all residual functions
+    are evaluated.
+
+    The plugin is supposed to change the given ``energy_source`` array pointer. Its values is contiguous in memory
+    and the dimensions are given by ``n_layers`` and ``n_control_volumes``. It has unit equal to ``[J/s]``.
+
+    Since ``ALFAsim`` considers two energy models, if ``n_layers`` is equal to 1 it means that the global energy model
+    is being used. Otherwise the layers energy model is being used. See the ``ALFAsim``'s Technical Report for more
+    information.
 
     :param ctx: ALFAsim's plugins context
     :param energy_source: Source term of energy equation
     :param n_layers: Number of layers
     :param n_control_volumes: Number of control volumes
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_ENERGY_SOURCE_TERM(
+            ctx, energy_source, n_layers, n_control_volumes) {
+            double* gas_energy_source;
+            if (n_layers > 1){
+                // Layers Energy model
+                // One energy equation for each layer
+                int gas_id = -1;
+                errcode = alfasim_sdk_api.get_layer_id(
+                    ctx, &gas_id, "gas");
+                // Convertion from void* to double* and getting the
+                // array range related to gas layer
+                gas_energy_source =
+                    (double*) energy_source + n_faces * gas_id;
+            } else {
+                // Global energy model
+                // Only one global energy equation
+
+                // Convertion from void* to double*
+                gas_energy_source = (double*) energy_source;
+            }
+            // Make some calculations and add it to gas_energy_source
+            return OK;
+        }
+
+    In the example above is shown how to manage the ``energy_source`` array to get the energy source term array
+    related to a specific layer (`gas layer` in this case). Note that ``gas_energy_source`` has size equal to
+    ``n_control_volumes``.
+
     """
 
 
@@ -348,15 +440,49 @@ def calculate_tracer_source_term(
     """
     **c++ signature** : ``HOOK_CALCULATE_TRACER_SOURCE_TERM(void* ctx, void* phi_source, int n_tracers, int n_control_volumes)``
 
-    Internal simulator hook to calculate source terms of tracer transport equation.
-    This is called after all residual functions are evaluated.
+    Internal simulator hook to calculate source terms of tracer transport equation. This is called after all residual
+    functions are evaluated.
+
+    The plugin is supposed to change the given ``phi_source`` array pointer. Its values is contiguous in memory
+    and the dimensions are given by ``n_tracers`` and ``n_control_volumes``. It has unit equal to ``[kg/s]``.
 
     :param ctx: ALFAsim's plugins context
     :param phi_source: Source term of tracers mass equation
     :param n_tracers: Number of tracers
     :param n_control_volumes: Number of control volumes
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_TRACER_SOURCE_TERM(
+            ctx, phi_source, n_tracers, n_control_volumes) {
+           // Tracer information
+            void* tracer_ref;
+            errcode = alfasim_sdk_api.get_tracer_ref_by_name(
+                ctx,
+                &tracer_ref,
+                "my_tracer", // Added by User interface
+                plugin_id);
+            int tracer_id = -1;
+            errcode = alfasim_sdk_api.get_tracer_id(
+                ctx, &tracer_id, tracer_ref);
+            // Convertion from void* to double* and getting the
+            // array range related to gas layer
+            double* my_tracer_phi_source =
+                (double*) phi_source + n_control_volumes * tracer_id;
+            // Make some calculations and add
+            // it to my_tracer_phi_source
+            return OK;
+        }
+
+    In the example above is shown how to manage the ``phi_source`` array to get the tracer source term array
+    related to a specific tracer (`my_tracer` in this case). Note that ``gas_energy_source`` has size equal to
+    ``n_control_volumes``.
+
     """
 
 

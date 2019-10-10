@@ -101,6 +101,11 @@ This `hook` is used to update plugin's variables that depends on Tracer's mass f
 Source Terms
 ------------
 
+The `hooks` showed in this section can be considered as the most important. Since they allow the plugin to change the
+conservation equations. It is made adding source terms in the residual function of mass, momentum and energy conservation
+equations. Since the equations are in residual form, the negative values of source terms indicate that mass, momentum and
+energy will be consumed. Otherwise, some amount of mass, momentum, and energy will be generated.
+
 .. autofunction:: alfasim_sdk.hook_specs.calculate_mass_source_term
 
 .. autofunction:: alfasim_sdk.hook_specs.calculate_momentum_source_term
