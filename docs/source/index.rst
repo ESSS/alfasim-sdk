@@ -27,8 +27,8 @@ To get quick and running with ``ALFAsim-SDK`` you can read the :ref:`quick-start
     :maxdepth: 2
     :glob:
 
-    quick_start
-    alfasim_sdk_by_example
+    01_quick_start
+    02_alfasim_sdk_by_example
 
 After reading the quick start section and the plugin by example section,
 check out these additional resources to help better understand the plugin workflow:
@@ -37,9 +37,9 @@ check out these additional resources to help better understand the plugin workfl
     :maxdepth: 2
     :glob:
 
-    concepts/plugin_structure
-    concepts/user_interface_hooks
-    concepts/solver_hooks
+    03_plugin_structure
+    04_application_hooks
+    05_solver_hooks
 
 Dig deeper into specific topics:
 
@@ -47,4 +47,4 @@ Dig deeper into specific topics:
     :maxdepth: 2
     :glob:
 
-    api/reference
+    99_0_reference

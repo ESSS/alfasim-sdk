@@ -8,5 +8,5 @@ This page contains the full reference to ``ALFAsim-SDK`` API.
 
 .. toctree::
 
-    solver_api_reference
-    user_interface_reference
+    99_1_solver_api_reference
+    99_2_user_interface_reference

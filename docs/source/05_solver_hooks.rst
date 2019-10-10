@@ -1,9 +1,6 @@
 Solver Hooks
 ============
 
-.. |alfasim| replace:: **ALFAsim**
-.. |sdk| replace:: ``ALFAsim-SDK``
-
 The present section describes all solver `Hooks` available on |alfasim| plugin infrastructure.
 Solver `Hooks` are |alfasim|'s pre-defined functions that allows the plugin developer to add/update |alfasim|'s Solver.
 As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``template`` option
@@ -116,6 +113,8 @@ energy will be consumed. Otherwise, some amount of mass, momentum, and energy wi
 
 State Variables for additional phases
 -------------------------------------
+
+As can be seen in :ref:`multi-field-description` section, the plugins can add
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize_state_variables_calculator
 

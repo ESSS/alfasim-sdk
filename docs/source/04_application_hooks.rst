@@ -35,6 +35,7 @@ Additional variables
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_additional_variables
 
 
+.. _multi-field-description:
 
 Multi-field description
 -----------------------
