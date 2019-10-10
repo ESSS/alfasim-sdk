@@ -141,19 +141,19 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             int size_U = -1;
             int size_E = -1;
             int liq_id = -1;
-            errcode = get_field_id(ctx, &liquid_id, "liquid");
+            errcode = alfasim_sdk_api.get_field_id(ctx, &liquid_id, "liquid");
             double* vel;
             VariableScope Fields_OnFaces = {
                 GridScope::FACE,
                 MultiFieldDescriptionScope::FIELD,
                 TimestepScope::CURRENT
             }
-            errcode = alfasim.get_simulation_array(
+            errcode = alfasim_sdk_api.get_simulation_array(
                 ctx, &vel, (char*) "U", Fields_OnFaces, liq_id, &size_U);
             double* kinetic_energy;
             char* name = "kinetic_energy_of_liquid";
             int global_idx = 0;
-            errcode = alfasim.get_plugin_variable(
+            errcode = alfasim_sdk_api.get_plugin_variable(
                 ctx,
                 (void**) (&kinetic_energy),
                 name,
@@ -200,7 +200,7 @@ def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
             double* kinetic_energy;
             char* name = "kinetic_energy_of_liquid";
             int global_idx = 0;
-            errcode = alfasim.get_plugin_variable(
+            errcode = alfasim_sdk_api.get_plugin_variable(
                 ctx,
                 (void**) (&kinetic_energy),
                 name,
@@ -233,13 +233,13 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(ctx) {
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER(ctx) {
             const char* plugin_id = get_plugin_id()
             int errcode = -1;
             int size_t = -1;
             int size_p_var = -1;
             int liq_id = -1;
-            errcode = get_field_id(ctx, &liquid_id, "liquid");
+            errcode = alfasim_sdk_api.get_field_id(ctx, &liquid_id, "liquid");
             double* tracer_mass_fraction;
             VariableScope global_OnCenters = {
                 GridScope::FACE,
@@ -248,15 +248,15 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
             }
             // Tracer information
             void* tracer_ref;
-            errcode = alfasim.get_tracer_ref_by_name(
+            errcode = alfasim_sdk_api.get_tracer_ref_by_name(
                 ctx,
                 &tracer_ref,
                 "my_tracer", // Added by User interface
                 plugin_id);
             int tracer_id = -1;
-            errcode = alfasim.get_tracer_id(ctx, &tracer_id, tracer_ref);
+            errcode = alfasim_sdk_api.get_tracer_id(ctx, &tracer_id, tracer_ref);
             double *tracer_mass_fraction
-            errcode = alfasim.get_simulation_tracer_array(
+            errcode = alfasim_sdk_api.get_simulation_tracer_array(
                 ctx,
                 &tracer_mass_fraction,
                 (char*) "phi",
@@ -266,7 +266,7 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
                 &size_t);
             // Plugin secondary variable array
             double* plugin_var;
-            errcode = alfasim.get_plugin_variable(
+            errcode = alfasim_sdk_api.get_plugin_variable(
                 ctx,
                 (void**) (&plugin_var),
                 name,
