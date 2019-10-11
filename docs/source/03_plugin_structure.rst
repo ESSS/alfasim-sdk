@@ -3,8 +3,6 @@
 Plugins Structure
 =================
 
-.. |sdk| replace:: :program:`ALFAsim-SDK`
-
 As mentioned on :ref:`quick-start-section`, the |sdk| package has few utilities to help in the process to create
 a new plugin project and to create a plugin file.
 
@@ -15,7 +13,7 @@ At any moment, it's possible to invoke the help command to list all commands ava
    >>> alfasim-sdk --help
 
 
-You can also learn about the available options of each command invoking the :option:`--help` option for each command:
+You can also learn about the available options of each command invoking the :guilabel:`--help` option for each command:
 
 .. code-block:: bash
 

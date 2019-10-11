@@ -80,9 +80,7 @@ class String(BaseField):
     Properties:
     caption - property used as a label for the text input.
     value   - property that holds the value informed from the user, or the default value that
-              should be displayed for the user.
-
-
+    should be displayed for the user.
     """
 
     value: str = attrib(validator=non_empty_str)
@@ -161,6 +159,7 @@ class BaseReference(BaseField):
 class Reference(BaseReference):
     """
     The Reference field stores a reference to another model available at the application.
+
     The are two types of models supported by this field.
         - ALFAsimTypes: models from ALFAsim, example Tracers.
         - Custom Data: a model defined withing the plugin.

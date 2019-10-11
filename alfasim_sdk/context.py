@@ -207,36 +207,39 @@ class Context:
     """
     The context class provides information about the current state of the application
     and the models implemented by the user.
+
     """
 
     def GetModel(self, model_name: str) -> Optional[type]:
         """
         Returns a model defined from a plugin.
+
         The parameter ``model_name`` must be the name of models defined within the plugin.
 
-        Ex.:
         You can access a class "Acme" defined from ``alfasim_get_data_model_type()`` by typing
         ``ctx.GetModel("Acme")`` as exemplified in the code bellow.
 
+        .. code-block:: python
 
-        @hookimpl
-        def alfasim_get_data_model_type():
-            @model_class(caption="Acme")
-            class Acme:
-                name = String(value="acme", caption="Acme")
+            @hookimpl
+            def alfasim_get_data_model_type():
+                @model_class(caption="Acme")
+                class Acme:
+                    name = String(value="acme", caption="Acme")
 
-            return [Acme]
+                return [Acme]
 
-        @hookimpl
-        def alfasim_get_status(ctx):
-            model = ctx.GetModel('Acme')
-            assert model.name == 'acme'
+            @hookimpl
+            def alfasim_get_status(ctx):
+                model = ctx.GetModel('Acme')
+                assert model.name == 'acme'
 
         It also possible to use ``alfasim_sdk.context.PluginInfo.models`` to check models available for a given Plugin
         For more information check ``alfasim_sdk.context.Context.GetPluginInfoById``
 
         The values from the returned Model are read-only, they cannot be modified.
         If the model informed cannot be found, a  :class:`TypeError` exception is raised.
+
         """
 
     def GetPipelines(self) -> Optional[List[PipelineInfo]]:

@@ -14,8 +14,8 @@ solver to be tracked during the simulation.
     :local:
 
 
-User interface customization
-----------------------------
+Application customization
+-------------------------
 
 |sdk| allows plugins to customize the user interface of |alfasim| by adding custom models, the image bellow shows
 the locations where a custom model can be inserted using the hook |gui_hook|.
