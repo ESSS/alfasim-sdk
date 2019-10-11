@@ -45,7 +45,8 @@ def initialize(ctx: "void*") -> "int":
 
         ALFAsimSDK_API alfasim_sdk_api;
 
-        HOOK_INITIALIZE(ctx) {
+        HOOK_INITIALIZE(ctx)
+        {
             const char* plugin_id = get_plugin_id()
             // Loading ALFAsim-SDK API
             int load_error_code = alfasim_sdk_open(alfasim_sdk_api)
@@ -136,7 +137,8 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(ctx) {
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES(ctx)
+        {
             int errcode = -1;
             int size_U = -1;
             int size_E = -1;
@@ -194,7 +196,8 @@ def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP(ctx) {
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP(ctx)
+        {
             int errcode = -1;
             int size_E = -1;
             double* kinetic_energy;
@@ -233,7 +236,8 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER(ctx) {
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER(ctx)
+        {
             const char* plugin_id = get_plugin_id()
             int errcode = -1;
             int size_t = -1;
@@ -313,7 +317,8 @@ def calculate_mass_source_term(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_MASS_SOURCE_TERM(
-            ctx, mass_source, n_fields, n_control_volumes) {
+            ctx, mass_source, n_fields, n_control_volumes)
+        {
             int liq_id = -1;
             errcode = alfasim_sdk_api.get_field_id(
                 ctx, &liquid_id, "liquid");
@@ -356,7 +361,8 @@ def calculate_momentum_source_term(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_MOMENTUM_SOURCE_TERM(
-            ctx, momentum_source, n_layers, n_faces) {
+            ctx, momentum_source, n_layers, n_faces)
+        {
             int gas_id = -1;
             errcode = alfasim_sdk_api.get_layer_id(
                 ctx, &gas_id, "gas");
@@ -404,7 +410,8 @@ def calculate_energy_source_term(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_ENERGY_SOURCE_TERM(
-            ctx, energy_source, n_layers, n_control_volumes) {
+            ctx, energy_source, n_layers, n_control_volumes)
+        {
             double* gas_energy_source;
             if (n_layers > 1){
                 // Layers Energy model
@@ -459,7 +466,8 @@ def calculate_tracer_source_term(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_TRACER_SOURCE_TERM(
-            ctx, phi_source, n_tracers, n_control_volumes) {
+            ctx, phi_source, n_tracers, n_control_volumes)
+        {
            // Tracer information
             void* tracer_ref;
             errcode = alfasim_sdk_api.get_tracer_ref_by_name(
@@ -495,26 +503,85 @@ def initialize_state_variables_calculator(
     n_layers: "int",
 ) -> "int":
     """
-    Hook for the state variables calculator initialization.
-    To define a function that'll calculate the state variables for a given phase on ALFAsim,
-    two main steps must be performed:
+    **c++ signature** : ``HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR(void* ctx, void* P, void* T, void* T_mix,
+    int n_control_volumes, int n_layers)``
 
-    1) In the plugin python configuration file, define the
-       alfasim_get_phase_properties_calculated_from_plugin function to set which phases
-       the current plugin is able to calculate state variables.
+    Hook for the state variables calculator initialization (internal ``ALFAsim`` structure).
 
-    2) The plugin must, then, implement four hooks:
+    At this point, it is possible to pre-calculate and cache any relevant information. Then, for each state variable of
+    the phases in the python configuration file, the `hook` :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_state_variables>`
+    is called and return the pre-calculated values.
 
-     - HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR
-     - HOOK_CALCULATE_STATE_VARIABLE
-     - HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE
-     - HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR
+    :param ctx: ALFAsim's plugins context
+    :param P: Pressure values array
+    :param T: Temperature values array
+    :param T_mix: Mixture temperature values array
+    :param n_control_volumes: Number of control volumes
+    :param n_layers: Number of layers
+    :returns: Return OK if successful or anything different if failed
 
-    The first and last hooks are called immediately before and after the state variables are
-    calculated, respectively.
-    At this point, it is possible to pre-calculate and cache any relevant information.
-    Then, for each state variable of the phases in the python configuration file, the hook
-    HOOK_CALCULATE_STATE_VARIABLE is called.
+    The ``P`` and ``T_mix`` have size equal to ``n_control_volumes``. However, ``T`` has values contiguous in memory
+    and its dimensions are given by ``n_layers`` and ``n_control_volumes``
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR(
+            void* ctx, void* P, void* T, void* T_mix,
+            int n_control_volumes, int n_layers)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            // MyStruct is a developer defined struct to hold
+            // all important information for plugin hooks.
+            MyStruct* data.
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            // MyFunction is a function implemented by
+            // plugin developer that computes de density
+            data.density = MyFunction(P, T_mix, n_control_volumes);
+            return OK;
+        }
+        // Then, to use the cached value:
+        HOOK_CALCULATE_STATE_VARIABLE(
+            void* ctx, void* P, void* T, int n_control_volumes, i
+            nt n_layers, int phase_id, int property_id, void* output)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (phase_id != data.my_added_phase_id) {
+                return OK;
+            }
+            if (property_id == StateVariable::RHO) {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    output[i] = data.density[i];
+                }
+            }
+            return OK;
+        }
+
+    .. Note::
+        For pre-calculated values, the plugin developer must cache it in the plugin internal data. See the example above.
+
+    However, if the state variable is considered constant or the developer doesn't need to cache the values,
+    just return ``OK``.
+
     """
 
 
@@ -528,21 +595,76 @@ def calculate_state_variable(
     output: "void*",
 ) -> "int":
     """
-    Hook to calculate the state variable given by the `property_id` (See alfasim_sdk_api common
-    headers to retrieve the available property ids), for the phase `phase_id` (Note that the phase
-    id is the same as the one retrieved from the `get_phase_id()` API function - It is not advisable
-    to use hardcoded numbers).
+    **c++ signature** : ``HOOK_CALCULATE_STATE_VARIABLE(void* ctx, void* P, void* T, int n_control_volumes, int n_layers,
+    int phase_id, int property_id, void* output)``
+
+    Hook to calculate the state variable given by the `property_id` ( a See :cpp:enum:`StateVariable` value), for the
+    phase with `phase_id` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id` API
+    function - It is not advisable to use hardcoded numbers).
 
     List of affected variables:
-    - sigma
+    - Density
+    - Viscosity
+    - Heat Capacity
+    - Partial Derivative of Density in Relation to Pressure
+    - Partial Derivative of Density in Relation to Temperature
+    - Enthalpy
+    - Thermal Conductivity
 
-    The output parameter must be filled with the calculated property for each control volume. The
-    pressure 'P' and layer or mixture temperature 'T' (Depending on the energy model being used)
+    :param ctx: ALFAsim's plugins context
+    :param P: Pressure values array
+    :param T: Temperature values array
+    :param n_control_volumes: Number of control volumes
+    :param n_layers: Number of layers
+    :param n_phase_id: Is of phase in which the property must be calculated
+    :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
+                        property must be calculated
+    :param output: Output values array
+    :returns: Return OK if successful or anything different if failed
+
+    The ``output`` parameter must be filled with the calculated property for each control volume. The
+    pressure ``P`` and layer or mixture temperature ``T`` (Depending on the energy model being used)
     are given in order to perform the calculation. The number of control volumes is also given for
     convenience.
 
-    The programmer must NOT change any variable other than the output. The output size is
-    n_control_volumes.
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_STATE_VARIABLE(
+            void* ctx, void* P, void* T, int n_control_volumes, int n_layers, int phase_id, int property_id, void* output)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (phase_id != data.my_added_phase_id) {
+                return OK;
+            }
+            if (property_id == StateVariable::RHO) {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the property has a constant value
+                    output[i] = data.constant_density;
+                    // If the property has a constant value
+                    // MyStruct has a function called 'compute_density()'
+                    output[i] = data.compute_density(
+                        (double *)P, T, n_control_volumes);
+                }
+            }
+            return OK;
+        }
+
+    .. warning::
+        The plugin developer must **NOT** change any variable other than the output. The ``output`` size is
+        ``n_control_volumes`` .
     """
 
 
@@ -557,10 +679,16 @@ def calculate_phase_pair_state_variable(
     output: "void*",
 ) -> "int":
     """
+    **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes
+    int phase1_id, int phase2_id, int property_id, void* output)``
+
     Hook to calculate the state variable given by the `property_id` (See alfasim_sdk_api common
     headers to retrieve the available property ids), for the phase pair `(phase1_id, phase2_id)`
     (Note that the phase id is the same as the one retrieved from the `get_phase_id()` API function
     - It is not advisable to use hardcoded numbers).
+
+    List of affected variables:
+    - Interfacial Tension
 
     The output parameter must be filled with the calculated property for each control volume. The
     pressure 'P' and mixture temperature 'T_mix' are given in order to perform the calculation.
@@ -573,6 +701,8 @@ def calculate_phase_pair_state_variable(
 
 def finalize_state_variables_calculator(ctx: "void*") -> "int":
     """
+    **c++ signature** : ``HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)``
+
     Hook for the state variables calculator finalization.
     The programmer should free/delete any allocated data from the initialization hook.
     """

@@ -51,6 +51,8 @@ data for each `thread` identified as ``thread_id``.
     possible to return error codes from |sdk| API functions, however the developer can intercept this error code and
     handle it instead of returning it to the |alfasim|'s Solver.
 
+.. _update_secondary_variables:
+
 Update plugin variables
 -----------------------
 
@@ -114,7 +116,9 @@ energy will be consumed. Otherwise, some amount of mass, momentum, and energy wi
 State Variables for additional phases
 -------------------------------------
 
-As can be seen in :ref:`multi-field-description` section, the plugins can add
+As can be seen in :ref:`multi-field-description` section the plugins can add new `fields`, `phases` and `layers`. Also,
+it is possible to indicate if a phase will have its state variables calculated from plugin implementing the
+:py:func:`~alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin`.
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize_state_variables_calculator
 

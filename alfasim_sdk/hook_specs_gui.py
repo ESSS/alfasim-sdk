@@ -135,8 +135,9 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
     """
     Allows plugins to register new additional variables on ALFAsim.
 
-    This variable can be used to store internal data from the plugin, (on solver)
-    or it can be used to expose data to the user in the plot window (on application).
+    It can be used to store internal variable from the plugin (on solver), or it can be used to expose as an
+    output to the user in the plot window (on application). To calculate and update the registered variables the Solver
+    `hooks` described on :ref:`update_secondary_variables` section must be implemented.
 
     This method expects to return a list of :func:`alfasim_sdk.variables.SecondaryVariable`, for more details checkout
     the reference section with all details about :ref:`variables <api-variables-section>`
@@ -256,8 +257,8 @@ def alfasim_configure_fields():
         @alfasim_sdk.hookimpl
         def alfasim_configure_fields():
            return [
-                   AddField(name='plugin_continuous_field'),
-                   AddField(name='plugin_dispersed_field'),
+               AddField(name='plugin_continuous_field'),
+               AddField(name='plugin_dispersed_field'),
            ]
 
 
@@ -280,23 +281,21 @@ def alfasim_configure_layers():
         @alfasim_sdk.hookimpl
         def alfasim_configure_layers():
            return [
-                   AddLayer(
-                       name='plugin_layer',
-                       fields=['plugin_continuous_field'],
-                       continuous_field='plugin_continuous_field',
-                   ),
-                   UpdateLayer(
-                       name=LIQUID_LAYER,
-                       additional_fields=['plugin_dispersed_field'],
-                   ),
+               AddLayer(
+                   name='plugin_layer',
+                   fields=['plugin_continuous_field'],
+                   continuous_field='plugin_continuous_field',
+               ),
+               UpdateLayer(
+                   name=LIQUID_LAYER,
+                   additional_fields=['plugin_dispersed_field'],
+               ),
            ]
 
     The image bellow shows the new added phase on the application.
 
     .. image:: _static/alfasim_configure_layer_example_1.png
         :scale: 80%
-
-
 
     """
 
@@ -349,8 +348,8 @@ def alfasim_configure_phases():
         def alfasim_configure_phases():
             return [
                 UpdatePhase(
-                name=LIQUID_PHASE,
-                additional_fields=['plugin_dispersed_field'],
+                    name=LIQUID_PHASE,
+                    additional_fields=['plugin_dispersed_field'],
                 )
             ]
 
@@ -360,12 +359,27 @@ def alfasim_configure_phases():
 @hookspec
 def alfasim_get_phase_properties_calculated_from_plugin():
     """
-    Must return a list of phases in which state variables will be computed for. In order to
-    implement the properties, HOOK_CALCULATE_STATE_VARIABLE must be implemented on the C plugin.
+    Allows the plugin to calculate the properties (state variables) of a phase.
 
-    Example:
-    from alfasim_sdk.constants import GAS_PHASE
-    return [GAS_PHASE, 'solid']
+    Must return a list of phase names in which state variables will be computed for. If the plugin implements this `hook`
+     four C/C++ Solver `hooks` also must be implemented. They are:
+
+     - :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`
+     - :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_state_variable>`
+     - :py:func:`HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_phase_pair_state_variable>`
+     - :py:func:`HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.finalize_state_variables_calculator>`
+
+    The first and last hooks are called immediately before and after the state variables are calculated, respectively.
+
+     Example of usage:
+
+    .. code-block:: python
+
+        from alfasim_sdk.constants import GAS_PHASE
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_phase_properties_calculated_from_plugin():
+            return [GAS_PHASE, 'solid']
 
     """
 
@@ -373,16 +387,23 @@ def alfasim_get_phase_properties_calculated_from_plugin():
 @hookspec
 def alfasim_get_phase_interaction_properties_calculated_from_plugin():
     """
+
     Must return a list of tuple of phases in which state variables will be computed for. In order to
     implement the properties, HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE must be implemented on the C
     plugin.
 
-    Example:
-    from alfasim_sdk.constants import GAS_PHASE, LIQUID_PHASE, WATER_PHASE
-    return [
-        (GAS_PHASE, LIQUID_PHASE),
-        (GAS_PHASE, WATER_PHASE),
-    ]
+    Example of usage:
+
+    .. code-block:: python
+
+        from alfasim_sdk.constants import GAS_PHASE, LIQUID_PHASE, WATER_PHASE
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_phase_interaction_properties_calculated_from_plugin():
+        return [
+            (GAS_PHASE, LIQUID_PHASE),
+            (GAS_PHASE, WATER_PHASE),
+        ]
 
     """
 
@@ -390,11 +411,17 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
 @hookspec
 def alfasim_get_user_defined_tracers_from_plugin():
     """
+
     Must return a list of tracers in which the internal tracer model hooks will be implemented for.
     the HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE, HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_FIELD
     and UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER must be implemented on the C plugin.
 
-    Example:
-    return ['my_tracer']
+    Example of usage:
+
+    .. code-block:: python
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_user_defined_tracers_from_plugin():
+            return ['my_tracer']
 
     """

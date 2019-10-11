@@ -9,6 +9,7 @@ Some examples of the capabilities that can be extended are:
   * Creation of user-defined models, allowing custom models to be available over the Tree and in the Model Explorer.
   * Registration of secondary variables, allowing plugins to register new additional variables on ALFAsim.
   * Customization of the hydrodynamic models, supporting the additions of custom Phases/Fields/Layers.
+  * Support for inclusion of custom mass, momentum and energy equations.
   * Support for calculating source terms to solver equations.
   * Support for calculating/updating plugin-defined Simulation Variables
 

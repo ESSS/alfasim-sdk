@@ -47,6 +47,10 @@ the hook listed bellow, the plugin can:
  - Add/update phases
  - Add/update layers
 
+.. note::
+    For each new added ``field`` is considered a mass conservation equation and for each new added ``layer`` is considered
+    a momentum conservation and an energy conservation equations.
+
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_fields
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_phases
@@ -56,9 +60,9 @@ the hook listed bellow, the plugin can:
 In order to complement the ``Hydrodynamic model`` customization, it's possible to inform to |alfasim| which phases
 (added from plugin or not) will have the state variables calculated by plugin.
 
-.. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin
+.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin
 
-.. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
+.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
 
 User defined Tracers
 --------------------
@@ -66,4 +70,4 @@ User defined Tracers
 .. warning::
     This is an advanced customization. We strongly encourage the plugin developer to read the |alfasim|'s Technical Report
 
-.. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin
+.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin
