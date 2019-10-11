@@ -23,11 +23,12 @@ Models
 Types
 -----
 
-The Types Module provides a set of UI elements to create classic desktop-style user interfaces.
-See the User Interfaces overview for more information on using widgets.
+Models are the primary elements fro creating user interfaces on |alfasim|, models can display data, receive user input,
+and provide a container for other fields that should be grouped together.
 
-.. automodule:: alfasim_sdk.types
-    :members:
+Types is a module which supplies UI elements for creating user interfaces with the classic desktop-style.
+
+.. autoclass:: alfasim_sdk.types.BaseField()
 
 
 .. _api-layout-section:

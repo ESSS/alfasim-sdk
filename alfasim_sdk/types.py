@@ -50,17 +50,114 @@ class Group:
 @attr.s(kw_only=True)
 class BaseField:
     """
-    Base class for all widget fields available at ALFAsim.
+    Base field for all types available at ALFAsim.
 
-    The BaseField class and all others classes that inheritance from BaseField must use kw_only=True
-    for all attributes.
-    This is due to the necessity to make enable_expr and visible_expr an optional value and the
-    only way to have properties with default values mixed with required properties is with
-    key-word only arguments.
+    :parameter str caption: Label to be displayed on the right side of the component.
+
+    :param str tooltip: Shows a tip, a short piece of text.
+
+    :param Callable enable_expr: Function to evaluate if the component will be enabled or not.
+
+    :param Callable visible_expr: Function to inform if the component will be visible or not.
+
+    .. rubric:: **Caption and Tooltip**:
+
+    Captions is the most basic information that all fields must inform, it will display Label over the right side of
+    the component on the ``Model Explorer`` window.
+
+    Tooltips are short pieces of text to reminder/inform the user about some specificity about the property when they
+    keep the mouse over the field. Tooltips must be a string, and can have HTML tags and unicode character as well.
+
+    :raise TypeError: if the tooltip informed it's not a string.
+
+    Example.:
+
+    .. code-block:: python
+
+        @data_model(icon='', caption='My Plugin')
+        class MyModel:
+            my_string_1= String(
+                value='String 1',
+                caption='My String 1',
+                tooltip="Some Text <br> <b> More Information</b>",
+            )
+            my_string_2 = String(
+                value='String 2',
+                caption='My String 2',
+                tooltip="∩ ∪ ∫ ∬ ∮",
+            )
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModel]
+
+    The images bellow shows the output from the example above.
+
+    .. image:: _static/base_field_caption.png
+        :scale: 60%
+
+    .. image:: _static/base_field_tootip_1.png
+        :scale: 70%
+
+    .. image:: _static/base_field_tootip_2.png
+        :scale: 70%
+
+    .. rubric:: **Enable Expression**:
+
+    Accepts a python function that controls either the component will be enabled, or disabled.
+    The python function will receive two arguments, a instance of itself (to check local values) and a instance of
+    :func:`alfasim_sdk.context.Context` to retrieve information about the application.
+
+    This function must return a boolean, informing True (for enabled) or False (for disabled).
+
+    .. epigraph:: **enabled**:
+        The component will handles keyboard and mouse events.
+
+    .. epigraph:: **disabled**:
+        The component will not handle events and it will be grayed out.
+
+    Example.:
+
+    .. code-block:: python
+        :emphasize-lines: 1-2, 11
+
+        def my_check(self, ctx):
+            return self.bool_value
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            bool_value = Boolean(value=True, caption="Enabled")
+            N_ions = Quantity(
+                caption='Number of Ions',
+                value=1,
+                unit='-',
+                enable_expr=my_check,
+            )
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModel]
+
+    The image bellow shows the ``N_ions`` property disabled, when the property ``bool_value`` is disabled (False)
+
+    .. image:: _static/base_field_enable_expr_1.png
+
+    .. image:: _static/base_field_enable_expr_2.png
+
+
+    .. rubric:: **Visible Expression**:
+
+enable_expr=lambda self, ctx: self.thi_type == "Salt",
+
+    .. Development only
+
+        The BaseField class and all others classes that inheritance from BaseField must use kw_only=True for all attributes.
+        This is due to the necessity to make enable_expr and visible_expr an optional value and the only way to have
+        properties with default values mixed with required properties is with key-word only arguments.
     """
 
     caption: str = attrib(validator=non_empty_str)
-    tooltip: Optional[Callable] = attrib(default="", validator=instance_of(str))
+    tooltip: str = attrib(default="", validator=instance_of(str))
     enable_expr: Optional[Callable] = attrib(
         default=None, validator=optional(is_callable())
     )

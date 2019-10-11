@@ -16,20 +16,20 @@ be customized will be located on: :menuselection:`myplugin --> src --> python --
 
 .. _alfasim_get_data_model_type:
 
-Customizing the user interface
-------------------------------
+Plugin Model
+------------
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type
 
 
-Customizing the status monitor
-------------------------------
+Status Monitor
+--------------
 
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_status
 
 
-Additional variables
+Additional Variables
 --------------------
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_additional_variables
@@ -37,7 +37,7 @@ Additional variables
 
 .. _multi-field-description:
 
-Hydrodynamic model
+Hydrodynamic Model
 -------------------
 
 |alfasim| provides way to customize the hydrodynamic model available within the application, if the usage of
@@ -60,7 +60,7 @@ In order to complement the ``Hydrodynamic model`` customization, it's possible t
 
 .. autofunction::alfasim_sdk.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
 
-User defined Tracers
+User Defined Tracers
 --------------------
 
 .. warning::
