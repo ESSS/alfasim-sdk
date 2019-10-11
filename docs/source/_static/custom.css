@@ -21,3 +21,8 @@ pre {
     padding: 1.25rem 1.5rem;
     background: #282c34;
 }
+
+div.sphinxsidebarwrapper > ul > li {
+    margin-top: 15px;
+}
+
