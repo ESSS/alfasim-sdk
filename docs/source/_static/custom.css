@@ -26,3 +26,9 @@ div.sphinxsidebarwrapper > ul > li {
     margin-top: 15px;
 }
 
+div.sphinxsidebarwrapper a {
+    border-bottom: 0;
+}
+
+
+
