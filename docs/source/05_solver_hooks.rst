@@ -131,6 +131,11 @@ it is possible to indicate if a phase will have its state variables calculated f
 Additional solid phase
 ----------------------
 
+When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.types.AddPhase` type, it is possible
+to set as a `solid phase`. In this case, the particle size of `fields` that are `solid phase` can be calculated by
+implementing the following Solver `Hooks`.Otherwise, the particle size will be considered constant and equal to
+:math:`1\times10^{-4}` meters.
+
 .. autofunction:: alfasim_sdk.hook_specs.initialize_particle_diameter_of_solids_fields
 
 .. autofunction:: alfasim_sdk.hook_specs.update_particle_diameter_of_solids_fields

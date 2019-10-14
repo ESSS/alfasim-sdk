@@ -542,7 +542,7 @@ def initialize_state_variables_calculator(
             }
             // MyStruct is a developer defined struct to hold
             // all important information for plugin hooks.
-            MyStruct* data.
+            MyStruct* data = nullptr;
             errcode = alfasim_sdk_api.get_plugin_data(
                     ctx, (void**) &data, plugin_id, thread_id);
             // MyFunction is a function implemented by
@@ -598,25 +598,32 @@ def calculate_state_variable(
     **c++ signature** : ``HOOK_CALCULATE_STATE_VARIABLE(void* ctx, void* P, void* T, int n_control_volumes, int n_layers,
     int phase_id, int property_id, void* output)``
 
-    Hook to calculate the state variable given by the `property_id` ( a See :cpp:enum:`StateVariable` value), for the
+    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the
     phase with `phase_id` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id` API
     function - It is not advisable to use hardcoded numbers).
 
     List of affected variables:
-    - Density
-    - Viscosity
-    - Heat Capacity
-    - Partial Derivative of Density in Relation to Pressure
-    - Partial Derivative of Density in Relation to Temperature
-    - Enthalpy
-    - Thermal Conductivity
+
+    - ``Density``
+
+    - ``Viscosity``
+
+    - ``Heat Capacity``
+
+    - ``Partial Derivative of Density in Relation to Pressure``
+
+    - ``Partial Derivative of Density in Relation to Temperature``
+
+    - ``Enthalpy``
+
+    - ``Thermal Conductivity``
 
     :param ctx: ALFAsim's plugins context
     :param P: Pressure values array
     :param T: Temperature values array
     :param n_control_volumes: Number of control volumes
     :param n_layers: Number of layers
-    :param n_phase_id: Is of phase in which the property must be calculated
+    :param n_phase_id: Id of phase in which the property must be calculated
     :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
                         property must be calculated
     :param output: Output values array
@@ -634,7 +641,9 @@ def calculate_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_STATE_VARIABLE(
-            void* ctx, void* P, void* T, int n_control_volumes, int n_layers, int phase_id, int property_id, void* output)
+            void* ctx, void* P, void* T,
+            int n_control_volumes, int n_layers,
+            int phase_id, int property_id, void* output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -653,10 +662,10 @@ def calculate_state_variable(
                 for (int i = 0; i < n_control_volumes; ++i) {
                     // If the property has a constant value
                     output[i] = data.constant_density;
-                    // If the property has a constant value
+                    // If the property must be computed
                     // MyStruct has a function called 'compute_density()'
                     output[i] = data.compute_density(
-                        (double *)P, T, n_control_volumes);
+                        (double *)P[i], (double *)T[i]);
                 }
             }
             return OK;
@@ -665,6 +674,7 @@ def calculate_state_variable(
     .. warning::
         The plugin developer must **NOT** change any variable other than the output. The ``output`` size is
         ``n_control_volumes`` .
+
     """
 
 
@@ -679,23 +689,81 @@ def calculate_phase_pair_state_variable(
     output: "void*",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes
+    **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes,
     int phase1_id, int phase2_id, int property_id, void* output)``
 
-    Hook to calculate the state variable given by the `property_id` (See alfasim_sdk_api common
-    headers to retrieve the available property ids), for the phase pair `(phase1_id, phase2_id)`
-    (Note that the phase id is the same as the one retrieved from the `get_phase_id()` API function
-    - It is not advisable to use hardcoded numbers).
+    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:StateVariable values), for the phase
+    pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :py:func:`get_phase_id()`
+    API function - It is not advisable to use hardcoded numbers).
 
     List of affected variables:
-    - Interfacial Tension
+
+    - ``Interfacial Tension``
+
+    :param ctx: ALFAsim's plugins context
+    :param P: Pressure values array
+    :param T_mix: Mixture temperature values array
+    :param n_control_volumes: Number of control volumes
+    :param n_phase1_id: Id of phase one in which the property must be calculated
+    :param n_phase2_id: Id of phase two in which the property must be calculated
+    :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
+                        property must be calculated
+    :param output: Output values array
+    :returns: Return OK if successful or anything different if failed
 
     The output parameter must be filled with the calculated property for each control volume. The
-    pressure 'P' and mixture temperature 'T_mix' are given in order to perform the calculation.
+    pressure ``P`` and mixture temperature ``T_mix`` are given in order to perform the calculation.
     The number of control volumes is also given for convenience.
 
-    The programmer must NOT change any variable other than the output. The output size is
-    n_control_volumes.
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(
+            void* ctx, void* P, void* T_mix, int n_control_volumes,
+            int phase1_id, int phase2_id, int property_id, void* output)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            int gas_phase_id = -1;
+            errcode = alfasim_sdk_api.get_phase_id(
+                ctx, &gas_phase_id, "gas");
+
+            if ((
+                (phase1_id == data.my_added_phase_id)
+                && (phase1_id == gas_phase_id)
+                ) || (
+                (phase1_id == gas_phase_id)
+                && (phase1_id == data.my_added_phase_id)
+                ))
+            {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the property has a constant value
+                    output[i] = data.constant_surface_tension;
+                    // If the property must be computed
+                    // MyStruct has a function
+                    // called 'compute_surface_tension()'
+                    output[i] = data.compute_surface_tension(
+                        (double *)P[i], (double *)T_mix[i]);
+                }
+            }
+            return OK;
+        }
+
+    .. warning::
+        The plugin developer must **NOT** change any variable other than the output. The ``output`` size is
+        ``n_control_volumes``.
+
     """
 
 
@@ -704,7 +772,24 @@ def finalize_state_variables_calculator(ctx: "void*") -> "int":
     **c++ signature** : ``HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)``
 
     Hook for the state variables calculator finalization.
-    The programmer should free/delete any allocated data from the initialization hook.
+    The plugin developer should free/delete any allocated data from the :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`.
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
+    If there is no need memory deallocation a minimal implementation would be:
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)
+        {
+            return OK;
+        }
+
     """
 
 
@@ -715,15 +800,58 @@ def initialize_particle_diameter_of_solids_fields(
     solid_field_id: "int",
 ) -> "int":
     """
-    Internal simulator hook to initialize particle diameter of solids fields.
+    **c++ signature** : ``HOOK_INITIALIZE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(void* ctx, void* particle_diameter,
+    int n_control_volumes, int solids_field_id)``
+
+    Internal simulator hook to initialize particle diameter of solid fields. This `hook` follows the same idea of
+    :py:func:`HOOK_UPDATE_PLUGIN_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`,
+    which makes the initialization in the moment that there is no previous time step data available.
 
     :param ctx: ALFAsim's plugins context
     :param particle_diameter: Particle diameter of a given solid field,
     :param n_control_volumes: Number of control volumes,
     :param solid_field_id: Index of the solid field in which the `particle_diameter`
                            Should be calculated.
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_INITIALIZE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
+        void* ctx, void* particle_diameter,
+        int n_control_volumes, int solids_field_id)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (solids_field_id != data.my_added_solid_field_id) {
+                return OK;
+            } else {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the particle size is constant
+                    output[i] = data.constant_particle_size;
+                    // The value is calculated
+                    // MyStruct has a function
+                    // called 'initial_particle_size()'
+                    output[i] = data.initial_particle_size(
+                             // List of params that can be
+                             // retrieved by get_simulation_array()
+                             );
+                }
+            }
+            return OK;
+        }
+
     """
 
 
@@ -734,15 +862,58 @@ def update_particle_diameter_of_solids_fields(
     solid_field_id: "int",
 ) -> "int":
     """
-    Internal simulator hook to update/calculate particle diameter of solids fields.
+    **c++ signature** : ``HOOK_UPDATE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(void* ctx, void* particle_diameter,
+    int n_control_volumes, int solids_field_id)``
+
+    Internal simulator hook to update/calculate particle diameter of solid fields. It is called right before any update
+    secondary variable from |alfasim|'s Solver, because they may depend on the solids particle size (for example `Slurry
+    Viscosity` calculated by ``Solids Model``)
 
     :param ctx: ALFAsim's plugins context
     :param particle_diameter: Particle diameter of a given solid field,
     :param n_control_volumes: Number of control volumes,
     :param solid_field_id: Index of the solid field in which the `particle_diameter`
                            Should be calculated.
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
+        void* ctx, void* particle_diameter,
+        int n_control_volumes, int solids_field_id)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (solids_field_id != data.my_added_solid_field_id) {
+                return OK;
+            } else {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the particle size is constant
+                    output[i] = data.constant_particle_size;
+                    // The value is calculated
+                    // MyStruct has a function
+                    // called 'compute_particle_size()'
+                    output[i] = data.compute_particle_size(
+                             // List of params that can be
+                             // retrieved by get_simulation_array()
+                             );
+                }
+            }
+            return OK;
+        }
+
     """
 
 

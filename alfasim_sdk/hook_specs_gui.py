@@ -321,6 +321,7 @@ def alfasim_configure_phases():
                         'plugin_dispersed_field',
                     ],
                     primary_field='plugin_continuous_field',
+                    is_solid=False,
                 )
             ]
 
