@@ -246,8 +246,8 @@ def alfasim_configure_fields():
 
     An added ``field`` must be associated with:
 
-     - Phase, defined by :func:`~alfasim_sdk.types.AddPhase` or :func:`~alfasim_sdk.types.UpdatePhase`.
-     - Layer, defined by :func:`~alfasim_sdk.types.AddLayer` or :func:`~alfasim_sdk.types.UpdateLayer`.
+     - Phase, defined by :class:`~alfasim_sdk.types.AddPhase` or :class:`~alfasim_sdk.types.UpdatePhase`.
+     - Layer, defined by :class:`~alfasim_sdk.types.AddLayer` or :class:`~alfasim_sdk.types.UpdateLayer`.
 
 
     Example of usage:
@@ -270,7 +270,7 @@ def alfasim_configure_layers():
     """
     Allows plugins to configure new layers or associate a new field with a existing layer for ALFAsim's hydrodynamic model
 
-    In order to configure a new layer is necessary to return an :func:`~alfasim_sdk.types.AddLayer` object defining the
+    In order to configure a new layer is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
     required fields.
 
 
@@ -304,7 +304,7 @@ def alfasim_configure_layers():
 def alfasim_configure_phases():
     """
     Allows plugins to configure new phases or associate a new field with a existing phase from the application.
-    In order to configure a new phases is necessary to return an :func:`~alfasim_sdk.types.AddPhase` object defining the
+    In order to configure a new phases is necessary to return an :class:`~alfasim_sdk.types.AddPhase` object defining the
     required fields.
 
     Example of usage:
@@ -338,7 +338,7 @@ def alfasim_configure_phases():
     .. image:: _static/alfasim_configure_phase_example_1.png
         :scale: 80%
 
-    Is also possible to add additional fields to an existent phases using the :func:`~alfasim_sdk.types.UpdatePhase`.
+    Is also possible to add additional fields to an existent phases using the :class:`~alfasim_sdk.types.UpdatePhase`.
 
     Example of usage:
 

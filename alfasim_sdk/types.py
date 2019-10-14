@@ -361,11 +361,19 @@ class FileContent(BaseField):
 
 @attr.s(kw_only=True, frozen=True)
 class AddField:
+    """
+        Adding Fields
+    """
+
     name: str = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
 class AddLayer:
+    """
+        Adding Layers
+    """
+
     name: str = attr.ib()
     fields: list = attr.ib()
     continuous_field: str = attr.ib()
@@ -373,12 +381,20 @@ class AddLayer:
 
 @attr.s(kw_only=True, frozen=True)
 class UpdateLayer:
+    """
+        Updating Layers
+    """
+
     name: str = attr.ib()
     additional_fields: list = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
 class AddPhase:
+    """
+        Adding Phases
+    """
+
     name: str = attr.ib()
     fields: list = attr.ib()
     primary_field: str = attr.ib()
@@ -387,5 +403,9 @@ class AddPhase:
 
 @attr.s(kw_only=True, frozen=True)
 class UpdatePhase:
+    """
+        Updating Phases
+    """
+
     name: str = attr.ib()
     additional_fields: list = attr.ib()

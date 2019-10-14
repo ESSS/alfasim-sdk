@@ -48,7 +48,8 @@ Status
     :members:
 
 
-.. _api-variables-section:
+
+.. _api-context-section:
 
 Context
 -------
@@ -56,13 +57,30 @@ Context
 .. automodule:: alfasim_sdk.context
     :members:
 
+.. _api-mfd-section:
+
+Hydrodymaic Model Customization
+-------------------------------
+
+.. autoclass:: alfasim_sdk.types.AddField()
+
+.. autoclass:: alfasim_sdk.types.AddPhase()
+
+.. autoclass:: alfasim_sdk.types.UpdatePhase()
+
+.. autoclass:: alfasim_sdk.types.AddLayer()
+
+.. autoclass:: alfasim_sdk.types.UpdateLayer()
+
+.. _api-variables-section:
+
 Variables
 ---------
 
 .. automodule:: alfasim_sdk.variables
     :members:
 
-.. _api-context-section:
+
 
 .. _api-constants-section:
 
