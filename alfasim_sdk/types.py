@@ -147,7 +147,39 @@ class BaseField:
 
     .. rubric:: **Visible Expression**:
 
-enable_expr=lambda self, ctx: self.thi_type == "Salt",
+    Accepts a python function that controls either the component will be visible, or not.
+    The python function will receive two arguments, a instance of itself (to check local values) and a instance of
+    :func:`alfasim_sdk.context.Context` to retrieve information about the application.
+
+    This function must return a boolean, informing True (for visible) or False (for invisible).
+
+    Example.:
+
+    .. code-block:: python
+        :emphasize-lines: 1-2, 11
+
+        def my_check(self, ctx):
+            return self.bool_value
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            bool_value = Boolean(value=True, caption="Enabled")
+            N_ions = Quantity(
+                caption='Number of Ions',
+                value=1,
+                unit='-',
+                visible_expr=my_check,
+            )
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModel]
+
+    The image bellow shows the ``N_ions`` property visible, when the property ``bool_value`` is enabled (True)
+
+    .. image:: _static/base_field_visible_expr_1.png
+
+    .. image:: _static/base_field_visible_expr_2.png
 
     .. Development only
 
@@ -169,15 +201,42 @@ enable_expr=lambda self, ctx: self.thi_type == "Salt",
 @attr.s(kw_only=True)
 class String(BaseField):
     """
-    The String represents an input that the user can provide a string text for the application.
+    The String field represents an input that allows the user to enter and edit a single line of plain text.
 
-    GUI Representation:
-    On the GUI interface, the String represent an text input with a one-line text editor.
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, plus the following ones
 
-    Properties:
-    caption - property used as a label for the text input.
-    value   - property that holds the value informed from the user, or the default value that
-    should be displayed for the user.
+    :parameter str value: property to hold the value informed by the user.
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            string_field = String(
+                value="Default Value",
+                caption="String Field",
+            )
+
+    .. image:: _static/string_field_example.png
+
+    .. rubric:: **Accessing String Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++  you need to use :cpp:func:`get_plugin_input_data_string_size`
+    together with :cpp:func:`get_plugin_input_data_string_size`
+
+    .. rubric:: **Accessing String Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the String field will return the currently text as ``str``.
+
+    .. code-block:: python
+
+        >>> ctx.GetModel("MyModel").string_field
+        'Default Value'
+
+        >>> type(ctx.GetModel("MyModel").string_field)
+        <class 'str'>
+
     """
 
     value: str = attrib(validator=non_empty_str)
@@ -189,9 +248,51 @@ class Enum(BaseField):
     The Enum field provides list of options to the user, showing  only the select item but providing a way to display
     a list of all options through a combo-box.
 
-    :ivar str caption: A string to be displayed on the right side of the component.
-    :ivar List[str] values: A list of strings with the available options.
-    :ivar str initial: Indicates which one of the options should be selected per default. If not given, the first item in ``values`` will be used as default.
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, beside the listed the ones listed above:
+
+    :param values: A list of strings with the available options.
+    :param initial: Indicates which one of the options should be selected per default.
+                    If not given, the first item in ``values`` will be used as default.
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            enum_field = Enum(
+                values=["Option 1, Option 2"],
+                initial="Option 1",
+                caption="Enum Field",
+            )
+
+    .. image:: _static/enum_field_example.png
+
+    .. rubric:: **Accessing Enum Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_enum`
+
+    .. rubric:: **Accessing Enum Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the Enum field will return the currently selected option
+    as ``str``.
+
+    .. code-block:: bash
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            enum_field = Enum(
+                values=["Option 1", "Option 2"],
+                initial="Option 1",
+                caption="Enum Field",
+            )
+
+        # From Terminal
+        >>> ctx.GetModel("MyModel").enum_field
+        'Option 1'
+
+        >>> type(ctx.GetModel("MyModel").enum_field)
+        <class 'str'>
 
     """
 
@@ -255,24 +356,93 @@ class BaseReference(BaseField):
 @attr.s(kw_only=True)
 class Reference(BaseReference):
     """
-    The Reference field stores a reference to another model available at the application.
+    The Reference field provides a list of options to the user and displays the current item selected.
 
-    The are two types of models supported by this field.
-        - ALFAsimTypes: models from ALFAsim, example Tracers.
-        - Custom Data: a model defined withing the plugin.
-            Note.: In order to reference a custom data the model must be inside a container.
+    There are two types of models supported by this field.
 
-    GUI representation:
-        The reference field provides a list of options to the user and displays the current item selected.
+    :ALFAsimTypes: models from ALFAsim, example Tracers.
+    :Custom Data: a model defined within the plugin.
 
-    :ivar str caption:
+    .. note::
+        In order to reference custom data the model must be inside a container.
+
+    :param str caption:
         Property used as a label for the field.
 
-    :ivar Union[alfasim_sdk.types.ALFAsimType, type] ref_type:
+    :param Union[alfasim_sdk.types.ALFAsimType, type] ref_type:
         Property that indicates which type of data the Reference will hold.
 
-    :ivar Optional[str] container_type:
+    :param Optional[str] container_type:
         The name of the class that holds the ref_type, this property must be used when the ref_type references model from the plugin.
+
+    Example using ``ALFAsimTypes``:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            tracer_ref = Reference(ref_type=TracerType, caption="Tracer Type")
+
+
+    .. image:: _static/reference_field_example_1.png
+
+    Example using ``Custom Data``:
+
+    .. code-block:: python
+        @data_model(caption="My Model")
+        class MyModel:
+            field_1 = String(value="Value 1", caption="String 1")
+
+        @container_model(caption="My Container", model=MyModel, icon="")
+        class MyContainer:
+            internal_ref = Reference(
+                ref_type=MyModel,
+                container_type="MyContainer",
+                caption="Internal Reference"
+            )
+
+    .. image:: _static/reference_field_example_2.png
+
+    .. rubric:: **Accessing Reference Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_reference`
+
+    .. rubric:: **Accessing Reference Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the Reference field will return the currently selected option
+    object instance.
+
+    With the instance, you can access all attributes from the object normally. Check the example below.
+
+    .. code-block:: bash
+
+        @data_model(caption="My Model")
+        class MyModel:
+            field_1 = String(value="Value 1", caption="String 1")
+
+        @container_model(caption="My Container", model=MyModel, icon="")
+        class MyContainer:
+            tracer_ref = Reference(ref_type=TracerType, caption="Tracer Type")
+            internal_ref = Reference(
+                ref_type=MyModel,
+                container_type="MyContainer",
+                caption="Internal Reference"
+            )
+
+        # Example with Tracer
+        >>> ctx.GetModel("MyContainer").tracer_ref
+        TracerModel(gas_partition_coefficient=[...])
+
+        >>> ctx.GetModel("MyContainer").tracer_ref.gas_partition_coefficient
+        Scalar(0.0, 'kg/kg', 'mass fraction')
+
+        # Example with Custom Data
+        >>> ctx.GetModel("MyContainer").internal_ref
+        MyModel(field_1='Value 1', name='My Model 1')
+
+        >>> ctx.GetModel("MyContainer").internal_ref.field_1
+        'Value 1'
+
     """
 
 

@@ -30,6 +30,11 @@ Types is a module which supplies UI elements for creating user interfaces with t
 
 .. autoclass:: alfasim_sdk.types.BaseField()
 
+.. autoclass:: alfasim_sdk.types.String()
+
+.. autoclass:: alfasim_sdk.types.Enum()
+
+.. autoclass:: alfasim_sdk.types.Reference()
 
 .. _api-layout-section:
 
