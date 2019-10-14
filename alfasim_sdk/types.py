@@ -369,11 +369,11 @@ class Reference(BaseReference):
     :param str caption:
         Property used as a label for the field.
 
-    :param Union[alfasim_sdk.types.ALFAsimType, type] ref_type:
+    :param ref_type:
         Property that indicates which type of data the Reference will hold.
 
-    :param Optional[str] container_type:
-        The name of the class that holds the ref_type, this property must be used when the ref_type references model from the plugin.
+    :param container_type:
+        The name of the class that holds the ref_type, this property must be used when the ``ref_type`` references model from the plugin.
 
     Example using ``ALFAsimTypes``:
 
@@ -381,7 +381,10 @@ class Reference(BaseReference):
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
-            tracer_ref = Reference(ref_type=TracerType, caption="Tracer Type")
+            tracer_ref = Reference(
+                ref_type=TracerType,
+                caption="Tracer Type",
+            )
 
 
     .. image:: _static/reference_field_example_1.png
@@ -389,6 +392,7 @@ class Reference(BaseReference):
     Example using ``Custom Data``:
 
     .. code-block:: python
+
         @data_model(caption="My Model")
         class MyModel:
             field_1 = String(value="Value 1", caption="String 1")
@@ -422,7 +426,10 @@ class Reference(BaseReference):
 
         @container_model(caption="My Container", model=MyModel, icon="")
         class MyContainer:
-            tracer_ref = Reference(ref_type=TracerType, caption="Tracer Type")
+            tracer_ref = Reference(
+                ref_type=TracerType,
+                caption="Tracer Type",
+            )
             internal_ref = Reference(
                 ref_type=MyModel,
                 container_type="MyContainer",
@@ -449,30 +456,160 @@ class Reference(BaseReference):
 @attr.s(kw_only=True)
 class MultipleReference(BaseReference):
     """
-    The MultipleReference field stores a reference to another model in a container, providing a way to store
-    multiples references of the same type.
+    The MultipleReference field works similar to :func:`~alfasim_sdk.types.Reference`, providing a list of options
+    to the user, but allowing multiple values, of the same type, to be chosen.
 
     The are two types of models supported by this field.
-        - ALFAsimTypes: models from ALFAsim, example Tracers.
-        - Custom Data: a model defined withing the plugin.
-            Note.: In order to reference a custom data the model must be inside a container.
+    :ALFAsimTypes: models from ALFAsim, example Tracers.
+    :Custom Data: a model defined withing the plugin.
 
-    GUI representation:
-        The MultipleReference field provides a list of selectable options to the user which can select one or mode items.
+    .. note::
+        In order to reference a custom data the model must be inside a container.
 
     :ivar str caption:
         Property used as a label for the field.
 
-    :ivar Union[alfasim_sdk.types.ALFAsimType, type] ref_type:
+    :ivar ref_type:
         Property that indicates which type of data the Reference will hold.
 
-    :ivar Optional[str] container_type:
+    :ivar container_type:
         The name of the class that holds the ref_type, this property must be used when the ref_type references model from the plugin.
+
+    Example using ``ALFAsimType``
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            tracer_ref = MultipleReference(
+                ref_type=TracerType,
+                caption="Tracer Type",
+            )
+
+
+    .. image:: _static/multiplereference_field_example_1.png
+
+    Example using ``Custom Data``:
+
+    .. code-block:: python
+
+        @data_model(caption="My Model")
+        class MyModel:
+            field_1 = String(value="Value 1", caption="String 1")
+
+        @container_model(caption="My Container", model=MyModel, icon="")
+        class MyContainer:
+            internal_ref = MultipleReference(
+                ref_type=MyModel,
+                container_type="MyContainer",
+                caption="Internal Reference"
+            )
+
+    .. image:: _static/multiplereference_field_example_2.png
+
+    .. rubric:: **Accessing MultipleReference Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_multiplereference_selected_size`
+
+    .. rubric:: **Accessing MultipleReference Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the MultipleReference field will return a list with
+    the currently selected option objects instances.
+
+    With the instance, you can access all attributes from the object. Check the example below.
+
+    .. code-block:: bash
+
+        @data_model(caption="My Model")
+        class MyModel:
+            field_1 = String(value="Value 1", caption="String 1")
+
+        @container_model(caption="My Container", model=MyModel, icon="")
+        class MyContainer:
+            internal_ref = MultipleReference(
+                ref_type=MyModel,
+                container_type="MyContainer",
+                caption="Internal Reference"
+            )
+
+        # Example
+        >>> ctx.GetModel("MyContainer").internal_ref
+        [MyModel(field_1='Value 1', name='My Model 1'),
+        MyModel(field_1='Value 1', name='My Model 4')]
+
+        >>> type(ctx.GetModel("MyContainer").internal_ref)
+        <class 'list'>
+
+        >>> ctx.GetModel("MyContainer").internal_ref[0]
+        MyModel(field_1='Value 1', name='My Model 1')
+
     """
 
 
 @attr.s(kw_only=True, frozen=True)
 class Quantity(BaseField):
+    """
+    The Quantity field provides a way to the user provide a scalar value into the application.
+
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, beside the listed the ones listed above:
+    :param values:  A number value.
+    :param unit:    Unit for the given scalar.
+
+    All scalar values are created using the `Barril library`_
+
+    Checkout the Barril documentation, to see all available units available units [ Needs to implement on Barril this section]
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            quantity_field = Quantity(
+                value=1,
+                unit="degC",
+                caption="Quantity Field",
+            )
+
+    .. image:: _static/quantity_field_example.png
+
+    .. rubric:: **Accessing Quantity Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_quantity`
+
+    .. rubric:: **Accessing Quantity Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the Quantity field will return a ``Scalar`` object, with
+    the current value and unit.
+    Check out the `Scalar documentation from Barril`_ for more details about the usage.
+
+    .. code-block:: bash
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            quantity_field = Enum(
+                values=["Option 1", "Option 2"],
+                initial="Option 1",
+                caption="Enum Field",
+            )
+
+        # From Terminal
+        >>> ctx.GetModel("MyModel").quantity_field
+        Scalar(1.0, 'degC', 'temperature')
+
+        >>> ctx.GetModel("MyModel").quantity_field.value
+        1.0
+
+        >>> ctx.GetModel("MyModel").quantity_field.unit
+        'degC'
+
+        >>> ctx.GetModel("MyModel").quantity_field.GetValue('K')
+        274.15
+
+    .. _Barril library: https://github.com/ESSS/barril
+    .. _Scalar documentation from Barril:  https://barril.readthedocs.io/en/latest/api.html#scalar
+    """
+
     value: numbers.Real = attrib(validator=instance_of(numbers.Real))
     unit: str = attrib(validator=[non_empty_str, valid_unit])
 

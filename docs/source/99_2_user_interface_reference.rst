@@ -36,6 +36,19 @@ Types is a module which supplies UI elements for creating user interfaces with t
 
 .. autoclass:: alfasim_sdk.types.Reference()
 
+.. autoclass:: alfasim_sdk.types.MultipleReference()
+
+.. autoclass:: alfasim_sdk.types.Quantity()
+
+.. autoclass:: alfasim_sdk.types.Table()
+
+.. autoclass:: alfasim_sdk.types.TableColumn()
+
+.. autoclass:: alfasim_sdk.types.Boolean()
+
+.. autoclass:: alfasim_sdk.types.FileContent()
+
+
 .. _api-layout-section:
 
 Layout
