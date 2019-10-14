@@ -52,9 +52,9 @@ class BaseField:
     """
     Base field for all types available at ALFAsim.
 
-    :parameter str caption: Label to be displayed on the right side of the component.
+    :param caption: Label to be displayed on the right side of the component.
 
-    :param str tooltip: Shows a tip, a short piece of text.
+    :param tooltip: Shows a tip, a short piece of text.
 
     :param Callable enable_expr: Function to evaluate if the component will be enabled or not.
 
@@ -633,6 +633,10 @@ class TableColumn(BaseField):
 
 @attr.s(kw_only=True, frozen=True)
 class Table(BaseField):
+    """
+
+    """
+
     rows: FrozenSet[TableColumn] = attrib(converter=tuple)
 
     @rows.validator
@@ -648,6 +652,47 @@ class Table(BaseField):
 
 @attr.s(kw_only=True)
 class Boolean(BaseField):
+    """
+    The Boolean field provides a checkbox for to the user selected/deselected a property.
+
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, beside the listed the ones listed above:
+    :param value:  A boolean informing the initial state from the Field
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            boolean_field = Boolean(
+                value=False,
+                caption="Boolean Field",
+            )
+
+    .. image:: _static/boolean_field_example_1.png
+
+    .. rubric:: **Accessing Boolean Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_boolean`
+
+    .. rubric:: **Accessing Quantity Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the Boolean field will return a boolean value
+
+    .. code-block:: bash
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            quantity_field = Boolean(
+                value=False,
+                caption="Boolean Field",
+            )
+
+        # From Terminal
+        >>> ctx.GetModel("MyModel").boolean_field
+        False
+    """
+
     value: bool = attrib(validator=instance_of(bool))
 
 
@@ -657,12 +702,56 @@ class FileContent(BaseField):
     The FileContent component provides a platform-native file dialog to the user to be able to select a file.
     The name of the selected file will be available over the GUI and be enabled to be manually changed.
 
-    If you want to make the file mandatory is recommended to include a status monitor in your plugin
-    to make sure that that a file is selected.
+    .. note::
 
-    For more details about status monitor check alfasim_sdk.status.ErrorMessage
+        If you want to make the file mandatory is recommended to include a status monitor in your plugin
+        to make sure that that a file is selected.
 
-    :ivar caption: caption - label to be used on the left side of the component, that informs the selected file.
+        For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
+
+    :param caption: Label to be displayed on the right side of the component.
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Plugin")
+        class MyModel:
+            file_content_field = FileContent(caption="FileContent Field")
+
+    .. image:: _static/file_content_field_example_1.png
+
+    .. rubric:: **Accessing FileContent Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_file_content`
+    together with :cpp:func:`get_plugin_input_data_file_content_size`
+
+    .. rubric:: **Accessing Quantity Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the FileContent field will return a FileContent object,
+    a Model that represent a file from the filesystem.
+
+    Class FileContent
+
+    :path:          Return a `Path object`_ of the file.
+    :content:       The content from the file in binary format.
+    :size:          The size of the file in bytes.
+    :modified_data: Return a `Datetime object`_, with the last time the file was modified
+
+    >>> ctx.GetModel("MyModel").file_content_field.path
+    WindowsPath('C:/ol-wax-1.wax')
+
+    >>> ctx.GetModel("MyModel").file_content_field.content
+    b"!Name of Table  [...] "
+
+    >>> ctx.GetModel("MyModel").file_content_field.size
+    90379
+
+    >>> ctx.GetModel("MyModel").file_content_field.modified_data
+    datetime.datetime(2019, 5, 10, 14, 22, 11, 50795)
+
+    .. _Path object: https://docs.python.org/3/library/pathlib.html#pure-paths
+    .. _Datetime object: https://docs.python.org/3/library/datetime.html#datetime-objects
     """
 
 
