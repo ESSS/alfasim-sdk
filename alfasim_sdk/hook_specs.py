@@ -15,7 +15,7 @@ def initialize(ctx: "void*") -> "int":
 
     Examples of usage:
 
-    A minimal `HOOK_INITIALIZE` needed could be:
+    A minimal ``HOOK_INITIALIZE`` needed could be:
 
     .. code-block:: c++
         :linenos:
@@ -143,7 +143,8 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             int size_U = -1;
             int size_E = -1;
             int liq_id = -1;
-            errcode = alfasim_sdk_api.get_field_id(ctx, &liquid_id, "liquid");
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &liquid_id, "liquid");
             double* vel;
             VariableScope Fields_OnFaces = {
                 GridScope::FACE,
@@ -243,7 +244,8 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
             int size_t = -1;
             int size_p_var = -1;
             int liq_id = -1;
-            errcode = alfasim_sdk_api.get_field_id(ctx, &liquid_id, "liquid");
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &liquid_id, "liquid");
             double* tracer_mass_fraction;
             VariableScope global_OnCenters = {
                 GridScope::FACE,
@@ -258,7 +260,8 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
                 "my_tracer", // Added by User interface
                 plugin_id);
             int tracer_id = -1;
-            errcode = alfasim_sdk_api.get_tracer_id(ctx, &tracer_id, tracer_ref);
+            errcode = alfasim_sdk_api.get_tracer_id(
+                ctx, &tracer_id, tracer_ref);
             double *tracer_mass_fraction
             errcode = alfasim_sdk_api.get_simulation_tracer_array(
                 ctx,
@@ -542,7 +545,7 @@ def initialize_state_variables_calculator(
             }
             // MyStruct is a developer defined struct to hold
             // all important information for plugin hooks.
-            MyStruct* data.
+            MyStruct* data = nullptr;
             errcode = alfasim_sdk_api.get_plugin_data(
                     ctx, (void**) &data, plugin_id, thread_id);
             // MyFunction is a function implemented by
@@ -598,25 +601,25 @@ def calculate_state_variable(
     **c++ signature** : ``HOOK_CALCULATE_STATE_VARIABLE(void* ctx, void* P, void* T, int n_control_volumes, int n_layers,
     int phase_id, int property_id, void* output)``
 
-    Hook to calculate the state variable given by the `property_id` ( a See :cpp:enum:`StateVariable` value), for the
+    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the
     phase with `phase_id` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id` API
     function - It is not advisable to use hardcoded numbers).
 
-    List of affected variables:
-    - Density
-    - Viscosity
-    - Heat Capacity
-    - Partial Derivative of Density in Relation to Pressure
-    - Partial Derivative of Density in Relation to Temperature
-    - Enthalpy
-    - Thermal Conductivity
+    List of affected variables:|br|
+    - ``Density`` |br|
+    - ``Viscosity`` |br|
+    - ``Heat Capacity`` |br|
+    - ``Partial Derivative of Density in Relation to Pressure`` |br|
+    - ``Partial Derivative of Density in Relation to Temperature`` |br|
+    - ``Enthalpy`` |br|
+    - ``Thermal Conductivity`` |br|
 
     :param ctx: ALFAsim's plugins context
     :param P: Pressure values array
     :param T: Temperature values array
     :param n_control_volumes: Number of control volumes
     :param n_layers: Number of layers
-    :param n_phase_id: Is of phase in which the property must be calculated
+    :param n_phase_id: Id of phase in which the property must be calculated
     :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
                         property must be calculated
     :param output: Output values array
@@ -634,7 +637,9 @@ def calculate_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_STATE_VARIABLE(
-            void* ctx, void* P, void* T, int n_control_volumes, int n_layers, int phase_id, int property_id, void* output)
+            void* ctx, void* P, void* T,
+            int n_control_volumes, int n_layers,
+            int phase_id, int property_id, void* output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -653,10 +658,10 @@ def calculate_state_variable(
                 for (int i = 0; i < n_control_volumes; ++i) {
                     // If the property has a constant value
                     output[i] = data.constant_density;
-                    // If the property has a constant value
+                    // If the property must be computed
                     // MyStruct has a function called 'compute_density()'
                     output[i] = data.compute_density(
-                        (double *)P, T, n_control_volumes);
+                        (double *)P[i], (double *)T[i]);
                 }
             }
             return OK;
@@ -665,6 +670,7 @@ def calculate_state_variable(
     .. warning::
         The plugin developer must **NOT** change any variable other than the output. The ``output`` size is
         ``n_control_volumes`` .
+
     """
 
 
@@ -679,23 +685,80 @@ def calculate_phase_pair_state_variable(
     output: "void*",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes
+    **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes,
     int phase1_id, int phase2_id, int property_id, void* output)``
 
-    Hook to calculate the state variable given by the `property_id` (See alfasim_sdk_api common
-    headers to retrieve the available property ids), for the phase pair `(phase1_id, phase2_id)`
-    (Note that the phase id is the same as the one retrieved from the `get_phase_id()` API function
-    - It is not advisable to use hardcoded numbers).
+    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:StateVariable values), for the phase
+    pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :py:func:`get_phase_id()`
+    API function - It is not advisable to use hardcoded numbers).
 
-    List of affected variables:
-    - Interfacial Tension
+    List of affected variables:|br|
+    - ``Interfacial Tension``
+
+    :param ctx: ALFAsim's plugins context
+    :param P: Pressure values array
+    :param T_mix: Mixture temperature values array
+    :param n_control_volumes: Number of control volumes
+    :param n_phase1_id: Id of phase one in which the property must be calculated
+    :param n_phase2_id: Id of phase two in which the property must be calculated
+    :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
+                        property must be calculated
+    :param output: Output values array
+    :returns: Return OK if successful or anything different if failed
 
     The output parameter must be filled with the calculated property for each control volume. The
-    pressure 'P' and mixture temperature 'T_mix' are given in order to perform the calculation.
+    pressure ``P`` and mixture temperature ``T_mix`` are given in order to perform the calculation.
     The number of control volumes is also given for convenience.
 
-    The programmer must NOT change any variable other than the output. The output size is
-    n_control_volumes.
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(
+            void* ctx, void* P, void* T_mix, int n_control_volumes,
+            int phase1_id, int phase2_id, int property_id, void* output)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            int gas_phase_id = -1;
+            errcode = alfasim_sdk_api.get_phase_id(
+                ctx, &gas_phase_id, "gas");
+
+            if ((
+                (phase1_id == data.my_added_phase_id)
+                && (phase1_id == gas_phase_id)
+                ) || (
+                (phase1_id == gas_phase_id)
+                && (phase1_id == data.my_added_phase_id)
+                ))
+            {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the property has a constant value
+                    output[i] = data.constant_surface_tension;
+                    // If the property must be computed
+                    // MyStruct has a function
+                    // called 'compute_surface_tension()'
+                    output[i] = data.compute_surface_tension(
+                        (double *)P[i], (double *)T_mix[i]);
+                }
+            }
+            return OK;
+        }
+
+    .. warning::
+        The plugin developer must **NOT** change any variable other than the output. The ``output`` size is
+        ``n_control_volumes``.
+
     """
 
 
@@ -704,7 +767,24 @@ def finalize_state_variables_calculator(ctx: "void*") -> "int":
     **c++ signature** : ``HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)``
 
     Hook for the state variables calculator finalization.
-    The programmer should free/delete any allocated data from the initialization hook.
+    The plugin developer should free/delete any allocated data from the :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`.
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
+    If there is no need memory deallocation a minimal implementation would be:
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)
+        {
+            return OK;
+        }
+
     """
 
 
@@ -715,15 +795,58 @@ def initialize_particle_diameter_of_solids_fields(
     solid_field_id: "int",
 ) -> "int":
     """
-    Internal simulator hook to initialize particle diameter of solids fields.
+    **c++ signature** : ``HOOK_INITIALIZE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(void* ctx, void* particle_diameter,
+    int n_control_volumes, int solids_field_id)``
+
+    Internal simulator hook to initialize particle diameter of solid fields. This `hook` follows the same idea of
+    :py:func:`HOOK_UPDATE_PLUGIN_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`,
+    which makes the initialization in the moment that there is no previous time step data available.
 
     :param ctx: ALFAsim's plugins context
     :param particle_diameter: Particle diameter of a given solid field,
     :param n_control_volumes: Number of control volumes,
     :param solid_field_id: Index of the solid field in which the `particle_diameter`
                            Should be calculated.
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_INITIALIZE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
+        void* ctx, void* particle_diameter,
+        int n_control_volumes, int solids_field_id)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (solids_field_id != data.my_added_solid_field_id) {
+                return OK;
+            } else {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the particle size is constant
+                    output[i] = data.constant_particle_size;
+                    // The value is calculated
+                    // MyStruct has a function
+                    // called 'initial_particle_size()'
+                    output[i] = data.initial_particle_size(
+                             // List of params that can be
+                             // retrieved by get_simulation_array()
+                             );
+                }
+            }
+            return OK;
+        }
+
     """
 
 
@@ -734,15 +857,58 @@ def update_particle_diameter_of_solids_fields(
     solid_field_id: "int",
 ) -> "int":
     """
-    Internal simulator hook to update/calculate particle diameter of solids fields.
+    **c++ signature** : ``HOOK_UPDATE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(void* ctx, void* particle_diameter,
+    int n_control_volumes, int solids_field_id)``
+
+    Internal simulator hook to update/calculate particle diameter of solid fields. It is called right before any update
+    secondary variable from |alfasim|'s Solver, because they may depend on the solids particle size (for example `Slurry
+    Viscosity` calculated by ``Solids Model``)
 
     :param ctx: ALFAsim's plugins context
     :param particle_diameter: Particle diameter of a given solid field,
     :param n_control_volumes: Number of control volumes,
     :param solid_field_id: Index of the solid field in which the `particle_diameter`
                            Should be calculated.
-
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
+        void* ctx, void* particle_diameter,
+        int n_control_volumes, int solids_field_id)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (solids_field_id != data.my_added_solid_field_id) {
+                return OK;
+            } else {
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    // If the particle size is constant
+                    output[i] = data.constant_particle_size;
+                    // The value is calculated
+                    // MyStruct has a function
+                    // called 'compute_particle_size()'
+                    output[i] = data.compute_particle_size(
+                             // List of params that can be
+                             // retrieved by get_simulation_array()
+                             );
+                }
+            }
+            return OK;
+        }
+
     """
 
 
@@ -795,6 +961,120 @@ def calculate_slurry_viscosity(
     """
 
 
+def initialize_mass_fraction_of_tracer(
+    ctx: "void*", phi_initial: "void*", tracer_index: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_initial, int tracer_index)``
+
+    Internal tracer model Hook to initialize the mass fraction of tracer, given by `tracer_id`, in the entire
+    network. The output variable `phi_initial` is the initial mass fraction of the given tracer in respect
+    to the mass of the mixture.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def calculate_mass_fraction_of_tracer_in_phase(
+    ctx: "void*",
+    phi: "void*",
+    phi_phase: "void*",
+    tracer_index: "int",
+    phase_index: "int",
+    n_control_volumes: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE(void* ctx, void* phi, void* phi_phase,
+    int tracer_index, int phase_index, int n_control_volumes)``
+
+    Internal tracer model `Hook` to calculate the mass fraction of tracer, given by `tracer_id`, in phase,
+    given by `phase_id`. The input variable `phi` is the mass fraction of the given tracer in respect to
+    the mass of the mixture. The output variable `phi_phase` is the mass fraction of the given tracer in
+    respect to the mass of the given phase.
+
+    The programmer must NOT change `phi` variable, only the output variable `phi_phase`. Both `phi` and
+    `phi_phase` have size equal to `n_control_volumes`.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def calculate_mass_fraction_of_tracer_in_field(
+    ctx: "void*",
+    phi_phase: "void*",
+    phi_field: "void*",
+    tracer_index: "int",
+    field_index: "int",
+    phase_index_of_field: "int",
+    n_control_volumes: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD(void* ctx, void* phi_phase, void* phi_field,
+    int tracer_index, int field_index, int phase_index_of_field, int n_control_volumes)``
+
+    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in field,
+    given by `field_id`. The input variable `phi_phase` is the mass fraction of the given tracer in
+    respect to the mass of the given phase, in which the id is `phase_id_of_field`. The output variable
+    `phi_field` is the mass fraction of the given tracer in respect to the mass of the given field.
+
+    The programmer must NOT change `phi_phase` variable, only the output variable `phi_field`. Both
+    `phi_phase` and `phi_field` have size equal to `n_control_volumes`.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
+    ctx: "void*", phi_presc: "void*", tracer_index: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
+    int tracer_index)``
+
+    Internal tracer model Hook to set the initial prescribed bondary condition of mass fraction of tracer,
+    given by `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
+    in respect to the mass of the mixture.
+
+    It's important to note that all boundary nodes will be populated with `phi_presc` value set by this hook.
+
+    Another important information is that this hook doesn't have a plugin context, since it is the first value
+    that should be set in the boundary condition of mass fraction related to the user defined tracer. Any kind
+    of simulator data is not available at this time, however the hook "update_boundary_condition_of_mass_fraction_of_tracer"
+    allows the programmer to update this value.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def update_boundary_condition_of_mass_fraction_of_tracer(
+    ctx: "void*",
+    phi_presc: "void*",
+    tracer_index: "int",
+    vol_frac_bound: "void*",
+    n_fields: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
+    void* phi_field, int tracer_index, void* vol_frac_bound, int n_fields)``
+
+    Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
+    The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
+    the mass of the mixture.
+
+    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
+    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
+    calculated.
+
+    :param ctx: A
+    :param phi_presc: A
+    :param tracer_index: A
+    :param vol_frac_bound: A
+    :param n_fields: A
+    :type test1: test2 or test3
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -828,106 +1108,6 @@ def calculate_entrained_liquid_fraction(
     :returns:
         Entrainment fraction, defined as the ratio between the droplet mass flow rate and the total liquid
         mass flow rate (dimensionless)
-    """
-
-
-def calculate_mass_fraction_of_tracer_in_phase(
-    ctx: "void*",
-    phi: "void*",
-    phi_phase: "void*",
-    tracer_index: "int",
-    phase_index: "int",
-    n_control_volumes: "int",
-) -> "int":
-    """
-    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in phase,
-    given by `phase_id`. The input variable `phi` is the mass fraction of the given tracer in respect to
-    the mass of the mixture. The output variable `phi_phase` is the mass fraction of the given tracer in
-    respect to the mass of the given phase.
-
-    The programmer must NOT change `phi` variable, only the output variable `phi_phase`. Both `phi` and
-    `phi_phase` have size equal to `n_control_volumes`.
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def calculate_mass_fraction_of_tracer_in_field(
-    ctx: "void*",
-    phi_phase: "void*",
-    phi_field: "void*",
-    tracer_index: "int",
-    field_index: "int",
-    phase_index_of_field: "int",
-    n_control_volumes: "int",
-) -> "int":
-    """
-    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in field,
-    given by `field_id`. The input variable `phi_phase` is the mass fraction of the given tracer in
-    respect to the mass of the given phase, in which the id is `phase_id_of_field`. The output variable
-    `phi_field` is the mass fraction of the given tracer in respect to the mass of the given field.
-
-    The programmer must NOT change `phi_phase` variable, only the output variable `phi_field`. Both
-    `phi_phase` and `phi_field` have size equal to `n_control_volumes`.
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def update_boundary_condition_of_mass_fraction_of_tracer(
-    ctx: "void*",
-    phi_presc: "void*",
-    tracer_index: "int",
-    vol_frac_bound: "void*",
-    n_fields: "int",
-) -> "int":
-    """
-    Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
-    The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
-    the mass of the mixture.
-
-    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
-    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
-    calculated.
-
-    :param ctx: A
-    :param phi_presc: A
-    :param tracer_index: A
-    :param vol_frac_bound: A
-    :param n_fields: A
-    :type test1: test2 or test3
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def initialize_mass_fraction_of_tracer(
-    ctx: "void*", phi_initial: "void*", tracer_index: "int"
-) -> "int":
-    """
-    Internal tracer model Hook to initialize the mass fraction of tracer, given by `tracer_id`, in the entire
-    network. The output variable `phi_initial` is the initial mass fraction of the given tracer in respect
-    to the mass of the mixture.
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
-    ctx: "void*", phi_presc: "void*", tracer_index: "int"
-) -> "int":
-    """
-    Internal tracer model Hook to set the initial prescribed bondary condition of mass fraction of tracer,
-    given by `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
-    in respect to the mass of the mixture.
-
-    It's important to note that all boundary nodes will be populated with `phi_presc` value set by this hook.
-
-    Another important information is that this hook doesn't have a plugin context, since it is the first value
-    that should be set in the boundary condition of mass fraction related to the user defined tracer. Any kind
-    of simulator data is not available at this time, however the hook "update_boundary_condition_of_mass_
-    fraction_of_tracer" allows the programmer to update this value.
-
-    :returns: Return OK if successful or anything different if failed
     """
 
 

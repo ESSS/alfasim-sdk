@@ -321,6 +321,7 @@ def alfasim_configure_phases():
                         'plugin_dispersed_field',
                     ],
                     primary_field='plugin_continuous_field',
+                    is_solid=False,
                 )
             ]
 
@@ -362,7 +363,7 @@ def alfasim_get_phase_properties_calculated_from_plugin():
     Allows the plugin to calculate the properties (state variables) of a phase.
 
     Must return a list of phase names in which state variables will be computed for. If the plugin implements this `hook`
-     four C/C++ Solver `hooks` also must be implemented. They are:
+    four C/C++ Solver `hooks` also must be implemented. They are:
 
      - :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`
      - :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_state_variable>`
@@ -387,10 +388,11 @@ def alfasim_get_phase_properties_calculated_from_plugin():
 @hookspec
 def alfasim_get_phase_interaction_properties_calculated_from_plugin():
     """
+    Allows the plugin to calculate the properties that are related to a pair of phases, like `surface tension`.
 
     Must return a list of tuple of phases in which state variables will be computed for. In order to
-    implement the properties, HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE must be implemented on the C
-    plugin.
+    implement the properties, :py:func:`HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_phase_pair_state_variable>`
+    must be implemented on the C/C++ part of the plugin.
 
     Example of usage:
 
@@ -411,10 +413,17 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
 @hookspec
 def alfasim_get_user_defined_tracers_from_plugin():
     """
+    Allows the plugin to add new tracers in the |alfasim|'s Tracer Solver, in which the transport equation will be
+    modified by Solver `hooks` listed below.
 
-    Must return a list of tracers in which the internal tracer model hooks will be implemented for.
-    the HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE, HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_FIELD
-    and UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER must be implemented on the C plugin.
+    Must return a list of tracers in which the internal tracer model `hooks` will be implemented for.
+    The folowing C/C++ Solver `hooks` must be implemented:
+
+     - :py:func:`HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer>`
+     - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE<alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase>`
+     - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_FIELD<alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_field>`
+     - :py:func:`HOOK_SET_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer>`
+     - :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
 
     Example of usage:
 
