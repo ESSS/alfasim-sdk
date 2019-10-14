@@ -15,7 +15,7 @@ def initialize(ctx: "void*") -> "int":
 
     Examples of usage:
 
-    A minimal `HOOK_INITIALIZE` needed could be:
+    A minimal ``HOOK_INITIALIZE`` needed could be:
 
     .. code-block:: c++
         :linenos:
@@ -143,7 +143,8 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             int size_U = -1;
             int size_E = -1;
             int liq_id = -1;
-            errcode = alfasim_sdk_api.get_field_id(ctx, &liquid_id, "liquid");
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &liquid_id, "liquid");
             double* vel;
             VariableScope Fields_OnFaces = {
                 GridScope::FACE,
@@ -243,7 +244,8 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
             int size_t = -1;
             int size_p_var = -1;
             int liq_id = -1;
-            errcode = alfasim_sdk_api.get_field_id(ctx, &liquid_id, "liquid");
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &liquid_id, "liquid");
             double* tracer_mass_fraction;
             VariableScope global_OnCenters = {
                 GridScope::FACE,
@@ -258,7 +260,8 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
                 "my_tracer", // Added by User interface
                 plugin_id);
             int tracer_id = -1;
-            errcode = alfasim_sdk_api.get_tracer_id(ctx, &tracer_id, tracer_ref);
+            errcode = alfasim_sdk_api.get_tracer_id(
+                ctx, &tracer_id, tracer_ref);
             double *tracer_mass_fraction
             errcode = alfasim_sdk_api.get_simulation_tracer_array(
                 ctx,
@@ -602,21 +605,14 @@ def calculate_state_variable(
     phase with `phase_id` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id` API
     function - It is not advisable to use hardcoded numbers).
 
-    List of affected variables:
-
-    - ``Density``
-
-    - ``Viscosity``
-
-    - ``Heat Capacity``
-
-    - ``Partial Derivative of Density in Relation to Pressure``
-
-    - ``Partial Derivative of Density in Relation to Temperature``
-
-    - ``Enthalpy``
-
-    - ``Thermal Conductivity``
+    List of affected variables:|br|
+    - ``Density`` |br|
+    - ``Viscosity`` |br|
+    - ``Heat Capacity`` |br|
+    - ``Partial Derivative of Density in Relation to Pressure`` |br|
+    - ``Partial Derivative of Density in Relation to Temperature`` |br|
+    - ``Enthalpy`` |br|
+    - ``Thermal Conductivity`` |br|
 
     :param ctx: ALFAsim's plugins context
     :param P: Pressure values array
@@ -696,8 +692,7 @@ def calculate_phase_pair_state_variable(
     pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :py:func:`get_phase_id()`
     API function - It is not advisable to use hardcoded numbers).
 
-    List of affected variables:
-
+    List of affected variables:|br|
     - ``Interfacial Tension``
 
     :param ctx: ALFAsim's plugins context
@@ -966,6 +961,120 @@ def calculate_slurry_viscosity(
     """
 
 
+def initialize_mass_fraction_of_tracer(
+    ctx: "void*", phi_initial: "void*", tracer_index: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_initial, int tracer_index)``
+
+    Internal tracer model Hook to initialize the mass fraction of tracer, given by `tracer_id`, in the entire
+    network. The output variable `phi_initial` is the initial mass fraction of the given tracer in respect
+    to the mass of the mixture.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def calculate_mass_fraction_of_tracer_in_phase(
+    ctx: "void*",
+    phi: "void*",
+    phi_phase: "void*",
+    tracer_index: "int",
+    phase_index: "int",
+    n_control_volumes: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE(void* ctx, void* phi, void* phi_phase,
+    int tracer_index, int phase_index, int n_control_volumes)``
+
+    Internal tracer model `Hook` to calculate the mass fraction of tracer, given by `tracer_id`, in phase,
+    given by `phase_id`. The input variable `phi` is the mass fraction of the given tracer in respect to
+    the mass of the mixture. The output variable `phi_phase` is the mass fraction of the given tracer in
+    respect to the mass of the given phase.
+
+    The programmer must NOT change `phi` variable, only the output variable `phi_phase`. Both `phi` and
+    `phi_phase` have size equal to `n_control_volumes`.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def calculate_mass_fraction_of_tracer_in_field(
+    ctx: "void*",
+    phi_phase: "void*",
+    phi_field: "void*",
+    tracer_index: "int",
+    field_index: "int",
+    phase_index_of_field: "int",
+    n_control_volumes: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD(void* ctx, void* phi_phase, void* phi_field,
+    int tracer_index, int field_index, int phase_index_of_field, int n_control_volumes)``
+
+    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in field,
+    given by `field_id`. The input variable `phi_phase` is the mass fraction of the given tracer in
+    respect to the mass of the given phase, in which the id is `phase_id_of_field`. The output variable
+    `phi_field` is the mass fraction of the given tracer in respect to the mass of the given field.
+
+    The programmer must NOT change `phi_phase` variable, only the output variable `phi_field`. Both
+    `phi_phase` and `phi_field` have size equal to `n_control_volumes`.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
+    ctx: "void*", phi_presc: "void*", tracer_index: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
+    int tracer_index)``
+
+    Internal tracer model Hook to set the initial prescribed bondary condition of mass fraction of tracer,
+    given by `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
+    in respect to the mass of the mixture.
+
+    It's important to note that all boundary nodes will be populated with `phi_presc` value set by this hook.
+
+    Another important information is that this hook doesn't have a plugin context, since it is the first value
+    that should be set in the boundary condition of mass fraction related to the user defined tracer. Any kind
+    of simulator data is not available at this time, however the hook "update_boundary_condition_of_mass_fraction_of_tracer"
+    allows the programmer to update this value.
+
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def update_boundary_condition_of_mass_fraction_of_tracer(
+    ctx: "void*",
+    phi_presc: "void*",
+    tracer_index: "int",
+    vol_frac_bound: "void*",
+    n_fields: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
+    void* phi_field, int tracer_index, void* vol_frac_bound, int n_fields)``
+
+    Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
+    The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
+    the mass of the mixture.
+
+    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
+    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
+    calculated.
+
+    :param ctx: A
+    :param phi_presc: A
+    :param tracer_index: A
+    :param vol_frac_bound: A
+    :param n_fields: A
+    :type test1: test2 or test3
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -999,106 +1108,6 @@ def calculate_entrained_liquid_fraction(
     :returns:
         Entrainment fraction, defined as the ratio between the droplet mass flow rate and the total liquid
         mass flow rate (dimensionless)
-    """
-
-
-def calculate_mass_fraction_of_tracer_in_phase(
-    ctx: "void*",
-    phi: "void*",
-    phi_phase: "void*",
-    tracer_index: "int",
-    phase_index: "int",
-    n_control_volumes: "int",
-) -> "int":
-    """
-    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in phase,
-    given by `phase_id`. The input variable `phi` is the mass fraction of the given tracer in respect to
-    the mass of the mixture. The output variable `phi_phase` is the mass fraction of the given tracer in
-    respect to the mass of the given phase.
-
-    The programmer must NOT change `phi` variable, only the output variable `phi_phase`. Both `phi` and
-    `phi_phase` have size equal to `n_control_volumes`.
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def calculate_mass_fraction_of_tracer_in_field(
-    ctx: "void*",
-    phi_phase: "void*",
-    phi_field: "void*",
-    tracer_index: "int",
-    field_index: "int",
-    phase_index_of_field: "int",
-    n_control_volumes: "int",
-) -> "int":
-    """
-    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in field,
-    given by `field_id`. The input variable `phi_phase` is the mass fraction of the given tracer in
-    respect to the mass of the given phase, in which the id is `phase_id_of_field`. The output variable
-    `phi_field` is the mass fraction of the given tracer in respect to the mass of the given field.
-
-    The programmer must NOT change `phi_phase` variable, only the output variable `phi_field`. Both
-    `phi_phase` and `phi_field` have size equal to `n_control_volumes`.
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def update_boundary_condition_of_mass_fraction_of_tracer(
-    ctx: "void*",
-    phi_presc: "void*",
-    tracer_index: "int",
-    vol_frac_bound: "void*",
-    n_fields: "int",
-) -> "int":
-    """
-    Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
-    The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
-    the mass of the mixture.
-
-    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
-    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
-    calculated.
-
-    :param ctx: A
-    :param phi_presc: A
-    :param tracer_index: A
-    :param vol_frac_bound: A
-    :param n_fields: A
-    :type test1: test2 or test3
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def initialize_mass_fraction_of_tracer(
-    ctx: "void*", phi_initial: "void*", tracer_index: "int"
-) -> "int":
-    """
-    Internal tracer model Hook to initialize the mass fraction of tracer, given by `tracer_id`, in the entire
-    network. The output variable `phi_initial` is the initial mass fraction of the given tracer in respect
-    to the mass of the mixture.
-
-    :returns: Return OK if successful or anything different if failed
-    """
-
-
-def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
-    ctx: "void*", phi_presc: "void*", tracer_index: "int"
-) -> "int":
-    """
-    Internal tracer model Hook to set the initial prescribed bondary condition of mass fraction of tracer,
-    given by `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
-    in respect to the mass of the mixture.
-
-    It's important to note that all boundary nodes will be populated with `phi_presc` value set by this hook.
-
-    Another important information is that this hook doesn't have a plugin context, since it is the first value
-    that should be set in the boundary condition of mass fraction related to the user defined tracer. Any kind
-    of simulator data is not available at this time, however the hook "update_boundary_condition_of_mass_
-    fraction_of_tracer" allows the programmer to update this value.
-
-    :returns: Return OK if successful or anything different if failed
     """
 
 

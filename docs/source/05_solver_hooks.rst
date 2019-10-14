@@ -1,6 +1,5 @@
 Solver Hooks
 ============
-
 The present section describes all solver `Hooks` available on |alfasim| plugin infrastructure.
 Solver `Hooks` are |alfasim|'s pre-defined functions that allows the plugin developer to add/update |alfasim|'s Solver.
 As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``template`` option
@@ -12,6 +11,10 @@ on |sdk|'s CLI a new file named ``plugin.c`` will be available to implement thos
 
 In order to help the developer to decide which `hooks` to implement in the plugin, they are shown below according to their
 classification which identifies what part of the solver workflow is related to.
+
+.. contents::
+    :depth: 3
+    :local:
 
 Initial configuration and plugin internal data
 ----------------------------------------------
@@ -139,3 +142,21 @@ implementing the following Solver `Hooks`.Otherwise, the particle size will be c
 .. autofunction:: alfasim_sdk.hook_specs.initialize_particle_diameter_of_solids_fields
 
 .. autofunction:: alfasim_sdk.hook_specs.update_particle_diameter_of_solids_fields
+
+User Defined Tracers
+--------------------
+
+ The `hooks` described in this section are :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin`
+
+.. warning::
+    |tracer_warn|
+
+.. autofunction:: alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer
+
+.. autofunction:: alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase
+
+.. autofunction:: alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_field
+
+.. autofunction:: alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer
+
+.. autofunction:: alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer

@@ -64,10 +64,13 @@ In order to complement the ``Hydrodynamic model`` customization, it's possible t
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
 
+
+.. _get_user_defined_tracer_from_plugin:
+
 User Defined Tracers
 --------------------
 
 .. warning::
-    This is an advanced customization. We strongly encourage the plugin developer to read the |alfasim|'s Technical Report
+    |tracer_warn|
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin
