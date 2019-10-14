@@ -47,7 +47,8 @@ class Scope(Enum):
 @attr.s(kw_only=True)
 class SecondaryVariable:
     """
-    SOME TEXT
+    Secondary variables are those variables that are not unknowns from the nonlinear system.
+    That is, they are not directly solved in the nonlinear system, but they are calculated based on the nonlinear system results.
 
     :param str name:
     :param str caption:

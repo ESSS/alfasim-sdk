@@ -65,7 +65,7 @@ def alfasim_get_data_model_type():
     The image below shows the output of example 1 when executing on ALFAsim.
 
     .. image:: _static/alfasim_get_data_model_type_example_1.png
-        :scale: 70%
+        :scale: 80%
 
 
     Example 2: This second example shows hot to create a new container model.
@@ -96,7 +96,7 @@ def alfasim_get_data_model_type():
     The image below shows the output of example 2 when executing on ALFAsim.
 
     .. image:: _static/alfasim_get_data_model_type_example_2.png
-        :scale: 70%
+        :scale: 80%
 
     Example 3: This third example demonstrates that it's possible to create multiple models within the plugin
 
@@ -126,7 +126,7 @@ def alfasim_get_data_model_type():
     The image below shows the output of example 3 when executing on ALFAsim.
 
     .. image:: _static/alfasim_get_data_model_type_example_3.png
-        :scale: 70%
+        :scale: 80%
     """
 
 

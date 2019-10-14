@@ -7,25 +7,87 @@ from alfasim_sdk._alfasim_sdk_utils import get_attr_class
 
 def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callable:
     """
-    Container model is a container object that keeps together many different properties.
-    Similar to "data_model", the "container_model" can hold properties that are required
-    from the application and user properties.
+    Container model is a object that keeps together many different properties defined by the plugin, and allows developers
+    to build user interfaces in a declarative way similar to :func:`~alfasim_sdk.models.data_model`.
 
-    The difference here is that the "container_model" can also hold a reference to a user-declared
-    "data_model", turning this container a parent over the Pool structure TreeStructure
-    for this user-declared model.
+    :func:`~alfasim_sdk.models.container_model` can also hold a reference to a :func:`~alfasim_sdk.models.data_model`
+    declared from the plugin, making this object a parent for all new :func:`~alfasim_sdk.models.data_model` created.
 
-    1) Application Required:
-    All properties that are required from the application can be accessed from _alfasim_metadata.
+    .. rubric:: **Application Required**:
 
-    Currently the following options are available:
-        - caption: A text to be displayed
-        - icon: Name of the icon available at resource folder to be used over the TreeStructure
-        - model: A reference for a user-declared class that has the @data_model decorator.
+    The following options are required when declaring a :func:`~alfasim_sdk.models.container_model`.
 
-    2) User described:
-        All properties defined from the user can be accessed by attrs fields.
-        Check the module alfasim_sdk.data_types to verify all properties that the user can describe.
+    :caption:   A text to be displayed over the Tree.
+    :icon:      Name of the icon to be used over the Tree.
+    :model:     A reference to a class decorated with :func:`~alfasim_sdk.models.data_model`.
+
+    .. note::
+
+        Even though the icon parameter is required, it's not currently being used.
+
+
+    .. rubric:: **Plugin defined**:
+
+    Visual elements that allow the user to input information into the application, or to arrange better the user interface.
+
+    :Input Fields:  Visual elements that allow the user to provide input information into the application.
+    :Layout:        Elements that assist the developer to arrange input fields in meaningfully way.
+
+    Check the section :ref:`visual elements <api-types-section>` to see all inputs available, and
+    :ref:`layout elements<api-layout-section>` to see all layouts available.
+
+    Example:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Child")
+        class ChildModel:
+            distance = Quantity(value=1, unit="m", caption="Distance")
+
+
+        @container_model(icon='', caption='My Container', model=ChildModel)
+        class MyModelContainer:
+            my_string = String(value='Initial Value', caption='My String')
+
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+            return [MyModelContainer]
+
+    .. image:: _static/container_model_example_1_1.png
+        :scale: 70%
+
+    .. image:: _static/container_model_example_1_2.png
+        :scale: 70%
+
+    .. image:: _static/container_model_example_1_3.png
+        :scale: 70%
+
+
+    Container data also includes automatically two actions for the model:
+
+    .. rubric:: Create new Model
+
+    An action that creates a new model inside the container selected, you can activate this action
+    by right-clicking in the container over the Tree, or by clicking on the "Plus" icon available at the ``Model Explorer``.
+
+    .. image:: _static/container_model_new_model_1.png
+        :scale: 80%
+
+    .. image:: _static/container_model_new_model_2.png
+        :scale: 80%
+
+    .. rubric:: Remove
+
+    Remove the selected model, only available for models inside a container, you can activate this action by
+    right-clicking the model over the Tree, or by clicking on the "Trash" icon available at the ``Model Explorer``.
+
+    .. image:: _static/container_model_remove_1.png
+        :scale: 80%
+
+    .. image:: _static/container_model_remove_2.png
+        :scale: 80%
+
     """
 
     def apply(class_):
@@ -40,22 +102,51 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
 
 def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
     """
-    Data model is a container object that keeps together many different properties.
-    There are two kinds of properties that could be used with the "data_model" object:
-        1) Application required
-        2) User described.
+    Data model is a object that keeps together many different properties defined by the plugin, and allows developers
+    to build user interfaces in a declarative way.
 
-    1) Application Required:
-    All properties that are required from the application can be accessed from _alfasim_metadata.
+    .. rubric:: **Application Required**:
 
-    Currently the following options are available:
-        - caption: A text to be displayed
-        - icon: Name of the icon available at resource folder to be used over the TreeStructure
-        - model: None (data_model cannot reference another model).
+    The following options are required when declaring a data_model, and are used into the user interface
 
-    2) User described:
-        All properties defined from the user can be accessed by attrs fields.
-        Check the module alfasim_sdk.data_types to verify all properties that the user can describe.
+        :caption:   A text to be displayed over the Tree.
+        :icon:      Name of the icon to be used over the Tree.
+
+    .. note::
+
+        Even though the icon parameter is required, it's not currently being used.
+
+
+    .. rubric:: **Plugin Defined**:
+
+    Visual elements that allow the user to input information into the application, or to arrange better the user interface.
+
+    :Input Fields: Visual elements that allow the user to provide input information into the application.
+    :Layout: Elements that assist the developer to arrange input fields in meaningfully way.
+
+    Check the section :ref:`visual elements <api-types-section>` to see all inputs available, and
+    :ref:`layout elements<api-layout-section>` to see all layouts available.
+
+    Example:
+
+    .. code-block:: python
+
+        @data_model(icon='', caption='My Plugin')
+        class MyModel:
+	        distance = Quantity(value=1, unit='m', caption='Distance')
+
+
+        @alfasim_sdk.hookimpl
+        def alfasim_get_data_model_type():
+	        return [MyModel]
+
+    .. image:: _static/data_model_example_1_1.png
+        :scale: 90%
+
+    .. image:: _static/data_model_example_1_2.png
+        :scale: 90%
+
+
     """
 
     def apply(class_: type):

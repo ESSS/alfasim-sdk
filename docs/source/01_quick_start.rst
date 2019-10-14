@@ -145,8 +145,8 @@ The plugin directory will have the following structure when executing from a `Wi
             \---python
                     myplugin.py
 
-Installing the package on ALFAsim
----------------------------------
+Installing the plugin
+---------------------
 
 With :file:`myplugin.hmplugin` file, it's now possible to install it on |alfasim| application.
 From the menu bar select the `Plugin Manager` option, as illustrated in the figure bellow:

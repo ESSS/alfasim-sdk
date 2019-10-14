@@ -6,8 +6,8 @@ Plugins can extend the ALFAsim capabilities in a lot of ways, from adding a simp
 
 Some examples of the capabilities that can be extended are:
 
-  * Creation of user-defined models, allowing custom models to be available over the Tree and in the Model Explorer.
-  * Registration of secondary variables, allowing plugins to register new additional variables on ALFAsim.
+  * Creation of user-defined GUI models, allowing custom models to be available over the Tree and in the Model Explorer.
+  * Registration of additional variables that are not nonlinear system's unknowns, for the ALFAsim solver. Also called "secondary variables"
   * Customization of the hydrodynamic models, supporting the additions of custom Phases/Fields/Layers.
   * Support for inclusion of custom mass, momentum and energy equations.
   * Support for calculating source terms to solver equations.
@@ -17,7 +17,7 @@ For a list of all capabilities that can be expanded check the :ref:`api-referenc
 
 Anyone with programming skills can create a Plugin for ALFAsim, for that, alfasim-SDK provides hooks to customize
 the solver and the user interface. In order to customize the solver, an API in `C` is provided for application
-writeen in C/C++, while, for user interface customization, an API in Python allows the developer to customize
+written in C/C++, while, for user interface customization, an API in Python allows the developer to customize
 the interface in a declarative way.
 
 
