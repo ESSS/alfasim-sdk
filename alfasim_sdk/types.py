@@ -559,6 +559,13 @@ class Quantity(BaseField):
 
     Checkout the Barril documentation, to see all available units available units [ Needs to implement on Barril this section]
 
+    .. note::
+
+        If you want to check the input value, is recommended to include a status monitor in your plugin
+        to make sure that the provided value is valid.
+
+        For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
+
     Example of usage:
 
     .. code-block:: python
@@ -616,6 +623,13 @@ class Quantity(BaseField):
 
 @attr.s(kw_only=True, frozen=True)
 class TableColumn(BaseField):
+    """
+    The TableColumn component provides columns for a :func:`~alfasim_sdk.type.Table` field.
+    Currently only columns with a :func:`~alfasim_sdk.type.Quantity` fields are available.
+
+    Check out the documentation from :func:`~alfasim_sdk.type.Table` to se more details about the usage and how to retrieve values.
+    """
+
     id: str = attrib(validator=non_empty_str)
     value: Quantity = attrib()
     caption = attrib(init=False, default="")
@@ -634,6 +648,92 @@ class TableColumn(BaseField):
 @attr.s(kw_only=True, frozen=True)
 class Table(BaseField):
     """
+    The Table component provides a table to the user to be able input values manually or by importing it from a file.
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            Table(
+                rows=[
+                    TableColumn(
+                        id='temperature',
+                        value=Quantity(
+                            value=1,
+                            unit='K',
+                            caption='Temperature Column Caption'
+                        ),
+                    ),
+                    TableColumn(
+                        id='pressure',
+                        value=Quantity(
+                            value=2,
+                            unit='bar',
+                            caption='Pressure Column Caption'
+                        ),
+                    ),
+                ],
+                caption="Table Field"
+            )
+
+    The image above illustrates the output from the example above.
+
+    .. image:: _static/table_field_example_1.png
+
+    With this component, the user can easily import the content from a file by clicking on the last icon from the toolbar menu.
+
+    .. image:: _static/table_field_example_2.png
+
+    The wizard assistance supports multiple types of file, the user just needs to inform which kind of configuration the file has.
+
+    .. image:: _static/table_field_example_3.png
+
+    By the end, it's possible for the user select to which unit the values must be converted and which columns.
+
+    .. rubric:: **Accessing Table Field from Plugin**:
+
+    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_table_quantity`
+
+    .. rubric:: **Accessing Table Field from Context**:
+
+    When accessed from the :func:`~alfasim_sdk.context.Context`, the Table field will return a model, with information about
+    all columns.
+
+
+    .. code-block:: bash
+        :linenos:
+
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            Table(
+                rows=[
+                    TableColumn(
+                        id='temperature',
+                        value=Quantity(value=1, unit='K', caption='Temperature Column Caption'),
+                    ),
+                    TableColumn(
+                        id='pressure',
+                        value=Quantity(value=2, unit='bar', caption='Pressure Column Caption'),
+                    ),
+                ],
+                caption="Table Field"
+            )
+
+        # From Terminal
+        >>> ctx.GetModel("MyModel").table_field
+        TableContainer([...])
+
+        >>> len(ctx.GetModel("MyModel").table_field)
+        6
+
+        >>> len(ctx.GetModel("MyModel").table_field)
+        TableRow(temperature=Scalar(1.0, 'K', 'temperature'), pressure=Scalar(2.0, 'bar', 'pressure'))
+
+        >>> ctx.GetModel("MyModel").table_field[0].pressure
+        Scalar(2.0, 'bar', 'pressure')
+
 
     """
 
@@ -700,7 +800,7 @@ class Boolean(BaseField):
 class FileContent(BaseField):
     """
     The FileContent component provides a platform-native file dialog to the user to be able to select a file.
-    The name of the selected file will be available over the GUI and be enabled to be manually changed.
+    The name of the selected file will be available over the GUI.
 
     .. note::
 
