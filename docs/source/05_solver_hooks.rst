@@ -146,10 +146,16 @@ implementing the following Solver `Hooks`.Otherwise, the particle size will be c
 User Defined Tracers
 --------------------
 
- The `hooks` described in this section are :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin`
+The `hooks` described in this section must be implemented when at least one `user defined tracer` is added via
+:py:func:`~alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin` `hook`.
 
 .. warning::
     |tracer_warn|
+
+These `hooks` can modify the tracer transport equation from the initialization to configuration of boundary conditions.
+The plugin developer has complete freedom to change the equations, however it is important to be aware that it can be
+made manipulating the transport equation terms inside the `hooks`. For that, it is important to read the `Tracers`
+Chapter at |alfasim|'s Technical Manual.
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer
 

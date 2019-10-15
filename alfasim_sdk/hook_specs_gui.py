@@ -433,4 +433,11 @@ def alfasim_get_user_defined_tracers_from_plugin():
         def alfasim_get_user_defined_tracers_from_plugin():
             return ['my_tracer']
 
+    .. note::
+        The tracer added in the `user defined tracers from plugin` list will not be considered as a standard tracer, in which
+        has output of its `mass fraction` and appears in the tracer container at |alfasim|'s User Interface. The `user defined
+        tracer` is hidden (did not appear in the User Interface) and the plugin developer can modify the transport equation
+        to use its results internally. However, the `user defined tracers` will be solved together with the standard tracers
+        (Added via User Interface).
+
     """
