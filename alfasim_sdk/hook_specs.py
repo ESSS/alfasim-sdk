@@ -816,8 +816,8 @@ def initialize_particle_diameter_of_solids_fields(
         :emphasize-lines: 1
 
         HOOK_INITIALIZE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
-        void* ctx, void* particle_diameter,
-        int n_control_volumes, int solids_field_id)
+            void* ctx, void* particle_diameter,
+            int n_control_volumes, int solids_field_id)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -878,8 +878,8 @@ def update_particle_diameter_of_solids_fields(
         :emphasize-lines: 1
 
         HOOK_UPDATE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
-        void* ctx, void* particle_diameter,
-        int n_control_volumes, int solids_field_id)
+            void* ctx, void* particle_diameter,
+            int n_control_volumes, int solids_field_id)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -971,7 +971,40 @@ def initialize_mass_fraction_of_tracer(
     network. The output variable `phi_initial` is the initial mass fraction of the given tracer in respect
     to the mass of the mixture.
 
+    :param ctx: ALFAsim's plugins context
+    :param phi_initial: Initial mass fraction of tracer in respect to the mass of the mixture
+    :param tracer_index: Tracer ID
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER(
+            void* ctx, void* phi_initial, int tracer_index)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (tracer_index != data.my_user_defined_tracer_id) {
+                return OK;
+            } else {
+                // Set a initial value to the tracer mass fraction
+                // phi_initial has size equal to 1
+                *static_cast<double*>(phi_initial) = 0.0;
+            }
+            return OK;
+        }
+
     """
 
 
@@ -987,15 +1020,68 @@ def calculate_mass_fraction_of_tracer_in_phase(
     **c++ signature** : ``HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE(void* ctx, void* phi, void* phi_phase,
     int tracer_index, int phase_index, int n_control_volumes)``
 
-    Internal tracer model `Hook` to calculate the mass fraction of tracer, given by `tracer_id`, in phase,
-    given by `phase_id`. The input variable `phi` is the mass fraction of the given tracer in respect to
-    the mass of the mixture. The output variable `phi_phase` is the mass fraction of the given tracer in
-    respect to the mass of the given phase.
+    Internal tracer model `Hook` to calculate the mass fraction of tracer, given by ``tracer_index``, in phase,
+    given by ``phase_index``. The input variable ``phi`` is the mass fraction of the given tracer in respect to
+    the mass of the mixture. The output variable ``phi_phase`` is the mass fraction of the given tracer in
+    respect to the mass of the given phase. Both ``phi`` and ``phi_phase`` have size equal to ``n_control_volumes``.
 
-    The programmer must NOT change `phi` variable, only the output variable `phi_phase`. Both `phi` and
-    `phi_phase` have size equal to `n_control_volumes`.
-
+    :param ctx: ALFAsim's plugins context
+    :param phi: Array of mass fraction of tracer in respect to the mass of the mixture
+    :param phi_phase: Array of mass fraction of tracer in respect to the mass of the phase given by `phase_index`
+    :param tracer_index: Tracer ID
+    :param phase_index: Phase ID
+    :param n_control_volumes: Number of control volumes
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE(
+            void* ctx, void* phi, void* phi_phase,
+            int tracer_index, int phase_index, int n_control_volumes)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            // Casting to double pointer
+            double* phi_ptr = static_cast<double*>(phi);
+            double* phi_phase_ptr = static_cast<double*>(phi_phase);
+            // Check if the tracer_index was added by this plugin
+            if (tracer_index != data.my_user_defined_tracer_id){
+                return OK
+            }
+            // Let suppose that this tracer is only in the gas phase
+            if(phase_index != data.gas_id) {
+                 for (int i = 0; i < n_control_volumes; ++i) {
+                    phi_phase_ptr[i] = 0.0;
+                 }
+            } else {
+                // Calculate and set the Phi_phase value
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    phi_phase_ptr[i] =
+                        data.calculate_mass_fraction_of_tracer_in_gas(
+                            phi_ptr[i],
+                            // List of params that can be
+                            // retrieved by get_simulation_array()
+                            );
+                }
+            }
+            return OK;
+        }
+
+    .. warning::
+        The plugin developer must NOT change ``phi`` variable, only the output variable ``phi_phase``.
+
     """
 
 
@@ -1012,15 +1098,71 @@ def calculate_mass_fraction_of_tracer_in_field(
     **c++ signature** : ``HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD(void* ctx, void* phi_phase, void* phi_field,
     int tracer_index, int field_index, int phase_index_of_field, int n_control_volumes)``
 
-    Internal tracer model Hook to calculate the mass fraction of tracer, given by `tracer_id`, in field,
-    given by `field_id`. The input variable `phi_phase` is the mass fraction of the given tracer in
-    respect to the mass of the given phase, in which the id is `phase_id_of_field`. The output variable
-    `phi_field` is the mass fraction of the given tracer in respect to the mass of the given field.
+    Internal tracer model Hook to calculate the mass fraction of tracer, given by ``tracer_index``, in field,
+    given by ``field_index``. The input variable ``phi_phase`` is the mass fraction of the given tracer in
+    respect to the mass of the given phase, in which the ID is `phase_index_of_field`. The output variable
+    ``phi_field`` is the mass fraction of the given tracer in respect to the mass of the given field. Both
+    ``phi_phase`` and ``phi_field`` have size equal to ``n_control_volumes``.
 
-    The programmer must NOT change `phi_phase` variable, only the output variable `phi_field`. Both
-    `phi_phase` and `phi_field` have size equal to `n_control_volumes`.
-
+    :param ctx: ALFAsim's plugins context
+    :param phi_phase: Array of mass fraction of tracer in respect to the mass of the phase given by `phase_index_of_field`
+    :param phi_field: Array of mass fraction of tracer in respect to the mass of the field given by `field_index`
+    :param tracer_index: Tracer ID
+    :param field_index: Field ID
+    :param phase_index_of_field: Phase ID of field
+    :param n_control_volumes: Number of control volumes
     :returns: Return OK if successful or anything different if failed
+
+     Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD(
+            void* ctx, void* phi_phase, void* phi_field,
+            int tracer_index, int field_index,
+            int phase_index_of_field, int n_control_volumes)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            // Casting to double pointer
+            double* phi_phase_ptr = static_cast<double*>(phi_phase);
+            double* phi_field_ptr = static_cast<double*>(phi_field);
+            // Check if the tracer_index was added by this plugin
+            if (tracer_index != data.my_user_defined_tracer_id){
+                return OK
+            }
+            // Let suppose that this tracer is only in the gas phase
+            if(phase_index_of_field != data.gas_phase_id) {
+                 for (int i = 0; i < n_control_volumes; ++i) {
+                    phi_field_ptr[i] = 0.0;
+                 }
+            } else {
+                // Calculate and set the Phi_field value
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    phi_field_ptr[i] =
+                        data.mass_fraction_of_tracer_in_gas_fields(
+                            phi_phase_ptr[i],
+                            // List of params that can be
+                            // retrieved by get_simulation_array()
+                            );
+                }
+            }
+            return OK;
+        }
+
+    .. warning::
+        The plugin developer must NOT change ``phi_phase`` variable, only the output variable ``phi_field``.
+
     """
 
 
@@ -1031,18 +1173,50 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
     **c++ signature** : ``HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
     int tracer_index)``
 
-    Internal tracer model Hook to set the initial prescribed bondary condition of mass fraction of tracer,
-    given by `tracer_id`. The output variable `phi_presc` is the prescribed mass fraction of the given tracer
-    in respect to the mass of the mixture.
+    Internal tracer model `hook` to set the initial prescribed bondary condition of mass fraction of tracer,
+    given by ``tracer_index`. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
+    in respect to the mass of the mixture. Note that all boundary nodes will be populated with `phi_presc` value
+    set by this `hook`.
 
-    It's important to note that all boundary nodes will be populated with `phi_presc` value set by this hook.
+    An important information is that this `hook` set the first value of boundary conditions of mass fraction related to
+    the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
+    allows the plugin developer to update this value.
 
-    Another important information is that this hook doesn't have a plugin context, since it is the first value
-    that should be set in the boundary condition of mass fraction related to the user defined tracer. Any kind
-    of simulator data is not available at this time, however the hook "update_boundary_condition_of_mass_fraction_of_tracer"
-    allows the programmer to update this value.
-
+    :param ctx: ALFAsim's plugins context
+    :param phi_presc: Prescribed mass fraction of tracer
+    :param tracer_index: Tracer ID
     :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(
+            void* ctx, void* phi_presc, int tracer_index)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            if (tracer_index != data.my_user_defined_tracer_id) {
+                return OK;
+            } else {
+                // Set a initial boundary condition
+                // to the tracer mass fraction.
+                // phi_presc has size equal to 1.
+                *static_cast<double*>(phi_presc) = 0.0;
+            }
+            return OK;
+        }
+
     """
 
 
@@ -1057,21 +1231,62 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
     **c++ signature** : ``HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
     void* phi_field, int tracer_index, void* vol_frac_bound, int n_fields)``
 
-    Internal tracer model Hook to update the prescribed mass fraction of tracer, given by `tracer_id`.
-    The output variable `phi_presc` is the prescribed mass fraction of the given tracer in respect to
-    the mass of the mixture.
+    Internal tracer model `hook` to update the prescribed mass fraction of tracer, given by ``tracer_id``.
+    The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer in respect to
+    the mass of the mixture. The ``vol_frac_bound`` is the volume fraction of fields at the boundary in which
+    the ``phi_presc`` is being calculated.
 
-    The programmer must NOT change `vol_frac_bound` variable, only the output variable `phi_presc`. The
-    `vol_frac_bound` is the volume fraction of fields at the boundary in which the `phi_presc` is being
-    calculated.
+    This `hook` allows the developer to update the boundary conditions of mass fraction that may depend on |alfasim|'s
+    internal variables that may change during the simulation. So, this update will be performed to each time step.
 
-    :param ctx: A
-    :param phi_presc: A
-    :param tracer_index: A
-    :param vol_frac_bound: A
-    :param n_fields: A
-    :type test1: test2 or test3
+    :param ctx: ALFAsim's plugins context
+    :param phi_presc: Prescribed mass fraction of tracer
+    :param tracer_index: Tracer ID
+    :param vol_frac_bound: Volume fraction of fields in the boundary
+    :param n_fields: Number of fields
     :returns: Return OK if successful or anything different if failed
+
+     Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(
+            void* ctx, void* phi_presc, int tracer_index)
+        {
+            // getting plugin internal data
+            int errcode = -1;
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                    ctx, (void**) &data, plugin_id, thread_id);
+            // Casting to double pointer
+            double* phi_presc_ptr = static_cast<double*>(phi_presc);
+            double* vol_frac_bound_ptr = static_cast<double*>(vol_frac_bound);
+            // Let suppose that this tracer is only in the gas field
+            if (tracer_index != data.my_user_defined_tracer_id) {
+                return OK;
+            } else {
+                // Update the boundary condition
+                // to the tracer mass fraction.
+                phi_presc_ptr =
+                        data.calc_bc_mass_fraction_of_tracer_in_gas_field(
+                            vol_frac_bound_ptr[data.continuous_gas_field_id],
+                            // List of params that can be
+                            // retrieved by get_simulation_array()
+                            );
+            }
+            return OK;
+        }
+
+    .. warning::
+        The plugin developer must NOT change ``vol_frac_bound`` variable, only the output variable ``phi_presc``.
+
     """
 
 
