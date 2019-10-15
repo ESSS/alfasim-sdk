@@ -11,18 +11,41 @@ from alfasim_sdk.types import Tabs
 
 def tabs() -> Callable:
     """
-    The tab layout allows the model explore to have a tab bar, which contains can have as many tabs as desired.
-    Each tab will have it's one "page" which will displayed all related fields.
+    Create a tab bar layout, to group multiples :func:"~alfasim_sdk.layout.tab" instances.
+
+    With the ``tabs``, you can split up complex dialog into "pages" using a :func:"~alfasim_sdk.layout.tab" instance.
+
+    Notice that only classes decorated with :func:"~alfasim_sdk.layout.tab" can be placed inside a ``tab bar``.
 
     Example of usage:
 
     .. code-block:: python
 
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            field = String(caption="String outside tabs", value="Default")
 
+            @tabs()
+            class MainPage:
+                @tab(caption="Fist Tab")
+                class Tab1:
+                    field_1 = String(caption="First Tab", value="Default")
+
+                @tab(caption="Second Tab")
+                class Tab2:
+                    field_2 = String(caption="Second Tab", value="Default")
+
+    The image below shows the output from the command above.
+
+    .. image:: _static/tabs_layout_example_1.png
+        :scale: 90%
+
+    .. image:: _static/tabs_layout_example_2.png
+        :scale: 90%
 
     .. note::
 
-        tab is a layout component, therefore, the final model will not have a attribute that can be accessed
+        tabs is a layout component, therefore, the final model will not have a attribute that can be accessed
         trough context or API.
     """
 
@@ -50,14 +73,9 @@ def tabs() -> Callable:
 
 def tab(*, caption: str) -> Callable:
     """
-    The tab layout allows the model explore to have a tab bar, which contains can have as many tabs as desired.
-    Each tab will have it's one "page" which will displayed all related fields.
+    The tab represent a single entry, or a "page" on the tab menu bar create from the :func:"~alfasim_sdk.layout.tabs" layout.
 
-
-    .. note::
-
-        tab is a layout component, therefore, the final model will not have a attribute that can be accessed
-        trough context or API.
+    Only fields that derives from BaseField can be defined inside a tab.
     """
 
     def apply(class_: type):
@@ -86,6 +104,7 @@ def group(*, caption: str) -> Callable:
             class GroupMain:
                 string_field_2 = String(value="Group 1", caption="Inside")
                 bool_field = Boolean(value=True, caption="Boolean Field")
+
 
     The image below shows the output from the example above.
 
