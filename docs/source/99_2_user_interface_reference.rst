@@ -56,8 +56,12 @@ and provide a container for other fields that should be grouped together.
 Layout
 ------
 
-.. automodule:: alfasim_sdk.layout
-    :members:
+.. autofunction:: alfasim_sdk.layout.group()
+
+.. autofunction:: alfasim_sdk.layout.tabs()
+
+.. autofunction:: alfasim_sdk.layout.tab()
+
 
 .. _api-status-section:
 

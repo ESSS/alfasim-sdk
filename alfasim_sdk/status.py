@@ -7,8 +7,13 @@ from alfasim_sdk._validators import non_empty_str
 @attr.s(kw_only=True)
 class ErrorMessage:
     """
-    The model_name and the message informed is displayed on the status monitor of ALFAsim.
-    The execution of a new simulation will not be allowed until the error is solved.
+    ErrorMessage allows the plugin to display a message over the status monitor, and signalize to the application to lock
+    the simulation until the issue is fixed.
+
+    :param model_name: Name of the model that issues the error.
+    :param message: Message that will be displayed over the status monitor.
+
+    Checkout the :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_status` for some examples of :func:`~alfasim_sdk.status.ErrorMessage` in action.
     """
 
     model_name: str = attrib(validator=non_empty_str)
@@ -18,8 +23,13 @@ class ErrorMessage:
 @attr.s(kw_only=True)
 class WarningMessage:
     """
-    The model_name and the message informed is displayed on the status monitor of ALFAsim.
-    The execution of a new simulation will be kept normal.
+    WarningMessage allows the plugin to display a message to the user over the status monitor, and signalize a minor
+    issue, that needs to be fixed but doesn't need to lock the simulation.
+
+    :param model_name: Name of the model that issues the warning.
+    :param message: Message that will be displayed over the status monitor.
+
+    Checkout the :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_status` for some examples of :func:`~alfasim_sdk.status.WarningMessage` in action.
     """
 
     model_name: str = attrib(validator=non_empty_str)

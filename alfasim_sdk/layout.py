@@ -27,6 +27,7 @@ def tabs() -> Callable:
 
             @tabs()
             class MainPage:
+
                 @tab(caption="Fist Tab")
                 class Tab1:
                     field_1 = String(caption="First Tab", value="Default")
@@ -73,9 +74,9 @@ def tabs() -> Callable:
 
 def tab(*, caption: str) -> Callable:
     """
-    The tab represent a single entry, or a "page" on the tab menu bar create from the :func:"~alfasim_sdk.layout.tabs" layout.
+    The tab represent a single entry, on the :func:`~alfasim_sdk.layout.tabs` layout.
 
-    Only fields that derives from BaseField can be defined inside a tab.
+    Notice that only components available at the :ref:`types modules <api-types-section>` can be placed inside a tab.
     """
 
     def apply(class_: type):

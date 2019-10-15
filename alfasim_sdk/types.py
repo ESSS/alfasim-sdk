@@ -102,6 +102,8 @@ class BaseField:
     .. image:: _static/base_field_tootip_2.png
         :scale: 70%
 
+    .. _enable-expression-section:
+
     .. rubric:: **Enable Expression**:
 
     Accepts a python function that controls either the component will be enabled, or disabled.
@@ -145,6 +147,8 @@ class BaseField:
     .. image:: _static/base_field_enable_expr_2.png
 
 
+    .. _visible-expression-section:
+
     .. rubric:: **Visible Expression**:
 
     Accepts a python function that controls either the component will be visible, or not.
@@ -161,19 +165,22 @@ class BaseField:
         def my_check(self, ctx):
             return self.bool_value
 
+
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             bool_value = Boolean(value=True, caption="Enabled")
             N_ions = Quantity(
-                caption='Number of Ions',
+                caption="Number of Ions",
                 value=1,
-                unit='-',
+                unit="-",
                 visible_expr=my_check,
             )
+
 
         @alfasim_sdk.hookimpl
         def alfasim_get_data_model_type():
             return [MyModel]
+
 
     The image bellow shows the ``N_ions`` property visible, when the property ``bool_value`` is enabled (True)
 
@@ -397,13 +404,15 @@ class Reference(BaseReference):
         class MyModel:
             field_1 = String(value="Value 1", caption="String 1")
 
+
         @container_model(caption="My Container", model=MyModel, icon="")
         class MyContainer:
             internal_ref = Reference(
                 ref_type=MyModel,
                 container_type="MyContainer",
-                caption="Internal Reference"
+                caption="Internal Reference",
             )
+
 
     .. image:: _static/reference_field_example_2.png
 
@@ -433,7 +442,7 @@ class Reference(BaseReference):
             internal_ref = Reference(
                 ref_type=MyModel,
                 container_type="MyContainer",
-                caption="Internal Reference"
+                caption="Internal Reference",
             )
 
         # Example with Tracer
@@ -482,8 +491,7 @@ class MultipleReference(BaseReference):
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             tracer_ref = MultipleReference(
-                ref_type=TracerType,
-                caption="Tracer Type",
+                ref_type=TracerType, caption="Tracer Type"
             )
 
 
@@ -497,13 +505,15 @@ class MultipleReference(BaseReference):
         class MyModel:
             field_1 = String(value="Value 1", caption="String 1")
 
+
         @container_model(caption="My Container", model=MyModel, icon="")
         class MyContainer:
             internal_ref = MultipleReference(
                 ref_type=MyModel,
                 container_type="MyContainer",
-                caption="Internal Reference"
+                caption="Internal Reference",
             )
+
 
     .. image:: _static/multiplereference_field_example_2.png
 
@@ -524,13 +534,15 @@ class MultipleReference(BaseReference):
         class MyModel:
             field_1 = String(value="Value 1", caption="String 1")
 
+
         @container_model(caption="My Container", model=MyModel, icon="")
         class MyContainer:
             internal_ref = MultipleReference(
                 ref_type=MyModel,
                 container_type="MyContainer",
-                caption="Internal Reference"
+                caption="Internal Reference",
             )
+
 
         # Example
         >>> ctx.GetModel("MyContainer").internal_ref
@@ -573,10 +585,9 @@ class Quantity(BaseField):
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             quantity_field = Quantity(
-                value=1,
-                unit="degC",
-                caption="Quantity Field",
+                value=1, unit="degC", caption="Quantity Field"
             )
+
 
     .. image:: _static/quantity_field_example.png
 
@@ -659,23 +670,23 @@ class Table(BaseField):
             Table(
                 rows=[
                     TableColumn(
-                        id='temperature',
+                        id="temperature",
                         value=Quantity(
                             value=1,
-                            unit='K',
-                            caption='Temperature Column Caption'
+                            unit="K",
+                            caption="Temperature Column Caption",
                         ),
                     ),
                     TableColumn(
-                        id='pressure',
+                        id="pressure",
                         value=Quantity(
                             value=2,
-                            unit='bar',
-                            caption='Pressure Column Caption'
+                            unit="bar",
+                            caption="Pressure Column Caption",
                         ),
                     ),
                 ],
-                caption="Table Field"
+                caption="Table Field",
             )
 
     The image above illustrates the output from the example above.
