@@ -11,10 +11,19 @@ from alfasim_sdk.types import Tabs
 
 def tabs() -> Callable:
     """
-    tabs is a container that only holds alfasim_sdk.layout.tab.
+    The tab layout allows the model explore to have a tab bar, which contains can have as many tabs as desired.
+    Each tab will have it's one "page" which will displayed all related fields.
+
+    Example of usage:
+
+    .. code-block:: python
 
 
-    Note.: tabs is considered a layout component, therefore, the final model will have any attribute related with the tabs
+
+    .. note::
+
+        tab is a layout component, therefore, the final model will not have a attribute that can be accessed
+        trough context or API.
     """
 
     def apply(class_: type):
@@ -41,9 +50,14 @@ def tabs() -> Callable:
 
 def tab(*, caption: str) -> Callable:
     """
-    tab is a container for other attributes, only BaseField can be defined inside a tab.
+    The tab layout allows the model explore to have a tab bar, which contains can have as many tabs as desired.
+    Each tab will have it's one "page" which will displayed all related fields.
 
-    Note.: tab is considered a layout component, therefore, the final model will have any attribute related with the tabs
+
+    .. note::
+
+        tab is a layout component, therefore, the final model will not have a attribute that can be accessed
+        trough context or API.
     """
 
     def apply(class_: type):
@@ -58,9 +72,31 @@ def tab(*, caption: str) -> Callable:
 
 def group(*, caption: str) -> Callable:
     """
-    group is a container for other attributes, only BaseField can be defined inside a group.
+    The group layout is a container to organize ALFAsim types, only fields that derives from BaseField can be defined inside a group.
 
-    Note.: group is considered a layout component, therefore, the final model will have any attribute related with the group
+    Example.:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            string_field_1 = String(caption="Outside", value="Default")
+
+            @group(caption="Group Container")
+            class GroupMain:
+                string_field_2 = String(value="Group 1", caption="Inside")
+                bool_field = Boolean(value=True, caption="Boolean Field")
+
+    The image below shows the output from the example above.
+
+    .. image:: _static/group_layout_example.png
+
+
+    .. note::
+
+        group is a layout component, therefore, the final model will not have a attribute that can be accessed
+        trough context or API.
+
     """
 
     def apply(class_: type):
