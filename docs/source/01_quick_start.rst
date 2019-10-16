@@ -30,7 +30,7 @@ From a terminal, install the |sdk| with :command:`pip` command.
 
 Also, make sure to have `CMake` at least version `3.5.2` installed and the `Ninja` package.
 
-The package :program:`alfasim-sdk` has a number of commands, and you can explore them all by running:
+The package :program:`alfasim-sdk` has several, and you can explore them all by running:
 
 .. code-block:: bash
 
@@ -39,7 +39,7 @@ The package :program:`alfasim-sdk` has a number of commands, and you can explore
 Creating a Plugin Project
 -------------------------
 
-To create new project, run:
+To create a new project, run:
 
 .. code-block:: bash
 
@@ -56,13 +56,13 @@ After the execution of the command above, you will be prompted to fill the follo
     ... -- Author Email: alfasim@esss.co
 
 
-:Plugin Caption: Caption to be used across the application to identify the plugin.
+:Plugin Caption: The caption to be used across the application to identify the plugin.
 :Plugin Id: The name of the plugin to be referenced during the development.
 :Author Name: Name of the plugin author to be displayed.
 :Author Email: Email of the plugin author to be displayed.
 
 
-In order to check all available options, you can execute:
+To check all options, call the help command:
 
 .. code-block:: bash
 
@@ -149,7 +149,7 @@ Installing the plugin
 ---------------------
 
 With :file:`myplugin.hmplugin` file, it's now possible to install it on |alfasim| application.
-From the menu bar select the `Plugin Manager` option, as illustrated in the figure bellow:
+From the menu bar select the `Plugin Manager` option, as illustrated in the figure below:
 
 .. image:: _static/quick_start/menu_bar.png
     :target: _static/quick_start/menu_bar.png

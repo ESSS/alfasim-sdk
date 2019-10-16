@@ -28,7 +28,7 @@ class PluginInfo:
 @attr.s(frozen=True)
 class PipelineSegmentInfo:
     """
-    The PipelineSegmentInfo provides information about a segments associated with a pipeline.
+    The PipelineSegmentInfo provides information about segments associated with a pipeline.
 
     PipelineSegmentInfo provides the following attributes:
         edge_name: name of the edge that the segment is associated with
@@ -39,7 +39,7 @@ class PipelineSegmentInfo:
 
         roughness: Absolute roughness of the wall of this segment.
             When ```is_custom``` is true, the reported roughness is customized for this segment,
-            otherwise the reported roughness is the original reported by the wall.
+            otherwise, the reported roughness is the original reported by the wall.
 
         is_custom: Informs either the roughness value is custom or original from the wall
     """
@@ -83,7 +83,7 @@ class PipelineInfo:
 class NodeInfo:
     """
     The ``NodeInfo`` provides information about a ``Node`` from ``ALFAsim``, it provides the name of the Node and the number of
-    phases that the associate pvt model has.
+    phases that the associate PVT model has.
     """
 
     name = attr.attrib(validator=non_empty_str)
@@ -152,10 +152,10 @@ class HydrodynamicModelType(Enum):
     Informs which base Hydrodynamic model is being used, without any modification from plugins:
 
     - two_phase_four_field_ucm - 'Multi-field, Unit Cell (gas-liquid)':
-        Two phase (gas and liquid) with four fields (continuous gas, continuous liquid, dispersed gas bubble and dispersed liquid droplet).
+        Two phase (gas and liquid) with four fields (continuous gas, continuous liquid, dispersed gas bubble, and dispersed liquid droplet).
 
     - three_phase_five_field_ucm - 'Multi-field, Unit Cell (gas-liquid-water)':
-        Three phase (gas, liquid and water) with five fields (continuous gas, continuous liquid, continuous water,dispersed gas bubble and dispersed liquid droplet).
+        Three phase (gas, liquid, and water) with five fields (continuous gas, continuous liquid, continuous water, dispersed gas bubble, and dispersed liquid droplet).
 
     - two_phase_two_field_slug_capturing - 'Two-fluid, Regime Capturing (gas-liquid)':
         Two phase (gas and liquid) with two fields (continuous gas and continuous liquid) using Regime Capturing strategy.
@@ -170,7 +170,7 @@ class HydrodynamicModelType(Enum):
 @attr.s(frozen=True)
 class HydrodynamicModelInfo:
     """
-    HydrodynamicModelInfo provides information about which layer, fields and phases the currently Hydrodynamic model is using.
+    HydrodynamicModelInfo provides information about which layer, fields, and phases the currently Hydrodynamic model is using.
     """
 
     selected_base_type = attr.attrib(validator=instance_of(HydrodynamicModelType))
@@ -208,7 +208,7 @@ class Context:
     The context class provides information about the current state of the application
     and the models implemented by the user.
 
-    The following methods provides an instance of :func:`~alfasim_sdk.context.Context` to inform the currently state
+    The following methods provide an instance of :func:`~alfasim_sdk.context.Context` to inform the current state
     of the application:
 
     - :ref:`visible-expression-section` parameter from all fields
@@ -224,7 +224,7 @@ class Context:
 
         In the example below, the Context is used to access a property from the model "MyModel"
 
-        ``ctx.GetModel("Acme")`` as exemplified in the code bellow.
+        ``ctx.GetModel("Acme")`` as exemplified in the code below.
 
         .. rubric:: Setting up the model
 

@@ -23,10 +23,10 @@ Models
 Types
 -----
 
-Types is a module which supplies UI elements for creating user interfaces with the classic desktop-style, each type
+The ``types`` module supplies UI elements for creating user interfaces with the classic desktop-style, each type
 has a related model
 
-Models are the primary elements fro creating user interfaces on |alfasim|, models can display data, receive user input,
+Models are the primary elements to create user interfaces on |alfasim|, models can display data, receive user input,
 and provide a container for other fields that should be grouped together.
 
 
@@ -83,8 +83,8 @@ Context
 
 .. _api-mfd-section:
 
-Hydrodymaic Model Customization
--------------------------------
+Hydrodynamic Model Customization
+--------------------------------
 
 .. autoclass:: alfasim_sdk.types.AddField()
 

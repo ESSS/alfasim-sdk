@@ -46,8 +46,8 @@ def tabs() -> Callable:
 
     .. note::
 
-        tabs is a layout component, therefore, the final model will not have a attribute that can be accessed
-        trough context or API.
+        ``tabs`` is a layout component, and will not have an attribute to be accessed through context or API.
+
     """
 
     def apply(class_: type):
@@ -74,7 +74,7 @@ def tabs() -> Callable:
 
 def tab(*, caption: str) -> Callable:
     """
-    The tab represent a single entry, on the :func:`~alfasim_sdk.layout.tabs` layout.
+    The tab represents a single entry, on the :func:`~alfasim_sdk.layout.tabs` layout.
 
     Notice that only components available at the :ref:`types modules <api-types-section>` can be placed inside a tab.
     """
@@ -114,8 +114,7 @@ def group(*, caption: str) -> Callable:
 
     .. note::
 
-        group is a layout component, therefore, the final model will not have a attribute that can be accessed
-        trough context or API.
+        ``group`` is a layout component, and will not have an attribute to be accessed through context or API.
 
     """
 

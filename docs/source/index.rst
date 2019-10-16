@@ -16,7 +16,7 @@ Some examples of the capabilities that can be extended are:
 For a list of all capabilities that can be expanded check the :ref:`api-reference-section` in the documentation.
 
 Anyone with programming skills can create a Plugin for ALFAsim, for that, alfasim-SDK provides hooks to customize
-the solver and the user interface. In order to customize the solver, an API in `C` is provided for application
+the solver and the user interface. To customize the solver, an API in `C` is provided for application
 written in C/C++, while, for user interface customization, an API in Python allows the developer to customize
 the interface in a declarative way.
 

@@ -90,8 +90,8 @@ rst_prolog = """
    <br />
 
 .. |tracer_warning_text| replace::
-    This is an advanced customization. We strongly encourage the plugin developer to read the Tracers chapter of
-    |alfasim|'s Technical Report available on `Help` menu at |alfasim| application.
+    This is advanced customization. We strongly encourage the plugin developer to read the Tracers chapter of
+    |alfasim|'s Technical Report available on the `Help` menu at |alfasim| application.
 
 .. |manual| image:: _static/Help_menu_Technical_Manual.png
         :scale: 80%

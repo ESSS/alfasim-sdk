@@ -15,7 +15,7 @@ from alfasim_sdk._validators import valid_unit
 class Visibility(Enum):
     """
     Controls the visibility of the variable.
-        - Internal: The variable should only be used by the plugin, but not available to the end user.
+        - Internal: The variable should only be used by the plugin, but not available to the end-user.
         - Output: The variable should be available to the end user, as a Property on Plot Window
     """
 

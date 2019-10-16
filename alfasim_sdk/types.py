@@ -50,7 +50,7 @@ class Group:
 @attr.s(kw_only=True)
 class BaseField:
     """
-    Base field for all types available at ALFAsim.
+    A base field for all types available at ALFAsim.
 
     :param caption: Label to be displayed on the right side of the component.
 
@@ -62,11 +62,11 @@ class BaseField:
 
     .. rubric:: **Caption and Tooltip**:
 
-    Captions is the most basic information that all fields must inform, it will display Label over the right side of
+    Caption is the most basic information that all fields must inform, it will display Label over the right side of
     the component on the ``Model Explorer`` window.
 
     Tooltips are short pieces of text to reminder/inform the user about some specificity about the property when they
-    keep the mouse over the field. Tooltips must be a string, and can have HTML tags and unicode character as well.
+    keep the mouse over the field. Tooltips must be a string and can have HTML tags and Unicode characters  as well.
 
     :raise TypeError: if the tooltip informed it's not a string.
 
@@ -91,7 +91,7 @@ class BaseField:
         def alfasim_get_data_model_type():
             return [MyModel]
 
-    The images bellow shows the output from the example above.
+    The images below shows the output from the example above.
 
     .. image:: _static/base_field_caption.png
         :scale: 60%
@@ -107,13 +107,13 @@ class BaseField:
     .. rubric:: **Enable Expression**:
 
     Accepts a python function that controls either the component will be enabled, or disabled.
-    The python function will receive two arguments, a instance of itself (to check local values) and a instance of
+    The python function will receive two arguments, an instance of itself (to check local values) and an instance of
     :func:`alfasim_sdk.context.Context` to retrieve information about the application.
 
     This function must return a boolean, informing True (for enabled) or False (for disabled).
 
     .. epigraph:: **enabled**:
-        The component will handles keyboard and mouse events.
+        The component will handle keyboard and mouse events.
 
     .. epigraph:: **disabled**:
         The component will not handle events and it will be grayed out.
@@ -140,7 +140,7 @@ class BaseField:
         def alfasim_get_data_model_type():
             return [MyModel]
 
-    The image bellow shows the ``N_ions`` property disabled, when the property ``bool_value`` is disabled (False)
+    The image below shows the ``N_ions`` property disabled, when the property ``bool_value`` is disabled (False)
 
     .. image:: _static/base_field_enable_expr_1.png
 
@@ -152,7 +152,7 @@ class BaseField:
     .. rubric:: **Visible Expression**:
 
     Accepts a python function that controls either the component will be visible, or not.
-    The python function will receive two arguments, a instance of itself (to check local values) and a instance of
+    The python function will receive two arguments, an instance of itself (to check local values) and an instance of
     :func:`alfasim_sdk.context.Context` to retrieve information about the application.
 
     This function must return a boolean, informing True (for visible) or False (for invisible).
@@ -182,7 +182,7 @@ class BaseField:
             return [MyModel]
 
 
-    The image bellow shows the ``N_ions`` property visible, when the property ``bool_value`` is enabled (True)
+    The image below shows the ``N_ions`` property visible, when the property ``bool_value`` is enabled (True)
 
     .. image:: _static/base_field_visible_expr_1.png
 
@@ -255,7 +255,7 @@ class Enum(BaseField):
     The Enum field provides list of options to the user, showing  only the select item but providing a way to display
     a list of all options through a combo-box.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, beside the listed the ones listed above:
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
 
     :param values: A list of strings with the available options.
     :param initial: Indicates which one of the options should be selected per default.
@@ -367,11 +367,11 @@ class Reference(BaseReference):
 
     There are two types of models supported by this field.
 
-    :ALFAsimTypes: models from ALFAsim, example Tracers.
+    :ALFAsimTypes: models from ALFAsim, for example, Tracers.
     :Custom Data: a model defined within the plugin.
 
     .. note::
-        In order to reference custom data the model must be inside a container.
+        In order to reference custom data, the model must be inside a container.
 
     :param str caption:
         Property used as a label for the field.
@@ -468,9 +468,9 @@ class MultipleReference(BaseReference):
     The MultipleReference field works similar to :func:`~alfasim_sdk.types.Reference`, providing a list of options
     to the user, but allowing multiple values, of the same type, to be chosen.
 
-    The are two types of models supported by this field.
-    :ALFAsimTypes: models from ALFAsim, example Tracers.
-    :Custom Data: a model defined withing the plugin.
+    There are two types of models supported by this field.
+    :ALFAsimTypes: models from ALFAsim, for example, Tracers.
+    :Custom Data: a model defined within the plugin.
 
     .. note::
         In order to reference a custom data the model must be inside a container.
@@ -563,13 +563,13 @@ class Quantity(BaseField):
     """
     The Quantity field provides a way to the user provide a scalar value into the application.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, beside the listed the ones listed above:
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
     :param values:  A number value.
     :param unit:    Unit for the given scalar.
 
     All scalar values are created using the `Barril library`_
 
-    Checkout the Barril documentation, to see all available units available units [ Needs to implement on Barril this section]
+    Checkout the Barril documentation, to see all available units [ Needs to implement on Barril this section]
 
     .. note::
 
@@ -638,7 +638,7 @@ class TableColumn(BaseField):
     The TableColumn component provides columns for a :func:`~alfasim_sdk.type.Table` field.
     Currently only columns with a :func:`~alfasim_sdk.type.Quantity` fields are available.
 
-    Check out the documentation from :func:`~alfasim_sdk.type.Table` to se more details about the usage and how to retrieve values.
+    Check out the documentation from :func:`~alfasim_sdk.type.Table` to see more details about the usage and how to retrieve values.
     """
 
     id: str = attrib(validator=non_empty_str)
@@ -764,9 +764,9 @@ class Table(BaseField):
 @attr.s(kw_only=True)
 class Boolean(BaseField):
     """
-    The Boolean field provides a checkbox for to the user selected/deselected a property.
+    The Boolean field provides a checkbox to selected/deselected a property.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, beside the listed the ones listed above:
+    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
     :param value:  A boolean informing the initial state from the Field
 
     Example of usage:

@@ -27,7 +27,7 @@ def alfasim_get_data_model_type():
     - :func:`alfasim_sdk.models.container_model`
     - :func:`alfasim_sdk.models.data_model`
 
-    The image bellow shows the locations where a custom model can be inserted implementing the hook.
+    The image below shows the locations where a custom model can be inserted implementing the hook.
 
     .. image:: _static/tree_plugin_marker.png
         :scale: 80%
@@ -68,7 +68,7 @@ def alfasim_get_data_model_type():
         :scale: 80%
 
 
-    Example 2: This second example shows hot to create a new container model.
+    Example 2: This second example shows how to create a new container model.
 
     Notice that when using the :func:`~alfasim_sdk.models.container_model` you only need to inform the container class
     to the :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type` hook
@@ -135,7 +135,7 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
     """
     Allows plugins to register new additional variables on ALFAsim.
 
-    It can be used to store internal variable from the plugin (on solver), or it can be used to expose as an
+    It can be used to store the internal variable from the plugin (on solver), or it can be used to expose as an
     output to the user in the plot window (on application). To calculate and update the registered variables the Solver
     `hooks` described on :ref:`update_secondary_variables` section must be implemented.
 
@@ -184,16 +184,16 @@ def alfasim_get_status(
 
     The ``alfasim_get_status`` will be called for:
 
-     - Each time an input from the plugin model is modified.
+     - Each time a model from the plugin is modified.
      - Each time a ``Physics options`` from ALFAsim are modified. |br|
        Ex.: Hydrodynamic model changed
 
-    The ``ctx`` parameter is provided in order to retrieve information about the current state of the application and the curretn value
+    The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
     of the models implemented by the user.
 
-    Checkout the full documentation of :class:`alfasim_sdk.context.Context` for more details.
+    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
 
-    The following example shows how to display an ErrorMessage when a :func:`~alfasim_sdk.types.Quantity` field does not have a desired value.
+    The following example shows how to display an ErrorMessage when a :func:`~alfasim_sdk.types.Quantity` field does not have the desired value.
 
     .. code-block:: python
 
@@ -292,7 +292,7 @@ def alfasim_configure_layers():
                ),
            ]
 
-    The image bellow shows the new added phase on the application.
+    The image below shows the new added phase on the application.
 
     .. image:: _static/alfasim_configure_layer_example_1.png
         :scale: 80%
@@ -334,12 +334,12 @@ def alfasim_configure_phases():
         Your can restrict the ALFAsim application through the status monitor, by checking the current hydrodynamic model
         from the Physic option, for more details checkout the documentation of :ref:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
 
-    The image bellow shows the new added phase on the application.
+    The image below shows the new added phase on the application.
 
     .. image:: _static/alfasim_configure_phase_example_1.png
         :scale: 80%
 
-    Is also possible to add additional fields to an existent phases using the :class:`~alfasim_sdk.types.UpdatePhase`.
+    It is also possible to add additional fields to existent phases using the :class:`~alfasim_sdk.types.UpdatePhase`.
 
     Example of usage:
 
@@ -416,8 +416,8 @@ def alfasim_get_user_defined_tracers_from_plugin():
     Allows the plugin to add new tracers in the |alfasim|'s Tracer Solver, in which the transport equation will be
     modified by Solver `hooks` listed below.
 
-    Must return a list of tracers in which the internal tracer model `hooks` will be implemented for.
-    The folowing C/C++ Solver `hooks` must be implemented:
+    Must return a list of tracers in which the internal tracer model `hooks` will be implemented.
+    The following C/C++ Solver `hooks` must be implemented:
 
      - :py:func:`HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer>`
      - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE<alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase>`
@@ -434,10 +434,10 @@ def alfasim_get_user_defined_tracers_from_plugin():
             return ['my_tracer']
 
     .. note::
-        The tracer added in the `user defined tracers from plugin` list will not be considered as a standard tracer, in which
-        has output of its `mass fraction` and appears in the tracer container at |alfasim|'s User Interface. The `user defined
+        The tracer added in the `user-defined tracers from plugin` list will not be considered as a standard tracer, which
+        has an output of its `mass fraction` and appears in the tracer container at |alfasim|'s User Interface. The `user-defined
         tracer` is hidden (did not appear in the User Interface) and the plugin developer can modify the transport equation
-        to use its results internally. However, the `user defined tracers` will be solved together with the standard tracers
+        to use its results internally. However, the `user-defined tracers` will be solved together with the standard tracers
         (Added via User Interface).
 
     """

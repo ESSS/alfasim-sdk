@@ -17,7 +17,7 @@ solver to be tracked during the simulation.
 Application customization
 -------------------------
 
-|sdk| allows plugins to customize the user interface of |alfasim| by adding custom models, the image bellow shows
+|sdk| allows plugins to customize the user interface of |alfasim| by adding custom models, the image below shows
 the locations where a custom model can be inserted using the hook |gui_hook|.
 
 .. image:: _static/alfasim_get_data_model_type_main.png
@@ -25,7 +25,7 @@ the locations where a custom model can be inserted using the hook |gui_hook|.
 
 
 |marker_1| illustrates the section where the models |container| or |model| will be placed.
-|marker_2| illustrates the section where the the inputs fields will be placed.
+|marker_2| illustrates the section where the inputs fields will be placed.
 
 For more details about all input fields available, check the section :ref:`api-types-section`.
 
@@ -58,10 +58,10 @@ Pre-solver Customization
 ------------------------
 
 |alfasim| provides hooks to customize the internal settings of the application that interacts internally with the solver and the application,
-some of this configurations are: creation of new secondary variables, and  or new phases/fields/layers to be used.
+some of this configurations are: the creation of new secondary variables, and  or new phases/fields/layers to be used.
 
 For this sample plugin, a new |s_variable| will be created, to track the temperature of [ ... needs more details ...].
-In order to create this variables, the hook |s_variable_hook| must be implemented from :file:`myplugin.py` file.
+To create these variables, the hook |s_variable_hook| must be implemented from :file:`myplugin.py` file.
 
 A ``SecondaryVariable`` can be used to [...], because [...].
 For the full documentation of the SecondaryVariable check the :ref:`api-variables-section` section.
@@ -91,10 +91,10 @@ Hooks for Solver
 |alfasim| provides hooks that can customize the ``Solver`` behavior, this customization are implemented in C/C++ and can
 make use of the `ALFAsim-SDK API` in order to fetch information from the application.
 
-Given sequence for the sample plugin, in this last step we are going to implements the hook that update the secondary variable
+Given sequence for the sample plugin, in this last step, we are going to implements the hook that updates the secondary variable
 declared from :file:`myplugin.py` file.
 
-For this, first we need to implement two hooks that are mandatory, the :py:func:`HOOK_INITIALIZE <alfasim_sdk.hook_specs.initialize>` and :py:func:`alfasim_sdk.hook_specs.hook_finalize`
+First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk.hook_specs.initialize>` and :py:func:`alfasim_sdk.hook_specs.hook_finalize`
 With the ``HOOK_INITIALIZE`` it's possible to initialize any custom routine for [ fill with more details ], also
 with the alfasim_sdk_open [ details about alfasim_sdk_open]
 

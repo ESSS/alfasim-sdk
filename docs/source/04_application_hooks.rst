@@ -3,8 +3,8 @@
 Application Hooks
 ====================
 
-The application hooks allows plugins top add custom models or custom checks in application as well to configure internal
-setting from the ALFAsim. To add an application hook is necessary to implement the given hook in a python file that is
+The application hooks allow plugins top add custom models or custom checks in the application as well to configure internal
+settings from the ALFAsim. To add an application hook is necessary to implement the given hook in a python file that is
 already available on your plugin project folder.
 
 As an example, if the ``alfasim-sdk template`` command was created with the name ``myplugin`` the necessary file to
@@ -40,8 +40,8 @@ Additional Variables
 Hydrodynamic Model
 -------------------
 
-|alfasim| provides way to customize the hydrodynamic model available within the application, if the usage of
-the hook listed bellow, the plugin can:
+|alfasim| provides a way to customize the hydrodynamic model available within the application, if the usage of
+the hook listed below, the plugin can:
 
  - Add new fields
  - Add/update phases
@@ -57,7 +57,7 @@ the hook listed bellow, the plugin can:
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_layers
 
-In order to complement the ``Hydrodynamic model`` customization, it's possible to inform to |alfasim| which phases
+In order to complement the ``Hydrodynamic model`` customization, it's possible to inform |alfasim| which phases
 (added from plugin or not) will have the state variables calculated by plugin.
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin

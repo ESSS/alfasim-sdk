@@ -7,7 +7,7 @@ from alfasim_sdk._alfasim_sdk_utils import get_attr_class
 
 def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callable:
     """
-    Container model is a object that keeps together many different properties defined by the plugin, and allows developers
+    ``container_model`` is an object that keeps together many different properties defined by the plugin and allows developers
     to build user interfaces in a declarative way similar to :func:`~alfasim_sdk.models.data_model`.
 
     :func:`~alfasim_sdk.models.container_model` can also hold a reference to a :func:`~alfasim_sdk.models.data_model`
@@ -102,12 +102,12 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
 
 def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
     """
-    Data model is a object that keeps together many different properties defined by the plugin, and allows developers
+    ```data_model``` is an object that keeps together many different properties defined by the plugin and allows developers
     to build user interfaces in a declarative way.
 
     .. rubric:: **Application Required**:
 
-    The following options are required when declaring a data_model, and are used into the user interface
+    The following options are required when declaring a data_model and are used into the user interface
 
         :caption:   A text to be displayed over the Tree.
         :icon:      Name of the icon to be used over the Tree.
