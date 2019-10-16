@@ -222,7 +222,7 @@ class Context:
 
         The parameter ``model_name`` must be the name of a model defined within the plugin.
 
-        In the example below, the Context is used to access a property from the model "MyModel"
+        In the example below, the Context is used to access a property from the model ``MyModel``
 
         ``ctx.GetModel("Acme")`` as exemplified in the code below.
 
@@ -252,10 +252,6 @@ class Context:
 
         At runtime, you can also verify the names of the models defined by a given plugin. For this, you need to
         For more information check :func:`~alfasim_sdk.context.Context.GetPluginInfoById`
-
-        .. note::
-
-            The model returned by the GetModel is read-only, they cannot be modified.
 
         :raises TypeError: When the given ``model_name`` does not exist.
         :raises FrozenInstanceError: When trying to modify a value
@@ -334,10 +330,6 @@ class Context:
             ['MyModel']
 
 
-        .. note::
-
-          The values from PluginInfo are read-only, they cannot be modified
-
         Checkout the :func:`~alfasim_sdk.context.PluginInfo` section to know more about the properties available.
         """
 
@@ -349,11 +341,6 @@ class Context:
         Checkout the :func:`~alfasim_sdk.context.PluginInfo` section to know more about the properties available.
 
         :raises ValueError: When the plugin informed by ``plugin_id`` it's not available.
-
-        .. note::
-
-            The values from PluginInfo are read-only, they cannot be modified
-
         """
 
     def GetEdges(self) -> Optional[List[EdgeInfo]]:
@@ -361,12 +348,14 @@ class Context:
         Return a list of all Edges available on ALFAsim.
         Each Edge is represented by an instance of :func:`~alfasim_sdk.context.EdgeInfo`.
 
-        .. rubric:: Usage Example of GetEdges
+        .. rubric:: Example of GetEdges
 
         .. image:: _static/context_access_network.png
 
-        The image above has two Edges configured, you can access this information by using the method ``GetEdges`` as
+        The image above has two Edges configured, in order to access the available Edges, it's possible to use the method ``GetEdges`` as
         demonstrated below.
+
+        .. rubric:: Accessing GetEdges from the context
 
         .. code-block:: console
 
@@ -375,10 +364,6 @@ class Context:
 
             >>> ctx.GetPipelines()[0].number_of_phases_from_associated_pvt
             'Pipe 1'
-
-        .. note::
-
-            The values from EdgeInfo are read-only, they cannot be modified.
 
         Checkout the :func:`~alfasim_sdk.context.EdgeInfo` section to know more about the properties available.
         """
@@ -414,9 +399,9 @@ class Context:
         """
         Return the physics options from the current project from ALFAsim.
 
-        .. note:
+        .. rubric:: Example of GetPhysicsOptions
 
-          The values from PhysicsOptionsInfo are read-only, they cannot be modified.
+        The image below shows a configuration from a given project.
 
         .. image:: _static/context_get_advanced_options_example_2.png
             :scale: 80%
@@ -424,10 +409,9 @@ class Context:
         .. image:: _static/context_get_advanced_options_example_1.png
             :scale: 80%
 
-        .. rubric:: Usage Example of GetPhysicsOptions
+        It's possible to access this information from inside the plugin, by using context api as demonstrate below.
 
-        The image above shows the current configuration of a study, you can access this information by using the method
-        ``GetPhysicsOptions`` as demonstrated below.
+        .. rubric:: Accessing GetPhysicsOptions from the context
 
         .. code-block:: python
 

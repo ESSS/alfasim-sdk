@@ -1,3 +1,5 @@
+.. _sdk_api:
+
 C/C++ API
 =========
 
@@ -29,6 +31,7 @@ Structs
 
 .. doxygenstruct:: VariableScope
     :members:
+
 
 Functions
 ---------

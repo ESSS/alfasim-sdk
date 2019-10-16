@@ -36,7 +36,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
     Check the section :ref:`visual elements <api-types-section>` to see all inputs available, and
     :ref:`layout elements<api-layout-section>` to see all layouts available.
 
-    Example:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -66,7 +66,7 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
 
     Container data also includes automatically two actions for the model:
 
-    .. rubric:: Create new Model
+    .. rubric:: Action: Create new Model
 
     An action that creates a new model inside the container selected, you can activate this action
     by right-clicking in the container over the Tree, or by clicking on the "Plus" icon available at the ``Model Explorer``.
@@ -77,9 +77,9 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
     .. image:: _static/container_model_new_model_2.png
         :scale: 80%
 
-    .. rubric:: Remove
+    .. rubric:: Action: Remove
 
-    Remove the selected model, only available for models inside a container, you can activate this action by
+    An action that remove the selected model, only available for models inside a container, you can activate this action by
     right-clicking the model over the Tree, or by clicking on the "Trash" icon available at the ``Model Explorer``.
 
     .. image:: _static/container_model_remove_1.png

@@ -5,9 +5,34 @@ Plugin by Example
 =================
 
 
-In this section, we will continue to customize the template plugin create from the previous section,
-this plugin example will have a simple input on the user interface application and issues a custom variable on
-solver to be tracked during the simulation.
+In this section, we will continue to customize the template plugin created from the previous section,
+this plugin will calculate the liquid velocity to the power of a given exponent provided by the user from the user interface.
+
+The following equation describes the plugin:
+
+.. math::
+
+    var = U_{\text{liq}}^{n}
+
+.. rubric:: Where
+
+.. |a| replace:: :math:`U_{\text{liq}}`
+.. |b| replace:: :math:`n`
+.. |c| replace:: :math:`var`
+
+:|a|: Liquid Velocity
+:|b|: Input from the user interface
+:|c|: Plugin calculated value, that will be shown on the output.
+
+For this, we will need to:
+
+#. Create a simple input, on the user interface.
+#. Add an secondary variable, to keep track of the value.
+#. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>`.
+#. Save the input data on a plugin internal data.
+#. Get the liquid velocity from the solver, during run-time.
+#. Export the value into the created secondary variable.
+
 
 .. contents::
     :depth: 3
@@ -24,59 +49,80 @@ the locations where a custom model can be inserted using the hook |gui_hook|.
     :target: _static/alfasim_get_data_model_type_main.png
 
 
-|marker_1| illustrates the section where the models |container| or |model| will be placed.
+|marker_1| illustrates the section where the models |container| or |model| will be placed. |br|
 |marker_2| illustrates the section where the inputs fields will be placed.
 
-For more details about all input fields available, check the section :ref:`api-types-section`.
+For this example we will use a :func:`~alfasim_sdk.models.data_model` entry over the Tree,
+using a :func:`~alfasim_sdk.types.Quantity` field to get exponent value from the user.
 
-When implementing the hook |gui_hook| it's necessary to inform which ``model`` will be used, |container| or a |model|.
-For this plugin, we are going to use a simple model that only has one input field.
+The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located on :file:`myplugin/src/python` folder.
 
-From :file:`myplugin.py` inside the :file:`myplugin/src/python` folder.
+.. rubric:: Implementation of :file:`myplugin.py`
 
 .. code-block:: python
 
+    import alfasim_sdk
     from alfasim_sdk.models import data_model
     from alfasim_sdk.types import Quantity
 
-    @data_model(icon='logo.png', caption='My plugin model')
+    @data_model(caption='My plugin model', icon='')
     class MyPluginModel:
-        quantity = Quantity(value=1, unit='m', caption='Quantity Caption')
-
+        exponent = Quantity(value=1, unit='-', caption='Exponent value')
 
     @alfasim_sdk.hookimpl
     def alfasim_get_data_model_type():
         return [MyPluginModel]
 
 
-Notice the hook |gui_hook| from the example above, only the models inside the list return by this hook will be included
-on the user interface of |alfasim|.
+Notice that only models that are returned by the hook :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type`
+will be included on the user interface of |alfasim|.
 
-.. _pre_solver_customization:
+The image below illustrates the application with the output from the snippet above.
 
-Pre-solver Customization
-------------------------
+.. image:: _static/plugin_example/user_interface_hook.png
 
-|alfasim| provides hooks to customize the internal settings of the application that interacts internally with the solver and the application,
-some of this configurations are: the creation of new secondary variables, and  or new phases/fields/layers to be used.
 
-For this sample plugin, a new |s_variable| will be created, to track the temperature of [ ... needs more details ...].
-To create these variables, the hook |s_variable_hook| must be implemented from :file:`myplugin.py` file.
+For more details about all input fields available, check the section :ref:`api-types-section`.
+And for more detail about the available models, check the section :ref:`api-models-section`.
 
-A ``SecondaryVariable`` can be used to [...], because [...].
-For the full documentation of the SecondaryVariable check the :ref:`api-variables-section` section.
+
+.. _solver_customization:
+
+Solver Configuration
+--------------------
+
+|alfasim| provides hooks to customize the internal settings of the application that configures the solver internally,
+some of this configurations are:
+
+- Creation of new secondary variables
+- Creation of new phases/fields/layers.
+- Update of default phases and layers from the application.
+
+For this example, a new |s_variable| will be created, to track the liquid velocity to the power of a custom value provided from the user.
+
+
+A ``Secondary Variable`` is a variable that can be calculated along the `Network`. Also, if configured as external, this
+variable will be set an Output, and will be available within the Trends and Profiles plots.
+
+To create these variables, the hook |s_variable_hook| must be implemented in the :file:`myplugin.py` file.
+
+.. rubric:: Implementation of :file:`myplugin.py`
 
 .. code-block:: python
 
     @alfasim_sdk.hookimpl
     def alfasim_get_additional_variables():
-        from alfasim_sdk.variables import SecondaryVariable, Visibility, Location, Scope
+        import alfasim_sdk
+        from alfasim_sdk.variables import SecondaryVariable
+        from alfasim_sdk.variables import Visibility
+        from alfasim_sdk.variables import Location
+        from alfasim_sdk.variables import Scope
 
         return [
             SecondaryVariable(
-                name='annulus_temperature',
-                caption='Annulus Temperature',
-                unit='K',
+                name='U_liq_n',
+                caption='Powered Liquid Velocity',
+                unit='-',
                 visibility=Visibility.Output,
                 location=Location.Center,
                 multifield_scope=Scope.Global,
@@ -85,26 +131,67 @@ For the full documentation of the SecondaryVariable check the :ref:`api-variable
         ]
 
 
+The image below illustrates the application with the output from the snippet above.
+
+.. image:: _static/plugin_example/secondary_variable_trend_output.png
+
+
+For more details about ``SecondaryVariable``, check the section :ref:`api-variables-section`.
+
 Hooks for Solver
 ----------------
 
 |alfasim| provides hooks that can customize the ``Solver`` behavior, this customization are implemented in C/C++ and can
-make use of the `ALFAsim-SDK API` in order to fetch information from the application.
+make use of the :ref:`ALFAsim-SDK API <sdk_api>` in order to fetch information from the application.
 
-Given sequence for the sample plugin, in this last step, we are going to implements the hook that updates the secondary variable
-declared from :file:`myplugin.py` file.
+At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared from
+:file:`myplugin.py` file and retrieve the ``Liquid Velocity`` from the |alfasim|'s Solver.
 
-First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk.hook_specs.initialize>` and :py:func:`alfasim_sdk.hook_specs.hook_finalize`
-With the ``HOOK_INITIALIZE`` it's possible to initialize any custom routine for [ fill with more details ], also
-with the alfasim_sdk_open [ details about alfasim_sdk_open]
+First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk.hook_specs.initialize>` and
+the :py:func:`HOOK_FINALIZE <alfasim_sdk.hook_specs.finalize>`
+
+With them it's possible to initialize any custom data (to store any important information) for internal use. Also it's
+needed to load and unload the ALFAsim-SDK API, in which will allows the plugin to use the API in any implemented `hook`.
+
+.. rubric::  Implementation of :file:`myplugin.cpp`
+
 
 .. code-block:: cpp
 
     ALFAsimSDK_API alfasim_sdk_api;
 
-     HOOK_INITIALIZE(ctx)
+    HOOK_INITIALIZE(ctx)
     {
         alfasim_sdk_open(&alfasim_sdk_api);
+
+        int errcode = -1;
+        double n = 0.0;
+
+        errcode = alfasim_sdk_api.get_plugin_input_data_quantity(
+            ctx,
+            &n,
+            get_plugin_id(),
+            (const char*) "MyPluginModel.exponent");
+        if (errcode != 0) {
+            std::cout << "input_data_quantity error=" << errcode << "\n";
+            return errcode;
+        }
+
+        int n_threads = -1;
+
+        errcode = alfasim_sdk_api.get_number_of_threads(ctx, &n_threads);
+
+        for (int thread_id = 0; thread_id < n_threads; ++thread_id) {
+            auto* model = new MyPluginModel();
+            model->exponential = n;
+            errcode = alfasim_sdk_api.set_plugin_data(
+                ctx,
+                get_plugin_id(),
+                (void*) model,
+                thread_id
+            );
+        }
+
         return OK;
     }
 
@@ -114,7 +201,10 @@ with the alfasim_sdk_open [ details about alfasim_sdk_open]
         return OK;
     }
 
-In order to get [ details about the desired information ], you can get the information of [...]
+In order to get the ``Liquid Field Velocity`` it's necessary to retrieve the data from the simulation array trough
+the API :func:`get_simulation_array`, after that you update the created secondary variable inside the hook
+:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk.hook_specs.update_plugins_secondary_variables>` as
+exemplified in the snippet below.
 
 .. code-block:: cpp
 
@@ -122,55 +212,73 @@ In order to get [ details about the desired information ], you can get the infor
     {
         int errcode = -1;
 
-        // Workaround for ignoring update secondary variables
-        // for internal nodes
-        double* dummy_ptr = nullptr;
-        int n_control_volumes = -1;
+        // Get Liquid Field ID
+        int liquid_field_id = -1;
+        errcode = alfasim_sdk_api.get_field_id(
+            ctx,
+            &liquid_field_id,
+            "liquid"
+        )
+        if (errcode != 0) {
+            std::cout << "get_field_id error = " << errcode << "\n";
+            return errcode;
+        }
 
+        // Get Liquid Field Velocity
+        int n_faces = -1;
+        double* U_liq = nullptr;
         errcode = alfasim_sdk_api.get_simulation_array(
             ctx,
-            &dummy_ptr,
-            (char*) "rho",
+            &U_liq,
+            (char*) "U",
             VariableScope {
-                GridScope::CENTER, MultiFieldDescriptionScope::MIXTURE, TimestepScope::CURRENT },
-            0,
-            &n_control_volumes);
-        if (n_control_volumes == 1) {
+                GridScope::CENTER,
+                MultiFieldDescriptionScope::FIELD,
+                TimestepScope::CURRENT
+            },
+            liquid_field_id,
+            &n_faces);
+        if (errcode != 0) {
+            std::cout << "get_simulation_array error = " << errcode << "\n";
             return OK;
         }
 
+        // Get Exponent input data
+        double n = 0.0;
+        {
+            int thread_id = -1;
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+
+            MyPluginModel* model = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(
+                ctx, (void**) (&model),
+                get_plugin_id(), thread_id
+            );
+            n = model->exponential;
+        }
+
+        // Get Plugin Secondary Variable
         int size = -1;
-        void* annulus_temperature_void_ptr = nullptr;
+        double* U_liq_n_ptr = nullptr;
         errcode = alfasim_sdk_api.get_plugin_variable(
             ctx,
-            &annulus_temperature_void_ptr,
-            "annulus_temperature",
-            0,
+            (void**) &U_liq_n_ptr,
+            "U_liq_n",
+            0, // Global Scope
             TimestepScope::CURRENT,
             &size);
         if (errcode != 0) {
-            throw std::runtime_error("Error on get_plugin_variable (annulus_temperature)");
+            std::cout << "get_plugin_variable error = " << errcode << "\n";
+            return errcode;
         }
-
-        auto annulus_temperature_double_ptr = static_cast<double*>(annulus_temperature_void_ptr);
-
-        int n_interfaces = -1;
-        double* T_wall_interfaces = nullptr;
+        // Calculating the 'U_liq' to power of 'n'
         for (int i = 0; i < size; ++i) {
-            errcode = alfasim_sdk_api.get_wall_interfaces_temperature(
-                ctx, &T_wall_interfaces, i, TimestepScope::CURRENT, &n_interfaces);
-            if (errcode != 0) {
-                throw std::runtime_error("Error on get_wall_interfaces_temperature");
-            }
-
-            if (n_interfaces > 2) {
-                annulus_temperature_double_ptr[i] = T_wall_interfaces[2];
-            } else if (n_interfaces > 1) {
-                annulus_temperature_double_ptr[i] = T_wall_interfaces[1];
-            } else {
-                annulus_temperature_double_ptr[i] = T_wall_interfaces[0];
-            }
+            U_liq_n_ptr[i] = std::pow(U_liq[i], n);
         };
 
         return OK;
     }
+
+
+The image below illustrates the output from the solver, when running the plugin created in this section with the given
+network.

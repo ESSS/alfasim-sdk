@@ -70,7 +70,7 @@ class BaseField:
 
     :raise TypeError: if the tooltip informed it's not a string.
 
-    Example.:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -118,7 +118,7 @@ class BaseField:
     .. epigraph:: **disabled**:
         The component will not handle events and it will be grayed out.
 
-    Example.:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
         :emphasize-lines: 1-2, 11
@@ -157,7 +157,7 @@ class BaseField:
 
     This function must return a boolean, informing True (for visible) or False (for invisible).
 
-    Example.:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
         :emphasize-lines: 1-2, 11
@@ -214,7 +214,7 @@ class String(BaseField):
 
     :parameter str value: property to hold the value informed by the user.
 
-    Example of usage:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -261,7 +261,7 @@ class Enum(BaseField):
     :param initial: Indicates which one of the options should be selected per default.
                     If not given, the first item in ``values`` will be used as default.
 
-    Example of usage:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -382,7 +382,7 @@ class Reference(BaseReference):
     :param container_type:
         The name of the class that holds the ref_type, this property must be used when the ``ref_type`` references model from the plugin.
 
-    Example using ``ALFAsimTypes``:
+    .. rubric:: Example using ``ALFAsimTypes`` on myplugin.py
 
     .. code-block:: python
 
@@ -396,7 +396,7 @@ class Reference(BaseReference):
 
     .. image:: _static/reference_field_example_1.png
 
-    Example using ``Custom Data``:
+    .. rubric:: Example using ``Custom Data`` on myplugin.py
 
     .. code-block:: python
 
@@ -484,7 +484,7 @@ class MultipleReference(BaseReference):
     :ivar container_type:
         The name of the class that holds the ref_type, this property must be used when the ref_type references model from the plugin.
 
-    Example using ``ALFAsimType``
+    .. rubric:: Example using ``ALFAsimTypes`` on myplugin.py
 
     .. code-block:: python
 
@@ -497,7 +497,7 @@ class MultipleReference(BaseReference):
 
     .. image:: _static/multiplereference_field_example_1.png
 
-    Example using ``Custom Data``:
+    .. rubric:: Example using ``Custom Data`` on myplugin.py
 
     .. code-block:: python
 
@@ -578,7 +578,7 @@ class Quantity(BaseField):
 
         For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
 
-    Example of usage:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -661,7 +661,7 @@ class Table(BaseField):
     """
     The Table component provides a table to the user to be able input values manually or by importing it from a file.
 
-    Example of usage:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -769,7 +769,7 @@ class Boolean(BaseField):
     The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
     :param value:  A boolean informing the initial state from the Field
 
-    Example of usage:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 
@@ -822,7 +822,7 @@ class FileContent(BaseField):
 
     :param caption: Label to be displayed on the right side of the component.
 
-    Example of usage:
+    .. rubric:: Example myplugin.py
 
     .. code-block:: python
 

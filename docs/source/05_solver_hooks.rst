@@ -1,3 +1,5 @@
+.. _solver_hooks:
+
 Solver Hooks
 ============
 The present section describes all solver `Hooks` available on |alfasim| plugin infrastructure.
@@ -60,7 +62,7 @@ Update plugin variables
 -----------------------
 
 The `hooks` described in this section are related to plugin secondary variables that were registered in the python config
-file, as already explained in :ref:`pre_solver_customization` section. They are called `secondary variables` because they
+file, as already explained in :ref:`solver_customization` section. They are called `secondary variables` because they
 are not obtained from |alfasim|'s Solver, these ones are called primary variables and examples of those variables are `pressure`,
 `temperature`, `volume fractions` and `velocities`.
 
