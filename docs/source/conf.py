@@ -50,7 +50,12 @@ release = ""
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "breathe", "sphinx_click.ext"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "breathe",
+    "sphinx_click.ext",
+    "sphinx.ext.graphviz",
+]
 
 autodoc_typehints = "none"
 

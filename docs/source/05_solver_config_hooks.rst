@@ -25,7 +25,7 @@ Hydrodynamic Model
 -------------------
 
 |alfasim| provides a way to customize the hydrodynamic model available within the application, if the usage of
-the hook listed below, the pluin can:
+the hook listed below, the plugin can:
 
  - Add new fields
  - Add/update phases
