@@ -869,7 +869,16 @@ class FileContent(BaseField):
 @attr.s(kw_only=True, frozen=True)
 class AddField:
     """
-        Adding Fields
+    Allows the plugin add new fields to Hydrodynamic model.
+
+    An added field **must** be associated to a phase (Using :class:`~alfasim_sdk.types.AddPhase` or :class:`~alfasim_sdk.types.UpdatePhase`)
+    and added to a layer (Using :class:`~alfasim_sdk.types.AddLayer` or :class:`~alfasim_sdk.types.UpdateLayer`)
+
+    :param name: Name of the new field.
+
+    .. note::
+        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_fields` `hook`.
+
     """
 
     name: str = attr.ib()
@@ -878,7 +887,14 @@ class AddField:
 @attr.s(kw_only=True, frozen=True)
 class AddLayer:
     """
-        Adding Layers
+    Allows the plugin add new layers to Hydrodynamic model.
+
+    :param name: Name of the new layer.
+    :param fields: List of fields names contained in the added layer.
+    :param continuous_field: Name of the continuous field of the added layer (must be in the `fields` list).
+
+    .. note::
+        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_layers` `hook`.
     """
 
     name: str = attr.ib()
@@ -889,7 +905,19 @@ class AddLayer:
 @attr.s(kw_only=True, frozen=True)
 class UpdateLayer:
     """
-        Updating Layers
+    Allows the plugin to update existing layer of the Hydrodynamic model.
+
+    List of possible layers names (see :ref:`api-constants-section` for details):
+     - ``GAS_LAYER``
+     - ``LIQUID_LAYER``
+     - ``WATER_LAYER`` (If a three phase hydrodynamic model is used)
+
+    :param name: Name of the updated layer.
+    :param additional_fields: List of additional fields names to be appended in the fields list of the layer.
+
+
+    .. note::
+        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_layers` `hook`.
     """
 
     name: str = attr.ib()
@@ -899,7 +927,15 @@ class UpdateLayer:
 @attr.s(kw_only=True, frozen=True)
 class AddPhase:
     """
-        Adding Phases
+    Allows the plugin add new phases to Hydrodynamic model.
+
+    :param name: Name of the new phase.
+    :param fields: List of fields names associated to the added phase. It is important to know how to calculate the state variables of fields.
+    :param primary_field: Reference field when a phase property calculation is performed through the fields of the phase.
+    :param is_solid: A boolean variable to identify if the added phase is solid.
+
+    .. note::
+        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_phases` `hook`.
     """
 
     name: str = attr.ib()
@@ -911,7 +947,13 @@ class AddPhase:
 @attr.s(kw_only=True, frozen=True)
 class UpdatePhase:
     """
-        Updating Phases
+    Allows the plugin update existing phases of the Hydrodynamic model.
+
+    :param name: Name of the new phase.
+    :param additional_fields: List of additional fields names to be appended in the fields list of the phase.
+
+    .. note::
+        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_phases` `hook`.
     """
 
     name: str = attr.ib()
