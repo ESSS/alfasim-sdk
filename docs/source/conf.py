@@ -56,6 +56,10 @@ extensions = [
     "sphinx_click.ext",
     "sphinx.ext.graphviz",
 ]
+# -- Options for Graphviz -------------------------------------------------
+graphviz_dot = "dot"
+graphviz_dot_args = ["-Tsvg"]
+graphviz_output_format = "svg"
 
 autodoc_typehints = "none"
 

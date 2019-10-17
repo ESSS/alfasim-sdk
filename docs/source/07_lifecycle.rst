@@ -14,50 +14,60 @@ Main Overview
 .. graphviz::
 
     digraph {
-            splines=line
-            nodesep = 0.6;
-            node [fillcolor="#3AB882" style=filled color="#3AB882" fontcolor="#ffffff" shape=""];
+            //splines=false
+            nodesep = 0.7;
+            node [peripheries="2", fillcolor="#3AB882" style=filled color="#3AB882" fontcolor="#ffffff" shape=""];
             edge [ color="#8699A3" ];
 
-            init [label="Run Simulation", shape=""];
-            end [label="End", shape=""];
+            init [label="Initialize Simulation", shape=""];
+            end [label="End of Simulation", shape=""];
             config [label="Solver Configuration"];
             solver [label="Solver (Transient)"];
-            time [label="Time Step Solver"];
+            time [  fixedsize=true,
+                    label="Time Step",
+                    height="1.0",
+                    width="1.0",
+                    shape="circle",
+                    regular="true",
+                    ];
 
             hook_initialize_point [shape = point, width = 0 ]
-            invisible [shape = point, width = 0 ]
+            decision [label="If \nFinal Time", shape="diamond"]
             hook_finalize_point [shape = point, width = 0 ]
-            hook_initialize [label="HOOK_INITIALIZE", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""]
-            hook_finalize [label="HOOK_FINALIZE", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""]
+            hook_initialize [peripheries="0"
+                label="HOOK_INITIALIZE", shape="cds", color="#DA5961", fontcolor="#DA5961", style=""
+                URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.initialize", target="_top"
+            ]
+            hook_finalize [peripheries="0"
+                label="HOOK_FINALIZE", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
+                URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize", target="_top"
+            ]
+            hyd_solver [label="Hydrodynamic Solver"]
+            tracer_solver [label="Tracer Solver"]
+            output [label="Output Variables"]
 
-           node[group=a];
-           hyd_solver; tracer_solver; output
-           node[group=b];
-           init; config; hook_initialize_point; solver; time; hook_finalize_point;end
-
-           {rank = same; hook_initialize_point; hook_initialize}
-           {rank = same; hook_finalize_point; hook_finalize; }
-           {rank=same; time;tracer_solver}
-           {rank=same; solver;hyd_solver}
+            {rank = same; hook_initialize_point; hook_initialize}
+            {rank = same; hook_finalize_point; hook_finalize; }
+            {rank=same; time;tracer_solver}
+            {rank=same; solver;hyd_solver}
 
 
             init -> config;
             config -> hook_initialize_point [arrowhead= none];
 
             hook_initialize_point -> solver;
-            hook_initialize_point -> hook_initialize [style=dotted, color="#DA5961", nodesep = 1.5;];
+            hook_initialize_point -> hook_initialize [style=dotted, color="#DA5961"];
 
             solver -> time;
-            time -> hyd_solver [style=dashed];
+            time:ne -> hyd_solver:sw [style=dashed];
+            output:nw -> time:se [style=dashed];
 
             hyd_solver -> tracer_solver;
             tracer_solver -> output;
-            output -> time [style=dashed];
-            time -> invisible [arrowhead= none];
-            invisible -> hook_finalize_point [arrowhead= none];
-            //time -> hook_finalize_point [arrowhead= none];
-            hook_finalize_point ->  hook_finalize [style=dotted, color="#DA5961", nodesep = 1.5;];
+            time -> decision;
+            decision -> hook_finalize_point [arrowhead= none, label="True"];
+            decision:w -> time:w [label="False"];
+            hook_finalize_point ->  hook_finalize [style=dotted, color="#DA5961"];
             hook_finalize_point ->  end;
 
         }
@@ -68,6 +78,7 @@ Hydrodynamic Solver
 -------------------
 
 .. graphviz::
+
  digraph {
     hydrodynamic_1 [label="Primary Variables"];
         hydrodynamic_2 [label="State Variables"];
