@@ -1,6 +1,19 @@
+
 GAS_PHASE = "gas"
+"""
+Constant to identify the gas phase
+"""
+
 LIQUID_PHASE = "liquid"
+"""
+Constant to identify the liquid phase
+"""
+
 WATER_PHASE = "water"
+"""
+Constant to identify the water phase
+"""
+
 SOLID_PHASE = "solid"
 
 GAS_FIELD = "gas"
@@ -11,5 +24,16 @@ DROPLET_FIELD = "droplet"
 BUBBLE_FIELD = "bubble"
 
 GAS_LAYER = "gas"
+"""
+Constant to identify the gas layer
+"""
+
 LIQUID_LAYER = "liquid"
+"""
+Constant to identify the liquid layer
+"""
+
 WATER_LAYER = "water"
+"""
+Constant to identify the water layer
+"""

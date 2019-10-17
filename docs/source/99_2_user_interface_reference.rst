@@ -101,8 +101,15 @@ Hydrodynamic Model Customization
 Variables
 ---------
 
-.. automodule:: alfasim_sdk.variables
-    :members:
+.. autoclass:: alfasim_sdk.variables.SecondaryVariable()
+
+.. autoclass:: alfasim_sdk.variables.Type()
+
+.. autoclass:: alfasim_sdk.variables.Visibility()
+
+.. autoclass:: alfasim_sdk.variables.Location()
+
+.. autoclass:: alfasim_sdk.variables.Scope()
 
 
 
@@ -111,5 +118,14 @@ Variables
 Constants
 ---------
 
-.. automodule:: alfasim_sdk.constants
-    :members:
+.. autodata:: alfasim_sdk.constants.GAS_PHASE
+
+.. autodata:: alfasim_sdk.constants.LIQUID_PHASE
+
+.. autodata:: alfasim_sdk.constants.WATER_PHASE
+
+.. autodata:: alfasim_sdk.constants.GAS_LAYER
+
+.. autodata:: alfasim_sdk.constants.LIQUID_LAYER
+
+.. autodata:: alfasim_sdk.constants.WATER_LAYER
