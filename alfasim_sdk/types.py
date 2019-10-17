@@ -949,6 +949,11 @@ class UpdatePhase:
     """
     Allows the plugin update existing phases of the Hydrodynamic model.
 
+    List of possible phase names (see :ref:`api-constants-section` for details):
+     - ``GAS_PHASE``
+     - ``LIQUID_PHASE``
+     - ``WATER_PHASE`` (If a three phase hydrodynamic model is used)
+
     :param name: Name of the new phase.
     :param additional_fields: List of additional fields names to be appended in the fields list of the phase.
 
