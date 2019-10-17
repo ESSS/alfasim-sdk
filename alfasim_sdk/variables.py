@@ -82,6 +82,9 @@ class SecondaryVariable:
     :param checked_on_gui_default: If the added variable has :class:`~alfasim_sdk.variables.Visibility` equal to ``Output``,
         it indicates that this variable will be exported as output by default.
 
+    The ``unit`` param accepts all units available on `Barril <https://github.com/ESSS/barril>`_ Unit Manager, for
+    more information read its `documentation <https://barril.readthedocs.io/en/latest/>`_.
+
     .. note::
         This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_get_additional_variables` `hook`.
     """
