@@ -40,7 +40,8 @@ check out these additional resources to help better understand the plugin workfl
 
     03_plugin_structure
     04_application_hooks
-    05_solver_hooks
+    05_solver_config_hooks
+    06_solver_hooks
 
 Dig deeper into specific topics:
 

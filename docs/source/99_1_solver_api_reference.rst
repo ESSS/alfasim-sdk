@@ -3,7 +3,7 @@
 C/C++ API
 =========
 
-This page contains the full reference to C/C++ ``ALFAsim-SDK`` API .
+Here is listed the completed API available to implement the :ref:`solver_hooks`.
 
 .. contents::
     :depth: 3

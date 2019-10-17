@@ -1,7 +1,7 @@
-API
-===
+Application API
+===============
 
-This page contains the full reference to ``ALFAsim-SDK`` API.
+Here is listed the completed API available to implement the :ref:`user_interface_hooks-section`.
 
 .. contents::
     :depth: 3
@@ -72,7 +72,6 @@ Status
     :members:
 
 
-
 .. _api-context-section:
 
 Context
@@ -80,52 +79,3 @@ Context
 
 .. automodule:: alfasim_sdk.context
     :members:
-
-.. _api-mfd-section:
-
-Hydrodynamic Model Customization
---------------------------------
-
-.. autoclass:: alfasim_sdk.types.AddField()
-
-.. autoclass:: alfasim_sdk.types.AddPhase()
-
-.. autoclass:: alfasim_sdk.types.UpdatePhase()
-
-.. autoclass:: alfasim_sdk.types.AddLayer()
-
-.. autoclass:: alfasim_sdk.types.UpdateLayer()
-
-.. _api-variables-section:
-
-Variables
----------
-
-.. autoclass:: alfasim_sdk.variables.SecondaryVariable()
-
-.. autoclass:: alfasim_sdk.variables.Type()
-
-.. autoclass:: alfasim_sdk.variables.Visibility()
-
-.. autoclass:: alfasim_sdk.variables.Location()
-
-.. autoclass:: alfasim_sdk.variables.Scope()
-
-
-
-.. _api-constants-section:
-
-Constants
----------
-
-.. autodata:: alfasim_sdk.constants.GAS_PHASE
-
-.. autodata:: alfasim_sdk.constants.LIQUID_PHASE
-
-.. autodata:: alfasim_sdk.constants.WATER_PHASE
-
-.. autodata:: alfasim_sdk.constants.GAS_LAYER
-
-.. autodata:: alfasim_sdk.constants.LIQUID_LAYER
-
-.. autodata:: alfasim_sdk.constants.WATER_LAYER

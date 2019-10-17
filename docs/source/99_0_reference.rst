@@ -10,3 +10,4 @@ This page contains the full reference to ``ALFAsim-SDK`` API.
 
     99_1_solver_api_reference
     99_2_user_interface_reference
+    99_3_solver_configuration_reference
