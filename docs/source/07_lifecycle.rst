@@ -21,14 +21,12 @@ Main Overview
             init [label="Initialize Simulation", shape=""];
             end [label="End of Simulation", shape=""];
             config [label="Solver Configuration"];
-            solver [label="Solver (Transient)"];
+            solver [shape=point, width=0, peripheries="0"];
             time [
                     fixedsize=true,
                     label="Time Step",
-                    //height="1.0",
                     width="1.0",
                     shape="circle",
-                    //regular="true",
                     ];
 
             hook_initialize_point [shape = point, width = 0 ]
@@ -54,25 +52,37 @@ Main Overview
 
             {rank = same; hook_initialize_point; hook_initialize}
             {rank = same; hook_finalize_point; hook_finalize; }
-            {rank=same; time;tracer_solver}
-            {rank=same; solver;hyd_solver}
-
 
             init -> config;
             config -> hook_initialize_point [arrowhead= none];
 
-            hook_initialize_point -> solver;
+            hook_initialize_point -> solver [arrowhead=none];
             hook_initialize_point -> hook_initialize [style=dotted, color="#DA5961"];
+            subgraph cluster_a{
+                label="Transient Solver"
+                style="dashed, reactangular"
+                color="#8699A3"
+                labeljust="l"
 
-            solver -> time;
-            time:ne -> hyd_solver:sw [style=dashed];
-            output:nw -> time:se [style=dashed];
+                {rank=same; time;tracer_solver}
+                {rank=same; solver;hyd_solver}
+                solver -> time;
+                time:ne -> hyd_solver:w [style=dashed];
 
-            hyd_solver -> tracer_solver;
-            tracer_solver -> output;
-            time -> decision;
+                hyd_solver -> tracer_solver [weight=999];
+                tracer_solver -> output [weight=999];
+
+                node[group=x]
+                time;decision
+
+                node[group=a]
+                hyd_solver;tracer_solver;output
+
+                output:nw -> time:se [style=dashed];
+                time:s -> decision:n [weight=999];
+                decision:w -> time:w [label="No", weight=99, constraint=true];
+            }
             decision -> hook_finalize_point [arrowhead= none, label="Yes"];
-            decision:w -> time:w [label="No"];
             hook_finalize_point ->  hook_finalize [style=dotted, color="#DA5961"];
             hook_finalize_point ->  end;
 
@@ -86,8 +96,9 @@ Hydrodynamic Solver
 .. graphviz::
 
     digraph {
-
+        //splines=ortho
         nodesep = 0.9;
+        ratio=autor;
         newrank=true;
         node [
             peripheries="1",
@@ -96,7 +107,7 @@ Hydrodynamic Solver
             fontcolor="#ffffff"
             shape="reactangle",
             style="rounded, filled",
-            ];
+        ];
         edge [ color="#8699A3" ];
 
         hydrodynamic_1 [label="Primary Variables"];
@@ -106,16 +117,15 @@ Hydrodynamic Solver
         hydrodynamic_4 [label="Source Terms"];
 
 
-
         // Align Notes
         subgraph cluster2{
             labeljust="l"
             style="rounded, dashed"
             color="#8699A3"
             label="Notes"
-        note_1 [label="P, U", shape=box, color="#3AB882",fillcolor="#FFFFFF", fontcolor="#3AB882"]
-        note_2 [label="P, mi = f(P,T)", shape=box, color="#3AB882",fillcolor="#FFFFFF", fontcolor="#3AB882"]
-        note_3 [label="Mass Flow Rate, \n Flow Pattern", shape=box, color="#3AB882",fillcolor="#FFFFFF", fontcolor="#3AB882"]
+            note_1 [label="P, U", shape=box, color="#3AB882",fillcolor="#FFFFFF", fontcolor="#3AB882"]
+            note_2 [label="P, mi = f(P,T)", shape=box, color="#3AB882",fillcolor="#FFFFFF", fontcolor="#3AB882"]
+            note_3 [label="Mass Flow Rate, \n Flow Pattern", shape=box, color="#3AB882",fillcolor="#FFFFFF", fontcolor="#3AB882"]
         }
         hydrodynamic_1 -> note_1 [arrowhead=none, style=dashed, constraint=false,];
         hydrodynamic_2 -> note_2 [arrowhead=none, style=dashed, constraint=false,];
@@ -135,50 +145,62 @@ Hydrodynamic Solver
 
         // Align Hooks
 
-        hook_update_variables_point [shape = point, width = 0 ]
-        hook_calculate_source_terms_point [shape = point, width = 0 ]
+        hook_update_variables_point [shape = point, width = 0, peripheries="2"]
+        hook_calculate_source_terms_point [shape = point, width = 0, peripheries="2" ]
 
-        hook_update_variables [
-            peripheries="0"
+
+
+        hook_update_variables [peripheries="0"
             label="HOOK_UPDATE_SECONDARY_VARIABLES", shape="cds", color="#DA5961", fontcolor="#DA5961", style=""
-            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.initialize", target="_top"
+            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.update_plugins_secondary_variables", target="_top"
         ]
+        subgraph a{
+            rankdir=LR;
+        //nodesep=0.1;
+        //mindist=0.1;
         hook_calculate_mass_source_terms [peripheries="0"
             label="HOOK_CALCULATE_MASS_SOURCE_TERM", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
-            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize", target="_top"
+            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_mass_source_term", target="_top"
         ]
         hook_calculate_momentum_source_terms [peripheries="0"
             label="HOOK_CALCULATE_MOMENTUM_SOURCE_TERM", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
-            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize", target="_top"
+            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_momentum_source_term", target="_top"
         ]
         hook_calculate_energy_source_terms [peripheries="0"
             label="HOOK_CALCULATE_ENERGY_SOURCE_TERM", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
-            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize", target="_top"
+            URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_energy_source_term", target="_top"
         ]
+        }
         {rank = same; hook_update_variables_point; hook_update_variables        }
         {rank = same; hook_calculate_source_terms_point; hook_calculate_momentum_source_terms; }
 
-
-        // node[group=a, shape="circle", color=""]
-        // hook_calculate_mass_source_terms; hook_calculate_momentum_source_terms; hook_calculate_energy_source_terms
-
+        // Align all hooks
         hook_calculate_mass_source_terms -> hook_calculate_momentum_source_terms -> hook_calculate_energy_source_terms [constraint=true, style=invis]
-        // Define Main Flow
+
         subgraph cluster1{
             labeljust="l"
             style="rounded, dashed"
             color="#8699A3"
-            label="Hydrodynamic Solver"
-        hydrodynamic_1 -> hydrodynamic_2 -> hydrodynamic_3
-        hydrodynamic_3 -> hook_update_variables_point [arrowhead=none, ltail=cluster1]
-        hook_update_variables_point -> hydrodynamic_4
-        hydrodynamic_4 -> hook_calculate_source_terms_point [arrowhead=none]
+            hydrodynamic_1 -> hydrodynamic_2 -> hydrodynamic_3
+            hydrodynamic_3 -> hook_update_variables_point [arrowhead=none, ltail=cluster1]
+            hook_update_variables_point -> hydrodynamic_4
+            hydrodynamic_4 -> hook_calculate_source_terms_point [arrowhead=none]
         }
         hook_update_variables_point -> hook_update_variables [constraint=false, style=dotted, color="#DA5961"]
         hook_calculate_source_terms_point -> hook_calculate_mass_source_terms:w [constraint=false, style=dotted, color="#DA5961"]
         hook_calculate_source_terms_point -> hook_calculate_momentum_source_terms [constraint=false, style=dotted, color="#DA5961"]
         hook_calculate_source_terms_point -> hook_calculate_energy_source_terms:w [constraint=false, style=dotted, color="#DA5961"]
 
-
-
         }
+
+.. _tracer_solver:
+
+Tracer Solver
+-------------
+
+
+
+.. _output:
+
+Output
+------
