@@ -1,0 +1,76 @@
+digraph {
+        newrank=true
+        nodesep=0.5
+        node [fillcolor="#FAAC2C" style="rounded, filled" color="#FAAC2C" fontcolor="#ffffff" shape="rectangular"]
+        edge [ color="#8699A3" fontcolor="#2c3e50" ]
+
+        node_1 [label="Calculate State Variables \n for ALFAsim Phases"]
+        node_2 [label="Setup"]
+        node_3 [label="Calculate State Variables"]
+        node_4 [label="Calculate Phase Pair \n State Variables \n (Surface Tension)"]
+        node_5 [label="Finalize"]
+
+        loop_1 [fixedsize=true, label="Phases Set \n By Plugins", width="1.2", shape="circle"]
+
+        node [shape=point style=invis width=0]
+        invisible_init
+        invisible_end
+        invisible_1
+        invisible_2
+        invisible_3
+
+
+        node[peripheries="0" shape="cds", color="#DA5961",  fontcolor="#DA5961" , style="" target="_top" fontsize=10]
+        hook_initialize_state_variables_calculator [label=" HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR" URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.initialize_state_variables_calculator"]
+        hook_calculate_state_variable [label=" HOOK_CALCULATE_STATE_VARIABLE", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_state_variable"]
+        hook_calculate_phase_pair_state_variable [label=" HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_phase_pair_state_variable"]
+        hook_finalize_state_variables_calculator [label=" HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR" URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize_state_variables_calculator"]
+
+
+        {rank = same   node_2   hook_initialize_state_variables_calculator   }
+        {rank = same   node_3   hook_calculate_state_variable   }
+        {rank = same   node_4   hook_calculate_phase_pair_state_variable}
+        {rank = same   node_5   hook_finalize_state_variables_calculator   }
+
+        // Main Flow
+
+        {rank=same loop_1 node_3}
+        //{rank=same invisible_1 node_2}
+        //{rank=same invisible_2 node_4}
+        //{rank=same invisible_3 node_5}
+
+        node[group=b]
+        invisible_init;node_1;loop_1;invisible_end
+
+        invisible_init -> node_1
+
+        subgraph cluster1{
+            label=""
+            labeljust="l"
+            style="rounded, dashed"
+            color="#8699A3"
+
+
+            node_2->node_3->node_4->node_5 [weight=9999]
+            loop_1:ne -> node_2:w [style=dashed]
+            node_5:w -> loop_1:se    [style=dashed]
+
+
+            invisible_1 -> loop_1 [weight=9999]
+            edge[arrowhead=none style=normal]
+            node_1 -> invisible_1 [weight=9999]
+            loop_1 -> invisible_2
+            invisible_2 -> invisible_3
+        }
+
+        invisible_3 -> invisible_end
+
+
+        edge[constraint=false, style=dotted, color="#DA5961"]
+
+        node_2 -> hook_initialize_state_variables_calculator    [weight=9999]
+        node_3 -> hook_calculate_state_variable                 [weight=9999]
+        node_4 -> hook_calculate_phase_pair_state_variable      [weight=9999]
+        node_5 -> hook_finalize_state_variables_calculator      [weight=9999]
+
+    }

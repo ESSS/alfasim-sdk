@@ -109,19 +109,19 @@ ALFAsim's Solver Data
 
 .. warning::
     Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
-    The user must **NEVER** change the contents returned by this function.
+    The plugin must **NEVER** change the contents returned by this function.
 
 .. doxygenfunction:: get_simulation_array
 
 .. warning::
     Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
-    The user must **NEVER** change the contents returned by this function.
+    The plugin must **NEVER** change the contents returned by this function.
 
 .. doxygenfunction:: get_simulation_tracer_array
 
 .. warning::
     Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
-    The user must **NEVER** change the contents returned by this function.
+    The plugin must **NEVER** change the contents returned by this function.
 
 .. doxygenfunction:: get_simulation_quantity
 
@@ -149,12 +149,12 @@ ALFAsim's Solver Data
 Variable Name Parsing
 ~~~~~~~~~~~~~~~~~~~~~
 
-To retrieve input data from plugin's GUI, user must pass a ``var_name`` in a specific format. API functions that uses this
+To retrieve input data from the plugin's GUI, the plugin must pass a ``var_name`` in a specific format. API functions that use this
 kind of variable described on :ref:`plugin_input_data` section.
 
 All variables must begin with the model name described on the plugin model, followed by ``.`` (For nested objects) or
 ``->`` (For references). Lists must be accessed with the list index directly, for example, ``Model.lst[0]`` will be the
-first element of list "lst", inside plugin model named "Model". References can be internal (Reference to a plugin model)
+first element of the list "lst", inside the plugin model named "Model". References can be internal (Reference to a plugin model)
 or external (Reference to an ALFAsim model).
 
 Basic example
@@ -164,11 +164,11 @@ Imagine you have the following simple GUI model defined as
 
 .. code-block:: python
 
-    @data_model(icon='a.png', caption='PLUGIN DEVELOPER MODEL')
+    @data_model(icon='', caption='Plugin Model')
     class Model:
         boolean_data = Boolean(value=True, caption="BOOLEAN CAPTION")
 
-To extract the plugin input data content on C++, user must use the proper API function call:
+To extract the plugin input data content on C++, the plugin must use the proper API function call:
 
 .. code-block:: c++
 
@@ -189,25 +189,25 @@ For the cases were the model is a container, it is possible to retrieve the info
 
 .. code-block:: python
 
-    @data_model(icon='a.png', caption='PLUGIN DEVELOPER MODEL 2')
+    @data_model(icon='', caption='Plugin Model 2')
     class Model:
-        name = String(value='STRING', caption='STRING_CAPTION')
-        boolean = Boolean(value=True, caption="BOOLEAN CAPTION 2")
-        quantity = Quantity(value=1, unit='m', caption='QUANTITY CAPTION 2')
+        name = String(value='default', caption='Name')
+        boolean = Boolean(value=True, caption="Boolean")
+        quantity = Quantity(value=1, unit='m', caption='Quantity')
 
 
-    @container_model(icon='b.png', caption='PLUGIN DEVELOPER MODEL CONTAINER', model=Model)
+    @container_model(icon='', caption='Plugin Container', model=Model)
     class ModelContainer:
         pass
 
-To extract the plugin input data content on C++, user must use the proper API function call:
+To extract the plugin input data content on C++, the plugin must use the proper API function call:
 
 .. code-block:: c++
 
     int errcode = 0;
     double test_api_quantity = 0.;
     errcode = alfasim_sdk_api.get_plugin_input_data_quantity(
-        ctx, &test_api_quantity, get_plugin_id(), "ModelContainer[0].quantity");
+       ctx, &test_api_quantity, get_plugin_id(), "ModelContainer[0].quantity");
     std::cout << " Quantity from container[0]:" << test_api_quantity
               << " ERROR CODE:" << errcode
               << std::endl;
@@ -219,14 +219,18 @@ Internal Reference Example
 
 Internal references are references to models defined in the plugin itself. They are useful when you have a list of models,
 for example, but need to let the user decide from one specific model from the list. Assuming the model container defined
-in the previous, example, an internal reference for an element inside that container can be programmed as follows. User
+in the previous, example, an internal reference for an element inside that container can be programmed as follows. The plugin
 must use ``->`` to access referenced data, instead of ``.`` as in other examples.
 
 .. code-block:: python
 
-    @data_model(icon='c.png', caption='PLUGIN DEVELOPER MODEL')
+    @data_model(icon='', caption='Plugin Model')
     class OtherModel:
-        internal_reference = Reference(container_type='ModelContainer', ref_type=Model, caption="INTERNAL REFERENCE CAPTION")
+        internal_reference = Reference(
+            container_type='ModelContainer',
+            ref_type=Model,
+            caption="Internal Reference"
+        )
 
 Data from the referenced model can then be extracted on C++ code as follows. Note that the developer will extract the
 values directly, not the model itself, that is, in the example below, there is never an object of type ``Model``.
@@ -260,11 +264,14 @@ The example below extracts the `tracer Id` configured in the plugin.
 
 .. code-block:: python
 
-    @data_model(icon='c.png', caption='PLUGIN DEVELOPER MODEL')
+    @data_model(icon='', caption='Plugin Model')
     class OtherModel:
-        tracer_reference = Reference(ref_type=TracerType, caption="REFERENCE CAPTION")
+        tracer_reference = Reference(
+            ref_type=TracerType,
+            caption="Tracer Reference",
+        )
 
-To extract the plugin input data content on C++, user must use the proper API function call:
+To extract the plugin input data content on C++, the plugin must use the proper API function call:
 
 .. code-block:: c++
 
@@ -291,14 +298,18 @@ Example of a GUI model in which has both types of multiple references:
 
 .. code-block:: python
 
-    @data_model(icon='a.png', caption='PLUGIN DEVELOPER MODEL')
+    @data_model(icon='', caption='Plugin Model')
     class OtherModel:
         multiple_reference = MultipleReference(
-            ref_type=TracerType, caption='MULTIPLE REFERENCE CAPTION')
+            ref_type=TracerType,
+            caption='Multiple Reference'
+        )
+
         internal_multiple_reference = MultipleReference(
             ref_type=Model,
             container_type='ModelContainer',
-            caption='INTERNAL MULTIPLE REFERENCE CAPTION')
+            caption='Internal Multiple Reference'
+        )
 
 Example of accessing the external multiple references:
 

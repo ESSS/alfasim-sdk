@@ -49,5 +49,5 @@ Dig deeper into specific topics:
     :maxdepth: 2
     :glob:
 
-    07_lifecycle
+    07_workflow
     99_0_reference

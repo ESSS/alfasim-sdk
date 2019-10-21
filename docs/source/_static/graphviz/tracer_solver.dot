@@ -1,0 +1,70 @@
+digraph {
+        nodesep = 0.1
+        newrank=true
+        node [fillcolor="#FAAC2C" style="rounded, filled" color="#FAAC2C" fontcolor="#ffffff" shape="rectangular"]
+        edge [ color="#8699A3" fontcolor="#2c3e50" ]
+
+        tracer_1 [label="Primary Variables \n (Solver Unknowns, ϕ) "]
+        tracer_2 [label="Calculate \n Secondary Variables"]
+        tracer_3 [label="Calculate \n Source Terms"]
+
+        invisible_init [shape=point, style=invis]
+        invisible_end [shape=point, style=invis]
+
+        node[shape = point, width = 0, peripheries="2" ]
+        hook_initialize_user_defined_tracer_point
+        hook_set_bc_user_defined_tracer_point
+        hook_update_variables_point
+        hook_calculate_source_terms_point
+
+        node[peripheries="0" shape="cds", color="#DA5961",  fontcolor="#DA5961" , style="" target="_top" fontsize=10]
+        hook_initialize_user_defined_tracer [label=" HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER" URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer"]
+        hook_set_bc_user_defined_tracer [label=" HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer"]
+        hook_update_variables [label=" HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver"]
+        hook_calculate_tracer_source_terms [label=" HOOK_CALCULATE_TRACER_SOURCE_TERM" URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_tracer_source_term"]
+        hook_update_bc_user_defined_tracer [label=" HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER" URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer"]
+        hook_calculate_mass_fraction_of_tracer_in_field [label=" HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD \n HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE" URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase" ]
+
+        {rank = same   hook_update_variables_point   hook_update_variables}
+        {rank = same   hook_calculate_source_terms_point   hook_calculate_tracer_source_terms   }
+        {rank = same   hook_initialize_user_defined_tracer_point   hook_initialize_user_defined_tracer   }
+        {rank = same   hook_set_bc_user_defined_tracer_point   hook_set_bc_user_defined_tracer   }
+        {rank = same   tracer_1   hook_update_bc_user_defined_tracer   }
+        {rank = same   tracer_2   hook_calculate_mass_fraction_of_tracer_in_field}
+
+        // Main Flow
+        invisible_init -> hook_initialize_user_defined_tracer_point [arrowhead=none]
+        hook_calculate_source_terms_point -> invisible_end
+
+        subgraph cluster1{
+            labeljust="l"
+            style="rounded, dashed"
+            color="#8699A3"
+
+            hook_initialize_user_defined_tracer_point -> hook_set_bc_user_defined_tracer_point [arrowhead=none]
+            hook_set_bc_user_defined_tracer_point-> tracer_1
+            tracer_1 -> tracer_2
+            tracer_2 -> hook_update_variables_point [arrowhead=none]
+            hook_update_variables_point -> tracer_3
+            tracer_3 -> hook_calculate_source_terms_point [arrowhead=none]
+        }
+
+        edge[constraint=false, style=dotted, color="#DA5961"]
+
+        subgraph cluster2{
+            label="Hooks for User Defined Tracers"
+            labeljust="l"
+            fontcolor="#2c3e50"
+            style="rounded, dashed"
+            color="#8699A3"
+
+            hook_initialize_user_defined_tracer_point -> hook_initialize_user_defined_tracer
+            hook_set_bc_user_defined_tracer_point -> hook_set_bc_user_defined_tracer
+            tracer_1 -> hook_update_bc_user_defined_tracer
+            tracer_2 -> hook_calculate_mass_fraction_of_tracer_in_field
+        }
+
+        hook_calculate_source_terms_point -> hook_calculate_tracer_source_terms
+        hook_update_variables_point -> hook_update_variables
+
+    }

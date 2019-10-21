@@ -2,6 +2,7 @@
 
 Solver Hooks
 ============
+
 The present section describes all solver `Hooks` available on |alfasim| plugin infrastructure.
 Solver `Hooks` are |alfasim|'s pre-defined functions that allows the plugin developer to add/update |alfasim|'s Solver.
 As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``template`` option
@@ -13,6 +14,9 @@ on |sdk|'s CLI a new file named ``plugin.c`` will be available to implement thos
 
 In order to help the developer to decide which `hooks` to implement in the plugin, they are shown below according to their
 classification which identifies what part of the solver workflow is related to.
+
+To better visualize the interaction of the hooks with the solver, the section :ref:`workflow_section`
+has several graphs illustrating the solver's walkthrough, showing where each hook will be called.
 
 .. contents::
     :depth: 3
@@ -32,6 +36,13 @@ will be used during the simulation, and also by other `hooks`.
 .. warning::
     The plugin internal data will be hold by |alfasim|'s solver, however the plugin has full responsibility to allocate
     and deallocate its data from memory.
+
+
+The following graph is the same one available at :ref:`main_overview` section from :ref:`workflow_section`. It illustrates
+where the :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>` and the :py:func:`HOOK_FINALIZE<alfasim_sdk.hook_specs.finalize>`
+will be called.
+
+.. graphviz:: _static/graphviz/main_flow.dot
 
 .. autofunction:: alfasim_sdk.hook_specs.initialize
 
