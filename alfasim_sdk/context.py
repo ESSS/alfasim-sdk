@@ -265,7 +265,7 @@ class Context:
 
         .. rubric:: Usage Example of GetPipelines
 
-        .. image:: _static/context_access_network.png
+        .. image:: _static/images/api/context_access_network.png
 
         The image above has two Pipelines configured, you can access this information by using the method ``GetPipelines`` as
         demonstrated below.
@@ -350,7 +350,7 @@ class Context:
 
         .. rubric:: Example of GetEdges
 
-        .. image:: _static/context_access_network.png
+        .. image:: _static/images/api/context_access_network.png
 
         The image above has two Edges configured, in order to access the available Edges, it's possible to use the method ``GetEdges`` as
         demonstrated below.
@@ -375,7 +375,7 @@ class Context:
 
         .. rubric:: Usage Example of GetNodes
 
-        .. image:: _static/context_access_network.png
+        .. image:: _static/images/api/context_access_network.png
 
         The image above has three nodes configured, you can access this information by using the method ``GetNodes`` as
         demonstrated below.
@@ -403,10 +403,10 @@ class Context:
 
         The image below shows a configuration from a given project.
 
-        .. image:: _static/context_get_advanced_options_example_2.png
+        .. image:: _static/images/api/context_get_advanced_options_example_2.png
             :scale: 80%
 
-        .. image:: _static/context_get_advanced_options_example_1.png
+        .. image:: _static/images/api/context_get_advanced_options_example_1.png
             :scale: 80%
 
         It's possible to access this information from inside the plugin, by using context api as demonstrate below.
