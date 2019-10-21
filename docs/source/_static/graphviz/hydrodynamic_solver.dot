@@ -1,75 +1,33 @@
 digraph {
-    nodesep = 0.9;
-    ratio=autor;
+    nodesep = 0.6;
     newrank=true;
-    node [
-        peripheries="1",
-        fillcolor="#FAAC2C"
-        style="rounded, filled"
-        color="#FAAC2C"
-        fontcolor="#ffffff"
-        shape="rectangular"
-    ];
-    edge [ color="#8699A3" fontcolor="#2c3e50" ];
+    node [fillcolor="#FAAC2C", style="rounded, filled", color="#FAAC2C", fontcolor="#ffffff",  target="_top"]
+    edge [color="#8699A3", fontcolor="#2c3e50"]
 
     hydrodynamic_1 [label="Primary Variables \n (Solver Unknowns)"]
-    hydrodynamic_2 [label="Calculate \n State Variables" URL="../07_workflow.html#state-variable-calculator", target="_top"]
+    hydrodynamic_2 [label="Calculate \n State Variables" URL="../07_workflow.html#state-variable-calculator"]
     hydrodynamic_3 [label="Calculate \n Secondary Variables"]
     hydrodynamic_4 [label="Calculate \n Source Terms"]
 
 
-    // Align Notes
-    subgraph cluster2{
-        labeljust="l"
-        style="rounded, dashed"
-        fontcolor="#2c3e50"
-        color="#8699A3"
-        note_1 [label="α, P, U, T", shape=box, color="#FAAC2C",fillcolor="#FFFFFF", fontcolor="#FAAC2C"]
-        note_2 [label="ρ, μ, Cₚ, ... = ƒ(P,T)", shape=box, color="#FAAC2C",fillcolor="#FFFFFF", fontcolor="#FAAC2C"]
-        note_3 [label="Mass Flow Rate, Flow Pattern ...", shape=box, color="#FAAC2C",fillcolor="#FFFFFF", fontcolor="#FAAC2C"]
-    }
-    hydrodynamic_1 -> note_1 [arrowhead=none, style=dashed, constraint=false,];
-    hydrodynamic_2 -> note_2 [arrowhead=none, style=dashed, constraint=false,];
-    hydrodynamic_3 -> note_3 [arrowhead=none, style=dashed, constraint=false,];
-
-    {rank=same; hydrodynamic_1; note_1}
-    {rank=same; hydrodynamic_2; note_2}
-    {rank=same; hydrodynamic_3; note_3}
-
-    note_1->note_2->note_3[ style = invis ]
-
     invisible_init [shape=point, style=invis]
     invisible_end [shape=point, style=invis]
-
-    invisible_init -> hydrodynamic_1
-    hook_calculate_source_terms_point -> invisible_end ;
-
-    // Align Hooks
-
     hook_update_variables_point [shape = point, width = 0, peripheries="2"]
     hook_calculate_source_terms_point [shape = point, width = 0, peripheries="2" ]
 
-    hook_update_variables [peripheries="0"
-        label="HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES", shape="cds", color="#DA5961", fontcolor="#DA5961", style=""
-        URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.update_plugins_secondary_variables", target="_top"
-    ]
-    subgraph a{
-        rankdir=LR;
-    hook_calculate_mass_source_terms [peripheries="0"
-        label="HOOK_CALCULATE_MASS_SOURCE_TERM", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
-        URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_mass_source_term", target="_top"
-    ]
-    hook_calculate_momentum_source_terms [peripheries="0"
-        label="HOOK_CALCULATE_MOMENTUM_SOURCE_TERM", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
-        URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_momentum_source_term", target="_top"
-    ]
-    hook_calculate_energy_source_terms [peripheries="0"
-        label="HOOK_CALCULATE_ENERGY_SOURCE_TERM", shape="cds", color="#DA5961",  fontcolor="#DA5961" , style=""
-        URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_energy_source_term", target="_top"
-    ]
-    }
+    // Align Hooks
+    node[peripheries="0", shape="cds", color="#DA5961", fontcolor="#DA5961", style=""]
+    hook_update_variables [label="HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.update_plugins_secondary_variables"]
+
+    hook_calculate_mass_source_terms [label="HOOK_CALCULATE_MASS_SOURCE_TERM", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_mass_source_term"]
+    hook_calculate_momentum_source_terms [label="HOOK_CALCULATE_MOMENTUM_SOURCE_TERM", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_momentum_source_term"]
+    hook_calculate_energy_source_terms [label="HOOK_CALCULATE_ENERGY_SOURCE_TERM", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.calculate_energy_source_term"]
+
     {rank = same; hook_update_variables_point; hook_update_variables        }
     {rank = same; hook_calculate_source_terms_point; hook_calculate_momentum_source_terms; }
+
+    invisible_init -> hydrodynamic_1
+    hook_calculate_source_terms_point -> invisible_end ;
 
     // Align all hooks
     hook_calculate_mass_source_terms -> hook_calculate_momentum_source_terms -> hook_calculate_energy_source_terms [constraint=true, style=invis]
@@ -89,4 +47,26 @@ digraph {
     hook_calculate_source_terms_point -> hook_calculate_momentum_source_terms [constraint=false, style=dotted, color="#DA5961"]
     hook_calculate_source_terms_point -> hook_calculate_energy_source_terms:w [constraint=false, style=dotted, color="#DA5961"]
 
+    // Align Notes
+    subgraph cluster2{
+        labeljust="l"
+        style="rounded, dashed"
+        fontcolor="#2c3e50"
+        color="#8699A3"
+
+        node[shape=box, color="#FAAC2C",fillcolor="#FFFFFF", fontcolor="#FAAC2C", peripheries="1" shape="rectangular"]
+        note_1 [label="α, P, U, T"]
+        note_2 [label="ρ, μ, Cₚ, ... = ƒ(P,T)"]
+        note_3 [label="Mass Flow Rate, Flow Pattern ..."]
+    }
+
+    {rank=same; hydrodynamic_1; note_1}
+    {rank=same; hydrodynamic_2; note_2}
+    {rank=same; hydrodynamic_3; note_3}
+    note_1->note_2->note_3[ style = invis ]
+
+    edge[arrowhead=none, style=dashed, constraint=false,]
+    hydrodynamic_1 -> note_1
+    hydrodynamic_2 -> note_2
+    hydrodynamic_3 -> note_3
     }

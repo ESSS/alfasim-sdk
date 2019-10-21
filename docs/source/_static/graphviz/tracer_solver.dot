@@ -1,5 +1,5 @@
 digraph {
-        nodesep = 0.1
+        nodesep = 0.7
         newrank=true
         node [fillcolor="#FAAC2C" style="rounded, filled" color="#FAAC2C" fontcolor="#ffffff" shape="rectangular"]
         edge [ color="#8699A3" fontcolor="#2c3e50" ]
@@ -32,7 +32,6 @@ digraph {
         {rank = same   tracer_1   hook_update_bc_user_defined_tracer   }
         {rank = same   tracer_2   hook_calculate_mass_fraction_of_tracer_in_field}
 
-        // Main Flow
         invisible_init -> hook_initialize_user_defined_tracer_point [arrowhead=none]
         hook_calculate_source_terms_point -> invisible_end
 
