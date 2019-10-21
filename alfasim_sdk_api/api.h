@@ -164,8 +164,8 @@ DLL_EXPORT int get_plugin_input_data_file_content_size(void* ctx, int* out, cons
         &values,
         &size,
         "temperature",
-        plugin_id,
-        "some_table"
+        get_plugin_id(),
+        "Model.some_table"
     );
     for (int i = 0; i < size; ++i) {
         some_plugin_data = 1.1 * values[i];
@@ -198,7 +198,7 @@ DLL_EXPORT int get_plugin_input_data_table_quantity(
     ~~~~~{.cpp}
     void* tracer_ref = nullptr;
     errcode = get_plugin_input_data_reference(
-        ctx, &tracer_ref, plugin_id, "Model.tracer_reference");
+        ctx, &tracer_ref, get_plugin_id(), "Model.tracer_reference");
 
     int tracer_id = -1;
     errcode = get_tracer_id(ctx, &tracer_id, tracer_ref);
@@ -221,7 +221,7 @@ DLL_EXPORT int get_plugin_input_data_reference(void* ctx, void** out, const char
     int errcode = -1;
     int indexes_size = -1;
     errcode = get_plugin_input_data_multiplereference_selected_size(
-        ctx, &indexes_size, plugin_id, "Model.internal_multiple_reference");
+        ctx, &indexes_size, get_plugin_id(), "Model.internal_multiple_reference");
 
     for (int i = 0; i < indexes_size; ++i) {
         auto value = -1.0;
@@ -229,7 +229,7 @@ DLL_EXPORT int get_plugin_input_data_reference(void* ctx, void** out, const char
             "Model.internal_multiple_reference[" + std::to_string(i) + "]->quantity");
 
         errcode = get_plugin_input_data_quantity(
-            ctx, &value, plugin_id, reference_str.c_str());
+            ctx, &value, get_plugin_id(), reference_str.c_str());
         }
     }
     ~~~~~
