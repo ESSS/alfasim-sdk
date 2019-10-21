@@ -281,3 +281,5 @@ exemplified in the snippet below.
 
 The image below illustrates the output from the solver, when running the plugin created in this section with the given
 network.
+
+.. image:: _static/images/plugin_example/output_graph.png
