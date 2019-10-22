@@ -19,7 +19,7 @@ the official docs <https://www.python.org/downloads/>`_.
 .. note::
 
     It is recommended that you install the |sdk| using a Python Virtual Environment.
-    For more details, see Virtual Environments and Packages in Python documentation.
+    For more details, see `Virtual Environments and Packages in Python documentation <https://docs.python.org/3/tutorial/venv.html>`_.
 
 From a terminal, install the |sdk| with :command:`pip` command.
 
@@ -28,7 +28,11 @@ From a terminal, install the |sdk| with :command:`pip` command.
     >>> pip install alfasim-sdk
 
 
-Also, make sure to have `CMake` at least version `3.5.2` installed and the `Ninja` package.
+Also, make sure to have at least the following version for this software:
+
+ - ``CMake`` at least version 3.5.2
+ - ``Ninja`` at least version 1.7.0
+
 
 The :program:`alfasim-sdk` package has several commands that can be visualized by running the help option.
 
@@ -91,8 +95,8 @@ After the execution of the :program:`template` command the generated plugin proj
 The highlights here are for:
 
 :plugin.yaml: File with all information about the plugin that will be used by |alfasim|.
-:myplugin.py: Implementation of the hooks for customization of the UI interface, or the pre-solver hooks
-:myplugin.c:  Implementation of the hooks for customization of solver
+:myplugin.py: Implementation of the hooks for customization of the UI interface, or the solver configuration hooks.
+:myplugin.c:  Implementation of the hooks for customization of solver.
 
 
 Check out the :ref:`Plugin Structure section <plugin_structure-section>` for more details about how the folder and files are structured, and

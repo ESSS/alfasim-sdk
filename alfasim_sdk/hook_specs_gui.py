@@ -326,11 +326,14 @@ def alfasim_configure_phases():
     With this new phase, all existing hydrodynamic models from the application will have this additional phase.
     Notice that the ``fields`` parameter must be a field registered from the hook :func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_fields`.
 
-    .. note:
+    .. note::
 
-        If your plugin cannot work with an existing ALFAsim phase, for example the water phase.
-        Your can restrict the ALFAsim application through the status monitor, by checking the current hydrodynamic model
-        from the Physic option, for more details checkout the documentation of :ref:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
+            You can restrict the operation of your plugin in the application to certain settings by using the status monitor.
+            For example, if your plugin does not work with the water phase you can block the simulation
+            if the user is using a hydrodynamic model with water.
+
+            For more details check out the documentation of :ref:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
+
 
     The image below shows the new added phase on the application.
 

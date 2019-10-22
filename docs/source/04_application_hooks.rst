@@ -3,8 +3,8 @@
 Application Hooks
 ====================
 
-The application hooks allow plugins to add custom models or custom checks in the application as well to configure internal
-settings from the ALFAsim. To add an application hook is necessary to implement the given hook in a python file that is
+The application hooks allow plugins to add custom models or custom checks in the application.
+To add an application hook is necessary to implement the given hook in a python file that is
 already available on your plugin project folder.
 
 As an example, if the ``alfasim-sdk template`` command was created with the name ``myplugin`` the necessary file to

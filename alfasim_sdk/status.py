@@ -23,8 +23,8 @@ class ErrorMessage:
 @attr.s(kw_only=True)
 class WarningMessage:
     """
-    WarningMessage allows the plugin to display a message to the user over the status monitor, and signalize a minor
-    issue, that needs to be fixed but doesn't need to lock the simulation.
+    WarningMessage allows the plugin to display a message to the user over the status monitor, and signalizes a minor
+    issue, that needs to be fixed but doesn't need to block the simulation.
 
     :param model_name: Name of the model that issues the warning.
     :param message: Message that will be displayed over the status monitor.

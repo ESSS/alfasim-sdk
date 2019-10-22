@@ -6,7 +6,7 @@ Plugins Structure
 As mentioned in :ref:`quick-start-section`, the |sdk| package has few utilities to help in the process to create
 a new plugin project and to create a plugin file.
 
-At any moment, it's possible to invoke the help command to list all commands available.
+At any moment, it's possible to invoke the ``help`` command to list all commands available.
 
 .. code-block:: bash
 

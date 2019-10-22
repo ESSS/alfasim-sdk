@@ -21,7 +21,7 @@ The following equation describes the plugin:
 .. |c| replace:: :math:`var`
 
 :|a|: Liquid Velocity
-:|b|: Input from the user interface
+:|b|: Exponent, input from user interface
 :|c|: Plugin calculated value, that will be shown on the output.
 
 For this, we will need to:
@@ -31,7 +31,7 @@ For this, we will need to:
 #. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>`.
 #. Save the input data on a plugin internal data.
 #. Get the liquid velocity from the solver, during run-time.
-#. Export the value into the created secondary variable.
+#. Export the value into the created/registered plugin secondary variable.
 
 
 .. contents::
@@ -90,10 +90,10 @@ And for more detail about the available models, check the section :ref:`api-mode
 Solver Configuration
 --------------------
 
-|alfasim| provides hooks to customize the internal settings of the application that configures the solver internally,
+|sdk| provides hooks to customize the settings of the application that configures the solver internally,
 some of this configurations are:
 
-- Creation of new secondary variables
+- Creation/Registration of new secondary variables
 - Creation of new phases/fields/layers.
 - Update of default phases and layers from the application.
 
@@ -140,8 +140,8 @@ For more details about ``SecondaryVariable``, check the section :ref:`api-variab
 Hooks for Solver
 ----------------
 
-|alfasim| provides hooks that can customize the ``Solver`` behavior, this customization are implemented in C/C++ and can
-make use of the :ref:`ALFAsim-SDK API <sdk_api>` in order to fetch information from the application.
+|sdk| provides hooks that can customize the ``Solver`` behavior, this customization are implemented in C/C++ and can
+make use of the :ref:`ALFAsim-SDK C/C++ API <sdk_api>` in order to fetch information from the application.
 
 At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared from
 :file:`myplugin.py` file and retrieve the ``Liquid Velocity`` from the |alfasim|'s Solver.
@@ -181,6 +181,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
         errcode = alfasim_sdk_api.get_number_of_threads(ctx, &n_threads);
 
         for (int thread_id = 0; thread_id < n_threads; ++thread_id) {
+            // MyPluginModel is a class or struct defined by plugin
             auto* model = new MyPluginModel();
             model->exponential = n;
             errcode = alfasim_sdk_api.set_plugin_data(
@@ -200,10 +201,11 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
         return OK;
     }
 
-In order to get the ``Liquid Field Velocity`` it's necessary to retrieve the data from the simulation array trough
-the API :func:`get_simulation_array`, after that you update the created secondary variable inside the hook
-:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk.hook_specs.update_plugins_secondary_variables>` as
-exemplified in the snippet below.
+Then, since the plugin wants to calculate its own secondary variable, the
+:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk.hook_specs.update_plugins_secondary_variables>` must be implemented.
+As can be seen in the example below, to retrieve the velocity of the continuous liquid field
+it's necessary to use the :func:`get_simulation_array` API function.
+
 
 .. code-block:: cpp
 

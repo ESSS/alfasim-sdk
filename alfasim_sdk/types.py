@@ -210,7 +210,7 @@ class String(BaseField):
     """
     The String field represents an input that allows the user to enter and edit a single line of plain text.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, plus the following ones
+    The String field have all options available from :func:`~alfasim_sdk.types.BaseField`, plus the following ones
 
     :parameter str value: property to hold the value informed by the user.
 
@@ -255,7 +255,7 @@ class Enum(BaseField):
     The Enum field provides list of options to the user, showing  only the select item but providing a way to display
     a list of all options through a combo-box.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
+    The Enum field have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
 
     :param values: A list of strings with the available options.
     :param initial: Indicates which one of the options should be selected per default.
@@ -563,7 +563,7 @@ class Quantity(BaseField):
     """
     The Quantity field provides a way to the user provide a scalar value into the application.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
+    The Quantity field have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
     :param values:  A number value.
     :param unit:    Unit for the given scalar.
 
@@ -816,7 +816,7 @@ class FileContent(BaseField):
     .. note::
 
         If you want to make the file mandatory it is recommended to include a status monitor in your plugin
-        to make sure that that a file is selected.
+        to make sure that a file is selected.
 
         For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
 

@@ -143,10 +143,10 @@ def package(ctx, plugin_dir, package_name, dst):
     """
     Creates a new ``<package-name>.hmplugin`` file containing all the necessary files.
 
-    This command will first invoke the compile command to generate the shared library, and after that, the plugin
+    This command will first invoke the ``compile`` command to generate the shared library, and after that, the plugin
     package will be generated  with all the content available from the directory assets and artifacts.
 
-    By default, the package command will assume that the plugin project is the current directory and the generated file
+    By default, the ``package`` command will assume that the plugin project is the current directory and the generated file
     will be placed also in the current directory.
 
     In order to change that, it's possible to use the options ``plugin-dir`` and ``dst``
@@ -164,7 +164,7 @@ def package_only(ctx, plugin_dir, package_name, dst):
     """
     Generate a ``<package_name>.hmplugin`` file with all the content from the directory assets and artifacts.
 
-    Per default, the package will be created inside the folder plugin_dir, however, it's possible
+    By default, the package will be created inside the folder plugin_dir, however, it's possible
     to give another path filling the dst argument.
     """
     plugin_dir = Path(plugin_dir)
