@@ -4,7 +4,7 @@
 Full API Reference
 ==================
 
-This page contains the full reference to ``ALFAsim-SDK`` API.
+This page contains the full reference to |sdk| API.
 
 .. toctree::
 

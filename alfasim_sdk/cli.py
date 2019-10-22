@@ -58,7 +58,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     """
     Generate a template with the necessary files and structure to create a plugin.
 
-    The template folder will be placed on the ``dst`` option, that per default the current directory from where the command
+    The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
     was invoked.
 
     The files generated and their contents are ready to be used, or customized and have the following structured.
@@ -146,14 +146,10 @@ def package(ctx, plugin_dir, package_name, dst):
     This command will first invoke the compile command to generate the shared library, and after that, the plugin
     package will be generated  with all the content available from the directory assets and artifacts.
 
-    Per default, the package command will assume that the plugin project is the current directory and the generated file
+    By default, the package command will assume that the plugin project is the current directory and the generated file
     will be placed also in the current directory.
 
-    In order to change that, it's possible to pass the following options:
-
-     -- plugin-dir with the path to where the plugin directory, where configuration and the shared library is located.
-     -- dst with the path to where the output package should be located
-
+    In order to change that, it's possible to use the options ``plugin-dir`` and ``dst``
     """
     ctx.invoke(_compile, plugin_dir=plugin_dir)
     ctx.invoke(package_only, plugin_dir=plugin_dir, package_name=package_name, dst=dst)

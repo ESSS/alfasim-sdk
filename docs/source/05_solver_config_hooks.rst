@@ -3,8 +3,8 @@
 Solver Configuration Hooks
 ==========================
 
-The solver configuration hooks allow plugins configure internal settings from the ALFAsim.
-To add an configuration hook is necessary to implement the given `hook` in a python file that is already available
+The solver configuration hooks allow plugins to configure internal settings from ALFAsim.
+To add a configuration hook it is necessary to implement the given `hook` in a python file that is already available
 on your plugin project folder.
 
 As an example, if the ``alfasim-sdk template`` command was created with the name ``myplugin`` the necessary file to
@@ -24,7 +24,7 @@ Additional Variables
 Hydrodynamic Model
 -------------------
 
-|alfasim| provides a way to customize the hydrodynamic model available within the application, if the usage of
+|alfasim| provides a way to customize the hydrodynamic model available within the application, with the usage of
 the hook listed below, the plugin can:
 
  - Add new fields

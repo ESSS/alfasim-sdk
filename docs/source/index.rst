@@ -1,7 +1,7 @@
-ALFASIM-SDK
+ALFAsim-SDK
 ===========
 
-The ALFAsim-SDK help developers to create plugins for an ALFAsim application.
+The |sdk| help developers to create plugins for an ALFAsim application.
 Plugins can extend the ALFAsim capabilities in a lot of ways, from adding a simple input to a custom calculation of solver equations.
 
 Some examples of the capabilities that can be extended are:
@@ -15,13 +15,13 @@ Some examples of the capabilities that can be extended are:
 
 For a list of all capabilities that can be expanded check the :ref:`api-reference-section` in the documentation.
 
-Anyone with programming skills can create a Plugin for ALFAsim, for that, alfasim-SDK provides hooks to customize
+Anyone with programming skills can create a Plugin for ALFAsim, for that, |sdk| provides hooks to customize
 the solver and the user interface. To customize the solver, an API in `C` is provided for application
 written in C/C++, while, for user interface customization, an API in Python allows the developer to customize
 the interface in a declarative way.
 
 
-To get quick and running with ``ALFAsim-SDK`` you can read the :ref:`quick-start-section` and the
+To get quick and running with |sdk| you can read the :ref:`quick-start-section` and the
 :ref:`plugin-by-example-section` sections
 
 .. toctree::

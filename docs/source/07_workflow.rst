@@ -5,7 +5,7 @@ Simulator WorkFlow
 
 Here are shown some graphs of the |alfasim| simulator workflow. In those graphs, it is possible to identify when
 the :ref:`solver_hooks` are called during the simulation. Some of them, like :ref:`hyd_solver` and  :ref:`tracer_solver`,
-had their own graphs expanded to make it possible to see more internal `hooks`.
+have their graphs expanded to make it possible to see more internal `hooks`.
 
 .. _main_overview:
 

@@ -150,7 +150,7 @@ First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <
 the :py:func:`HOOK_FINALIZE <alfasim_sdk.hook_specs.finalize>`
 
 With them it's possible to initialize any custom data (to store any important information) for internal use. Also it's
-needed to load and unload the ALFAsim-SDK API, in which will allows the plugin to use the API in any implemented `hook`.
+needed to load and unload the |sdk| API, in which will allows the plugin to use the API in any implemented `hook`.
 
 .. rubric::  Implementation of :file:`myplugin.cpp`
 

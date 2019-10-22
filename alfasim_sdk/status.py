@@ -7,7 +7,7 @@ from alfasim_sdk._validators import non_empty_str
 @attr.s(kw_only=True)
 class ErrorMessage:
     """
-    ErrorMessage allows the plugin to display a message over the status monitor, and signalize to the application to lock
+    ErrorMessage allows the plugin to display a message over the status monitor, and signalize to the application to block
     the simulation until the issue is fixed.
 
     :param model_name: Name of the model that issues the error.

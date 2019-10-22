@@ -3,7 +3,7 @@
 Quick Start
 ===========
 
-In this section, it's showed how to create a plugin from scratch with the template command provided by |sdk|.
+In this section, it's shown how to create a plugin from scratch with the template command provided by |sdk|.
 With this template, you can easily customize your application to extended |alfasim| functionality.
 
 This allows you to experience the complete creation of a plugin workflow in a short time.
@@ -30,7 +30,7 @@ From a terminal, install the |sdk| with :command:`pip` command.
 
 Also, make sure to have `CMake` at least version `3.5.2` installed and the `Ninja` package.
 
-The package :program:`alfasim-sdk` has several, and you can explore them all by running:
+The :program:`alfasim-sdk` package has several commands that can be visualized by running the help option.
 
 .. code-block:: bash
 

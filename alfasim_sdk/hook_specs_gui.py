@@ -268,7 +268,7 @@ def alfasim_configure_layers():
     """
     Allows plugins to configure new layers or associate a new field with a existing layer for ALFAsim's hydrodynamic model
 
-    In order to configure a new layer is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
+    In order to configure a new layer, it is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
     required fields.
 
 
@@ -434,7 +434,7 @@ def alfasim_get_user_defined_tracers_from_plugin():
     .. note::
         The tracer added in the `user-defined tracers from plugin` list will not be considered as a standard tracer, which
         has an output of its `mass fraction` and appears in the tracer container at |alfasim|'s User Interface. The `user-defined
-        tracer` is hidden (did not appear in the User Interface) and the plugin developer can modify the transport equation
+        tracer` is hidden (does not appear in the User Interface) and the plugin developer can modify the transport equation
         to use its results internally. However, the `user-defined tracers` will be solved together with the standard tracers
         (Added via User Interface).
 

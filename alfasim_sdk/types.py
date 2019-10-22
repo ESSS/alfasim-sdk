@@ -68,7 +68,7 @@ class BaseField:
     Tooltips are short pieces of text to reminder/inform the user about some specificity about the property when they
     keep the mouse over the field. Tooltips must be a string and can have HTML tags and Unicode characters  as well.
 
-    :raise TypeError: if the tooltip informed it's not a string.
+    :raise TypeError: if the tooltip informed is not a string.
 
     .. rubric:: Example myplugin.py
 
@@ -764,9 +764,9 @@ class Table(BaseField):
 @attr.s(kw_only=True)
 class Boolean(BaseField):
     """
-    The Boolean field provides a checkbox to selected/deselected a property.
+    The Boolean field provides a checkbox to select/deselect a property.
 
-    The String fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
+    The Boolean fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
     :param value:  A boolean informing the initial state from the Field
 
     .. rubric:: Example myplugin.py
@@ -815,7 +815,7 @@ class FileContent(BaseField):
 
     .. note::
 
-        If you want to make the file mandatory is recommended to include a status monitor in your plugin
+        If you want to make the file mandatory it is recommended to include a status monitor in your plugin
         to make sure that that a file is selected.
 
         For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
@@ -869,7 +869,7 @@ class FileContent(BaseField):
 @attr.s(kw_only=True, frozen=True)
 class AddField:
     """
-    Allows the plugin add new fields to Hydrodynamic model.
+    Allows the plugin to add new fields to Hydrodynamic model.
 
     An added field **must** be associated to a phase (Using :class:`~alfasim_sdk.types.AddPhase` or :class:`~alfasim_sdk.types.UpdatePhase`)
     and added to a layer (Using :class:`~alfasim_sdk.types.AddLayer` or :class:`~alfasim_sdk.types.UpdateLayer`)
@@ -887,7 +887,7 @@ class AddField:
 @attr.s(kw_only=True, frozen=True)
 class AddLayer:
     """
-    Allows the plugin add new layers to Hydrodynamic model.
+    Allows the plugin to add new layers to Hydrodynamic model.
 
     :param name: Name of the new layer.
     :param fields: List of fields names contained in the added layer.
@@ -927,7 +927,7 @@ class UpdateLayer:
 @attr.s(kw_only=True, frozen=True)
 class AddPhase:
     """
-    Allows the plugin add new phases to Hydrodynamic model.
+    Allows the plugin to add new phases to Hydrodynamic model.
 
     :param name: Name of the new phase.
     :param fields: List of fields names associated to the added phase. It is important to know how to calculate the state variables of fields.
