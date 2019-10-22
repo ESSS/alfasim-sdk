@@ -61,7 +61,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
     was invoked.
 
-    The files generated and their contents are ready to be used, or customized and have the following structured.
+    The files generated and their contents are ready to be used or customized and have the following structured.
 
     .. code-block:: bash
 
@@ -116,7 +116,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
 @plugin_dir_option
 def _compile(plugin_dir):
     """
-    Compile the plugin from the given plugin-dir option, when not provided, plugin-dir will be the current folder location.
+    Compile the plugin from the given plugin-dir option. When not provided plugin-dir will be the current folder location.
 
     This command basically calls the compile.py informing the location of the header files of alfasim_sdk_api.
     For more details about the build steps, check the compile.py generated for your plugin project.
