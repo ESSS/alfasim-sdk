@@ -302,7 +302,7 @@ def alfasim_configure_layers():
 def alfasim_configure_phases():
     """
     Allows plugins to configure new phases or associate a new field with a existing phase from the application.
-    In order to configure a new phases is necessary to return an :class:`~alfasim_sdk.types.AddPhase` object defining the
+    In order to configure a new phase it is necessary to return an :class:`~alfasim_sdk.types.AddPhase` object defining the
     required fields.
 
     Example of usage:
