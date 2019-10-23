@@ -4,7 +4,7 @@ Quick Start
 ===========
 
 In this section, it's shown how to create a plugin from scratch with the template command provided by |sdk|.
-With this template, you can easily customize your application to extended |alfasim| functionality.
+With this template, you can easily customize your application to extend |alfasim| functionality.
 
 This allows you to experience the complete creation of a plugin workflow in a short time.
 

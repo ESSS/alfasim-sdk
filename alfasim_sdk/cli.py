@@ -61,7 +61,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
     was invoked.
 
-    The files generated and their contents are ready to be used or customized and have the following structured.
+    The files generated and their contents are ready to be used or customized and have the following structure:
 
     .. code-block:: bash
 

@@ -24,7 +24,7 @@ Types
 -----
 
 The ``types`` module supplies UI elements for creating user interfaces with the classic desktop-style, each type
-has a related model
+has a related model.
 
 Models are the primary elements to create user interfaces on |alfasim|, models can display data, receive user input,
 and provide a container for other fields that should be grouped together.

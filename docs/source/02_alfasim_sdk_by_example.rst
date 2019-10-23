@@ -27,7 +27,7 @@ The following equation describes the plugin:
 For this, we will need to:
 
 #. Create a simple input, on the user interface.
-#. Add an secondary variable, to keep track of the value.
+#. Add a secondary variable, to keep track of the value.
 #. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<alfasim_sdk.hook_specs.initialize>`.
 #. Save the input data on a plugin internal data.
 #. Get the liquid velocity from the solver, during run-time.
@@ -91,7 +91,7 @@ Solver Configuration
 --------------------
 
 |sdk| provides hooks to customize the settings of the application that configures the solver internally,
-some of this configurations are:
+some of these configurations are:
 
 - Creation/Registration of new secondary variables
 - Creation of new phases/fields/layers.
