@@ -7,7 +7,7 @@ The solver configuration hooks allow plugins to configure internal settings from
 To add a configuration hook it is necessary to implement the given `hook` in a python file that is already available
 on your plugin project folder.
 
-As an example, if the ``alfasim-sdk template`` command was created with the name ``myplugin`` the necessary file to
+As an example, if a plugin was created using ``alfasim-sdk template`` command and named as ``myplugin`` the necessary file to
 be customized would be located on: :menuselection:`myplugin --> src --> python --> myplugin.py`
 
 .. contents::
@@ -33,7 +33,7 @@ the hook listed below, the plugin can:
 
 .. note::
     For each new added ``field`` is considered a mass conservation equation and for each new added ``layer`` is considered
-    a momentum conservation and an energy conservation equations.
+    a momentum conservation and an energy conservation equations, depending on the energy model used at |alfasim|.
 
 .. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_configure_fields
 
