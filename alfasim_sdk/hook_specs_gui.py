@@ -173,7 +173,7 @@ def alfasim_get_status(
     The status monitor accepts two types of message:
 
      - :func:`~alfasim_sdk.status.ErrorMessage`:
-        Signalize the application to lock the simulation until the error is fixed.
+        Signalize the application to block the simulation until the error is fixed.
 
      - :func:`~alfasim_sdk.status.WarningMessage`:
         Signalize the application that the user needs to fix this problem, but does not need to block the simulation.
