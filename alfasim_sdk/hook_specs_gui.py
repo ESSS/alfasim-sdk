@@ -168,7 +168,7 @@ def alfasim_get_status(
 ) -> Optional[List[Union[WarningMessage, ErrorMessage]]]:
     """
     Allows plugins to execute custom checks on ALFAsim.
-    These checks can be used to guarantee the consistency of the data or compatibility with some configuration made on ALFAsim.
+    These checks can be used to guarantee the consistency of the data or compatibility with some configuration made on |alfasim|.
 
     The status monitor accepts two types of message:
 
