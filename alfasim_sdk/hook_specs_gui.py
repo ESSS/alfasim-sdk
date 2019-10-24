@@ -240,7 +240,7 @@ def alfasim_get_status(
 @hookspec
 def alfasim_configure_fields():
     """
-    Allows plugins to configure new fields to be added in ALFAsim's hydrodynamic model.
+    Allows plugins to configure new fields to be added in |alfasim|'s hydrodynamic model.
 
     An added ``field`` must be associated with:
 
