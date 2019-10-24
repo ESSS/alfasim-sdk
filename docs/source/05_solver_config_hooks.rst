@@ -3,7 +3,7 @@
 Solver Configuration Hooks
 ==========================
 
-The solver configuration hooks allow plugins to configure internal settings from ALFAsim.
+The solver configuration hooks allow plugins to configure internal settings from |alfasim|.
 To add a configuration hook it is necessary to implement the given `hook` in a python file that is already available
 on your plugin project folder.
 

@@ -398,7 +398,7 @@ def calculate_energy_source_term(
 
     Since ``ALFAsim`` considers two energy models, if ``n_layers`` is equal to 1 it means that the global energy model
     is being used. Otherwise the layers energy model is being used. See the ``ALFAsim``'s Technical Report for more
-    information.
+    information about the equations system.
 
     :param ctx: ALFAsim's plugins context
     :param energy_source: Source term of energy equation
@@ -1173,12 +1173,12 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
     **c++ signature** : ``HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
     int tracer_index)``
 
-    Internal tracer model `hook` to set the initial prescribed bondary condition of mass fraction of tracer,
+    Internal tracer model `hook` to set the initial prescribed boundary condition of mass fraction of tracer,
     given by ``tracer_index`. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
     in respect to the mass of the mixture. Note that all boundary nodes will be populated with `phi_presc` value
     set by this `hook`.
 
-    An important information is that this `hook` set the first value of boundary conditions of mass fraction related to
+    Please note that this `hook` sets the first mass fraction related boundary conditions value to
     the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
     allows the plugin developer to update this value.
 

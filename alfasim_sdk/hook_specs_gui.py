@@ -121,7 +121,7 @@ def alfasim_get_data_model_type():
         def alfasim_get_data_model_type():
             return [MyModelContainer, MyModel]
 
-    The image below shows the output of example 3 when executing on ALFAsim.
+    The image below shows the output of example 3 when executing on |alfasim|.
 
     .. image:: _static/images/hooks/alfasim_get_data_model_type_example_3.png
         :scale: 80%
@@ -183,7 +183,7 @@ def alfasim_get_status(
     The ``alfasim_get_status`` will be called for:
 
      - Each time a model from the plugin is modified.
-     - Each time a ``Physics options`` from ALFAsim are modified. |br|
+     - Each time a ``Physics options`` from |alfasim| are modified. |br|
        Ex.: Hydrodynamic model changed
 
     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
@@ -230,7 +230,7 @@ def alfasim_get_status(
             return results
 
 
-    For the status monitor above the application will show the following message, when the distance is lower than 0:
+    For the status monitor above, the application will show the following message when the distance is less than 0:
 
     .. image:: _static/images/hooks/status_monitor_with_distance_error.png
 
@@ -240,7 +240,7 @@ def alfasim_get_status(
 @hookspec
 def alfasim_configure_fields():
     """
-    Allows plugins to configure new fields to be added in ALFAsim's hydrodynamic model.
+    Allows plugins to configure new fields to be added in |alfasim|'s hydrodynamic model.
 
     An added ``field`` must be associated with:
 
@@ -266,7 +266,7 @@ def alfasim_configure_fields():
 @hookspec
 def alfasim_configure_layers():
     """
-    Allows plugins to configure new layers or associate a new field with a existing layer for ALFAsim's hydrodynamic model
+    Allows plugins to configure new layers or associate a new field with a existing layer for |alfasim|'s hydrodynamic model
 
     In order to configure a new layer, it is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
     required fields.
