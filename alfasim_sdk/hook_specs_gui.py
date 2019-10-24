@@ -121,7 +121,7 @@ def alfasim_get_data_model_type():
         def alfasim_get_data_model_type():
             return [MyModelContainer, MyModel]
 
-    The image below shows the output of example 3 when executing on ALFAsim.
+    The image below shows the output of example 3 when executing on |alfasim|.
 
     .. image:: _static/images/hooks/alfasim_get_data_model_type_example_3.png
         :scale: 80%
