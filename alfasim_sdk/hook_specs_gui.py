@@ -230,7 +230,7 @@ def alfasim_get_status(
             return results
 
 
-    For the status monitor above the application will show the following message, when the distance is lower than 0:
+    For the status monitor above, the application will show the following message when the distance is less than 0:
 
     .. image:: _static/images/hooks/status_monitor_with_distance_error.png
 
