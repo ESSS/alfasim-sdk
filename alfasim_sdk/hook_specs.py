@@ -398,7 +398,7 @@ def calculate_energy_source_term(
 
     Since ``ALFAsim`` considers two energy models, if ``n_layers`` is equal to 1 it means that the global energy model
     is being used. Otherwise the layers energy model is being used. See the ``ALFAsim``'s Technical Report for more
-    information.
+    information about the equations system.
 
     :param ctx: ALFAsim's plugins context
     :param energy_source: Source term of energy equation
