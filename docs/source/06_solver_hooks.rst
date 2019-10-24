@@ -48,7 +48,7 @@ As can be seen in the example above the function :cpp:func:`set_plugin_data` is 
 hold the plugin internal data.
 
 .. note::
-    Since |alfasim|'s solver uses multi-threads to perform all possible parallelizable calculation, it is important that
+    Since |alfasim|'s solver uses multi-threading to perform all possible parallelizable calculation, it is important that
     the plugins provide internal data to each `thread` to avoid data access concurrency problems. As can be seen the
     ``HOOK_INITIALIZE`` example above, a ``for-loop`` is performed over the `threads` to set the plugin internal data.
     The |sdk| API function :cpp:func:`get_number_of_threads` is used to do it properly. See
@@ -82,7 +82,7 @@ depend on primary variables. After that, :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY
 is called, but if it is running the `first time step`
 :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`
 is called before. It is necessary because usually during the `first time step` some initialization tasks are needed. Then,
-if the plugin needs to initialize with some value different from ``nan``, this hook is the place to do that.
+if the plugin needs to initialize with some value that is different from the initial ``nan`` value, this hook is the place to do that.
 
 .. note::
     Different from plugin internal data, the secondary variables registered by plugins are allocated, deallocated and
@@ -115,7 +115,7 @@ Source Terms
 ------------
 
 The `hooks` showed in this section can be considered as the most important. Since they allow the plugin to change the
-conservation equations. It is made adding source terms in the residual function of mass, momentum and energy conservation
+conservation equations. This is achieved by adding source terms in the residual function of mass, momentum and energy conservation
 equations. Since the equations are in residual form, the negative values of source terms indicate that mass, momentum and
 energy will be consumed. Otherwise, some amount of mass, momentum, and energy will be generated.
 
