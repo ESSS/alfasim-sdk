@@ -173,7 +173,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
         }
 
     In the example above the variable ``kinetic_energy_of_liquid`` was registered as a global variable, but its value is
-    obtained for `liquid field`. If this variable would calculated to all fields then the ``global_idx`` would be
+    obtained for `liquid field`. If this variable would be calculated to all fields then the ``global_idx`` would be
     substituted by ``field_idx`` and it would be performed to each `field`.
     """
 
