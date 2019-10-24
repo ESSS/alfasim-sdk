@@ -183,7 +183,7 @@ def alfasim_get_status(
     The ``alfasim_get_status`` will be called for:
 
      - Each time a model from the plugin is modified.
-     - Each time a ``Physics options`` from ALFAsim are modified. |br|
+     - Each time a ``Physics options`` from |alfasim| are modified. |br|
        Ex.: Hydrodynamic model changed
 
     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
