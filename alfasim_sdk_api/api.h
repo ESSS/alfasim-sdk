@@ -59,7 +59,7 @@ DLL_EXPORT int get_number_of_threads(void* ctx, int* n_threads);
 
     Once the plugin sets one internal data to each running thread, to access this
     data properly it has to know which thread is trying to access this data. For
-    that, this function retrieves this information from Solver.
+    that, this function retrieves this information from solver.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] thread_id Thread ID.
