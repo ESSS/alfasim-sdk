@@ -1178,7 +1178,7 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
     in respect to the mass of the mixture. Note that all boundary nodes will be populated with `phi_presc` value
     set by this `hook`.
 
-    An important information is that this `hook` set the first value of boundary conditions of mass fraction related to
+    Please note that this `hook` sets the first mass fraction related boundary conditions value to
     the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
     allows the plugin developer to update this value.
 
