@@ -1173,7 +1173,7 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
     **c++ signature** : ``HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(void* ctx, void* phi_presc,
     int tracer_index)``
 
-    Internal tracer model `hook` to set the initial prescribed bondary condition of mass fraction of tracer,
+    Internal tracer model `hook` to set the initial prescribed boundary condition of mass fraction of tracer,
     given by ``tracer_index`. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
     in respect to the mass of the mixture. Note that all boundary nodes will be populated with `phi_presc` value
     set by this `hook`.
