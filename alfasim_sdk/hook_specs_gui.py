@@ -266,7 +266,7 @@ def alfasim_configure_fields():
 @hookspec
 def alfasim_configure_layers():
     """
-    Allows plugins to configure new layers or associate a new field with a existing layer for ALFAsim's hydrodynamic model
+    Allows plugins to configure new layers or associate a new field with a existing layer for |alfasim|'s hydrodynamic model
 
     In order to configure a new layer, it is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
     required fields.
