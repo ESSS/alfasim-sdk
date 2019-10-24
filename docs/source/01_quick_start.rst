@@ -34,7 +34,7 @@ Also, make sure to have at least the following version for this software:
  - ``Ninja`` at least version 1.7.0
 
 
-The :program:`alfasim-sdk` package has several commands that can be visualized by running the help option.
+The ``alfasim-sdk`` package has several commands that can be visualized by running the help option.
 
 .. code-block:: bash
 
