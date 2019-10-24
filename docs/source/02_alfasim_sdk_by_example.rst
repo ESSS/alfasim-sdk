@@ -100,7 +100,7 @@ some of these configurations are:
 For this example, a new |s_variable| will be created, to track the liquid velocity to the power of a custom value provided from the user.
 
 
-A ``Secondary Variable`` is a variable that can be calculated along the `Network`. Also, if configured as external, this
+A *Secondary Variable* is a variable that can be calculated along the `Network`. Also, if configured as external, this
 variable will be set an Output, and will be available within the Trends and Profiles plots.
 
 To create these variables, the hook |s_variable_hook| must be implemented in the :file:`myplugin.py` file.
@@ -149,7 +149,7 @@ At this point, we are going to implement the :ref:`solver_hooks` that updates th
 First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk.hook_specs.initialize>` and
 the :py:func:`HOOK_FINALIZE <alfasim_sdk.hook_specs.finalize>`
 
-With them it's possible to initialize any custom data (to store any important information) for internal use. Also it's
+With them it is possible to initialize any custom data (to store any important information) for internal use. Also it is
 needed to load and unload the |sdk| API, in which will allows the plugin to use the API in any implemented `hook`.
 
 .. rubric::  Implementation of :file:`myplugin.cpp`
@@ -204,7 +204,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 Then, since the plugin wants to calculate its own secondary variable, the
 :func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk.hook_specs.update_plugins_secondary_variables>` must be implemented.
 As can be seen in the example below, to retrieve the velocity of the continuous liquid field
-it's necessary to use the :func:`get_simulation_array` API function.
+it is necessary to use the :func:`get_simulation_array` API function.
 
 
 .. code-block:: cpp

@@ -332,7 +332,7 @@ def alfasim_configure_phases():
             For example, if your plugin does not work with the water phase you can block the simulation
             if the user is using a hydrodynamic model with water.
 
-            For more details check out the documentation of :ref:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
+            For more details check out the documentation of :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
 
 
     The image below shows the new added phase on the application.

@@ -61,7 +61,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
     was invoked.
 
-    The files generated and their contents are ready to be used or customized and have the following structure:
+    The files generated and their contents are ready to be used or customized and have the following structured:
 
     .. code-block:: bash
 
@@ -144,7 +144,7 @@ def package(ctx, plugin_dir, package_name, dst):
     Creates a new ``<package-name>.hmplugin`` file containing all the necessary files.
 
     This command will first invoke the ``compile`` command to generate the shared library, and after that, the plugin
-    package will be generated  with all the content available from the directory assets and artifacts.
+    package will be generated with all the content available from the directory assets and artifacts.
 
     By default, the ``package`` command will assume that the plugin project is the current directory and the generated file
     will be placed also in the current directory.

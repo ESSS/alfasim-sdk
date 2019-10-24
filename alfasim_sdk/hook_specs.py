@@ -304,7 +304,7 @@ def calculate_mass_source_term(
     Internal simulator hook to calculate source terms of mass equation. This is called after all residual functions are
     evaluated.
 
-    The plugin is supposed to change the given ``mass_source`` array pointer. Its values is contiguous in memory
+    The plugin is supposed to change the given ``mass_source`` array pointer. Its values are contiguous in memory
     and the dimensions are given by ``n_fields`` and ``n_control_volumes``. It has unit equal to ``[kg/s]``.
 
     :param ctx: ALFAsim's plugins context
@@ -329,7 +329,11 @@ def calculate_mass_source_term(
             // array range related to liquid field
             double* liquid_mass_source =
                 (double*) mass_source + n_control_volumes * liq_id;
-            // Make some calculations and add it to liquid_mass_source
+            // Make some calculations and add it to liquid_mass_source.
+            // In this example, we add a mass source of 3.1415 kg/s to all control volumes.
+			for (int i = 0; i < n_control_volumes; ++i) {
+    			liquid_mass_source[i] = 3.1415; // [kg/s]
+			}
             return OK;
         }
 

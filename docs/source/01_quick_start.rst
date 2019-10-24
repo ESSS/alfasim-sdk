@@ -3,7 +3,7 @@
 Quick Start
 ===========
 
-In this section, it's shown how to create a plugin from scratch with the template command provided by |sdk|.
+In this section, it is shown how to create a plugin from scratch with the template command provided by |sdk|.
 With this template, you can easily customize your application to extend |alfasim| functionality.
 
 This allows you to experience the complete creation of a plugin workflow in a short time.
@@ -13,7 +13,7 @@ Set up the environment
 ----------------------
 
 The |sdk| is a Python package that helps developers in the process to create a Plugin for |alfasim|, to use
-this tool it's necessary to have a Python Interpreter with at least version 3.6. For more details on how to install Python `check
+this tool it is necessary to have a Python Interpreter with at least version 3.6. For more details on how to install Python `check
 the official docs <https://www.python.org/downloads/>`_.
 
 .. note::
@@ -152,7 +152,7 @@ The plugin directory will have the following structure when executing from a `Wi
 Installing the plugin
 ---------------------
 
-With :file:`myplugin.hmplugin` file, it's now possible to install it on |alfasim| application.
+With :file:`myplugin.hmplugin` file, it is now possible to install it on |alfasim| application.
 From the menu bar select the `Plugin Manager` option, as illustrated in the figure below:
 
 .. image:: _static/images/quick_start/menu_bar.png
@@ -161,7 +161,7 @@ In the `Plugin Manager` windows, install :file:`myplugin.hmplugin` file plugin.
 
 .. image:: _static/images/quick_start/plugin_manager_empty.png
 
-By clicking on the plugin name, it's possible to visualize the content from the :file:`README.md` file.
+By clicking on the plugin name, it is possible to visualize the content from the :file:`README.md` file.
 
 .. image:: _static/images/quick_start/plugin_manager_with_plugin.png
 

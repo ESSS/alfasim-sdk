@@ -569,7 +569,7 @@ class Quantity(BaseField):
 
     All scalar values are created using the `Barril library`_
 
-    Checkout the Barril documentation, to see all available units [ Needs to implement on Barril this section]
+    Checkout the Barril documentation, `to see all available units <https://barril.readthedocs.io/en/latest/units.html>`_
 
     .. note::
 
