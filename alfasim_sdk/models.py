@@ -122,7 +122,7 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
     Visual elements that allow the user to input information into the application, or to arrange better the user interface.
 
     :Input Fields: Visual elements that allow the user to provide input information into the application.
-    :Layout: Elements that assist the developer to arrange input fields in meaningfully way.
+    :Layout: Elements that assist the developer to arrange input fields in a meaningful way.
 
     Check the section :ref:`visual elements <api-types-section>` to see all inputs available, and
     :ref:`layout elements<api-layout-section>` to see all layouts available.
