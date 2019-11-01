@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define MAX_PATH 32767
+#define MAX_PATH_SIZE 32767
 
 inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
@@ -19,7 +19,7 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     char SO_FILENAME[] = "/alfasim_plugins_api.so";
 
     // Extract the folder from the executable's full path
-    char current_exe_dir[MAX_PATH];
+    char current_exe_dir[MAX_PATH_SIZE];
     getcwd(current_exe_dir, sizeof(current_exe_dir));
 
     // Extract the folder from the environment variable
