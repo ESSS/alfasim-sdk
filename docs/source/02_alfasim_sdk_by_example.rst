@@ -197,18 +197,18 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 
     HOOK_FINALIZE(ctx)
     {
-        
+
         auto errcode = -1;
         auto number_of_threads = -1;
         errcode = alfasim.get_number_of_threads(ctx, &number_of_threads);
         for (int thread_id = 0; thread_id < n_threads; ++thread_id) {
             MyPluginModel* model = nullptr;
             errcode = alfasim.get_plugin_data(ctx, (void**) (&model), get_plugin_id(), thread_id);
-            delete model; 
+            delete model;
         }
-        
+
         alfasim_sdk_close(&alfasim_sdk_api);
-        
+
         return OK;
     }
 
