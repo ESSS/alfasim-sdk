@@ -8,7 +8,7 @@ alfasim-sdk
 
 .. image:: https://github.com/ESSS/alfasim-sdk/workflows/ALFAsim%20SDK/badge.svg
     :target: https://github.com/ESSS/alfasim-sdk/actions?query=workflow%3A%22ALFAsim+SDK%22
-    
+
 .. image:: https://codecov.io/gh/ESSS/alfasim-sdk/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/ESSS/alfasim-sdk
 
