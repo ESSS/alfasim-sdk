@@ -6,9 +6,20 @@
 #include <stdlib.h>
 #include <strsafe.h>
 #include <wchar.h>
+/*! @file */
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define MAX_PATH_SIZE 32767
 
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+/*!
+    Load ALFAsim-SDK API dll.
+
+    @param[out] api ALFAsim-SDK API.
+    @return An #sdk_load_error_code value.
+*/
 inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
     if (api->handle != nullptr) {
@@ -97,6 +108,12 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     return SDK_OK;
 }
 
+/*!
+    Unload ALFAsim-SDK API dll.
+
+    @param[in] api ALFAsim-SDK API.
+    @return An #sdk_load_error_code value.
+*/
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)
 {
     FreeLibrary(api->handle);

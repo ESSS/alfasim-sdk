@@ -1,0 +1,63 @@
+digraph {
+            nodesep = 0.6;
+            newrank=true
+            node [fillcolor="#FAAC2C" style="rounded, filled" color="#FAAC2C" fontcolor="#ffffff"]
+            edge [color="#8699A3" fontcolor="#2c3e50"]
+
+            init [label="Initialize Simulation"]
+            end [label="End of Simulation"]
+
+            node [shape=point, width=0]
+            invisible_point
+            hook_initialize_point [peripheries="2"]
+            hook_finalize_point [peripheries="2"]
+
+            time [fixedsize=true, label="Time Step", width="1.0", shape="circle"];
+            decision [label="Final \n Time?", shape="diamond", fixedsize=true, width=2.0, height=1.0, labelcolor="#8699A3", style="filled"]
+
+            node[shape="rectangular", target="_top"]
+            config [label="Solver Configuration"]
+            hyd_solver [label="Hydrodynamic Solver", URL="../07_workflow.html#hydrodynamic-solver"]
+            tracer_solver [label="Tracer Solver" URL="../07_workflow.html#tracer-solver"]
+
+            output [label="Output Variables"]
+
+            node[peripheries="0" shape="cds", color="#DA5961", fontcolor="#DA5961", style=""]
+            hook_initialize [ label="HOOK_INITIALIZE", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.initialize"]
+            hook_finalize [label="HOOK_FINALIZE", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize"]
+
+            {rank = same; hook_initialize_point; hook_initialize}
+            {rank = same; hook_finalize_point; hook_finalize; }
+            {rank=same; time;tracer_solver}
+            {rank=same; invisible_point;hyd_solver}
+
+            init -> config;
+            config -> hook_initialize_point [arrowhead= none];
+
+            hook_initialize_point -> invisible_point [arrowhead=none];
+            hook_initialize_point -> hook_initialize [style=dotted, color="#DA5961"];
+
+            subgraph cluster_a{
+                label="Transient Solver"
+                style="dashed, rounded"
+                shape="reactangular"
+                color="#8699A3"
+                fontcolor="#2c3e50"
+                labeljust="l"
+
+
+                invisible_point -> time;
+                time:ne -> hyd_solver:w [style=dashed];
+
+                hyd_solver -> tracer_solver [weight=1000];
+                tracer_solver -> output [weight=1000];
+
+                output:nw -> time:se [style=dashed];
+                time:s -> decision:n [weight=10];
+                decision:w -> time:sw [label="No"];
+            }
+            decision -> hook_finalize_point [arrowhead= none, label="Yes"];
+            hook_finalize_point ->  hook_finalize [style=dotted, color="#DA5961"];
+            hook_finalize_point ->  end;
+
+        }

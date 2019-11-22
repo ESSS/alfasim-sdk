@@ -10,6 +10,13 @@
 
 #define MAX_PATH_SIZE 32767
 
+/***
+Load ALFAsim-SDK API shared object (so file).
+
+@param[out] api ALFAsim-SDK API.
+@return An #sdk_load_error_code value.
+
+***/
 inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
     if (api->handle != nullptr) {
