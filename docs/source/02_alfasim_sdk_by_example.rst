@@ -158,7 +158,11 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 .. code-block:: cpp
 
     ALFAsimSDK_API alfasim_sdk_api;
-
+    
+    struct MyPluginModel {
+        double exponential = 0.0;
+    };
+    
     HOOK_INITIALIZE(ctx)
     {
         alfasim_sdk_open(&alfasim_sdk_api);
@@ -206,7 +210,6 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
             errcode = alfasim.get_plugin_data(ctx, (void**) (&model), get_plugin_id(), thread_id);
             delete model;
         }
-
         alfasim_sdk_close(&alfasim_sdk_api);
 
         return OK;
