@@ -360,6 +360,8 @@ DLL_EXPORT int get_state_variable_array(
     - `"ff_S_wall"`: Wall friction factor times wall perimeter [-]
     - `"ff_S_interface"`: Interface Friction factor times interface perimeter [-]
     - `"D"`: Pipe Inner Diameter [m]
+    - `"A"`: Cross-sectional Area in each control volume [m2]
+    - `"theta"`: Inclination of each control volume [rad]
     - `"dx"`: Control Volume Length along the Pipe Axis [m]
     - `"dv"`: Volume of the Control volume [m]
 
