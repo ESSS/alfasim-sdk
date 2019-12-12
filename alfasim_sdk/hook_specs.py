@@ -389,24 +389,27 @@ def calculate_momentum_source_term(
 
 
 def calculate_energy_source_term(
-    ctx: "void*", energy_source: "void*", n_layers: "int", n_control_volumes: "int"
+    ctx: "void*",
+    energy_source: "void*",
+    n_energy_equation: "int",
+    n_control_volumes: "int",
 ) -> "int":
     """
-     **c++ signature** : ``HOOK_CALCULATE_ENERGY_SOURCE_TERM(void* ctx, void* energy_source, int n_layers, int n_control_volumes)``
+     **c++ signature** : ``HOOK_CALCULATE_ENERGY_SOURCE_TERM(void* ctx, void* energy_source, int n_energy_equation, int n_control_volumes)``
 
     Internal simulator hook to calculate source terms of energy equation. This is called after all residual functions
     are evaluated.
 
     The plugin is supposed to change the given ``energy_source`` array pointer. Its values is contiguous in memory
-    and the dimensions are given by ``n_layers`` and ``n_control_volumes``. It has unit equal to ``[J/s]``.
+    and the dimensions are given by ``n_energy_equation`` and ``n_control_volumes``. It has unit equal to ``[J/s]``.
 
-    Since ``ALFAsim`` considers two energy models, if ``n_layers`` is equal to 1 it means that the global energy model
+    Since ``ALFAsim`` considers two energy models, if ``n_energy_equation`` is equal to 1 it means that the global energy model
     is being used. Otherwise the layers energy model is being used. See the ``ALFAsim``'s Technical Report for more
     information about the equations system.
 
     :param ctx: ALFAsim's plugins context
     :param energy_source: Source term of energy equation
-    :param n_layers: Number of layers
+    :param n_energy_equation: Number of Energy Equation being solved
     :param n_control_volumes: Number of control volumes
     :returns: Return OK if successful or anything different if failed
 
@@ -417,10 +420,10 @@ def calculate_energy_source_term(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_ENERGY_SOURCE_TERM(
-            ctx, energy_source, n_layers, n_control_volumes)
+            ctx, energy_source, n_energy_equation, n_control_volumes)
         {
             double* gas_energy_source;
-            if (n_layers > 1){
+            if (n_energy_equation > 1){
                 // Layers Energy model
                 // One energy equation for each layer
                 int gas_id = -1;
