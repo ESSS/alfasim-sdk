@@ -339,8 +339,8 @@ DLL_EXPORT int get_state_variable_array(
 /*!
     Gets the current contents of a given secondary variable (For an array data pointer).
     A secondary variable is any variable calculated in the solver iterative procedure.
-    Note that not all variables are available at any time. If a given variable is not available,
-    a #NOT_AVAILABLE_DATA error is returned.
+    Note that not all variables are available at any time. If a given variable is not available
+    in one of the chosen scopes, a #NOT_AVAILABLE_DATA error is returned.
 
     List of `variable_name` values:
     - `"rho"`: Density [kg/m3]
@@ -349,12 +349,22 @@ DLL_EXPORT int get_state_variable_array(
     - `"mass_concentration"`: Mass Concentration [kg of `field|layer|phase` /m3 of mixture]
     - `"P"`: Pressure [Pa]
     - `"T"`: Temperature [K]
+    - `"h"`: Specific Enthalpy [J/kg]
     - `"cp"`: Specific Heat Capacity [J/kg.K]
     - `"k"`: Thermal Conductivity [W/m.K]
+    - `"eta_inner"`: Heat Transfer Coefficient between inner pipe wall and the fluid layers [W/m2.K]
     - `"U"`: Velocity [m/s]
+    - `"U_superficial"`: Superficial Velocity [m/s]
+    - `"RS"`: Gas mass fraction in gas/oil mixture [kg/kg]
+    - `"RSW"`: Water vapour mass fraction in gas phase [kg/kg]
+    - `"ff_S_wall"`: Wall friction factor times wall perimeter [-]
+    - `"ff_S_interface"`: Interface Friction factor times interface perimeter [-]
     - `"D"`: Pipe Inner Diameter [m]
     - `"dx"`: Control Volume Length along the Pipe Axis [m]
     - `"dv"`: Volume of the Control volume [m]
+
+    It is important to know that the listed `variable_name`s are no available in all #MultiFieldDescriptionScope
+    and #GridScope. Because of that, the #error_code must be checked.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] out Variable values array.
