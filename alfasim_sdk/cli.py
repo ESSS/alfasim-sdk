@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import click
+
 from hookman.hookman_generator import HookManGenerator
 
 
@@ -61,7 +62,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
     was invoked.
 
-    The files generated and their contents are ready to be used or customized and have the following structured:
+    The files generated and their contents are ready to be used or customized and have the following structure:
 
     .. code-block:: bash
 
@@ -171,7 +172,8 @@ def package_only(ctx, plugin_dir, package_name, dst):
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    hm.generate_plugin_package(package_name, plugin_dir, dst)
+    from alfasim_sdk._alfasim_sdk_utils import add_default_required_alfasim_sdk_version
+    hm.generate_plugin_package(package_name, plugin_dir, dst, custom_contents_handle_func=add_default_required_alfasim_sdk_version)
 
 
 def _get_hook_specs_file_path() -> Path:
