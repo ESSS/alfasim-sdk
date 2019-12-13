@@ -79,8 +79,9 @@ def get_current_version():
     Checks current version of alfasim-sdk. Extracted to be easier to mock in tests.
     :return:
     """
-    import alfasim_sdk
-    return alfasim_sdk.__version__
+    import pkg_resources
+
+    return pkg_resources.get_distribution("alfasim_sdk").version
 
 
 def get_extras_default_required_version():
@@ -91,6 +92,6 @@ def get_extras_default_required_version():
         greater or equal current version and lesser than next major release.
     """
     current_version = get_current_version()
-    current_major = current_version.split('.')[0]
+    current_major = current_version.split(".")[0]
     next_major = float(current_major) + 1
-    return f'>={current_version}, <{next_major}'
+    return f">={current_version}, <{next_major}"

@@ -38,7 +38,7 @@ WATER_LAYER = "water"
 Constant to identify the water layer
 """
 
-EXTRAS_REQUIRED_VERSION_KEY = 'required-alfasim-sdk'
+EXTRAS_REQUIRED_VERSION_KEY = "required-alfasim-sdk"
 """
 The dict key which identifies the required version of alfasim-sdk for a given plugin
 """
