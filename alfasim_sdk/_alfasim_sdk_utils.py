@@ -94,23 +94,3 @@ def get_extras_default_required_version():
     current_major = current_version.split('.')[0]
     next_major = float(current_major) + 1
     return f'>={current_version}, <{next_major}'
-
-
-def add_default_required_alfasim_sdk_version(contents, schema):
-    """
-    Adds a default required version to the received plugin yaml configuration `contents` in case
-    it is not defined.
-    """
-    from alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
-    import strictyaml
-    contents_dict = strictyaml.load(contents, schema)
-
-    key = EXTRAS_REQUIRED_VERSION_KEY
-    value = get_extras_default_required_version()
-    if not hasattr(contents_dict, 'extras'):
-        contents_dict['extras'] = {key: value}
-    else:
-        if EXTRAS_REQUIRED_VERSION_KEY not in contents_dict['extras']:
-            contents_dict['extras'][key] = value
-
-    return contents_dict.as_yaml()
