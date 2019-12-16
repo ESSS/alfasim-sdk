@@ -55,13 +55,13 @@ def main():
     help="Email of the plugin author, this value is stored in plugin metadata and not displayed on the application explicitly",
 )
 def template(dst, caption, plugin_id, author_name, author_email):
-    """
+    r"""
     Generate a template with the necessary files and structure to create a plugin.
 
     The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
     was invoked.
 
-    The files generated and their contents are ready to be used or customized and have the following structured:
+    The files generated and their contents are ready to be used or customized and have the following structure:
 
     .. code-block:: bash
 
@@ -171,7 +171,15 @@ def package_only(ctx, plugin_dir, package_name, dst):
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    hm.generate_plugin_package(package_name, plugin_dir, dst)
+    from alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
+    from alfasim_sdk._alfasim_sdk_utils import get_extras_default_required_version
+
+    extras_defaults = {
+        EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
+    }
+    hm.generate_plugin_package(
+        package_name, plugin_dir, dst, extras_defaults=extras_defaults
+    )
 
 
 def _get_hook_specs_file_path() -> Path:
