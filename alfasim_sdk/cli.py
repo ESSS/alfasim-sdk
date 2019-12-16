@@ -55,7 +55,7 @@ def main():
     help="Email of the plugin author, this value is stored in plugin metadata and not displayed on the application explicitly",
 )
 def template(dst, caption, plugin_id, author_name, author_email):
-    """
+    r"""
     Generate a template with the necessary files and structure to create a plugin.
 
     The template folder will be placed on the ``dst`` option, that by default is the current directory from where the command
