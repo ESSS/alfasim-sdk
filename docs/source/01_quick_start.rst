@@ -21,7 +21,13 @@ the official docs <https://www.python.org/downloads/>`_.
     It is recommended that you install the |sdk| using a Python Virtual Environment.
     For more details, see `Virtual Environments and Packages in Python documentation <https://docs.python.org/3/tutorial/venv.html>`_.
 
-From a terminal, install the |sdk| with :command:`pip` command.
+From a terminal, and inside a virtual environment, update pip:
+
+.. code-block:: console
+
+    >>> python -m pip install -U pip
+
+Install the |sdk| with:
 
 .. code-block:: console
 
