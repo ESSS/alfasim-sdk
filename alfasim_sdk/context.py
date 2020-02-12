@@ -4,12 +4,14 @@ from typing import Optional
 
 import attr
 from attr.validators import deep_iterable
+from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import Scalar
 
 from alfasim_sdk._validators import list_of_strings
 from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk.constants import HydrodynamicModelType
 
 
 @attr.s(frozen=True)
@@ -147,33 +149,13 @@ class SolidsModelType(Enum):
     thomas1965_equilibrium = "SolidsModelType.thomas1965_equilibrium"
 
 
-class HydrodynamicModelType(Enum):
-    """
-    Informs which base Hydrodynamic model is being used, without any modification from plugins:
-
-    - two_phase_four_field_ucm - 'Multi-field, Unit Cell (gas-liquid)':
-        Two phase (gas and liquid) with four fields (continuous gas, continuous liquid, dispersed gas bubble, and dispersed liquid droplet).
-
-    - three_phase_five_field_ucm - 'Multi-field, Unit Cell (gas-liquid-water)':
-        Three phase (gas, liquid, and water) with five fields (continuous gas, continuous liquid, continuous water, dispersed gas bubble, and dispersed liquid droplet).
-
-    - two_phase_two_field_slug_capturing - 'Two-fluid, Regime Capturing (gas-liquid)':
-        Two phase (gas and liquid) with two fields (continuous gas and continuous liquid) using Regime Capturing strategy.
-
-    """
-
-    two_phase_four_field_ucm = "hydrodynamic_model_4_fields"
-    three_phase_five_field_ucm = "hydrodynamic_model_3_layers_gas_oil_water"
-    two_phase_two_field_slug_capturing = "hydrodynamic_model_2_fields"
-
-
 @attr.s(frozen=True)
 class HydrodynamicModelInfo:
     """
     HydrodynamicModelInfo provides information about which layer, fields, and phases the currently Hydrodynamic model is using.
     """
 
-    selected_base_type = attr.attrib(validator=instance_of(HydrodynamicModelType))
+    selected_base_type = attr.attrib(validator=in_(HydrodynamicModelType))
     phases = attr.attrib(validator=list_of_strings)
     fields = attr.attrib(validator=list_of_strings)
     layers = attr.attrib(validator=list_of_strings)
