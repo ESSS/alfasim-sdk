@@ -58,35 +58,23 @@ class HydrodynamicModelType(Enum):
     - FourFields - 'Multi-field, Unit Cell (gas-liquid)':
         Two phase (gas and liquid) with four fields (continuous gas, continuous liquid, dispersed gas bubble, and dispersed liquid droplet).
 
-    - FiveFieldsSolid
-        ...
-
-    - FiveFieldsWater
-        ...
-
-    - FiveFieldsCO2
-        ...
-
     - ThreeLayersGasOilWater - 'Multi-field, Unit Cell (gas-liquid-water)':
         Three phase (gas, liquid, and water) with five fields (continuous gas, continuous liquid, continuous water, dispersed gas bubble, and dispersed liquid droplet).
 
-    - ThreeLayersNoBubbleGasOilWater
-        ...
-
-    - ThreeLayersWaterWithCO2
-        ...
     """
 
     TwoFields = "hydrodynamic_model_2_fields"
     FourFields = "hydrodynamic_model_4_fields"
-    FiveFieldsSolid = "hydrodynamic_model_5_fields_solid"
-    FiveFieldsWater = "hydrodynamic_model_5_fields_water"
-    FiveFieldsCO2 = "hydrodynamic_model_5_fields_co2"
     ThreeLayersGasOilWater = "hydrodynamic_model_3_layers_gas_oil_water"
+    FiveFieldsSolid = "hydrodynamic_model_5_fields_solid"  # Under Development
+    FiveFieldsWater = "hydrodynamic_model_5_fields_water"  # Under Development
+    FiveFieldsCO2 = "hydrodynamic_model_5_fields_co2"  # Under Development
     ThreeLayersNoBubbleGasOilWater = (
-        "hydrodynamic_model_3_layers_no_bubble_gas_oil_water"
+        "hydrodynamic_model_3_layers_no_bubble_gas_oil_water"  # Under Development
     )
-    ThreeLayersWaterWithCO2 = "hydrodynamic_model_3_layers_water_with_co2"
+    ThreeLayersWaterWithCO2 = (
+        "hydrodynamic_model_3_layers_water_with_co2"  # Under Development
+    )
 
     two_phase_four_field_ucm = FourFields  # backward compatibility
     three_phase_five_field_ucm = ThreeLayersGasOilWater  # backward compatibility
