@@ -154,6 +154,17 @@ implementing the following Solver `Hooks`.Otherwise, the particle size will be c
 
 .. autofunction:: alfasim_sdk.hook_specs.update_particle_diameter_of_solids_fields
 
+Internal deposit layer
+----------------------
+
+When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.types.AddPhase` type, it is possible
+that this phase will deposit inside of the pipeline walls. In this case, the thickness of the deposited layer can be
+calculated through the following Solver `Hook`. If not implemented, the layer thickness will be considered equal
+to zero meters.
+
+.. autofunction:: alfasim_sdk.hook_specs.update_plugins_internal_deposit_layer
+
+
 User Defined Tracers
 --------------------
 

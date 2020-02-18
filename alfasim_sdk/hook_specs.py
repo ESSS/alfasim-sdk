@@ -331,9 +331,9 @@ def calculate_mass_source_term(
                 (double*) mass_source + n_control_volumes * liq_id;
             // Make some calculations and add it to liquid_mass_source.
             // In this example, we add a mass source of 3.1415 kg/s to all control volumes.
-			for (int i = 0; i < n_control_volumes; ++i) {
-    			liquid_mass_source[i] = 3.1415; // [kg/s]
-			}
+            for (int i = 0; i < n_control_volumes; ++i) {
+                liquid_mass_source[i] = 3.1415; // [kg/s]
+            }
             return OK;
         }
 
@@ -1333,6 +1333,52 @@ def calculate_entrained_liquid_fraction(
     """
 
 
+def update_plugins_internal_deposit_layer(ctx: "void*", deposition_layer_thickness: "void*",
+                                             n_control_volumes: "int") -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_INTERNAL_DEPOSIT_LAYER(void* ctx, void* deposition_layer_thickness,
+    int n_control_volumes)``
+
+    Internal simulator hook to evaluate the thickness of the deposited layer at the inside of the pipeline walls.
+    This is called at the beginning of accounting the diameter reduction.
+
+    The plugin is supposed to change the given ``deposition_layer_thickness`` array pointer. Its values are contiguous
+    in memory and the dimension is given by ``n_control_volumes``. It has unit equal to ``[m]``.
+
+    :param ctx: ALFAsim's plugins context
+    :param deposition_layer_thickness: Thickness of the internal deposition layer
+    :param n_control_volumes: Number of control volumes
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+    TODO!!!!!!!!
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PLUGINS_INTERNAL_DEPOSIT_LAYER(
+            ctx, deposition_layer_thickness, n_control_volumes)
+        {
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &liquid_id, "liquid");
+            // Convertion from void* to double* and getting the
+            // array range related to liquid field
+            double* liquid_mass_source =
+                (double*) mass_source + n_control_volumes * liq_id;
+            // Make some calculations and add it to liquid_mass_source.
+            // In this example, we add a mass source of 3.1415 kg/s to all control volumes.
+            for (int i = 0; i < n_control_volumes; ++i) {
+                liquid_mass_source[i] = 3.1415; // [kg/s]
+            }
+            return OK;
+    }
+
+    In the example above is shown how to manage the ``mass_source`` array to get the mass source term array related to a
+    specific field (`liquid field` in this case). Note that ``liquid_mass_source`` has size equal to ``n_control_volumes``.
+
+    """
+
+
 specs = HookSpecs(
     project_name="ALFAsim",
     version="1",
@@ -1369,5 +1415,7 @@ specs = HookSpecs(
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
+        # Internal Deposition Layer
+        update_plugins_internal_deposit_layer,
     ],
 )
