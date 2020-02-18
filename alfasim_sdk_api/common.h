@@ -112,18 +112,18 @@ enum sdk_load_error_code {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define FIELD_GAS "gas"
-#define FIELD_LIQUID "liquid"
+#define FIELD_OIL "oil"
 #define FIELD_WATER "water"
 #define FIELD_WATER_DROPLET_IN_LIQUID "water_in_liquid_droplet"
 #define FIELD_DROPLET "droplet"
 #define FIELD_BUBBLE "bubble"
 
 #define PHASE_GAS "gas"
-#define PHASE_LIQUID "liquid"
+#define PHASE_OIL "oil"
 #define PHASE_WATER "water"
 
 #define LAYER_GAS "gas"
-#define LAYER_LIQUID "liquid"
+#define LAYER_OIL "oil"
 #define LAYER_WATER "water"
 
 #endif // DOXYGEN_SHOULD_SKIP_THIS
