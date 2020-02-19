@@ -10,6 +10,7 @@ from alfasim_sdk.context import PhysicsOptionsInfo
 from alfasim_sdk.context import PipelineInfo
 from alfasim_sdk.context import PipelineSegmentInfo
 from alfasim_sdk.context import SolidsModelType
+from barril.units import Scalar
 
 
 def test_plugin_info():
