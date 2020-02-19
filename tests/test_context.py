@@ -1,16 +1,15 @@
 import re
 
 import pytest
+from alfasim_sdk.constants import HydrodynamicModelType
 from alfasim_sdk.context import EdgeInfo
 from alfasim_sdk.context import EmulsionModelType
 from alfasim_sdk.context import HydrodynamicModelInfo
-from alfasim_sdk.context import HydrodynamicModelType
 from alfasim_sdk.context import NodeInfo
 from alfasim_sdk.context import PhysicsOptionsInfo
 from alfasim_sdk.context import PipelineInfo
 from alfasim_sdk.context import PipelineSegmentInfo
 from alfasim_sdk.context import SolidsModelType
-from barril.units import Scalar
 
 
 def test_plugin_info():
