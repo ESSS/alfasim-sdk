@@ -162,7 +162,7 @@ that this phase will deposit inside of the pipeline walls. In this case, the thi
 calculated through the following Solver `Hook`. If not implemented, the layer thickness will be considered equal
 to zero meters.
 
-.. autofunction:: alfasim_sdk.hook_specs.update_plugins_internal_deposit_layer
+.. autofunction:: alfasim_sdk.hook_specs.update_internal_deposit_layer
 
 
 User Defined Tracers

@@ -1333,10 +1333,11 @@ def calculate_entrained_liquid_fraction(
     """
 
 
-def update_plugins_internal_deposit_layer(ctx: "void*", deposition_layer_thickness: "void*",
-                                             n_control_volumes: "int") -> "int":
+def update_internal_deposit_layer(
+    ctx: "void*", deposition_layer_thickness: "void*", n_control_volumes: "int"
+) -> "int":
     """
-    **c++ signature** : ``HOOK_UPDATE_PLUGINS_INTERNAL_DEPOSIT_LAYER(void* ctx, void* deposition_layer_thickness,
+    **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSIT_LAYER(void* ctx, void* deposition_layer_thickness,
     int n_control_volumes)``
 
     Internal simulator hook to evaluate the thickness of the deposited layer at the inside of the pipeline walls.
@@ -1356,20 +1357,10 @@ def update_plugins_internal_deposit_layer(ctx: "void*", deposition_layer_thickne
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_UPDATE_PLUGINS_INTERNAL_DEPOSIT_LAYER(
+        HOOK_UPDATE_INTERNAL_DEPOSIT_LAYER(
             ctx, deposition_layer_thickness, n_control_volumes)
         {
-            errcode = alfasim_sdk_api.get_field_id(
-                ctx, &liquid_id, "liquid");
-            // Convertion from void* to double* and getting the
-            // array range related to liquid field
-            double* liquid_mass_source =
-                (double*) mass_source + n_control_volumes * liq_id;
-            // Make some calculations and add it to liquid_mass_source.
-            // In this example, we add a mass source of 3.1415 kg/s to all control volumes.
-            for (int i = 0; i < n_control_volumes; ++i) {
-                liquid_mass_source[i] = 3.1415; // [kg/s]
-            }
+
             return OK;
     }
 
@@ -1416,6 +1407,6 @@ specs = HookSpecs(
         env_temperature,
         calculate_entrained_liquid_fraction,
         # Internal Deposition Layer
-        update_plugins_internal_deposit_layer,
+        update_internal_deposit_layer,
     ],
 )
