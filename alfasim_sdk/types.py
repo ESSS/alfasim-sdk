@@ -909,7 +909,7 @@ class UpdateLayer:
 
     List of possible layers names (see :ref:`api-constants-section` for details):
      - ``GAS_LAYER``
-     - ``LIQUID_LAYER``
+     - ``OIL_LAYER``
      - ``WATER_LAYER`` (If a three phase hydrodynamic model is used)
 
     :param name: Name of the updated layer.

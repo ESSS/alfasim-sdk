@@ -144,7 +144,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             int size_E = -1;
             int liq_id = -1;
             errcode = alfasim_sdk_api.get_field_id(
-                ctx, &liquid_id, "liquid");
+                ctx, &oil_id, "oil");
             double* vel;
             VariableScope Fields_OnFaces = {
                 GridScope::FACE,
@@ -154,7 +154,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             errcode = alfasim_sdk_api.get_simulation_array(
                 ctx, &vel, (char*) "U", Fields_OnFaces, liq_id, &size_U);
             double* kinetic_energy;
-            char* name = "kinetic_energy_of_liquid";
+            char* name = "kinetic_energy_of_oil";
             int global_idx = 0;
             errcode = alfasim_sdk_api.get_plugin_variable(
                 ctx,
@@ -172,8 +172,8 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             return OK;
         }
 
-    In the example above the variable ``kinetic_energy_of_liquid`` was registered as a global variable, but its value is
-    obtained for `liquid field`. If this variable would be calculated to all fields then the ``global_idx`` would be
+    In the example above the variable ``kinetic_energy_of_oil`` was registered as a global variable, but its value is
+    obtained for `oil field`. If this variable would be calculated to all fields then the ``global_idx`` would be
     substituted by ``field_idx`` and it would be performed to each `field`.
     """
 
@@ -202,7 +202,7 @@ def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
             int errcode = -1;
             int size_E = -1;
             double* kinetic_energy;
-            char* name = "kinetic_energy_of_liquid";
+            char* name = "kinetic_energy_of_oil";
             int global_idx = 0;
             errcode = alfasim_sdk_api.get_plugin_variable(
                 ctx,
@@ -245,7 +245,7 @@ def update_plugins_secondary_variables_on_tracer_solver(ctx: "void*") -> "int":
             int size_p_var = -1;
             int liq_id = -1;
             errcode = alfasim_sdk_api.get_field_id(
-                ctx, &liquid_id, "liquid");
+                ctx, &oil_id, "oil");
             double* tracer_mass_fraction;
             VariableScope global_OnCenters = {
                 GridScope::FACE,
@@ -324,21 +324,21 @@ def calculate_mass_source_term(
         {
             int liq_id = -1;
             errcode = alfasim_sdk_api.get_field_id(
-                ctx, &liquid_id, "liquid");
+                ctx, &oil_id, "oil");
             // Convertion from void* to double* and getting the
-            // array range related to liquid field
-            double* liquid_mass_source =
+            // array range related to oil field
+            double* oil_mass_source =
                 (double*) mass_source + n_control_volumes * liq_id;
-            // Make some calculations and add it to liquid_mass_source.
+            // Make some calculations and add it to oil_mass_source.
             // In this example, we add a mass source of 3.1415 kg/s to all control volumes.
 			for (int i = 0; i < n_control_volumes; ++i) {
-    			liquid_mass_source[i] = 3.1415; // [kg/s]
+    			oil_mass_source[i] = 3.1415; // [kg/s]
 			}
             return OK;
         }
 
     In the example above is shown how to manage the ``mass_source`` array to get the mass source term array related to a
-    specific field (`liquid field` in this case). Note that ``liquid_mass_source`` has size equal to ``n_control_volumes``.
+    specific field (`oil field` in this case). Note that ``oil_mass_source`` has size equal to ``n_control_volumes``.
 
     """
 
@@ -963,7 +963,7 @@ def calculate_slurry_viscosity(
 
     :returns: Return OK if successful or anything different if failed
 
-    It is expected to be changed the mu_f_layer of liquid layer(continuous liquid and dispersed solid),
+    It is expected to be changed the mu_f_layer of oil layer(continuous oil and dispersed solid),
     whose index will be available via API.
     """
 

@@ -114,7 +114,7 @@ enum sdk_load_error_code {
 #define FIELD_GAS "gas"
 #define FIELD_OIL "oil"
 #define FIELD_WATER "water"
-#define FIELD_WATER_DROPLET_IN_LIQUID "water_in_liquid_droplet"
+#define FIELD_WATER_DROPLET_IN_OIL "water_in_oil_droplet"
 #define FIELD_DROPLET "droplet"
 #define FIELD_BUBBLE "bubble"
 

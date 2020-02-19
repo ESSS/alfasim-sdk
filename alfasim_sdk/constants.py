@@ -52,14 +52,14 @@ class HydrodynamicModelType(Enum):
 
     TwoFields is valid only for the slug/regime capturing
 
-    - TwoFields - 'Two-fluid, Regime Capturing (gas-liquid)':
-        Two phase (gas and liquid) with two fields (continuous gas and continuous liquid) using Regime Capturing strategy.
+    - TwoFields - 'Two-fluid, Regime Capturing (gas-oil)':
+        Two phase (gas and oil) with two fields (continuous gas and continuous oil) using Regime Capturing strategy.
 
-    - FourFields - 'Multi-field, Unit Cell (gas-liquid)':
-        Two phase (gas and liquid) with four fields (continuous gas, continuous liquid, dispersed gas bubble, and dispersed liquid droplet).
+    - FourFields - 'Multi-field, Unit Cell (gas-oil)':
+        Two phase (gas and oil) with four fields (continuous gas, continuous oil, dispersed gas bubble, and dispersed oil droplet).
 
-    - ThreeLayersGasOilWater - 'Multi-field, Unit Cell (gas-liquid-water)':
-        Three phase (gas, liquid, and water) with five fields (continuous gas, continuous liquid, continuous water, dispersed gas bubble, and dispersed liquid droplet).
+    - ThreeLayersGasOilWater - 'Multi-field, Unit Cell (gas-oil-water)':
+        Three phase (gas, oil, and water) with five fields (continuous gas, continuous oil, continuous water, dispersed gas bubble, and dispersed liquid droplet).
 
     """
 
