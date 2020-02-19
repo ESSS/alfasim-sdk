@@ -1,6 +1,7 @@
 import re
 
 import pytest
+
 from alfasim_sdk.types import MultipleReference
 from alfasim_sdk.types import Reference
 
