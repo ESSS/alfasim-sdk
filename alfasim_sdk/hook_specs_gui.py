@@ -2,11 +2,12 @@ from typing import List
 from typing import Optional
 from typing import Union
 
+from pluggy import HookspecMarker
+
 from alfasim_sdk.context import Context
 from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import WarningMessage
 from alfasim_sdk.variables import SecondaryVariable
-from pluggy import HookspecMarker
 
 
 hookspec = HookspecMarker("ALFAsim")

@@ -1,7 +1,8 @@
 import os
 
-from alfasim_sdk import cli
 from click.testing import CliRunner
+
+from alfasim_sdk import cli
 
 
 def test_command_line_interface():
