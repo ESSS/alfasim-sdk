@@ -1334,25 +1334,24 @@ def calculate_entrained_liquid_fraction(
 
 
 def update_internal_deposit_layer(
-    ctx: "void*", deposition_layer_thickness: "void*", n_control_volumes: "int"
+    ctx: "void*", deposit_layer_thickness: "void*", n_control_volumes: "int"
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSIT_LAYER(void* ctx, void* deposition_layer_thickness,
+    **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSIT_LAYER(void* ctx, void* deposit_layer_thickness,
     int n_control_volumes)``
 
     Internal simulator hook to evaluate the thickness of the deposited layer at the inside of the pipeline walls.
     This is called at the beginning of accounting the diameter reduction.
 
-    The plugin is supposed to change the given ``deposition_layer_thickness`` array pointer. Its values are contiguous
+    The plugin is supposed to change the given ``deposit_layer_thickness`` array pointer. Its values are contiguous
     in memory and the dimension is given by ``n_control_volumes``. It has unit equal to ``[m]``.
 
     :param ctx: ALFAsim's plugins context
-    :param deposition_layer_thickness: Thickness of the internal deposition layer
+    :param deposit_layer_thickness: Thickness of the internal deposit layer
     :param n_control_volumes: Number of control volumes
     :returns: Return OK if successful or anything different if failed
 
-    Example of usage:
-    TODO!!!!!!!!
+    Example of usage
     .. code-block:: c++
         :linenos:
         :emphasize-lines: 1
@@ -1360,13 +1359,53 @@ def update_internal_deposit_layer(
         HOOK_UPDATE_INTERNAL_DEPOSIT_LAYER(
             ctx, deposition_layer_thickness, n_control_volumes)
         {
+            auto errcode = -1;
+            void* deposit_layer_thickness_raw_ptr = nullptr;
+            errcode = alfasim.get_plugin_variable(
+                ctx, &deposit_layer_thickness_raw_ptr, "deposit_layer_thickness", 0, TimestepScope::CURRENT, &size);
+            if (errcode != 0) {
+                throw std::runtime_error("Error on get_plugin_variable (deposit_layer_thickness_raw_ptr)");
+            }
+            auto* deposit_layer_thickness = (double*) (deposit_layer_thickness_raw_ptr);
+
+            double dt = -1.0;
+            errcode = alfasim.get_simulation_quantity(ctx, &dt, TimestepScope::CURRENT, (char*) "dt");
+            if (errcode != 0) {
+                throw std::runtime_error("Error on get_simulation_quantity (dt)");
+            }
+
+            // Handle first time step, because you won't have the previously information
+            if (is_first_time_step){
+                // Set a value for the deposit layer thickness
+                 for (int i = 0; i < n_control_volumes; ++i) {
+                    deposit_layer_thickness = 0.0; // [m]
+                }
+            } else{
+                // Get previously deposit layer thickness to obtain the current
+                void* deposit_layer_thickness_old_raw_ptr;
+                errcode = alfasim.get_plugin_variable(
+                    ctx, &deposit_layer_thickness_old_raw_ptr, "deposit_layer_thickness", 0,
+                    TimestepScope::PREVIOUS, &size);
+                if (errcode != 0) {
+                    throw std::runtime_error("Error on get_plugin_variable (deposit_layer_thickness_old)");
+                }
+                auto* deposit_layer_thickness_old = (double*) (deposit_layer_thickness_old_raw_ptr);
+
+                // Calculate the variation of the deposit layer in one time step
+                double* d_deposit_layer_dt = 0.0001; // [m/s]
+
+                // Sum this variation with the thickness of the older time step
+                for (int i = 0; i < n_control_volumes; ++i) {
+                    deposit_layer_thickness[i] = deposit_layer_thickness_old[i] +  d_deposit_layer_dt * dt; // [m]
+                }
+            }
 
             return OK;
     }
 
-    In the example above is shown how to manage the ``mass_source`` array to get the mass source term array related to a
-    specific field (`liquid field` in this case). Note that ``liquid_mass_source`` has size equal to ``n_control_volumes``.
-
+    In the example above is shown how to manage the ``deposit_layer_thickness`` array for each control volume.
+    Note that the ``deposit_layer_thickness`` should be always the total value for that time step, so the first
+    time step should be handle in a separately way, since there is no previously information.
     """
 
 
