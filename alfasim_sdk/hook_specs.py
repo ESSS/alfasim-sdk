@@ -1364,14 +1364,14 @@ def update_internal_deposit_layer(
             errcode = alfasim.get_plugin_variable(
                 ctx, &deposit_layer_thickness_raw_ptr, "deposit_layer_thickness", 0, TimestepScope::CURRENT, &size);
             if (errcode != 0) {
-                throw std::runtime_error("Error on get_plugin_variable (deposit_layer_thickness_raw_ptr)");
+                return errcode;
             }
             auto* deposit_layer_thickness = (double*) (deposit_layer_thickness_raw_ptr);
 
             double dt = -1.0;
             errcode = alfasim.get_simulation_quantity(ctx, &dt, TimestepScope::CURRENT, (char*) "dt");
             if (errcode != 0) {
-                throw std::runtime_error("Error on get_simulation_quantity (dt)");
+                return errcode;
             }
 
             // Handle first time step, because you won't have the previously information
@@ -1387,7 +1387,7 @@ def update_internal_deposit_layer(
                     ctx, &deposit_layer_thickness_old_raw_ptr, "deposit_layer_thickness", 0,
                     TimestepScope::PREVIOUS, &size);
                 if (errcode != 0) {
-                    throw std::runtime_error("Error on get_plugin_variable (deposit_layer_thickness_old)");
+                    return errcode;
                 }
                 auto* deposit_layer_thickness_old = (double*) (deposit_layer_thickness_old_raw_ptr);
 
