@@ -1,5 +1,4 @@
 import pytest
-
 from alfasim_sdk.layout import tab
 from alfasim_sdk.layout import tabs
 from alfasim_sdk.types import String

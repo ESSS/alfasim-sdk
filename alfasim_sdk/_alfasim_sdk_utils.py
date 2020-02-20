@@ -2,7 +2,6 @@ from typing import Optional
 from typing import Tuple
 
 import attr
-
 from alfasim_sdk.types import BaseField
 from alfasim_sdk.types import Group
 from alfasim_sdk.types import Tab
