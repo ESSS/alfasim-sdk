@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "alfasim-sdk"
-version = "0.1.0"
+version = "0.2.0"
 description = "ALFAsim API/SDK"
 authors = ["ESSS <foss@esss.co>"]
 license = "MIT"
@@ -47,6 +47,7 @@ pytest-cov= "^2.7.1"
 pytest-mock= "^1.10.0"
 pytest-runner= "^5.1"
 pytest= "^5.1.3"
+
 
 [tool.poetry.scripts]
 alfasim-sdk = "alfasim_sdk.cli:main"

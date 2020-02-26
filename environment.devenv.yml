@@ -8,6 +8,8 @@ dependencies:
 - pytest-cov
 - pytest-datadir
 - pytest-mock
+- sphinx-click >=2.3.0
+- breathe >=4.13.0
 
 environment:
   PYTHONPATH:

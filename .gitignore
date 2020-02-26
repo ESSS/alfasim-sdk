@@ -104,3 +104,7 @@ ENV/
 
 # VSCode
 /.vscode/
+
+
+**/build
+**/_build

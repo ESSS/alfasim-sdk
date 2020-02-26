@@ -5,10 +5,12 @@ on:
     branches:
       - master
       - rb-*
+    tags:
+      - v*
 
   pull_request:
   schedule:
-  - cron: 0 2 * * *
+  - cron: "0 2 * * *"
 
 jobs:
   test:
@@ -36,9 +38,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install tox codecov
     - name: Run tests
-      run: |
-        tox -e ${{matrix.env}}
-        codecov -t  ${{secrets.CODECOV_TOKEN}} -X gcov -f coverage.xml
+      run: tox -e ${{matrix.env}}
+    - name: Upload codecov
+      run: codecov -t  ${{secrets.CODECOV_TOKEN}} -X gcov -f coverage.xml
 
 
   linting:

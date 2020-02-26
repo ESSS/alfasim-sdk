@@ -6,9 +6,20 @@
 #include <stdlib.h>
 #include <strsafe.h>
 #include <wchar.h>
+/*! @file */
 
-#define MAX_PATH 32767
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
+#define MAX_PATH_SIZE 32767
+
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+/*!
+    Load ALFAsim-SDK API dll.
+
+    @param[out] api ALFAsim-SDK API.
+    @return An #sdk_load_error_code value.
+*/
 inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 {
     if (api->handle != nullptr) {
@@ -18,14 +29,14 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     WCHAR DLL_FILENAME[] = L"/alfasim_plugins_api.dll";
 
     // Extract the folder from the executable's full path
-    WCHAR current_exe_dir[MAX_PATH];
+    WCHAR current_exe_dir[MAX_PATH_SIZE];
     {
-        WCHAR current_exe_fullpath[MAX_PATH];
-        GetModuleFileNameW(NULL, current_exe_fullpath, MAX_PATH);
-        int size = wcslen(current_exe_fullpath);
+        WCHAR current_exe_fullpath[MAX_PATH_SIZE];
+        GetModuleFileNameW(NULL, current_exe_fullpath, MAX_PATH_SIZE);
+        auto size = wcslen(current_exe_fullpath);
         if (size > 0) {
-            int i = size - 1;
-            int j = 0;
+            auto i = size - 1;
+            auto j = 0;
             for (; i > 0 && current_exe_fullpath[i] != '\\' && current_exe_fullpath[i] != '/'; --i);
             for (j = 0; j < i; j++) {
                 current_exe_dir[j] = current_exe_fullpath[j];
@@ -48,15 +59,15 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
         alfasim_executable_dir = current_exe_dir;
     }
 
-    if (wcslen(alfasim_executable_dir) + wcslen(DLL_FILENAME) > MAX_PATH) {
+    if (wcslen(alfasim_executable_dir) + wcslen(DLL_FILENAME) > MAX_PATH_SIZE) {
         return SDK_DLL_PATH_TOO_LONG;
     }
 
     // Load shared object
-    WCHAR full_filepath[MAX_PATH];
+    WCHAR full_filepath[MAX_PATH_SIZE];
     full_filepath[0] = '\0';
-    StringCchCatW(full_filepath, MAX_PATH, alfasim_executable_dir);
-    StringCchCatW(full_filepath, MAX_PATH, DLL_FILENAME);
+    StringCchCatW(full_filepath, MAX_PATH_SIZE, alfasim_executable_dir);
+    StringCchCatW(full_filepath, MAX_PATH_SIZE, DLL_FILENAME);
     api->handle = LoadLibraryW(full_filepath);
     free(executable_dir_from_env);
 
@@ -97,6 +108,12 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     return SDK_OK;
 }
 
+/*!
+    Unload ALFAsim-SDK API dll.
+
+    @param[in] api ALFAsim-SDK API.
+    @return An #sdk_load_error_code value.
+*/
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)
 {
     FreeLibrary(api->handle);

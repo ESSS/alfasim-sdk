@@ -72,3 +72,27 @@ def get_all_attributes(class_: type):
         attributes[key] = attr.ib(default=value)
 
     return attributes
+
+
+def get_current_version():
+    """
+    Checks current version of alfasim-sdk. Extracted to be easier to mock in tests.
+    :return:
+    """
+    import alfasim_sdk
+
+    return alfasim_sdk.__version__
+
+
+def get_extras_default_required_version():
+    """
+    :rtype str:
+    :return:
+        Returns a string with default alfasim-sdk version requirement for plugins. Default is
+        greater or equal current version and lesser than next major release.
+    """
+    parts = get_current_version().split(".")
+    current_major = parts[0]
+    current_minor = ".".join(parts[:2])
+    next_major = int(current_major) + 1
+    return f">={current_minor}, <{next_major}"

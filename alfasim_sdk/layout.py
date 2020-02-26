@@ -11,10 +11,43 @@ from alfasim_sdk.types import Tabs
 
 def tabs() -> Callable:
     """
-    tabs is a container that only holds alfasim_sdk.layout.tab.
+    Create a tab bar layout, to group multiples :func:"~alfasim_sdk.layout.tab" instances.
 
+    With the ``tabs``, you can split up complex dialog into "pages" using a :func:"~alfasim_sdk.layout.tab" instance.
 
-    Note.: tabs is considered a layout component, therefore, the final model will have any attribute related with the tabs
+    Notice that only classes decorated with :func:"~alfasim_sdk.layout.tab" can be placed inside a ``tab bar``.
+
+    Example of usage:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            field = String(caption="String outside tabs", value="Default")
+
+            @tabs()
+            class MainPage:
+
+                @tab(caption="Fist Tab")
+                class Tab1:
+                    field_1 = String(caption="First Tab", value="Default")
+
+                @tab(caption="Second Tab")
+                class Tab2:
+                    field_2 = String(caption="Second Tab", value="Default")
+
+    The image below shows the output from the command above.
+
+    .. image:: _static/images/api/tabs_layout_example_1.png
+        :scale: 90%
+
+    .. image:: _static/images/api/tabs_layout_example_2.png
+        :scale: 90%
+
+    .. note::
+
+        ``tabs`` is a layout component, and will not have an attribute to be accessed through context or API.
+
     """
 
     def apply(class_: type):
@@ -41,9 +74,9 @@ def tabs() -> Callable:
 
 def tab(*, caption: str) -> Callable:
     """
-    tab is a container for other attributes, only BaseField can be defined inside a tab.
+    The tab represents a single entry, on the :func:`~alfasim_sdk.layout.tabs` layout.
 
-    Note.: tab is considered a layout component, therefore, the final model will have any attribute related with the tabs
+    Notice that only components available at the :ref:`types modules <api-types-section>` can be placed inside a tab.
     """
 
     def apply(class_: type):
@@ -58,9 +91,31 @@ def tab(*, caption: str) -> Callable:
 
 def group(*, caption: str) -> Callable:
     """
-    group is a container for other attributes, only BaseField can be defined inside a group.
+    The group layout is a container to organize ALFAsim types, only fields that derives from BaseField can be defined inside a group.
 
-    Note.: group is considered a layout component, therefore, the final model will have any attribute related with the group
+    Example.:
+
+    .. code-block:: python
+
+        @data_model(icon="", caption="My Model")
+        class MyModel:
+            string_field_1 = String(caption="Outside", value="Default")
+
+            @group(caption="Group Container")
+            class GroupMain:
+                string_field_2 = String(value="Group 1", caption="Inside")
+                bool_field = Boolean(value=True, caption="Boolean Field")
+
+
+    The image below shows the output from the example above.
+
+    .. image:: _static/images/api/group_layout_example.png
+
+
+    .. note::
+
+        ``group`` is a layout component, and will not have an attribute to be accessed through context or API.
+
     """
 
     def apply(class_: type):
