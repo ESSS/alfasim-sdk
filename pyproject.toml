@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "alfasim-sdk"
-version = "0.2.0"
+version = "0.3.0"
 description = "ALFAsim API/SDK"
 authors = ["ESSS <foss@esss.co>"]
 license = "MIT"
