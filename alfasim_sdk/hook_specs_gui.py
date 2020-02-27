@@ -285,7 +285,7 @@ def alfasim_configure_layers():
                    continuous_field='plugin_continuous_field',
                ),
                UpdateLayer(
-                   name=LIQUID_LAYER,
+                   name=OIL_LAYER,
                    additional_fields=['plugin_dispersed_field'],
                ),
            ]
