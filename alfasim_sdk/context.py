@@ -407,13 +407,13 @@ class Context:
             HydrodynamicModelInfo( [ ... ] )
 
             >>> ctx.GetPhysicsOptions().hydrodynamic_model.fields
-            ['gas', 'liquid', 'droplet', 'bubble']
+            ['gas', 'oil', 'droplet', 'bubble']
 
             >>> ctx.GetPhysicsOptions().hydrodynamic_model.layers
-            ['gas', 'liquid']
+            ['gas', 'oil']
 
             >>> ctx.GetPhysicsOptions().hydrodynamic_model.phases
-            ['gas', 'liquid']
+            ['gas', 'oil']
 
         Checkout the :func:`~alfasim_sdk.context.PhysicsOptionsInfo` section to know more about the properties available.
 

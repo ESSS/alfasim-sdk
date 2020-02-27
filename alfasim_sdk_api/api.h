@@ -263,7 +263,7 @@ DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_n
 
 /*!
     Gets the field ID of the given name. Althought this depends on the hydrodynamic model being
-    solved, common values include "gas", "liquid", "droplet" and "bubble". This functions supports
+    solved, common values include "gas", "oil", "droplet" and "bubble". This functions supports
     retrieve ID of field added by plugin.
 
     @param[in] ctx ALFAsim's plugins context.
@@ -274,8 +274,8 @@ DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_n
 DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
 
 /*!
-    Gets the primary field ID of the phase with given name. For example, the "liquid" phase has
-    primary field "liquid". Different phases may have different primary fields. Use this function
+    Gets the primary field ID of the phase with given name. For example, the "oil" phase has
+    primary field "oil". Different phases may have different primary fields. Use this function
     when you need a variable from a field, but you aren't sure about the field name, but you know
     the phase name.
 
@@ -288,7 +288,7 @@ DLL_EXPORT int get_primary_field_id_of_phase(void* ctx, int* out, const char* na
 
 /*!
     Gets the phase ID of the given name. Althought this depends on the hydrodynamic model
-    being solved, common values include "gas", "liquid" and "water". This functions supports
+    being solved, common values include "gas", "oil" and "water". This functions supports
     retrieve ID of phase added by plugin.
 
     @param[in] ctx ALFAsim's plugins context.
@@ -300,7 +300,7 @@ DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
 
 /*!
     Gets the layer ID of the given name. Althought this depends on the hydrodynamic model
-    being solved, common values include "gas", "liquid" and "water". This functions supports
+    being solved, common values include "gas", "oil" and "water". This functions supports
     retrieve ID of layer added by plugin.
 
     @param[in] ctx ALFAsim's plugins context.
