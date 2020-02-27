@@ -158,11 +158,9 @@ Internal deposit layer
 ----------------------
 
 When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.types.AddPhase` type, it is possible
-that this phase will deposit inside of the pipeline walls. In this case, the thickness of the deposited layer can be
-calculated through the following Solver `Hook`. If not implemented, the layer thickness will be considered equal
-to zero meters.
-When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.types.AddPhase` type, it is possible to consider the deposition inside the pipeline walls. If so, calculate the thickness of the deposited layer on a given phase through the usage of :py:func:`~alfasim_sdk.hook_specs.update_internal_deposit_layer`. By default, the layer thickness will be considered equal to zero meters.
-.. autofunction:: alfasim_sdk.hook_specs.update_internal_deposit_layer
+to consider the deposition inside the pipeline walls. If so, calculate the thickness of the deposited layer on a given
+phase through the usage of :py:func:`~alfasim_sdk.hook_specs.update_internal_deposition_layer`.By default, the layer
+thickness will be considered equal to zero meters.
 
 
 User Defined Tracers
