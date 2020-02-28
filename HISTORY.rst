@@ -2,16 +2,13 @@
 History
 =======
 
-0.4.0
------
-
-* Add a new hook to evaluate the thickness of the deposited layer at the inside of the pipeline walls and it accounts for the diameter reduction.
-
 
 0.3.0
 -----
 
 * Adopt terminology gas-oil-water
+
+* Add a new hook to evaluate the thickness of the deposited layer at the inside of the pipeline walls and it accounts for the diameter reduction.
 
 * Rename HydrodynamicModelType items from snake_case to CamelCase, a backward compatibility option is kept.
 
