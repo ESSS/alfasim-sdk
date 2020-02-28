@@ -11,6 +11,7 @@ from barril.units import Scalar
 
 from alfasim_sdk._validators import list_of_strings
 from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk.constants import EmulsionModelType
 from alfasim_sdk.constants import HydrodynamicModelType
 
 
@@ -107,24 +108,6 @@ class EdgeInfo:
     )
 
 
-class EmulsionModelType(Enum):
-    """
-    Options for emulsion properties calculation.
-    """
-
-    no_model = "EmulsionModelType.no_model"
-    boxall2012 = "EmulsionModelType.boxall2012"
-    brauner2001 = "EmulsionModelType.brauner2001"
-    brinkman1952 = "EmulsionModelType.brinkman1952"
-    brinkman1952_and_yeh1964 = "EmulsionModelType.brinkman1952_and_yeh1964"
-    hinze1955 = "EmulsionModelType.hinze1955"
-    model_default = "EmulsionModelType.model_default"
-    mooney1951a = "EmulsionModelType.mooney1951a"
-    mooney1951b = "EmulsionModelType.mooney1951b"
-    sleicher1962 = "EmulsionModelType.sleicher1962"
-    taylor1932 = "EmulsionModelType.taylor1932"
-
-
 class SolidsModelType(Enum):
     """
     Informs which solid model should be used:
@@ -180,7 +163,7 @@ class PhysicsOptionsInfo:
     For more information about all options available check ``alfasim_sdk.context.HydrodynamicModelInfo``
     """
 
-    emulsion_model = attr.attrib(validator=instance_of(EmulsionModelType))
+    emulsion_model = attr.attrib(validator=in_(EmulsionModelType))
     solids_model = attr.attrib(validator=instance_of(SolidsModelType))
     hydrodynamic_model = attr.attrib(validator=instance_of(HydrodynamicModelInfo))
 

@@ -3,9 +3,9 @@ import re
 import pytest
 from barril.units import Scalar
 
+from alfasim_sdk.constants import EmulsionModelType
 from alfasim_sdk.constants import HydrodynamicModelType
 from alfasim_sdk.context import EdgeInfo
-from alfasim_sdk.context import EmulsionModelType
 from alfasim_sdk.context import HydrodynamicModelInfo
 from alfasim_sdk.context import NodeInfo
 from alfasim_sdk.context import PhysicsOptionsInfo
@@ -122,10 +122,10 @@ def test_nodes_and_edges_info(class_with_info):
 
 def test_physics_option():
     assert PhysicsOptionsInfo(
-        emulsion_model=EmulsionModelType.boxall2012,
+        emulsion_model=EmulsionModelType.Boxall2012,
         solids_model=SolidsModelType.no_model,
         hydrodynamic_model=HydrodynamicModelInfo(
-            selected_base_type=HydrodynamicModelType.three_phase_five_field_ucm,
+            selected_base_type=HydrodynamicModelType.ThreeLayersGasOilWater,
             phases=["1", "2"],
             fields=["3", "4"],
             layers=["5", "6"],

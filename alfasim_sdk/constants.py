@@ -76,6 +76,20 @@ class HydrodynamicModelType(Enum):
         "hydrodynamic_model_3_layers_water_with_co2"  # Under Development
     )
 
-    two_phase_four_field_ucm = FourFields  # backward compatibility
-    three_phase_five_field_ucm = ThreeLayersGasOilWater  # backward compatibility
-    two_phase_two_field_slug_capturing = TwoFields  # backward compatibility
+
+class EmulsionModelType(Enum):
+    """
+    Options for emulsion properties calculation.
+    """
+
+    NoModel = "no_model"
+    ModelDefault = "model_default"
+    Taylor1932 = "taylor1932"
+    Brinkman1952 = "brinkman1952"
+    Mooney1951A = "mooney1951a"
+    Mooney1951B = "mooney1951b"
+    Hinze1955 = "hinze1955"
+    Sleicher1962 = "sleicher1962"
+    Brauner2001 = "brauner2001"
+    Boxall2012 = "boxall2012"
+    Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
