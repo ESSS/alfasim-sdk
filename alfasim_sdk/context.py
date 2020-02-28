@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import List
 from typing import Optional
 
@@ -13,6 +12,7 @@ from alfasim_sdk._validators import list_of_strings
 from alfasim_sdk._validators import non_empty_str
 from alfasim_sdk.constants import EmulsionModelType
 from alfasim_sdk.constants import HydrodynamicModelType
+from alfasim_sdk.constants import SolidsModelType
 
 
 @attr.s(frozen=True)
@@ -108,30 +108,6 @@ class EdgeInfo:
     )
 
 
-class SolidsModelType(Enum):
-    """
-    Informs which solid model should be used:
-
-    - no_model - None:
-        Without slip velocity and slurry viscosity
-
-    - mills1985_equilibrium - Mills (1985):
-        Employs the equilibrium slip velocity model and the Mills (1985) effective dynamic viscosity expression.
-
-    - santamaria2010_equilibrium - Santamaría-Holek (2010):
-        This model is more appropriate to use when the solid phase has properties similar to or equal to hydrate.
-        It was fitted by Qin et al. (2018) for hydrates.
-
-    - thomas1965_equilibrium - Thomas (1965):
-        Employs the equilibrium slip velocity model and the Thomas (1965) effective dynamic viscosity expression.
-    """
-
-    no_model = "SolidsModelType.no_model"
-    mills1985_equilibrium = "SolidsModelType.mills1985_equilibrium"
-    santamaria2010_equilibrium = "SolidsModelType.santamaria2010_equilibrium"
-    thomas1965_equilibrium = "SolidsModelType.thomas1965_equilibrium"
-
-
 @attr.s(frozen=True)
 class HydrodynamicModelInfo:
     """
@@ -164,7 +140,7 @@ class PhysicsOptionsInfo:
     """
 
     emulsion_model = attr.attrib(validator=in_(EmulsionModelType))
-    solids_model = attr.attrib(validator=instance_of(SolidsModelType))
+    solids_model = attr.attrib(validator=in_(SolidsModelType))
     hydrodynamic_model = attr.attrib(validator=instance_of(HydrodynamicModelInfo))
 
 
@@ -347,10 +323,10 @@ class Context:
 
         .. code-block:: console
 
-            >>> ctx.GetNodes()[0]
+            >>> ctx.GetNodes[0]
             EdgeInfo(name='Pipe 1', number_of_phases_from_associated_pvt=2)
 
-            >>> ctx.GetNodes()[0].name
+            >>> ctx.GetNodes[0].name
             'Node 1'
 
         .. note::

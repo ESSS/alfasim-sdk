@@ -93,3 +93,27 @@ class EmulsionModelType(Enum):
     Brauner2001 = "brauner2001"
     Boxall2012 = "boxall2012"
     Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
+
+
+class SolidsModelType(Enum):
+    """
+    Informs which solid model should be used:
+
+    - NoModel - None:RR
+        Without slip velocity and slurry viscosity
+
+    - Mills1985Equilibrium - Mills (1985):
+        Employs the equilibrium slip velocity model and the Mills (1985) effective dynamic viscosity expression.
+
+    - Santamaria2010Equilibrium - Santamaría-Holek (2010):
+        This model is more appropriate to use when the solid phase has properties similar to or equal to hydrate.
+        It was fitted by Qin et al. (2018) for hydrates.
+
+    - Thomas1965Equilibrium - Thomas (1965):
+        Employs the equilibrium slip velocity model and the Thomas (1965) effective dynamic viscosity expression.
+    """
+
+    NoModel = "no_model"
+    Thomas1965Equilibrium = "thomas1965_equilibrium"
+    Mills1985Equilibrium = "mills1985_equilibrium"
+    Santamaria2010Equilibrium = "santamaria2010_equilibrium"
