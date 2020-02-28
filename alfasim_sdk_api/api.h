@@ -363,7 +363,10 @@ DLL_EXPORT int get_state_variable_array(
     - `"A"`: Cross-sectional Area in each control volume [m2]
     - `"theta"`: Inclination of each control volume [rad]
     - `"dx"`: Control Volume Length along the Pipe Axis [m]
-    - `"dv"`: Volume of the Control volume [m]
+    - `"dv"`: Volume of the control volume [m3]
+    - `"D_eff"`: Effective Pipe Inner Diameter, considering the internal deposit layers [m]
+    - `"A_eff"`: Cross-sectional Area Effective in each control volume, considering the internal deposit layers [m2]
+    - `"dv_eff"`: Effective Volume of the control volume, considering the internal deposit layers [m3]
 
     It is important to know that the listed `variable_name`s are no available in all #MultiFieldDescriptionScope
     and #GridScope. Because of that, the #error_code must be checked.
