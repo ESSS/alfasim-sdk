@@ -595,7 +595,7 @@ DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_l
 /*!
     Gets the current UCM (unit cell model) input data for friction factor calculation.
     Any available variable by this function is considered for a unit cell, which means
-    that there are variables with one value and there are varailbes with two values
+    that there are variables with one value and there are variables with two values
     related to the two phase system (GAS and LIQUID).
     If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
 
@@ -616,10 +616,10 @@ DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_l
     - `"sigma"`: Gas-liquid Surface Tension [N/m]
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] out Variable values array.
+    @param[out] out Variable value.
     @param[in] var_name String with the variable name. See the list of possible values above.
-    @param[in] phase_id Phase Id, When it is Gas phase the Id must be 0
-                          when it is Liquid phase the Id must be 1.
+    @param[in] phase_id A #TwoPhaseSystem value. When the requested variable is not associated
+                            to a phase any value can be passed.
     @return An #error_code value.
 */
 DLL_EXPORT int get_ucm_friction_factor_input_variable(
@@ -639,8 +639,8 @@ DLL_EXPORT int get_ucm_friction_factor_input_variable(
     @param[in] ctx ALFAsim's plugins context.
     @param[out] S_w Wetted Perimeters [m].
     @param[out] S_i Interface Perimeter [m].
-    @param[out] H   Phase height [m]. For annular flow, H[0] is the core diameter and H[1] is two
-                     times the liquid film.
+    @param[out] H   Phase height [m]. For annular flow, H[GAS] is the core diameter and H[LIQUID] is
+                     the total liquid film height.
     @param[in] alpha_G  Unit Cell Gas Volume Fraction [m3 of `gas phase` /m3 of mixture].
     @param[in] D        Unit Cell Inner Diameter [m].
     @param[in] phase_id Phase Id, When it is Gas phase the Id must be 0
@@ -652,8 +652,8 @@ DLL_EXPORT int get_ucm_fluid_geometrical_properties(
     double** S_w,
     double* S_i,
     double** H,
-    const double alpha_G,
-    const double D,
+    double alpha_G,
+    double D,
     int phase_id
 );
 
