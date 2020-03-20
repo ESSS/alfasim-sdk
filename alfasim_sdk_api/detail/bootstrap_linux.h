@@ -86,8 +86,10 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
 
 inline void alfasim_sdk_close(ALFAsimSDK_API* api)
 {
-    dlclose(api->handle);
-    api->handle = nullptr;
+    if (api->handle != nullptr){
+        dlclose(api->handle);
+        api->handle = nullptr;
+    }
 }
 
 #endif
