@@ -592,4 +592,69 @@ DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* mate
 */
 DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 
+/*!
+    Gets the current UCM (unit cell model) input data for friction factor calculation.
+    Any available variable by this function is considered for a unit cell, which means
+    that there are variables with one value and there are variables with two values
+    related to the two phase system (GAS and LIQUID).
+    If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
+
+    List of `variable_name` with two values (Two phase):
+    - `"alpha"`: Volume Fraction [m3 of `phase` /m3 of mixture]
+    - `"rho"`: Density [kg/m3]
+    - `"mu"`: Viscosity [Pa.s]
+    - `"U"`: Velocity [m/s]
+
+    It is important to know that the listed `variable_name`s are not available in any phase, only for
+    two phase systems, in which `Gas id` is 0 (zero) and `Liquid id` (sum of all liquid phases) is 1 (One).
+    Because of that, the #error_code must be checked.
+
+    List of `variable_name` with one value:
+    - `"D"`: Unit Cell Inner Diameter [m]
+    - `"ks"`: Roughness [m]
+    - `"theta"`: Inclination of the Unit Cell [rad]
+    - `"sigma"`: Gas-liquid Surface Tension [N/m]
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Variable value.
+    @param[in] var_name String with the variable name. See the list of possible values above.
+    @param[in] phase_id A #TwoPhaseSystem value. When the requested variable is not associated
+                            to a phase any value can be passed.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_ucm_friction_factor_input_variable(
+    void* ctx, double* out, const char* var_name, int phase_id
+);
+
+/*!
+    Gets the current UCM (unit cell model) fluid geometrical properties for friction
+    factor calculation.
+
+    During the implementation of any HOOK related to the UCM friction factor, this
+    function provides the following fluid geometrical properties:
+    - `"S_w"`: Wetted perimeters of phases [m].
+    - `"S_i"`: Interface perimeter [m].
+    - `"H"`: Phase height [m].
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] S_w Wetted Perimeters [m].
+    @param[out] S_i Interface Perimeter [m].
+    @param[out] H   Phase height [m]. For annular flow, H[GAS] is the core diameter and H[LIQUID] is
+                     the total liquid film height.
+    @param[in] alpha_G  Unit Cell Gas Volume Fraction [m3 of `gas phase` /m3 of mixture].
+    @param[in] D        Unit Cell Inner Diameter [m].
+    @param[in] phase_id Phase Id, When it is Gas phase the Id must be 0
+                          when it is Liquid phase the Id must be 1.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_ucm_fluid_geometrical_properties(
+    void* ctx,
+    double** S_w,
+    double* S_i,
+    double** H,
+    double alpha_G,
+    double D,
+    int phase_id
+);
+
 #endif

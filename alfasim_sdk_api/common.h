@@ -42,6 +42,14 @@ enum MultiFieldDescriptionScope
 };
 
 /*!
+    It holds the two phase system ids for Unit Cell Model related API functions.
+*/
+enum TwoPhaseSystem {
+    GAS=0, /*!< Gas phase.*/
+    LIQUID=1, /*!< Liquid phase (sum of all phases).*/
+};
+
+/*!
     It holds the variable scope in the time level to retrieve a simulation array.
 */
 enum TimestepScope
