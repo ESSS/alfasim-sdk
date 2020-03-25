@@ -83,7 +83,7 @@ typedef int (*get_wall_layer_id_func)(void* ctx, int control_volume, const char*
 typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_id, const char* var_name);
 typedef int (*get_ucm_friction_factor_input_variable_func)(void* ctx, double* out, const char* var_name, int phase_id);
-typedef int (*get_ucm_fluid_geometrical_properties_func)(void* ctx, double** S_w, double* S_i, double** H, double alpha_G, double D, int phase_id);
+typedef int (*get_ucm_fluid_geometrical_properties_func)(void* ctx, double** S_w, double* S_i, double** H, double alpha_G, double D);
 
 struct ALFAsimSDK_API {
 #if defined(_WIN32)
