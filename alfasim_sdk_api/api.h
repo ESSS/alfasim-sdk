@@ -644,12 +644,14 @@ DLL_EXPORT int get_ucm_friction_factor_input_variable(
     @param[in] alpha_G  Unit Cell Gas Volume Fraction [m3 of `gas phase` /m3 of mixture].
     @param[in] D        Unit Cell Inner Diameter [m].
     @return An #error_code value.
+
+    It is important to know that `S_w` and `H` must be pointers to an array of size two (GAS and LIQUID).
 */
 DLL_EXPORT int get_ucm_fluid_geometrical_properties(
     void* ctx,
-    double** S_w,
+    double* S_w,
     double* S_i,
-    double** H,
+    double* H,
     double alpha_G,
     double D
 );
