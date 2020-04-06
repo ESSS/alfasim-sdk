@@ -1297,6 +1297,52 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
     """
 
 
+def calculate_ucm_friction_factor_stratified(
+    ctx: "void*", ff_wG: "double*", ff_wL: "double*", ff_i: "double*"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED(void* ctx, double* ff_wG, double* ff_wL,
+    double* ff_i)``
+
+    Internal unit cell model `hook` to calculate the wall and interfacial friction factors for stratified
+    fluid flow pattern. The unit cell model represents a two phase flow with Gas and Liquid Phases.
+    The output variables ``ff_wG``, ``ff_wL`` and ``ff_i`` are the Gas-Wall friction factor, Liquid-Wall
+    friction factor and interfacial Gas-Liquid friction factor, respectively.
+
+    This `hook` allows the developer to implement your own correlation for friction factor in a stratified
+    flow.
+
+    :param ctx: ALFAsim's plugins context
+    :param ff_wG: Gas-Wall Friction Factor
+    :param ff_wL: Liquid-Wall Friction Factor
+    :param ff_i: Interfacial Gas-Liquid Friction Factor
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
+def calculate_ucm_friction_factor_annular(
+    ctx: "void*", ff_wG: "double*", ff_wL: "double*", ff_i: "double*"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_FRICTION_FACTOR_ANNULAR(void* ctx, double* ff_wG, double* ff_wL,
+    double* ff_i)``
+
+    Internal unit cell model `hook` to calculate the wall and interfacial friction factors for annular
+    fluid flow pattern. The unit cell model represents a two phase flow with Gas and Liquid Phases.
+    The output variables ``ff_wG``, ``ff_wL`` and ``ff_i`` are the Gas-Wall friction factor, Liquid-Wall
+    friction factor and interfacial Gas-Liquid friction factor, respectively.
+
+    This `hook` allows the developer to implement your own correlation for friction factor in a annular
+    flow.
+
+    :param ctx: ALFAsim's plugins context
+    :param ff_wG: Gas-Wall Friction Factor
+    :param ff_wL: Liquid-Wall Friction Factor
+    :param ff_i: Interfacial Gas-Liquid Friction Factor
+    :returns: Return OK if successful or anything different if failed
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -1440,7 +1486,10 @@ specs = HookSpecs(
         calculate_mass_fraction_of_tracer_in_field,
         set_prescribed_boundary_condition_of_mass_fraction_of_tracer,
         update_boundary_condition_of_mass_fraction_of_tracer,
-        # Extra Hooks
+        # Hooks related to Unit Cell Model
+        calculate_ucm_friction_factor_stratified,
+        calculate_ucm_friction_factor_annular,
+        # Extra Hooks (For testing)
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
