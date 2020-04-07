@@ -46,12 +46,12 @@ Constants
 
 .. autodata:: alfasim_sdk.constants.GAS_PHASE
 
-.. autodata:: alfasim_sdk.constants.LIQUID_PHASE
+.. autodata:: alfasim_sdk.constants.OIL_PHASE
 
 .. autodata:: alfasim_sdk.constants.WATER_PHASE
 
 .. autodata:: alfasim_sdk.constants.GAS_LAYER
 
-.. autodata:: alfasim_sdk.constants.LIQUID_LAYER
+.. autodata:: alfasim_sdk.constants.OIL_LAYER
 
 .. autodata:: alfasim_sdk.constants.WATER_LAYER

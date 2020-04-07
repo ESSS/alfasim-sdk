@@ -144,6 +144,14 @@ ALFAsim's Solver Data
 .. doxygenfunction:: get_flow_pattern
 
 
+Unit Cell Model (UCM) helpers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. doxygenfunction:: get_ucm_friction_factor_input_variable
+
+.. doxygenfunction:: get_ucm_fluid_geometrical_properties
+
+
 .. _var_name_parsing:
 
 Variable Name Parsing

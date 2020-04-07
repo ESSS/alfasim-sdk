@@ -159,8 +159,31 @@ Internal deposit layer
 
 When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.types.AddPhase` type, it is possible
 to consider the deposition inside the pipeline walls. If so, calculate the thickness of the deposited layer on a given
-phase through the usage of :py:func:`~alfasim_sdk.hook_specs.update_internal_deposition_layer`.By default, the layer
+phase through the usage of :py:func:`~alfasim_sdk.hook_specs.update_internal_deposition_layer`. By default, the layer
 thickness will be considered equal to zero meters.
+
+.. autofunction:: alfasim_sdk.hook_specs.update_internal_deposition_layer
+
+Unit Cell Model (UCM) Friction Factor
+-------------------------------------
+
+When the Unit Cell Model is used in ALFAsim simulation any plugin can implement your own friction factor
+correlation. For that, two hooks MUST be implemented, one for stratified flow and one for annular flow. Both of
+them must be implemented because the |alfasim|'s Solver will call them depending on which flow pattern ths fluid
+flow is in the control volume.
+
+.. note::
+    It is important to know that the main input variables needed to compute the friction factor is avaible in
+    the API function :cpp:func:`get_ucm_friction_factor_input_variable`. Note that, the variables listed in the
+    documentation of the cited function are related to one control volume, in which the Unit Cell Model is applied.
+
+.. autofunction:: alfasim_sdk.hook_specs.calculate_ucm_friction_factor_stratified
+
+.. autofunction:: alfasim_sdk.hook_specs.calculate_ucm_friction_factor_annular
+
+.. note::
+    Another important API function for UCM is :cpp:func:`get_ucm_fluid_geometrical_properties`. This function computes
+    the geometrical properties properly in each previous presented `hooks` depending on the flow pattern.
 
 
 User Defined Tracers
