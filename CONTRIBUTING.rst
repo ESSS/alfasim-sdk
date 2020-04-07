@@ -116,3 +116,15 @@ Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated.
+
+Building the Docs
+-----------------
+
+Inside the folder docs, there is a makefile with all instructions necessary to build the documentation locally. In order to execute this instruction type `make html` inside the `docs` folder, and an HTML file will be generated under `_build\html`
+
+```bash
+cd docs
+make html
+cd  _build\html\
+start index.html
+```
