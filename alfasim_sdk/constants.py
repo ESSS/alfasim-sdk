@@ -75,6 +75,12 @@ class HydrodynamicModelType(Enum):
     ThreeLayersWaterWithCO2 = (
         "hydrodynamic_model_3_layers_water_with_co2"  # Under Development
     )
+    ThreeLayersSevenFieldsGasOilWater = (
+        "hydrodynamic_model_3_layers_7_fields_gas_oil_water"
+    )
+    ThreeLayersNineFieldsGasOilWater = (
+        "hydrodynamic_model_3_layers_9_fields_gas_oil_water"
+    )
 
 
 class EmulsionModelType(Enum):
