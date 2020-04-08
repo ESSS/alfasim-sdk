@@ -951,7 +951,7 @@ class UpdatePhase:
 
     List of possible phase names (see :ref:`api-constants-section` for details):
      - ``GAS_PHASE``
-     - ``LIQUID_PHASE``
+     - ``OIL_PHASE``
      - ``WATER_PHASE`` (If a three phase hydrodynamic model is used)
 
     :param name: Name of the new phase.
