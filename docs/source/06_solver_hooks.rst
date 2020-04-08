@@ -169,11 +169,11 @@ Unit Cell Model (UCM) Friction Factor
 
 When the Unit Cell Model is used in ALFAsim simulation any plugin can implement your own friction factor
 correlation. For that, two hooks MUST be implemented, one for stratified flow and one for annular flow. Both of
-them must be implemented because the |alfasim|'s Solver will call them depending on which flow pattern ths fluid
+them must be implemented because the |alfasim|'s Solver will call them depending on which flow pattern the fluid
 flow is in the control volume.
 
 .. note::
-    It is important to know that the main input variables needed to compute the friction factor is avaible in
+    It is important to know that the main input variables needed to compute the friction factor is available in
     the API function :cpp:func:`get_ucm_friction_factor_input_variable`. Note that, the variables listed in the
     documentation of the cited function are related to one control volume, in which the Unit Cell Model is applied.
 
