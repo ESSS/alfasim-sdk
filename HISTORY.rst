@@ -2,6 +2,12 @@
 History
 =======
 
+0.4.0
+-----
+
+* Add new API functions related unit cell model friction factor hooks.
+
+* Add two new hooks to calculate the unit cell model friction factor for stratified and annular flows.
 
 0.3.0
 -----

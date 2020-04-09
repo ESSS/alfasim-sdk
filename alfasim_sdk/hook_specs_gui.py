@@ -350,7 +350,7 @@ def alfasim_configure_phases():
         def alfasim_configure_phases():
             return [
                 UpdatePhase(
-                    name=LIQUID_PHASE,
+                    name=OIL_PHASE,
                     additional_fields=['plugin_dispersed_field'],
                 )
             ]
@@ -399,12 +399,12 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
 
     .. code-block:: python
 
-        from alfasim_sdk.constants import GAS_PHASE, LIQUID_PHASE, WATER_PHASE
+        from alfasim_sdk.constants import GAS_PHASE, OIL_PHASE, WATER_PHASE
 
         @alfasim_sdk.hookimpl
         def alfasim_get_phase_interaction_properties_calculated_from_plugin():
         return [
-            (GAS_PHASE, LIQUID_PHASE),
+            (GAS_PHASE, OIL_PHASE),
             (GAS_PHASE, WATER_PHASE),
         ]
 

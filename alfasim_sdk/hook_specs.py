@@ -1253,7 +1253,7 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
     :param n_fields: Number of fields
     :returns: Return OK if successful or anything different if failed
 
-     Example of usage:
+    Example of usage:
 
     .. code-block:: c++
         :linenos:
@@ -1294,6 +1294,98 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
     .. warning::
         The plugin developer must NOT change ``vol_frac_bound`` variable, only the output variable ``phi_presc``.
 
+    """
+
+
+def calculate_ucm_friction_factor_stratified(
+    ctx: "void*", ff_wG: "double*", ff_wL: "double*", ff_i: "double*"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED(void* ctx, double* ff_wG, double* ff_wL,
+    double* ff_i)``
+
+    Internal unit cell model `hook` to calculate the wall and interfacial friction factors for stratified
+    fluid flow pattern. The unit cell model represents a two phase flow with Gas and Liquid Phases.
+    The output variables ``ff_wG``, ``ff_wL`` and ``ff_i`` are the Gas-Wall friction factor, Liquid-Wall
+    friction factor and interfacial Gas-Liquid friction factor, respectively.
+
+    This `hook` allows the developer to implement your own correlation for friction factor in a stratified
+    flow.
+
+    :param ctx: ALFAsim's plugins context
+    :param ff_wG: Gas-Wall Friction Factor
+    :param ff_wL: Liquid-Wall Friction Factor
+    :param ff_i: Interfacial Gas-Liquid Friction Factor
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED(
+            void* ctx, double* ff_wG, double* ff_wL, double* ff_i)
+        {
+            int errcode = -1;
+            int G = TwoPhaseSystem::GAS
+            int L = TwoPhaseSystem::LIQUID
+
+            // Getting friction factor input data from context
+            double alpha[2];
+            errcode = alfasim_sdk_api.get_ucm_friction_factor_input_variable(
+                ctx, &alpha[G], "alpha", TwoPhaseSystem::GAS);
+            if (errcode != OK){ return errcode; }
+            errcode = alfasim_plugins_api.get_ucm_friction_factor_input_variable(
+                ctx, &alpha[L], "alpha", TwoPhaseSystem::LIQUID);
+            if (errcode != OK){ return errcode; }
+            // And so on to each friction factor input variable
+            // U(velocities), rho(densities), mu(viscosities) and D(pipe diameter)
+
+             // Getting the fluid geometrical properties
+            double S_w[2];
+            double S_i;
+            double H[2];
+            errcode = alfasim_sdk_api.get_ucm_fluid_geometrical_properties(
+                ctx, S_w, &S_i, H, alpha[G], D);
+            if (errcode != OK){ return errcode; }
+
+            // Compute the friction factors using your own correlation.
+            // Also, using the variables: alpha, U, rho, mu, D, S_w, S_i and H
+
+            *ff_wG = gas_wall_ff;
+            *ff_wL = liq_wall_ff;
+            *ff_i = gas_liq_ff;
+
+            return OK;
+        }
+    """
+
+
+def calculate_ucm_friction_factor_annular(
+    ctx: "void*", ff_wG: "double*", ff_wL: "double*", ff_i: "double*"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_FRICTION_FACTOR_ANNULAR(void* ctx, double* ff_wG, double* ff_wL,
+    double* ff_i)``
+
+    Internal unit cell model `hook` to calculate the wall and interfacial friction factors for annular
+    fluid flow pattern. The unit cell model represents a two phase flow with Gas and Liquid Phases.
+    The output variables ``ff_wG``, ``ff_wL`` and ``ff_i`` are the Gas-Wall friction factor, Liquid-Wall
+    friction factor and interfacial Gas-Liquid friction factor, respectively.
+
+    This `hook` allows the developer to implement your own correlation for friction factor in a annular
+    flow.
+
+    :param ctx: ALFAsim's plugins context
+    :param ff_wG: Gas-Wall Friction Factor
+    :param ff_wL: Liquid-Wall Friction Factor
+    :param ff_i: Interfacial Gas-Liquid Friction Factor
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+        The same example presented in :py:func:`HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED<alfasim_sdk.hook_specs.calculate_ucm_friction_factor_stratified>`
+        can be used, just change the `hook` name to `HOOK_CALCULATE_UCM_FRICTION_FACTOR_ANNULAR`.
     """
 
 
@@ -1351,7 +1443,8 @@ def update_internal_deposition_layer(
     :param n_control_volumes: Number of control volumes
     :returns: Return OK if successful or anything different if failed
 
-    Example of usage
+    Example of usage:
+
     .. code-block:: c++
         :linenos:
         :emphasize-lines: 1
@@ -1362,14 +1455,16 @@ def update_internal_deposition_layer(
             auto errcode = -1;
 
             double dt = -1.0;
-            errcode = alfasim.get_simulation_quantity(ctx, &dt, TimestepScope::CURRENT, (char*) "dt");
+            errcode = alfasim.get_simulation_quantity(
+                ctx, &dt, TimestepScope::CURRENT, (char*) "dt");
             if (errcode != 0) {
                 return errcode;
             }
 
             // Handle first time step, because you won't have the previously information
             double current_time = -1.0;
-            errcode = alfasim.get_simulation_quantity(ctx, &current_time, TimestepScope::CURRENT, (char*) "time");
+            errcode = alfasim.get_simulation_quantity(
+                ctx, &current_time, TimestepScope::CURRENT, (char*) "time");
             if (errcode != 0) {
                 return errcode;
             }
@@ -1382,25 +1477,30 @@ def update_internal_deposition_layer(
                 // Get previously deposition layer thickness to obtain the current
                 void* deposition_layer_thickness_old_raw_ptr;
                 errcode = alfasim.get_plugin_variable(
-                    ctx, &deposition_layer_thickness_old_raw_ptr, "deposition_layer_thickness", 0,
-                    TimestepScope::PREVIOUS, &size);
+                    ctx,
+                    &deposition_layer_thickness_old_raw_ptr,
+                    "deposition_layer_thickness",
+                    0,
+                    TimestepScope::PREVIOUS,
+                    &size);
                 if (errcode != 0) {
                     return errcode;
                 }
-                auto* deposition_layer_thickness_old = (double*) (deposition_layer_thickness_old_raw_ptr);
+                auto* deposition_layer_thickness_old =
+                    (double*) (deposition_layer_thickness_old_raw_ptr);
 
                 // Calculate the variation of the deposition layer in one time step
                 double* d_deposit_layer_dt = 0.0001; // [m/s]
 
                 // Sum this variation with the thickness of the older time step
                 for (int i = 0; i < n_control_volumes; ++i) {
-                    (double*) deposition_layer_thickness[i] = deposit_layer_thickness_old[i] +
-                    d_deposit_layer_dt * dt; // [m]
+                    (double*) deposition_layer_thickness[i] =
+                        deposit_layer_thickness_old[i] + d_deposit_layer_dt * dt; // [m]
                 }
             }
 
             return OK;
-    }
+        }
 
     In the example above is shown how to manage the ``deposit_layer_thickness`` array for each control volume.
     Note that the ``deposit_layer_thickness`` should be always the total value for that time step, so the first
@@ -1440,7 +1540,10 @@ specs = HookSpecs(
         calculate_mass_fraction_of_tracer_in_field,
         set_prescribed_boundary_condition_of_mass_fraction_of_tracer,
         update_boundary_condition_of_mass_fraction_of_tracer,
-        # Extra Hooks
+        # Hooks related to Unit Cell Model
+        calculate_ucm_friction_factor_stratified,
+        calculate_ucm_friction_factor_annular,
+        # Extra Hooks (For testing)
         friction_factor,
         env_temperature,
         calculate_entrained_liquid_fraction,
