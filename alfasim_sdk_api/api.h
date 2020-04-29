@@ -451,13 +451,11 @@ DLL_EXPORT int get_simulation_quantity(
 
     List of possible values of `Flow Pattern` is:
     - `0 - Unknown`
-    - `1 - Dispersed Bubble`
-    - `2 - Froth`
-    - `3 - Stratified Smooth`
-    - `4 - Stratified Wavy`
+    - `1 - Stratified`
+    - `2 - Dispersed Bubble`
+    - `3 - Bubble`
+    - `4 - Slug`
     - `5 - Annular Mist`
-    - `6 - Bubble`
-    - `7 - Slug`
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] out Flow Pattern values array. See list of possible values above.
