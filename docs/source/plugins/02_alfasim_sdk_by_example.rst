@@ -45,7 +45,7 @@ Application customization
 |sdk| allows plugins to customize the user interface of |alfasim| by adding custom models, the image below shows
 the locations where a custom model can be inserted using the hook |gui_hook|.
 
-.. image:: _static/images/alfasim_get_data_model_type_main.png
+.. image:: /_static/images/alfasim_get_data_model_type_main.png
 
 
 |marker_1| illustrates the section where the models |container| or |model| will be placed. |br|
@@ -78,7 +78,7 @@ will be included on the user interface of |alfasim|.
 
 The image below illustrates the application with the output from the snippet above.
 
-.. image:: _static/images/plugin_example/user_interface_hook.png
+.. image:: /_static/images/plugin_example/user_interface_hook.png
 
 
 For more details about all input fields available, check the section :ref:`api-types-section`.
@@ -132,7 +132,7 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
 
 The image below illustrates the application with the output from the snippet above.
 
-.. image:: _static/images/plugin_example/secondary_variable_trend_output.png
+.. image:: /_static/images/plugin_example/secondary_variable_trend_output.png
 
 
 For more details about ``SecondaryVariable``, check the section :ref:`api-variables-section`.
@@ -298,4 +298,4 @@ it is necessary to use the :func:`get_simulation_array` API function.
 The image below illustrates the output from the solver, when running the plugin created in this section with the given
 network.
 
-.. image:: _static/images/plugin_example/output_graph.png
+.. image:: /_static/images/plugin_example/output_graph.png

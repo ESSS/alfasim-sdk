@@ -29,16 +29,16 @@ def alfasim_get_data_model_type():
 
     The image below shows the locations where a custom model can be inserted implementing the hook.
 
-    .. image:: _static/images/hooks/tree_plugin_marker.png
+    .. image:: /_static/images/hooks/tree_plugin_marker.png
         :scale: 80%
 
-    .. image:: _static/images/hooks/model_explorer_with_marker.png
+    .. image:: /_static/images/hooks/model_explorer_with_marker.png
         :scale: 80%
 
-    .. |m_1| image:: _static/images/marker_1.png
+    .. |m_1| image:: /_static/images/marker_1.png
         :scale: 80%
 
-    .. |m_2| image:: _static/images/marker_2.png
+    .. |m_2| image:: /_static/images/marker_2.png
         :scale: 80%
 
     |m_1| Location to where the models :func:`~alfasim_sdk.models.container_model` or :func:`~alfasim_sdk.models.data_model` will be placed. |br|
@@ -62,7 +62,7 @@ def alfasim_get_data_model_type():
 
     The image below shows the output of example 1 when executing on ALFAsim.
 
-    .. image:: _static/images/hooks/alfasim_get_data_model_type_example_1.png
+    .. image:: /_static/images/hooks/alfasim_get_data_model_type_example_1.png
         :scale: 80%
 
 
@@ -93,7 +93,7 @@ def alfasim_get_data_model_type():
 
     The image below shows the output of example 2 when executing on ALFAsim.
 
-    .. image:: _static/images/hooks/alfasim_get_data_model_type_example_2.png
+    .. image:: /_static/images/hooks/alfasim_get_data_model_type_example_2.png
         :scale: 80%
 
     Example 3: This third example demonstrates that it's possible to create multiple models within the plugin
@@ -123,7 +123,7 @@ def alfasim_get_data_model_type():
 
     The image below shows the output of example 3 when executing on |alfasim|.
 
-    .. image:: _static/images/hooks/alfasim_get_data_model_type_example_3.png
+    .. image:: /_static/images/hooks/alfasim_get_data_model_type_example_3.png
         :scale: 80%
     """
 
@@ -232,7 +232,7 @@ def alfasim_get_status(
 
     For the status monitor above, the application will show the following message when the distance is less than 0:
 
-    .. image:: _static/images/hooks/status_monitor_with_distance_error.png
+    .. image:: /_static/images/hooks/status_monitor_with_distance_error.png
 
     """
 
@@ -292,7 +292,7 @@ def alfasim_configure_layers():
 
     The image below shows the new added phase on the application.
 
-    .. image:: _static/images/hooks/alfasim_configure_layer_example_1.png
+    .. image:: /_static/images/hooks/alfasim_configure_layer_example_1.png
         :scale: 80%
 
     """
@@ -337,7 +337,7 @@ def alfasim_configure_phases():
 
     The image below shows the new added phase on the application.
 
-    .. image:: _static/images/hooks/alfasim_configure_phase_example_1.png
+    .. image:: /_static/images/hooks/alfasim_configure_phase_example_1.png
         :scale: 80%
 
     It is also possible to add additional fields to existent phases using the :class:`~alfasim_sdk.types.UpdatePhase`.

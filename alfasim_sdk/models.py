@@ -54,13 +54,13 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
         def alfasim_get_data_model_type():
             return [MyModelContainer]
 
-    .. image:: _static/images/api/container_model_example_1_1.png
+    .. image:: /_static/images/api/container_model_example_1_1.png
         :scale: 70%
 
-    .. image:: _static/images/api/container_model_example_1_2.png
+    .. image:: /_static/images/api/container_model_example_1_2.png
         :scale: 70%
 
-    .. image:: _static/images/api/container_model_example_1_3.png
+    .. image:: /_static/images/api/container_model_example_1_3.png
         :scale: 70%
 
 
@@ -71,10 +71,10 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
     An action that creates a new model inside the container selected, you can activate this action
     by right-clicking in the container over the Tree, or by clicking on the "Plus" icon available at the ``Model Explorer``.
 
-    .. image:: _static/images/api/container_model_new_model_1.png
+    .. image:: /_static/images/api/container_model_new_model_1.png
         :scale: 80%
 
-    .. image:: _static/images/api/container_model_new_model_2.png
+    .. image:: /_static/images/api/container_model_new_model_2.png
         :scale: 80%
 
     .. rubric:: Action: Remove
@@ -82,10 +82,10 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
     An action that remove the selected model, only available for models inside a container, you can activate this action by
     right-clicking the model over the Tree, or by clicking on the "Trash" icon available at the ``Model Explorer``.
 
-    .. image:: _static/images/api/container_model_remove_1.png
+    .. image:: /_static/images/api/container_model_remove_1.png
         :scale: 80%
 
-    .. image:: _static/images/api/container_model_remove_2.png
+    .. image:: /_static/images/api/container_model_remove_2.png
         :scale: 80%
 
     """
@@ -140,10 +140,10 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
         def alfasim_get_data_model_type():
 	        return [MyModel]
 
-    .. image:: _static/images/api/data_model_example_1_1.png
+    .. image:: /_static/images/api/data_model_example_1_1.png
         :scale: 90%
 
-    .. image:: _static/images/api/data_model_example_1_2.png
+    .. image:: /_static/images/api/data_model_example_1_2.png
         :scale: 90%
 
 

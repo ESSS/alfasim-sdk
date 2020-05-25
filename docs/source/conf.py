@@ -47,10 +47,17 @@ graphviz_output_format = "svg"
 extensions = [
     "sphinx.ext.autodoc",
     "breathe",
+    # "sphinx_panels",
     "sphinx_click.ext",
     "sphinx.ext.graphviz",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.doctest",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.todo",
 ]
-
+# nbsphinx do not use requirejs (breaks bootstrap)
+nbsphinx_requirejs_path = ""
 autodoc_typehints = "none"
 templates_path = ["_templates"]
 source_suffix = ".rst"
@@ -69,10 +76,10 @@ rst_prolog = """
 .. |s_variable| replace:: :py:func:`alfasim_sdk.variables.SecondaryVariable`
 .. |s_variable_hook| replace:: :py:func:`alfasim_get_additional_variables`
 
-.. |marker_1| image:: _static/images/marker_1.png
+.. |marker_1| image:: /_static/images/marker_1.png
     :scale: 80%
 
-.. |marker_2| image:: _static/images/marker_2.png
+.. |marker_2| image:: /_static/images/marker_2.png
     :scale: 80%
 
 .. # define a hard line break for HTML
@@ -84,7 +91,7 @@ rst_prolog = """
     This is advanced customization. We strongly encourage the plugin developer to read the Tracers chapter of
     |alfasim|'s Technical Report available on the `Help` menu at |alfasim| application.
 
-.. |manual| image:: _static/images/help_menu_technical_manual.png
+.. |manual| image:: /_static/images/help_menu_technical_manual.png
         :scale: 80%
 
 .. |tracer_warn| replace::
@@ -95,21 +102,30 @@ rst_prolog = """
 
 language = None
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "breathe/*"]
-pygments_style = "monokai"
+
+pygments_style = 'sphinx'
 
 # -- Options for HTML output -------------------------------------------------
-html_theme = "alabaster"
+html_theme = "pydata_sphinx_theme"
 html_theme_options = {
-    "analytics_id": "UA-149094345-1",
-    "link": "#3782BE",
-    "link_hover": "#3782BE",
-    "font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
-    "head_font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
-    "font_size": "18px",
-    "page_width": "980px",
-    "show_relbars": True,
+    "external_links": [],
+    "github_url": "https://github.com/esss/alfasim-sdk",
+    "google_analytics_id": "UA-149094345-1",
 }
+html_css_files = [
+    "css/alfasim_sdk.css",
+]
+# html_theme_options = {
+#     "analytics_id": "UA-149094345-1",
+#     "link": "#3782BE",
+#     "link_hover": "#3782BE",
+#     "font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
+#     "head_font_family": '"Avenir Next", Calibri, "PT Sans", sans-serif',
+#     "font_size": "18px",
+#     "page_width": "980px",
+#     "show_relbars": True,
+# }
 html_static_path = ["_static"]
-html_sidebars = {"**": ["searchbox.html", "about.html", "fulltoc.html"]}
+# html_sidebars = {"**": ["searchbox.html", "about.html", "fulltoc.html"]}
 html_favicon = "_static/images/alfasim_gui.ico"
 html_logo = "_static/images/logo-alfasim.svg"

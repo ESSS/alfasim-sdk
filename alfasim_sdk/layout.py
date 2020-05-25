@@ -38,10 +38,10 @@ def tabs() -> Callable:
 
     The image below shows the output from the command above.
 
-    .. image:: _static/images/api/tabs_layout_example_1.png
+    .. image:: /_static/images/api/tabs_layout_example_1.png
         :scale: 90%
 
-    .. image:: _static/images/api/tabs_layout_example_2.png
+    .. image:: /_static/images/api/tabs_layout_example_2.png
         :scale: 90%
 
     .. note::
@@ -109,7 +109,7 @@ def group(*, caption: str) -> Callable:
 
     The image below shows the output from the example above.
 
-    .. image:: _static/images/api/group_layout_example.png
+    .. image:: /_static/images/api/group_layout_example.png
 
 
     .. note::
