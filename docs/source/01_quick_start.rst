@@ -63,7 +63,7 @@ After the execution of the command above, you will be prompted to fill the follo
     ... -- Plugin Caption: Myplugin
     ... -- Plugin Id: myplugin
     ... -- Author Name: ESSS
-    ... -- Author Email: alfasim@esss.co
+    ... -- Author Email: <email>@<server>
 
 
 :Plugin Caption: The caption to be used across the application to identify the plugin.
