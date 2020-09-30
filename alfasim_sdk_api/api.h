@@ -443,7 +443,7 @@ DLL_EXPORT int get_simulation_quantity(
     void* ctx,
     double* out,
     enum TimestepScope ts_scope,
-    char* variable_name_c
+    const char* variable_name_c
 );
 
 /*!
