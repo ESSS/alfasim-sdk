@@ -62,6 +62,7 @@ jobs:
           tox -e linting
 
   deploy:
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'ESSS/alfasim-sdk'
 
     runs-on: ubuntu-latest
 
