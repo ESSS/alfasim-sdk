@@ -1,2 +1,2 @@
-breathe==4.18.1
-sphinx-click==2.3.0
+breathe==4.22.1
+sphinx-click==2.5.0
