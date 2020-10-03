@@ -40,7 +40,7 @@ typedef int (*get_state_variable_array_func)(
 typedef int (*get_simulation_array_func)(
     void* ctx,
     double** out,
-    char* variable_name,
+    const char* variable_name,
     struct VariableScope var_scope,
     int line_index,
     int* size
@@ -48,7 +48,7 @@ typedef int (*get_simulation_array_func)(
 typedef int (*get_simulation_tracer_array_func)(
     void* ctx,
     double** out,
-    char* variable_name,
+    const char* variable_name,
     struct VariableScope var_scope,
     int tracer_index,
     int line_index,
@@ -58,7 +58,7 @@ typedef int (*get_simulation_quantity_func)(
     void* ctx,
     double* out,
     enum TimestepScope ts_scope,
-    char* variable_name_c
+    const char* variable_name_c
 );
 typedef int (*get_wall_interfaces_temperature_func)(
     void* ctx,
