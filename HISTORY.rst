@@ -2,6 +2,11 @@
 History
 =======
 
+0.5.0
+-----
+
+* Remove api functions `get_wall_layer_id` and `set_wall_layer_property`.
+
 0.4.0
 -----
 

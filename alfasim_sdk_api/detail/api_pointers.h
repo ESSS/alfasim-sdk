@@ -40,7 +40,7 @@ typedef int (*get_state_variable_array_func)(
 typedef int (*get_simulation_array_func)(
     void* ctx,
     double** out,
-    char* variable_name,
+    const char* variable_name,
     struct VariableScope var_scope,
     int line_index,
     int* size
@@ -48,7 +48,7 @@ typedef int (*get_simulation_array_func)(
 typedef int (*get_simulation_tracer_array_func)(
     void* ctx,
     double** out,
-    char* variable_name,
+    const char* variable_name,
     struct VariableScope var_scope,
     int tracer_index,
     int line_index,
@@ -58,7 +58,7 @@ typedef int (*get_simulation_quantity_func)(
     void* ctx,
     double* out,
     enum TimestepScope ts_scope,
-    char* variable_name_c
+    const char* variable_name_c
 );
 typedef int (*get_wall_interfaces_temperature_func)(
     void* ctx,
@@ -79,8 +79,6 @@ typedef int (*get_tracer_name_size_func)(void* ctx, int* tracer_name_size, void*
 typedef int (*get_tracer_name_func)(void* ctx, char* tracer_name, void* reference, int size);
 typedef int (*get_tracer_ref_by_name_func)(void* ctx, void** reference, const char* tracer_name, const char* plugin_id);
 typedef int (*get_tracer_partition_coefficient_func)(void* ctx, double* out, void* reference, int phase_id);
-typedef int (*get_wall_layer_id_func)(void* ctx, int control_volume, const char* material_name, int* out);
-typedef int (*set_wall_layer_property_func)(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_id, const char* var_name);
 typedef int (*get_ucm_friction_factor_input_variable_func)(void* ctx, double* out, const char* var_name, int phase_id);
 typedef int (*get_ucm_fluid_geometrical_properties_func)(void* ctx, double* S_w, double* S_i, double* H, double alpha_G, double D);
@@ -136,8 +134,6 @@ struct ALFAsimSDK_API {
     get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
 
     get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
-    get_wall_layer_id_func get_wall_layer_id;
-    set_wall_layer_property_func set_wall_layer_property;
 
     get_ucm_friction_factor_input_variable_func get_ucm_friction_factor_input_variable;
     get_ucm_fluid_geometrical_properties_func get_ucm_fluid_geometrical_properties;

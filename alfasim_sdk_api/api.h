@@ -385,7 +385,7 @@ DLL_EXPORT int get_state_variable_array(
 DLL_EXPORT int get_simulation_array(
     void* ctx,
     double** out,
-    char* variable_name,
+    const char* variable_name,
     struct VariableScope var_scope,
     int line_index,
     int* size
@@ -416,7 +416,7 @@ DLL_EXPORT int get_simulation_array(
 DLL_EXPORT int get_simulation_tracer_array(
     void* ctx,
     double** out,
-    char* variable_name_c,
+    const char* variable_name_c,
     struct VariableScope var_scope,
     int tracer_index,
     int line_index,
@@ -564,31 +564,6 @@ DLL_EXPORT int get_wall_interfaces_temperature(
     enum TimestepScope ts_scope,
     int* size
 );
-
-/*!
-    Gets the wall layer ID in the given control volume, with a given material name.
-
-    @param[in] ctx ALFAsim's plugins context.
-    @param[in] control_volume Control Volume ID.
-    @param[in] material_name Material name.
-    @param[out] out Wall Layer ID.
-    @return An #error_code value.
-*/
-DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* material_name, int* out);
-
-/*!
-    Set a property in the given wall layer ID (Use #get_wall_layer_id to obtain it), in a given
-    control volume. Please note that the new value is assumed to be physical, as no sanity check is
-    performed by the solver.
-
-    @param[in] ctx ALFAsim's plugins context.
-    @param[in] control_volume Control Volume ID.
-    @param[in] wall_layer_id Wall Layer ID.
-    @param[in] property_id A #WallLayerProperty value.
-    @param[in] new_value A new value to be set in the specified property.
-    @return An #error_code value.
-*/
-DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
 
 /*!
     Gets the current UCM (unit cell model) input data for friction factor calculation.
