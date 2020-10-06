@@ -137,10 +137,6 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_wall_interfaces_temperature
 
-.. doxygenfunction:: get_wall_layer_id
-
-.. doxygenfunction:: set_wall_layer_property
-
 .. doxygenfunction:: get_flow_pattern
 
 

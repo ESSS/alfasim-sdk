@@ -101,8 +101,6 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_tracer_name = (get_tracer_name_func)GetProcAddress(api->handle, "get_tracer_name");
     api->get_tracer_ref_by_name = (get_tracer_ref_by_name_func)GetProcAddress(api->handle, "get_tracer_ref_by_name");
     api->get_tracer_partition_coefficient = (get_tracer_partition_coefficient_func)GetProcAddress(api->handle, "get_tracer_partition_coefficient");
-    api->get_wall_layer_id = (get_wall_layer_id_func)GetProcAddress(api->handle, "get_wall_layer_id");
-    api->set_wall_layer_property = (set_wall_layer_property_func)GetProcAddress(api->handle, "set_wall_layer_property");
     api->get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)GetProcAddress(api->handle, "get_plugin_input_data_multiplereference_selected_size");
     api->get_ucm_friction_factor_input_variable = (get_ucm_friction_factor_input_variable_func)GetProcAddress(api->handle, "get_ucm_friction_factor_input_variable");
     api->get_ucm_fluid_geometrical_properties = (get_ucm_fluid_geometrical_properties_func)GetProcAddress(api->handle, "get_ucm_fluid_geometrical_properties");

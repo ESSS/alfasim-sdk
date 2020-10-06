@@ -566,31 +566,6 @@ DLL_EXPORT int get_wall_interfaces_temperature(
 );
 
 /*!
-    Gets the wall layer ID in the given control volume, with a given material name.
-
-    @param[in] ctx ALFAsim's plugins context.
-    @param[in] control_volume Control Volume ID.
-    @param[in] material_name Material name.
-    @param[out] out Wall Layer ID.
-    @return An #error_code value.
-*/
-DLL_EXPORT int get_wall_layer_id(void* ctx, int control_volume, const char* material_name, int* out);
-
-/*!
-    Set a property in the given wall layer ID (Use #get_wall_layer_id to obtain it), in a given
-    control volume. Please note that the new value is assumed to be physical, as no sanity check is
-    performed by the solver.
-
-    @param[in] ctx ALFAsim's plugins context.
-    @param[in] control_volume Control Volume ID.
-    @param[in] wall_layer_id Wall Layer ID.
-    @param[in] property_id A #WallLayerProperty value.
-    @param[in] new_value A new value to be set in the specified property.
-    @return An #error_code value.
-*/
-DLL_EXPORT int set_wall_layer_property(void* ctx, int control_volume, int wall_layer_id, enum WallLayerProperty property_id, double new_value);
-
-/*!
     Gets the current UCM (unit cell model) input data for friction factor calculation.
     Any available variable by this function is considered for a unit cell, which means
     that there are variables with one value and there are variables with two values

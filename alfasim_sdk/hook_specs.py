@@ -1426,7 +1426,12 @@ def calculate_entrained_liquid_fraction(
 
 
 def update_internal_deposition_layer(
-    ctx: "void*", thickness: "void*", density: "void*", heat_capacity: "void*", thermal_conductivity: "void*", n_control_volumes: "int"
+    ctx: "void*",
+    thickness: "void*",
+    density: "void*",
+    heat_capacity: "void*",
+    thermal_conductivity: "void*",
+    n_control_volumes: "int",
 ) -> "int":
     """
     **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSITION_LAYER(void* ctx, void* thickness, void* density, void* heat_capacity, void* thermal_conductivity,
@@ -1471,10 +1476,18 @@ def update_internal_deposition_layer(
             if (errcode != 0) {
                 return errcode;
             }
+
+            double wax_density = 900.0 // [kg/m3]
+            double wax_heat_capacity = 2140.0 // [J/(kg.K)]
+            double wax_thermal_conductivity = 0.25 // [W/(m.K)]
+
             if (current_time == 0.0){
                 // Set a value for the deposition layer thickness
                  for (int i = 0; i < n_control_volumes; ++i) {
                    (double*) thickness[i] = 0.0; // [m]
+                   (double*) density[i] = wax_density; // [kg/m3]
+                   (double*) heat_capacity[i] = wax_heat_capacity; //  [J/(kg.K)]
+                   (double*) thermal_conductivity[i] = wax_thermal_conductivity; // [W/(m.K)]
                 }
             } else{
                 // Get previously deposition layer thickness to obtain the current
@@ -1499,15 +1512,19 @@ def update_internal_deposition_layer(
                 for (int i = 0; i < n_control_volumes; ++i) {
                     (double*) thickness[i] =
                         thickness_old[i] + d_deposit_layer_dt * dt; // [m]
+                   (double*) density[i] = wax_density; // [kg/m3]
+                   (double*) heat_capacity[i] = wax_heat_capacity; //  [J/(kg.K)]
+                   (double*) thermal_conductivity[i] = wax_thermal_conductivity; // [W/(m.K)]
                 }
             }
 
             return OK;
         }
 
-    In the example above is shown how to manage the ``thickness`` array for each control volume.
-    Note that the ``thickness`` should be always the total value for that time step, so the first
-    time step should be handle in a separately way, since there is no previously information.
+    In the example above is shown how to manage the ``thickness``, ``density``, ``heat_capacity``
+    and ``thermal_conductivity`` arrays for each control volume. Note that the ``thickness`` should
+    be always the total value for that time step, so the first time step should be handle in a
+    separately way, since there is no previously information.
     """
 
 
