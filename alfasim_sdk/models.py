@@ -133,12 +133,12 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
 
         @data_model(icon='', caption='My Plugin')
         class MyModel:
-	        distance = Quantity(value=1, unit='m', caption='Distance')
+                distance = Quantity(value=1, unit='m', caption='Distance')
 
 
         @alfasim_sdk.hookimpl
         def alfasim_get_data_model_type():
-	        return [MyModel]
+                return [MyModel]
 
     .. image:: _static/images/api/data_model_example_1_1.png
         :scale: 90%
