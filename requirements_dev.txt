@@ -1,5 +1,4 @@
 coverage
 pytest-cov
 pytest-mock
-pytest-runner
 pytest
