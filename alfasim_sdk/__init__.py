@@ -2,9 +2,12 @@
 """Top-level package for alfasim-sdk."""
 import pluggy
 
-__author__ = """ESSS"""
+from alfasim_sdk import _version
+
+__author__ = "ESSS"
 __email__ = "foss@esss.co"
-__version__ = "0.2.0"
+__version__ = _version.__version__
+
 
 hookimpl = pluggy.HookimplMarker("ALFAsim")
 

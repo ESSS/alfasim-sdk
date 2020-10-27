@@ -1,58 +1,6 @@
-[tool.poetry]
-name = "alfasim-sdk"
-version = "0.3.0"
-description = "ALFAsim API/SDK"
-authors = ["ESSS <foss@esss.co>"]
-license = "MIT"
-packages = [
-    { include = "alfasim_sdk" },
-]
-include = [
-    "AUTHORS.rst",
-    "CONTRIBUTING.rst",
-    "HISTORY.rst",
-    "LICENSE",
-    "README.rst",
-    "tests/**/*",
-    "docs/**/*",
-    "alfasim_sdk_api/**/*.h",
-    ]
-
-homepage = "https://github.com/esss/alfasim-sdk"
-repository = "https://github.com/esss/alfasim-sdk"
-documentation = "https://alfasim-sdk.readthedocs.io"
-readme = "README.rst"
-keywords = ["alfasim", "alfasim-sdk", "python-hookman", "hookman"]
-
-classifiers = [
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-]
-
-
-[tool.poetry.dependencies]
-barril = "^1.5.0"
-Click = "^7.0"
-pluggy = '^0.13.0'
-python = "^3.6.0"
-python-hookman = {git = "https://github.com/ESSS/hookman.git"}
-
-
-[tool.poetry.dev-dependencies]
-codecov= "^2"
-coverage= "^4.5.4"
-pytest-cov= "^2.7.1"
-pytest-mock= "^1.10.0"
-pytest-runner= "^5.1"
-pytest= "^5.1.3"
-
-
-[tool.poetry.scripts]
-alfasim-sdk = "alfasim_sdk.cli:main"
-alfasim_sdk = "alfasim_sdk.cli:main"
-
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = [
+  "setuptools>=42.0",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
