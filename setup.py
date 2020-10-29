@@ -4,7 +4,7 @@ from setuptools import setup
 
 version_content = Path("alfasim_sdk/_version.py").read_text()
 version_number = next(
-    line.split("=")[1].strip()
+    line.split("=")[1].strip().replace('"', "")
     for line in version_content.splitlines()
     if "__version__" in line
 )
