@@ -157,7 +157,7 @@ class Context:
     - :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_status` hook
     """
 
-    def GetModel(self, model_name: str) -> Optional[type]:
+    def get_model(self, model_name: str) -> Optional[type]:
         """
         Returns an instance of the given ``model_name``.
 
@@ -185,10 +185,10 @@ class Context:
         .. code-block:: console
 
 
-            >>> ctx.GetModel('MyModel')
+            >>> ctx.get_model('MyModel')
             MyModel(name='ALFAsim', scalar=Scalar(1.0, 'degC', 'temperature'))
 
-            >>> ctx.GetModel('MyModel').name
+            >>> ctx.get_model('MyModel').name
             'ALFAsim'
 
         At runtime, you can also verify the names of the models defined by a given plugin. For this, you need to
@@ -199,7 +199,7 @@ class Context:
 
         """
 
-    def GetPipelines(self) -> Optional[List[PipelineInfo]]:
+    def get_pipelines(self) -> Optional[List[PipelineInfo]]:
         """
         Return a list with all Pipes available on the Network from the Project.
         Each Pipe is represented by an instance of :func:`~alfasim_sdk.context.PipelineInfo`.
@@ -213,16 +213,16 @@ class Context:
 
         .. code-block:: console
 
-            >>> ctx.GetPipelines()[0]
+            >>> ctx.get_pipelines()[0]
             PipelineInfo(name='Pipe 1 > Pipeline', [ ... ])
 
-            >>> ctx.GetPipelines()[0].edge_name
+            >>> ctx.get_pipelines()[0].edge_name
             'Pipe 1'
 
-            >>> ctx.GetPipelines()[0].total_length
+            >>> ctx.get_pipelines()[0].total_length
             Scalar(1000.0, 'm', 'length')
 
-            >>> len(ctx.GetPipelines()[0].segments)
+            >>> len(ctx.get_pipelines()[0].segments)
             1
 
 
@@ -233,7 +233,7 @@ class Context:
         Checkout the :func:`~alfasim_sdk.context.PipelineInfo` section to know more about the properties available.
         """
 
-    def GetPluginsInfos(self) -> List[PluginInfo]:
+    def get_plugins_infos(self) -> List[PluginInfo]:
         """
         Return a list of all plugins available on ALFAsim.
         Each plugin is represented by an instance of :func:`~alfasim_sdk.context.PluginInfo`.
@@ -261,20 +261,20 @@ class Context:
         .. code-block:: console
 
 
-            >>> ctx.GetPluginsInfos()
+            >>> ctx.get_plugins_infos()
             [PluginInfo(caption='myplugin', name='myplugin', enabled=True, models=['MyModel'])]
 
-            >>> ctx.GetPluginsInfos()[0].enabled
+            >>> ctx.get_plugins_infos()[0].enabled
             True
 
-            >>> ctx.GetPluginsInfos()[0].models
+            >>> ctx.get_plugins_infos()[0].models
             ['MyModel']
 
 
         Checkout the :func:`~alfasim_sdk.context.PluginInfo` section to know more about the properties available.
         """
 
-    def GetPluginInfoById(self, plugin_id: str) -> PluginInfo:
+    def get_plugin_info_by_id(self, plugin_id: str) -> PluginInfo:
         """
         Similar to :func:`~alfasim_sdk.context.GetPluginsInfos` but returns a single instance of :func:`~alfasim_sdk.context.PluginInfo`
         from the given ``plugin_id`` parameter.
@@ -284,7 +284,7 @@ class Context:
         :raises ValueError: When the plugin informed by ``plugin_id`` it's not available.
         """
 
-    def GetEdges(self) -> Optional[List[EdgeInfo]]:
+    def get_edges(self) -> Optional[List[EdgeInfo]]:
         """
         Return a list of all Edges available on ALFAsim.
         Each Edge is represented by an instance of :func:`~alfasim_sdk.context.EdgeInfo`.
@@ -300,16 +300,16 @@ class Context:
 
         .. code-block:: console
 
-            >>> ctx.GetEdges()[0]
+            >>> ctx.get_edges()[0]
             EdgeInfo(name='Pipe 1', number_of_phases_from_associated_pvt=2)
 
-            >>> ctx.GetPipelines()[0].number_of_phases_from_associated_pvt
+            >>> ctx.get_pipelines()[0].number_of_phases_from_associated_pvt
             'Pipe 1'
 
         Checkout the :func:`~alfasim_sdk.context.EdgeInfo` section to know more about the properties available.
         """
 
-    def GetNodes(self) -> Optional[List[NodeInfo]]:
+    def get_nodes(self) -> Optional[List[NodeInfo]]:
         """
         Return a list of all Nodes available on ALFAsim.
         Each Node is represented by an instance of :func:`alfasim_sdk.context.NodeInfo`.
@@ -323,10 +323,10 @@ class Context:
 
         .. code-block:: console
 
-            >>> ctx.GetNodes[0]
+            >>> ctx.get_nodes[0]
             EdgeInfo(name='Pipe 1', number_of_phases_from_associated_pvt=2)
 
-            >>> ctx.GetNodes[0].name
+            >>> ctx.get_nodes[0].name
             'Node 1'
 
         .. note::
@@ -336,7 +336,7 @@ class Context:
         Checkout the :func:`~alfasim_sdk.context.NodeInfo` section to know more about the properties available.
         """
 
-    def GetPhysicsOptions(self) -> PhysicsOptionsInfo:
+    def get_physics_options(self) -> PhysicsOptionsInfo:
         """
         Return the physics options from the current project from ALFAsim.
 
@@ -356,22 +356,22 @@ class Context:
 
         .. code-block:: python
 
-            >>> ctx.GetPhysicsOptions()
+            >>> ctx.get_physics_options()
             PhysicsOptionsInfo( [...] )
 
-            >>> ctx.GetPhysicsOptions().emulsion_model.value
+            >>> ctx.get_physics_options().emulsion_model.value
             'EmulsionModelType.brinkman1952'
 
-            >>> ctx.GetPhysicsOptions().hydrodynamic_model
+            >>> ctx.get_physics_options().hydrodynamic_model
             HydrodynamicModelInfo( [ ... ] )
 
-            >>> ctx.GetPhysicsOptions().hydrodynamic_model.fields
+            >>> ctx.get_physics_options().hydrodynamic_model.fields
             ['gas', 'oil', 'droplet', 'bubble']
 
-            >>> ctx.GetPhysicsOptions().hydrodynamic_model.layers
+            >>> ctx.get_physics_options().hydrodynamic_model.layers
             ['gas', 'oil']
 
-            >>> ctx.GetPhysicsOptions().hydrodynamic_model.phases
+            >>> ctx.get_physics_options().hydrodynamic_model.phases
             ['gas', 'oil']
 
         Checkout the :func:`~alfasim_sdk.context.PhysicsOptionsInfo` section to know more about the properties available.

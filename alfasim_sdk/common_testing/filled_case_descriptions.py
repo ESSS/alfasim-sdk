@@ -7,7 +7,7 @@ from barril.units import Scalar
 from . import case_builders
 from alfasim_sdk import constants
 from alfasim_sdk.alfacase import case_description
-from alfasim_sdk.alfacase._alfacase_to_case import GetCategoryFor
+from alfasim_sdk.alfacase._alfacase_to_case import get_category_for
 from alfasim_sdk.common_testing import get_acme_tab_file_path
 
 BIP_DESCRIPTION = case_description.BipDescription(
@@ -135,30 +135,32 @@ HEAT_SOURCE_DESCRIPTION = case_description.HeatSourceEquipmentDescription(
     start=Scalar(200.0, "m"), length=Scalar(550.0, "m"), power=Scalar(20.0e3, "W")
 )
 INITIAL_CONDITIONS_DESCRIPTION = case_description.InitialConditionsDescription(
-    pressures=case_builders.BuildConstantInitialPressureDescription(50.0, "bar"),
-    velocities=case_builders.BuildConstantInitialVelocitiesDescription(
+    pressures=case_builders.build_constant_initial_pressure_description(50.0, "bar"),
+    velocities=case_builders.build_constant_initial_velocities_description(
         {
             constants.FLUID_GAS: Scalar(0.0, "m/s"),
             constants.FLUID_OIL: Scalar(0.0, "m/s"),
             constants.FLUID_WATER: Scalar(0, "m/s"),
         }
     ),
-    volume_fractions=case_builders.BuildConstantInitialVolumeFractionsDescription(
+    volume_fractions=case_builders.build_constant_initial_volume_fractions_description(
         {
             constants.FLUID_GAS: Scalar("volume fraction", 0.999, "-"),
             constants.FLUID_OIL: Scalar("volume fraction", 0.001, "-"),
             constants.FLUID_WATER: Scalar("volume fraction", 0.0, "-"),
         }
     ),
-    tracers_mass_fractions=case_builders.BuildConstantInitialTracersMassFractionsDescription(
+    tracers_mass_fractions=case_builders.build_constant_initial_tracers_mass_fractions_description(
         [0.0, 1.0], "-"
     ),
-    temperatures=case_builders.BuildConstantInitialTemperaturesDescription(123.4, "K"),
+    temperatures=case_builders.build_constant_initial_temperatures_description(
+        123.4, "K"
+    ),
     initial_fluid="fluid_1",
 )
 MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
     position=Scalar(10, "m"),
-    gas_oil_ratio=Scalar(100.0, "sm3/sm3", GetCategoryFor("sm3/sm3")),
+    gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
     water_cut=Scalar(0.2, "-", "volume fraction"),
     volumetric_flow_rates_std={
         "gas": Scalar(1000.5, "m3/s"),
@@ -237,8 +239,8 @@ PRESSURE_NODE_PROPERTIES_DESCRIPTION = (
         temperature=Scalar(343.0, "K"),
         fluid="fluid_1",
         tracer_mass_fraction=Array([1.0, 0.0], "-", "mass fraction"),
-        gas_oil_ratio=Scalar(100.0, "sm3/sm3", GetCategoryFor("sm3/sm3")),
-        gas_liquid_ratio=Scalar(5.0, "sm3/sm3", GetCategoryFor("sm3/sm3")),
+        gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
+        gas_liquid_ratio=Scalar(5.0, "sm3/sm3", get_category_for("sm3/sm3")),
         water_cut=Scalar(0.2, "-", "volume fraction"),
         split_type=constants.MassInflowSplitType.ConstantMassFraction,
         mass_fractions={
@@ -313,11 +315,11 @@ RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescript
     length=Scalar(150.0, "m"),
     pressure=Scalar(12.0, "bar"),
     temperature=Scalar(50.0, "degC"),
-    productivity_IPR="Table IPR 1",
-    injectivity_IPR="Linear IPR 1",
+    productivity_ipr="Table IPR 1",
+    injectivity_ipr="Linear IPR 1",
     split_type=constants.MassInflowSplitType.Pvt,
     water_cut=Scalar(0.2, "-", "volume fraction"),
-    gas_oil_ratio=Scalar(100.0, "sm3/sm3", GetCategoryFor("sm3/sm3")),
+    gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
     mass_fractions={
         constants.FLUID_GAS: Scalar("mass fraction", 0.4, "-"),
         constants.FLUID_OIL: Scalar("mass fraction", 0.6, "-"),
@@ -671,7 +673,7 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
 )
 
 
-def EnsureDescriptionsAreEqual(
+def ensure_descriptions_are_equal(
     expected_case_description_dict, obtained_description_dict, ignored_properties
 ):
     """
@@ -683,7 +685,7 @@ def EnsureDescriptionsAreEqual(
         if key in ignored_properties:
             continue
         if isinstance(expected_value, dict):
-            EnsureDescriptionsAreEqual(
+            ensure_descriptions_are_equal(
                 expected_case_description_dict=expected_value,
                 obtained_description_dict=obtained_description_dict[key],
                 ignored_properties=ignored_properties,
@@ -693,7 +695,7 @@ def EnsureDescriptionsAreEqual(
         is_list = isinstance(expected_value, list)
         if is_list and isinstance(first(expected_value, None), dict):
             for index, value in enumerate(expected_value):
-                EnsureDescriptionsAreEqual(
+                ensure_descriptions_are_equal(
                     expected_case_description_dict=value,
                     obtained_description_dict=obtained_description_dict[key][index],
                     ignored_properties=ignored_properties,
@@ -709,8 +711,8 @@ def EnsureDescriptionsAreEqual(
             assert np.array_equal(obtained_description_dict[key], expected_value)
             continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
-        is_Array = isinstance(expected_value, Array)
-        if is_Array:
+        is_array = isinstance(expected_value, Array)
+        if is_array:
             unit = expected_value.GetUnit()
             obtained_values = np.array(obtained_description_dict[key].GetValues(unit))
             expected_values = np.array(expected_value.GetValues(unit))

@@ -15,3 +15,14 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: debug-statements
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
+    hooks:
+    -   id: flake8
+        additional_dependencies:
+            - pep8-naming
+            - flake8-typing-imports==1.9.0
+        language_version: python3
+        args:
+            - --ignore=E,W,N803
+            - --per-file-ignores=alfasim_sdk/hook_specs.py:F722,F821

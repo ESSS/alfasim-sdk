@@ -3,7 +3,7 @@ from pathlib import Path
 from alfasim_sdk.alfacase import case_description
 
 
-def GenerateAlfacaseFile(
+def generate_alfacase_file(
     alfacase_description: case_description.CaseDescription, alfacase_file: Path
 ):
     """
@@ -11,23 +11,23 @@ def GenerateAlfacaseFile(
 
     PvtModels that are of mode constants.PVT_MODEL_TABLE will be dumped into a separate file (.alfatable).
     """
-    _GenerateAlfatableFileForPvtModelsDescription(
+    _generate_alfatable_file_for_pvt_models_description(
         alfacase_description.pvt_models, alfacase_file
     )
-    alfacase_file_content = ConvertDescriptionToAlfacase(alfacase_description)
+    alfacase_file_content = convert_description_to_alfacase(alfacase_description)
     alfacase_file.write_text(alfacase_file_content, encoding="utf-8")
 
 
-def _GenerateAlfatableFileForPvtModelsDescription(
+def _generate_alfatable_file_for_pvt_models_description(
     pvt_models: case_description.PvtModelsDescription, alfacase_file: Path
 ):
     """
     Create `.alfatable` files for each pvt_model which the mode is constants.PVT_MODEL_TABLE
     """
-    from alfasim_sdk.alfacase.alfatable import GenerateAlfatableFile
+    from alfasim_sdk.alfacase.alfatable import generate_alfatable_file
 
     for pvt_name, pvt_table_description in pvt_models.table_parameters.items():
-        alfatable_file = GenerateAlfatableFile(
+        alfatable_file = generate_alfatable_file(
             alfacase_file=alfacase_file,
             alfatable_filename=pvt_name,
             description=pvt_table_description,
@@ -36,7 +36,7 @@ def _GenerateAlfatableFileForPvtModelsDescription(
     pvt_models.table_parameters.clear()
 
 
-def ConvertDescriptionToAlfacase(
+def convert_description_to_alfacase(
     alfacase_description, *, enable_flow_style_on_numpy: bool = False
 ) -> str:
     """
@@ -60,23 +60,25 @@ def ConvertDescriptionToAlfacase(
 
     """
     import attr
-    from alfasim_sdk.alfacase._case_to_alfacase import ConvertDictToValidAlfacaseFormat
+    from alfasim_sdk.alfacase._case_to_alfacase import (
+        convert_dict_to_valid_alfacase_format,
+    )
     from strictyaml import YAML
 
-    case_description_dict = ConvertDictToValidAlfacaseFormat(
+    case_description_dict = convert_dict_to_valid_alfacase_format(
         attr.asdict(alfacase_description, recurse=False),
         enable_flow_style_on_numpy=enable_flow_style_on_numpy,
     )
     return YAML(case_description_dict).as_yaml()
 
 
-def ConvertAlfacaseToCase(file_alfacase: Path) -> case_description.CaseDescription:
+def convert_alfacase_to_case(file_alfacase: Path) -> case_description.CaseDescription:
     """
     Return a alfasim_sdk.alfacase.case_description.Case with all information provided on file_yaml
     """
     from alfasim_sdk.alfacase._alfacase_to_case import (
-        LoadCaseDescription,
+        load_case_description,
         DescriptionDocument,
     )
 
-    return LoadCaseDescription(DescriptionDocument.FromFile(file_alfacase))
+    return load_case_description(DescriptionDocument.from_file(file_alfacase))

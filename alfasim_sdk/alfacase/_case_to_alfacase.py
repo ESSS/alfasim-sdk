@@ -13,7 +13,7 @@ from barril.units import Scalar
 
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk.alfacase.generate_schema import IsAttrs
+from alfasim_sdk.alfacase.generate_schema import is_attrs
 
 
 ATTRIBUTES = Union[Scalar, Array, Enum, np.ndarray, List, List[Enum]]
@@ -26,7 +26,7 @@ NON_FININTE_VALUES_TO_STRING = [
 ]
 
 
-def FormatList(values: List[Any], *, enable_flow_style: bool = False):
+def format_list(values: List[Any], *, enable_flow_style: bool = False):
     """
     This method marks specific nodes for dumping in flow mode,
     and everything "below" will then be dumped with flow-mode as well.
@@ -46,7 +46,7 @@ def FormatList(values: List[Any], *, enable_flow_style: bool = False):
     return retval
 
 
-def _ConvertValueToValidAlfacaseFormat(
+def _convert_value_to_valid_alfacase_format(
     value: ATTRIBUTES, enable_flow_style_on_numpy: bool
 ) -> Union[str, Dict[str, str], List[str], List[List[str]]]:
     """
@@ -65,7 +65,7 @@ def _ConvertValueToValidAlfacaseFormat(
         return value.value
 
     if isinstance(value, np.ndarray) and value.ndim == 1:
-        return FormatList(
+        return format_list(
             values=[str(coefficients) for coefficients in value],
             enable_flow_style=enable_flow_style_on_numpy,
         )
@@ -74,7 +74,7 @@ def _ConvertValueToValidAlfacaseFormat(
         (isinstance(item, np.ndarray) and item.ndim == 1 for item in value)
     ):
         return [
-            FormatList(
+            format_list(
                 values=[str(np_value) for np_value in np_array],
                 enable_flow_style=enable_flow_style_on_numpy,
             )
@@ -104,7 +104,7 @@ def _ConvertValueToValidAlfacaseFormat(
     return str(value)
 
 
-def ConvertDictToValidAlfacaseFormat(
+def convert_dict_to_valid_alfacase_format(
     case_description_dict: Dict[str, ATTRIBUTES], enable_flow_style_on_numpy: bool
 ) -> Dict[str, Any]:
     """
@@ -124,19 +124,19 @@ def ConvertDictToValidAlfacaseFormat(
         if is_empty_dict or value is None or ignore:
             continue
 
-        if IsAttrs(value):
+        if is_attrs(value):
 
             to_dict = partial(attr.asdict, recurse=False)
 
             if isinstance(value, list):
                 converted_value = [
-                    ConvertDictToValidAlfacaseFormat(
+                    convert_dict_to_valid_alfacase_format(
                         to_dict(i), enable_flow_style_on_numpy
                     )
                     for i in value
                 ]
             else:
-                converted_value = ConvertDictToValidAlfacaseFormat(
+                converted_value = convert_dict_to_valid_alfacase_format(
                     to_dict(value), enable_flow_style_on_numpy
                 )
 
@@ -145,12 +145,12 @@ def ConvertDictToValidAlfacaseFormat(
             continue
 
         if isinstance(value, dict):
-            converted_dict[key] = ConvertDictToValidAlfacaseFormat(
+            converted_dict[key] = convert_dict_to_valid_alfacase_format(
                 value, enable_flow_style_on_numpy
             )
             continue
 
-        converted_dict[key] = _ConvertValueToValidAlfacaseFormat(
+        converted_dict[key] = _convert_value_to_valid_alfacase_format(
             value, enable_flow_style_on_numpy
         )
 

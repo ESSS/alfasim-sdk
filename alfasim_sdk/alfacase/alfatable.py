@@ -3,15 +3,15 @@ from pathlib import Path
 from alfasim_sdk.alfacase import case_description
 
 
-def GenerateAlfatableFile(alfacase_file, alfatable_filename, description):
+def generate_alfatable_file(alfacase_file, alfatable_filename, description):
     """
     Create `.alfatable` file for the given description
     """
     from boltons.strutils import slugify
 
-    from alfasim_sdk.alfacase.alfacase import ConvertDescriptionToAlfacase
+    from alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
 
-    alfatable_content = ConvertDescriptionToAlfacase(
+    alfatable_content = convert_description_to_alfacase(
         description, enable_flow_style_on_numpy=True
     )
     alfatable_file = (
@@ -22,7 +22,7 @@ def GenerateAlfatableFile(alfacase_file, alfatable_filename, description):
     return alfatable_file
 
 
-def LoadPvtModelTableParametersDescriptionFromAlfatable(
+def load_pvt_model_table_parameters_description_from_alfatable(
     file_path,
 ) -> case_description.PvtModelTableParametersDescription:
     """
@@ -55,10 +55,10 @@ def LoadPvtModelTableParametersDescriptionFromAlfatable(
         "total_water_fraction": "-",
     }
 
-    from alfasim_sdk.alfacase._alfacase_to_case import GetCategoryFor
+    from alfasim_sdk.alfacase._alfacase_to_case import get_category_for
 
     table_parameter_keys_and_scalars = {
-        key: Scalar(GetCategoryFor(unit), content[key]["value"], content[key]["unit"])
+        key: Scalar(get_category_for(unit), content[key]["value"], content[key]["unit"])
         for key, unit in key_and_unit.items()
     }
     return case_description.PvtModelTableParametersDescription(

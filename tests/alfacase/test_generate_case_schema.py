@@ -17,13 +17,13 @@ from alfasim_sdk.alfacase.case_description import attrib_scalar
 from alfasim_sdk.alfacase.case_description import CaseDescription
 from alfasim_sdk.alfacase.case_description import CompressorEquipmentDescription
 from alfasim_sdk.alfacase.case_description import Numpy1DArray
-from alfasim_sdk.alfacase.generate_schema import _ObtainReferredType
-from alfasim_sdk.alfacase.generate_schema import GenerateAlfacaseSchema
-from alfasim_sdk.alfacase.generate_schema import GetAllClassesThatNeedsSchema
+from alfasim_sdk.alfacase.generate_schema import _obtain_referred_type
+from alfasim_sdk.alfacase.generate_schema import generate_alfacase_schema
+from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
 
 
 class TestGenerateStrictYaml:
-    def testListSchema(self):
+    def test_list_schema(self):
         @attr.s
         class Foo:
             float_list: List[float] = attr.ib()
@@ -31,7 +31,7 @@ class TestGenerateStrictYaml:
             bool_list: List[bool] = attr.ib()
             str_list: List[str] = attr.ib()
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -47,7 +47,7 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testBaseTypesSchema(self):
+    def test_base_types_schema(self):
         @attr.s
         class Foo:
             float_1: float = attr.ib()
@@ -56,7 +56,7 @@ class TestGenerateStrictYaml:
             str_1: str = attr.ib()
             float_2: float = attr.ib(default=1e-4)
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -73,14 +73,14 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testArraySchema(self):
+    def test_array_schema(self):
         @attr.s
         class Foo:
             array_1: Array = attr.ib()
             array_2: Optional[Array] = attr.ib(default=None)
             array_3: Array = attr.ib(default=Array([1], "K"))
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -95,13 +95,13 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testPath(self):
+    def test_path(self):
         @attr.s
         class Foo:
             path_1: Path = attr.ib()
             path_2: Path = attr.ib(default=None)
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -115,14 +115,14 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testScalar(self):
+    def test_scalar(self):
         @attr.s
         class Foo:
             scalar_1 = attrib_scalar()
             scalar_2 = attrib_scalar(default=None)
             scalar_3 = attrib_scalar(default=Scalar(1, "K"))
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -137,7 +137,7 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testUnionSchema(self):
+    def test_union_schema(self):
         """
         Currently Union is only used for attr classes, and not for multiple types like str | float
         With the exception for PvtModelTable, that accepts str and Path but the YAML only accepts str anyway
@@ -160,7 +160,7 @@ class TestGenerateStrictYaml:
             # Optional[str] is equivalent to Union[str, None] and in this case we want only str
             x_4: Optional[str] = attr.ib(default="SomePath")
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -186,14 +186,14 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testDictSchema(self):
+    def test_dict_schema(self):
         @attr.s
         class Foo:
             x_1: Dict[str, float] = attr.ib()
             x_2: Dict[str, Array] = attr.ib()
             x_3: Optional[Dict[str, Scalar]] = attr.ib(default=None)
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -208,12 +208,12 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testNumpySchema(self):
+    def test_numpy_schema(self):
         @attr.s
         class Foo:
             x_1: Numpy1DArray = attr.ib()
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -226,7 +226,7 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testAttrSchema(self):
+    def test_attr_schema(self):
         @attr.s
         class X1:
             bool_1: bool = attr.ib()
@@ -236,7 +236,7 @@ class TestGenerateStrictYaml:
             x_1 = attrib_instance(X1)
             x_2 = attrib_instance_list(X1)
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
                 foo_schema = Map(
@@ -250,7 +250,7 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testEnumSchema(self):
+    def test_enum_schema(self):
         from enum import Enum
 
         class Bar(Enum):
@@ -263,7 +263,7 @@ class TestGenerateStrictYaml:
             x_2 = attrib_enum(type_=Bar)
             x_3 = attrib_enum(default=Bar.b)
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
             foo_schema = Map(
@@ -278,12 +278,12 @@ class TestGenerateStrictYaml:
 
         assert schema == expected_schema
 
-    def testOptionalTypeHint(self):
+    def test_optional_type_hint(self):
         @attr.s
         class Foo:
             x_1: Optional[str] = attr.ib(default=None)
 
-        schema = GenerateAlfacaseSchema(Foo)
+        schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
             """\
             foo_schema = Map(
@@ -311,12 +311,12 @@ class TestGenerateStrictYaml:
         )
 
         with pytest.raises(TypeError, match=msg):
-            GenerateAlfacaseSchema(Foo)
+            generate_alfacase_schema(Foo)
 
         with pytest.raises(TypeError, match=msg):
-            GenerateAlfacaseSchema(Bar)
+            generate_alfacase_schema(Bar)
 
-    def testNotKnowType(self):
+    def test_not_know_type(self):
         @attr.s
         class Foo:
             x_1: None = attr.ib()
@@ -325,12 +325,12 @@ class TestGenerateStrictYaml:
 
         msg = f"Alfacase Schema does not know how to handle {None}"
         with pytest.raises(RuntimeError, match=re.escape(msg)):
-            GenerateAlfacaseSchema(Foo)
+            generate_alfacase_schema(Foo)
 
 
-def testGenerateStrictYamlSchemaForClass():
+def test_generate_strict_yaml_schema_for_class():
 
-    schema = GenerateAlfacaseSchema(CompressorEquipmentDescription)
+    schema = generate_alfacase_schema(CompressorEquipmentDescription)
     compressor_expected_schema = dedent(
         """\
         compressor_equipment_description_schema = Map(
@@ -351,7 +351,7 @@ def testGenerateStrictYamlSchemaForClass():
     assert schema == compressor_expected_schema
 
 
-def testGenerateSchemaForAllCases(file_regression):
+def test_generate_schema_for_all_cases(file_regression):
     """
     This check helps ensure that the YAMLSchema is being changed consciously because whenever CaseDescription is changed, the schema will change as well.
 
@@ -366,14 +366,16 @@ def testGenerateSchemaForAllCases(file_regression):
 
     Dev note: This test is also a facility to help debug the output generate from COG
     """
-    list_of_classes_that_needs_schema = GetAllClassesThatNeedsSchema(CaseDescription)
+    list_of_classes_that_needs_schema = get_all_classes_that_needs_schema(
+        CaseDescription
+    )
     output = [
-        GenerateAlfacaseSchema(class_) for class_ in list_of_classes_that_needs_schema
+        generate_alfacase_schema(class_) for class_ in list_of_classes_that_needs_schema
     ]
     file_regression.check("\n".join(output), encoding="utf-8")
 
 
-def testALFAsimSchemaIsUsable():
+def test_alfasim_schema_is_usable():
     """
     Smoke test to ensure that the Schema has valid python syntax
     """
@@ -384,14 +386,16 @@ def testALFAsimSchemaIsUsable():
     as_document({"name": "Name"}, case_description_schema)
 
 
-def testGetCasesClass():
+def test_get_cases_class():
     """
     Smoke test to ensure that the descriptions classes didn't change the name.
     If the is broken due to renaming or removal be aware of backward compatibility with ALFAcase files.
     If only Descriptions are being added, you don't need to worry and just update the list above.
     """
 
-    list_of_classes_that_needs_schema = GetAllClassesThatNeedsSchema(CaseDescription)
+    list_of_classes_that_needs_schema = get_all_classes_that_needs_schema(
+        CaseDescription
+    )
     obtained = {class_.__name__ for class_ in list_of_classes_that_needs_schema}
     expected = {
         "AnnulusDescription",
@@ -477,7 +481,7 @@ def testGetCasesClass():
        """
 
 
-def testObtainReferredType():
+def test_obtain_referred_type():
     @attr.s
     class B:
         b = attr.ib()
@@ -489,9 +493,9 @@ def testObtainReferredType():
         z: Union[str, int] = attr.ib()
         w: str = attr.ib()
 
-    assert _ObtainReferredType(attr.fields_dict(A)["x"].type) == [str]
-    assert _ObtainReferredType(attr.fields_dict(A)["y"].type) == [B]
-    assert _ObtainReferredType(attr.fields_dict(A)["z"].type) == [str, int]
+    assert _obtain_referred_type(attr.fields_dict(A)["x"].type) == [str]
+    assert _obtain_referred_type(attr.fields_dict(A)["y"].type) == [B]
+    assert _obtain_referred_type(attr.fields_dict(A)["z"].type) == [str, int]
 
     import re
 
@@ -499,4 +503,4 @@ def testObtainReferredType():
         "type_ must be a List or Union referring other types, got <class 'str'>"
     )
     with pytest.raises(TypeError, match=msg):
-        assert _ObtainReferredType(attr.fields_dict(A)["w"].type) == [str]
+        assert _obtain_referred_type(attr.fields_dict(A)["w"].type) == [str]

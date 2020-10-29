@@ -13,18 +13,19 @@ from alfasim_sdk.alfacase import _alfacase_to_case
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase import schema
 from alfasim_sdk.alfacase._alfacase_to_case import DescriptionDocument
-from alfasim_sdk.alfacase._alfacase_to_case import GetArrayLoader
-from alfasim_sdk.alfacase._alfacase_to_case import GetScalarLoader
-from alfasim_sdk.alfacase._alfacase_to_case import LoadPhysicsDescription
-from alfasim_sdk.alfacase._alfacase_to_case import LoadPvtModelsDescription
-from alfasim_sdk.alfacase.alfacase import ConvertDescriptionToAlfacase
-from alfasim_sdk.alfacase.generate_schema import GetAllClassesThatNeedsSchema
+from alfasim_sdk.alfacase._alfacase_to_case import get_array_loader
+from alfasim_sdk.alfacase._alfacase_to_case import get_scalar_loader
+from alfasim_sdk.alfacase._alfacase_to_case import load_physics_description
+from alfasim_sdk.alfacase._alfacase_to_case import load_pvt_models_description
+from alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
+from alfasim_sdk.alfacase.generate_schema import convert_to_snake_case
+from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
 from alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk.alfacase.generate_schema import IsAttrs
+from alfasim_sdk.alfacase.generate_schema import is_attrs
 from alfasim_sdk.common_testing import filled_case_descriptions
 from alfasim_sdk.common_testing import get_acme_tab_file_path
 from alfasim_sdk.common_testing.filled_case_descriptions import (
-    EnsureDescriptionsAreEqual,
+    ensure_descriptions_are_equal,
 )
 
 
@@ -51,7 +52,9 @@ class AlfacaseTestConfig:
 
     @property
     def load_function_name(self):
-        return "Load" + self.description_expected.__class__.__name__
+        return "load_" + convert_to_snake_case(
+            self.description_expected.__class__.__name__
+        )
 
 
 @pytest.fixture
@@ -60,11 +63,11 @@ def alfacase_to_case_helper(tmp_path):
         def __init__(self, tmp_path) -> None:
             self.tmp_path = Path(tmp_path)
 
-        def GenerateDescription(self, alfacase_config: AlfacaseTestConfig):
+        def generate_description(self, alfacase_config: AlfacaseTestConfig):
             """
             Helper method to generate a "Description" from the given alfacase_config
             """
-            alfacase_string = ConvertDescriptionToAlfacase(
+            alfacase_string = convert_description_to_alfacase(
                 alfacase_config.description_expected
             )
             alfacase_content = strictyaml.dirty_load(
@@ -74,7 +77,9 @@ def alfacase_to_case_helper(tmp_path):
             )
 
             # 'LoadPvtModelsDescription' is special case and the DescriptionDocument doesn't need a FakeKey
-            skip_dict = alfacase_config.load_function_name == "LoadPvtModelsDescription"
+            skip_dict = (
+                alfacase_config.load_function_name == "load_pvt_models_description"
+            )
 
             if alfacase_config.is_sequence:
                 alfacase_content = [alfacase_content]
@@ -90,7 +95,7 @@ def alfacase_to_case_helper(tmp_path):
                 description_document
             )
 
-        def EnsureDescriptionHasAllProperties(
+        def ensure_description_has_all_properties(
             self, expected_description_class, obtained_description_obj
         ):
             """
@@ -239,21 +244,21 @@ ALFACASE_TEST_CONFIG_MAP = {
     ),
     "LinearIPRDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.LINEAR_IPR_DESCRIPTION,
-        schema=schema.linear_iprdescription_schema,
+        schema=schema.linear_ipr_description_schema,
         is_dict=True,
     ),
     "IPRCurveDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.IPR_CURVE_DESCRIPTION,
-        schema=schema.i_prcurve_description_schema,
+        schema=schema.ipr_curve_description_schema,
     ),
     "TableIPRDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.TABLE_IPR_DESCRIPTION,
-        schema=schema.table_iprdescription_schema,
+        schema=schema.table_ipr_description_schema,
         is_dict=True,
     ),
     "IPRModelsDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.IPR_MODELS_DESCRIPTION,
-        schema=schema.i_prmodels_description_schema,
+        schema=schema.ipr_models_description_schema,
     ),
     "ReservoirInflowEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.RESERVOIR_INFLOW_DESCRIPTION,
@@ -294,7 +299,7 @@ ALFACASE_TEST_CONFIG_MAP = {
     ),
     "XAndYDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.X_AND_Y_DESCRIPTION,
-        schema=schema.x_and_ydescription_schema,
+        schema=schema.x_and_y_description_schema,
     ),
     "AnnulusDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.ANNULUS_DESCRIPTION,
@@ -443,22 +448,22 @@ ALFACASE_TEST_CONFIG_MAP = {
     ),
 }
 
-ALL_CLASSES_THAT_NEEDS_SCHEMA = GetAllClassesThatNeedsSchema(
+ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
     case_description.CaseDescription
 )
 
 # Useful for debugging
-# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.CaseDescription]
+# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.TableIPRDescription]
 
 
 @pytest.mark.parametrize("class_", ALL_CLASSES_THAT_NEEDS_SCHEMA)
-def testConvertAlfacaseToDescription(alfacase_to_case_helper, class_, tmp_path):
+def test_convert_alfacase_to_description(alfacase_to_case_helper, class_, tmp_path):
     """
     Test to convert Alfacase from all classes of alfasim_core.simulation_models.case_description that needs a Alfacase schema
     """
     alfacase_test_config = ALFACASE_TEST_CONFIG_MAP[class_.__name__]
     file_path = tmp_path / "test_case.alfacase"
-    description_obtained = alfacase_to_case_helper.GenerateDescription(
+    description_obtained = alfacase_to_case_helper.generate_description(
         alfacase_test_config
     )
     description_obtained = (
@@ -471,7 +476,7 @@ def testConvertAlfacaseToDescription(alfacase_to_case_helper, class_, tmp_path):
 
     description_obtained = (
         description_obtained
-        if IsAttrs(description_obtained)
+        if is_attrs(description_obtained)
         else description_obtained["FakeKey"]
     )
     obtained_dict = attr.asdict(description_obtained)
@@ -491,10 +496,10 @@ def testConvertAlfacaseToDescription(alfacase_to_case_helper, class_, tmp_path):
 
     expected_dict = fill_pvt_table_path(expected_dict)
     # Check that generated test case is correct
-    EnsureDescriptionsAreEqual(expected_dict, obtained_dict, IGNORED_PROPERTIES)
+    ensure_descriptions_are_equal(expected_dict, obtained_dict, IGNORED_PROPERTIES)
 
     # Ensure that all properties from the original Case is present in the generated test case
-    alfacase_to_case_helper.EnsureDescriptionHasAllProperties(
+    alfacase_to_case_helper.ensure_description_has_all_properties(
         expected_description_class=class_, obtained_description_obj=description_obtained
     )
 
@@ -504,7 +509,7 @@ def description_document_for_pvt_tables_test(tmp_path):
     case = case_description.PvtModelsDescription(
         tables={"acme": "acme.tab", "acme_2": "acme.tab"}
     )
-    alfacase_string = ConvertDescriptionToAlfacase(case)
+    alfacase_string = convert_description_to_alfacase(case)
     alfacase_file_path = tmp_path / "test_case.alfacase"
     shutil.copy2(get_acme_tab_file_path(), tmp_path)
     alfacase_content = strictyaml.dirty_load(
@@ -515,14 +520,14 @@ def description_document_for_pvt_tables_test(tmp_path):
     return DescriptionDocument(content=alfacase_content, file_path=alfacase_file_path)
 
 
-def testLoadPvtTablesWithRelativeFile(
+def test_load_pvt_tables_with_relative_file(
     description_document_for_pvt_tables_test, tmp_path
 ):
     """
     PvtModelsDescription.tables should accept a path relative to a tab file
     """
     document = description_document_for_pvt_tables_test
-    pvt_model_description = LoadPvtModelsDescription(document=document)
+    pvt_model_description = load_pvt_models_description(document=document)
 
     assert pvt_model_description.tables == {
         "acme": document.file_path.parent / "acme.tab",
@@ -530,7 +535,7 @@ def testLoadPvtTablesWithRelativeFile(
     }
 
 
-def testLoadPvtTablesWithAbsoluteFile(
+def test_load_pvt_tables_with_absolute_file(
     description_document_for_pvt_tables_test, tmp_path
 ):
     """
@@ -551,14 +556,14 @@ def testLoadPvtTablesWithAbsoluteFile(
         str(document.file_path.parent / "new_folder/acme.tab")
     )
 
-    pvt_model_description = LoadPvtModelsDescription(document=document)
+    pvt_model_description = load_pvt_models_description(document=document)
     assert pvt_model_description.tables == {
         "acme": document.file_path.parent / "new_folder/acme.tab",
         "acme_2": document.file_path.parent / "acme.tab",
     }
 
 
-def testLoadPvtTablesWithInvalidFile(
+def test_load_pvt_tables_with_invalid_file(
     description_document_for_pvt_tables_test, tmp_path
 ):
     """
@@ -573,10 +578,10 @@ def testLoadPvtTablesWithInvalidFile(
         "The PVT Table Foo.tab must be place within the test_case.alfacase file on *"
     )
     with pytest.raises(RuntimeError, match=expected_msg):
-        LoadPvtModelsDescription(document=document)
+        load_pvt_models_description(document=document)
 
 
-def testLoadPvtTablesWithPvtModelSelector(
+def test_load_pvt_tables_with_pvt_model_selector(
     description_document_for_pvt_tables_test, tmp_path
 ):
     """
@@ -592,7 +597,7 @@ def testLoadPvtTablesWithPvtModelSelector(
     )
     document.content["tables"]["acme_2"] = YAML("acme.tab|SOMELABEL")
 
-    pvt_model_description = LoadPvtModelsDescription(document=document)
+    pvt_model_description = load_pvt_models_description(document=document)
     assert pvt_model_description.tables == {
         "acme": document.file_path.parent / "acme.tab|SOMELABEL",
         "acme_2": document.file_path.parent / "acme.tab|SOMELABEL",
@@ -601,10 +606,10 @@ def testLoadPvtTablesWithPvtModelSelector(
     # Ensure that the pvt file has the pvt_model GaveaDST
     case_description.CaseDescription(
         pvt_models=pvt_model_description
-    ).EnsureValidReferences()
+    ).ensure_valid_references()
 
 
-def testGetArrayLoader():
+def test_get_array_loader():
     alfacase_content = YAML(
         value={"foo": {"values": YAML(value=[1, 2]), "unit": YAML(value="m")}}
     )
@@ -612,23 +617,23 @@ def testGetArrayLoader():
         content=alfacase_content, file_path=Path()
     )
     # Loading Scalar passing ``category``
-    array_loader = GetArrayLoader(category="length")
+    array_loader = get_array_loader(category="length")
     assert array_loader(key="foo", alfacase_content=description_document) == Array(
         "length", [1.0, 2.0], "m"
     )
 
     # Load Scalar passing ``from_unit``
-    array_loader = GetArrayLoader(from_unit="m")
+    array_loader = get_array_loader(from_unit="m")
     assert array_loader(key="foo", alfacase_content=description_document) == Array(
         "length", [1.0, 2.0], "m"
     )
 
     expected_msg = "Either 'category' or 'from_unit' parameter must be defined"
     with pytest.raises(ValueError, match=expected_msg):
-        GetArrayLoader()
+        get_array_loader()
 
 
-def testGetScalarLoader():
+def test_get_scalar_loader():
     alfacase_content = YAML(
         value={"foo": {"value": YAML(value=1), "unit": YAML(value="m")}}
     )
@@ -637,13 +642,13 @@ def testGetScalarLoader():
     )
 
     # Loading Scalar passing ``category``
-    scalar_loader = GetScalarLoader(category="length")
+    scalar_loader = get_scalar_loader(category="length")
     assert scalar_loader(key="foo", alfacase_content=description_document) == Scalar(
         1.0, "m", "length"
     )
 
     # Load Scalar passing ``from_unit``
-    scalar_loader = GetScalarLoader(from_unit="m")
+    scalar_loader = get_scalar_loader(from_unit="m")
     assert scalar_loader(key="foo", alfacase_content=description_document) == Scalar(
         1.0, "m", "length"
     )
@@ -651,15 +656,15 @@ def testGetScalarLoader():
     # Passing None
     expected_msg = "Either 'category' or 'from_unit' parameter must be defined"
     with pytest.raises(ValueError, match=expected_msg):
-        GetScalarLoader()
+        get_scalar_loader()
 
     # Informing both parameter
     expected_msg = "Both parameters 'category' and 'from_unit' were provided, only one must be informed"
     with pytest.raises(ValueError, match=expected_msg):
-        GetScalarLoader(category="length", from_unit="m")
+        get_scalar_loader(category="length", from_unit="m")
 
 
-def testConvertAlfacaseToDescriptionRestartFilePath(tmp_path):
+def test_convert_alfacase_to_description_restart_file_path(tmp_path):
     """
     Round-trip test with a description that has a Path as type.
         - YAML representation should be a Str()
@@ -676,7 +681,7 @@ def testConvertAlfacaseToDescriptionRestartFilePath(tmp_path):
         filled_case_descriptions.PHYSICS_DESCRIPTION, restart_filepath=restart_file
     )
 
-    alfacase_string = ConvertDescriptionToAlfacase(physics_with_restart_file)
+    alfacase_string = convert_description_to_alfacase(physics_with_restart_file)
     restart_file_relative_path = restart_file.relative_to(alfacase_file.parent)
     assert f"restart_filepath: {restart_file.absolute()}" in alfacase_string
     alfacase_string = alfacase_string.replace(
@@ -698,5 +703,5 @@ def testConvertAlfacaseToDescriptionRestartFilePath(tmp_path):
     description_document = DescriptionDocument(
         content=alfacase_content, file_path=alfacase_file
     )
-    physics_description = LoadPhysicsDescription(description_document)
+    physics_description = load_physics_description(description_document)
     assert physics_description.restart_filepath == restart_file

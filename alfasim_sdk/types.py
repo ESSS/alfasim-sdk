@@ -238,10 +238,10 @@ class String(BaseField):
 
     .. code-block:: python
 
-        >>> ctx.GetModel("MyModel").string_field
+        >>> ctx.get_model("MyModel").string_field
         'Default Value'
 
-        >>> type(ctx.GetModel("MyModel").string_field)
+        >>> type(ctx.get_model("MyModel").string_field)
         <class 'str'>
 
     """
@@ -295,10 +295,10 @@ class Enum(BaseField):
             )
 
         # From Terminal
-        >>> ctx.GetModel("MyModel").enum_field
+        >>> ctx.get_model("MyModel").enum_field
         'Option 1'
 
-        >>> type(ctx.GetModel("MyModel").enum_field)
+        >>> type(ctx.get_model("MyModel").enum_field)
         <class 'str'>
 
     """
@@ -446,17 +446,17 @@ class Reference(BaseReference):
             )
 
         # Example with Tracer
-        >>> ctx.GetModel("MyContainer").tracer_ref
+        >>> ctx.get_model("MyContainer").tracer_ref
         TracerModel(gas_partition_coefficient=[...])
 
-        >>> ctx.GetModel("MyContainer").tracer_ref.gas_partition_coefficient
+        >>> ctx.get_model("MyContainer").tracer_ref.gas_partition_coefficient
         Scalar(0.0, 'kg/kg', 'mass fraction')
 
         # Example with Custom Data
-        >>> ctx.GetModel("MyContainer").internal_ref
+        >>> ctx.get_model("MyContainer").internal_ref
         MyModel(field_1='Value 1', name='My Model 1')
 
-        >>> ctx.GetModel("MyContainer").internal_ref.field_1
+        >>> ctx.get_model("MyContainer").internal_ref.field_1
         'Value 1'
 
     """
@@ -545,14 +545,14 @@ class MultipleReference(BaseReference):
 
 
         # Example
-        >>> ctx.GetModel("MyContainer").internal_ref
+        >>> ctx.get_model("MyContainer").internal_ref
         [MyModel(field_1='Value 1', name='My Model 1'),
         MyModel(field_1='Value 1', name='My Model 4')]
 
-        >>> type(ctx.GetModel("MyContainer").internal_ref)
+        >>> type(ctx.get_model("MyContainer").internal_ref)
         <class 'list'>
 
-        >>> ctx.GetModel("MyContainer").internal_ref[0]
+        >>> ctx.get_model("MyContainer").internal_ref[0]
         MyModel(field_1='Value 1', name='My Model 1')
 
     """
@@ -612,16 +612,16 @@ class Quantity(BaseField):
             )
 
         # From Terminal
-        >>> ctx.GetModel("MyModel").quantity_field
+        >>> ctx.get_model("MyModel").quantity_field
         Scalar(1.0, 'degC', 'temperature')
 
-        >>> ctx.GetModel("MyModel").quantity_field.value
+        >>> ctx.get_model("MyModel").quantity_field.value
         1.0
 
-        >>> ctx.GetModel("MyModel").quantity_field.unit
+        >>> ctx.get_model("MyModel").quantity_field.unit
         'degC'
 
-        >>> ctx.GetModel("MyModel").quantity_field.GetValue('K')
+        >>> ctx.get_model("MyModel").quantity_field.GetValue('K')
         274.15
 
     .. _Barril library: https://github.com/ESSS/barril
@@ -733,16 +733,16 @@ class Table(BaseField):
             )
 
         # From Terminal
-        >>> ctx.GetModel("MyModel").table_field
+        >>> ctx.get_model("MyModel").table_field
         TableContainer([...])
 
-        >>> len(ctx.GetModel("MyModel").table_field)
+        >>> len(ctx.get_model("MyModel").table_field)
         6
 
-        >>> len(ctx.GetModel("MyModel").table_field)
+        >>> len(ctx.get_model("MyModel").table_field)
         TableRow(temperature=Scalar(1.0, 'K', 'temperature'), pressure=Scalar(2.0, 'bar', 'pressure'))
 
-        >>> ctx.GetModel("MyModel").table_field[0].pressure
+        >>> ctx.get_model("MyModel").table_field[0].pressure
         Scalar(2.0, 'bar', 'pressure')
 
 
@@ -800,7 +800,7 @@ class Boolean(BaseField):
             )
 
         # From Terminal
-        >>> ctx.GetModel("MyModel").boolean_field
+        >>> ctx.get_model("MyModel").boolean_field
         False
     """
 
@@ -849,16 +849,16 @@ class FileContent(BaseField):
     :size:          The size of the file in bytes.
     :modified_data: Return a `Datetime object`_, with the last time the file was modified
 
-    >>> ctx.GetModel("MyModel").file_content_field.path
+    >>> ctx.get_model("MyModel").file_content_field.path
     WindowsPath('C:/ol-wax-1.wax')
 
-    >>> ctx.GetModel("MyModel").file_content_field.content
+    >>> ctx.get_model("MyModel").file_content_field.content
     b"!Name of Table  [...] "
 
-    >>> ctx.GetModel("MyModel").file_content_field.size
+    >>> ctx.get_model("MyModel").file_content_field.size
     90379
 
-    >>> ctx.GetModel("MyModel").file_content_field.modified_data
+    >>> ctx.get_model("MyModel").file_content_field.modified_data
     datetime.datetime(2019, 5, 10, 14, 22, 11, 50795)
 
     .. _Path object: https://docs.python.org/3/library/pathlib.html#pure-paths

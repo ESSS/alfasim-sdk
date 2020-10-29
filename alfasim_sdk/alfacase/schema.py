@@ -2,13 +2,13 @@
 ##[[[cog
 # import cog
 # from alfasim_sdk.alfacase.case_description import CaseDescription
-# from alfasim_sdk.alfacase.generate_schema import GetAllClassesThatNeedsSchema, GenerateAlfacaseSchema
+# from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
 # cog.out("from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
 # cog.out("\n\n")
 # cog.out("\n\n")
-# list_of_classes_that_needs_schema = GetAllClassesThatNeedsSchema(CaseDescription)
+# list_of_classes_that_needs_schema = get_all_classes_that_needs_schema(CaseDescription)
 # for class_ in list_of_classes_that_needs_schema:
-#    cog.out(GenerateAlfacaseSchema(class_))
+#    cog.out(generate_alfacase_schema(class_))
 # ]]]
 from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
 
@@ -98,7 +98,7 @@ heavy_component_description_schema = Map(
         Optional("rho"): Map({"value": Float(), "unit": Str()}),
     }
 )
-i_prcurve_description_schema = Map(
+ipr_curve_description_schema = Map(
     {
         Optional("pressure_difference"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("flow_rate"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -133,7 +133,7 @@ light_component_description_schema = Map(
         Optional("Cp_4"): Map({"value": Float(), "unit": Str()}),
     }
 )
-linear_iprdescription_schema = Map(
+linear_ipr_description_schema = Map(
     {
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
         Optional("min_pressure_difference"): Map({"value": Float(), "unit": Str()}),
@@ -324,8 +324,8 @@ reservoir_inflow_equipment_description_schema = Map(
         Optional("water_cut"): Map({"value": Float(), "unit": Str()}),
         "start": Map({"value": Float(), "unit": Str()}),
         "length": Map({"value": Float(), "unit": Str()}),
-        Optional("productivity_IPR"): Str(),
-        Optional("injectivity_IPR"): Str(),
+        Optional("productivity_ipr"): Str(),
+        Optional("injectivity_ipr"): Str(),
     }
 )
 separator_node_properties_description_schema = Map(
@@ -419,7 +419,7 @@ wall_layer_description_schema = Map(
         Optional("has_annulus_flow"): Bool(),
     }
 )
-x_and_ydescription_schema = Map(
+x_and_y_description_schema = Map(
     {
         Optional("x"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("y"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -528,7 +528,7 @@ node_description_schema = Map(
 )
 profile_description_schema = Map(
     {
-        Optional("x_and_y"): x_and_ydescription_schema,
+        Optional("x_and_y"): x_and_y_description_schema,
         Optional("length_and_elevation"): length_and_elevation_description_schema,
     }
 )
@@ -544,10 +544,10 @@ pump_equipment_description_schema = Map(
         Optional("flow_direction"): Enum(['forward', 'backward']),
     }
 )
-table_iprdescription_schema = Map(
+table_ipr_description_schema = Map(
     {
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
-        Optional("table"): i_prcurve_description_schema,
+        Optional("table"): ipr_curve_description_schema,
     }
 )
 tracers_description_schema = Map(
@@ -585,10 +585,10 @@ equipment_description_schema = Map(
         Optional("compressors"): MapPattern(Str(), compressor_equipment_description_schema),
     }
 )
-i_prmodels_description_schema = Map(
+ipr_models_description_schema = Map(
     {
-        Optional("linear_models"): MapPattern(Str(), linear_iprdescription_schema),
-        Optional("table_models"): MapPattern(Str(), table_iprdescription_schema),
+        Optional("linear_models"): MapPattern(Str(), linear_ipr_description_schema),
+        Optional("table_models"): MapPattern(Str(), table_ipr_description_schema),
     }
 )
 initial_conditions_description_schema = Map(
@@ -663,7 +663,7 @@ case_description_schema = Map(
         Optional("physics"): physics_description_schema,
         Optional("time_options"): time_options_description_schema,
         Optional("numerical_options"): numerical_options_description_schema,
-        Optional("ipr_models"): i_prmodels_description_schema,
+        Optional("ipr_models"): ipr_models_description_schema,
         Optional("pvt_models"): pvt_models_description_schema,
         Optional("tracers"): tracers_description_schema,
         Optional("outputs"): case_output_description_schema,
@@ -674,5 +674,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 5721c3702e79ec020979eb1a7205a4ce)
+# [[[end]]] (checksum: ff895133e81c52521d011e266ce5d236)
 # fmt: on

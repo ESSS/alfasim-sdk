@@ -4,7 +4,7 @@ from barril.units import Scalar
 from alfasim_sdk.alfacase import case_description
 
 
-def BuildSimpleSegment():
+def build_simple_segment():
     """
     Return an instance of PipeSegmentsDescription with a pre-populated value.
 
@@ -19,7 +19,7 @@ def BuildSimpleSegment():
     )
 
 
-def BuildConstantInitialPressureDescription(value, unit):
+def build_constant_initial_pressure_description(value, unit):
 
     from alfasim_sdk import constants
 
@@ -31,7 +31,7 @@ def BuildConstantInitialPressureDescription(value, unit):
     )
 
 
-def BuildConstantInitialVolumeFractionsDescription(values):
+def build_constant_initial_volume_fractions_description(values):
 
     from alfasim_sdk import constants
 
@@ -44,7 +44,7 @@ def BuildConstantInitialVolumeFractionsDescription(values):
     )
 
 
-def BuildConstantInitialTracersMassFractionsDescription(values, unit):
+def build_constant_initial_tracers_mass_fractions_description(values, unit):
     from alfasim_sdk import constants
 
     return case_description.InitialTracersMassFractionsDescription(
@@ -55,7 +55,7 @@ def BuildConstantInitialTracersMassFractionsDescription(values, unit):
     )
 
 
-def BuildConstantInitialVelocitiesDescription(values):
+def build_constant_initial_velocities_description(values):
     from alfasim_sdk import constants
 
     return case_description.InitialVelocitiesDescription(
@@ -67,7 +67,7 @@ def BuildConstantInitialVelocitiesDescription(values):
     )
 
 
-def BuildConstantInitialTemperaturesDescription(value, unit):
+def build_constant_initial_temperatures_description(value, unit):
     from alfasim_sdk import constants
 
     return case_description.InitialTemperaturesDescription(
@@ -78,7 +78,7 @@ def BuildConstantInitialTemperaturesDescription(value, unit):
     )
 
 
-def BuildLinearInitialTemperaturesDescription(
+def build_linear_initial_temperatures_description(
     from_temperature,
     to_temperature,
     unit,

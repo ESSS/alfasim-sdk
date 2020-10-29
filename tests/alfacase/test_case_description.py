@@ -12,14 +12,15 @@ from alfasim_sdk.alfacase.case_description import attrib_enum
 from alfasim_sdk.alfacase.case_description import attrib_instance
 from alfasim_sdk.alfacase.case_description import attrib_instance_list
 from alfasim_sdk.alfacase.case_description import attrib_scalar
-from alfasim_sdk.alfacase.case_description import CollapseArrayRepr
+from alfasim_sdk.alfacase.case_description import collapse_array_repr
 from alfasim_sdk.alfacase.case_description import MaterialDescription
 from alfasim_sdk.alfacase.case_description import numpy_array_validator
 from alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
+from alfasim_sdk.common_testing.case_builders import build_simple_segment
 from alfasim_sdk.constants import NodeCellType
 
 
-def testPhysicsDescriptionPathValidator(tmp_path):
+def test_physics_description_path_validator(tmp_path):
     """
     Ensure PhysicsDescription.restart_filepath only accepts created files
     """
@@ -38,7 +39,7 @@ def testPhysicsDescriptionPathValidator(tmp_path):
     assert case_description.PhysicsDescription(restart_filepath=None)
 
 
-def testOpeningCurveDescription():
+def test_opening_curve_description():
     expected_msg = "Time and Opening must have the same size, got 2 items for time and 3 for opening"
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
         case_description.OpeningCurveDescription(
@@ -46,7 +47,7 @@ def testOpeningCurveDescription():
         )
 
 
-def testCvTableDescription():
+def test_cv_table_description():
     expected_msg = "Opening and Flow Coefficient must have the same size, got 2 items for flow_coefficient and 1 for opening"
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
         case_description.CvTableDescription(
@@ -55,7 +56,7 @@ def testCvTableDescription():
         )
 
 
-def testTablePumpDescriptionLength():
+def test_table_pump_description_length():
     expected_msg = dedent(
         """\
     speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got :
@@ -77,7 +78,7 @@ def testTablePumpDescriptionLength():
     case_description.TablePumpDescription()
 
 
-def testInstanceAttributeList():
+def test_instance_attribute_list():
     @attr.s
     class X:
         pass
@@ -109,7 +110,7 @@ def testInstanceAttributeList():
     assert Foo(attr_1_validator_type=[Y()])
 
 
-def testInstanceAttribute():
+def test_instance_attribute():
     @attr.s
     class X:
         pass
@@ -133,7 +134,7 @@ def testInstanceAttribute():
     assert Foo(attr_1=X())
 
 
-def testScalarAttribute():
+def test_scalar_attribute():
     @attr.s(kw_only=True)
     class Foo:
         position = attrib_scalar(default=Scalar(1, "m"))
@@ -162,7 +163,7 @@ def testScalarAttribute():
     assert Foo(position_2=None).position_2 is None
 
 
-def testEnumAttribute():
+def test_enum_attribute():
     from enum import Enum
 
     class X(Enum):
@@ -247,23 +248,14 @@ def default_well() -> case_description.WellDescription:
     )
 
 
-def _EmptyProfile():
+def _empty_profile():
     """ Helper function to get a empty profile for tests. """
     return case_description.ProfileDescription(
         x_and_y=case_description.XAndYDescription(x=Array([0], "m"), y=Array([0], "m"))
     )
 
 
-def _BuildSimpleSegment():
-    """ Helper function to get aPipeSegmentsDescription for tests. """
-    return case_description.PipeSegmentsDescription(
-        start_positions=Array([0.0], "m"),
-        diameters=Array([0.1], "m"),
-        roughnesses=Array([1e-5], "m"),
-    )
-
-
-def testCheckPvtModelFilesHandlingWhiteSpace(default_case, tmp_path):
+def test_check_pvt_model_files_handling_white_space(default_case, tmp_path):
     """
     PvtModelsDescription.tables accept which PvtModel should be included from the file by passing the argument
 
@@ -274,10 +266,10 @@ def testCheckPvtModelFilesHandlingWhiteSpace(default_case, tmp_path):
             default_model="PVT1", tables={"PVT1": f"{tmp_path / 'dummy.tab'}| PVT1"}
         ),
     )
-    case.EnsureValidReferences()
+    case.ensure_valid_references()
 
 
-def testCheckRestartFileExists(default_case, tmp_path):
+def test_check_restart_file_exists(default_case, tmp_path):
     """ Ensure that the method EnsureValidReferences from CaseDescription catches errors with invalid restart files. """
     restart_file = tmp_path / "dummy.restart"
     case = attr.evolve(
@@ -289,14 +281,14 @@ def testCheckRestartFileExists(default_case, tmp_path):
     )
     expected_error = re.escape(f"Restart file '{restart_file}' is not a valid file")
     with pytest.raises(case_description.InvalidReferenceError, match=expected_error):
-        case.EnsureValidReferences()
+        case.ensure_valid_references()
 
     restart_file.write_text("Restart file contents")
-    case.EnsureValidReferences()
+    case.ensure_valid_references()
 
 
 class TestResetInvalidReferences:
-    def testRemovePvtEntryFromPvtModelsWhenPvtModelIsInvalid(
+    def test_remove_pvt_entry_from_pvt_models_when_pvt_model_is_invalid(
         self, default_case, tmp_path
     ):
         """
@@ -310,7 +302,7 @@ class TestResetInvalidReferences:
                 default_model="PVT1", tables={"PVT1": f"{tmp_path/'dummy.tab'}|INVALID"}
             ),
         )
-        case.ResetInvalidReferences()
+        case.reset_invalid_references()
         assert case.pvt_models.tables == {}
         assert case.pvt_models.default_model is None
         case = case_description.CaseDescription(
@@ -318,10 +310,10 @@ class TestResetInvalidReferences:
                 default_model="PVT2", tables={"PVT2": f"{tmp_path/'dummy.tab'}|PVT2"}
             )
         )
-        case.ResetInvalidReferences()
+        case.reset_invalid_references()
         assert case.pvt_models.default_model == "PVT2"
 
-    def testRemovePvtEntryFromPvtModelsWhenFileIsInvalid(self):
+    def test_remove_pvt_entry_from_pvt_models_when_file_is_invalid(self):
         """
         Remove the PVT entry from case.pvt_models.tables if the file is not a file when calling ResetInvalidReferences()
         """
@@ -330,11 +322,11 @@ class TestResetInvalidReferences:
                 default_model="PVT1", tables={"PVT1": "SomePath"}
             )
         )
-        case.ResetInvalidReferences()
+        case.reset_invalid_references()
         assert case.pvt_models.tables == {}
         assert case.pvt_models.default_model is None
 
-    def testPvtModelDefault(self, default_case):
+    def test_pvt_model_default(self, default_case):
         """
         If default_model has an invalid reference, the value must reset to None when calling ResetInvalidReferences()
         """
@@ -342,10 +334,10 @@ class TestResetInvalidReferences:
             default_case,
             pvt_models=attr.evolve(default_case.pvt_models, default_model="InvalidPVT"),
         )
-        case.ResetInvalidReferences()
+        case.reset_invalid_references()
         assert case.pvt_models.default_model is None
 
-    def testPipePvtModel(self, default_case, default_well):
+    def test_pipe_pvt_model(self, default_case, default_well):
         """
         If a Elements on case uses an invalid PvtModel, the pvt_model must reset to None when calling ResetInvalidReferences()
         """
@@ -375,8 +367,8 @@ class TestResetInvalidReferences:
                     pvt_model="InvalidPVT",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
-                    segments=_BuildSimpleSegment(),
+                    profile=_empty_profile(),
+                    segments=build_simple_segment(),
                     equipment=case_description.EquipmentDescription(
                         mass_sources={
                             "Mass Equip. 1": case_description.MassSourceEquipmentDescription(
@@ -388,7 +380,7 @@ class TestResetInvalidReferences:
             ],
         )
 
-        case.ResetInvalidReferences()
+        case.reset_invalid_references()
         assert case.pipes[0].pvt_model is None
         assert case.nodes[0].pvt_model is None
         assert case.wells[0].pvt_model is None
@@ -400,7 +392,7 @@ class TestEnsureValidReferences:
     Ensure that the attributes from CaseDescription that have references to other elements are valid.
     """
 
-    def testPvtModelAreValid(self, default_case):
+    def test_pvt_model_are_valid(self, default_case):
         """
         Check that the validation for invalid references works for all types of PvtModel. (Composition, Correlation, Tables and TableParameters).
         """
@@ -412,40 +404,40 @@ class TestEnsureValidReferences:
                     pvt_model="PVT1",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
-                    segments=_BuildSimpleSegment(),
+                    profile=_empty_profile(),
+                    segments=build_simple_segment(),
                 ),
                 case_description.PipeDescription(
                     name="Pipe 2",
                     pvt_model="PVT2",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
-                    segments=_BuildSimpleSegment(),
+                    profile=_empty_profile(),
+                    segments=build_simple_segment(),
                 ),
                 case_description.PipeDescription(
                     name="Pipe 3",
                     pvt_model="PVT3",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
-                    segments=_BuildSimpleSegment(),
+                    profile=_empty_profile(),
+                    segments=build_simple_segment(),
                 ),
                 case_description.PipeDescription(
                     name="Pipe 4",
                     pvt_model="PVT4",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
-                    segments=_BuildSimpleSegment(),
+                    profile=_empty_profile(),
+                    segments=build_simple_segment(),
                 ),
                 case_description.PipeDescription(
                     name="Pipe 5",
                     pvt_model="PVT5",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
-                    segments=_BuildSimpleSegment(),
+                    profile=_empty_profile(),
+                    segments=build_simple_segment(),
                 ),
             ],
         )
@@ -453,9 +445,9 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expect_message)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
-    def testPVtModelFromFileIsInValid(self, default_case, tmp_path):
+    def test_pvt_model_from_file_is_in_valid(self, default_case, tmp_path):
         """
         When a PVTModel informed from the user on a file doesn't exist,
         a InvalidReferenceError must be raised when case.EnsureValidReferences is called.
@@ -470,7 +462,7 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expect_message)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
         # Ensure the test finishes in a valid state
         case = case_description.CaseDescription(
@@ -478,10 +470,10 @@ class TestEnsureValidReferences:
                 default_model="PVT2", tables={"PVT2": f"{tmp_path/'dummy.tab'}|PVT2"}
             )
         )
-        case.EnsureValidReferences()
+        case.ensure_valid_references()
         assert case.pvt_models.default_model == "PVT2"
 
-    def testPvtModelsWithInvalidPVTFile(self, tmp_path):
+    def test_pvt_models_with_invalid_pvtfile(self, tmp_path):
         """
         When a PVTModel assigned on case.pvt_models.tables doesn't exist,
         a InvalidReferenceError exception must be raised when case.EnsureValidReferences is called.
@@ -495,7 +487,7 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expect_message)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
         # Ensure the test finishes in a valid state
         tmp_file = tmp_path / "dummy.tab"
@@ -506,10 +498,10 @@ class TestEnsureValidReferences:
                 default_model="PVT2", tables={"PVT2": f"{tmp_file}"}
             )
         )
-        case.EnsureValidReferences()
+        case.ensure_valid_references()
         assert case.pvt_models.default_model == "PVT2"
 
-    def testPvtModelDefaultBehavior(self, default_case, default_well):
+    def test_pvt_model_default_behavior(self, default_case, default_well):
         """
         1) CaseDescription should accept components that uses PvtModel as None while default_model is configured.
         2) default_model must be a valid pvt_model defined on pvt_models
@@ -531,7 +523,7 @@ class TestEnsureValidReferences:
                     pvt_model=None,
                     source="in",
                     target="out",
-                    segments=_BuildSimpleSegment(),
+                    segments=build_simple_segment(),
                     profile=case_description.ProfileDescription(
                         x_and_y=case_description.XAndYDescription(
                             x=Array([0], "m"), y=Array([0], "m")
@@ -548,7 +540,7 @@ class TestEnsureValidReferences:
             ],
         )
         # Check 1) If default_model assigned, elements that uses pvt_model can be None
-        case.EnsureValidReferences()
+        case.ensure_valid_references()
         assert case.pvt_models.default_model == "PVT2"
         assert case.nodes[0].pvt_model is None
         assert case.pipes[0].pvt_model is None
@@ -567,7 +559,7 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expected_msg)
         ):
-            case_with_invalid_default_pvt_model.EnsureValidReferences()
+            case_with_invalid_default_pvt_model.ensure_valid_references()
 
         # Check 3) If default_model is not assigned, all elements with pvt_models must be configured.
         case_with_invalid_default_pvt_model = attr.evolve(
@@ -580,9 +572,9 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expected_msg)
         ):
-            case_with_invalid_default_pvt_model.EnsureValidReferences()
+            case_with_invalid_default_pvt_model.ensure_valid_references()
 
-    def testPipePvtModel(self, default_case):
+    def test_pipe_pvt_model(self, default_case):
         """
         If a PipeDescription uses an invalid PvtModel, an InvalidReferenceError must be raised.
         """
@@ -591,11 +583,11 @@ class TestEnsureValidReferences:
             pipes=[
                 case_description.PipeDescription(
                     name="Pipe 1",
-                    segments=_BuildSimpleSegment(),
+                    segments=build_simple_segment(),
                     pvt_model="Acme",
                     source="in",
                     target="out",
-                    profile=_EmptyProfile(),
+                    profile=_empty_profile(),
                 )
             ],
         )
@@ -606,9 +598,9 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expected_error)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
-    def testNodePvtModel(self, default_case):
+    def test_node_pvt_model(self, default_case):
         """
         If a NodeDescription uses an invalid PvtModel, an InvalidReferenceError must be raised.
         """
@@ -627,9 +619,9 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expected_error)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
-    def testWellPvtModel(self, default_case, default_well):
+    def test_well_pvt_model(self, default_case, default_well):
         """
         If a WellDescription uses an invalid PvtModel, an InvalidReferenceError must be raised.
         """
@@ -643,9 +635,9 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expected_error)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
-    def testAnnulusDescriptionPvtModel(self, default_case, default_well):
+    def test_annulus_description_pvt_model(self, default_case, default_well):
         """
         If a AnnulusDescription uses an invalid PvtModel, an InvalidReferenceError must be raised.
         """
@@ -667,10 +659,10 @@ class TestEnsureValidReferences:
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expected_error)
         ):
-            case.EnsureValidReferences()
+            case.ensure_valid_references()
 
 
-def testPvtModelTableParametersDescriptionEqual():
+def test_pvt_model_table_parameters_description_equal():
     import numpy as np
 
     table_params_1 = case_description.PvtModelTableParametersDescription(
@@ -705,7 +697,7 @@ def testPvtModelTableParametersDescriptionEqual():
     assert table_params_3 != table_params_2
 
 
-def testPvtModelTableParametersDescriptionPostInit():
+def test_pvt_model_table_parameters_description_post_init():
     """
     Check that standard properties that have not been informed (None) is converted to np.nan
     for more details about this, check the docstring from  PvtModelTableParametersDescription.__attrs_post_init__
@@ -743,7 +735,7 @@ def testPvtModelTableParametersDescriptionPostInit():
     assert table_params.temperature_unit == "K"
 
 
-def testNumpyArrayValidator():
+def test_numpy_array_validator():
     import numpy as np
 
     @attr.s()
@@ -783,36 +775,36 @@ def testNumpyArrayValidator():
         DummyWithList(x=[np.array([1, 2]), np.array([[1, 2], [3, 4]])])
 
 
-def testPvtModelTableParametersDescriptionCreateConstant():
+def test_pvt_model_table_parameters_description_create_constant():
     import numpy as np
 
     pressure_values = np.linspace(0.5, 1e10, 4)
     temperature_values = np.linspace(250, 500, 30)
-    T, P = np.meshgrid(temperature_values, pressure_values)
-    R = 286.9  # Air individual gas constant [J/kg K]
+    t, p = np.meshgrid(temperature_values, pressure_values)
+    r = 286.9  # Air individual gas constant [J/kg K]
 
     # Check constant_gas_density_model
-    rho_G_ref = 42.0
-    expected_value = rho_G_ref + 0 * P
+    rho_g_ref = 42.0
+    expected_value = rho_g_ref + 0 * p
 
     pvt = case_description.PvtModelTableParametersDescription.create_constant(
-        ideal_gas=False, rho_G_ref=rho_G_ref
+        ideal_gas=False, rho_g_ref=rho_g_ref
     )
     np.array_equal(pvt.table_variables[0], expected_value.flatten())
 
     # Check gas_density_derivative_respect_pressure
-    expected_value = 1 / (R * T)
+    expected_value = 1 / (r * t)
     np.array_equal(pvt.table_variables[1], expected_value.flatten())
 
 
-def testGetValueAndUnitFromLengthAndElevationDescriptionAndXAndYDescription():
+def test_get_value_and_unit_from_length_and_elevation_description_and_xand_ydescription():
     """
     Ensure that GetValueAndUnit returns a pair of values along with their units.
     """
     length_and_elevation = case_description.LengthAndElevationDescription(
         length=Array([0.0, 5.0, 7.0], "m"), elevation=Array([1.0] * 3, "m")
     )
-    assert list(length_and_elevation.IterValuesAndUnit()) == [
+    assert list(length_and_elevation.iter_values_and_unit()) == [
         ((0.0, "m"), (1.0, "m")),
         ((5.0, "m"), (1.0, "m")),
         ((7.0, "m"), (1.0, "m")),
@@ -820,14 +812,14 @@ def testGetValueAndUnitFromLengthAndElevationDescriptionAndXAndYDescription():
     x_and_y = case_description.XAndYDescription(
         x=Array([1.0, 10.0, 100.0], "m"), y=Array([42.0] * 3, "m")
     )
-    assert list(x_and_y.IterValuesAndUnit()) == [
+    assert list(x_and_y.iter_values_and_unit()) == [
         ((1.0, "m"), (42.0, "m")),
         ((10.0, "m"), (42.0, "m")),
         ((100.0, "m"), (42.0, "m")),
     ]
 
 
-def testCheckProfileDescription(default_case):
+def test_check_profile_description(default_case):
     """
     Ensures that the ProfileDescription only accepts either XAndYDescription or a LengthAndElevationDescription
 
@@ -867,18 +859,18 @@ def testCheckProfileDescription(default_case):
     assert profile_2.length_and_elevation.elevation.GetValues("m") == []
 
 
-def testCollapseArrayRepr():
-    assert CollapseArrayRepr("array([1, 2, 3])") == "'array([...])'"
+def test_collapse_array_repr():
+    assert collapse_array_repr("array([1, 2, 3])") == "'array([...])'"
 
 
-def testMaterialDescriptionAsDict():
+def test_material_description_as_dict():
     """
     Ensure that the helper function AsDict returns a diction where the Scalar are tuple with value and unit.
     """
 
     from alfasim_sdk import constants
 
-    assert MaterialDescription(name="Acme").AsDict() == {
+    assert MaterialDescription(name="Acme").as_dict() == {
         "density": (1.0, "kg/m3"),
         "expansion": (0.0, "1/K"),
         "heat_capacity": (0.0, "J/kg.degC"),
@@ -891,7 +883,7 @@ def testMaterialDescriptionAsDict():
     }
 
 
-def testPvtModelTableParametersDescriptionEquality():
+def test_pvt_model_table_parameters_description_equality():
     """
     Ensure that the custom PvtModelTableParametersDescription equality functions works properly
     since it was customized to suport ndarrays.

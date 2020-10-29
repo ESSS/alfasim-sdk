@@ -45,7 +45,7 @@ class DescriptionDocument:
         return item in self.content
 
     @classmethod
-    def FromFile(cls, file_path: Path) -> "DescriptionDocument":
+    def from_file(cls, file_path: Path) -> "DescriptionDocument":
         """
         Load the values from the given file_path validating against the Schema defined on
         alfacase.schema.case_schema
@@ -62,7 +62,7 @@ class DescriptionDocument:
 
 
 @lru_cache(maxsize=None)
-def GetCategoryFor(unit: Optional[str]) -> Optional[str]:
+def get_category_for(unit: Optional[str]) -> Optional[str]:
     """
     Return the default category for the given unit
     """
@@ -70,7 +70,7 @@ def GetCategoryFor(unit: Optional[str]) -> Optional[str]:
         return UnitDatabase.GetSingleton().GetDefaultCategory(unit)
 
 
-def LoadScalar(key: str, alfacase_content: DescriptionDocument, category) -> Scalar:
+def load_scalar(key: str, alfacase_content: DescriptionDocument, category) -> Scalar:
     """
     Create a barril.units.Scalar instance from the given alfacase_content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -83,7 +83,7 @@ def LoadScalar(key: str, alfacase_content: DescriptionDocument, category) -> Sca
 
 
 @lru_cache(maxsize=None)
-def GetScalarLoader(
+def get_scalar_loader(
     *, category: Optional[str] = None, from_unit: Optional[str] = None
 ) -> Callable:
     """
@@ -92,10 +92,12 @@ def GetScalarLoader(
     If ``from_unit`` is provided, the category parameter will be filled with
     the default category for the given unit.
     """
-    return partial(LoadScalar, category=_ObtainCategoryForScalar(category, from_unit))
+    return partial(
+        load_scalar, category=_obtain_category_for_scalar(category, from_unit)
+    )
 
 
-def LoadArray(key: str, alfacase_content: DescriptionDocument, category) -> Array:
+def load_array(key: str, alfacase_content: DescriptionDocument, category) -> Array:
     """
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -108,7 +110,7 @@ def LoadArray(key: str, alfacase_content: DescriptionDocument, category) -> Arra
 
 
 @lru_cache(maxsize=None)
-def GetArrayLoader(
+def get_array_loader(
     *, category: Optional[str] = None, from_unit: Optional[str] = None
 ) -> Callable:
     """
@@ -117,10 +119,12 @@ def GetArrayLoader(
     If ``from_unit`` is provided, the category parameter will be filled with
     the default category for the given unit.
     """
-    return partial(LoadArray, category=_ObtainCategoryForScalar(category, from_unit))
+    return partial(
+        load_array, category=_obtain_category_for_scalar(category, from_unit)
+    )
 
 
-def LoadListOfArrays(
+def load_list_of_arrays(
     key: str, alfacase_content: DescriptionDocument, category
 ) -> List[Array]:
     """
@@ -134,7 +138,7 @@ def LoadListOfArrays(
 
 
 @lru_cache(maxsize=None)
-def GetListOfArraysLoader(
+def get_list_of_arrays_loader(
     *, category: Optional[str] = None, from_unit: Optional[str] = None
 ) -> Callable:
     """
@@ -144,11 +148,11 @@ def GetListOfArraysLoader(
     the default category for the given unit.
     """
     return partial(
-        LoadListOfArrays, category=_ObtainCategoryForScalar(category, from_unit)
+        load_list_of_arrays, category=_obtain_category_for_scalar(category, from_unit)
     )
 
 
-def LoadDictOfArrays(
+def load_dict_of_arrays(
     key: str, alfacase_content: DescriptionDocument, category
 ) -> Array:
     """
@@ -162,7 +166,7 @@ def LoadDictOfArrays(
 
 
 @lru_cache(maxsize=None)
-def GetDictOfArraysLoader(
+def get_dict_of_arrays_loader(
     *, category: Optional[str] = None, from_unit: Optional[str] = None
 ) -> Callable:
     """
@@ -172,11 +176,11 @@ def GetDictOfArraysLoader(
     the default category for the given unit.
     """
     return partial(
-        LoadDictOfArrays, category=_ObtainCategoryForScalar(category, from_unit)
+        load_dict_of_arrays, category=_obtain_category_for_scalar(category, from_unit)
     )
 
 
-def _ObtainCategoryForScalar(category: str, from_unit: str) -> str:
+def _obtain_category_for_scalar(category: str, from_unit: str) -> str:
     """
     Obtain the category to be used for GetArrayLoader and GetScalarLoader.
 
@@ -190,10 +194,10 @@ def _ObtainCategoryForScalar(category: str, from_unit: str) -> str:
     if category is None and from_unit is None:
         raise ValueError("Either 'category' or 'from_unit' parameter must be defined")
 
-    return category or GetCategoryFor(from_unit)
+    return category or get_category_for(from_unit)
 
 
-def LoadDictWithScalar(
+def load_dict_with_scalar(
     key: str, alfacase_content: DescriptionDocument, category
 ) -> Dict[str, Scalar]:
     return {
@@ -202,14 +206,14 @@ def LoadDictWithScalar(
     }
 
 
-def GetDictWithScalarLoader(*, category: str) -> Callable:
+def get_dict_with_scalar_loader(*, category: str) -> Callable:
     """
     Return a LoadDictWithScalar function pre-populate with the category
     """
-    return partial(LoadDictWithScalar, category=category)
+    return partial(load_dict_with_scalar, category=category)
 
 
-def LoadEnum(
+def load_enum(
     key: str, alfacase_content: DescriptionDocument, enum_class: Type[enum.Enum]
 ) -> enum.Enum:
     """
@@ -220,14 +224,14 @@ def LoadEnum(
     return enum_class(enum_value)
 
 
-def GetEnumLoader(*, enum_class: enum.EnumMeta) -> Callable:
+def get_enum_loader(*, enum_class: enum.EnumMeta) -> Callable:
     """
     Return a LoadEnum function pre-populated with the enum_class
     """
-    return partial(LoadEnum, enum_class=enum_class)
+    return partial(load_enum, enum_class=enum_class)
 
 
-def LoadValue(
+def load_value(
     key: str, alfacase_content: DescriptionDocument
 ) -> Union[str, Number, list, dict]:
     """
@@ -236,7 +240,7 @@ def LoadValue(
     return alfacase_content[key].content.data
 
 
-def LoadPath(key: str, alfacase_content: DescriptionDocument) -> Path:
+def load_path(key: str, alfacase_content: DescriptionDocument) -> Path:
     path_from_alfacase_file = Path(alfacase_content[key].content.data)
     return (
         path_from_alfacase_file
@@ -253,8 +257,8 @@ PvtModels = Union[
 ]
 
 
-def LoadPvtTables(alfacase_content: DescriptionDocument) -> Dict[str, Path]:
-    def GetTableFile(value):
+def load_pvt_tables(alfacase_content: DescriptionDocument) -> Dict[str, Path]:
+    def get_table_file(value):
         """
         Value can be:
         - An absolute path
@@ -266,9 +270,9 @@ def LoadPvtTables(alfacase_content: DescriptionDocument) -> Dict[str, Path]:
         (
             pvt_file,
             model_name,
-        ) = case_description.PvtModelsDescription.GetPvtFileAndModelName(value)
+        ) = case_description.PvtModelsDescription.get_pvt_file_and_model_name(value)
 
-        def AppendPvtModelNameIfDefined(file_path: Path) -> Path:
+        def append_pvt_model_name_if_defined(file_path: Path) -> Path:
             """
             Append "<path_name>" on the "<tab_file_path>" if the model_name is specified.
             """
@@ -281,7 +285,7 @@ def LoadPvtTables(alfacase_content: DescriptionDocument) -> Dict[str, Path]:
         )
 
         if pvt_path.is_file():
-            return Path(AppendPvtModelNameIfDefined(pvt_path))
+            return Path(append_pvt_model_name_if_defined(pvt_path))
         else:
             raise RuntimeError(
                 f"The PVT Table {value} must be place within the "
@@ -289,182 +293,184 @@ def LoadPvtTables(alfacase_content: DescriptionDocument) -> Dict[str, Path]:
             )
 
     return {
-        key.data: GetTableFile(value.data)
+        key.data: get_table_file(value.data)
         for key, value in alfacase_content.content.items()
     }
 
 
-def LoadPvtModelCorrelationDescription(
+def load_pvt_model_correlation_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.PvtModelCorrelationDescription]:
     alfacase_to_case_description = {
-        "oil_density_std": GetScalarLoader(from_unit="kg/m3"),
-        "gas_density_std": GetScalarLoader(from_unit="kg/m3"),
-        "rs_sat": GetScalarLoader(from_unit="sm3/sm3"),
-        "pvt_correlation_package": GetEnumLoader(
+        "oil_density_std": get_scalar_loader(from_unit="kg/m3"),
+        "gas_density_std": get_scalar_loader(from_unit="kg/m3"),
+        "rs_sat": get_scalar_loader(from_unit="sm3/sm3"),
+        "pvt_correlation_package": get_enum_loader(
             enum_class=constants.CorrelationPackage
         ),
     }
 
-    def GeneratePvtModelCorrelation(value: DescriptionDocument):
-        case_values = ToCaseValues(value, alfacase_to_case_description)
+    def generate_pvt_model_correlation(value: DescriptionDocument):
+        case_values = to_case_values(value, alfacase_to_case_description)
         return case_description.PvtModelCorrelationDescription(**case_values)
 
     return {
-        key.data: GeneratePvtModelCorrelation(
+        key.data: generate_pvt_model_correlation(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadHeavyComponentDescription(
+def load_heavy_component_description(
     document: DescriptionDocument,
 ) -> List[case_description.HeavyComponentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "scn": LoadValue,
-        "MW": GetScalarLoader(from_unit="kg/mol"),
-        "rho": GetScalarLoader(from_unit="kg/m3"),
+        "name": load_value,
+        "scn": load_value,
+        "MW": get_scalar_loader(from_unit="kg/mol"),
+        "rho": get_scalar_loader(from_unit="kg/m3"),
     }
 
-    def GenerateHeavyComponentsDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_heavy_components_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.HeavyComponentDescription(**case_values)
 
     return [
-        GenerateHeavyComponentsDescription(alfacase_document)
+        generate_heavy_components_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadLightComponentDescription(
+def load_light_component_description(
     document: DescriptionDocument,
 ) -> List[case_description.LightComponentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "Pc": GetScalarLoader(from_unit="Pa"),
-        "Tc": GetScalarLoader(from_unit="K"),
-        "Vc": GetScalarLoader(from_unit="m3/mol"),
-        "omega": GetScalarLoader(from_unit="-"),
-        "MW": GetScalarLoader(from_unit="kg/mol"),
-        "Tb": GetScalarLoader(from_unit="K"),
-        "Parachor": GetScalarLoader(from_unit="-"),
-        "B_parameter": GetScalarLoader(from_unit="-"),
-        "Cp_0": GetScalarLoader(from_unit="-"),
-        "Cp_1": GetScalarLoader(from_unit="-"),
-        "Cp_2": GetScalarLoader(from_unit="-"),
-        "Cp_3": GetScalarLoader(from_unit="-"),
-        "Cp_4": GetScalarLoader(from_unit="-"),
+        "name": load_value,
+        "Pc": get_scalar_loader(from_unit="Pa"),
+        "Tc": get_scalar_loader(from_unit="K"),
+        "Vc": get_scalar_loader(from_unit="m3/mol"),
+        "omega": get_scalar_loader(from_unit="-"),
+        "MW": get_scalar_loader(from_unit="kg/mol"),
+        "Tb": get_scalar_loader(from_unit="K"),
+        "Parachor": get_scalar_loader(from_unit="-"),
+        "B_parameter": get_scalar_loader(from_unit="-"),
+        "Cp_0": get_scalar_loader(from_unit="-"),
+        "Cp_1": get_scalar_loader(from_unit="-"),
+        "Cp_2": get_scalar_loader(from_unit="-"),
+        "Cp_3": get_scalar_loader(from_unit="-"),
+        "Cp_4": get_scalar_loader(from_unit="-"),
     }
 
-    def GenerateLightComponentsDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_light_components_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.LightComponentDescription(**case_values)
 
     return [
-        GenerateLightComponentsDescription(alfacase_document)
+        generate_light_components_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadBipDescription(
+def load_bip_description(
     document: DescriptionDocument,
 ) -> List[case_description.BipDescription]:
     alfacase_to_case_description = {
-        "component_1": LoadValue,
-        "component_2": LoadValue,
-        "value": LoadValue,
+        "component_1": load_value,
+        "component_2": load_value,
+        "value": load_value,
     }
 
-    def GenerateBipDescription(alfacase_document: DescriptionDocument):
-        case_values = ToCaseValues(alfacase_document, alfacase_to_case_description)
+    def generate_bip_description(alfacase_document: DescriptionDocument):
+        case_values = to_case_values(alfacase_document, alfacase_to_case_description)
         return case_description.BipDescription(**case_values)
 
-    return [GenerateBipDescription(alfacase_document) for alfacase_document in document]
+    return [
+        generate_bip_description(alfacase_document) for alfacase_document in document
+    ]
 
 
-def LoadCompositionDescription(
+def load_composition_description(
     document: DescriptionDocument,
 ) -> List[case_description.CompositionDescription]:
     alfacase_to_case_description = {
-        "component": LoadValue,
-        "molar_fraction": GetScalarLoader(from_unit="mol/mol"),
-        "reference_enthalpy": GetScalarLoader(from_unit="J/mol"),
+        "component": load_value,
+        "molar_fraction": get_scalar_loader(from_unit="mol/mol"),
+        "reference_enthalpy": get_scalar_loader(from_unit="J/mol"),
     }
 
-    def GenerateCompositionDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_composition_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.CompositionDescription(**case_values)
 
     return [
-        GenerateCompositionDescription(alfacase_document)
+        generate_composition_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadFluidDescription(
+def load_fluid_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.FluidDescription]:
     alfacase_to_case_description = {
-        "composition": LoadCompositionDescription,
-        "fraction_pairs": LoadBipDescription,
+        "composition": load_composition_description,
+        "fraction_pairs": load_bip_description,
     }
 
-    def GenerateFluidDescription(
+    def generate_fluid_description(
         value: DescriptionDocument,
     ) -> case_description.FluidDescription:
-        case_values = ToCaseValues(value, alfacase_to_case_description)
+        case_values = to_case_values(value, alfacase_to_case_description)
         return case_description.FluidDescription(**case_values)
 
     return {
-        key.data: GenerateFluidDescription(
+        key.data: generate_fluid_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadPvtModelCompositionalDescription(
+def load_pvt_model_compositional_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.PvtModelCompositionalDescription]:
     alfacase_to_case_description = {
-        "equation_of_state_type": GetEnumLoader(
+        "equation_of_state_type": get_enum_loader(
             enum_class=constants.EquationOfStateType
         ),
-        "surface_tension_model_type": GetEnumLoader(
+        "surface_tension_model_type": get_enum_loader(
             enum_class=constants.SurfaceTensionType
         ),
-        "viscosity_model": GetEnumLoader(
+        "viscosity_model": get_enum_loader(
             enum_class=constants.PVTCompositionalViscosityModel
         ),
-        "heavy_components": LoadHeavyComponentDescription,
-        "light_components": LoadLightComponentDescription,
-        "fluids": LoadFluidDescription,
+        "heavy_components": load_heavy_component_description,
+        "light_components": load_light_component_description,
+        "fluids": load_fluid_description,
     }
 
-    def GeneratePvtModelCompositional(value: DescriptionDocument):
-        case_values = ToCaseValues(value, alfacase_to_case_description)
+    def generate_pvt_model_compositional(value: DescriptionDocument):
+        case_values = to_case_values(value, alfacase_to_case_description)
         return case_description.PvtModelCompositionalDescription(**case_values)
 
     return {
-        key.data: GeneratePvtModelCompositional(
+        key.data: generate_pvt_model_compositional(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadPvtModelsDescription(
+def load_pvt_models_description(
     document: DescriptionDocument,
 ) -> case_description.PvtModelsDescription:
     alfacase_to_case_description = {
-        "default_model": LoadValue,
-        "tables": LoadPvtTables,
-        "correlations": LoadPvtModelCorrelationDescription,
-        "compositions": LoadPvtModelCompositionalDescription,
+        "default_model": load_value,
+        "tables": load_pvt_tables,
+        "correlations": load_pvt_model_correlation_description,
+        "compositions": load_pvt_model_compositional_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.PvtModelsDescription(**case_values)
 
 
@@ -472,7 +478,7 @@ def LoadPvtModelsDescription(
 IGNORE_KEY = "IgnoreKey"
 
 
-def ToCaseValues(
+def to_case_values(
     document: DescriptionDocument,
     alfacase_to_case_description_dict: Dict[str, Callable],
 ) -> Dict[str, Any]:
@@ -488,14 +494,14 @@ def ToCaseValues(
     alfacase_to_case_description = {}
     for attr_name, function_handle in alfacase_to_case_description_dict.items():
         if attr_name in document:
-            alfacase_to_case_description[attr_name] = ExecuteLoader(
+            alfacase_to_case_description[attr_name] = execute_loader(
                 attr_name, function_handle, document
             )
 
     return alfacase_to_case_description
 
 
-def ExecuteLoader(
+def execute_loader(
     attr_name: str, loader_function: Callable, alfacase_content: YAML
 ) -> Any:
     """
@@ -509,183 +515,183 @@ def ExecuteLoader(
         return loader_function(key=attr_name, alfacase_content=alfacase_content)
 
 
-def LoadCasingSectionDescription(
+def load_casing_section_description(
     document: DescriptionDocument,
 ) -> List[case_description.CasingSectionDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "hanger_depth": GetScalarLoader(from_unit="m"),
-        "settings_depth": GetScalarLoader(from_unit="m"),
-        "hole_diameter": GetScalarLoader(from_unit="m"),
-        "outer_diameter": GetScalarLoader(from_unit="m"),
-        "inner_diameter": GetScalarLoader(from_unit="m"),
-        "inner_roughness": GetScalarLoader(from_unit="m"),
-        "material": LoadValue,
-        "top_of_filler": GetScalarLoader(from_unit="m"),
-        "filler_material": LoadValue,
-        "material_above_filler": LoadValue,
+        "name": load_value,
+        "hanger_depth": get_scalar_loader(from_unit="m"),
+        "settings_depth": get_scalar_loader(from_unit="m"),
+        "hole_diameter": get_scalar_loader(from_unit="m"),
+        "outer_diameter": get_scalar_loader(from_unit="m"),
+        "inner_diameter": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "material": load_value,
+        "top_of_filler": get_scalar_loader(from_unit="m"),
+        "filler_material": load_value,
+        "material_above_filler": load_value,
     }
 
-    def GenerateCasingSectionDescription(document: DescriptionDocument):
-        case_content = ToCaseValues(document, alfacase_to_case_description)
+    def generate_casing_section_description(document: DescriptionDocument):
+        case_content = to_case_values(document, alfacase_to_case_description)
         return case_description.CasingSectionDescription(**case_content)
 
     return [
-        GenerateCasingSectionDescription(alfacase_document)
+        generate_casing_section_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadCvTableDescription(
+def load_cv_table_description(
     document: DescriptionDocument,
 ) -> case_description.CvTableDescription:
     alfacase_to_case_description = {
-        "opening": GetArrayLoader(from_unit="-"),
-        "flow_coefficient": GetArrayLoader(from_unit="(galUS/min)/(psi^0.5)"),
+        "opening": get_array_loader(from_unit="-"),
+        "flow_coefficient": get_array_loader(from_unit="(galUS/min)/(psi^0.5)"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.CvTableDescription(**case_values)
 
 
-def LoadEnvironmentPropertyDescription(
+def load_environment_property_description(
     document: DescriptionDocument,
 ) -> List[case_description.EnvironmentPropertyDescription]:
     # fmt: off
     alfacase_to_case_description = {
-        'type': GetEnumLoader(enum_class=constants.PipeEnvironmentHeatTransferCoefficientModelType),
-        'position': GetScalarLoader(from_unit='m'),
-        'temperature': GetScalarLoader(from_unit='degC'),
-        'heat_transfer_coefficient': GetScalarLoader(from_unit='W/m2.K'),
-        'overall_heat_transfer_coefficient': GetScalarLoader(from_unit='W/m2.K'),
-        'fluid_velocity': GetScalarLoader(from_unit='m/s'),
+        'type': get_enum_loader(enum_class=constants.PipeEnvironmentHeatTransferCoefficientModelType),
+        'position': get_scalar_loader(from_unit='m'),
+        'temperature': get_scalar_loader(from_unit='degC'),
+        'heat_transfer_coefficient': get_scalar_loader(from_unit='W/m2.K'),
+        'overall_heat_transfer_coefficient': get_scalar_loader(from_unit='W/m2.K'),
+        'fluid_velocity': get_scalar_loader(from_unit='m/s'),
     }
     # fmt: on
-    def GenerateEnvironmentPropertyDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_environment_property_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.EnvironmentPropertyDescription(**case_values)
 
     return [
-        GenerateEnvironmentPropertyDescription(alfacase_document)
+        generate_environment_property_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadFormationLayerDescription(
+def load_formation_layer_description(
     document: DescriptionDocument,
 ) -> List[case_description.FormationLayerDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "start": GetScalarLoader(from_unit="m"),
-        "material": LoadValue,
+        "name": load_value,
+        "start": get_scalar_loader(from_unit="m"),
+        "material": load_value,
     }
 
-    def GenerateFormationLayerDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_formation_layer_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.FormationLayerDescription(**case_values)
 
     return [
-        GenerateFormationLayerDescription(alfacase_document)
+        generate_formation_layer_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadGasLiftValveEquipmentDescription(
+def load_gas_lift_valve_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.GasLiftValveEquipmentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-        "diameter": GetScalarLoader(from_unit="m"),
-        "valve_type": GetEnumLoader(enum_class=constants.ValveType),
-        "delta_p_min": GetScalarLoader(from_unit="Pa"),
-        "discharge_coeff": GetScalarLoader(from_unit="-"),
+        "name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+        "diameter": get_scalar_loader(from_unit="m"),
+        "valve_type": get_enum_loader(enum_class=constants.ValveType),
+        "delta_p_min": get_scalar_loader(from_unit="Pa"),
+        "discharge_coeff": get_scalar_loader(from_unit="-"),
     }
 
-    def GenerateGasLiftDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_gas_lift_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.GasLiftValveEquipmentDescription(**case_values)
 
     return {
-        key.data: GenerateGasLiftDescription(
+        key.data: generate_gas_lift_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadHeatSourceEquipmentDescription(
+def load_heat_source_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.HeatSourceEquipmentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "start": GetScalarLoader(from_unit="m"),
-        "length": GetScalarLoader(from_unit="m"),
-        "power": GetScalarLoader(from_unit="W"),
+        "name": load_value,
+        "start": get_scalar_loader(from_unit="m"),
+        "length": get_scalar_loader(from_unit="m"),
+        "power": get_scalar_loader(from_unit="W"),
     }
 
-    def GenerateHeatSourceDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_heat_source_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.HeatSourceEquipmentDescription(**case_values)
 
     return {
-        key.data: GenerateHeatSourceDescription(
+        key.data: generate_heat_source_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def GetInitialConditionsTableLoader(
+def get_initial_conditions_table_loader(
     table_class, attr_name, attr_unit, *, is_referenced, is_multidimensional
 ):
     if is_multidimensional:
-        attr_loader = GetDictOfArraysLoader(from_unit=attr_unit)
+        attr_loader = get_dict_of_arrays_loader(from_unit=attr_unit)
     else:
-        attr_loader = GetArrayLoader(from_unit=attr_unit)
+        attr_loader = get_array_loader(from_unit=attr_unit)
 
-    def LoadInitialConditionsTable(document: DescriptionDocument):
+    def load_initial_conditions_table(document: DescriptionDocument):
         alfacase_to_case_description = {
-            "positions": GetArrayLoader(from_unit="m"),
+            "positions": get_array_loader(from_unit="m"),
             attr_name: attr_loader,
         }
         if is_referenced:
-            alfacase_to_case_description["reference_coordinate"] = GetScalarLoader(
+            alfacase_to_case_description["reference_coordinate"] = get_scalar_loader(
                 from_unit="m"
             )
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+        case_values = to_case_values(document, alfacase_to_case_description)
         return table_class(**case_values)
 
-    return LoadInitialConditionsTable
+    return load_initial_conditions_table
 
 
-def GetTracersInitialConditionsTableLoader(
+def get_tracers_initial_conditions_table_loader(
     table_class, attr_name, attr_unit, *, is_referenced
 ):
-    attr_loader = GetListOfArraysLoader(from_unit=attr_unit)
+    attr_loader = get_list_of_arrays_loader(from_unit=attr_unit)
 
-    def LoadInitialConditionsTable(document: DescriptionDocument):
+    def load_initial_conditions_table(document: DescriptionDocument):
         alfacase_to_case_description = {
-            "positions": GetArrayLoader(from_unit="m"),
+            "positions": get_array_loader(from_unit="m"),
             attr_name: attr_loader,
         }
         if is_referenced:
-            alfacase_to_case_description["reference_coordinate"] = GetScalarLoader(
+            alfacase_to_case_description["reference_coordinate"] = get_scalar_loader(
                 from_unit="m"
             )
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+        case_values = to_case_values(document, alfacase_to_case_description)
         return table_class(**case_values)
 
-    return LoadInitialConditionsTable
+    return load_initial_conditions_table
 
 
-LoadReferencedVelocitiesContainerDescription = GetInitialConditionsTableLoader(
+load_referenced_velocities_container_description = get_initial_conditions_table_loader(
     case_description.ReferencedVelocitiesContainerDescription,
     "velocities",
     "m/s",
     is_referenced=True,
     is_multidimensional=True,
 )
-LoadVelocitiesContainerDescription = GetInitialConditionsTableLoader(
+load_velocities_container_description = get_initial_conditions_table_loader(
     case_description.VelocitiesContainerDescription,
     "velocities",
     "m/s",
@@ -694,27 +700,29 @@ LoadVelocitiesContainerDescription = GetInitialConditionsTableLoader(
 )
 
 
-def LoadInitialVelocitiesDescription(
+def load_initial_velocities_description(
     document: DescriptionDocument,
 ) -> case_description.InitialVelocitiesDescription:
     alfacase_to_case_description = {
-        "position_input_type": GetEnumLoader(enum_class=constants.TableInputType),
-        "table_x": LoadReferencedVelocitiesContainerDescription,
-        "table_y": LoadReferencedVelocitiesContainerDescription,
-        "table_length": LoadVelocitiesContainerDescription,
+        "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
+        "table_x": load_referenced_velocities_container_description,
+        "table_y": load_referenced_velocities_container_description,
+        "table_length": load_velocities_container_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialVelocitiesDescription(**case_values)
 
 
-LoadReferencedTemperaturesContainerDescription = GetInitialConditionsTableLoader(
-    case_description.ReferencedTemperaturesContainerDescription,
-    "temperatures",
-    "K",
-    is_referenced=True,
-    is_multidimensional=False,
+load_referenced_temperatures_container_description = (
+    get_initial_conditions_table_loader(
+        case_description.ReferencedTemperaturesContainerDescription,
+        "temperatures",
+        "K",
+        is_referenced=True,
+        is_multidimensional=False,
+    )
 )
-LoadTemperaturesContainerDescription = GetInitialConditionsTableLoader(
+load_temperatures_container_description = get_initial_conditions_table_loader(
     case_description.TemperaturesContainerDescription,
     "temperatures",
     "K",
@@ -723,27 +731,29 @@ LoadTemperaturesContainerDescription = GetInitialConditionsTableLoader(
 )
 
 
-def LoadInitialTemperaturesDescription(
+def load_initial_temperatures_description(
     document: DescriptionDocument,
 ) -> case_description.InitialTemperaturesDescription:
     alfacase_to_case_description = {
-        "position_input_type": GetEnumLoader(enum_class=constants.TableInputType),
-        "table_x": LoadReferencedTemperaturesContainerDescription,
-        "table_y": LoadReferencedTemperaturesContainerDescription,
-        "table_length": LoadTemperaturesContainerDescription,
+        "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
+        "table_x": load_referenced_temperatures_container_description,
+        "table_y": load_referenced_temperatures_container_description,
+        "table_length": load_temperatures_container_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialTemperaturesDescription(**case_values)
 
 
-LoadReferencedVolumeFractionsContainerDescription = GetInitialConditionsTableLoader(
-    case_description.ReferencedVolumeFractionsContainerDescription,
-    "fractions",
-    "-",
-    is_referenced=True,
-    is_multidimensional=True,
+load_referenced_volume_fractions_container_description = (
+    get_initial_conditions_table_loader(
+        case_description.ReferencedVolumeFractionsContainerDescription,
+        "fractions",
+        "-",
+        is_referenced=True,
+        is_multidimensional=True,
+    )
 )
-LoadVolumeFractionsContainerDescription = GetInitialConditionsTableLoader(
+load_volume_fractions_container_description = get_initial_conditions_table_loader(
     case_description.VolumeFractionsContainerDescription,
     "fractions",
     "-",
@@ -752,27 +762,27 @@ LoadVolumeFractionsContainerDescription = GetInitialConditionsTableLoader(
 )
 
 
-def LoadInitialVolumeFractionsDescription(
+def load_initial_volume_fractions_description(
     document: DescriptionDocument,
 ) -> case_description.InitialVolumeFractionsDescription:
     alfacase_to_case_description = {
-        "position_input_type": GetEnumLoader(enum_class=constants.TableInputType),
-        "table_x": LoadReferencedVolumeFractionsContainerDescription,
-        "table_y": LoadReferencedVolumeFractionsContainerDescription,
-        "table_length": LoadVolumeFractionsContainerDescription,
+        "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
+        "table_x": load_referenced_volume_fractions_container_description,
+        "table_y": load_referenced_volume_fractions_container_description,
+        "table_length": load_volume_fractions_container_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialVolumeFractionsDescription(**case_values)
 
 
-LoadReferencedPressureContainerDescription = GetInitialConditionsTableLoader(
+load_referenced_pressure_container_description = get_initial_conditions_table_loader(
     case_description.ReferencedPressureContainerDescription,
     "pressures",
     "Pa",
     is_referenced=True,
     is_multidimensional=False,
 )
-LoadPressureContainerDescription = GetInitialConditionsTableLoader(
+load_pressure_container_description = get_initial_conditions_table_loader(
     case_description.PressureContainerDescription,
     "pressures",
     "Pa",
@@ -781,867 +791,874 @@ LoadPressureContainerDescription = GetInitialConditionsTableLoader(
 )
 
 
-def LoadInitialPressuresDescription(
+def load_initial_pressures_description(
     document: DescriptionDocument,
 ) -> case_description.InitialPressuresDescription:
     alfacase_to_case_description = {
-        "position_input_type": GetEnumLoader(enum_class=constants.TableInputType),
-        "table_x": LoadReferencedPressureContainerDescription,
-        "table_y": LoadReferencedPressureContainerDescription,
-        "table_length": LoadPressureContainerDescription,
+        "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
+        "table_x": load_referenced_pressure_container_description,
+        "table_y": load_referenced_pressure_container_description,
+        "table_length": load_pressure_container_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialPressuresDescription(**case_values)
 
 
-LoadReferencedTracersMassFractionsContainerDescription = (
-    GetTracersInitialConditionsTableLoader(
+load_referenced_tracers_mass_fractions_container_description = (
+    get_tracers_initial_conditions_table_loader(
         case_description.ReferencedTracersMassFractionsContainerDescription,
         "tracers_mass_fractions",
         "-",
         is_referenced=True,
     )
 )
-LoadTracersMassFractionsContainerDescription = GetTracersInitialConditionsTableLoader(
-    case_description.TracersMassFractionsContainerDescription,
-    "tracers_mass_fractions",
-    "-",
-    is_referenced=False,
+load_tracers_mass_fractions_container_description = (
+    get_tracers_initial_conditions_table_loader(
+        case_description.TracersMassFractionsContainerDescription,
+        "tracers_mass_fractions",
+        "-",
+        is_referenced=False,
+    )
 )
 
 
-def LoadInitialTracersMassFractionsDescription(
+def load_initial_tracers_mass_fractions_description(
     document: DescriptionDocument,
 ) -> case_description.InitialTracersMassFractionsDescription:
     alfacase_to_case_description = {
-        "position_input_type": GetEnumLoader(enum_class=constants.TableInputType),
-        "table_x": LoadReferencedTracersMassFractionsContainerDescription,
-        "table_y": LoadReferencedTracersMassFractionsContainerDescription,
-        "table_length": LoadTracersMassFractionsContainerDescription,
+        "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
+        "table_x": load_referenced_tracers_mass_fractions_container_description,
+        "table_y": load_referenced_tracers_mass_fractions_container_description,
+        "table_length": load_tracers_mass_fractions_container_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialTracersMassFractionsDescription(**case_values)
 
 
-def LoadInitialConditionsDescription(
+def load_initial_conditions_description(
     document: DescriptionDocument,
 ) -> case_description.InitialConditionsDescription:
     alfacase_to_case_description = {
-        "velocities": LoadInitialVelocitiesDescription,
-        "temperatures": LoadInitialTemperaturesDescription,
-        "volume_fractions": LoadInitialVolumeFractionsDescription,
-        "pressures": LoadInitialPressuresDescription,
-        "tracers_mass_fractions": LoadInitialTracersMassFractionsDescription,
-        "initial_fluid": LoadValue,
+        "velocities": load_initial_velocities_description,
+        "temperatures": load_initial_temperatures_description,
+        "volume_fractions": load_initial_volume_fractions_description,
+        "pressures": load_initial_pressures_description,
+        "tracers_mass_fractions": load_initial_tracers_mass_fractions_description,
+        "initial_fluid": load_value,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialConditionsDescription(**case_values)
 
 
-def _LoadMassSourceCommon() -> Dict[str, Callable]:
+def _load_mass_source_common() -> Dict[str, Callable]:
     return {
-        "fluid": LoadValue,
-        "temperature": GetScalarLoader(from_unit="K"),
-        "tracer_mass_fraction": GetArrayLoader(category="mass fraction"),
-        "water_cut": GetScalarLoader(category="volume fraction"),
-        "gas_oil_ratio": GetScalarLoader(from_unit="sm3/sm3"),
-        "source_type": GetEnumLoader(enum_class=constants.MassSourceType),
-        "volumetric_flow_rates_std": GetDictWithScalarLoader(
+        "fluid": load_value,
+        "temperature": get_scalar_loader(from_unit="K"),
+        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
+        "water_cut": get_scalar_loader(category="volume fraction"),
+        "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
+        "source_type": get_enum_loader(enum_class=constants.MassSourceType),
+        "volumetric_flow_rates_std": get_dict_with_scalar_loader(
             category="volume flow rate"
         ),
-        "mass_flow_rates": GetDictWithScalarLoader(category="mass flow rate"),
-        "total_mass_flow_rate": GetScalarLoader(from_unit="kg/s"),
+        "mass_flow_rates": get_dict_with_scalar_loader(category="mass flow rate"),
+        "total_mass_flow_rate": get_scalar_loader(from_unit="kg/s"),
     }
 
 
-def LoadMassSourceEquipmentDescription(
+def load_mass_source_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.MassSourceEquipmentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-        "material_above_filler": LoadValue,
+        "name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+        "material_above_filler": load_value,
     }
-    alfacase_to_case_description.update(**_LoadMassSourceCommon())
+    alfacase_to_case_description.update(**_load_mass_source_common())
 
-    def GenerateMassSourceDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_mass_source_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.MassSourceEquipmentDescription(**case_values)
 
     return {
-        key.data: GenerateMassSourceDescription(
+        key.data: generate_mass_source_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadMaterialDescription(
+def load_material_description(
     document: DescriptionDocument,
 ) -> List[case_description.MaterialDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "material_type": GetEnumLoader(enum_class=constants.MaterialType),
-        "density": GetScalarLoader(from_unit="kg/m3"),
-        "heat_capacity": GetScalarLoader(from_unit="J/kg.degC"),
-        "thermal_conductivity": GetScalarLoader(from_unit="W/m.degC"),
-        "inner_emissivity": GetScalarLoader(category="emissivity"),
-        "outer_emissivity": GetScalarLoader(category="emissivity"),
-        "expansion": GetScalarLoader(from_unit="1/K"),
-        "viscosity": GetScalarLoader(from_unit="cP"),
+        "name": load_value,
+        "material_type": get_enum_loader(enum_class=constants.MaterialType),
+        "density": get_scalar_loader(from_unit="kg/m3"),
+        "heat_capacity": get_scalar_loader(from_unit="J/kg.degC"),
+        "thermal_conductivity": get_scalar_loader(from_unit="W/m.degC"),
+        "inner_emissivity": get_scalar_loader(category="emissivity"),
+        "outer_emissivity": get_scalar_loader(category="emissivity"),
+        "expansion": get_scalar_loader(from_unit="1/K"),
+        "viscosity": get_scalar_loader(from_unit="cP"),
     }
 
-    def GenerateMaterialsDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_materials_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.MaterialDescription(**case_values)
 
     return [
-        GenerateMaterialsDescription(alfacase_document)
+        generate_materials_description(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadInternalNodePropertiesDescription(
+def load_internal_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.InternalNodePropertiesDescription:
-    alfacase_to_case_description = {"fluid": LoadValue}
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    alfacase_to_case_description = {"fluid": load_value}
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InternalNodePropertiesDescription(**case_values)
 
 
-def LoadMassSourceNodePropertiesDescription(
+def load_mass_source_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.MassSourceNodePropertiesDescription:
-    case_values = ToCaseValues(document, _LoadMassSourceCommon())
+    case_values = to_case_values(document, _load_mass_source_common())
     return case_description.MassSourceNodePropertiesDescription(**case_values)
 
 
-def LoadPressureNodePropertiesDescription(
+def load_pressure_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.PressureNodePropertiesDescription:
-    case_values = ToCaseValues(document, _LoadPressureSourceCommon())
+    case_values = to_case_values(document, _load_pressure_source_common())
     return case_description.PressureNodePropertiesDescription(**case_values)
 
 
-def LoadSeparatorNodePropertiesDescription(
+def load_separator_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.SeparatorNodePropertiesDescription:
     alfacase_to_case_description = {
-        "environment_temperature": GetScalarLoader(from_unit="K"),
-        "geometry": GetEnumLoader(enum_class=constants.SeparatorGeometryType),
-        "length": GetScalarLoader(from_unit="m"),
-        "overall_heat_transfer_coefficient": GetScalarLoader(from_unit="W/m2.K"),
-        "radius": GetScalarLoader(from_unit="m"),
-        "nozzles": GetDictWithScalarLoader(category=GetCategoryFor("m")),
-        "initial_phase_volume_fractions": GetDictWithScalarLoader(
+        "environment_temperature": get_scalar_loader(from_unit="K"),
+        "geometry": get_enum_loader(enum_class=constants.SeparatorGeometryType),
+        "length": get_scalar_loader(from_unit="m"),
+        "overall_heat_transfer_coefficient": get_scalar_loader(from_unit="W/m2.K"),
+        "radius": get_scalar_loader(from_unit="m"),
+        "nozzles": get_dict_with_scalar_loader(category=get_category_for("m")),
+        "initial_phase_volume_fractions": get_dict_with_scalar_loader(
             category="volume fraction"
         ),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.SeparatorNodePropertiesDescription(**case_values)
 
 
-def LoadNodeDescription(
+def load_node_description(
     document: DescriptionDocument,
 ) -> List[case_description.NodeDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "node_type": GetEnumLoader(enum_class=constants.NodeCellType),
-        "pvt_model": LoadValue,
-        "pressure_properties": LoadPressureNodePropertiesDescription,
-        "mass_source_properties": LoadMassSourceNodePropertiesDescription,
-        "internal_properties": LoadInternalNodePropertiesDescription,
-        "separator_properties": LoadSeparatorNodePropertiesDescription,
+        "name": load_value,
+        "node_type": get_enum_loader(enum_class=constants.NodeCellType),
+        "pvt_model": load_value,
+        "pressure_properties": load_pressure_node_properties_description,
+        "mass_source_properties": load_mass_source_node_properties_description,
+        "internal_properties": load_internal_node_properties_description,
+        "separator_properties": load_separator_node_properties_description,
     }
 
-    def GenerateNodeDescription(
+    def generate_node_description(
         document: DescriptionDocument,
     ) -> case_description.NodeDescription:
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.NodeDescription(**case_values)
 
     return [
-        GenerateNodeDescription(alfacase_document) for alfacase_document in document
+        generate_node_description(alfacase_document) for alfacase_document in document
     ]
 
 
-def LoadOpeningCurveDescription(
+def load_opening_curve_description(
     document: DescriptionDocument,
 ) -> case_description.OpeningCurveDescription:
     alfacase_to_case_description = {
-        "time": GetArrayLoader(from_unit="s"),
-        "opening": GetArrayLoader(from_unit="-"),
+        "time": get_array_loader(from_unit="s"),
+        "opening": get_array_loader(from_unit="-"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.OpeningCurveDescription(**case_values)
 
 
-def LoadPackerDescription(
+def load_packer_description(
     document: DescriptionDocument,
 ) -> List[case_description.PackerDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-        "material_above": LoadValue,
+        "name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+        "material_above": load_value,
     }
 
-    def GeneratePackerDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_packer_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.PackerDescription(**case_values)
 
     return [
-        GeneratePackerDescription(alfacase_document) for alfacase_document in document
+        generate_packer_description(alfacase_document) for alfacase_document in document
     ]
 
 
-def LoadPipeSegmentsDescription(
+def load_pipe_segments_description(
     document: DescriptionDocument,
 ) -> case_description.PipeSegmentsDescription:
     alfacase_to_case_description = {
-        "start_positions": GetArrayLoader(from_unit="m"),
-        "diameters": GetArrayLoader(from_unit="m"),
-        "roughnesses": GetArrayLoader(from_unit="m"),
-        "wall_names": LoadValue,
+        "start_positions": get_array_loader(from_unit="m"),
+        "diameters": get_array_loader(from_unit="m"),
+        "roughnesses": get_array_loader(from_unit="m"),
+        "wall_names": load_value,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.PipeSegmentsDescription(**case_values)
 
 
-def LoadProfileOutputDescription(
+def load_profile_output_description(
     document: DescriptionDocument,
 ) -> List[case_description.ProfileOutputDescription]:
     alfacase_to_case_description = {
-        "curve_names": LoadValue,
-        "element_name": LoadValue,
-        "location": GetEnumLoader(enum_class=constants.OutputAttachmentLocation),
+        "curve_names": load_value,
+        "element_name": load_value,
+        "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
     }
 
-    def GenerateProfileDefinitions(
+    def generate_profile_definitions(
         document: DescriptionDocument,
     ) -> case_description.ProfileOutputDescription:
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.ProfileOutputDescription(**case_values)
 
     return [
-        GenerateProfileDefinitions(alfacase_document) for alfacase_document in document
-    ]
-
-
-def LoadLinearIPRDescription(
-    document: DescriptionDocument,
-) -> Dict[str, case_description.LinearIPRDescription]:
-    alfacase_to_case_description = {
-        "well_index_phase": GetEnumLoader(enum_class=constants.WellIndexPhaseType),
-        "min_pressure_difference": GetScalarLoader(from_unit="Pa"),
-        "well_index": GetScalarLoader(from_unit="m3/bar.d"),
-    }
-
-    def GenerateLinearIPRCorrelation(value: DescriptionDocument):
-        case_values = ToCaseValues(value, alfacase_to_case_description)
-        return case_description.LinearIPRDescription(**case_values)
-
-    return {
-        key.data: GenerateLinearIPRCorrelation(
-            DescriptionDocument(value, document.file_path)
-        )
-        for key, value in document.content.items()
-    }
-
-
-def LoadIPRCurveDescription(
-    document: DescriptionDocument,
-) -> case_description.IPRCurveDescription:
-    alfacase_to_case_description = {
-        "pressure_difference": GetArrayLoader(from_unit="Pa"),
-        "flow_rate": GetArrayLoader(from_unit="sm3/d"),
-    }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
-    return case_description.IPRCurveDescription(**case_values)
-
-
-def LoadTableIPRDescription(
-    document: DescriptionDocument,
-) -> Dict[str, case_description.LinearIPRDescription]:
-    alfacase_to_case_description = {
-        "well_index_phase": GetEnumLoader(enum_class=constants.WellIndexPhaseType),
-        "table": LoadIPRCurveDescription,
-    }
-
-    def GenerateTableIPRCorrelation(value: DescriptionDocument):
-        case_values = ToCaseValues(value, alfacase_to_case_description)
-        return case_description.TableIPRDescription(**case_values)
-
-    return {
-        key.data: GenerateTableIPRCorrelation(
-            DescriptionDocument(value, document.file_path)
-        )
-        for key, value in document.content.items()
-    }
-
-
-def LoadIPRModelsDescription(
-    document: DescriptionDocument,
-) -> case_description.IPRModelsDescription:
-    alfacase_to_case_description = {
-        "linear_models": LoadLinearIPRDescription,
-        "table_models": LoadTableIPRDescription,
-    }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
-    return case_description.IPRModelsDescription(**case_values)
-
-
-def _LoadPressureSourceCommon() -> Dict[str, Callable]:
-    return {
-        "fluid": LoadValue,
-        "tracer_mass_fraction": GetArrayLoader(category="mass fraction"),
-        "split_type": GetEnumLoader(enum_class=constants.MassInflowSplitType),
-        "mass_fractions": GetDictWithScalarLoader(category="mass fraction"),
-        "volume_fractions": GetDictWithScalarLoader(category="volume fraction"),
-        "water_cut": GetScalarLoader(category="volume fraction"),
-        "gas_oil_ratio": GetScalarLoader(from_unit="sm3/sm3"),
-        "gas_liquid_ratio": GetScalarLoader(from_unit="sm3/sm3"),
-        "pressure": GetScalarLoader(from_unit="bar"),
-        "temperature": GetScalarLoader(from_unit="K"),
-    }
-
-
-def LoadReservoirInflowEquipmentDescription(
-    document: DescriptionDocument,
-) -> Dict[str, case_description.ReservoirInflowEquipmentDescription]:
-    alfacase_to_case_description = {
-        "name": LoadValue,
-        "fluid": LoadValue,
-        "start": GetScalarLoader(from_unit="m"),
-        "length": GetScalarLoader(from_unit="m"),
-        "pressure": GetScalarLoader(from_unit="bar"),
-        "temperature": GetScalarLoader(from_unit="degC"),
-        "productivity_IPR": LoadValue,
-        "injectivity_IPR": LoadValue,
-        "tracer_mass_fraction": GetArrayLoader(category="mass fraction"),
-    }
-    alfacase_to_case_description.update(**_LoadPressureSourceCommon())
-
-    def GenerateReservoirInflowDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
-        return case_description.ReservoirInflowEquipmentDescription(**case_values)
-
-    return {
-        key.data: GenerateReservoirInflowDescription(
-            DescriptionDocument(value, document.file_path)
-        )
-        for key, value in document.content.items()
-    }
-
-
-def LoadSpeedCurveDescription(
-    document: DescriptionDocument,
-) -> case_description.SpeedCurveDescription:
-    alfacase_to_case_description = {
-        "time": GetArrayLoader(from_unit="s"),
-        "speed": GetArrayLoader(from_unit="rpm"),
-    }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
-    return case_description.SpeedCurveDescription(**case_values)
-
-
-def LoadTablePumpDescription(
-    document: DescriptionDocument,
-) -> case_description.TablePumpDescription:
-    alfacase_to_case_description = {
-        "speeds": GetArrayLoader(from_unit="rpm"),
-        "void_fractions": GetArrayLoader(category="volume fraction"),
-        "flow_rates": GetArrayLoader(category="volume flow rate"),
-        "pressure_boosts": GetArrayLoader(from_unit="bar"),
-    }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
-    return case_description.TablePumpDescription(**case_values)
-
-
-def LoadTrendOutputDescription(
-    document: DescriptionDocument,
-) -> List[case_description.TrendOutputDescription]:
-    alfacase_to_case_description = {
-        "curve_names": LoadValue,
-        "location": GetEnumLoader(enum_class=constants.OutputAttachmentLocation),
-        "element_name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-    }
-
-    def GenerateTrendDescription(
-        document: DescriptionDocument,
-    ) -> case_description.TrendOutputDescription:
-        case_values = ToCaseValues(document, alfacase_to_case_description)
-        return case_description.TrendOutputDescription(**case_values)
-
-    return [
-        GenerateTrendDescription(alfacase_document) for alfacase_document in document
-    ]
-
-
-def LoadTubingDescription(
-    document: DescriptionDocument,
-) -> List[case_description.TubingDescription]:
-    alfacase_to_case_description = {
-        "name": LoadValue,
-        "length": GetScalarLoader(from_unit="m"),
-        "outer_diameter": GetScalarLoader(from_unit="m"),
-        "inner_diameter": GetScalarLoader(from_unit="m"),
-        "inner_roughness": GetScalarLoader(from_unit="m"),
-        "material": LoadValue,
-    }
-
-    def GenerateTubingsDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
-        return case_description.TubingDescription(**case_values)
-
-    return [
-        GenerateTubingsDescription(alfacase_document) for alfacase_document in document
-    ]
-
-
-def LoadWallLayerDescription(
-    document: DescriptionDocument,
-) -> List[case_description.WallLayerDescription]:
-    alfacase_to_case_description = {
-        "thickness": GetScalarLoader(from_unit="m"),
-        "material_name": LoadValue,
-        "has_annulus_flow": LoadValue,
-    }
-
-    def GenerateWallLayerContainerDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
-        return case_description.WallLayerDescription(**case_values)
-
-    return [
-        GenerateWallLayerContainerDescription(alfacase_document)
+        generate_profile_definitions(alfacase_document)
         for alfacase_document in document
     ]
 
 
-def LoadAnnulusDescription(
+def load_linear_ipr_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.LinearIPRDescription]:
+    alfacase_to_case_description = {
+        "well_index_phase": get_enum_loader(enum_class=constants.WellIndexPhaseType),
+        "min_pressure_difference": get_scalar_loader(from_unit="Pa"),
+        "well_index": get_scalar_loader(from_unit="m3/bar.d"),
+    }
+
+    def generate_linear_ipr_correlation(value: DescriptionDocument):
+        case_values = to_case_values(value, alfacase_to_case_description)
+        return case_description.LinearIPRDescription(**case_values)
+
+    return {
+        key.data: generate_linear_ipr_correlation(
+            DescriptionDocument(value, document.file_path)
+        )
+        for key, value in document.content.items()
+    }
+
+
+def load_ipr_curve_description(
+    document: DescriptionDocument,
+) -> case_description.IPRCurveDescription:
+    alfacase_to_case_description = {
+        "pressure_difference": get_array_loader(from_unit="Pa"),
+        "flow_rate": get_array_loader(from_unit="sm3/d"),
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    return case_description.IPRCurveDescription(**case_values)
+
+
+def load_table_ipr_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.LinearIPRDescription]:
+    alfacase_to_case_description = {
+        "well_index_phase": get_enum_loader(enum_class=constants.WellIndexPhaseType),
+        "table": load_ipr_curve_description,
+    }
+
+    def generate_table_ipr_correlation(value: DescriptionDocument):
+        case_values = to_case_values(value, alfacase_to_case_description)
+        return case_description.TableIPRDescription(**case_values)
+
+    return {
+        key.data: generate_table_ipr_correlation(
+            DescriptionDocument(value, document.file_path)
+        )
+        for key, value in document.content.items()
+    }
+
+
+def load_ipr_models_description(
+    document: DescriptionDocument,
+) -> case_description.IPRModelsDescription:
+    alfacase_to_case_description = {
+        "linear_models": load_linear_ipr_description,
+        "table_models": load_table_ipr_description,
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    return case_description.IPRModelsDescription(**case_values)
+
+
+def _load_pressure_source_common() -> Dict[str, Callable]:
+    return {
+        "fluid": load_value,
+        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
+        "split_type": get_enum_loader(enum_class=constants.MassInflowSplitType),
+        "mass_fractions": get_dict_with_scalar_loader(category="mass fraction"),
+        "volume_fractions": get_dict_with_scalar_loader(category="volume fraction"),
+        "water_cut": get_scalar_loader(category="volume fraction"),
+        "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
+        "gas_liquid_ratio": get_scalar_loader(from_unit="sm3/sm3"),
+        "pressure": get_scalar_loader(from_unit="bar"),
+        "temperature": get_scalar_loader(from_unit="K"),
+    }
+
+
+def load_reservoir_inflow_equipment_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.ReservoirInflowEquipmentDescription]:
+    alfacase_to_case_description = {
+        "name": load_value,
+        "fluid": load_value,
+        "start": get_scalar_loader(from_unit="m"),
+        "length": get_scalar_loader(from_unit="m"),
+        "pressure": get_scalar_loader(from_unit="bar"),
+        "temperature": get_scalar_loader(from_unit="degC"),
+        "productivity_ipr": load_value,
+        "injectivity_ipr": load_value,
+        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
+    }
+    alfacase_to_case_description.update(**_load_pressure_source_common())
+
+    def generate_reservoir_inflow_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
+        return case_description.ReservoirInflowEquipmentDescription(**case_values)
+
+    return {
+        key.data: generate_reservoir_inflow_description(
+            DescriptionDocument(value, document.file_path)
+        )
+        for key, value in document.content.items()
+    }
+
+
+def load_speed_curve_description(
+    document: DescriptionDocument,
+) -> case_description.SpeedCurveDescription:
+    alfacase_to_case_description = {
+        "time": get_array_loader(from_unit="s"),
+        "speed": get_array_loader(from_unit="rpm"),
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    return case_description.SpeedCurveDescription(**case_values)
+
+
+def load_table_pump_description(
+    document: DescriptionDocument,
+) -> case_description.TablePumpDescription:
+    alfacase_to_case_description = {
+        "speeds": get_array_loader(from_unit="rpm"),
+        "void_fractions": get_array_loader(category="volume fraction"),
+        "flow_rates": get_array_loader(category="volume flow rate"),
+        "pressure_boosts": get_array_loader(from_unit="bar"),
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    return case_description.TablePumpDescription(**case_values)
+
+
+def load_trend_output_description(
+    document: DescriptionDocument,
+) -> List[case_description.TrendOutputDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
+        "element_name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+    }
+
+    def generate_trend_description(
+        document: DescriptionDocument,
+    ) -> case_description.TrendOutputDescription:
+        case_values = to_case_values(document, alfacase_to_case_description)
+        return case_description.TrendOutputDescription(**case_values)
+
+    return [
+        generate_trend_description(alfacase_document) for alfacase_document in document
+    ]
+
+
+def load_tubing_description(
+    document: DescriptionDocument,
+) -> List[case_description.TubingDescription]:
+    alfacase_to_case_description = {
+        "name": load_value,
+        "length": get_scalar_loader(from_unit="m"),
+        "outer_diameter": get_scalar_loader(from_unit="m"),
+        "inner_diameter": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "material": load_value,
+    }
+
+    def generate_tubings_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
+        return case_description.TubingDescription(**case_values)
+
+    return [
+        generate_tubings_description(alfacase_document)
+        for alfacase_document in document
+    ]
+
+
+def load_wall_layer_description(
+    document: DescriptionDocument,
+) -> List[case_description.WallLayerDescription]:
+    alfacase_to_case_description = {
+        "thickness": get_scalar_loader(from_unit="m"),
+        "material_name": load_value,
+        "has_annulus_flow": load_value,
+    }
+
+    def generate_wall_layer_container_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
+        return case_description.WallLayerDescription(**case_values)
+
+    return [
+        generate_wall_layer_container_description(alfacase_document)
+        for alfacase_document in document
+    ]
+
+
+def load_annulus_description(
     document: DescriptionDocument,
 ) -> case_description.AnnulusDescription:
     alfacase_to_case_description = {
-        "has_annulus_flow": LoadValue,
-        "pvt_model": LoadValue,
-        "top_node": LoadValue,
-        "initial_conditions": LoadInitialConditionsDescription,
-        "gas_lift_valve_equipment": LoadGasLiftValveEquipmentDescription,
+        "has_annulus_flow": load_value,
+        "pvt_model": load_value,
+        "top_node": load_value,
+        "initial_conditions": load_initial_conditions_description,
+        "gas_lift_valve_equipment": load_gas_lift_valve_equipment_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.AnnulusDescription(**case_values)
 
 
-def LoadCaseOutputDescription(
+def load_case_output_description(
     document: DescriptionDocument,
 ) -> case_description.CaseOutputDescription:
     alfacase_to_case_description = {
-        "profiles": LoadProfileOutputDescription,
-        "trends": LoadTrendOutputDescription,
-        "profile_frequency": GetScalarLoader(from_unit="s"),
-        "trend_frequency": GetScalarLoader(from_unit="s"),
+        "profiles": load_profile_output_description,
+        "trends": load_trend_output_description,
+        "profile_frequency": get_scalar_loader(from_unit="s"),
+        "trend_frequency": get_scalar_loader(from_unit="s"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.CaseOutputDescription(**case_values)
 
 
-def LoadOpenHoleDescription(
+def load_open_hole_description(
     document: DescriptionDocument,
 ) -> List[case_description.OpenHoleDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "length": GetScalarLoader(from_unit="m"),
-        "diameter": GetScalarLoader(from_unit="m"),
-        "inner_roughness": GetScalarLoader(from_unit="m"),
+        "name": load_value,
+        "length": get_scalar_loader(from_unit="m"),
+        "diameter": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(from_unit="m"),
     }
 
-    def GenerateOpenHoleDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_open_hole_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.OpenHoleDescription(**case_values)
 
     return [
-        GenerateOpenHoleDescription(alfacase_document) for alfacase_document in document
+        generate_open_hole_description(alfacase_document)
+        for alfacase_document in document
     ]
 
 
-def LoadCasingDescription(
+def load_casing_description(
     document: DescriptionDocument,
 ) -> case_description.CasingDescription:
     alfacase_to_case_description = {
-        "casing_sections": LoadCasingSectionDescription,
-        "tubings": LoadTubingDescription,
-        "packers": LoadPackerDescription,
-        "open_holes": LoadOpenHoleDescription,
+        "casing_sections": load_casing_section_description,
+        "tubings": load_tubing_description,
+        "packers": load_packer_description,
+        "open_holes": load_open_hole_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.CasingDescription(**case_values)
 
 
-def LoadCompressorPressureTableDescription(
+def load_compressor_pressure_table_description(
     document: DescriptionDocument,
 ) -> case_description.CompressorPressureTableDescription:
     alfacase_to_case_description = {
-        "speed_entries": GetArrayLoader(from_unit="rpm"),
-        "corrected_mass_flow_rate_entries": GetArrayLoader(from_unit="kg/s"),
-        "pressure_ratio_table": GetArrayLoader(from_unit="-"),
-        "isentropic_efficiency_table": GetArrayLoader(from_unit="-"),
+        "speed_entries": get_array_loader(from_unit="rpm"),
+        "corrected_mass_flow_rate_entries": get_array_loader(from_unit="kg/s"),
+        "pressure_ratio_table": get_array_loader(from_unit="-"),
+        "isentropic_efficiency_table": get_array_loader(from_unit="-"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.CompressorPressureTableDescription(**case_values)
 
 
-def LoadCompressorEquipmentDescription(
+def load_compressor_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.CompressorEquipmentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-        "table": LoadCompressorPressureTableDescription,
-        "speed_curve": LoadSpeedCurveDescription,
-        "reference_pressure": GetScalarLoader(from_unit="bar"),
-        "reference_temperature": GetScalarLoader(from_unit="degC"),
-        "constant_speed": GetScalarLoader(from_unit="rpm"),
-        "compressor_type": GetEnumLoader(enum_class=constants.CompressorSpeedType),
-        "speed_curve_interpolation_type": GetEnumLoader(
+        "name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+        "table": load_compressor_pressure_table_description,
+        "speed_curve": load_speed_curve_description,
+        "reference_pressure": get_scalar_loader(from_unit="bar"),
+        "reference_temperature": get_scalar_loader(from_unit="degC"),
+        "constant_speed": get_scalar_loader(from_unit="rpm"),
+        "compressor_type": get_enum_loader(enum_class=constants.CompressorSpeedType),
+        "speed_curve_interpolation_type": get_enum_loader(
             enum_class=constants.InterpolationType
         ),
-        "flow_direction": GetEnumLoader(enum_class=constants.FlowDirection),
+        "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
     }
 
-    def GenerateCompressorDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_compressor_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.CompressorEquipmentDescription(**case_values)
 
     return {
-        key.data: GenerateCompressorDescription(
+        key.data: generate_compressor_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadEnvironmentDescription(
+def load_environment_description(
     document: DescriptionDocument,
 ) -> case_description.EnvironmentDescription:
     alfacase_to_case_description = {
-        "thermal_model": GetEnumLoader(enum_class=constants.PipeThermalModelType),
-        "position_input_mode": GetEnumLoader(
+        "thermal_model": get_enum_loader(enum_class=constants.PipeThermalModelType),
+        "position_input_mode": get_enum_loader(
             enum_class=constants.PipeThermalPositionInput
         ),
-        "reference_y_coordinate": GetScalarLoader(from_unit="m"),
-        "md_properties_table": LoadEnvironmentPropertyDescription,
-        "tvd_properties_table": LoadEnvironmentPropertyDescription,
+        "reference_y_coordinate": get_scalar_loader(from_unit="m"),
+        "md_properties_table": load_environment_property_description,
+        "tvd_properties_table": load_environment_property_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.EnvironmentDescription(**case_values)
 
 
-def LoadFormationDescription(
+def load_formation_description(
     document: DescriptionDocument,
 ) -> case_description.FormationDescription:
     alfacase_to_case_description = {
-        "reference_y_coordinate": GetScalarLoader(from_unit="m"),
-        "layers": LoadFormationLayerDescription,
+        "reference_y_coordinate": get_scalar_loader(from_unit="m"),
+        "layers": load_formation_layer_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.FormationDescription(**case_values)
 
 
-def LoadPumpEquipmentDescription(
+def load_pump_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.PumpEquipmentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-        "type": GetEnumLoader(enum_class=constants.PumpType),
-        "pressure_boost": GetScalarLoader(from_unit="Pa"),
-        "thermal_efficiency": GetScalarLoader(from_unit="-"),
-        "table": LoadTablePumpDescription,
-        "speed_curve": LoadSpeedCurveDescription,
-        "speed_curve_interpolation_type": GetEnumLoader(
+        "name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+        "type": get_enum_loader(enum_class=constants.PumpType),
+        "pressure_boost": get_scalar_loader(from_unit="Pa"),
+        "thermal_efficiency": get_scalar_loader(from_unit="-"),
+        "table": load_table_pump_description,
+        "speed_curve": load_speed_curve_description,
+        "speed_curve_interpolation_type": get_enum_loader(
             enum_class=constants.InterpolationType
         ),
-        "flow_direction": GetEnumLoader(enum_class=constants.FlowDirection),
+        "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
     }
 
-    def GeneratePumpDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_pump_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.PumpEquipmentDescription(**case_values)
 
     return {
-        key.data: GeneratePumpDescription(
+        key.data: generate_pump_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadValveEquipmentDescription(
+def load_valve_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.ValveEquipmentDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "position": GetScalarLoader(from_unit="m"),
-        "type": GetEnumLoader(enum_class=constants.ValveType),
-        "diameter": GetScalarLoader(from_unit="m"),
-        "opening_type": GetEnumLoader(enum_class=constants.ValveOpeningType),
-        "opening": GetScalarLoader(from_unit="-"),
-        "opening_curve_interpolation_type": GetEnumLoader(
+        "name": load_value,
+        "position": get_scalar_loader(from_unit="m"),
+        "type": get_enum_loader(enum_class=constants.ValveType),
+        "diameter": get_scalar_loader(from_unit="m"),
+        "opening_type": get_enum_loader(enum_class=constants.ValveOpeningType),
+        "opening": get_scalar_loader(from_unit="-"),
+        "opening_curve_interpolation_type": get_enum_loader(
             enum_class=constants.InterpolationType
         ),
-        "opening_curve": LoadOpeningCurveDescription,
-        "cv_table": LoadCvTableDescription,
-        "flow_direction": GetEnumLoader(enum_class=constants.FlowDirection),
+        "opening_curve": load_opening_curve_description,
+        "cv_table": load_cv_table_description,
+        "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
     }
 
-    def GenerateValveDescription(document: DescriptionDocument):
+    def generate_valve_description(document: DescriptionDocument):
 
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.ValveEquipmentDescription(**case_values)
 
     return {
-        key.data: GenerateValveDescription(
+        key.data: generate_valve_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadWallDescription(
+def load_wall_description(
     document: DescriptionDocument,
 ) -> List[case_description.WallDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "inner_roughness": GetScalarLoader(from_unit="m"),
-        "wall_layer_container": LoadWallLayerDescription,
+        "name": load_value,
+        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "wall_layer_container": load_wall_layer_description,
     }
 
-    def GenerateWallsDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_walls_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.WallDescription(**case_values)
 
     return [
-        GenerateWallsDescription(alfacase_document) for alfacase_document in document
+        generate_walls_description(alfacase_document) for alfacase_document in document
     ]
 
 
-def LoadEquipmentDescription(
+def load_equipment_description(
     document: DescriptionDocument,
 ) -> case_description.EquipmentDescription:
     alfacase_to_case_description = {
-        "mass_sources": LoadMassSourceEquipmentDescription,
-        "pumps": LoadPumpEquipmentDescription,
-        "valves": LoadValveEquipmentDescription,
-        "reservoir_inflows": LoadReservoirInflowEquipmentDescription,
-        "heat_sources": LoadHeatSourceEquipmentDescription,
-        "compressors": LoadCompressorEquipmentDescription,
+        "mass_sources": load_mass_source_equipment_description,
+        "pumps": load_pump_equipment_description,
+        "valves": load_valve_equipment_description,
+        "reservoir_inflows": load_reservoir_inflow_equipment_description,
+        "heat_sources": load_heat_source_equipment_description,
+        "compressors": load_compressor_equipment_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.EquipmentDescription(**case_values)
 
 
-def LoadXAndYDescription(
+def load_x_and_y_description(
     document: DescriptionDocument,
 ) -> case_description.XAndYDescription:
     alfacase_to_case_description = {
-        "x": GetArrayLoader(from_unit="m"),
-        "y": GetArrayLoader(from_unit="m"),
+        "x": get_array_loader(from_unit="m"),
+        "y": get_array_loader(from_unit="m"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.XAndYDescription(**case_values)
 
 
-def LoadLengthAndElevationDescription(
+def load_length_and_elevation_description(
     document: DescriptionDocument,
 ) -> case_description.LengthAndElevationDescription:
     alfacase_to_case_description = {
-        "length": GetArrayLoader(from_unit="m"),
-        "elevation": GetArrayLoader(from_unit="m"),
+        "length": get_array_loader(from_unit="m"),
+        "elevation": get_array_loader(from_unit="m"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.LengthAndElevationDescription(**case_values)
 
 
-def LoadProfileDescription(
+def load_profile_description(
     document: DescriptionDocument,
 ) -> case_description.ProfileDescription:
     alfacase_to_case_description = {
-        "x_and_y": LoadXAndYDescription,
-        "length_and_elevation": LoadLengthAndElevationDescription,
+        "x_and_y": load_x_and_y_description,
+        "length_and_elevation": load_length_and_elevation_description,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.ProfileDescription(**case_values)
 
 
-def LoadPipeDescription(
+def load_pipe_description(
     document: DescriptionDocument,
 ) -> List[case_description.PipeDescription]:
     # fmt: off
     alfacase_to_case_description = {
-        "environment": LoadEnvironmentDescription,
-        "equipment": LoadEquipmentDescription,
-        "initial_conditions": LoadInitialConditionsDescription,
-        "profile": LoadProfileDescription,
-        "name": LoadValue,
-        "pvt_model": LoadValue,
-        "segments": LoadPipeSegmentsDescription,
-        "source": LoadValue,
-        "target": LoadValue,
+        "environment": load_environment_description,
+        "equipment": load_equipment_description,
+        "initial_conditions": load_initial_conditions_description,
+        "profile": load_profile_description,
+        "name": load_value,
+        "pvt_model": load_value,
+        "segments": load_pipe_segments_description,
+        "source": load_value,
+        "target": load_value,
     }
     # fmt: on
-    def GeneratePipesDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_pipes_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.PipeDescription(**case_values)
 
     return [
-        GeneratePipesDescription(alfacase_document) for alfacase_document in document
+        generate_pipes_description(alfacase_document) for alfacase_document in document
     ]
 
 
-def LoadWellDescription(
+def load_well_description(
     document: DescriptionDocument,
 ) -> List[case_description.WellDescription]:
     alfacase_to_case_description = {
-        "name": LoadValue,
-        "pvt_model": LoadValue,
-        "stagnant_fluid": LoadValue,
-        "profile": LoadProfileDescription,
-        "casing": LoadCasingDescription,
-        "annulus": LoadAnnulusDescription,
-        "top_node": LoadValue,
-        "bottom_node": LoadValue,
-        "initial_conditions": LoadInitialConditionsDescription,
-        "environment": LoadEnvironmentDescription,
-        "equipment": LoadEquipmentDescription,
-        "formation": LoadFormationDescription,
+        "name": load_value,
+        "pvt_model": load_value,
+        "stagnant_fluid": load_value,
+        "profile": load_profile_description,
+        "casing": load_casing_description,
+        "annulus": load_annulus_description,
+        "top_node": load_value,
+        "bottom_node": load_value,
+        "initial_conditions": load_initial_conditions_description,
+        "environment": load_environment_description,
+        "equipment": load_equipment_description,
+        "formation": load_formation_description,
     }
 
-    def GenerateWellsDescription(document: DescriptionDocument):
-        case_values = ToCaseValues(document, alfacase_to_case_description)
+    def generate_wells_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
         return case_description.WellDescription(**case_values)
 
     return [
-        GenerateWellsDescription(alfacase_document) for alfacase_document in document
+        generate_wells_description(alfacase_document) for alfacase_document in document
     ]
 
 
-def LoadPhysicsDescription(
+def load_physics_description(
     document: DescriptionDocument,
 ) -> case_description.PhysicsDescription:
     # fmt: off
     alfacase_to_case_description = {
-        'hydrodynamic_model': GetEnumLoader(enum_class=constants.HydrodynamicModelType),
-        'simulation_regime': GetEnumLoader(enum_class=constants.SimulationRegimeType),
-        'energy_model': GetEnumLoader(enum_class=constants.EnergyModel),
-        'solids_model': GetEnumLoader(enum_class=constants.SolidsModelType),
-        'initial_condition_strategy': GetEnumLoader(enum_class=constants.InitialConditionStrategyType),
-        'restart_filepath': LoadPath,
-        'keep_former_results': LoadValue,
-        'emulsion_model': GetEnumLoader(enum_class=constants.EmulsionModelType),
-        'flash_model': GetEnumLoader(enum_class=constants.FlashModel),
-        'correlations_package': GetEnumLoader(enum_class=constants.CorrelationPackageType),
+        'hydrodynamic_model': get_enum_loader(enum_class=constants.HydrodynamicModelType),
+        'simulation_regime': get_enum_loader(enum_class=constants.SimulationRegimeType),
+        'energy_model': get_enum_loader(enum_class=constants.EnergyModel),
+        'solids_model': get_enum_loader(enum_class=constants.SolidsModelType),
+        'initial_condition_strategy': get_enum_loader(enum_class=constants.InitialConditionStrategyType),
+        'restart_filepath': load_path,
+        'keep_former_results': load_value,
+        'emulsion_model': get_enum_loader(enum_class=constants.EmulsionModelType),
+        'flash_model': get_enum_loader(enum_class=constants.FlashModel),
+        'correlations_package': get_enum_loader(enum_class=constants.CorrelationPackageType),
     }
     # fmt: on
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.PhysicsDescription(**case_values)
 
 
 # fmt: off
-def LoadNumericalOptionsDescription(document: DescriptionDocument) -> case_description.NumericalOptionsDescription:
+def load_numerical_options_description(document: DescriptionDocument) -> case_description.NumericalOptionsDescription:
     alfacase_to_case_description = {
-        'tolerance': LoadValue,
-        'maximum_iterations': LoadValue,
-        'maximum_timestep_change_factor': LoadValue,
-        'maximum_cfl_value': LoadValue,
-        'nonlinear_solver_type': GetEnumLoader(enum_class=constants.NonlinearSolverType),
-        'relaxed_tolerance': LoadValue,
-        'divergence_tolerance': LoadValue,
-        'friction_factor_evaluation_strategy': GetEnumLoader(enum_class=constants.EvaluationStrategyType),
-        'simulation_mode': GetEnumLoader(enum_class=constants.SimulationModeType),
-        'enable_solver_caching': LoadValue,
-        'caching_rtol': LoadValue,
-        'caching_atol': LoadValue,
-        'always_repeat_timestep': LoadValue,
+        'tolerance': load_value,
+        'maximum_iterations': load_value,
+        'maximum_timestep_change_factor': load_value,
+        'maximum_cfl_value': load_value,
+        'nonlinear_solver_type': get_enum_loader(enum_class=constants.NonlinearSolverType),
+        'relaxed_tolerance': load_value,
+        'divergence_tolerance': load_value,
+        'friction_factor_evaluation_strategy': get_enum_loader(enum_class=constants.EvaluationStrategyType),
+        'simulation_mode': get_enum_loader(enum_class=constants.SimulationModeType),
+        'enable_solver_caching': load_value,
+        'caching_rtol': load_value,
+        'caching_atol': load_value,
+        'always_repeat_timestep': load_value,
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.NumericalOptionsDescription(**case_values)
 # fmt: on
 
 # fmt: off
-def LoadTimeOptionsDescription(
+def load_time_options_description(
     document: DescriptionDocument
 ) -> case_description.TimeOptionsDescription:
     alfacase_to_case_description = {
-        "stop_on_steady_state": LoadValue,
-        "initial_time": GetScalarLoader(from_unit="h"),
-        "final_time": GetScalarLoader(from_unit="h"),
-        "initial_timestep": GetScalarLoader(from_unit="s"),
-        "minimum_timestep": GetScalarLoader(from_unit="s"),
-        "maximum_timestep": GetScalarLoader(from_unit="s"),
-        "restart_autosave_frequency": GetScalarLoader(from_unit="h"),
-        "minimum_time_for_steady_state_stop": GetScalarLoader(from_unit="s"),
+        "stop_on_steady_state": load_value,
+        "initial_time": get_scalar_loader(from_unit="h"),
+        "final_time": get_scalar_loader(from_unit="h"),
+        "initial_timestep": get_scalar_loader(from_unit="s"),
+        "minimum_timestep": get_scalar_loader(from_unit="s"),
+        "maximum_timestep": get_scalar_loader(from_unit="s"),
+        "restart_autosave_frequency": get_scalar_loader(from_unit="h"),
+        "minimum_time_for_steady_state_stop": get_scalar_loader(from_unit="s"),
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.TimeOptionsDescription(**case_values)
 
 
 # fmt: on
 
 
-def LoadTracerModelConstantCoefficientsDescription(
+def load_tracer_model_constant_coefficients_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.TracerModelConstantCoefficientsDescription]:
     alfacase_to_case_description = {
-        "partition_coefficients": GetDictWithScalarLoader(category="mass fraction")
+        "partition_coefficients": get_dict_with_scalar_loader(category="mass fraction")
     }
 
-    def GenerateTracerModelConstantCoefficientsDescription(value: DescriptionDocument):
-        case_values = ToCaseValues(value, alfacase_to_case_description)
+    def generate_tracer_model_constant_coefficients_description(
+        value: DescriptionDocument,
+    ):
+        case_values = to_case_values(value, alfacase_to_case_description)
         return case_description.TracerModelConstantCoefficientsDescription(
             **case_values
         )
 
     return {
-        key.data: GenerateTracerModelConstantCoefficientsDescription(
+        key.data: generate_tracer_model_constant_coefficients_description(
             DescriptionDocument(value, document.file_path)
         )
         for key, value in document.content.items()
     }
 
 
-def LoadTracersDescription(
+def load_tracers_description(
     document: DescriptionDocument,
 ) -> case_description.TracersDescription:
     alfacase_to_case_description = {
-        "constant_coefficients": LoadTracerModelConstantCoefficientsDescription
+        "constant_coefficients": load_tracer_model_constant_coefficients_description
     }
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.TracersDescription(**case_values)
 
 
-def LoadCaseDescription(
+def load_case_description(
     document: DescriptionDocument,
 ) -> case_description.CaseDescription:
     # fmt: off
     alfacase_to_case_description = {
-        'physics': LoadPhysicsDescription,
-        'numerical_options': LoadNumericalOptionsDescription,
-        'time_options': LoadTimeOptionsDescription,
-        'max_timestep_change_factor': LoadValue,
-        'max_cfl_value': LoadValue,
-        'friction_factor_evaluation_strategy': GetEnumLoader(enum_class=constants.EvaluationStrategyType),
-        'name': LoadValue,
-        'positions': LoadValue,
-        'tracers': LoadTracersDescription,
-        'ipr_models': LoadIPRModelsDescription,
-        'pvt_models': LoadPvtModelsDescription,
-        'materials': LoadMaterialDescription,
-        'nodes': LoadNodeDescription,
-        'outputs': LoadCaseOutputDescription,
-        'pipes': LoadPipeDescription,
-        'walls': LoadWallDescription,
-        'wells': LoadWellDescription,
+        'physics': load_physics_description,
+        'numerical_options': load_numerical_options_description,
+        'time_options': load_time_options_description,
+        'max_timestep_change_factor': load_value,
+        'max_cfl_value': load_value,
+        'friction_factor_evaluation_strategy': get_enum_loader(enum_class=constants.EvaluationStrategyType),
+        'name': load_value,
+        'positions': load_value,
+        'tracers': load_tracers_description,
+        'ipr_models': load_ipr_models_description,
+        'pvt_models': load_pvt_models_description,
+        'materials': load_material_description,
+        'nodes': load_node_description,
+        'outputs': load_case_output_description,
+        'pipes': load_pipe_description,
+        'walls': load_wall_description,
+        'wells': load_well_description,
     }
     # fmt: on
-    case_values = ToCaseValues(document, alfacase_to_case_description)
+    case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.CaseDescription(**case_values)

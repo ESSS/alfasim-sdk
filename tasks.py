@@ -15,13 +15,10 @@ def schema_file_path() -> Path:
     return Path(__file__).parent / "alfasim_sdk/alfacase/schema.py"
 
 
-@invoke.task(help={"check": "Check whether the schema has been modified or not"})
-def cog(ctx, check=False):
+@invoke.task
+def cog(ctx):
     """ Executes cog on alfasim_sdk/alfacase/schema.py to generate the schema for strictyaml. """
     ctx.run(command=f"cog -rc {schema_file_path()}", warn=True)
-
-    if check:
-        check_cog(ctx)
 
 
 @invoke.task

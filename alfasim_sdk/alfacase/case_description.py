@@ -33,7 +33,7 @@ list_of_strings = deep_iterable(
 )
 
 
-def CollapseArrayRepr(value):
+def collapse_array_repr(value):
     """
     The full repr representation of PVT model takes too much space to print all values inside a array.
     Making annoying to debug Subjects that has a PVT model on it, due to seventy-four lines with only numbers.
@@ -43,7 +43,7 @@ def CollapseArrayRepr(value):
     return re.sub(r"array\(\[.*?\]\)", "array([...])", repr(value), flags=re.DOTALL)
 
 
-def ToScalar(
+def to_scalar(
     value: Union[Tuple[Number, str], Scalar], is_optional: bool = False
 ) -> Scalar:
     """
@@ -92,7 +92,7 @@ def attrib_scalar(
     """
     return attr.ib(
         default=default,
-        converter=partial(ToScalar, is_optional=is_optional or not default),
+        converter=partial(to_scalar, is_optional=is_optional or not default),
         type=Optional[Scalar] if is_optional or not default else Scalar,
     )
 
@@ -582,10 +582,10 @@ class IPRModelsDescription:
 class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     start = attrib_scalar()
     length = attrib_scalar()
-    productivity_IPR: Optional[str] = attr.ib(
+    productivity_ipr: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    injectivity_IPR: Optional[str] = attr.ib(
+    injectivity_ipr: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
 
@@ -604,24 +604,6 @@ class PipeSegmentsDescription:
     roughnesses: Array = attr.ib(validator=optional(instance_of(Array)))
     wall_names: Optional[List[str]] = attr.ib(
         default=None, validator=optional(list_of_strings)
-    )
-
-
-def dict_of(type_):
-    """
-    An attr validator that performs validation of dictionary values.
-
-    :param type_: The type to check for, can be a type or tuple of types
-
-    :raises TypeError:
-        raises a `TypeError` if the initializer is called with a wrong type for this particular attribute
-
-    :return: An attr validator that performs validation of dictionary values.
-    """
-    return deep_mapping(
-        key_validator=instance_of(str),
-        value_validator=instance_of(type_),
-        mapping_validator=instance_of(dict),
     )
 
 
@@ -829,7 +811,7 @@ class LengthAndElevationDescription:
         default=None, validator=optional(instance_of(Array))
     )
 
-    def IterValuesAndUnit(
+    def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[Tuple[Number, str], Tuple[Number, str]]]:
         """ Returns a pair of values with length and elevation along with their units. """
@@ -848,7 +830,7 @@ class XAndYDescription:
     x: Optional[Array] = attr.ib(default=None, validator=optional(instance_of(Array)))
     y: Optional[Array] = attr.ib(default=None, validator=optional(instance_of(Array)))
 
-    def IterValuesAndUnit(
+    def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[Tuple[Number, str], Tuple[Number, str]]]:
         """ Returns a pair of values with the x and y value along with their units. """
@@ -1138,7 +1120,7 @@ class MaterialDescription:
     expansion = attrib_scalar(default=Scalar(0, "1/K"))
     viscosity = attrib_scalar(default=Scalar(0, "cP"))
 
-    def AsDict(self) -> Dict[str, Union[str, Tuple[Number, str]]]:
+    def as_dict(self) -> Dict[str, Union[str, Tuple[Number, str]]]:
         """
         Helper function that returns a dict with all information needed to create a Material.
 
@@ -1303,14 +1285,14 @@ class PvtModelTableParametersDescription:
     """
 
     pressure_values: Numpy1DArray = attr.ib(
-        validator=numpy_array_validator(dimension=1), repr=CollapseArrayRepr
+        validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
     )
     temperature_values: Numpy1DArray = attr.ib(
-        validator=numpy_array_validator(dimension=1), repr=CollapseArrayRepr
+        validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
     )
     table_variables: List[Numpy1DArray] = attr.ib(
         validator=numpy_array_validator(dimension=1, is_list=True),
-        repr=CollapseArrayRepr,
+        repr=collapse_array_repr,
     )
     variable_names: List[str] = attr.ib(validator=list_of_strings)
 
@@ -1372,24 +1354,24 @@ class PvtModelTableParametersDescription:
 
     @staticmethod
     def create_constant(
-        rho_G_ref=1.0,
-        rho_L_ref=1000.0,
-        rho_W_ref=1000.0,
-        rho_S_ref=2500.0,
-        mu_G_ref=5e-6,
-        mu_L_ref=5e-2,
-        mu_W_ref=5e-2,
+        rho_g_ref=1.0,
+        rho_l_ref=1000.0,
+        rho_w_ref=1000.0,
+        rho_s_ref=2500.0,
+        mu_g_ref=5e-6,
+        mu_l_ref=5e-2,
+        mu_w_ref=5e-2,
         s_ref=7.197e-2,
         ideal_gas=True,
-        cp_G_ref=1010.0,
-        cp_L_ref=4181.3,
-        cp_W_ref=4181.3,
-        h_L_ref=104.86e3,
-        k_G_ref=2.4e-2,
-        k_L_ref=5.91e-1,
-        k_W_ref=5.91e-1,
-        s_GW_ref=7.197e-2,
-        s_LW_ref=7.197e-2,
+        cp_g_ref=1010.0,
+        cp_l_ref=4181.3,
+        cp_w_ref=4181.3,
+        h_l_ref=104.86e3,
+        k_g_ref=2.4e-2,
+        k_l_ref=5.91e-1,
+        k_w_ref=5.91e-1,
+        s_gw_ref=7.197e-2,
+        s_lw_ref=7.197e-2,
         has_water=False,
     ):
         """
@@ -1397,93 +1379,93 @@ class PvtModelTableParametersDescription:
         table.
         Used by PvtTable to build it's default table if no parameter is passed.
         """
-        R = 286.9  # Air individual gas constant [J/kg K]
+        r = 286.9  # Air individual gas constant [J/kg K]
 
-        def ideal_gas_density_model(P, T):
+        def ideal_gas_density_model(p, t):
             """
-            :param P: pressure in Pa
-            :param T: temperature in K
+            :param p: pressure in Pa
+            :param t: temperature in K
             """
-            return P / (R * T)
+            return p / (r * t)
 
-        def constant_gas_density_model(P, T):
-            return rho_G_ref + 0 * P
+        def constant_gas_density_model(p, t):
+            return rho_g_ref + 0 * p
 
-        def gas_density_derivative_respect_pressure(P, T):
-            return 1 / (R * T)
+        def gas_density_derivative_respect_pressure(p, t):
+            return 1 / (r * t)
 
-        def gas_density_derivative_respect_temperature(P, T):
-            return -P / (R * T ** 2)
+        def gas_density_derivative_respect_temperature(p, t):
+            return -p / (r * t ** 2)
 
-        def constant_density_model(P, T):
-            return rho_L_ref + 0 * P
+        def constant_density_model(p, t):
+            return rho_l_ref + 0 * p
 
-        def oil_density_derivative_respect_pressure(P, T):
-            return 0 * P
+        def oil_density_derivative_respect_pressure(p, t):
+            return 0 * p
 
-        def oil_density_derivative_respect_temperature(P, T):
-            return 0 * P
+        def oil_density_derivative_respect_temperature(p, t):
+            return 0 * p
 
-        def oil_viscosity_model(P, T):
-            return mu_L_ref + P * 0
+        def oil_viscosity_model(p, t):
+            return mu_l_ref + p * 0
 
-        def water_constant_density_model(P, T):
-            return rho_W_ref + 0 * P
+        def water_constant_density_model(p, t):
+            return rho_w_ref + 0 * p
 
-        def water_density_derivative_respect_pressure(P, T):
-            return 0 * P
+        def water_density_derivative_respect_pressure(p, t):
+            return 0 * p
 
-        def water_density_derivative_respect_temperature(P, T):
-            return 0 * P
+        def water_density_derivative_respect_temperature(p, t):
+            return 0 * p
 
-        def water_viscosity_model(P, T):
-            return mu_W_ref + P * 0
+        def water_viscosity_model(p, t):
+            return mu_w_ref + p * 0
 
-        def gas_viscosity_model(P, T):
-            return mu_G_ref + P * 0
+        def gas_viscosity_model(p, t):
+            return mu_g_ref + p * 0
 
-        def surface_tension_model(P, T):
-            return s_ref + P * 0
+        def surface_tension_model(p, t):
+            return s_ref + p * 0
 
-        def gas_mass_fraction_model(P, T):
-            return 0 * P
+        def gas_mass_fraction_model(p, t):
+            return 0 * p
 
-        def water_mass_fraction_model(P, T):
-            return 0 * P
+        def water_mass_fraction_model(p, t):
+            return 0 * p
 
-        def oil_specific_heat_model(P, T):
-            return cp_L_ref + P * 0
+        def oil_specific_heat_model(p, t):
+            return cp_l_ref + p * 0
 
-        def water_specific_heat_model(P, T):
-            return cp_W_ref + P * 0
+        def water_specific_heat_model(p, t):
+            return cp_w_ref + p * 0
 
-        def gas_specific_heat_model(P, T):
-            return cp_G_ref + P * 0
+        def gas_specific_heat_model(p, t):
+            return cp_g_ref + p * 0
 
-        def oil_specific_enthalpy_model(P, T):
-            return cp_L_ref * T + P / rho_L_ref
+        def oil_specific_enthalpy_model(p, t):
+            return cp_l_ref * t + p / rho_l_ref
 
-        def water_specific_enthalpy_model(P, T):
-            return cp_W_ref * T + P / rho_W_ref
+        def water_specific_enthalpy_model(p, t):
+            return cp_w_ref * t + p / rho_w_ref
 
-        def gas_specific_enthalpy_model(P, T):
-            h_LG = 2.260e6
-            return cp_G_ref * T + h_LG + h_L_ref
+        def gas_specific_enthalpy_model(p, t):
+            h_lg = 2.260e6
+            return cp_g_ref * t + h_lg + h_l_ref
 
-        def oil_thermal_conductivity_model(P, T):
-            return k_L_ref + P * 0
+        def oil_thermal_conductivity_model(p, t):
+            return k_l_ref + p * 0
 
-        def water_thermal_conductivity_model(P, T):
-            return k_W_ref + P * 0
+        def water_thermal_conductivity_model(p, t):
+            return k_w_ref + p * 0
 
-        def gas_thermal_conductivity_model(P, T):
-            return k_G_ref + P * 0
+        def gas_thermal_conductivity_model(p, t):
+            return k_g_ref + p * 0
 
-        def gas_water_surface_tension_model(P, T):
-            return s_GW_ref + P * 0
+        def gas_water_surface_tension_model(p, t):
+            return s_gw_ref + p * 0
 
-        def oil_water_surface_tension_model(P, T):
-            return s_LW_ref + P * 0
+        def oil_water_surface_tension_model(p, t):
+            return s_lw_ref + p * 0
 
         pressure_values = np.linspace(0.5, 1e10, 4)  # Pa (1e-5 to 1e5 in bar)
         temperature_values = np.linspace(250, 500, 30)  # K
@@ -1492,25 +1474,25 @@ class PvtModelTableParametersDescription:
             ideal_gas_density_model if ideal_gas else constant_gas_density_model
         )
 
-        T, P = np.meshgrid(temperature_values, pressure_values)
+        t, p = np.meshgrid(temperature_values, pressure_values)
 
         data = [
-            gas_density_model(P, T).flatten(),
-            gas_density_derivative_respect_pressure(P, T).flatten(),
-            gas_density_derivative_respect_temperature(P, T).flatten(),
-            constant_density_model(P, T).flatten(),
-            oil_density_derivative_respect_pressure(P, T).flatten(),
-            oil_density_derivative_respect_temperature(P, T).flatten(),
-            gas_viscosity_model(P, T).flatten(),
-            oil_viscosity_model(P, T).flatten(),
-            surface_tension_model(P, T).flatten(),
-            gas_mass_fraction_model(P, T).flatten(),
-            gas_specific_heat_model(P, T).flatten(),
-            oil_specific_heat_model(P, T).flatten(),
-            gas_specific_enthalpy_model(P, T).flatten(),
-            oil_specific_enthalpy_model(P, T).flatten(),
-            gas_thermal_conductivity_model(P, T).flatten(),
-            oil_thermal_conductivity_model(P, T).flatten(),
+            gas_density_model(p, t).flatten(),
+            gas_density_derivative_respect_pressure(p, t).flatten(),
+            gas_density_derivative_respect_temperature(p, t).flatten(),
+            constant_density_model(p, t).flatten(),
+            oil_density_derivative_respect_pressure(p, t).flatten(),
+            oil_density_derivative_respect_temperature(p, t).flatten(),
+            gas_viscosity_model(p, t).flatten(),
+            oil_viscosity_model(p, t).flatten(),
+            surface_tension_model(p, t).flatten(),
+            gas_mass_fraction_model(p, t).flatten(),
+            gas_specific_heat_model(p, t).flatten(),
+            oil_specific_heat_model(p, t).flatten(),
+            gas_specific_enthalpy_model(p, t).flatten(),
+            oil_specific_enthalpy_model(p, t).flatten(),
+            gas_thermal_conductivity_model(p, t).flatten(),
+            oil_thermal_conductivity_model(p, t).flatten(),
         ]
 
         names = [
@@ -1534,16 +1516,16 @@ class PvtModelTableParametersDescription:
 
         if has_water:
             data += [
-                water_constant_density_model(P, T).flatten(),
-                water_density_derivative_respect_pressure(P, T).flatten(),
-                water_density_derivative_respect_temperature(P, T).flatten(),
-                water_viscosity_model(P, T).flatten(),
-                water_mass_fraction_model(P, T).flatten(),
-                water_specific_heat_model(P, T).flatten(),
-                water_specific_enthalpy_model(P, T).flatten(),
-                water_thermal_conductivity_model(P, T).flatten(),
-                gas_water_surface_tension_model(P, T).flatten(),
-                oil_water_surface_tension_model(P, T).flatten(),
+                water_constant_density_model(p, t).flatten(),
+                water_density_derivative_respect_pressure(p, t).flatten(),
+                water_density_derivative_respect_temperature(p, t).flatten(),
+                water_viscosity_model(p, t).flatten(),
+                water_mass_fraction_model(p, t).flatten(),
+                water_specific_heat_model(p, t).flatten(),
+                water_specific_enthalpy_model(p, t).flatten(),
+                water_thermal_conductivity_model(p, t).flatten(),
+                gas_water_surface_tension_model(p, t).flatten(),
+                oil_water_surface_tension_model(p, t).flatten(),
             ]
 
             names += [
@@ -1566,9 +1548,9 @@ class PvtModelTableParametersDescription:
             variable_names=names,
             pressure_std=Scalar(1e5, "Pa"),
             temperature_std=Scalar(15, "degC"),
-            gas_density_std=Scalar(rho_G_ref, "kg/m3"),
-            oil_density_std=Scalar(rho_L_ref, "kg/m3"),
-            water_density_std=Scalar(rho_W_ref, "kg/m3"),
+            gas_density_std=Scalar(rho_g_ref, "kg/m3"),
+            oil_density_std=Scalar(rho_l_ref, "kg/m3"),
+            water_density_std=Scalar(rho_w_ref, "kg/m3"),
             gas_oil_ratio=Scalar(0, "sm3/sm3"),
             gas_liquid_ratio=Scalar(0, "sm3/sm3"),
             water_cut=Scalar(0, "-"),
@@ -1675,7 +1657,9 @@ class PvtModelsDescription:
     )
 
     @staticmethod
-    def GetPvtFileAndModelName(value: Union[str, Path]) -> Tuple[Path, Optional[str]]:
+    def get_pvt_file_and_model_name(
+        value: Union[str, Path]
+    ) -> Tuple[Path, Optional[str]]:
         """
         Parse the value provided from the user to get the path for the pvt file and if defined, the pvt model.
         """
@@ -1777,7 +1761,7 @@ class CaseDescription:
     materials = attrib_instance_list(MaterialDescription)
     walls = attrib_instance_list(WallDescription)
 
-    def _CheckPvtModelReferences(self, reset_invalid_reference: bool = False):
+    def _check_pvt_model_references(self, reset_invalid_reference: bool = False):
         """
         Check the consistence of the pvt_models, the following check are made:
         - The pvt files configured on case.pvt_models.tables must exist.
@@ -1813,7 +1797,7 @@ class CaseDescription:
 
         elements_without_pvt_model = []
 
-        def _HandleInvalidReference(element, element_name, pvt_model_name):
+        def _handle_invalid_reference(element, element_name, pvt_model_name):
             """
             Set the pvt_model from the element to None if reset_invalid_reference is activate, otherwise raise
             an exception informing the valid pvt_models.
@@ -1843,11 +1827,11 @@ class CaseDescription:
                     )
 
         for element in chain(self.nodes, self.pipes, self.wells):
-            _HandleInvalidReference(element, element.name, element.pvt_model)
+            _handle_invalid_reference(element, element.name, element.pvt_model)
 
             # Well has an annulus that also has a pvt_model but, doesn't have a name
             if isinstance(element, WellDescription):
-                _HandleInvalidReference(
+                _handle_invalid_reference(
                     element.annulus,
                     f"Annulus from {element.name}",
                     element.annulus.pvt_model,
@@ -1859,7 +1843,7 @@ class CaseDescription:
                 f"Either assign a valid pvt_model on the element, or fill the default_model parameter."
             )
 
-    def _CheckPvtModelFiles(self, reset_invalid_reference: bool = False):
+    def _check_pvt_model_files(self, reset_invalid_reference: bool = False):
         """
         Check the consistence of case.pvt_models.tables, the following check are made:
         - Ensure PVT files exist
@@ -1869,7 +1853,7 @@ class CaseDescription:
             Set the element to None if a insistence is found instead of raising an exception.
         """
 
-        def _GetAllPvtModelsDeclaredOnFile(file_path: Path) -> Set[str]:
+        def _get_all_pvt_models_declared_on_file(file_path: Path) -> Set[str]:
             """
             Read the pvt model file and return a tuple with all PVT Models declared on it
             """
@@ -1890,7 +1874,9 @@ class CaseDescription:
 
         keys_from_pvt_tables_to_remove = []
         for key, value in self.pvt_models.tables.items():
-            pvt_file, model_name = PvtModelsDescription.GetPvtFileAndModelName(value)
+            pvt_file, model_name = PvtModelsDescription.get_pvt_file_and_model_name(
+                value
+            )
 
             # Check if PVT files from case.pvt_models.tables exist
             if not Path(pvt_file).is_file():
@@ -1904,7 +1890,9 @@ class CaseDescription:
 
             # Check if user select PVT model is inside the file.
             if model_name:
-                pvt_models_available_on_file = _GetAllPvtModelsDeclaredOnFile(pvt_file)
+                pvt_models_available_on_file = _get_all_pvt_models_declared_on_file(
+                    pvt_file
+                )
                 if model_name not in pvt_models_available_on_file:
                     if not reset_invalid_reference:
                         raise InvalidReferenceError(
@@ -1915,27 +1903,27 @@ class CaseDescription:
         for key in keys_from_pvt_tables_to_remove:
             del self.pvt_models.tables[key]
 
-    def _CheckRestartFile(self):
+    def _check_restart_file(self):
         restart_file = self.physics.restart_filepath
         if restart_file and not Path(restart_file).is_file():
             raise InvalidReferenceError(
                 f"Restart file '{restart_file}' is not a valid file"
             )
 
-    def EnsureValidReferences(self):
+    def ensure_valid_references(self):
         """
         Ensure that all attributes that uses references has consistent values, otherwise an exception is raised.
         # TODO: ASIM-3635: Add Check for source and target parameters of PipeDescription
         # TODO: ASIM-3635: Add Check for stagnant_fluid parameters of WellDescription
         # TODO: ASIM-3635: Add Check for top_node parameter of AnnulusDescription
         """
-        self._CheckPvtModelFiles()
-        self._CheckPvtModelReferences()
-        self._CheckRestartFile()
+        self._check_pvt_model_files()
+        self._check_pvt_model_references()
+        self._check_restart_file()
 
-    def ResetInvalidReferences(self):
+    def reset_invalid_references(self):
         """
         Reset all attributes that uses references to None if the refence is invalid.
         """
-        self._CheckPvtModelFiles(reset_invalid_reference=True)
-        self._CheckPvtModelReferences(reset_invalid_reference=True)
+        self._check_pvt_model_files(reset_invalid_reference=True)
+        self._check_pvt_model_references(reset_invalid_reference=True)
