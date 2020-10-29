@@ -8,8 +8,11 @@ __author__ = "ESSS"
 __email__ = "foss@esss.co"
 __version__ = _version.__version__
 
+from alfasim_sdk.units import register_units
 
 hookimpl = pluggy.HookimplMarker("ALFAsim")
+
+register_units()
 
 
 def get_alfasim_sdk_api_path():

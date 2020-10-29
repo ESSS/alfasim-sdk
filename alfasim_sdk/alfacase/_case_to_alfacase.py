@@ -1,0 +1,168 @@
+import math
+from enum import Enum
+from functools import partial
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Union
+
+import attr
+import numpy as np
+from barril.units import Array
+from barril.units import Scalar
+
+from alfasim_sdk.alfacase import case_description
+from alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
+from alfasim_sdk.alfacase.generate_schema import IsAttrs
+
+
+ATTRIBUTES = Union[Scalar, Array, Enum, np.ndarray, List, List[Enum]]
+
+
+NON_FININTE_VALUES_TO_STRING = [
+    (math.isnan, ".nan"),
+    (lambda value: math.isinf(value) and value > 0, ".inf"),
+    (lambda value: math.isinf(value) and value < 0, "-.inf"),
+]
+
+
+def FormatList(values: List[Any], *, enable_flow_style: bool = False):
+    """
+    This method marks specific nodes for dumping in flow mode,
+    and everything "below" will then be dumped with flow-mode as well.
+
+    This approach was intended to avoid to dump dictionary with curly brackets "{ }"
+    and keep a list of strings with block style
+
+    For more details check:
+    https://stackoverflow.com/questions/63364894/how-to-dump-only-lists-with-flow-style-with-pyyaml-or-ruamel-yaml
+    """
+    import ruamel
+
+    retval = ruamel.yaml.comments.CommentedSeq(values)
+
+    if enable_flow_style:
+        retval.fa.set_flow_style()
+    return retval
+
+
+def _ConvertValueToValidAlfacaseFormat(
+    value: ATTRIBUTES, enable_flow_style_on_numpy: bool
+) -> Union[str, Dict[str, str], List[str], List[List[str]]]:
+    """
+    Returns a string representation from the given equipment_attribute
+
+    :param enable_flow_style_on_numpy:
+        Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] )
+    """
+    if isinstance(value, Scalar):
+        return {"value": str(value.value), "unit": value.unit}
+
+    if isinstance(value, Array):
+        return {"values": [str(i) for i in value.values], "unit": value.unit}
+
+    if isinstance(value, Enum):
+        return value.value
+
+    if isinstance(value, np.ndarray) and value.ndim == 1:
+        return FormatList(
+            values=[str(coefficients) for coefficients in value],
+            enable_flow_style=enable_flow_style_on_numpy,
+        )
+
+    if isinstance(value, list) and all(
+        (isinstance(item, np.ndarray) and item.ndim == 1 for item in value)
+    ):
+        return [
+            FormatList(
+                values=[str(np_value) for np_value in np_array],
+                enable_flow_style=enable_flow_style_on_numpy,
+            )
+            for np_array in value
+        ]
+
+    if isinstance(value, list) and all((isinstance(item, Array) for item in value)):
+        return [
+            {"values": [str(i) for i in item.values], "unit": item.unit}
+            for item in value
+        ]
+
+    if isinstance(value, list):
+        return [str(i) for i in value]
+
+    # YAML 1.2 specification uses `.nan` instead of `nan` and `.inf` instead of `inf`.
+    if isinstance(value, float):
+        for validator, fixed_value in NON_FININTE_VALUES_TO_STRING:
+            if validator(value):
+                float_formatted_value = fixed_value
+                break
+        else:
+            float_formatted_value = str(value)
+
+        return float_formatted_value
+
+    return str(value)
+
+
+def ConvertDictToValidAlfacaseFormat(
+    case_description_dict: Dict[str, ATTRIBUTES], enable_flow_style_on_numpy: bool
+) -> Dict[str, Any]:
+    """
+    Convert all values of the dictionary to string.
+
+    Note.: strict_yaml only allows "str" values on all attributes in order to render the YAML content.
+
+    :param enable_flow_style_on_numpy:
+        Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] )
+
+    """
+    converted_dict = {}
+    for key, value in case_description_dict.items():
+        is_empty_dict = isinstance(value, dict) and not value
+        ignore = key in IGNORED_PROPERTIES
+
+        if is_empty_dict or value is None or ignore:
+            continue
+
+        if IsAttrs(value):
+
+            to_dict = partial(attr.asdict, recurse=False)
+
+            if isinstance(value, list):
+                converted_value = [
+                    ConvertDictToValidAlfacaseFormat(
+                        to_dict(i), enable_flow_style_on_numpy
+                    )
+                    for i in value
+                ]
+            else:
+                converted_value = ConvertDictToValidAlfacaseFormat(
+                    to_dict(value), enable_flow_style_on_numpy
+                )
+
+            if converted_value:
+                converted_dict[key] = converted_value
+            continue
+
+        if isinstance(value, dict):
+            converted_dict[key] = ConvertDictToValidAlfacaseFormat(
+                value, enable_flow_style_on_numpy
+            )
+            continue
+
+        converted_dict[key] = _ConvertValueToValidAlfacaseFormat(
+            value, enable_flow_style_on_numpy
+        )
+
+    return converted_dict
+
+
+EquipmentTypes = Union[
+    case_description.MassSourceEquipmentDescription,
+    case_description.HeatSourceEquipmentDescription,
+    case_description.CompressorEquipmentDescription,
+    case_description.ReservoirInflowEquipmentDescription,
+    case_description.ValveEquipmentDescription,
+    case_description.PumpEquipmentDescription,
+    case_description.GasLiftValveEquipmentDescription,
+]

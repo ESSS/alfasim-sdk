@@ -1,4 +1,12 @@
+barril
+cogapp
 coverage
+invoke
+more-itertools
+pytest
 pytest-cov
 pytest-mock
-pytest
+pytest-regressions
+strictyaml
+toposort
+typing_inspect

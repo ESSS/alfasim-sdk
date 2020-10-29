@@ -325,7 +325,7 @@ class Enum(BaseField):
         if self.initial is not None:
             if self.initial not in values:
                 raise TypeError(
-                    f"The initial condition must be within the declared values"
+                    "The initial condition must be within the declared values"
                 )
 
 
@@ -340,7 +340,7 @@ class BaseReference(BaseField):
         else:
             if self.container_type is None:
                 raise TypeError(
-                    f"The container_type field must be given when ref_type is a class decorated with 'data_model'"
+                    "The container_type field must be given when ref_type is a class decorated with 'data_model'"
                 )
 
     @ref_type.validator

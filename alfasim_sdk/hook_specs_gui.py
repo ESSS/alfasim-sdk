@@ -164,7 +164,7 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
 
 @hookspec
 def alfasim_get_status(
-    ctx: Context
+    ctx: Context,
 ) -> Optional[List[Union[WarningMessage, ErrorMessage]]]:
     """
     Allows plugins to execute custom checks on ALFAsim.
