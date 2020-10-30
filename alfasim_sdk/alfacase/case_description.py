@@ -815,9 +815,9 @@ class LengthAndElevationDescription:
         self,
     ) -> Iterator[Tuple[Tuple[Number, str], Tuple[Number, str]]]:
         """ Returns a pair of values with length and elevation along with their units. """
-        lenght_values = self.length.GetValues(self.length.unit)
+        length_values = self.length.GetValues(self.length.unit)
         elevation_values = self.elevation.GetValues(self.elevation.unit)
-        for length, elevation in zip(lenght_values, elevation_values):
+        for length, elevation in zip(length_values, elevation_values):
             yield (length, self.length.unit), (elevation, self.elevation.unit)
 
 
@@ -1674,9 +1674,21 @@ class PvtModelsDescription:
         return Path(parts[0].strip()), model_name
 
 
-class InvalidReferenceError(Exception):
+class DescriptionError(Exception):
+    """
+    Base exception for exceptions in case description.
+    """
+
+
+class InvalidReferenceError(DescriptionError):
     """
     Error raised when an attribute has a reference for an element that doesn't exist.
+    """
+
+
+class InvalidYamlData(DescriptionError):
+    """
+    Error raised when some data in the YAML file is not properly configured.
     """
 
 

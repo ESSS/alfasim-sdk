@@ -53,11 +53,15 @@ class DescriptionDocument:
         from alfasim_sdk.alfacase.schema import case_description_schema
         import strictyaml
 
-        content = strictyaml.dirty_load(
-            yaml_string=Path(file_path).read_text(encoding="UTF-8"),
-            schema=case_description_schema,
-            allow_flow_style=True,
-        )
+        try:
+            content = strictyaml.dirty_load(
+                yaml_string=Path(file_path).read_text(encoding="UTF-8"),
+                schema=case_description_schema,
+                allow_flow_style=True,
+            )
+        except strictyaml.YAMLValidationError as e:
+            raise case_description.DescriptionError(str(e))
+
         return cls(content, file_path)
 
 
