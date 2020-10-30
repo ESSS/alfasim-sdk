@@ -2,10 +2,15 @@
 History
 =======
 
-0.6.0 (2020-10-29)
+0.6.1 (2020-10-30)
 ==================
 
-* Add alfacase support on alfasim-sdk
+* Add support for alfacase.
+
+0.6.0 (2020-10-29
+=================
+
+* Invalid release due to packaging error.
 
 0.5.0
 ======
