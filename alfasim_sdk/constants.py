@@ -349,3 +349,13 @@ class EvaluationStrategyType(Enum):
     TimeExplicit = "time_explicit"
     NewtonExplicit = "newton_explicit"
     Implicit = "implicit"
+
+
+class WellConnectionPort(Enum):
+    """
+    Available ports for connecting to a Well node.
+    """
+
+    Top = "port"  # 'port' is being used for backwards compatibility.
+    LeftAnnulus = "left_annulus_port"
+    RightAnnulus = "right_annulus_port"

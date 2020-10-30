@@ -1502,6 +1502,8 @@ def load_pipe_description(
         "segments": load_pipe_segments_description,
         "source": load_value,
         "target": load_value,
+        "source_port": get_enum_loader(enum_class=constants.WellConnectionPort),
+        "target_port": get_enum_loader(enum_class=constants.WellConnectionPort),
     }
     # fmt: on
     def generate_pipes_description(document: DescriptionDocument):

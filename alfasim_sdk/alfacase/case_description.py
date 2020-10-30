@@ -907,6 +907,12 @@ class PipeDescription:
     name: str = attr.ib(validator=instance_of(str))
     source: str = attr.ib(validator=instance_of(str))
     target: str = attr.ib(validator=instance_of(str))
+    source_port: Optional[constants.WellConnectionPort] = attr.ib(
+        default=None, validator=optional(in_(constants.WellConnectionPort))
+    )
+    target_port: Optional[constants.WellConnectionPort] = attr.ib(
+        default=None, validator=optional(in_(constants.WellConnectionPort))
+    )
     pvt_model: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )

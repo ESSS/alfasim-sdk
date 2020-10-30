@@ -625,6 +625,8 @@ pipe_description_schema = Map(
         "name": Str(),
         "source": Str(),
         "target": Str(),
+        Optional("source_port"): Enum(['port', 'left_annulus_port', 'right_annulus_port']),
+        Optional("target_port"): Enum(['port', 'left_annulus_port', 'right_annulus_port']),
         Optional("pvt_model"): Str(),
         Optional("profile"): profile_description_schema,
         Optional("equipment"): equipment_description_schema,
@@ -674,5 +676,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: ff895133e81c52521d011e266ce5d236)
+# [[[end]]] (checksum: 1a3637d3db46998337982baa10598ded)
 # fmt: on
