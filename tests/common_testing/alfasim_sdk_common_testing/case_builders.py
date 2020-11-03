@@ -74,3 +74,32 @@ def build_constant_initial_temperatures_description(value, unit):
             positions=Array([0.0], "m"), temperatures=Array([value], unit)
         ),
     )
+
+
+def build_linear_initial_temperatures_description(
+    from_temperature,
+    to_temperature,
+    unit,
+    final_position,
+    position_unit,
+    start_position=0.0,
+):
+
+    from alfasim_sdk.alfacase.case_description import InitialTemperaturesDescription
+    from alfasim_sdk.constants import TableInputType
+    from alfasim_sdk.alfacase.case_description import TemperaturesContainerDescription
+    from barril.units import Scalar
+
+    return InitialTemperaturesDescription(
+        position_input_type=TableInputType.length,
+        table_length=TemperaturesContainerDescription(
+            positions=Array(
+                [
+                    Scalar(start_position, position_unit).GetValue("m"),
+                    Scalar(final_position, position_unit).GetValue("m"),
+                ],
+                "m",
+            ),
+            temperatures=Array([from_temperature, to_temperature], unit),
+        ),
+    )
