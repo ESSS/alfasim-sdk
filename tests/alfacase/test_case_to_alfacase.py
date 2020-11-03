@@ -1,10 +1,12 @@
-from barril.units import Array
-
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase._alfacase_to_case import DescriptionDocument
 from alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
 from alfasim_sdk.alfacase.case_description import NumericalOptionsDescription
-from alfasim_sdk.common_testing.case_builders import build_simple_segment
+from barril.units import Array
+
+from ..common_testing.alfasim_sdk_common_testing.case_builders import (
+    build_simple_segment,
+)
 
 
 def test_convert_description_to_alfacase_with_empty_dict(tmp_path):

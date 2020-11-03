@@ -12,7 +12,7 @@ def build(ctx):
 
 
 def schema_file_path() -> Path:
-    return Path(__file__).parent / "alfasim_sdk/alfacase/schema.py"
+    return Path(__file__).parent / "src/alfasim_sdk/alfacase/schema.py"
 
 
 @invoke.task

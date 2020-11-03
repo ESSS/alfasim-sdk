@@ -7,9 +7,6 @@ from typing import Union
 
 import attr
 import pytest
-from barril.units import Array
-from barril.units import Scalar
-
 from alfasim_sdk.alfacase.case_description import attrib_enum
 from alfasim_sdk.alfacase.case_description import attrib_instance
 from alfasim_sdk.alfacase.case_description import attrib_instance_list
@@ -20,6 +17,8 @@ from alfasim_sdk.alfacase.case_description import Numpy1DArray
 from alfasim_sdk.alfacase.generate_schema import _obtain_referred_type
 from alfasim_sdk.alfacase.generate_schema import generate_alfacase_schema
 from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
+from barril.units import Array
+from barril.units import Scalar
 
 
 class TestGenerateStrictYaml:

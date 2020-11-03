@@ -1,7 +1,5 @@
-from barril.units import Array
-from barril.units import Scalar
-
 from alfasim_sdk.alfacase import case_description
+from barril.units import Array
 
 
 def build_simple_segment():
@@ -74,31 +72,5 @@ def build_constant_initial_temperatures_description(value, unit):
         position_input_type=constants.TableInputType.length,
         table_length=case_description.TemperaturesContainerDescription(
             positions=Array([0.0], "m"), temperatures=Array([value], unit)
-        ),
-    )
-
-
-def build_linear_initial_temperatures_description(
-    from_temperature,
-    to_temperature,
-    unit,
-    final_position,
-    position_unit,
-    start_position=0.0,
-):
-
-    from alfasim_sdk import constants
-
-    return case_description.InitialTemperaturesDescription(
-        position_input_type=constants.TableInputType.length,
-        table_length=case_description.TemperaturesContainerDescription(
-            positions=Array(
-                [
-                    Scalar(start_position, position_unit).GetValue("m"),
-                    Scalar(final_position, position_unit).GetValue("m"),
-                ],
-                "m",
-            ),
-            temperatures=Array([from_temperature, to_temperature], unit),
         ),
     )

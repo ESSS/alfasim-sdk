@@ -3,13 +3,12 @@ from enum import Enum
 from typing import Optional
 
 import attr
+from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk._validators import valid_unit
 from attr import attrib
 from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import UnitDatabase
-
-from alfasim_sdk._validators import non_empty_str
-from alfasim_sdk._validators import valid_unit
 
 
 class Visibility(Enum):
