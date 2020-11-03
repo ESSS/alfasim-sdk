@@ -32,7 +32,7 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
     and everything "below" will then be dumped with flow-mode as well.
 
     This approach was intended to avoid to dump dictionary with curly brackets "{ }"
-    and keep a list of strings with block style
+    and keep a list of strings with block style.
 
     For more details check:
     https://stackoverflow.com/questions/63364894/how-to-dump-only-lists-with-flow-style-with-pyyaml-or-ruamel-yaml
@@ -50,10 +50,10 @@ def _convert_value_to_valid_alfacase_format(
     value: ATTRIBUTES, enable_flow_style_on_numpy: bool
 ) -> Union[str, Dict[str, str], List[str], List[List[str]]]:
     """
-    Returns a string representation from the given equipment_attribute
+    Returns an yaml convertible representation from the given equipment_attribute
 
     :param enable_flow_style_on_numpy:
-        Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] )
+        Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] ).
     """
     if isinstance(value, Scalar):
         return {"value": str(value.value), "unit": value.unit}
@@ -113,7 +113,7 @@ def convert_dict_to_valid_alfacase_format(
     Note.: strict_yaml only allows "str" values on all attributes in order to render the YAML content.
 
     :param enable_flow_style_on_numpy:
-        Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] )
+        Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] ).
 
     """
     converted_dict = {}

@@ -300,7 +300,7 @@ LINEAR_IPR_DESCRIPTION = case_description.LinearIPRDescription(
     well_index=Scalar(1.0e-6, "m3/Pa.s"),
 )
 IPR_CURVE_DESCRIPTION = case_description.IPRCurveDescription(
-    pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "psia"),
+    pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "Pa"),
     flow_rate=Array([0.0, 0.87, 2.07, 2.305], "MMscf/d"),
 )
 TABLE_IPR_DESCRIPTION = case_description.TableIPRDescription(

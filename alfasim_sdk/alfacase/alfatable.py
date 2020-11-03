@@ -5,7 +5,7 @@ from alfasim_sdk.alfacase import case_description
 
 def generate_alfatable_file(alfacase_file, alfatable_filename, description):
     """
-    Create `.alfatable` file for the given description
+    Create `.alfatable` file for the given description.
     """
     from boltons.strutils import slugify
 
