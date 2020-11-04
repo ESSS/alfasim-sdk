@@ -1,5 +1,6 @@
-from alfasim_sdk.alfacase import case_description
 from barril.units import Array
+
+from alfasim_sdk.alfacase import case_description
 
 
 def build_simple_segment():

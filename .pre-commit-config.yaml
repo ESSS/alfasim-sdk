@@ -3,11 +3,15 @@ repos:
     rev: v2.3.5
     hooks:
     -   id: reorder-python-imports
+        args:
+            - --application-directories=.:src
 -   repo: https://github.com/ambv/black
     rev: 20.8b1
     hooks:
     -   id: black
-        args: [--safe, --quiet]
+        args:
+            - --safe
+            - --quiet
         language_version: python3
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.3.0

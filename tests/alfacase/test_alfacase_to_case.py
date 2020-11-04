@@ -4,6 +4,16 @@ from pathlib import Path
 import attr
 import pytest
 import strictyaml
+from barril.units import Array
+from barril.units import Scalar
+from ruamel.yaml.comments import CommentedMap
+from strictyaml import YAML
+
+from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
+from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
+from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
+    ensure_descriptions_are_equal,
+)
 from alfasim_sdk.alfacase import _alfacase_to_case
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase import schema
@@ -17,16 +27,6 @@ from alfasim_sdk.alfacase.generate_schema import convert_to_snake_case
 from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
 from alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk.alfacase.generate_schema import is_attrs
-from barril.units import Array
-from barril.units import Scalar
-from ruamel.yaml.comments import CommentedMap
-from strictyaml import YAML
-
-from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
-from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
-from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
-    ensure_descriptions_are_equal,
-)
 
 
 @attr.s(frozen=True)

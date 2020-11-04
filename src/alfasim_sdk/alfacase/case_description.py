@@ -14,7 +14,6 @@ from typing import Union
 
 import attr
 import numpy as np
-from alfasim_sdk import constants
 from attr.validators import deep_iterable
 from attr.validators import deep_mapping
 from attr.validators import in_
@@ -22,6 +21,8 @@ from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import Array
 from barril.units import Scalar
+
+from alfasim_sdk import constants
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str

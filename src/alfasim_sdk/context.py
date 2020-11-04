@@ -2,16 +2,17 @@ from typing import List
 from typing import Optional
 
 import attr
-from alfasim_sdk._validators import list_of_strings
-from alfasim_sdk._validators import non_empty_str
-from alfasim_sdk.constants import EmulsionModelType
-from alfasim_sdk.constants import HydrodynamicModelType
-from alfasim_sdk.constants import SolidsModelType
 from attr.validators import deep_iterable
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import Scalar
+
+from alfasim_sdk._validators import list_of_strings
+from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk.constants import EmulsionModelType
+from alfasim_sdk.constants import HydrodynamicModelType
+from alfasim_sdk.constants import SolidsModelType
 
 
 @attr.s(frozen=True)

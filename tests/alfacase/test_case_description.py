@@ -3,6 +3,12 @@ from textwrap import dedent
 
 import attr
 import pytest
+from barril.units import Array
+from barril.units import Scalar
+
+from ..common_testing.alfasim_sdk_common_testing.case_builders import (
+    build_simple_segment,
+)
 from alfasim_sdk import constants
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase.case_description import attrib_enum
@@ -14,12 +20,6 @@ from alfasim_sdk.alfacase.case_description import MaterialDescription
 from alfasim_sdk.alfacase.case_description import numpy_array_validator
 from alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
 from alfasim_sdk.constants import NodeCellType
-from barril.units import Array
-from barril.units import Scalar
-
-from ..common_testing.alfasim_sdk_common_testing.case_builders import (
-    build_simple_segment,
-)
 
 
 def test_physics_description_path_validator(tmp_path):

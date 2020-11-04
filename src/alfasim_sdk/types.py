@@ -6,13 +6,14 @@ from typing import Optional
 from typing import Union
 
 import attr
-from alfasim_sdk._validators import non_empty_str
-from alfasim_sdk._validators import valid_unit
 from attr import attrib
 from attr._make import Attribute
 from attr.validators import instance_of
 from attr.validators import is_callable
 from attr.validators import optional
+
+from alfasim_sdk._validators import non_empty_str
+from alfasim_sdk._validators import valid_unit
 
 
 @attr.s(kw_only=True)

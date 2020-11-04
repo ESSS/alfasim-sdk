@@ -13,13 +13,14 @@ from typing import Type
 from typing import Union
 
 import attr
-from alfasim_sdk import constants
-from alfasim_sdk.alfacase import case_description
 from attr.validators import instance_of
 from barril.units import Array
 from barril.units import Scalar
 from barril.units import UnitDatabase
 from strictyaml import YAML
+
+from alfasim_sdk import constants
+from alfasim_sdk.alfacase import case_description
 
 
 @attr.s
