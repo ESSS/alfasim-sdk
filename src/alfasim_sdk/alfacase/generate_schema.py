@@ -343,10 +343,8 @@ def _get_classes(class_: type) -> Set[type]:
 
     def needs_schema(type_):
         """Helper function to ensure that the given attribute (type_) needs a strict yaml schema"""
-        return (
-            is_attrs(type_)
-            or _is_from_typing_module(type_)
-            and is_attrs(_obtain_referred_type(type_))
+        return is_attrs(type_) or (
+            _is_from_typing_module(type_) and is_attrs(_obtain_referred_type(type_))
         )
 
     def get_attr_class_type(type_):
@@ -358,7 +356,7 @@ def _get_classes(class_: type) -> Set[type]:
         if needs_schema(value.type) and not key in IGNORED_PROPERTIES:
             classes.append(get_attr_class_type(value.type))
 
-    return set(sorted(flatten(classes), key=operator.attrgetter("__name__")))
+    return set(flatten(classes))
 
 
 def get_all_classes_that_needs_schema(class_: type) -> List[type]:
