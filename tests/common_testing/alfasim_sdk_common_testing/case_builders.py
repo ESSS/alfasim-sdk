@@ -1,5 +1,7 @@
 from barril.units import Array
+from barril.units import Scalar
 
+from alfasim_sdk import constants
 from alfasim_sdk.alfacase import case_description
 
 
@@ -10,7 +12,6 @@ def build_simple_segment():
     The pre-filled value was the default value used by all tests before refactoring,
     which removed `diameter` and `absolute_roughness` from PipeDescription.
     """
-
     return case_description.PipeSegmentsDescription(
         start_positions=Array([0.0], "m"),
         diameters=Array([0.1], "m"),
@@ -19,9 +20,6 @@ def build_simple_segment():
 
 
 def build_constant_initial_pressure_description(value, unit):
-
-    from alfasim_sdk import constants
-
     return case_description.InitialPressuresDescription(
         position_input_type=constants.TableInputType.length,
         table_length=case_description.PressureContainerDescription(
@@ -31,9 +29,6 @@ def build_constant_initial_pressure_description(value, unit):
 
 
 def build_constant_initial_volume_fractions_description(values):
-
-    from alfasim_sdk import constants
-
     return case_description.InitialVolumeFractionsDescription(
         position_input_type=constants.TableInputType.length,
         table_length=case_description.VolumeFractionsContainerDescription(
@@ -44,8 +39,6 @@ def build_constant_initial_volume_fractions_description(values):
 
 
 def build_constant_initial_tracers_mass_fractions_description(values, unit):
-    from alfasim_sdk import constants
-
     return case_description.InitialTracersMassFractionsDescription(
         position_input_type=constants.TableInputType.length,
         table_length=case_description.TracersMassFractionsContainerDescription(
@@ -55,8 +48,6 @@ def build_constant_initial_tracers_mass_fractions_description(values, unit):
 
 
 def build_constant_initial_velocities_description(values):
-    from alfasim_sdk import constants
-
     return case_description.InitialVelocitiesDescription(
         position_input_type=constants.TableInputType.length,
         table_length=case_description.VelocitiesContainerDescription(
@@ -67,8 +58,6 @@ def build_constant_initial_velocities_description(values):
 
 
 def build_constant_initial_temperatures_description(value, unit):
-    from alfasim_sdk import constants
-
     return case_description.InitialTemperaturesDescription(
         position_input_type=constants.TableInputType.length,
         table_length=case_description.TemperaturesContainerDescription(
@@ -85,15 +74,9 @@ def build_linear_initial_temperatures_description(
     position_unit,
     start_position=0.0,
 ):
-
-    from alfasim_sdk.alfacase.case_description import InitialTemperaturesDescription
-    from alfasim_sdk.constants import TableInputType
-    from alfasim_sdk.alfacase.case_description import TemperaturesContainerDescription
-    from barril.units import Scalar
-
-    return InitialTemperaturesDescription(
-        position_input_type=TableInputType.length,
-        table_length=TemperaturesContainerDescription(
+    return case_description.InitialTemperaturesDescription(
+        position_input_type=constants.TableInputType.length,
+        table_length=case_description.TemperaturesContainerDescription(
             positions=Array(
                 [
                     Scalar(start_position, position_unit).GetValue("m"),
