@@ -195,10 +195,10 @@ def test_tooltips():
     from alfasim_sdk.types import Boolean
 
     field = Boolean(value=True, caption="caption")
-    assert field.tooltip is ""
+    assert field.tooltip == ""
 
     field = Boolean(value=True, caption="caption", tooltip="Test123")
-    assert field.tooltip is "Test123"
+    assert field.tooltip == "Test123"
 
     expected_msg = re.escape(
         "'tooltip' must be <class 'str'> (got 2 that is a <class 'int'>)."
@@ -207,4 +207,4 @@ def test_tooltips():
         Boolean(value=True, caption="caption", tooltip=2)
 
     field = Boolean(value=True, caption="caption", tooltip="∩ ∪ ∫ ∬ ∭ ∮")
-    assert field.tooltip is "∩ ∪ ∫ ∬ ∭ ∮"
+    assert field.tooltip == "∩ ∪ ∫ ∬ ∭ ∮"
