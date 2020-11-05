@@ -61,7 +61,7 @@ def test_cv_table_description():
 def test_table_pump_description_length():
     expected_msg = dedent(
         """\
-    speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got :
+    speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:
         - 2 items for speeds
         - 2 items for void_fractions
         - 2 items for flow_rates
@@ -78,6 +78,28 @@ def test_table_pump_description_length():
 
     # Check if the defaults values works well
     case_description.TablePumpDescription()
+
+
+def test_compressor_pressure_table_description_length():
+    expected_msg = dedent(
+        """\
+    speed_entries, corrected_mass_flow_rate_entries, pressure_ratio_table and isentropic_efficiency_table must have the same size, got:
+        - 2 items for speed_entries
+        - 2 items for corrected_mass_flow_rate_entries
+        - 2 items for pressure_ratio_table
+        - 1 items for isentropic_efficiency_table
+    """
+    )
+    with pytest.raises(ValueError, match=re.escape(expected_msg)):
+        case_description.CompressorPressureTableDescription(
+            speed_entries=Array([1, 2], "rpm"),
+            corrected_mass_flow_rate_entries=Array([1, 2], "kg/s"),
+            pressure_ratio_table=Array([1, 2], "-"),
+            isentropic_efficiency_table=Array([1], "-"),
+        )
+
+    # Check if the defaults values works well
+    case_description.CompressorPressureTableDescription()
 
 
 def test_instance_attribute_list():

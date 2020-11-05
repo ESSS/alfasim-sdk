@@ -87,3 +87,40 @@ def build_linear_initial_temperatures_description(
             temperatures=Array([from_temperature, to_temperature], unit),
         ),
     )
+
+
+def build_compressor_pressure_table_description(
+    speed_entries,
+    corrected_mass_flow_rate_entries,
+    pressure_ratio_table,
+    isentropic_efficiency_table,
+):
+    """
+    Helper to build a table for CompressorPressureTable from a parametrized input of `speed_entries`
+    and `corrected_mass_flow_rate_entries`, correcting it so len(pressure_ratio_table) and
+    len(isentropic_efficiency_table) have elements = len(speed_entries) * len(corrected_mass_flow_rate_entries),
+    making it a explicit table with all combinations.
+    """
+    expected_size = len(speed_entries) * len(corrected_mass_flow_rate_entries)
+    assert expected_size == len(
+        pressure_ratio_table
+    ), f"Missing pressure entries. Expected {expected_size} but got {len(pressure_ratio_table)}"
+    assert expected_size == len(
+        isentropic_efficiency_table
+    ), f"Missing isentropic efficiency entries. Expected {expected_size} but got {len(isentropic_efficiency_table)}"
+
+    adjusted_speeds = []
+    adjusted_flow_rates = []
+    for speed in speed_entries:
+        for flow_rate in corrected_mass_flow_rate_entries:
+            adjusted_speeds.append(speed)
+            adjusted_flow_rates.append(flow_rate)
+
+    return case_description.CompressorPressureTableDescription(
+        speed_entries=Array(adjusted_speeds, speed_entries.unit),
+        corrected_mass_flow_rate_entries=Array(
+            adjusted_flow_rates, corrected_mass_flow_rate_entries.unit
+        ),
+        pressure_ratio_table=pressure_ratio_table,
+        isentropic_efficiency_table=isentropic_efficiency_table,
+    )

@@ -397,7 +397,7 @@ class TablePumpDescription:
         all_fields = list(attr.fields_dict(self.__class__).keys())
         if any(len(getattr(self, field)) != expected_length for field in all_fields):
             msg = (
-                f"speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got :\n"
+                f"speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:\n"
                 f"    - {len(self.speeds)} items for speeds\n"
                 f"    - {len(self.void_fractions)} items for void_fractions\n"
                 f"    - {len(self.flow_rates)} items for flow_rates\n"
@@ -444,23 +444,26 @@ class CompressorPressureTableDescription:
         default=Array([1.0], "-"), validator=instance_of(Array)
     )
 
+    def __attrs_post_init__(self):
+        expected_length = len(self.speed_entries)
+        all_fields = list(attr.fields_dict(self.__class__).keys())
+        if any(len(getattr(self, field)) != expected_length for field in all_fields):
+            msg = (
+                f"speed_entries, corrected_mass_flow_rate_entries, pressure_ratio_table and isentropic_efficiency_table must have the same size, got:\n"
+                f"    - {len(self.speed_entries)} items for speed_entries\n"
+                f"    - {len(self.corrected_mass_flow_rate_entries)} items for corrected_mass_flow_rate_entries\n"
+                f"    - {len(self.pressure_ratio_table)} items for pressure_ratio_table\n"
+                f"    - {len(self.isentropic_efficiency_table)} items for isentropic_efficiency_table\n"
+            )
+            raise ValueError(msg)
+
     @pressure_ratio_table.validator
     def _validate_pressure_ratio_table(self, attribute, value):
-        expected_length = len(self.speed_entries) * len(
-            self.corrected_mass_flow_rate_entries
-        )
-        assert (
-            len(value) == expected_length
-        ), f"pressure_ratio_table has {len(value)} elements, it's expected to have {expected_length} elements."
+        pressure_ratio = np.array(value.GetValues("-"))
+        assert np.all(pressure_ratio > 0), "Pressure Ratio must be greater than 0"
 
     @isentropic_efficiency_table.validator
     def _validate_isentropic_efficiency_table(self, attribute, value):
-        expected_length = len(self.speed_entries) * len(
-            self.corrected_mass_flow_rate_entries
-        )
-        assert (
-            len(value) == expected_length
-        ), f"isentropic_efficiency_table has {len(value)} elements, it's expected to have {expected_length} elements."
         isen_eff = np.array(value.GetValues("-"))
         assert np.all(
             np.logical_and(isen_eff > 0, isen_eff <= 1.0)

@@ -87,10 +87,18 @@ SPEED_CURVE_DESCRIPTION = case_description.SpeedCurveDescription(
 )
 COMPRESSOR_PRESSURE_TABLE_DESCRIPTION = (
     case_description.CompressorPressureTableDescription(
-        speed_entries=Array([25000.0, 50000.0], "rpm"),
-        corrected_mass_flow_rate_entries=Array([0.1, 0.2, 0.3], "kg/s"),
-        pressure_ratio_table=Array([1.0, 1.0, 2.7, 2.5, 2.3, 1.8], "-"),
-        isentropic_efficiency_table=Array([1.0, 1.0, 0.95, 0.95, 0.9, 0.85], "-"),
+        speed_entries=Array(
+            [25000.0, 25000.0, 25000.0, 50000.0, 50000.0, 50000.0], "rpm"
+        ),
+        corrected_mass_flow_rate_entries=Array([0.1, 0.2, 0.3, 0.1, 0.2, 0.3], "kg/s"),
+        pressure_ratio_table=Array(
+            [1.0, 1.0, 2.7, 2.5, 2.3, 1.8],
+            "-",
+        ),
+        isentropic_efficiency_table=Array(
+            [1.0, 1.0, 0.95, 0.95, 0.9, 0.85],
+            "-",
+        ),
     )
 )
 COMPRESSOR_DESCRIPTION = case_description.CompressorEquipmentDescription(
