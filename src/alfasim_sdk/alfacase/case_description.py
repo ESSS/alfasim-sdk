@@ -1839,7 +1839,7 @@ class CaseDescription:
                     element.pvt_model = None
                 else:
                     raise InvalidReferenceError(
-                        f"PVT model '{pvt_model_name}' select on '{element_name}' is not declared on 'pvt_models', "
+                        f"PVT model '{pvt_model_name}' selected on '{element_name}' is not declared on 'pvt_models', "
                         f"available pvt_models are: {', '.join(pvt_models_available)}"
                     )
 

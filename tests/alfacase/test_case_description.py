@@ -443,7 +443,7 @@ class TestEnsureValidReferences:
                 ),
             ],
         )
-        expect_message = "PVT model 'PVT5' select on 'Pipe 5' is not declared on 'pvt_models', available pvt_models are: PVT1, PVT2, PVT3, PVT4"
+        expect_message = "PVT model 'PVT5' selected on 'Pipe 5' is not declared on 'pvt_models', available pvt_models are: PVT1, PVT2, PVT3, PVT4"
         with pytest.raises(
             case_description.InvalidReferenceError, match=re.escape(expect_message)
         ):
@@ -594,7 +594,7 @@ class TestEnsureValidReferences:
             ],
         )
         expected_error = (
-            "PVT model 'Acme' select on 'Pipe 1' is not declared on 'pvt_models', "
+            "PVT model 'Acme' selected on 'Pipe 1' is not declared on 'pvt_models', "
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
@@ -615,7 +615,7 @@ class TestEnsureValidReferences:
             ],
         )
         expected_error = (
-            "PVT model 'Foo' select on 'Node 1' is not declared on 'pvt_models', "
+            "PVT model 'Foo' selected on 'Node 1' is not declared on 'pvt_models', "
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
@@ -631,7 +631,7 @@ class TestEnsureValidReferences:
             default_case, wells=[attr.evolve(default_well, pvt_model="Foo")]
         )
         expected_error = (
-            "PVT model 'Foo' select on 'Well 1' is not declared on 'pvt_models', "
+            "PVT model 'Foo' selected on 'Well 1' is not declared on 'pvt_models', "
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
@@ -655,7 +655,7 @@ class TestEnsureValidReferences:
             ],
         )
         expected_error = (
-            "PVT model 'Acme' select on 'Annulus from Well 1' is not declared on 'pvt_models', "
+            "PVT model 'Acme' selected on 'Annulus from Well 1' is not declared on 'pvt_models', "
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
