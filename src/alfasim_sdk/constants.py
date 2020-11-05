@@ -197,9 +197,7 @@ class MaterialType(Enum):
 FLUID_GAS = "gas"
 FLUID_OIL = "oil"
 FLUID_WATER = "water"
-FLUID_DROPLET = "droplet"
-FLUID_BUBBLE = "bubble"
-FLUID_PHASE_NAMES = [FLUID_GAS, FLUID_OIL, FLUID_WATER, FLUID_DROPLET, FLUID_BUBBLE]
+FLUID_PHASE_NAMES = [FLUID_GAS, FLUID_OIL, FLUID_WATER]
 
 
 class CorrelationPackageType(Enum):

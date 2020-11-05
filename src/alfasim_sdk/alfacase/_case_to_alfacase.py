@@ -8,11 +8,12 @@ from typing import Union
 
 import attr
 import numpy as np
+from barril.units import Array
+from barril.units import Scalar
+
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk.alfacase.generate_schema import is_attrs
-from barril.units import Array
-from barril.units import Scalar
 
 
 ATTRIBUTES = Union[Scalar, Array, Enum, np.ndarray, List, List[Enum]]

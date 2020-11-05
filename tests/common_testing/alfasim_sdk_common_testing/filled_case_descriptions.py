@@ -1,14 +1,14 @@
 from pathlib import Path
 
 import numpy as np
-from alfasim_sdk import constants
-from alfasim_sdk.alfacase import case_description
-from alfasim_sdk.alfacase._alfacase_to_case import get_category_for
 from barril.units import Array
 from barril.units import Scalar
 
 from . import case_builders
 from . import get_acme_tab_file_path
+from alfasim_sdk import constants
+from alfasim_sdk.alfacase import case_description
+from alfasim_sdk.alfacase._alfacase_to_case import get_category_for
 
 BIP_DESCRIPTION = case_description.BipDescription(
     component_1="C1", component_2="C2", value=0.5
@@ -87,10 +87,18 @@ SPEED_CURVE_DESCRIPTION = case_description.SpeedCurveDescription(
 )
 COMPRESSOR_PRESSURE_TABLE_DESCRIPTION = (
     case_description.CompressorPressureTableDescription(
-        speed_entries=Array([25000.0, 50000.0], "rpm"),
-        corrected_mass_flow_rate_entries=Array([0.1, 0.2, 0.3], "kg/s"),
-        pressure_ratio_table=Array([1.0, 1.0, 2.7, 2.5, 2.3, 1.8], "-"),
-        isentropic_efficiency_table=Array([1.0, 1.0, 0.95, 0.95, 0.9, 0.85], "-"),
+        speed_entries=Array(
+            [25000.0, 25000.0, 25000.0, 50000.0, 50000.0, 50000.0], "rpm"
+        ),
+        corrected_mass_flow_rate_entries=Array([0.1, 0.2, 0.3, 0.1, 0.2, 0.3], "kg/s"),
+        pressure_ratio_table=Array(
+            [1.0, 1.0, 2.7, 2.5, 2.3, 1.8],
+            "-",
+        ),
+        isentropic_efficiency_table=Array(
+            [1.0, 1.0, 0.95, 0.95, 0.9, 0.85],
+            "-",
+        ),
     )
 )
 COMPRESSOR_DESCRIPTION = case_description.CompressorEquipmentDescription(

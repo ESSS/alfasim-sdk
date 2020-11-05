@@ -1,12 +1,12 @@
 from typing import List
-from typing import Optional
 from typing import Union
+
+from pluggy import HookspecMarker
 
 from alfasim_sdk.context import Context
 from alfasim_sdk.status import ErrorMessage
 from alfasim_sdk.status import WarningMessage
 from alfasim_sdk.variables import SecondaryVariable
-from pluggy import HookspecMarker
 
 
 hookspec = HookspecMarker("ALFAsim")
@@ -164,7 +164,7 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
 @hookspec
 def alfasim_get_status(
     ctx: Context,
-) -> Optional[List[Union[WarningMessage, ErrorMessage]]]:
+) -> List[Union[WarningMessage, ErrorMessage]]:
     """
     Allows plugins to execute custom checks on ALFAsim.
     These checks can be used to guarantee the consistency of the data or compatibility with some configuration made on |alfasim|.

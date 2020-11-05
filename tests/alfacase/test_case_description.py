@@ -3,6 +3,12 @@ from textwrap import dedent
 
 import attr
 import pytest
+from barril.units import Array
+from barril.units import Scalar
+
+from ..common_testing.alfasim_sdk_common_testing.case_builders import (
+    build_simple_segment,
+)
 from alfasim_sdk import constants
 from alfasim_sdk.alfacase import case_description
 from alfasim_sdk.alfacase.case_description import attrib_enum
@@ -14,12 +20,6 @@ from alfasim_sdk.alfacase.case_description import MaterialDescription
 from alfasim_sdk.alfacase.case_description import numpy_array_validator
 from alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
 from alfasim_sdk.constants import NodeCellType
-from barril.units import Array
-from barril.units import Scalar
-
-from ..common_testing.alfasim_sdk_common_testing.case_builders import (
-    build_simple_segment,
-)
 
 
 def test_physics_description_path_validator(tmp_path):
@@ -61,7 +61,7 @@ def test_cv_table_description():
 def test_table_pump_description_length():
     expected_msg = dedent(
         """\
-    speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got :
+    speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:
         - 2 items for speeds
         - 2 items for void_fractions
         - 2 items for flow_rates
@@ -78,6 +78,28 @@ def test_table_pump_description_length():
 
     # Check if the defaults values works well
     case_description.TablePumpDescription()
+
+
+def test_compressor_pressure_table_description_length():
+    expected_msg = dedent(
+        """\
+    speed_entries, corrected_mass_flow_rate_entries, pressure_ratio_table and isentropic_efficiency_table must have the same size, got:
+        - 2 items for speed_entries
+        - 2 items for corrected_mass_flow_rate_entries
+        - 2 items for pressure_ratio_table
+        - 1 items for isentropic_efficiency_table
+    """
+    )
+    with pytest.raises(ValueError, match=re.escape(expected_msg)):
+        case_description.CompressorPressureTableDescription(
+            speed_entries=Array([1, 2], "rpm"),
+            corrected_mass_flow_rate_entries=Array([1, 2], "kg/s"),
+            pressure_ratio_table=Array([1, 2], "-"),
+            isentropic_efficiency_table=Array([1], "-"),
+        )
+
+    # Check if the defaults values works well
+    case_description.CompressorPressureTableDescription()
 
 
 def test_instance_attribute_list():

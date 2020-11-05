@@ -11,11 +11,12 @@ from typing import Set
 
 import attr
 import typing_inspect
-from alfasim_sdk.alfacase.case_description import CaseDescription
 from barril.units import Array
 from barril.units import Scalar
 from strictyaml.utils import flatten
 from typing_inspect import is_optional_type
+
+from alfasim_sdk.alfacase.case_description import CaseDescription
 
 INDENTANTION = "    "
 
@@ -190,8 +191,7 @@ def _get_attr_value(
     type_: type, block_indentation: str = INDENTANTION, key: str = "<Unknown>"
 ) -> str:
     """
-    Indentation is a parameter used for Union and Dict
-
+    Indentation is a parameter used for Union and Dict.
     If the type parameter is a "Optional" type, only the args are used (without the NoneType)
     """
     if is_optional_type(type_):
@@ -212,8 +212,7 @@ def _get_attr_value(
 
 def convert_to_snake_case(value: str) -> str:
     """
-    Convert the value from CamelCase to snake_case
-
+    Convert the value from CamelCase to snake_case.
     Regex from: https://github.com/jpvanhal/inflection/blob/0.5.1/inflection/__init__.py#L397
     """
     import re
@@ -261,8 +260,6 @@ def _get_attribute_schema(
 
     Keep in mind that for stricyyaml schema, an Optional type means that the user don't need
     to inform a value. While for type hint, an Optional type means that the attribute accepts None.
-
-
     """
     if value.default is attr.NOTHING and is_optional_type(value.type):
         msg = (
@@ -280,7 +277,7 @@ def _get_attribute_schema(
 
 def generate_alfacase_schema(class_: type) -> str:
     """
-    Return a schema for the given `class_` that is decorated with @attr and has type hints
+    Return a schema for the given `class_` that is decorated with @attr and has type hints.
     """
     lines = [f"{obtain_schema_name(class_)} = Map(", f"{INDENTANTION}{{"]
     lines.extend(
@@ -294,7 +291,9 @@ def generate_alfacase_schema(class_: type) -> str:
 
 
 def _is_from_typing_module(type_: type) -> bool:
-    """Helper method to verify if the given `type_` is instance of List/Dict/Union"""
+    """
+    Helper method to verify if the given `type_` is instance of List/Dict/Union.
+    """
     return is_list(type_) or is_dict(type_) or typing_inspect.is_union_type(type_)
 
 
@@ -337,15 +336,13 @@ def _obtain_referred_type(type_) -> List[type]:
 
 def _get_classes(class_: type) -> Set[type]:
     """
-    Helper function to return a set of attr classes that needs schema
+    Helper function to return a set of attr classes that needs schema.
     """
 
     def needs_schema(type_):
         """Helper function to ensure that the given attribute (type_) needs a strict yaml schema"""
-        return (
-            is_attrs(type_)
-            or _is_from_typing_module(type_)
-            and is_attrs(_obtain_referred_type(type_))
+        return is_attrs(type_) or (
+            _is_from_typing_module(type_) and is_attrs(_obtain_referred_type(type_))
         )
 
     def get_attr_class_type(type_):
@@ -357,7 +354,7 @@ def _get_classes(class_: type) -> Set[type]:
         if needs_schema(value.type) and not key in IGNORED_PROPERTIES:
             classes.append(get_attr_class_type(value.type))
 
-    return set(sorted(flatten(classes), key=operator.attrgetter("__name__")))
+    return set(flatten(classes))
 
 
 def get_all_classes_that_needs_schema(class_: type) -> List[type]:
