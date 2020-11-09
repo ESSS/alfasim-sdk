@@ -14,19 +14,19 @@ from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
 from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
     ensure_descriptions_are_equal,
 )
-from alfasim_sdk.alfacase import _alfacase_to_case
-from alfasim_sdk.alfacase import case_description
-from alfasim_sdk.alfacase import schema
-from alfasim_sdk.alfacase._alfacase_to_case import DescriptionDocument
-from alfasim_sdk.alfacase._alfacase_to_case import get_array_loader
-from alfasim_sdk.alfacase._alfacase_to_case import get_scalar_loader
-from alfasim_sdk.alfacase._alfacase_to_case import load_physics_description
-from alfasim_sdk.alfacase._alfacase_to_case import load_pvt_models_description
-from alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
-from alfasim_sdk.alfacase.generate_schema import convert_to_snake_case
-from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
-from alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk.alfacase.generate_schema import is_attrs
+from _alfasim_sdk.alfacase import alfacase_to_case
+from _alfasim_sdk.alfacase import case_description
+from _alfasim_sdk.alfacase import schema
+from _alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
+from _alfasim_sdk.alfacase.alfacase_to_case import DescriptionDocument
+from _alfasim_sdk.alfacase.alfacase_to_case import get_array_loader
+from _alfasim_sdk.alfacase.alfacase_to_case import get_scalar_loader
+from _alfasim_sdk.alfacase.alfacase_to_case import load_physics_description
+from _alfasim_sdk.alfacase.alfacase_to_case import load_pvt_models_description
+from _alfasim_sdk.alfacase.generate_schema import convert_to_snake_case
+from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
+from _alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
+from _alfasim_sdk.alfacase.generate_schema import is_attrs
 
 
 @attr.s(frozen=True)
@@ -91,7 +91,7 @@ def alfacase_to_case_helper(tmp_path):
             description_document = DescriptionDocument(
                 content=alfacase_content, file_path=self.tmp_path / "test_case.alfacase"
             )
-            return getattr(_alfacase_to_case, alfacase_config.load_function_name)(
+            return getattr(alfacase_to_case, alfacase_config.load_function_name)(
                 description_document
             )
 

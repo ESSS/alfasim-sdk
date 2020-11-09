@@ -10,7 +10,7 @@ from .common_testing.alfasim_sdk_common_testing.case_builders import (
 from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_linear_initial_temperatures_description,
 )
-from alfasim_sdk import constants
+from _alfasim_sdk import constants
 
 
 def test_build_constant_initial_temperatures_description():

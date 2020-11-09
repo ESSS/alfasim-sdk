@@ -6,9 +6,9 @@ from barril.units import Scalar
 
 from . import case_builders
 from . import get_acme_tab_file_path
-from alfasim_sdk import constants
-from alfasim_sdk.alfacase import case_description
-from alfasim_sdk.alfacase._alfacase_to_case import get_category_for
+from _alfasim_sdk import constants
+from _alfasim_sdk.alfacase import case_description
+from _alfasim_sdk.alfacase.alfacase_to_case import get_category_for
 
 BIP_DESCRIPTION = case_description.BipDescription(
     component_1="C1", component_2="C2", value=0.5

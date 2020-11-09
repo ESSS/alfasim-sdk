@@ -61,8 +61,8 @@ The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located 
 .. code-block:: python
 
     import alfasim_sdk
-    from alfasim_sdk.models import data_model
-    from alfasim_sdk.types import Quantity
+    from alfasim_sdk import data_model
+    from alfasim_sdk import Quantity
 
     @data_model(caption='My plugin model', icon='')
     class MyPluginModel:
@@ -112,10 +112,10 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
     @alfasim_sdk.hookimpl
     def alfasim_get_additional_variables():
         import alfasim_sdk
-        from alfasim_sdk.variables import SecondaryVariable
-        from alfasim_sdk.variables import Visibility
-        from alfasim_sdk.variables import Location
-        from alfasim_sdk.variables import Scope
+        from alfasim_sdk import SecondaryVariable
+        from alfasim_sdk import Visibility
+        from alfasim_sdk import Location
+        from alfasim_sdk import Scope
 
         return [
             SecondaryVariable(

@@ -22,7 +22,7 @@ from attr.validators import optional
 from barril.units import Array
 from barril.units import Scalar
 
-from alfasim_sdk import constants
+from _alfasim_sdk import constants
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str

@@ -3,10 +3,10 @@ from typing import Union
 
 from pluggy import HookspecMarker
 
-from alfasim_sdk.context import Context
-from alfasim_sdk.status import ErrorMessage
-from alfasim_sdk.status import WarningMessage
-from alfasim_sdk.variables import SecondaryVariable
+from _alfasim_sdk.context import Context
+from _alfasim_sdk.status import ErrorMessage
+from _alfasim_sdk.status import WarningMessage
+from _alfasim_sdk.variables import SecondaryVariable
 
 
 hookspec = HookspecMarker("ALFAsim")
@@ -48,8 +48,8 @@ def alfasim_get_data_model_type():
     .. code-block:: python
 
         import alfasim_sdk
-        from alfasim_sdk.models import data_model
-        from alfasim_sdk.types import Quantity
+        from alfasim_sdk import data_model
+        from alfasim_sdk import Quantity
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
@@ -73,8 +73,8 @@ def alfasim_get_data_model_type():
     .. code-block:: python
 
         import alfasim_sdk
-        from alfasim_sdk.models import data_model, container_model
-        from alfasim_sdk.types import Quantity, String
+        from alfasim_sdk import data_model, container_model
+        from alfasim_sdk import Quantity, String
 
         @data_model(icon="", caption="My Child")
         class ChildModel:
@@ -100,8 +100,8 @@ def alfasim_get_data_model_type():
     .. code-block:: python
 
         import alfasim_sdk
-        from alfasim_sdk.models import data_model, container_model
-        from alfasim_sdk.types import Quantity, String
+        from alfasim_sdk import data_model, container_model
+        from alfasim_sdk import Quantity, String
 
         @data_model(icon="", caption="My Model")
         class MyModel:
@@ -143,8 +143,10 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
 
     .. code-block:: python
 
-        from alfasim_sdk.variables import SecondaryVariable, Visibility
-        from alfasim_sdk.variables import Location, Scope
+        from alfasim_sdk import SecondaryVariable
+        from alfasim_sdk import Visibility
+        from alfasim_sdk import Location
+        from alfasim_sdk import Scope
 
         @alfasim_sdk.hookimpl
         def alfasim_get_additional_variables():
@@ -195,9 +197,9 @@ def alfasim_get_status(
     .. code-block:: python
 
         import alfasim_sdk
-        from alfasim_sdk.models import data_model
-        from alfasim_sdk.types import Quantity
-        from alfasim_sdk.status import ErrorMessage
+        from alfasim_sdk import data_model
+        from alfasim_sdk import Quantity
+        from alfasim_sdk import ErrorMessage
 
         # Define MyModel used in this plugin
         @data_model(icon="", caption="My Plugin Model")
@@ -376,7 +378,7 @@ def alfasim_get_phase_properties_calculated_from_plugin():
 
     .. code-block:: python
 
-        from alfasim_sdk.constants import GAS_PHASE
+        from alfasim_sdk import GAS_PHASE
 
         @alfasim_sdk.hookimpl
         def alfasim_get_phase_properties_calculated_from_plugin():
@@ -398,7 +400,7 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
 
     .. code-block:: python
 
-        from alfasim_sdk.constants import GAS_PHASE, OIL_PHASE, WATER_PHASE
+        from alfasim_sdk import GAS_PHASE, OIL_PHASE, WATER_PHASE
 
         @alfasim_sdk.hookimpl
         def alfasim_get_phase_interaction_properties_calculated_from_plugin():

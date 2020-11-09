@@ -19,8 +19,8 @@ from barril.units import Scalar
 from barril.units import UnitDatabase
 from strictyaml import YAML
 
-from alfasim_sdk import constants
-from alfasim_sdk.alfacase import case_description
+from _alfasim_sdk import constants
+from _alfasim_sdk.alfacase import case_description
 
 
 @attr.s
@@ -50,7 +50,7 @@ class DescriptionDocument:
         Load the values from the given file_path validating against the Schema defined on
         alfacase.schema.case_schema
         """
-        from alfasim_sdk.alfacase.schema import case_description_schema
+        from _alfasim_sdk.alfacase.schema import case_description_schema
         import strictyaml
 
         try:
