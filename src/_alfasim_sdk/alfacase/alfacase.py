@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from alfasim_sdk.alfacase import case_description
+from _alfasim_sdk.alfacase import case_description
 
 
 def generate_alfacase_file(
@@ -24,7 +24,7 @@ def _generate_alfatable_file_for_pvt_models_description(
     """
     Create `.alfatable` files for each pvt_model which the mode is constants.PVT_MODEL_TABLE.
     """
-    from alfasim_sdk.alfacase.alfatable import generate_alfatable_file
+    from _alfasim_sdk.alfacase.alfatable import generate_alfatable_file
 
     for pvt_name, pvt_table_description in pvt_models.table_parameters.items():
         alfatable_file = generate_alfatable_file(
@@ -60,7 +60,7 @@ def convert_description_to_alfacase(
 
     """
     import attr
-    from alfasim_sdk.alfacase._case_to_alfacase import (
+    from _alfasim_sdk.alfacase.case_to_alfacase import (
         convert_dict_to_valid_alfacase_format,
     )
     from strictyaml import YAML
@@ -76,7 +76,7 @@ def convert_alfacase_to_case(file_alfacase: Path) -> case_description.CaseDescri
     """
     Return a alfasim_sdk.alfacase.case_description.Case with all information provided on file_yaml.
     """
-    from alfasim_sdk.alfacase._alfacase_to_case import (
+    from _alfasim_sdk.alfacase.alfacase_to_case import (
         load_case_description,
         DescriptionDocument,
     )

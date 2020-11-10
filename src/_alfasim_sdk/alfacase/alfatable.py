@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from alfasim_sdk.alfacase import case_description
+from _alfasim_sdk.alfacase import case_description
 
 
 def generate_alfatable_file(alfacase_file, alfatable_filename, description):
@@ -9,7 +9,7 @@ def generate_alfatable_file(alfacase_file, alfatable_filename, description):
     """
     from boltons.strutils import slugify
 
-    from alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
+    from _alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
 
     alfatable_content = convert_description_to_alfacase(
         description, enable_flow_style_on_numpy=True
@@ -55,7 +55,7 @@ def load_pvt_model_table_parameters_description_from_alfatable(
         "total_water_fraction": "-",
     }
 
-    from alfasim_sdk.alfacase._alfacase_to_case import get_category_for
+    from _alfasim_sdk.alfacase.alfacase_to_case import get_category_for
 
     table_parameter_keys_and_scalars = {
         key: Scalar(get_category_for(unit), content[key]["value"], content[key]["unit"])

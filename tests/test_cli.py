@@ -2,12 +2,12 @@ import os
 
 from click.testing import CliRunner
 
-from alfasim_sdk import cli
+from _alfasim_sdk.cli import console_main
 
 
 def test_command_line_interface():
     runner = CliRunner()
-    help_result = runner.invoke(cli.main, ["--help"])
+    help_result = runner.invoke(console_main, ["--help"])
     assert help_result.exit_code == 0
     assert "--help  Show this message and exit." in help_result.output
 
@@ -23,7 +23,7 @@ def test_command_package(tmp_path, mocker):
     lib_file = artifacts_dir / f"{lib_name}"
 
     runner.invoke(
-        cli.main,
+        console_main,
         [
             "template",
             "--caption=Acme",
@@ -49,7 +49,7 @@ def test_command_package(tmp_path, mocker):
     )
 
     result = runner.invoke(
-        cli.main,
+        console_main,
         [
             "package",
             "--package-name=acme",
@@ -68,7 +68,7 @@ def test_command_package(tmp_path, mocker):
 def test_command_template(tmp_path):
     runner = CliRunner()
     result = runner.invoke(
-        cli.main,
+        console_main,
         [
             "template",
             "--caption=Acme",
@@ -84,13 +84,13 @@ def test_command_template(tmp_path):
 
 def test_compile_command(tmp_path):
     runner = CliRunner()
-    result = runner.invoke(cli.main, ["compile", "--plugin-dir", tmp_path])
+    result = runner.invoke(console_main, ["compile", "--plugin-dir", tmp_path])
     assert (
         f"Was not possible to find a compile.py file in {tmp_path}"
         == result.exception.args[0]
     )
 
     (tmp_path / "compile.py").write_text(data="", encoding="utf-8")
-    result = runner.invoke(cli.main, ["compile", "--plugin-dir", tmp_path])
+    result = runner.invoke(console_main, ["compile", "--plugin-dir", tmp_path])
     assert result.exception is None
     assert result.output == ""

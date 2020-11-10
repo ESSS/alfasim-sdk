@@ -1,7 +1,7 @@
 import attr
 from attr import attrib
 
-from alfasim_sdk._validators import non_empty_str
+from _alfasim_sdk.validators import non_empty_str
 
 
 @attr.s(kw_only=True)

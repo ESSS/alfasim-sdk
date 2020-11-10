@@ -31,5 +31,5 @@ ignore:
   - "tasks.py"
   - "setup.py"
   - "hook_specs_*.py"
-  - "src/alfasim_sdk/hook_specs_gui.py"
-  - "src/alfasim_sdk/constants.py"
+  - "src/_alfasim_sdk/hook_specs_gui.py"
+  - "src/_alfasim_sdk/constants.py"
