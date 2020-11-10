@@ -926,6 +926,7 @@ class PipeDescription:
 
     # Initial Condition Section
     initial_conditions = attrib_instance(InitialConditionsDescription)
+    # TODO ASIM-3947: Remove initial_condition_arrays from CaseDescription
     initial_condition_arrays = attr.ib(
         default=None,
         validator=optional(instance_of(InitialConditionArrays)),
