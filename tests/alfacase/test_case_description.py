@@ -16,6 +16,7 @@ from _alfasim_sdk.alfacase.case_description import attrib_instance
 from _alfasim_sdk.alfacase.case_description import attrib_instance_list
 from _alfasim_sdk.alfacase.case_description import attrib_scalar
 from _alfasim_sdk.alfacase.case_description import collapse_array_repr
+from _alfasim_sdk.alfacase.case_description import InvalidReferenceError
 from _alfasim_sdk.alfacase.case_description import MaterialDescription
 from _alfasim_sdk.alfacase.case_description import numpy_array_validator
 from _alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
@@ -916,3 +917,140 @@ def test_pvt_model_table_parameters_description_equality():
         PvtModelTableParametersDescription.create_constant()
         == PvtModelTableParametersDescription.create_constant()
     )
+
+
+def test_invalid_fluid_reference_on_nodes():
+    """
+    Ensure that only declared Fluids can be used on NodeDescription
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositions={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.FluidDescription()}
+                )
+            },
+        ),
+        nodes=[
+            case_description.NodeDescription(
+                name="Node 1",
+                node_type=NodeCellType.Internal,
+                internal_properties=case_description.InternalNodePropertiesDescription(
+                    fluid="Acme2"
+                ),
+            ),
+            case_description.NodeDescription(
+                name="Node 2",
+                node_type=NodeCellType.Pressure,
+                pressure_properties=case_description.PressureNodePropertiesDescription(
+                    fluid="Acme3"
+                ),
+            ),
+            case_description.NodeDescription(
+                name="Node 3",
+                node_type=NodeCellType.MassSource,
+                mass_source_properties=case_description.MassSourceNodePropertiesDescription(
+                    fluid="Acme4"
+                ),
+            ),
+        ],
+    )
+
+    expected_error = "The following elements have an invalid fluid assigned: 'Node 1', 'Node 2', 'Node 3'."
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    assert case.nodes[0].internal_properties.fluid is None
+    assert case.nodes[1].pressure_properties.fluid is None
+    assert case.nodes[2].mass_source_properties.fluid is None
+
+
+def test_invalid_fluid_reference_on_pipes():
+    """
+    Ensure that only declared Fluids can be used on:
+       PipeDescription, MassSourceEquipmentDescription, ReservoirInflowEquipmentDescription.
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositions={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.FluidDescription()}
+                )
+            },
+        ),
+        pipes=[
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="",
+                target="",
+                segments=build_simple_segment(),
+                initial_conditions=case_description.InitialConditionsDescription(
+                    initial_fluid="acme5"
+                ),
+                equipment=case_description.EquipmentDescription(
+                    mass_sources={
+                        "MassSource": case_description.MassSourceEquipmentDescription(
+                            position=Scalar(1, "m"), fluid="a6"
+                        )
+                    },
+                    reservoir_inflows={
+                        "Reservoir": case_description.ReservoirInflowEquipmentDescription(
+                            start=Scalar(1, "m"), length=Scalar(10, "m"), fluid="a7"
+                        )
+                    },
+                ),
+            )
+        ],
+    )
+    expected_error = "The following elements have an invalid fluid assigned: 'MassSource from Pipe 1', 'Pipe 1', 'Reservoir from Pipe 1'."
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    pipe = case.pipes[0]
+    assert pipe.initial_conditions.initial_fluid is None
+    assert pipe.equipment.mass_sources["MassSource"].fluid is None
+    assert pipe.equipment.reservoir_inflows["Reservoir"].fluid is None
+
+
+def test_invalid_fluid_reference_on_wells(default_well):
+    """
+    Ensure that only declared Fluids can be used on WellDescription and AnnulusDescription.
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositions={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.FluidDescription()}
+                )
+            },
+        ),
+        wells=[
+            attr.evolve(
+                default_well,
+                initial_conditions=attr.evolve(
+                    default_well.initial_conditions,
+                    initial_fluid="acme",
+                ),
+                annulus=attr.evolve(
+                    default_well.annulus,
+                    initial_conditions=attr.evolve(
+                        default_well.annulus.initial_conditions,
+                        initial_fluid="acme",
+                    ),
+                ),
+            )
+        ],
+    )
+    expected_error = "The following elements have an invalid fluid assigned: 'Annulus from Well 1', 'Well 1'."
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    well = case.wells[0]
+    assert well.initial_conditions.initial_fluid is None
+    assert well.annulus.initial_conditions.initial_fluid is None

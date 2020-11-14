@@ -581,7 +581,7 @@ class IPRModelsDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(slots=True)
 class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     start = attrib_scalar()
     length = attrib_scalar()
@@ -759,7 +759,7 @@ class InitialTemperaturesDescription:
     )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True)
 class InitialConditionsDescription:
     pressures: InitialPressuresDescription = attr.ib(
         default=InitialPressuresDescription()
@@ -1932,6 +1932,58 @@ class CaseDescription:
                 f"Restart file '{restart_file}' is not a valid file"
             )
 
+    def _check_fluid_references(self, *, reset_invalid_reference: bool = False):
+        """
+        Checks if all referenced fluids have a definition in at least one of the PVTs
+
+        :param bool reset_invalid_reference:
+            Set the element to None if a insistence is found instead of raising an exception.
+        """
+        from itertools import chain
+
+        elements_with_invalid_fluid = []
+        fluids_available = set(
+            fluid
+            for composition in self.pvt_models.compositions.values()
+            for fluid in composition.fluids.keys()
+        )
+
+        def _handle_invalid_fluid(element, element_name):
+            fluid_attrib_name = (
+                "fluid" if hasattr(element, "fluid") else "initial_fluid"
+            )
+            fluid = getattr(element, fluid_attrib_name)
+            if fluid and fluid not in fluids_available:
+                if reset_invalid_reference:
+                    setattr(element, fluid_attrib_name, None)
+                else:
+                    elements_with_invalid_fluid.append(f"'{element_name}'")
+
+        for node in self.nodes:
+            _handle_invalid_fluid(node.pressure_properties, node.name)
+            _handle_invalid_fluid(node.mass_source_properties, node.name)
+            _handle_invalid_fluid(node.internal_properties, node.name)
+
+        for pipe in self.pipes:
+            _handle_invalid_fluid(pipe.initial_conditions, pipe.name)
+            for name, equip in chain(
+                pipe.equipment.mass_sources.items(),
+                pipe.equipment.reservoir_inflows.items(),
+            ):
+                _handle_invalid_fluid(equip, f"{name} from {pipe.name}")
+
+        for well in self.wells:
+            _handle_invalid_fluid(well.initial_conditions, well.name)
+            _handle_invalid_fluid(
+                well.annulus.initial_conditions,
+                f"Annulus from {well.name}",
+            )
+
+        if elements_with_invalid_fluid:
+            raise InvalidReferenceError(
+                f"The following elements have an invalid fluid assigned: {', '.join(sorted(elements_with_invalid_fluid))}.\n"
+            )
+
     def ensure_valid_references(self):
         """
         Ensure that all attributes that uses references has consistent values, otherwise an exception is raised.
@@ -1942,10 +1994,12 @@ class CaseDescription:
         self._check_pvt_model_files()
         self._check_pvt_model_references()
         self._check_restart_file()
+        self._check_fluid_references()
 
     def reset_invalid_references(self):
         """
-        Reset all attributes that uses references to None if the refence is invalid.
+        Reset all attributes that uses references to None if the reference is invalid.
         """
         self._check_pvt_model_files(reset_invalid_reference=True)
         self._check_pvt_model_references(reset_invalid_reference=True)
+        self._check_fluid_references(reset_invalid_reference=True)
