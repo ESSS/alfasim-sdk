@@ -164,7 +164,7 @@ INITIAL_CONDITIONS_DESCRIPTION = case_description.InitialConditionsDescription(
     temperatures=case_builders.build_constant_initial_temperatures_description(
         123.4, "K"
     ),
-    initial_fluid="fluid_1",
+    fluid="fluid_1",
 )
 MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
     position=Scalar(10, "m"),

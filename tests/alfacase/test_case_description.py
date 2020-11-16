@@ -988,7 +988,7 @@ def test_invalid_fluid_reference_on_pipes():
                 target="",
                 segments=build_simple_segment(),
                 initial_conditions=case_description.InitialConditionsDescription(
-                    initial_fluid="acme5"
+                    fluid="acme5"
                 ),
                 equipment=case_description.EquipmentDescription(
                     mass_sources={
@@ -1011,7 +1011,7 @@ def test_invalid_fluid_reference_on_pipes():
 
     case.reset_invalid_references()
     pipe = case.pipes[0]
-    assert pipe.initial_conditions.initial_fluid is None
+    assert pipe.initial_conditions.fluid is None
     assert pipe.equipment.mass_sources["MassSource"].fluid is None
     assert pipe.equipment.reservoir_inflows["Reservoir"].fluid is None
 
@@ -1034,13 +1034,13 @@ def test_invalid_fluid_reference_on_wells(default_well):
                 default_well,
                 initial_conditions=attr.evolve(
                     default_well.initial_conditions,
-                    initial_fluid="acme",
+                    fluid="acme",
                 ),
                 annulus=attr.evolve(
                     default_well.annulus,
                     initial_conditions=attr.evolve(
                         default_well.annulus.initial_conditions,
-                        initial_fluid="acme",
+                        fluid="acme",
                     ),
                 ),
             )
@@ -1052,5 +1052,5 @@ def test_invalid_fluid_reference_on_wells(default_well):
 
     case.reset_invalid_references()
     well = case.wells[0]
-    assert well.initial_conditions.initial_fluid is None
-    assert well.annulus.initial_conditions.initial_fluid is None
+    assert well.initial_conditions.fluid is None
+    assert well.annulus.initial_conditions.fluid is None
