@@ -649,7 +649,7 @@ initial_conditions_description_schema = Map(
         Optional("tracers_mass_fractions"): initial_tracers_mass_fractions_description_schema,
         Optional("velocities"): initial_velocities_description_schema,
         Optional("temperatures"): initial_temperatures_description_schema,
-        Optional("initial_fluid"): Str(),
+        Optional("fluid"): Str(),
     }
 )
 

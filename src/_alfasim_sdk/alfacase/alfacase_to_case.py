@@ -848,7 +848,7 @@ def load_initial_conditions_description(
         "volume_fractions": load_initial_volume_fractions_description,
         "pressures": load_initial_pressures_description,
         "tracers_mass_fractions": load_initial_tracers_mass_fractions_description,
-        "initial_fluid": load_value,
+        "fluid": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialConditionsDescription(**case_values)

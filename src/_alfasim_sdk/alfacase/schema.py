@@ -598,7 +598,7 @@ initial_conditions_description_schema = Map(
         Optional("tracers_mass_fractions"): initial_tracers_mass_fractions_description_schema,
         Optional("velocities"): initial_velocities_description_schema,
         Optional("temperatures"): initial_temperatures_description_schema,
-        Optional("initial_fluid"): Str(),
+        Optional("fluid"): Str(),
     }
 )
 pvt_model_compositional_description_schema = Map(
@@ -676,5 +676,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 1a3637d3db46998337982baa10598ded)
+# [[[end]]] (checksum: ab563269c775ef583634ddb86aafa9f4)
 # fmt: on

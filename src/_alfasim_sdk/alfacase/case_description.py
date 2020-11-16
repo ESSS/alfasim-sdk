@@ -776,9 +776,7 @@ class InitialConditionsDescription:
     temperatures: InitialTemperaturesDescription = attr.ib(
         default=InitialTemperaturesDescription()
     )
-    initial_fluid: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(frozen=True)
@@ -1931,7 +1929,7 @@ class CaseDescription:
         Checks if all referenced fluids have a definition in at least one of the PVTs
 
         :param bool reset_invalid_reference:
-            Set the element to None if a insistence is found instead of raising an exception.
+            If True, sets the element to None if an inconsistency is found instead of raising an exception.
         """
         from itertools import chain
 
@@ -1943,13 +1941,9 @@ class CaseDescription:
         )
 
         def _handle_invalid_fluid(element, element_name):
-            fluid_attrib_name = (
-                "fluid" if hasattr(element, "fluid") else "initial_fluid"
-            )
-            fluid = getattr(element, fluid_attrib_name)
-            if fluid and fluid not in fluids_available:
+            if element.fluid and element.fluid not in fluids_available:
                 if reset_invalid_reference:
-                    setattr(element, fluid_attrib_name, None)
+                    element.fluid = None
                 else:
                     elements_with_invalid_fluid.append(f"'{element_name}'")
 
