@@ -1151,7 +1151,7 @@ class WallLayerDescription:
 
 @attr.s
 class WallDescription:
-    name: str = attr.ib(default="", validator=instance_of(str))
+    name: str = attr.ib(validator=instance_of(str))
     inner_roughness = attrib_scalar(default=Scalar(0, "m"))
     wall_layer_container = attrib_instance_list(WallLayerDescription)
 
@@ -1983,6 +1983,7 @@ class CaseDescription:
         self._check_pvt_model_references()
         self._check_restart_file()
         self._check_fluid_references()
+        self.ensure_unique_names()
 
     def reset_invalid_references(self):
         """
@@ -1991,3 +1992,68 @@ class CaseDescription:
         self._check_pvt_model_files(reset_invalid_reference=True)
         self._check_pvt_model_references(reset_invalid_reference=True)
         self._check_fluid_references(reset_invalid_reference=True)
+
+    def ensure_unique_names(self):
+        """
+        Ensure that elements that can be referenced by name have a unique name,
+        raising `InvalidReferenceError` if some elements have the same name .
+        """
+        import collections
+        from collections import Counter
+
+        duplicate_names = collections.defaultdict(list)
+
+        def get_duplicate_keys(counter):
+            return [key for key, value in counter.items() if value > 1]
+
+        all_node_names = [i.name for i in self.nodes]
+        all_pipes_names = [i.name for i in self.pipes]
+        all_wells_names = [i.name for i in self.wells]
+        all_walls_names = [i.name for i in self.walls]
+        all_material_names = [i.name for i in self.materials]
+        all_pvt_names = list(self.pvt_models.tables.keys())
+        all_pvt_names += list(self.pvt_models.correlations.keys())
+        all_pvt_names += list(self.pvt_models.compositions.keys())
+
+        all_fluids = [
+            fluid
+            for pvt_model in self.pvt_models.compositions.values()
+            for fluid in pvt_model.fluids.keys()
+        ]
+
+        duplicate_names["Nodes"] = get_duplicate_keys(Counter(all_node_names))
+        duplicate_names["Pipes"] = get_duplicate_keys(Counter(all_pipes_names))
+        duplicate_names["Wells"] = get_duplicate_keys(Counter(all_wells_names))
+        duplicate_names["Walls"] = get_duplicate_keys(Counter(all_walls_names))
+        duplicate_names["Materials"] = get_duplicate_keys(Counter(all_material_names))
+        duplicate_names["PVT"] = get_duplicate_keys(Counter(all_pvt_names))
+        duplicate_names["Fluids"] = get_duplicate_keys(Counter(all_fluids))
+
+        def get_error_msg():
+            output = []
+            for key, value in sorted(duplicate_names.items()):
+                if value:
+                    output.append(f"{key}:")
+                    formatted_names = "\n    - ".join(name for name in value)
+                    output.append(f"    - {formatted_names}")
+            return "\n".join(output)
+
+        if any(value for key, value in duplicate_names.items()):
+            raise InvalidReferenceError(
+                f"Elements that can be referenced must have a unique name, found multiples definitions of the following items:\n"
+                f"{get_error_msg()}"
+            )
+
+        # Check unique name between elements
+        duplicate_names["Nodes and Wells"] = get_duplicate_keys(
+            Counter(all_wells_names + all_node_names)
+        )
+        duplicate_names["Pipes and Wells"] = get_duplicate_keys(
+            Counter(all_wells_names + all_pipes_names)
+        )
+
+        if any(value for key, value in duplicate_names.items()):
+            raise InvalidReferenceError(
+                f"Some different type of elements needs to have unique name between them, found duplicated names for the following items:\n"
+                f"{get_error_msg()}"
+            )

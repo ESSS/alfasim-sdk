@@ -618,7 +618,7 @@ valve_equipment_description_schema = Map(
 
 wall_description_schema = Map(
     {
-        Optional("name"): Str(),
+        "name": Str(),
         Optional("inner_roughness"): Map({"value": Float(), "unit": Str()}),
         Optional("wall_layer_container"): Seq(wall_layer_description_schema),
     }
