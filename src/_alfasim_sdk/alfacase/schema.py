@@ -570,7 +570,7 @@ valve_equipment_description_schema = Map(
 )
 wall_description_schema = Map(
     {
-        Optional("name"): Str(),
+        "name": Str(),
         Optional("inner_roughness"): Map({"value": Float(), "unit": Str()}),
         Optional("wall_layer_container"): Seq(wall_layer_description_schema),
     }
@@ -676,5 +676,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: ab563269c775ef583634ddb86aafa9f4)
+# [[[end]]] (checksum: 59cb3cca17782bafaa2319b9882fd665)
 # fmt: on
