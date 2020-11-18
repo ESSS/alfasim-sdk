@@ -247,7 +247,6 @@ def _get_attr_name(key: str, value: attr.ib) -> str:
 IGNORED_PROPERTIES = (
     "plugins",
     "initial_condition_arrays",
-    "nonsplit_equipment",
     "table_parameters",
 )
 
