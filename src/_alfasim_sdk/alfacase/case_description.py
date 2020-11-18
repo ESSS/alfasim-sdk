@@ -2031,14 +2031,29 @@ class CaseDescription:
 
         def get_error_msg():
             output = []
-            for key, value in duplicate_names.items():
-                output.append(f"{key}:")
-                formatted_names = "\n    - ".join(name for name in value)
-                output.append(f"    - {formatted_names}")
+            for key, value in sorted(duplicate_names.items()):
+                if value:
+                    output.append(f"{key}:")
+                    formatted_names = "\n    - ".join(name for name in value)
+                    output.append(f"    - {formatted_names}")
             return "\n".join(output)
 
-        if any(value for key, value in sorted(duplicate_names.items())):
+        if any(value for key, value in duplicate_names.items()):
             raise InvalidReferenceError(
                 f"Elements that can be referenced must have a unique name, found multiples definitions of the following items:\n"
+                f"{get_error_msg()}"
+            )
+
+        # Check unique name between elements
+        duplicate_names["Nodes and Wells"] = get_duplicate_keys(
+            Counter(all_wells_names + all_node_names)
+        )
+        duplicate_names["Pipes and Wells"] = get_duplicate_keys(
+            Counter(all_wells_names + all_pipes_names)
+        )
+
+        if any(value for key, value in duplicate_names.items()):
+            raise InvalidReferenceError(
+                f"Some different type of elements needs to have unique name between them, found duplicated names for the following items:\n"
                 f"{get_error_msg()}"
             )

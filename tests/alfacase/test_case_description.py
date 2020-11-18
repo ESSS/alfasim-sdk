@@ -1061,10 +1061,8 @@ def test_case_description_duplicate_names(default_well):
     Pipes because they are reference by OutputDescription
     Nodes because they are referenced by PipeDescription, WellDescription and OutputDescription
     PVTs names, because of default_model
-    Well
     Wall Names because of PipeSegmentsDescription
-    Material because of WellDescription(stagnand_fluid), CasingSectionDescription, TubingDescription
-
+    Material because of WellDescription(stagnant_fluid), CasingSectionDescription, TubingDescription
     """
     well_1 = attr.evolve(default_well, name="Well 1")
     well_2 = attr.evolve(default_well, name="Well 1")
@@ -1135,22 +1133,70 @@ def test_case_description_duplicate_names(default_well):
     expected_msg = dedent(
         """\
         Elements that can be referenced must have a unique name, found multiples definitions of the following items:
+        Fluids:
+            - Fluid 0
+            - Fluid 1
+        Materials:
+            - Material
         Nodes:
             - ACME
             - FOO
-        Pipes:
-            - Pipe 1
-        Wells:
-            - Well 1
-        Walls:
-            - Wall A
-        Materials:
-            - Material
         PVT:
             - PVT1
-        Fluids:
-            - Fluid 0
-            - Fluid 1"""
+        Pipes:
+            - Pipe 1
+        Walls:
+            - Wall A
+        Wells:
+            - Well 1"""
     )
+
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_msg)):
+        case.ensure_unique_names()
+
+
+def test_case_description_duplicate_names_between_elements(default_well):
+    """
+    Ensure Pipes and Wells has unique names (because of OutputDefinition)
+    Ensure Nodes and Wells has unique names (because of Edge source/target)
+    """
+    well_1 = attr.evolve(default_well, name="ACME Node <-> Well")
+    well_2 = attr.evolve(default_well, name="ACME Pipe <-> Well")
+
+    case = case_description.CaseDescription(
+        nodes=[
+            case_description.NodeDescription(
+                name="ACME Node <-> Well", node_type=NodeCellType.Pressure
+            ),
+            case_description.NodeDescription(
+                name="Node1", node_type=NodeCellType.Pressure
+            ),
+        ],
+        pipes=[
+            case_description.PipeDescription(
+                name="ACME Pipe <-> Well",
+                source="ACME",
+                target="ACME",
+                segments=build_simple_segment(),
+            ),
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="ACME",
+                target="ACME",
+                segments=build_simple_segment(),
+            ),
+        ],
+        wells=[well_1, well_2],
+    )
+
+    expected_msg = dedent(
+        """\
+        Some different type of elements needs to have unique name between them, found duplicated names for the following items:
+        Nodes and Wells:
+            - ACME Node <-> Well
+        Pipes and Wells:
+            - ACME Pipe <-> Well"""
+    )
+
     with pytest.raises(InvalidReferenceError, match=re.escape(expected_msg)):
         case.ensure_unique_names()
