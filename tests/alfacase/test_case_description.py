@@ -1153,4 +1153,4 @@ def test_case_description_duplicate_names(default_well):
             - Fluid 1"""
     )
     with pytest.raises(InvalidReferenceError, match=re.escape(expected_msg)):
-        case.ensure_unique_name()
+        case.ensure_unique_names()

@@ -1983,7 +1983,7 @@ class CaseDescription:
         self._check_pvt_model_references()
         self._check_restart_file()
         self._check_fluid_references()
-        self.ensure_unique_name()
+        self.ensure_unique_names()
 
     def reset_invalid_references(self):
         """
@@ -1993,9 +1993,10 @@ class CaseDescription:
         self._check_pvt_model_references(reset_invalid_reference=True)
         self._check_fluid_references(reset_invalid_reference=True)
 
-    def ensure_unique_name(self):
+    def ensure_unique_names(self):
         """
-        Ensure that elements that can be referenced by name have a unique name.
+        Ensure that elements that can be referenced by name have a unique name,
+        raising `InvalidReferenceError` if some elements have the same name .
         """
         import collections
         from collections import Counter
@@ -2036,7 +2037,7 @@ class CaseDescription:
                 output.append(f"    - {formatted_names}")
             return "\n".join(output)
 
-        if any(value for key, value in duplicate_names.items()):
+        if any(value for key, value in sorted(duplicate_names.items())):
             raise InvalidReferenceError(
                 f"Elements that can be referenced must have a unique name, found multiples definitions of the following items:\n"
                 f"{get_error_msg()}"
