@@ -146,8 +146,8 @@ make use of the :ref:`ALFAsim-SDK C/C++ API <sdk_api>` in order to fetch informa
 At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared from
 :file:`myplugin.py` file and retrieve the ``Liquid Velocity`` from the |alfasim|'s Solver.
 
-First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <__alfasim_sdk.hook_specs.initialize>` and
-the :py:func:`HOOK_FINALIZE <__alfasim_sdk.hook_specs.finalize>`
+First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <_alfasim_sdk.hook_specs.initialize>` and
+the :py:func:`HOOK_FINALIZE <_alfasim_sdk.hook_specs.finalize>`
 
 With them it is possible to initialize any custom data (to store any important information) for internal use. Also it is
 needed to load and unload the |sdk| API, in which will allows the plugin to use the API in any implemented `hook`.
