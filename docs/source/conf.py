@@ -18,7 +18,9 @@ else:
 
 breathe_default_project = "alfasim_sdk_api"
 
-alfasim_sdk_api_project_folder = Path(os.getcwd()).parents[1] / "alfasim_sdk_api"
+alfasim_sdk_api_project_folder = (
+    Path(os.getcwd()).parents[1] / "src/alfasim_sdk/alfasim_sdk_api"
+)
 breathe_projects_source = {
     "alfasim_sdk_api": (
         alfasim_sdk_api_project_folder,
@@ -64,9 +66,9 @@ rst_prolog = """
 
 .. |template-command| replace:: :ref:`Template Command <alfasim_sdk_cli_template_section>`
 .. |gui_hook| replace:: :py:func:`alfasim_get_data_model_type`
-.. |container| replace:: :py:func:`alfasim_sdk.models.container_model`
-.. |model| replace:: :py:func:`alfasim_sdk.models.data_model`
-.. |s_variable| replace:: :py:func:`alfasim_sdk.variables.SecondaryVariable`
+.. |container| replace:: :py:func:`alfasim_sdk.container_model`
+.. |model| replace:: :py:func:`alfasim_sdk.data_model`
+.. |s_variable| replace:: :py:func:`alfasim_sdk.SecondaryVariable`
 .. |s_variable_hook| replace:: :py:func:`alfasim_get_additional_variables`
 
 .. |marker_1| image:: _static/images/marker_1.png
