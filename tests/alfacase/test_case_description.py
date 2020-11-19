@@ -9,17 +9,18 @@ from barril.units import Scalar
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
-from alfasim_sdk import constants
-from alfasim_sdk.alfacase import case_description
-from alfasim_sdk.alfacase.case_description import attrib_enum
-from alfasim_sdk.alfacase.case_description import attrib_instance
-from alfasim_sdk.alfacase.case_description import attrib_instance_list
-from alfasim_sdk.alfacase.case_description import attrib_scalar
-from alfasim_sdk.alfacase.case_description import collapse_array_repr
-from alfasim_sdk.alfacase.case_description import MaterialDescription
-from alfasim_sdk.alfacase.case_description import numpy_array_validator
-from alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
-from alfasim_sdk.constants import NodeCellType
+from _alfasim_sdk import constants
+from _alfasim_sdk.alfacase import case_description
+from _alfasim_sdk.alfacase.case_description import attrib_enum
+from _alfasim_sdk.alfacase.case_description import attrib_instance
+from _alfasim_sdk.alfacase.case_description import attrib_instance_list
+from _alfasim_sdk.alfacase.case_description import attrib_scalar
+from _alfasim_sdk.alfacase.case_description import collapse_array_repr
+from _alfasim_sdk.alfacase.case_description import InvalidReferenceError
+from _alfasim_sdk.alfacase.case_description import MaterialDescription
+from _alfasim_sdk.alfacase.case_description import numpy_array_validator
+from _alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
+from _alfasim_sdk.constants import NodeCellType
 
 
 def test_physics_description_path_validator(tmp_path):
@@ -531,7 +532,7 @@ class TestEnsureValidReferences:
         2) default_model must be a valid pvt_model defined on pvt_models
         3) If default_model is None, all components that uses pvt_model must be assigined.
         """
-        from alfasim_sdk.constants import NodeCellType
+        from _alfasim_sdk.constants import NodeCellType
 
         case = attr.evolve(
             default_case,
@@ -892,7 +893,7 @@ def test_material_description_as_dict():
     Ensure that the helper function AsDict returns a diction where the Scalar are tuple with value and unit.
     """
 
-    from alfasim_sdk import constants
+    from _alfasim_sdk import constants
 
     assert MaterialDescription(name="Acme").as_dict() == {
         "density": (1.0, "kg/m3"),
@@ -916,3 +917,286 @@ def test_pvt_model_table_parameters_description_equality():
         PvtModelTableParametersDescription.create_constant()
         == PvtModelTableParametersDescription.create_constant()
     )
+
+
+def test_invalid_fluid_reference_on_nodes():
+    """
+    Ensure that only declared Fluids can be used on NodeDescription
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositions={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.FluidDescription()}
+                )
+            },
+        ),
+        nodes=[
+            case_description.NodeDescription(
+                name="Node 1",
+                node_type=NodeCellType.Internal,
+                internal_properties=case_description.InternalNodePropertiesDescription(
+                    fluid="Acme2"
+                ),
+            ),
+            case_description.NodeDescription(
+                name="Node 2",
+                node_type=NodeCellType.Pressure,
+                pressure_properties=case_description.PressureNodePropertiesDescription(
+                    fluid="Acme3"
+                ),
+            ),
+            case_description.NodeDescription(
+                name="Node 3",
+                node_type=NodeCellType.MassSource,
+                mass_source_properties=case_description.MassSourceNodePropertiesDescription(
+                    fluid="Acme4"
+                ),
+            ),
+        ],
+    )
+
+    expected_error = "The following elements have an invalid fluid assigned: 'Node 1', 'Node 2', 'Node 3'."
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    assert case.nodes[0].internal_properties.fluid is None
+    assert case.nodes[1].pressure_properties.fluid is None
+    assert case.nodes[2].mass_source_properties.fluid is None
+
+
+def test_invalid_fluid_reference_on_pipes():
+    """
+    Ensure that only declared Fluids can be used on:
+       PipeDescription, MassSourceEquipmentDescription, ReservoirInflowEquipmentDescription.
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositions={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.FluidDescription()}
+                )
+            },
+        ),
+        pipes=[
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="",
+                target="",
+                segments=build_simple_segment(),
+                initial_conditions=case_description.InitialConditionsDescription(
+                    fluid="acme5"
+                ),
+                equipment=case_description.EquipmentDescription(
+                    mass_sources={
+                        "MassSource": case_description.MassSourceEquipmentDescription(
+                            position=Scalar(1, "m"), fluid="a6"
+                        )
+                    },
+                    reservoir_inflows={
+                        "Reservoir": case_description.ReservoirInflowEquipmentDescription(
+                            start=Scalar(1, "m"), length=Scalar(10, "m"), fluid="a7"
+                        )
+                    },
+                ),
+            )
+        ],
+    )
+    expected_error = "The following elements have an invalid fluid assigned: 'MassSource from Pipe 1', 'Pipe 1', 'Reservoir from Pipe 1'."
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    pipe = case.pipes[0]
+    assert pipe.initial_conditions.fluid is None
+    assert pipe.equipment.mass_sources["MassSource"].fluid is None
+    assert pipe.equipment.reservoir_inflows["Reservoir"].fluid is None
+
+
+def test_invalid_fluid_reference_on_wells(default_well):
+    """
+    Ensure that only declared Fluids can be used on WellDescription and AnnulusDescription.
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositions={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.FluidDescription()}
+                )
+            },
+        ),
+        wells=[
+            attr.evolve(
+                default_well,
+                initial_conditions=attr.evolve(
+                    default_well.initial_conditions,
+                    fluid="acme",
+                ),
+                annulus=attr.evolve(
+                    default_well.annulus,
+                    initial_conditions=attr.evolve(
+                        default_well.annulus.initial_conditions,
+                        fluid="acme",
+                    ),
+                ),
+            )
+        ],
+    )
+    expected_error = "The following elements have an invalid fluid assigned: 'Annulus from Well 1', 'Well 1'."
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    well = case.wells[0]
+    assert well.initial_conditions.fluid is None
+    assert well.annulus.initial_conditions.fluid is None
+
+
+def test_case_description_duplicate_names(default_well):
+    """
+    Pipes because they are reference by OutputDescription
+    Nodes because they are referenced by PipeDescription, WellDescription and OutputDescription
+    PVTs names, because of default_model
+    Wall Names because of PipeSegmentsDescription
+    Material because of WellDescription(stagnant_fluid), CasingSectionDescription, TubingDescription
+    """
+    well_1 = attr.evolve(default_well, name="Well 1")
+    well_2 = attr.evolve(default_well, name="Well 1")
+
+    case = case_description.CaseDescription(
+        materials=[
+            case_description.MaterialDescription(name="Material"),
+            case_description.MaterialDescription(name="Material"),
+        ],
+        walls=[
+            case_description.WallDescription(name="Wall A"),
+            case_description.WallDescription(name="Wall A"),
+        ],
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            correlations={
+                "PVT1": case_description.PvtModelCorrelationDescription(),
+            },
+            compositions={
+                "PVT1": case_description.PvtModelCompositionalDescription(
+                    fluids={
+                        "Fluid 0": case_description.FluidDescription(),
+                        "Fluid 1": case_description.FluidDescription(),
+                    },
+                ),
+                "PVT2": case_description.PvtModelCompositionalDescription(
+                    fluids={
+                        "Fluid 0": case_description.FluidDescription(),
+                        "Fluid 1": case_description.FluidDescription(),
+                    }
+                ),
+            },
+        ),
+        nodes=[
+            case_description.NodeDescription(
+                name="ACME", node_type=NodeCellType.Pressure
+            ),
+            case_description.NodeDescription(
+                name="ACME", node_type=NodeCellType.Pressure
+            ),
+            case_description.NodeDescription(
+                name="Node1", node_type=NodeCellType.Pressure
+            ),
+            case_description.NodeDescription(
+                name="FOO", node_type=NodeCellType.Pressure
+            ),
+            case_description.NodeDescription(
+                name="FOO", node_type=NodeCellType.Pressure
+            ),
+        ],
+        pipes=[
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="ACME",
+                target="ACME",
+                segments=build_simple_segment(),
+            ),
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="ACME",
+                target="ACME",
+                segments=build_simple_segment(),
+            ),
+        ],
+        wells=[well_1, well_2],
+    )
+
+    expected_msg = dedent(
+        """\
+        Elements that can be referenced must have a unique name, found multiples definitions of the following items:
+        Fluids:
+            - Fluid 0
+            - Fluid 1
+        Materials:
+            - Material
+        Nodes:
+            - ACME
+            - FOO
+        PVT:
+            - PVT1
+        Pipes:
+            - Pipe 1
+        Walls:
+            - Wall A
+        Wells:
+            - Well 1"""
+    )
+
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_msg)):
+        case.ensure_unique_names()
+
+
+def test_case_description_duplicate_names_between_elements(default_well):
+    """
+    Ensure Pipes and Wells has unique names (because of OutputDefinition)
+    Ensure Nodes and Wells has unique names (because of Edge source/target)
+    """
+    well_1 = attr.evolve(default_well, name="ACME Node <-> Well")
+    well_2 = attr.evolve(default_well, name="ACME Pipe <-> Well")
+
+    case = case_description.CaseDescription(
+        nodes=[
+            case_description.NodeDescription(
+                name="ACME Node <-> Well", node_type=NodeCellType.Pressure
+            ),
+            case_description.NodeDescription(
+                name="Node1", node_type=NodeCellType.Pressure
+            ),
+        ],
+        pipes=[
+            case_description.PipeDescription(
+                name="ACME Pipe <-> Well",
+                source="ACME",
+                target="ACME",
+                segments=build_simple_segment(),
+            ),
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="ACME",
+                target="ACME",
+                segments=build_simple_segment(),
+            ),
+        ],
+        wells=[well_1, well_2],
+    )
+
+    expected_msg = dedent(
+        """\
+        Some different type of elements needs to have unique name between them, found duplicated names for the following items:
+        Nodes and Wells:
+            - ACME Node <-> Well
+        Pipes and Wells:
+            - ACME Pipe <-> Well"""
+    )
+
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_msg)):
+        case.ensure_unique_names()

@@ -16,7 +16,7 @@ from barril.units import Scalar
 from strictyaml.utils import flatten
 from typing_inspect import is_optional_type
 
-from alfasim_sdk.alfacase.case_description import CaseDescription
+from _alfasim_sdk.alfacase.case_description import CaseDescription
 
 INDENTANTION = "    "
 

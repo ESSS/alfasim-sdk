@@ -4,8 +4,10 @@ import numpy as np
 
 
 def test_altable_has_flow_style_for_numpy_array(tmp_path):
-    from alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
-    from alfasim_sdk.alfacase.alfatable import generate_alfatable_file
+    from _alfasim_sdk.alfacase.case_description import (
+        PvtModelTableParametersDescription,
+    )
+    from _alfasim_sdk.alfacase.alfatable import generate_alfatable_file
 
     description = PvtModelTableParametersDescription(
         pressure_values=np.array([1, 2, 3]),
@@ -68,7 +70,9 @@ def test_alfacase_file_export(tmp_path):
     Check that GenerateAlfacaseFile creates a alfatable file with the content from PvtModelsDescription.table_parameters
     When exporting this alfatable should be placed on PvtModelDescription.tables
     """
-    from alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
+    from _alfasim_sdk.alfacase.case_description import (
+        PvtModelTableParametersDescription,
+    )
 
     alfacase_file = tmp_path / "mycase.alfacase"
     alfatable_file = tmp_path / "mycase.fluid_a_1.alfatable"
@@ -76,28 +80,28 @@ def test_alfacase_file_export(tmp_path):
     pvt_model_table_parameter = {
         "FLUID-A 1": PvtModelTableParametersDescription.create_constant()
     }
-    from alfasim_sdk.alfacase import case_description
+    from _alfasim_sdk.alfacase import case_description
 
     case_description = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
             table_parameters=pvt_model_table_parameter
         )
     )
-    from alfasim_sdk.alfacase.alfacase import generate_alfacase_file
+    from _alfasim_sdk.alfacase.alfacase import generate_alfacase_file
 
     generate_alfacase_file(case_description, alfacase_file)
     assert alfacase_file.is_file()
     assert alfatable_file.is_file()
     # Load
-    from alfasim_sdk.alfacase.alfacase import convert_alfacase_to_case
+    from _alfasim_sdk.alfacase.alfacase import convert_alfacase_to_case
 
     case = convert_alfacase_to_case(alfacase_file)
     assert case.pvt_models.tables == {"FLUID-A 1": alfatable_file}
 
 
 def test_alfacase_file_load(tmp_path):
-    from alfasim_sdk.alfacase import case_description
-    from alfasim_sdk.alfacase.alfatable import generate_alfatable_file
+    from _alfasim_sdk.alfacase import case_description
+    from _alfasim_sdk.alfacase.alfatable import generate_alfatable_file
 
     alfacase_file = tmp_path / "mycase.alfacase"
     pvt_table_parameters_description = (
@@ -109,7 +113,7 @@ def test_alfacase_file_load(tmp_path):
         description=pvt_table_parameters_description,
     )
     assert alfatable_file.is_file()
-    from alfasim_sdk.alfacase.alfatable import (
+    from _alfasim_sdk.alfacase.alfatable import (
         load_pvt_model_table_parameters_description_from_alfatable,
     )
 

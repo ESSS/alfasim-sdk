@@ -22,7 +22,7 @@ from attr.validators import optional
 from barril.units import Array
 from barril.units import Scalar
 
-from alfasim_sdk import constants
+from _alfasim_sdk import constants
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str
@@ -581,7 +581,7 @@ class IPRModelsDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(slots=True)
 class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     start = attrib_scalar()
     length = attrib_scalar()
@@ -759,7 +759,7 @@ class InitialTemperaturesDescription:
     )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True)
 class InitialConditionsDescription:
     pressures: InitialPressuresDescription = attr.ib(
         default=InitialPressuresDescription()
@@ -776,9 +776,7 @@ class InitialConditionsDescription:
     temperatures: InitialTemperaturesDescription = attr.ib(
         default=InitialTemperaturesDescription()
     )
-    initial_fluid: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(frozen=True)
@@ -1153,7 +1151,7 @@ class WallLayerDescription:
 
 @attr.s
 class WallDescription:
-    name: str = attr.ib(default="", validator=instance_of(str))
+    name: str = attr.ib(validator=instance_of(str))
     inner_roughness = attrib_scalar(default=Scalar(0, "m"))
     wall_layer_container = attrib_instance_list(WallLayerDescription)
 
@@ -1926,6 +1924,54 @@ class CaseDescription:
                 f"Restart file '{restart_file}' is not a valid file"
             )
 
+    def _check_fluid_references(self, *, reset_invalid_reference: bool = False):
+        """
+        Checks if all referenced fluids have a definition in at least one of the PVTs
+
+        :param bool reset_invalid_reference:
+            If True, sets the element to None if an inconsistency is found instead of raising an exception.
+        """
+        from itertools import chain
+
+        elements_with_invalid_fluid = []
+        fluids_available = set(
+            fluid
+            for composition in self.pvt_models.compositions.values()
+            for fluid in composition.fluids.keys()
+        )
+
+        def _handle_invalid_fluid(element, element_name):
+            if element.fluid and element.fluid not in fluids_available:
+                if reset_invalid_reference:
+                    element.fluid = None
+                else:
+                    elements_with_invalid_fluid.append(f"'{element_name}'")
+
+        for node in self.nodes:
+            _handle_invalid_fluid(node.pressure_properties, node.name)
+            _handle_invalid_fluid(node.mass_source_properties, node.name)
+            _handle_invalid_fluid(node.internal_properties, node.name)
+
+        for pipe in self.pipes:
+            _handle_invalid_fluid(pipe.initial_conditions, pipe.name)
+            for name, equip in chain(
+                pipe.equipment.mass_sources.items(),
+                pipe.equipment.reservoir_inflows.items(),
+            ):
+                _handle_invalid_fluid(equip, f"{name} from {pipe.name}")
+
+        for well in self.wells:
+            _handle_invalid_fluid(well.initial_conditions, well.name)
+            _handle_invalid_fluid(
+                well.annulus.initial_conditions,
+                f"Annulus from {well.name}",
+            )
+
+        if elements_with_invalid_fluid:
+            raise InvalidReferenceError(
+                f"The following elements have an invalid fluid assigned: {', '.join(sorted(elements_with_invalid_fluid))}.\n"
+            )
+
     def ensure_valid_references(self):
         """
         Ensure that all attributes that uses references has consistent values, otherwise an exception is raised.
@@ -1936,10 +1982,78 @@ class CaseDescription:
         self._check_pvt_model_files()
         self._check_pvt_model_references()
         self._check_restart_file()
+        self._check_fluid_references()
+        self.ensure_unique_names()
 
     def reset_invalid_references(self):
         """
-        Reset all attributes that uses references to None if the refence is invalid.
+        Reset all attributes that uses references to None if the reference is invalid.
         """
         self._check_pvt_model_files(reset_invalid_reference=True)
         self._check_pvt_model_references(reset_invalid_reference=True)
+        self._check_fluid_references(reset_invalid_reference=True)
+
+    def ensure_unique_names(self):
+        """
+        Ensure that elements that can be referenced by name have a unique name,
+        raising `InvalidReferenceError` if some elements have the same name .
+        """
+        import collections
+        from collections import Counter
+
+        duplicate_names = collections.defaultdict(list)
+
+        def get_duplicate_keys(counter):
+            return [key for key, value in counter.items() if value > 1]
+
+        all_node_names = [i.name for i in self.nodes]
+        all_pipes_names = [i.name for i in self.pipes]
+        all_wells_names = [i.name for i in self.wells]
+        all_walls_names = [i.name for i in self.walls]
+        all_material_names = [i.name for i in self.materials]
+        all_pvt_names = list(self.pvt_models.tables.keys())
+        all_pvt_names += list(self.pvt_models.correlations.keys())
+        all_pvt_names += list(self.pvt_models.compositions.keys())
+
+        all_fluids = [
+            fluid
+            for pvt_model in self.pvt_models.compositions.values()
+            for fluid in pvt_model.fluids.keys()
+        ]
+
+        duplicate_names["Nodes"] = get_duplicate_keys(Counter(all_node_names))
+        duplicate_names["Pipes"] = get_duplicate_keys(Counter(all_pipes_names))
+        duplicate_names["Wells"] = get_duplicate_keys(Counter(all_wells_names))
+        duplicate_names["Walls"] = get_duplicate_keys(Counter(all_walls_names))
+        duplicate_names["Materials"] = get_duplicate_keys(Counter(all_material_names))
+        duplicate_names["PVT"] = get_duplicate_keys(Counter(all_pvt_names))
+        duplicate_names["Fluids"] = get_duplicate_keys(Counter(all_fluids))
+
+        def get_error_msg():
+            output = []
+            for key, value in sorted(duplicate_names.items()):
+                if value:
+                    output.append(f"{key}:")
+                    formatted_names = "\n    - ".join(name for name in value)
+                    output.append(f"    - {formatted_names}")
+            return "\n".join(output)
+
+        if any(value for key, value in duplicate_names.items()):
+            raise InvalidReferenceError(
+                f"Elements that can be referenced must have a unique name, found multiples definitions of the following items:\n"
+                f"{get_error_msg()}"
+            )
+
+        # Check unique name between elements
+        duplicate_names["Nodes and Wells"] = get_duplicate_keys(
+            Counter(all_wells_names + all_node_names)
+        )
+        duplicate_names["Pipes and Wells"] = get_duplicate_keys(
+            Counter(all_wells_names + all_pipes_names)
+        )
+
+        if any(value for key, value in duplicate_names.items()):
+            raise InvalidReferenceError(
+                f"Some different type of elements needs to have unique name between them, found duplicated names for the following items:\n"
+                f"{get_error_msg()}"
+            )
