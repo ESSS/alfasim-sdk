@@ -68,8 +68,9 @@ Layout
 Status
 ------
 
-.. automodule:: _alfasim_sdk.status
-    :members:
+.. autoclass:: alfasim_sdk.ErrorMessage()
+
+.. autoclass:: alfasim_sdk.WarningMessage()
 
 
 .. _api-context-section:
