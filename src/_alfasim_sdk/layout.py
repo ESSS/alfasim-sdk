@@ -3,10 +3,10 @@ from typing import Callable
 
 import attr
 
-from alfasim_sdk._alfasim_sdk_utils import get_attr_class
-from alfasim_sdk.types import Group
-from alfasim_sdk.types import Tab
-from alfasim_sdk.types import Tabs
+from _alfasim_sdk.alfasim_sdk_utils import get_attr_class
+from _alfasim_sdk.types import Group
+from _alfasim_sdk.types import Tab
+from _alfasim_sdk.types import Tabs
 
 
 def tabs() -> Callable:

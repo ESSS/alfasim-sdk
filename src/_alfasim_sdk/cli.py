@@ -27,11 +27,11 @@ def destination_option(*, help):
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-def main():
+def console_main():
     pass
 
 
-@main.command()
+@console_main.command()
 @destination_option(
     help="""
     A path to where the plugin project should be created.
@@ -112,7 +112,7 @@ def template(dst, caption, plugin_id, author_name, author_email):
     Path(python_folder / f"{plugin_id}.py").touch()
 
 
-@main.command(name="compile")
+@console_main.command(name="compile")
 @plugin_dir_option
 def _compile(plugin_dir):
     """
@@ -134,7 +134,7 @@ def _compile(plugin_dir):
     subprocess.check_call(["python", str(compile_script)], env=env)  # nosec
 
 
-@main.command()
+@console_main.command()
 @click.pass_context
 @plugin_dir_option
 @destination_option(help="A path to where the output package should be created.")
@@ -155,7 +155,7 @@ def package(ctx, plugin_dir, package_name, dst):
     ctx.invoke(package_only, plugin_dir=plugin_dir, package_name=package_name, dst=dst)
 
 
-@main.command()
+@console_main.command()
 @click.pass_context
 @plugin_dir_option
 @destination_option(help="A path to where the output package should be created.")
@@ -171,8 +171,8 @@ def package_only(ctx, plugin_dir, package_name, dst):
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    from alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
-    from alfasim_sdk._alfasim_sdk_utils import get_extras_default_required_version
+    from _alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
+    from _alfasim_sdk.alfasim_sdk_utils import get_extras_default_required_version
 
     extras_defaults = {
         EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
@@ -183,10 +183,10 @@ def package_only(ctx, plugin_dir, package_name, dst):
 
 
 def _get_hook_specs_file_path() -> Path:
-    import alfasim_sdk.hook_specs
+    import _alfasim_sdk.hook_specs
 
-    return Path(alfasim_sdk.hook_specs.__file__)
+    return Path(_alfasim_sdk.hook_specs.__file__)
 
 
 if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    sys.exit(console_main())  # pragma: no cover

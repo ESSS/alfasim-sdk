@@ -2,6 +2,12 @@
 History
 =======
 
+0.7.0 (Unreleased)
+==================
+
+* Released with ALFAsim 1.8.0.
+* Add support for WellConectionPort on CaseDescription
+
 0.6.1 (2020-10-30)
 ==================
 

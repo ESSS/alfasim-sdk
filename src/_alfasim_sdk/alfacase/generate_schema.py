@@ -16,7 +16,7 @@ from barril.units import Scalar
 from strictyaml.utils import flatten
 from typing_inspect import is_optional_type
 
-from alfasim_sdk.alfacase.case_description import CaseDescription
+from _alfasim_sdk.alfacase.case_description import CaseDescription
 
 INDENTANTION = "    "
 
@@ -241,12 +241,8 @@ def _get_attr_name(key: str, value: attr.ib) -> str:
 # plugins:
 #   For now, Plugins inputs (GUI) will not be able to be customizable by YAML
 
-# initial_condition_arrays:
-#   Only used for tests, doesnt make sense to allows YAML to configure this (for now).
-
 IGNORED_PROPERTIES = (
     "plugins",
-    "initial_condition_arrays",
     "table_parameters",
 )
 

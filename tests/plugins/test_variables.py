@@ -23,7 +23,7 @@ import pytest
     ],
 )
 def test_validation(attr, expected_type_error, expected_message):
-    from alfasim_sdk.variables import (
+    from _alfasim_sdk.variables import (
         Visibility,
         Location,
         Scope,

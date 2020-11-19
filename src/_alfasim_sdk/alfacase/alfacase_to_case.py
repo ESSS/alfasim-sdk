@@ -19,8 +19,8 @@ from barril.units import Scalar
 from barril.units import UnitDatabase
 from strictyaml import YAML
 
-from alfasim_sdk import constants
-from alfasim_sdk.alfacase import case_description
+from _alfasim_sdk import constants
+from _alfasim_sdk.alfacase import case_description
 
 
 @attr.s
@@ -50,7 +50,7 @@ class DescriptionDocument:
         Load the values from the given file_path validating against the Schema defined on
         alfacase.schema.case_schema
         """
-        from alfasim_sdk.alfacase.schema import case_description_schema
+        from _alfasim_sdk.alfacase.schema import case_description_schema
         import strictyaml
 
         try:
@@ -848,7 +848,7 @@ def load_initial_conditions_description(
         "volume_fractions": load_initial_volume_fractions_description,
         "pressures": load_initial_pressures_description,
         "tracers_mass_fractions": load_initial_tracers_mass_fractions_description,
-        "initial_fluid": load_value,
+        "fluid": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.InitialConditionsDescription(**case_values)

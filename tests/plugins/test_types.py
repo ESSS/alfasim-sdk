@@ -2,13 +2,13 @@ import re
 
 import pytest
 
-from alfasim_sdk.types import MultipleReference
-from alfasim_sdk.types import Reference
+from _alfasim_sdk.types import MultipleReference
+from _alfasim_sdk.types import Reference
 
 
 @pytest.mark.parametrize("expression_type", ["enable_expr", "visible_expr"])
 def test_enable_expr_and_visible_expr(expression_type):
-    from alfasim_sdk.types import String
+    from _alfasim_sdk.types import String
 
     inputs = {"value": "value", "caption": "caption", expression_type: ""}
     with pytest.raises(TypeError, match=f"'{expression_type}' must be callable"):
@@ -28,7 +28,7 @@ def test_enable_expr_and_visible_expr(expression_type):
 
 
 def test_string():
-    from alfasim_sdk.types import String
+    from _alfasim_sdk.types import String
 
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
@@ -47,7 +47,7 @@ def test_string():
 
 
 def test_enum():
-    from alfasim_sdk.types import Enum
+    from _alfasim_sdk.types import Enum
 
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
@@ -81,8 +81,8 @@ def test_enum():
 
 @pytest.mark.parametrize("class_", [Reference, MultipleReference])
 def test_reference(class_):
-    from alfasim_sdk.types import TracerType
-    from alfasim_sdk.models import data_model, container_model
+    from _alfasim_sdk.types import TracerType
+    from _alfasim_sdk.models import data_model, container_model
 
     @data_model(caption="caption")
     class Data:
@@ -128,7 +128,7 @@ def test_reference(class_):
 
 
 def test_quantity():
-    from alfasim_sdk.types import Quantity
+    from _alfasim_sdk.types import Quantity
 
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
@@ -145,7 +145,7 @@ def test_quantity():
 
 
 def test_table():
-    from alfasim_sdk.types import Table
+    from _alfasim_sdk.types import Table
 
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
@@ -160,7 +160,7 @@ def test_table():
 
 
 def test_table_column():
-    from alfasim_sdk.types import TableColumn, Quantity
+    from _alfasim_sdk.types import TableColumn, Quantity
 
     with pytest.raises(
         TypeError, match="value must be a Quantity, got a <class 'str'>."
@@ -174,7 +174,7 @@ def test_table_column():
 
 
 def test_boolean():
-    from alfasim_sdk.types import Boolean
+    from _alfasim_sdk.types import Boolean
 
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
@@ -186,13 +186,13 @@ def test_boolean():
 
 
 def test_file_content():
-    from alfasim_sdk.types import FileContent
+    from _alfasim_sdk.types import FileContent
 
     FileContent(caption="Test")
 
 
 def test_tooltips():
-    from alfasim_sdk.types import Boolean
+    from _alfasim_sdk.types import Boolean
 
     field = Boolean(value=True, caption="caption")
     assert field.tooltip == ""

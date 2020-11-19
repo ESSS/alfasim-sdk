@@ -1,8 +1,8 @@
 # fmt: off
 ##[[[cog
 # import cog
-# from alfasim_sdk.alfacase.case_description import CaseDescription
-# from alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
+# from alfasim_sdk import CaseDescription
+# from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
 # cog.out("from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
 # cog.out("\n\n")
 # cog.out("\n\n")
@@ -570,7 +570,7 @@ valve_equipment_description_schema = Map(
 )
 wall_description_schema = Map(
     {
-        Optional("name"): Str(),
+        "name": Str(),
         Optional("inner_roughness"): Map({"value": Float(), "unit": Str()}),
         Optional("wall_layer_container"): Seq(wall_layer_description_schema),
     }
@@ -598,7 +598,7 @@ initial_conditions_description_schema = Map(
         Optional("tracers_mass_fractions"): initial_tracers_mass_fractions_description_schema,
         Optional("velocities"): initial_velocities_description_schema,
         Optional("temperatures"): initial_temperatures_description_schema,
-        Optional("initial_fluid"): Str(),
+        Optional("fluid"): Str(),
     }
 )
 pvt_model_compositional_description_schema = Map(
@@ -676,5 +676,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 1a3637d3db46998337982baa10598ded)
+# [[[end]]] (checksum: 59cb3cca17782bafaa2319b9882fd665)
 # fmt: on
