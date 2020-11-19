@@ -324,7 +324,7 @@ class Context:
         .. code-block:: console
 
             >>> ctx.get_nodes[0]
-            EdgeInfo(name='Pipe 1', number_of_phases_from_associated_pvt=2)
+            NodeInfo(name='Node 1', number_of_phases_from_associated_pvt=2)
 
             >>> ctx.get_nodes[0].name
             'Node 1'
