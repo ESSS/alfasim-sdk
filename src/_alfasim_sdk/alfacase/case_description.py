@@ -420,8 +420,6 @@ class PumpEquipmentDescription:
         default=constants.InterpolationType.Constant
     )
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
-    # @TODO: ASIM-3522 - Remove deprecated split equipment code
-    nonsplit_equipment: bool = attr.ib(default=True, validator=instance_of(bool))
 
 
 @attr.s(frozen=True, slots=True)
@@ -483,8 +481,6 @@ class CompressorEquipmentDescription:
     )
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
     table = attrib_instance(CompressorPressureTableDescription)
-    # @TODO: ASIM-3522 - Remove deprecated split equipment code
-    nonsplit_equipment: bool = attr.ib(default=True, validator=instance_of(bool))
 
 
 @attr.s(frozen=True, slots=True)
@@ -535,9 +531,6 @@ class ValveEquipmentDescription:
     opening_curve = attrib_instance(OpeningCurveDescription)
     # When ValveType.ChokeValveWithFlowCoefficient
     cv_table = attrib_instance(CvTableDescription)
-
-    # @TODO: ASIM-3522 - Remove deprecated split equipment code
-    nonsplit_equipment: bool = attr.ib(default=True, validator=instance_of(bool))
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
