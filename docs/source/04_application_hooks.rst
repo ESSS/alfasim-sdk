@@ -19,10 +19,10 @@ be customized will be located on: :menuselection:`myplugin --> src --> python --
 Plugin Model
 ------------
 
-.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type
+.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type
 
 
 Status Monitor
 --------------
 
-.. autofunction:: alfasim_sdk.hook_specs_gui.alfasim_get_status
+.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_status

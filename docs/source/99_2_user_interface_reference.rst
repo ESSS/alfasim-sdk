@@ -13,9 +13,9 @@ Here is listed the completed API available to implement the :ref:`user_interface
 Models
 ------
 
-.. autofunction:: alfasim_sdk.models.data_model
+.. autofunction:: alfasim_sdk.data_model
 
-.. autofunction:: alfasim_sdk.models.container_model
+.. autofunction:: alfasim_sdk.container_model
 
 
 .. _api-types-section:
@@ -30,25 +30,25 @@ Models are the primary elements to create user interfaces on |alfasim|, models c
 and provide a container for other fields that should be grouped together.
 
 
-.. autoclass:: alfasim_sdk.types.BaseField()
+.. autoclass:: _alfasim_sdk.types.BaseField()
 
-.. autoclass:: alfasim_sdk.types.String()
+.. autoclass:: alfasim_sdk.String()
 
-.. autoclass:: alfasim_sdk.types.Enum()
+.. autoclass:: alfasim_sdk.Enum()
 
-.. autoclass:: alfasim_sdk.types.Reference()
+.. autoclass:: alfasim_sdk.Reference()
 
-.. autoclass:: alfasim_sdk.types.MultipleReference()
+.. autoclass:: alfasim_sdk.MultipleReference()
 
-.. autoclass:: alfasim_sdk.types.Quantity()
+.. autoclass:: alfasim_sdk.Quantity()
 
-.. autoclass:: alfasim_sdk.types.Table()
+.. autoclass:: alfasim_sdk.Table()
 
-.. autoclass:: alfasim_sdk.types.TableColumn()
+.. autoclass:: alfasim_sdk.TableColumn()
 
-.. autoclass:: alfasim_sdk.types.Boolean()
+.. autoclass:: alfasim_sdk.Boolean()
 
-.. autoclass:: alfasim_sdk.types.FileContent()
+.. autoclass:: alfasim_sdk.FileContent()
 
 
 .. _api-layout-section:
@@ -56,11 +56,11 @@ and provide a container for other fields that should be grouped together.
 Layout
 ------
 
-.. autofunction:: alfasim_sdk.layout.group()
+.. autofunction:: alfasim_sdk.group()
 
-.. autofunction:: alfasim_sdk.layout.tabs()
+.. autofunction:: alfasim_sdk.tabs()
 
-.. autofunction:: alfasim_sdk.layout.tab()
+.. autofunction:: alfasim_sdk.tab()
 
 
 .. _api-status-section:
@@ -68,8 +68,9 @@ Layout
 Status
 ------
 
-.. automodule:: alfasim_sdk.status
-    :members:
+.. autoclass:: alfasim_sdk.ErrorMessage()
+
+.. autoclass:: alfasim_sdk.WarningMessage()
 
 
 .. _api-context-section:
@@ -77,5 +78,5 @@ Status
 Context
 -------
 
-.. automodule:: alfasim_sdk.context
+.. automodule:: _alfasim_sdk.context
     :members:

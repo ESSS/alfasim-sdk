@@ -12,15 +12,15 @@ Here is listed the completed API available to implement the :ref:`solver_config_
 Hydrodynamic Model
 ------------------
 
-.. autoclass:: alfasim_sdk.types.AddField()
+.. autoclass:: alfasim_sdk.AddField()
 
-.. autoclass:: alfasim_sdk.types.AddPhase()
+.. autoclass:: alfasim_sdk.AddPhase()
 
-.. autoclass:: alfasim_sdk.types.UpdatePhase()
+.. autoclass:: alfasim_sdk.UpdatePhase()
 
-.. autoclass:: alfasim_sdk.types.AddLayer()
+.. autoclass:: alfasim_sdk.AddLayer()
 
-.. autoclass:: alfasim_sdk.types.UpdateLayer()
+.. autoclass:: alfasim_sdk.UpdateLayer()
 
 
 .. _api-variables-section:
@@ -28,15 +28,15 @@ Hydrodynamic Model
 Secondary Variables
 -------------------
 
-.. autoclass:: alfasim_sdk.variables.SecondaryVariable()
+.. autoclass:: alfasim_sdk.SecondaryVariable()
 
-.. autoclass:: alfasim_sdk.variables.Type()
+.. autoclass:: alfasim_sdk.Type()
 
-.. autoclass:: alfasim_sdk.variables.Visibility()
+.. autoclass:: alfasim_sdk.Visibility()
 
-.. autoclass:: alfasim_sdk.variables.Location()
+.. autoclass:: alfasim_sdk.Location()
 
-.. autoclass:: alfasim_sdk.variables.Scope()
+.. autoclass:: alfasim_sdk.Scope()
 
 
 .. _api-constants-section:
@@ -44,14 +44,14 @@ Secondary Variables
 Constants
 ---------
 
-.. autodata:: alfasim_sdk.constants.GAS_PHASE
+.. autodata:: alfasim_sdk.GAS_PHASE
 
-.. autodata:: alfasim_sdk.constants.OIL_PHASE
+.. autodata:: alfasim_sdk.OIL_PHASE
 
-.. autodata:: alfasim_sdk.constants.WATER_PHASE
+.. autodata:: alfasim_sdk.WATER_PHASE
 
-.. autodata:: alfasim_sdk.constants.GAS_LAYER
+.. autodata:: alfasim_sdk.GAS_LAYER
 
-.. autodata:: alfasim_sdk.constants.OIL_LAYER
+.. autodata:: alfasim_sdk.OIL_LAYER
 
-.. autodata:: alfasim_sdk.constants.WATER_LAYER
+.. autodata:: alfasim_sdk.WATER_LAYER
