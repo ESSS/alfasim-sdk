@@ -93,13 +93,13 @@ class BaseField:
 
     The images below shows the output from the example above.
 
-    .. image:: _static/images/api/base_field_caption.png
+    .. image:: /_static/images/api/base_field_caption.png
         :scale: 60%
 
-    .. image:: _static/images/api/base_field_tootip_1.png
+    .. image:: /_static/images/api/base_field_tootip_1.png
         :scale: 70%
 
-    .. image:: _static/images/api/base_field_tootip_2.png
+    .. image:: /_static/images/api/base_field_tootip_2.png
         :scale: 70%
 
     .. _enable-expression-section:
@@ -142,9 +142,9 @@ class BaseField:
 
     The image below shows the ``N_ions`` property disabled, when the property ``bool_value`` is disabled (False)
 
-    .. image:: _static/images/api/base_field_enable_expr_1.png
+    .. image:: /_static/images/api/base_field_enable_expr_1.png
 
-    .. image:: _static/images/api/base_field_enable_expr_2.png
+    .. image:: /_static/images/api/base_field_enable_expr_2.png
 
 
     .. _visible-expression-section:
@@ -184,9 +184,9 @@ class BaseField:
 
     The image below shows the ``N_ions`` property visible, when the property ``bool_value`` is enabled (True)
 
-    .. image:: _static/images/api/base_field_visible_expr_1.png
+    .. image:: /_static/images/api/base_field_visible_expr_1.png
 
-    .. image:: _static/images/api/base_field_visible_expr_2.png
+    .. image:: /_static/images/api/base_field_visible_expr_2.png
 
     .. Development only
 
@@ -225,7 +225,7 @@ class String(BaseField):
                 caption="String Field",
             )
 
-    .. image:: _static/images/api/string_field_example.png
+    .. image:: /_static/images/api/string_field_example.png
 
     .. rubric:: **Accessing String Field from Plugin**:
 
@@ -273,7 +273,7 @@ class Enum(BaseField):
                 caption="Enum Field",
             )
 
-    .. image:: _static/images/api/enum_field_example.png
+    .. image:: /_static/images/api/enum_field_example.png
 
     .. rubric:: **Accessing Enum Field from Plugin**:
 
@@ -284,7 +284,7 @@ class Enum(BaseField):
     When accessed from the :func:`~alfasim_sdk.context.Context`, the Enum field will return the currently selected option
     as ``str``.
 
-    .. code-block:: bash
+    .. code-block:: python
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
@@ -293,6 +293,8 @@ class Enum(BaseField):
                 initial="Option 1",
                 caption="Enum Field",
             )
+
+    .. code-block:: bash
 
         # From Terminal
         >>> ctx.get_model("MyModel").enum_field
@@ -394,7 +396,7 @@ class Reference(BaseReference):
             )
 
 
-    .. image:: _static/images/api/reference_field_example_1.png
+    .. image:: /_static/images/api/reference_field_example_1.png
 
     .. rubric:: Example using ``Custom Data`` on myplugin.py
 
@@ -414,7 +416,7 @@ class Reference(BaseReference):
             )
 
 
-    .. image:: _static/images/api/reference_field_example_2.png
+    .. image:: /_static/images/api/reference_field_example_2.png
 
     .. rubric:: **Accessing Reference Field from Plugin**:
 
@@ -495,7 +497,7 @@ class MultipleReference(BaseReference):
             )
 
 
-    .. image:: _static/images/api/multiplereference_field_example_1.png
+    .. image:: /_static/images/api/multiplereference_field_example_1.png
 
     .. rubric:: Example using ``Custom Data`` on myplugin.py
 
@@ -515,7 +517,7 @@ class MultipleReference(BaseReference):
             )
 
 
-    .. image:: _static/images/api/multiplereference_field_example_2.png
+    .. image:: /_static/images/api/multiplereference_field_example_2.png
 
     .. rubric:: **Accessing MultipleReference Field from Plugin**:
 
@@ -589,7 +591,7 @@ class Quantity(BaseField):
             )
 
 
-    .. image:: _static/images/api/quantity_field_example.png
+    .. image:: /_static/images/api/quantity_field_example.png
 
     .. rubric:: **Accessing Quantity Field from Plugin**:
 
@@ -691,15 +693,15 @@ class Table(BaseField):
 
     The image above illustrates the output from the example above.
 
-    .. image:: _static/images/api/table_field_example_1.png
+    .. image:: /_static/images/api/table_field_example_1.png
 
     With this component, the user can easily import the content from a file by clicking on the last icon from the toolbar menu.
 
-    .. image:: _static/images/api/table_field_example_2.png
+    .. image:: /_static/images/api/table_field_example_2.png
 
     The wizard assistance supports multiple types of file, the user just needs to inform which kind of configuration the file has.
 
-    .. image:: _static/images/api/table_field_example_3.png
+    .. image:: /_static/images/api/table_field_example_3.png
 
     By the end, it's possible for the user select to which unit the values must be converted and which columns.
 
@@ -780,7 +782,7 @@ class Boolean(BaseField):
                 caption="Boolean Field",
             )
 
-    .. image:: _static/images/api/boolean_field_example_1.png
+    .. image:: /_static/images/api/boolean_field_example_1.png
 
     .. rubric:: **Accessing Boolean Field from Plugin**:
 
@@ -830,7 +832,7 @@ class FileContent(BaseField):
         class MyModel:
             file_content_field = FileContent(caption="FileContent Field")
 
-    .. image:: _static/images/api/file_content_field_example_1.png
+    .. image:: /_static/images/api/file_content_field_example_1.png
 
     .. rubric:: **Accessing FileContent Field from Plugin**:
 

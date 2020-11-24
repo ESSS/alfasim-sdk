@@ -23,8 +23,8 @@ digraph {
             output [label="Output Variables"]
 
             node[peripheries="0" shape="cds", color="#DA5961", fontcolor="#DA5961", style=""]
-            hook_initialize [ label="HOOK_INITIALIZE", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.initialize"]
-            hook_finalize [label="HOOK_FINALIZE", URL="../06_solver_hooks.html#alfasim_sdk.hook_specs.finalize"]
+            hook_initialize [ label="HOOK_INITIALIZE", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.initialize"]
+            hook_finalize [label="HOOK_FINALIZE", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.finalize"]
 
             {rank = same; hook_initialize_point; hook_initialize}
             {rank = same; hook_finalize_point; hook_finalize; }

@@ -1,0 +1,10 @@
+
+div.highlight > pre {
+    border-radius: 8px;
+    line-height: 1.4;
+    padding: 1.25rem 1.5rem;
+    border: 0;
+}
+div.bd-sidebar {
+    max-width: 20%;
+}
