@@ -17,7 +17,10 @@ be customized would be located on: :menuselection:`myplugin --> src --> python -
 Additional Variables
 --------------------
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_additional_variables
+.. currentmodule:: _alfasim_sdk.hook_specs_gui
+
+.. autofunction:: alfasim_get_additional_variables
+
 
 .. _multi-field-description:
 
@@ -35,11 +38,23 @@ the hook listed below, the plugin can:
     For each new added ``field`` is considered a mass conservation equation and for each new added ``layer`` is considered
     a momentum conservation and an energy conservation equations, depending on the energy model used at |alfasim|.
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_fields
+.. automodule:: _alfasim_sdk.hook_specs_gui
+    :members:
+    :undoc-members:
+    :exclude-members: alfasim_configure_fields
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_phases
+    .. py:function:: .alfasim_configure_fields
+        :noindex:
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_layers
+    .. py:function:: alfasim_configure_phases
+        :noindex:
+
+
+.. .. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_fields
+
+.. .. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_phases
+
+.. .. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_layers
 
 In order to complement the ``Hydrodynamic model`` customization, it is possible to inform |alfasim| which phases
 (added from plugin or not) will have the state variables calculated by plugin.

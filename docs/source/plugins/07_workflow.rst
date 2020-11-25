@@ -12,7 +12,7 @@ have their graphs expanded to make it possible to see more internal `hooks`.
 Main Overview
 -------------
 
-.. graphviz:: _static/graphviz/main_flow.dot
+.. graphviz:: /_static/graphviz/main_flow.dot
 
 
 .. _hyd_solver:
@@ -20,7 +20,7 @@ Main Overview
 Hydrodynamic Solver
 -------------------
 
-.. graphviz:: _static/graphviz/hydrodynamic_solver.dot
+.. graphviz:: /_static/graphviz/hydrodynamic_solver.dot
 
 
 
@@ -29,7 +29,7 @@ Hydrodynamic Solver
 State Variable Calculator
 -------------------------
 
-.. graphviz:: _static/graphviz/state_variable_calculator.dot
+.. graphviz:: /_static/graphviz/state_variable_calculator.dot
 
 
 .. _tracer_solver:
@@ -37,4 +37,4 @@ State Variable Calculator
 Tracer Solver
 -------------
 
-.. graphviz:: _static/graphviz/tracer_solver.dot
+.. graphviz:: /_static/graphviz/tracer_solver.dot

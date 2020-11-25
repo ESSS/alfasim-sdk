@@ -20,7 +20,7 @@ illustrating the solver's walkthrough, showing where each hook will be called. T
 available at :ref:`main_overview` section from :ref:`workflow_section`. It illustrates where the :py:func:`HOOK_INITIALIZE<_alfasim_sdk.hook_specs.initialize>`
 and the :py:func:`HOOK_FINALIZE<_alfasim_sdk.hook_specs.finalize>` will be called.
 
-.. graphviz:: _static/graphviz/main_flow.dot
+.. graphviz:: /_static/graphviz/main_flow.dot
     :align: center
 
 .. contents::

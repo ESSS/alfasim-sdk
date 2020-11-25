@@ -161,16 +161,16 @@ Installing the plugin
 With :file:`myplugin.hmplugin` file, it is now possible to install it on |alfasim| application.
 From the menu bar select the `Plugin Manager` option, as illustrated in the figure below:
 
-.. image:: _static/images/quick_start/menu_bar.png
+.. image:: /_static/images/quick_start/menu_bar.png
 
 In the `Plugin Manager` windows, install :file:`myplugin.hmplugin` file plugin.
 
-.. image:: _static/images/quick_start/plugin_manager_empty.png
+.. image:: /_static/images/quick_start/plugin_manager_empty.png
 
 By clicking on the plugin name, it is possible to visualize the content from the :file:`README.md` file.
 
-.. image:: _static/images/quick_start/plugin_manager_with_plugin.png
+.. image:: /_static/images/quick_start/plugin_manager_with_plugin.png
 
 Restart the application and check the recently installed plugin available over the :guilabel:`Tree`.
 
-.. image:: _static/images/quick_start/tree_with_plugin.png
+.. image:: /_static/images/quick_start/tree_with_plugin.png
