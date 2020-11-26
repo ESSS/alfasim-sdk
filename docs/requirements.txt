@@ -1,3 +1,4 @@
 breathe==4.22.1
 sphinx-click==2.5.0
 pydata-sphinx-theme
+sphinx-inline-tabs

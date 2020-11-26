@@ -47,10 +47,13 @@ graphviz_output_format = "svg"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
-    "sphinx.ext.autodoc",
     "breathe",
+    "sphinx.ext.autodoc",
     "sphinx_click.ext",
     "sphinx.ext.graphviz",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx_inline_tabs",
 ]
 add_module_names = False
 autodoc_typehints = "none"
@@ -76,6 +79,11 @@ rst_prolog = """
 
 .. |marker_2| image:: /_static/images/marker_2.png
     :scale: 80%
+
+.. # define a hard space useful for literal-blocks that has empty content.
+.. |space| raw:: html
+
+    ⠀
 
 .. # define a hard line break for HTML
 .. |br| raw:: html
@@ -111,3 +119,8 @@ html_css_files = [
     "css/custom.css",
 ]
 html_favicon = "_static/images/alfasim_gui.ico"
+
+# -- Options for intersphinx -------------------------------------------------
+intersphinx_mapping = {
+    "python": ("http://docs.python.org/3", None),
+}

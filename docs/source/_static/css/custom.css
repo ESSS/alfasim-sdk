@@ -8,3 +8,10 @@ div.highlight > pre {
 div.bd-sidebar {
     max-width: 20%;
 }
+
+div.tab-content > pre.literal-block {
+    border-radius: 8px;
+    line-height: 1.4;
+    padding: 1.25rem 1.5rem;
+    border: 0;
+}
