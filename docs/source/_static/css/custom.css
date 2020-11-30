@@ -1,7 +1,7 @@
 
 div.highlight > pre {
     border-radius: 8px;
-    line-height: 1.4;
+    line-height: 1.4em;
     padding: 1.25rem 1.5rem;
     border: 0;
 }
@@ -14,4 +14,9 @@ div.tab-content > pre.literal-block {
     line-height: 1.4;
     padding: 1.25rem 1.5rem;
     border: 0;
+}
+
+td.linenos > div.linenodiv > pre {
+    line-height: 1.4em;
+    padding: 1.25rem 1.5rem;
 }
