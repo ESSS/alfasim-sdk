@@ -178,11 +178,14 @@ def union_formatted(value):
     optional_with_reference = _get_optional_reference()
     ref_value = value.__args__[0]
 
-    name = ref_value.__name__
     if isinstance(ref_value, enum.EnumMeta):
         name = enum_formatted(ref_value)
     elif is_array(ref_value):
         name = _get_array_reference(add_space=False)
+    elif is_list(ref_value):
+        name = f"{_get_list_reference()}[{ref_value.__args__[0].__name__}]"
+    else:
+        name = ref_value.__name__
 
     return f"{optional_with_reference}[{name}]"
 
