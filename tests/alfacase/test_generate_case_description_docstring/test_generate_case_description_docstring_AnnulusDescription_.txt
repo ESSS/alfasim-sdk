@@ -1,0 +1,25 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class AnnulusDescription
+            has_annulus_flow: bool
+            has_annulus_flow: bool
+            pvt_model: \ :class:`Optional <typing.Optional>`\[str]
+            initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\ |space|
+            gas_lift_valve_equipment: \ :class:`Dict <typing.Dict>`\[str, \ :class:`GasLiftValveEquipmentDescription <GasLiftValveEquipmentDescription>`\]
+            top_node: str
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            has_annulus_flow: boolean
+            has_annulus_flow: number
+            pvt_model: string    # optional
+            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\ |space|
+            gas_lift_valve_equipment: 
+                string: \ :class:`gas_lift_valve_equipment_description_schema <GasLiftValveEquipmentDescription>`\ |space|
+            top_node: string

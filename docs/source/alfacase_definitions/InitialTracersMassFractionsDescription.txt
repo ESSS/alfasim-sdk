@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class InitialTracersMassFractionsDescription
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
+            table_x: \ :class:`ReferencedTracersMassFractionsContainerDescription <ReferencedTracersMassFractionsContainerDescription>`\ |space|
+            table_y: \ :class:`ReferencedTracersMassFractionsContainerDescription <ReferencedTracersMassFractionsContainerDescription>`\ |space|
+            table_length: \ :class:`TracersMassFractionsContainerDescription <TracersMassFractionsContainerDescription>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
+            table_x: \ :class:`referenced_tracers_mass_fractions_container_description_schema <ReferencedTracersMassFractionsContainerDescription>`\ |space|
+            table_y: \ :class:`referenced_tracers_mass_fractions_container_description_schema <ReferencedTracersMassFractionsContainerDescription>`\ |space|
+            table_length: \ :class:`tracers_mass_fractions_container_description_schema <TracersMassFractionsContainerDescription>`\ |space|

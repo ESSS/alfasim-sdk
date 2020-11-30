@@ -1,0 +1,24 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class HeavyComponentDescription
+            name: str
+            scn: int
+            MW: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            rho: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            scn: number
+            MW: 
+                value: number
+                unit: string
+            rho: 
+                value: number
+                unit: string

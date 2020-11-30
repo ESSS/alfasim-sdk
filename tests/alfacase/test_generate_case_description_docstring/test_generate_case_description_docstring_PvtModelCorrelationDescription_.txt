@@ -1,0 +1,26 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PvtModelCorrelationDescription
+            oil_density_std: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            gas_density_std: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            rs_sat: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            pvt_correlation_package: \ :class:`CorrelationPackage <_alfasim_sdk.constants.CorrelationPackage>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            oil_density_std: 
+                value: number
+                unit: string
+            gas_density_std: 
+                value: number
+                unit: string
+            rs_sat: 
+                value: number
+                unit: string
+            pvt_correlation_package: \ :class:`CorrelationPackage <_alfasim_sdk.constants.CorrelationPackage>`\ |space|

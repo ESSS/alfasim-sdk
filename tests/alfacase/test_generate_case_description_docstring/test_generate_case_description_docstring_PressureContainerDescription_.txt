@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PressureContainerDescription
+            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            pressures: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            positions: 
+                values: [number]
+                unit: string
+            pressures: 
+                values: [number]
+                unit: string

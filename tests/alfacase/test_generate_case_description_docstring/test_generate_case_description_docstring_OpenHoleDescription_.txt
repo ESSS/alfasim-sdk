@@ -1,0 +1,26 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class OpenHoleDescription
+            name: str
+            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            length: 
+                value: number
+                unit: string
+            diameter: 
+                value: number
+                unit: string
+            inner_roughness: 
+                value: number
+                unit: string

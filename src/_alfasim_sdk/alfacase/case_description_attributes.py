@@ -246,3 +246,21 @@ def numpy_array_validator(dimension: int, is_list: bool = False):
             _check_dimension(value)
 
     return _numpy_array_validator
+
+
+class DescriptionError(Exception):
+    """
+    Base exception for exceptions in case description.
+    """
+
+
+class InvalidReferenceError(DescriptionError):
+    """
+    Error raised when an attribute has a reference for an element that doesn't exist.
+    """
+
+
+class InvalidYamlData(DescriptionError):
+    """
+    Error raised when some data in the YAML file is not properly configured.
+    """

@@ -1,0 +1,62 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ReservoirInflowEquipmentDescription
+            pressure: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            fluid: \ :class:`Optional <typing.Optional>`\[str]
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ |space|
+            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ |space|
+            mass_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            start: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            productivity_ipr: \ :class:`Optional <typing.Optional>`\[str]
+            injectivity_ipr: \ :class:`Optional <typing.Optional>`\[str]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            pressure: 
+                value: number
+                unit: string
+            temperature: 
+                value: number
+                unit: string
+            fluid: string    # optional
+            tracer_mass_fraction: 
+                values: [number]
+                unit: string
+            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ |space|
+            mass_fractions: 
+                string: 
+                    value: number
+                    unit: string
+            volume_fractions: 
+                string: 
+                    value: number
+                    unit: string
+            gas_liquid_ratio: 
+                value: number
+                unit: string
+            gas_oil_ratio: 
+                value: number
+                unit: string
+            water_cut: 
+                value: number
+                unit: string
+            start: 
+                value: number
+                unit: string
+            length: 
+                value: number
+                unit: string
+            productivity_ipr: string    # optional
+            injectivity_ipr: string    # optional

@@ -34,6 +34,7 @@ breathe_doxygen_config_options = {
 }
 
 # -- Project information -----------------------------------------------------
+
 project = ""
 copyright = "2019, ESSS"
 author = "ESSS"
@@ -41,11 +42,13 @@ version = ""
 release = ""
 
 # -- Options for Graphviz -------------------------------------------------
+
 graphviz_dot = "dot"
 graphviz_dot_args = ["-Tsvg"]
 graphviz_output_format = "svg"
 
 # -- General configuration ---------------------------------------------------
+
 extensions = [
     "breathe",
     "sphinx.ext.autodoc",
@@ -107,6 +110,7 @@ language = None
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "breathe/*"]
 
 # -- Options for HTML output -------------------------------------------------
+
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/images/logo-alfasim.svg"
 
@@ -121,6 +125,12 @@ html_css_files = [
 html_favicon = "_static/images/alfasim_gui.ico"
 
 # -- Options for intersphinx -------------------------------------------------
+
 intersphinx_mapping = {
     "python": ("http://docs.python.org/3", None),
+    "barril": ("https://barril.readthedocs.io/en/latest/", None),
 }
+
+# -- Options for Autodoc -----------------------------------------------------
+
+autodoc_member_order = "groupwise"

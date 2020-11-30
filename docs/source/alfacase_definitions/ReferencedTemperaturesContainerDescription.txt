@@ -1,0 +1,24 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ReferencedTemperaturesContainerDescription
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            temperatures: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            reference_coordinate: 
+                value: number
+                unit: string
+            positions: 
+                values: [number]
+                unit: string
+            temperatures: 
+                values: [number]
+                unit: string

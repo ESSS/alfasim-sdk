@@ -1,0 +1,27 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PipeSegmentsDescription
+            start_positions: \ :class:`Array <barril.units.Array>`\ |space|
+            diameters: \ :class:`Array <barril.units.Array>`\ |space|
+            roughnesses: \ :class:`Array <barril.units.Array>`\ |space|
+            wall_names: \ :class:`Optional <typing.Optional>`\[List]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            start_positions: 
+                values: [number]
+                unit: string
+            diameters: 
+                values: [number]
+                unit: string
+            roughnesses: 
+                values: [number]
+                unit: string
+            wall_names:     # optional
+                - str

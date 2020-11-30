@@ -727,8 +727,7 @@ def test_invalid_yaml_contents_parsing(tmp_path):
         "    ...\n"
         "    ^ (line: 2)"
     )
+    from _alfasim_sdk.alfacase.case_description_attributes import DescriptionError
 
-    with pytest.raises(
-        case_description.DescriptionError, match=re.escape(expected_msg)
-    ):
+    with pytest.raises(DescriptionError, match=re.escape(expected_msg)):
         DescriptionDocument.from_file(alfacase_file)

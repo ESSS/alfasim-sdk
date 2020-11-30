@@ -1,0 +1,48 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CasingSectionDescription
+            name: str
+            hanger_depth: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            settings_depth: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            hole_diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            material: \ :class:`Optional <typing.Optional>`\[str]
+            top_of_filler: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            filler_material: \ :class:`Optional <typing.Optional>`\[str]
+            material_above_filler: \ :class:`Optional <typing.Optional>`\[str]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            hanger_depth: 
+                value: number
+                unit: string
+            settings_depth: 
+                value: number
+                unit: string
+            hole_diameter: 
+                value: number
+                unit: string
+            outer_diameter: 
+                value: number
+                unit: string
+            inner_diameter: 
+                value: number
+                unit: string
+            inner_roughness: 
+                value: number
+                unit: string
+            material: string    # optional
+            top_of_filler: 
+                value: number
+                unit: string
+            filler_material: string    # optional
+            material_above_filler: string    # optional

@@ -1,0 +1,26 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class EnvironmentDescription
+            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\ |space|
+            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\ |space|
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            md_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\]
+            tvd_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\ |space|
+            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\ |space|
+            reference_y_coordinate: 
+                value: number
+                unit: string
+            md_properties_table: 
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ |space|
+            tvd_properties_table: 
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ |space|

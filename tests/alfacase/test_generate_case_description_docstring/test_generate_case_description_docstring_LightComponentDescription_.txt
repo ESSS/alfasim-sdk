@@ -1,0 +1,66 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class LightComponentDescription
+            name: str
+            Pc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Tc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Vc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            omega: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            MW: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Tb: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Parachor: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            B_parameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            Pc: 
+                value: number
+                unit: string
+            Tc: 
+                value: number
+                unit: string
+            Vc: 
+                value: number
+                unit: string
+            omega: 
+                value: number
+                unit: string
+            MW: 
+                value: number
+                unit: string
+            Tb: 
+                value: number
+                unit: string
+            Parachor: 
+                value: number
+                unit: string
+            B_parameter: 
+                value: number
+                unit: string
+            Cp_0: 
+                value: number
+                unit: string
+            Cp_1: 
+                value: number
+                unit: string
+            Cp_2: 
+                value: number
+                unit: string
+            Cp_3: 
+                value: number
+                unit: string
+            Cp_4: 
+                value: number
+                unit: string

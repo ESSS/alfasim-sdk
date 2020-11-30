@@ -1,0 +1,25 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ReferencedVelocitiesContainerDescription
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            reference_coordinate: 
+                value: number
+                unit: string
+            positions: 
+                values: [number]
+                unit: string
+            velocities: 
+                string: 
+                    values: [number]
+                    unit: string

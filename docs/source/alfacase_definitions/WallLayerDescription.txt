@@ -1,0 +1,22 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class WallLayerDescription
+            thickness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            material_name: str
+            has_annulus_flow: bool
+            has_annulus_flow: bool
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            thickness: 
+                value: number
+                unit: string
+            material_name: string
+            has_annulus_flow: boolean
+            has_annulus_flow: number

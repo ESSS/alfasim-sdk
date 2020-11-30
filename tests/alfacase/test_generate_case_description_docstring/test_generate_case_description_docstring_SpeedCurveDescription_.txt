@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class SpeedCurveDescription
+            time: \ :class:`Array <barril.units.Array>`\ |space|
+            speed: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            time: 
+                values: [number]
+                unit: string
+            speed: 
+                values: [number]
+                unit: string

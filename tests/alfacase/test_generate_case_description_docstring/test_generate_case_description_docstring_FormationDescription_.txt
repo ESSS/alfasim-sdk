@@ -1,0 +1,19 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class FormationDescription
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            layers: \ :class:`List <typing.List>`\[\ :class:`FormationLayerDescription <FormationLayerDescription>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            reference_y_coordinate: 
+                value: number
+                unit: string
+            layers: 
+                - \ :class:`formation_layer_description_schema <FormationLayerDescription>`\ |space|

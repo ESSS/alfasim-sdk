@@ -1,0 +1,15 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class TracersDescription
+            constant_coefficients: \ :class:`Dict <typing.Dict>`\[str, \ :class:`TracerModelConstantCoefficientsDescription <TracerModelConstantCoefficientsDescription>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            constant_coefficients: 
+                string: \ :class:`tracer_model_constant_coefficients_description_schema <TracerModelConstantCoefficientsDescription>`\ |space|

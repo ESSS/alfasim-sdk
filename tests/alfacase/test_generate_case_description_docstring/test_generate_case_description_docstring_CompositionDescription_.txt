@@ -1,0 +1,22 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CompositionDescription
+            component: str
+            molar_fraction: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            reference_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            component: string
+            molar_fraction: 
+                value: number
+                unit: string
+            reference_enthalpy: 
+                value: number
+                unit: string

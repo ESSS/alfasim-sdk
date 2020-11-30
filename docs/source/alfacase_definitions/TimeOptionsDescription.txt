@@ -1,0 +1,44 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class TimeOptionsDescription
+            stop_on_steady_state: bool
+            stop_on_steady_state: bool
+            initial_time: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            final_time: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            stop_on_steady_state: boolean
+            stop_on_steady_state: number
+            initial_time: 
+                value: number
+                unit: string
+            final_time: 
+                value: number
+                unit: string
+            initial_timestep: 
+                value: number
+                unit: string
+            minimum_timestep: 
+                value: number
+                unit: string
+            maximum_timestep: 
+                value: number
+                unit: string
+            restart_autosave_frequency: 
+                value: number
+                unit: string
+            minimum_time_for_steady_state_stop: 
+                value: number
+                unit: string

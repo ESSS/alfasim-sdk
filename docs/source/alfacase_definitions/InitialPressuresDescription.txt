@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class InitialPressuresDescription
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
+            table_x: \ :class:`ReferencedPressureContainerDescription <ReferencedPressureContainerDescription>`\ |space|
+            table_y: \ :class:`ReferencedPressureContainerDescription <ReferencedPressureContainerDescription>`\ |space|
+            table_length: \ :class:`PressureContainerDescription <PressureContainerDescription>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
+            table_x: \ :class:`referenced_pressure_container_description_schema <ReferencedPressureContainerDescription>`\ |space|
+            table_y: \ :class:`referenced_pressure_container_description_schema <ReferencedPressureContainerDescription>`\ |space|
+            table_length: \ :class:`pressure_container_description_schema <PressureContainerDescription>`\ |space|

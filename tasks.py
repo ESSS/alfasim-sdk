@@ -23,6 +23,20 @@ def schema_file_path() -> Path:
 def cog(ctx, check=False):
     """ Executes cog on _alfasim_sdk/alfacase/schema.py to generate the schema for strictyaml. """
     ctx.run(command=f"cog -rc {schema_file_path()}", warn=True)
+
+    from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
+    from _alfasim_sdk.alfacase.case_description import CaseDescription
+    from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+        generate_definition,
+    )
+
+    alfacase_definitions_path = (
+        Path(__file__).parent / "docs/source/alfacase_definitions"
+    )
+    for class_ in get_all_classes_that_needs_schema(CaseDescription):
+        output = generate_definition(class_)
+        Path(alfacase_definitions_path / f"{class_.__name__}.txt").write_text(output)
+
     if check:
         check_cog(ctx)
 

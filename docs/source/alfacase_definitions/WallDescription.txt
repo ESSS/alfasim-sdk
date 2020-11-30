@@ -1,0 +1,21 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class WallDescription
+            name: str
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            wall_layer_container: \ :class:`List <typing.List>`\[\ :class:`WallLayerDescription <WallLayerDescription>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            inner_roughness: 
+                value: number
+                unit: string
+            wall_layer_container: 
+                - \ :class:`wall_layer_description_schema <WallLayerDescription>`\ |space|

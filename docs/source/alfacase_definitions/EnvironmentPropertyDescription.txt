@@ -1,0 +1,34 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class EnvironmentPropertyDescription
+            position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`\ |space|
+            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            position: 
+                value: number
+                unit: string
+            temperature: 
+                value: number
+                unit: string
+            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`\ |space|
+            heat_transfer_coefficient: 
+                value: number
+                unit: string
+            overall_heat_transfer_coefficient: 
+                value: number
+                unit: string
+            fluid_velocity: 
+                value: number
+                unit: string

@@ -1,0 +1,14 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class InternalNodePropertiesDescription
+            fluid: \ :class:`Optional <typing.Optional>`\[str]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            fluid: string    # optional

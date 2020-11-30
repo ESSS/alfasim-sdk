@@ -1,0 +1,32 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class TubingDescription
+            name: str
+            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            material: \ :class:`Optional <typing.Optional>`\[str]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            length: 
+                value: number
+                unit: string
+            outer_diameter: 
+                value: number
+                unit: string
+            inner_diameter: 
+                value: number
+                unit: string
+            inner_roughness: 
+                value: number
+                unit: string
+            material: string    # optional

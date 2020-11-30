@@ -1,0 +1,16 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ProfileDescription
+            x_and_y: \ :class:`Optional <typing.Optional>`\[XAndYDescription]
+            length_and_elevation: \ :class:`Optional <typing.Optional>`\[LengthAndElevationDescription]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            x_and_y: \ :class:`x_and_y_description_schema <XAndYDescription>`\ |space|  # optional
+            length_and_elevation: \ :class:`length_and_elevation_description_schema <LengthAndElevationDescription>`\ |space|  # optional

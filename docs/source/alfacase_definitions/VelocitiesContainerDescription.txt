@@ -1,0 +1,21 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class VelocitiesContainerDescription
+            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            positions: 
+                values: [number]
+                unit: string
+            velocities: 
+                string: 
+                    values: [number]
+                    unit: string
