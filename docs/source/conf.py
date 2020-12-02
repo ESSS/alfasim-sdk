@@ -57,6 +57,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx_inline_tabs",
+    "sphinx_copybutton",
 ]
 add_module_names = False
 autodoc_typehints = "none"

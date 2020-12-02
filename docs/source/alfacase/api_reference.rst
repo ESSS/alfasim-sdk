@@ -1,7 +1,10 @@
+.. _alfacase-reference-section:
+
 Full API Reference
 ==================
 
-This page contains the full reference to |sdk| API.
+This page is a detailed reference guide to |sdk| API.
+It includes a catalog of all supported CaseDescription and :program:`ALFAcase` capabilities.
 
 
 Case
