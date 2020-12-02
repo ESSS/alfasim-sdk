@@ -1,0 +1,18 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class BipDescription
+            component_1: str
+            component_2: str
+            value: float
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            component_1: string
+            component_2: string
+            value: number

@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CvTableDescription
+            opening: \ :class:`Array <barril.units.Array>`\ |space|
+            flow_coefficient: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            opening: 
+                values: [number]
+                unit: string
+            flow_coefficient: 
+                values: [number]
+                unit: string

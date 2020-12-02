@@ -1,0 +1,36 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ValveEquipmentDescription
+            position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\ |space|
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
+            opening_type: \ :class:`ValveOpeningType <_alfasim_sdk.constants.ValveOpeningType>`\ |space|
+            opening: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            opening_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
+            opening_curve: \ :class:`OpeningCurveDescription <OpeningCurveDescription>`\ |space|
+            cv_table: \ :class:`CvTableDescription <CvTableDescription>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            position: 
+                value: number
+                unit: string
+            type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\ |space|
+            diameter: 
+                value: number
+                unit: string
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
+            opening_type: \ :class:`ValveOpeningType <_alfasim_sdk.constants.ValveOpeningType>`\ |space|
+            opening: 
+                value: number
+                unit: string
+            opening_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
+            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\ |space|
+            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\ |space|

@@ -11,15 +11,15 @@ from ..common_testing.alfasim_sdk_common_testing.case_builders import (
 )
 from _alfasim_sdk import constants
 from _alfasim_sdk.alfacase import case_description
-from _alfasim_sdk.alfacase.case_description import attrib_enum
-from _alfasim_sdk.alfacase.case_description import attrib_instance
-from _alfasim_sdk.alfacase.case_description import attrib_instance_list
-from _alfasim_sdk.alfacase.case_description import attrib_scalar
-from _alfasim_sdk.alfacase.case_description import collapse_array_repr
-from _alfasim_sdk.alfacase.case_description import InvalidReferenceError
 from _alfasim_sdk.alfacase.case_description import MaterialDescription
-from _alfasim_sdk.alfacase.case_description import numpy_array_validator
 from _alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_enum
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance_list
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
+from _alfasim_sdk.alfacase.case_description_attributes import collapse_array_repr
+from _alfasim_sdk.alfacase.case_description_attributes import InvalidReferenceError
+from _alfasim_sdk.alfacase.case_description_attributes import numpy_array_validator
 from _alfasim_sdk.constants import NodeCellType
 
 
@@ -305,7 +305,11 @@ def test_check_restart_file_exists(default_case, tmp_path):
         ),
     )
     expected_error = re.escape(f"Restart file '{restart_file}' is not a valid file")
-    with pytest.raises(case_description.InvalidReferenceError, match=expected_error):
+
+    with pytest.raises(
+        InvalidReferenceError,
+        match=expected_error,
+    ):
         case.ensure_valid_references()
 
     restart_file.write_text("Restart file contents")
@@ -468,7 +472,8 @@ class TestEnsureValidReferences:
         )
         expect_message = "PVT model 'PVT5' selected on 'Pipe 5' is not declared on 'pvt_models', available pvt_models are: PVT1, PVT2, PVT3, PVT4"
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expect_message)
+            InvalidReferenceError,
+            match=re.escape(expect_message),
         ):
             case.ensure_valid_references()
 
@@ -485,7 +490,8 @@ class TestEnsureValidReferences:
         )
         expect_message = "'INVALID' could not be found on 'dummy.tab', available models are: 'PVT1, PVT2'"
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expect_message)
+            InvalidReferenceError,
+            match=re.escape(expect_message),
         ):
             case.ensure_valid_references()
 
@@ -510,7 +516,8 @@ class TestEnsureValidReferences:
         )
         expect_message = "Error on 'PVT1', 'SomePath' is not a valid file"
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expect_message)
+            InvalidReferenceError,
+            match=re.escape(expect_message),
         ):
             case.ensure_valid_references()
 
@@ -582,7 +589,8 @@ class TestEnsureValidReferences:
         )
 
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expected_msg)
+            InvalidReferenceError,
+            match=re.escape(expected_msg),
         ):
             case_with_invalid_default_pvt_model.ensure_valid_references()
 
@@ -595,7 +603,8 @@ class TestEnsureValidReferences:
             "Either assign a valid pvt_model on the element, or fill the default_model parameter."
         )
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expected_msg)
+            InvalidReferenceError,
+            match=re.escape(expected_msg),
         ):
             case_with_invalid_default_pvt_model.ensure_valid_references()
 
@@ -621,7 +630,8 @@ class TestEnsureValidReferences:
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expected_error)
+            InvalidReferenceError,
+            match=re.escape(expected_error),
         ):
             case.ensure_valid_references()
 
@@ -642,7 +652,8 @@ class TestEnsureValidReferences:
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expected_error)
+            InvalidReferenceError,
+            match=re.escape(expected_error),
         ):
             case.ensure_valid_references()
 
@@ -658,7 +669,8 @@ class TestEnsureValidReferences:
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expected_error)
+            InvalidReferenceError,
+            match=re.escape(expected_error),
         ):
             case.ensure_valid_references()
 
@@ -682,7 +694,8 @@ class TestEnsureValidReferences:
             "available pvt_models are: PVT1, PVT2, PVT3"
         )
         with pytest.raises(
-            case_description.InvalidReferenceError, match=re.escape(expected_error)
+            InvalidReferenceError,
+            match=re.escape(expected_error),
         ):
             case.ensure_valid_references()
 

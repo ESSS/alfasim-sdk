@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class FormationLayerDescription
+            name: str
+            start: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            material: \ :class:`Optional <typing.Optional>`\[str]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            start: 
+                value: number
+                unit: string
+            material: string    # optional

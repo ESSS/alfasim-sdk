@@ -1,0 +1,40 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class SeparatorNodePropertiesDescription
+            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\ |space|
+            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            radius: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            environment_temperature: 
+                value: number
+                unit: string
+            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\ |space|
+            length: 
+                value: number
+                unit: string
+            overall_heat_transfer_coefficient: 
+                value: number
+                unit: string
+            radius: 
+                value: number
+                unit: string
+            nozzles: 
+                string: 
+                    value: number
+                    unit: string
+            initial_phase_volume_fractions: 
+                string: 
+                    value: number
+                    unit: string

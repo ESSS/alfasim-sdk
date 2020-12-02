@@ -1,0 +1,28 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CompressorPressureTableDescription
+            speed_entries: \ :class:`Array <barril.units.Array>`\ |space|
+            corrected_mass_flow_rate_entries: \ :class:`Array <barril.units.Array>`\ |space|
+            pressure_ratio_table: \ :class:`Array <barril.units.Array>`\ |space|
+            isentropic_efficiency_table: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            speed_entries: 
+                values: [number]
+                unit: string
+            corrected_mass_flow_rate_entries: 
+                values: [number]
+                unit: string
+            pressure_ratio_table: 
+                values: [number]
+                unit: string
+            isentropic_efficiency_table: 
+                values: [number]
+                unit: string

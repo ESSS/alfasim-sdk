@@ -1,0 +1,44 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class MaterialDescription
+            name: str
+            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\ |space|
+            density: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_emissivity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            outer_emissivity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            expansion: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            viscosity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\ |space|
+            density: 
+                value: number
+                unit: string
+            thermal_conductivity: 
+                value: number
+                unit: string
+            heat_capacity: 
+                value: number
+                unit: string
+            inner_emissivity: 
+                value: number
+                unit: string
+            outer_emissivity: 
+                value: number
+                unit: string
+            expansion: 
+                value: number
+                unit: string
+            viscosity: 
+                value: number
+                unit: string

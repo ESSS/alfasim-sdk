@@ -1,0 +1,26 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class NodeDescription
+            name: str
+            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`\ |space|
+            pvt_model: \ :class:`Optional <typing.Optional>`\[str]
+            pressure_properties: \ :class:`PressureNodePropertiesDescription <PressureNodePropertiesDescription>`\ |space|
+            mass_source_properties: \ :class:`MassSourceNodePropertiesDescription <MassSourceNodePropertiesDescription>`\ |space|
+            internal_properties: \ :class:`InternalNodePropertiesDescription <InternalNodePropertiesDescription>`\ |space|
+            separator_properties: \ :class:`SeparatorNodePropertiesDescription <SeparatorNodePropertiesDescription>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string
+            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`\ |space|
+            pvt_model: string    # optional
+            pressure_properties: \ :class:`pressure_node_properties_description_schema <PressureNodePropertiesDescription>`\ |space|
+            mass_source_properties: \ :class:`mass_source_node_properties_description_schema <MassSourceNodePropertiesDescription>`\ |space|
+            internal_properties: \ :class:`internal_node_properties_description_schema <InternalNodePropertiesDescription>`\ |space|
+            separator_properties: \ :class:`separator_node_properties_description_schema <SeparatorNodePropertiesDescription>`\ |space|

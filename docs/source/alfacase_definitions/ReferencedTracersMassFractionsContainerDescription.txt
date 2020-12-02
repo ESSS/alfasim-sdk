@@ -1,0 +1,23 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ReferencedTracersMassFractionsContainerDescription
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            reference_coordinate: 
+                value: number
+                unit: string
+            positions: 
+                values: [number]
+                unit: string
+            tracers_mass_fractions: 
+                - Array

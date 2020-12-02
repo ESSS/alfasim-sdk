@@ -1,0 +1,24 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ReferencedPressureContainerDescription
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            pressures: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            reference_coordinate: 
+                value: number
+                unit: string
+            positions: 
+                values: [number]
+                unit: string
+            pressures: 
+                values: [number]
+                unit: string

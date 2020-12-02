@@ -1,0 +1,28 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class TablePumpDescription
+            speeds: \ :class:`Array <barril.units.Array>`\ |space|
+            void_fractions: \ :class:`Array <barril.units.Array>`\ |space|
+            flow_rates: \ :class:`Array <barril.units.Array>`\ |space|
+            pressure_boosts: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            speeds: 
+                values: [number]
+                unit: string
+            void_fractions: 
+                values: [number]
+                unit: string
+            flow_rates: 
+                values: [number]
+                unit: string
+            pressure_boosts: 
+                values: [number]
+                unit: string

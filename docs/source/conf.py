@@ -34,6 +34,7 @@ breathe_doxygen_config_options = {
 }
 
 # -- Project information -----------------------------------------------------
+
 project = ""
 copyright = "2019, ESSS"
 author = "ESSS"
@@ -41,16 +42,21 @@ version = ""
 release = ""
 
 # -- Options for Graphviz -------------------------------------------------
+
 graphviz_dot = "dot"
 graphviz_dot_args = ["-Tsvg"]
 graphviz_output_format = "svg"
 
 # -- General configuration ---------------------------------------------------
+
 extensions = [
-    "sphinx.ext.autodoc",
     "breathe",
+    "sphinx.ext.autodoc",
     "sphinx_click.ext",
     "sphinx.ext.graphviz",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx_inline_tabs",
 ]
 add_module_names = False
 autodoc_typehints = "none"
@@ -77,6 +83,11 @@ rst_prolog = """
 .. |marker_2| image:: /_static/images/marker_2.png
     :scale: 80%
 
+.. # define a hard space useful for literal-blocks that has empty content.
+.. |space| raw:: html
+
+    ⠀
+
 .. # define a hard line break for HTML
 .. |br| raw:: html
 
@@ -99,6 +110,7 @@ language = None
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "breathe/*"]
 
 # -- Options for HTML output -------------------------------------------------
+
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/images/logo-alfasim.svg"
 
@@ -111,3 +123,14 @@ html_css_files = [
     "css/custom.css",
 ]
 html_favicon = "_static/images/alfasim_gui.ico"
+
+# -- Options for intersphinx -------------------------------------------------
+
+intersphinx_mapping = {
+    "python": ("http://docs.python.org/3", None),
+    "barril": ("https://barril.readthedocs.io/en/latest/", None),
+}
+
+# -- Options for Autodoc -----------------------------------------------------
+
+autodoc_member_order = "groupwise"

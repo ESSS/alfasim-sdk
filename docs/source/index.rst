@@ -8,3 +8,4 @@ Documentation for the ALFAsim-SDK
 
     plugins/index
     alfacase/index
+    constants/index

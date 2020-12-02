@@ -1,0 +1,24 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class HeatSourceEquipmentDescription
+            start: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            power: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            start: 
+                value: number
+                unit: string
+            length: 
+                value: number
+                unit: string
+            power: 
+                value: number
+                unit: string

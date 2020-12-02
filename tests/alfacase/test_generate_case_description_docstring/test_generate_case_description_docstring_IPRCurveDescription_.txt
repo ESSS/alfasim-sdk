@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class IPRCurveDescription
+            pressure_difference: \ :class:`Array <barril.units.Array>`\ |space|
+            flow_rate: \ :class:`Array <barril.units.Array>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            pressure_difference: 
+                values: [number]
+                unit: string
+            flow_rate: 
+                values: [number]
+                unit: string

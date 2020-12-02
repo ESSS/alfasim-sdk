@@ -1,3 +1,11 @@
+# Note: the last line of multiline regex cannot have the pipe character,
+# Otherwise all files will be skipped.
+# https://github.com/psf/black/issues/395#issuecomment-499630129
+exclude: |
+    (?x)(
+        ^docs/source/alfacase_definitions/|
+        ^tests/alfacase/test_generate_case_description_docstring/
+    )
 repos:
 -   repo: https://github.com/asottile/reorder_python_imports
     rev: v2.3.5

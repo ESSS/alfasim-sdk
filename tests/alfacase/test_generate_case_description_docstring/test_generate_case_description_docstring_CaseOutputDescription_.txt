@@ -1,0 +1,26 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CaseOutputDescription
+            trends: \ :class:`List <typing.List>`\[\ :class:`TrendOutputDescription <TrendOutputDescription>`\]
+            trend_frequency: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            profiles: \ :class:`List <typing.List>`\[\ :class:`ProfileOutputDescription <ProfileOutputDescription>`\]
+            profile_frequency: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            trends: 
+                - \ :class:`trend_output_description_schema <TrendOutputDescription>`\ |space|
+            trend_frequency: 
+                value: number
+                unit: string
+            profiles: 
+                - \ :class:`profile_output_description_schema <ProfileOutputDescription>`\ |space|
+            profile_frequency: 
+                value: number
+                unit: string

@@ -1,0 +1,34 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PumpEquipmentDescription
+            position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\ |space|
+            pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            table: \ :class:`TablePumpDescription <TablePumpDescription>`\ |space|
+            speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\ |space|
+            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            position: 
+                value: number
+                unit: string
+            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\ |space|
+            pressure_boost: 
+                value: number
+                unit: string
+            thermal_efficiency: 
+                value: number
+                unit: string
+            table: \ :class:`table_pump_description_schema <TablePumpDescription>`\ |space|
+            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\ |space|
+            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|

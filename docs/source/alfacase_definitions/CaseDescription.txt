@@ -1,0 +1,43 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CaseDescription
+            name: \ :class:`Optional <typing.Optional>`\[str]
+            physics: \ :class:`PhysicsDescription <PhysicsDescription>`\ |space|
+            time_options: \ :class:`TimeOptionsDescription <TimeOptionsDescription>`\ |space|
+            numerical_options: \ :class:`NumericalOptionsDescription <NumericalOptionsDescription>`\ |space|
+            ipr_models: \ :class:`IPRModelsDescription <IPRModelsDescription>`\ |space|
+            pvt_models: \ :class:`PvtModelsDescription <PvtModelsDescription>`\ |space|
+            tracers: \ :class:`TracersDescription <TracersDescription>`\ |space|
+            outputs: \ :class:`CaseOutputDescription <CaseOutputDescription>`\ |space|
+            pipes: \ :class:`List <typing.List>`\[\ :class:`PipeDescription <PipeDescription>`\]
+            nodes: \ :class:`List <typing.List>`\[\ :class:`NodeDescription <NodeDescription>`\]
+            wells: \ :class:`List <typing.List>`\[\ :class:`WellDescription <WellDescription>`\]
+            materials: \ :class:`List <typing.List>`\[\ :class:`MaterialDescription <MaterialDescription>`\]
+            walls: \ :class:`List <typing.List>`\[\ :class:`WallDescription <WallDescription>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string    # optional
+            physics: \ :class:`physics_description_schema <PhysicsDescription>`\ |space|
+            time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>`\ |space|
+            numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>`\ |space|
+            ipr_models: \ :class:`ipr_models_description_schema <IPRModelsDescription>`\ |space|
+            pvt_models: \ :class:`pvt_models_description_schema <PvtModelsDescription>`\ |space|
+            tracers: \ :class:`tracers_description_schema <TracersDescription>`\ |space|
+            outputs: \ :class:`case_output_description_schema <CaseOutputDescription>`\ |space|
+            pipes: 
+                - \ :class:`pipe_description_schema <PipeDescription>`\ |space|
+            nodes: 
+                - \ :class:`node_description_schema <NodeDescription>`\ |space|
+            wells: 
+                - \ :class:`well_description_schema <WellDescription>`\ |space|
+            materials: 
+                - \ :class:`material_description_schema <MaterialDescription>`\ |space|
+            walls: 
+                - \ :class:`wall_description_schema <WallDescription>`\ |space|

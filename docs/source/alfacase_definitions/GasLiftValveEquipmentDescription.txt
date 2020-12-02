@@ -1,0 +1,30 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class GasLiftValveEquipmentDescription
+            position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            valve_type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\ |space|
+            delta_p_min: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            discharge_coeff: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            position: 
+                value: number
+                unit: string
+            diameter: 
+                value: number
+                unit: string
+            valve_type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\ |space|
+            delta_p_min: 
+                value: number
+                unit: string
+            discharge_coeff: 
+                value: number
+                unit: string

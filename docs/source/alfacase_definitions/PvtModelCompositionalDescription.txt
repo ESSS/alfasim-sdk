@@ -1,0 +1,27 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PvtModelCompositionalDescription
+            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\ |space|
+            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\ |space|
+            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\ |space|
+            heavy_components: \ :class:`List <typing.List>`\[\ :class:`HeavyComponentDescription <HeavyComponentDescription>`\]
+            light_components: \ :class:`List <typing.List>`\[\ :class:`LightComponentDescription <LightComponentDescription>`\]
+            fluids: \ :class:`Dict <typing.Dict>`\[str, \ :class:`FluidDescription <FluidDescription>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\ |space|
+            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\ |space|
+            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\ |space|
+            heavy_components: 
+                - \ :class:`heavy_component_description_schema <HeavyComponentDescription>`\ |space|
+            light_components: 
+                - \ :class:`light_component_description_schema <LightComponentDescription>`\ |space|
+            fluids: 
+                string: \ :class:`fluid_description_schema <FluidDescription>`\ |space|

@@ -60,7 +60,11 @@ class DescriptionDocument:
                 allow_flow_style=True,
             )
         except strictyaml.YAMLValidationError as e:
-            raise case_description.DescriptionError(str(e))
+            from _alfasim_sdk.alfacase.case_description_attributes import (
+                DescriptionError,
+            )
+
+            raise DescriptionError(str(e))
 
         return cls(content, file_path)
 

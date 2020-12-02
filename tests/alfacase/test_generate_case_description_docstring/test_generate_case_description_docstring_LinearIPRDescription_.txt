@@ -1,0 +1,22 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class LinearIPRDescription
+            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ |space|
+            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            well_index: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ |space|
+            min_pressure_difference: 
+                value: number
+                unit: string
+            well_index: 
+                value: number
+                unit: string

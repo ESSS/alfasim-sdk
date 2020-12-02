@@ -1,0 +1,34 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PhysicsDescription
+            hydrodynamic_model: \ :class:`HydrodynamicModelType <_alfasim_sdk.constants.HydrodynamicModelType>`\ |space|
+            simulation_regime: \ :class:`SimulationRegimeType <_alfasim_sdk.constants.SimulationRegimeType>`\ |space|
+            energy_model: \ :class:`EnergyModel <_alfasim_sdk.constants.EnergyModel>`\ |space|
+            solids_model: \ :class:`SolidsModelType <_alfasim_sdk.constants.SolidsModelType>`\ |space|
+            initial_condition_strategy: \ :class:`InitialConditionStrategyType <_alfasim_sdk.constants.InitialConditionStrategyType>`\ |space|
+            restart_filepath: \ :class:`Optional <typing.Optional>`\[Path]
+            keep_former_results: bool
+            keep_former_results: bool
+            emulsion_model: \ :class:`EmulsionModelType <_alfasim_sdk.constants.EmulsionModelType>`\ |space|
+            flash_model: \ :class:`FlashModel <_alfasim_sdk.constants.FlashModel>`\ |space|
+            correlations_package: \ :class:`CorrelationPackageType <_alfasim_sdk.constants.CorrelationPackageType>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            hydrodynamic_model: \ :class:`HydrodynamicModelType <_alfasim_sdk.constants.HydrodynamicModelType>`\ |space|
+            simulation_regime: \ :class:`SimulationRegimeType <_alfasim_sdk.constants.SimulationRegimeType>`\ |space|
+            energy_model: \ :class:`EnergyModel <_alfasim_sdk.constants.EnergyModel>`\ |space|
+            solids_model: \ :class:`SolidsModelType <_alfasim_sdk.constants.SolidsModelType>`\ |space|
+            initial_condition_strategy: \ :class:`InitialConditionStrategyType <_alfasim_sdk.constants.InitialConditionStrategyType>`\ |space|
+            restart_filepath: string    # optional
+            keep_former_results: boolean
+            keep_former_results: number
+            emulsion_model: \ :class:`EmulsionModelType <_alfasim_sdk.constants.EmulsionModelType>`\ |space|
+            flash_model: \ :class:`FlashModel <_alfasim_sdk.constants.FlashModel>`\ |space|
+            correlations_package: \ :class:`CorrelationPackageType <_alfasim_sdk.constants.CorrelationPackageType>`\ |space|

@@ -1,0 +1,17 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class TracerModelConstantCoefficientsDescription
+            partition_coefficients: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            partition_coefficients: 
+                string: 
+                    value: number
+                    unit: string

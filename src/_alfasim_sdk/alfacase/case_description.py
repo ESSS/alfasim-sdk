@@ -1,12 +1,8 @@
-from enum import EnumMeta
-from functools import partial
 from numbers import Number
 from pathlib import Path
-from typing import Any
 from typing import Dict
 from typing import Iterator
 from typing import List
-from typing import NewType
 from typing import Optional
 from typing import Set
 from typing import Tuple
@@ -14,8 +10,6 @@ from typing import Union
 
 import attr
 import numpy as np
-from attr.validators import deep_iterable
-from attr.validators import deep_mapping
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -23,180 +17,20 @@ from barril.units import Array
 from barril.units import Scalar
 
 from _alfasim_sdk import constants
-
-Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
-PhaseName = str
-
-
-list_of_strings = deep_iterable(
-    member_validator=optional(instance_of(str)), iterable_validator=instance_of(list)
-)
-
-
-def collapse_array_repr(value):
-    """
-    The full repr representation of PVT model takes too much space to print all values inside a array.
-    Making annoying to debug Subjects that has a PVT model on it, due to seventy-four lines with only numbers.
-    """
-    import re
-
-    return re.sub(r"array\(\[.*?\]\)", "array([...])", repr(value), flags=re.DOTALL)
-
-
-def to_scalar(
-    value: Union[Tuple[Number, str], Scalar], is_optional: bool = False
-) -> Scalar:
-    """
-    Converter to be used with attr.ib, accepts tuples and Scalar as input
-    If `is_optional` is defined, the converter will also accept None.
-
-    Ex.:
-    @attr.s
-    class TrendOutputDescription:
-        pos = attrib_scalar()
-        temperature = attrib_scalar(converter=partial(ToScalar, is_optional=True))
-
-    TrendOutputDescription(position=Scalar(1,"m")
-    TrendOutputDescription(position=(1,"m")
-    TrendOutputDescription(temperature=None)
-    """
-    if is_optional and value is None:
-        return value
-    if isinstance(value, tuple) and (len(value) == 2):
-        return Scalar(value)
-    elif isinstance(value, Scalar):
-        return value
-
-    raise TypeError(
-        f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})"
-    )
-
-
-attr_nothing_type = object
-
-
-def attrib_scalar(
-    default: Optional[
-        Union[Tuple[Number, str], Scalar, attr_nothing_type]
-    ] = attr.NOTHING,
-    is_optional: bool = False,
-) -> attr._make._CountingAttr:
-    """
-    Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
-
-    :param default:
-        Value to be used as default when instantiating a class with this attr.ib
-
-        If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
-        otherwise, a `TypeError` will be raised.
-    """
-    return attr.ib(
-        default=default,
-        converter=partial(to_scalar, is_optional=is_optional or not default),
-        type=Optional[Scalar] if is_optional or not default else Scalar,
-    )
-
-
-def attrib_instance(type_) -> attr._make._CountingAttr:
-    """
-    Create a new attr attribute with validator for the given type_
-    """
-    return attr.ib(
-        default=attr.Factory(type_), validator=instance_of(type_), type=type_
-    )
-
-
-def attrib_instance_list(
-    type_, *, validator_type: Optional[Tuple[Any, ...]] = None
-) -> attr._make._CountingAttr:
-    """
-    Create a new attr attribute with validator for the given type_
-    All attributes created are expected to be List of the given type_
-
-    :param validator_type:
-        Inform which type(s) the List should validate.
-        When not defined the param type_ will be used the type to be validated.
-
-    """
-    # Config validator
-    _validator_type = validator_type or type_
-    _validator = deep_iterable(
-        member_validator=instance_of(_validator_type),
-        iterable_validator=instance_of(list),
-    )
-
-    return attr.ib(default=attr.Factory(list), validator=_validator, type=List[type_])
-
-
-def attrib_enum(
-    type_: Optional[EnumMeta] = None, default: Any = attr.NOTHING
-) -> attr._make._CountingAttr:
-    """
-    Create a new attr attribute with validator for enums
-    When a default value is provided the type_ is automatically computed
-
-    Ex.:
-    class Foo(Enum):
-        A = 'first'
-
-    Valid calls:
-        attrib_enum(type_=Foo)      # Default is attr.NOTHING, a value must be supplied when instantiating;
-        attrib_enum(default=Foo.a)  # Default is Foo.a and type_ is Foo
-        attrib_enum(type_=Foo, default=Foo.a)
-    """
-    if default is attr.NOTHING and not type_:
-        raise RuntimeError("Default or type_ parameter must be provided")
-
-    if default is not attr.NOTHING:
-        type_ = type(default)
-
-    if isinstance(default, EnumMeta):
-        raise ValueError(
-            f"Default must be a member of Enum and not the Enum class itself, got {default} while expecting"
-            f" some of the following members {', '.join([str(i) for i in default])}"
-        )
-    return attr.ib(default=default, validator=in_(type_), type=type_)
-
-
-def dict_of(type_):
-    """
-    An attr validator that performs validation of dictionary values.
-
-    :param type_: The type to check for, can be a type or tuple of types
-
-    :raises TypeError:
-        raises a `TypeError` if the initializer is called with a wrong type for this particular attribute
-
-    :return: An attr validator that performs validation of dictionary values.
-    """
-    return deep_mapping(
-        key_validator=instance_of(str),
-        value_validator=instance_of(type_),
-        mapping_validator=instance_of(dict),
-    )
-
-
-def attrib_dict_of(type_) -> attr._make._CountingAttr:
-    """
-    Create a new attr attribute with validator for an atribute that is a dictionary with keys as str (to represent
-    the name) and the content of an instance of type_
-    """
-    return attr.ib(
-        default=attr.Factory(dict), validator=dict_of(type_), type=Dict[str, type_]
-    )
-
-
-dict_of_array = deep_mapping(
-    key_validator=instance_of(str),
-    value_validator=instance_of(Array),
-    mapping_validator=instance_of(dict),
-)
-
-
-list_of_tracer_models = deep_iterable(
-    member_validator=in_(constants.TracerModelType),
-    iterable_validator=instance_of(list),
-)
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_dict_of
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_enum
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance_list
+from _alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
+from _alfasim_sdk.alfacase.case_description_attributes import collapse_array_repr
+from _alfasim_sdk.alfacase.case_description_attributes import dict_of
+from _alfasim_sdk.alfacase.case_description_attributes import dict_of_array
+from _alfasim_sdk.alfacase.case_description_attributes import dict_with_scalar
+from _alfasim_sdk.alfacase.case_description_attributes import InvalidReferenceError
+from _alfasim_sdk.alfacase.case_description_attributes import list_of_strings
+from _alfasim_sdk.alfacase.case_description_attributes import Numpy1DArray
+from _alfasim_sdk.alfacase.case_description_attributes import numpy_array_validator
+from _alfasim_sdk.alfacase.case_description_attributes import PhaseName
 
 
 @attr.s(frozen=True, slots=True)
@@ -229,6 +63,10 @@ class PluginTableContainer:
 
 @attr.s(frozen=True, slots=True)
 class TrendOutputDescription:
+    """
+    .. include:: /alfacase_definitions/TrendOutputDescription.txt
+    """
+
     curve_names: List[str] = attr.ib(validator=list_of_strings)
     element_name: str = attr.ib(validator=instance_of(str))
     position = attrib_scalar()
@@ -237,6 +75,10 @@ class TrendOutputDescription:
 
 @attr.s(frozen=True, slots=True)
 class ProfileOutputDescription:
+    """
+    .. include:: /alfacase_definitions/ProfileOutputDescription.txt
+    """
+
     curve_names: List[str] = attr.ib(validator=list_of_strings)
     element_name: str = attr.ib(validator=instance_of(str))
     location = attrib_enum(type_=constants.OutputAttachmentLocation)
@@ -244,6 +86,10 @@ class ProfileOutputDescription:
 
 @attr.s(frozen=True, slots=True)
 class CaseOutputDescription:
+    """
+    .. include:: /alfacase_definitions/CaseOutputDescription.txt
+    """
+
     trends = attrib_instance_list(TrendOutputDescription)
     trend_frequency = attrib_scalar(default=Scalar(0.1, "s"))
     profiles = attrib_instance_list(ProfileOutputDescription)
@@ -333,9 +179,13 @@ class CompositionDescription:
     """
     :ivar str Component:
         Name of the component available created on:
-            * PvtModelCompositionalDescription.light_components
-            * PvtModelCompositionalDescription.heavy_components
-        Obs.: CompositionDescription can only refer to components created from the same PvtModelCompositionalDescription
+            PvtModelCompositionalDescription.light_components
+            PvtModelCompositionalDescription.heavy_components
+
+        ..note:: CompositionDescription can only refer to components created from the same PvtModelCompositionalDescription
+
+    .. include:: /alfacase_definitions/CompositionDescription.txt
+
     """
 
     component: str = attr.ib(validator=instance_of(str))
@@ -345,6 +195,10 @@ class CompositionDescription:
 
 @attr.s(frozen=True, slots=True)
 class BipDescription:
+    """
+    .. include:: /alfacase_definitions/BipDescription.txt
+    """
+
     component_1: str = attr.ib(validator=instance_of(str))
     component_2: str = attr.ib(validator=instance_of(str))
     value: float = attr.ib(validator=instance_of(float), converter=float)
@@ -352,17 +206,29 @@ class BipDescription:
 
 @attr.s(frozen=True, slots=True)
 class FluidDescription:
+    """
+    .. include:: /alfacase_definitions/FluidDescription.txt
+    """
+
     composition = attrib_instance_list(CompositionDescription)
     fraction_pairs = attrib_instance_list(BipDescription)
 
 
 @attr.s(slots=True, kw_only=True)
 class MassSourceEquipmentDescription(_MassSourceCommon):
+    """
+    .. include:: /alfacase_definitions/MassSourceEquipmentDescription.txt
+    """
+
     position = attrib_scalar()
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class SpeedCurveDescription:
+    """
+    .. include:: /alfacase_definitions/SpeedCurveDescription.txt
+    """
+
     time: Array = attr.ib(default=Array([0], "s"), validator=instance_of(Array))
     speed: Array = attr.ib(default=Array([500], "rpm"), validator=instance_of(Array))
 
@@ -370,6 +236,9 @@ class SpeedCurveDescription:
 # fmt: off
 @attr.s(frozen=True, slots=True, kw_only=True)
 class TablePumpDescription:
+    """
+    .. include:: /alfacase_definitions/TablePumpDescription.txt
+    """
     speeds: Array = attr.ib(
         default=Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'), validator=instance_of(Array)
     )
@@ -410,6 +279,10 @@ class TablePumpDescription:
 
 @attr.s(frozen=True, slots=True)
 class PumpEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/PumpEquipmentDescription.txt
+    """
+
     position = attrib_scalar()
     type = attrib_enum(default=constants.PumpType.ConstantPressure)
     pressure_boost = attrib_scalar(default=Scalar(1.0e5, "Pa"))
@@ -427,6 +300,8 @@ class CompressorPressureTableDescription:
     """
     :ivar corrected_mass_flow_rate_entries:
         Equivalent to `m * (T/T_ref)**0.5 / (P/P_ref)`
+
+    .. include:: /alfacase_definitions/CompressorPressureTableDescription.txt
     """
 
     speed_entries: Array = attr.ib(
@@ -470,6 +345,10 @@ class CompressorPressureTableDescription:
 
 @attr.s(frozen=True, slots=True)
 class CompressorEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/CompressorEquipmentDescription.txt
+    """
+
     position = attrib_scalar()
     speed_curve = attrib_instance(SpeedCurveDescription)
     reference_pressure = attrib_scalar(default=Scalar(1.0, "bar"))
@@ -485,6 +364,10 @@ class CompressorEquipmentDescription:
 
 @attr.s(frozen=True, slots=True)
 class OpeningCurveDescription:
+    """
+    .. include:: /alfacase_definitions/OpeningCurveDescription.txt
+    """
+
     time: Array = attr.ib(validator=instance_of(Array), default=Array([], "s"))
     opening: Array = attr.ib(validator=instance_of(Array), default=Array([], "-"))
 
@@ -499,6 +382,10 @@ class OpeningCurveDescription:
 
 @attr.s(frozen=True, slots=True)
 class CvTableDescription:
+    """
+    .. include:: /alfacase_definitions/CvTableDescription.txt
+    """
+
     opening: Array = attr.ib(validator=instance_of(Array), default=Array([], "-"))
     flow_coefficient: Array = attr.ib(
         validator=instance_of(Array), default=Array([], "(galUS/min)/(psi^0.5)")
@@ -515,6 +402,10 @@ class CvTableDescription:
 
 @attr.s(frozen=True, slots=True)
 class ValveEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/ValveEquipmentDescription.txt
+    """
+
     position = attrib_scalar()
     type = attrib_enum(default=constants.ValveType.PerkinsValve)
     diameter = attrib_scalar(default=Scalar(0.01, "m"))
@@ -535,6 +426,10 @@ class ValveEquipmentDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class IPRCurveDescription:
+    """
+    .. include:: /alfacase_definitions/IPRCurveDescription.txt
+    """
+
     pressure_difference: Array = attr.ib(
         default=Array([0.0], "Pa"), validator=instance_of(Array)
     )
@@ -550,12 +445,20 @@ class CommonIPR:
 
 @attr.s(frozen=True, slots=True)
 class LinearIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/LinearIPRDescription.txt
+    """
+
     min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
     well_index = attrib_scalar(default=Scalar(24.0, "m3/bar.d"))
 
 
 @attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/TableIPRDescription.txt
+    """
+
     table = attrib_instance(IPRCurveDescription)
 
 
@@ -564,6 +467,8 @@ class IPRModelsDescription:
     """
     :cvar Dict[str, Union[str, IPRDescription]] tables:
         A dictionary with the name of the IPR and the instance of the IPR Model.
+
+    .. include:: /alfacase_definitions/IPRModelsDescription.txt
     """
 
     linear_models: Dict[str, LinearIPRDescription] = attr.ib(
@@ -576,6 +481,10 @@ class IPRModelsDescription:
 
 @attr.s(slots=True)
 class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
+    """
+    .. include:: /alfacase_definitions/ReservoirInflowEquipmentDescription.txt
+    """
+
     start = attrib_scalar()
     length = attrib_scalar()
     productivity_ipr: Optional[str] = attr.ib(
@@ -588,6 +497,10 @@ class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
 
 @attr.s(frozen=True, slots=True)
 class HeatSourceEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/HeatSourceEquipmentDescription.txt
+    """
+
     start = attrib_scalar()
     length = attrib_scalar()
     power = attrib_scalar()
@@ -595,6 +508,10 @@ class HeatSourceEquipmentDescription:
 
 @attr.s(frozen=True, slots=True)
 class PipeSegmentsDescription:
+    """
+    .. include:: /alfacase_definitions/PipeSegmentsDescription.txt
+    """
+
     start_positions: Array = attr.ib(validator=optional(instance_of(Array)))
     diameters: Array = attr.ib(validator=optional(instance_of(Array)))
     roughnesses: Array = attr.ib(validator=optional(instance_of(Array)))
@@ -605,6 +522,10 @@ class PipeSegmentsDescription:
 
 @attr.s(frozen=True, slots=True)
 class ReferencedPressureContainerDescription:
+    """
+    .. include:: /alfacase_definitions/ReferencedPressureContainerDescription.txt
+    """
+
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([0.0], "m"))
     pressures: Array = attr.ib(default=Array([1e5], "Pa"))
@@ -612,12 +533,20 @@ class ReferencedPressureContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class PressureContainerDescription:
+    """
+    .. include:: /alfacase_definitions/PressureContainerDescription.txt
+    """
+
     positions: Array = attr.ib(default=Array([0.0], "m"))
     pressures: Array = attr.ib(default=Array([1e5], "Pa"))
 
 
 @attr.s(frozen=True, slots=True)
 class InitialPressuresDescription:
+    """
+    .. include:: /alfacase_definitions/InitialPressuresDescription.txt
+    """
+
     position_input_type = attrib_enum(default=constants.TableInputType.length)
     table_x: ReferencedPressureContainerDescription = attr.ib(
         default=ReferencedPressureContainerDescription()
@@ -632,6 +561,10 @@ class InitialPressuresDescription:
 
 @attr.s(frozen=True, slots=True)
 class ReferencedVolumeFractionsContainerDescription:
+    """
+    .. include:: /alfacase_definitions/ReferencedVolumeFractionsContainerDescription.txt
+    """
+
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     fractions: Dict[PhaseName, Array] = attr.ib(default={})
@@ -639,6 +572,10 @@ class ReferencedVolumeFractionsContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class VolumeFractionsContainerDescription:
+    """
+    .. include:: /alfacase_definitions/VolumeFractionsContainerDescription.txt
+    """
+
     positions: Array = attr.ib(default=Array([0.0], "m"))
     fractions: Dict[PhaseName, Array] = attr.ib(
         default={
@@ -651,6 +588,10 @@ class VolumeFractionsContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class InitialVolumeFractionsDescription:
+    """
+    .. include:: /alfacase_definitions/InitialVolumeFractionsDescription.txt
+    """
+
     position_input_type = attrib_enum(default=constants.TableInputType.length)
     table_x: ReferencedVolumeFractionsContainerDescription = attr.ib(
         default=ReferencedVolumeFractionsContainerDescription()
@@ -665,6 +606,10 @@ class InitialVolumeFractionsDescription:
 
 @attr.s(frozen=True, slots=True)
 class ReferencedTracersMassFractionsContainerDescription:
+    """
+    .. include:: /alfacase_definitions/ReferencedTracersMassFractionsContainerDescription.txt
+    """
+
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     tracers_mass_fractions: List[Array] = attr.ib(default=[])
@@ -672,12 +617,20 @@ class ReferencedTracersMassFractionsContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class TracersMassFractionsContainerDescription:
+    """
+    .. include:: /alfacase_definitions/TracersMassFractionsContainerDescription.txt
+    """
+
     positions: Array = attr.ib(default=Array([], "m"))
     tracers_mass_fractions: List[Array] = attr.ib(default=[])
 
 
 @attr.s(frozen=True, slots=True)
 class InitialTracersMassFractionsDescription:
+    """
+    .. include:: /alfacase_definitions/InitialTracersMassFractionsDescription.txt
+    """
+
     position_input_type = attrib_enum(default=constants.TableInputType.length)
     table_x: ReferencedTracersMassFractionsContainerDescription = attr.ib(
         default=ReferencedTracersMassFractionsContainerDescription()
@@ -692,6 +645,10 @@ class InitialTracersMassFractionsDescription:
 
 @attr.s(frozen=True, slots=True)
 class ReferencedVelocitiesContainerDescription:
+    """
+    .. include:: /alfacase_definitions/ReferencedVelocitiesContainerDescription.txt
+    """
+
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     velocities: Dict[PhaseName, Array] = attr.ib(default={})
@@ -699,6 +656,10 @@ class ReferencedVelocitiesContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class VelocitiesContainerDescription:
+    """
+    .. include:: /alfacase_definitions/VelocitiesContainerDescription.txt
+    """
+
     positions: Array = attr.ib(default=Array([0.0], "m"))
     velocities: Dict[PhaseName, Array] = attr.ib(
         default={
@@ -711,6 +672,10 @@ class VelocitiesContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class InitialVelocitiesDescription:
+    """
+    .. include:: /alfacase_definitions/InitialVelocitiesDescription.txt
+    """
+
     position_input_type = attrib_enum(default=constants.TableInputType.length)
     table_x: ReferencedVelocitiesContainerDescription = attr.ib(
         default=ReferencedVelocitiesContainerDescription()
@@ -725,6 +690,10 @@ class InitialVelocitiesDescription:
 
 @attr.s(frozen=True, slots=True)
 class ReferencedTemperaturesContainerDescription:
+    """
+    .. include:: /alfacase_definitions/ReferencedTemperaturesContainerDescription.txt
+    """
+
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     temperatures: Array = attr.ib(default=Array([], "K"))
@@ -732,6 +701,10 @@ class ReferencedTemperaturesContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class TemperaturesContainerDescription:
+    """
+    .. include:: /alfacase_definitions/TemperaturesContainerDescription.txt
+    """
+
     positions: Array = attr.ib(default=Array([0.0], "m"))
     temperatures: Array = attr.ib(
         default=Array([constants.DEFAULT_TEMPERATURE_IN_K], "K")
@@ -740,6 +713,10 @@ class TemperaturesContainerDescription:
 
 @attr.s(frozen=True, slots=True)
 class InitialTemperaturesDescription:
+    """
+    .. include:: /alfacase_definitions/InitialTemperaturesDescription.txt
+    """
+
     position_input_type = attrib_enum(default=constants.TableInputType.length)
     table_x: ReferencedTemperaturesContainerDescription = attr.ib(
         default=ReferencedTemperaturesContainerDescription()
@@ -754,6 +731,10 @@ class InitialTemperaturesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class InitialConditionsDescription:
+    """
+    .. include:: /alfacase_definitions/InitialConditionsDescription.txt
+    """
+
     pressures: InitialPressuresDescription = attr.ib(
         default=InitialPressuresDescription()
     )
@@ -774,6 +755,10 @@ class InitialConditionsDescription:
 
 @attr.s(frozen=True)
 class InitialConditionArrays:
+    """
+    .. include:: /alfacase_definitions/InitialConditionArrays.txt
+    """
+
     pressure: Array = attr.ib(validator=instance_of(Array))
     volume_fractions: Dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
     velocity: Dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
@@ -786,16 +771,15 @@ class InitialConditionArrays:
     )
 
 
-list_of_pipe_environment_heat_transfer_coefficient = deep_iterable(
-    member_validator=in_(constants.PipeEnvironmentHeatTransferCoefficientModelType),
-    iterable_validator=instance_of(list),
-)
+value_and_unit = Tuple[Number, str]
 
 
 @attr.s(frozen=True, slots=True)
 class LengthAndElevationDescription:
     """
     Describe a pipe with length and elevation.
+
+    .. include:: /alfacase_definitions/LengthAndElevationDescription.txt
     """
 
     length: Optional[Array] = attr.ib(
@@ -807,7 +791,7 @@ class LengthAndElevationDescription:
 
     def iter_values_and_unit(
         self,
-    ) -> Iterator[Tuple[Tuple[Number, str], Tuple[Number, str]]]:
+    ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
         """ Returns a pair of values with length and elevation along with their units. """
         length_values = self.length.GetValues(self.length.unit)
         elevation_values = self.elevation.GetValues(self.elevation.unit)
@@ -819,6 +803,8 @@ class LengthAndElevationDescription:
 class XAndYDescription:
     """
     Describe a pipe with a sequence of coordinates.
+
+    .. include:: /alfacase_definitions/XAndYDescription.txt
     """
 
     x: Optional[Array] = attr.ib(default=None, validator=optional(instance_of(Array)))
@@ -826,7 +812,7 @@ class XAndYDescription:
 
     def iter_values_and_unit(
         self,
-    ) -> Iterator[Tuple[Tuple[Number, str], Tuple[Number, str]]]:
+    ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
         """ Returns a pair of values with the x and y value along with their units. """
         for x, y in zip(self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)):
             yield (x, self.x.unit), (y, self.y.unit)
@@ -837,12 +823,16 @@ class ProfileDescription:
     """
     Describe a pipe by either length and inclination or by X and Y coordinates.
 
-    * LengthAndElevation: a list of points with the length and elevation.
-     The first item *MUST* always be (0, 0), otherwise a ValueError is raised.
+    :ivar Optional[XAndYDescription] LengthAndElevation:
+        A list of points with the length and elevation.
+        The first item *MUST* always be (0, 0), otherwise a ValueError is raised.
 
-    * XAndY: a list of points (X, Y), describing the coordinates.
+    :ivar Optional[LengthAndElevationDescription] XAndY:
+        A list of points (X, Y), describing the coordinates.
 
     .. note:: x_and_y and length_and_elevation are mutually exclusive.
+
+    .. include:: /alfacase_definitions/ProfileDescription.txt
 
     """
 
@@ -862,6 +852,10 @@ class ProfileDescription:
 
 @attr.s()
 class EquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/EquipmentDescription.txt
+    """
+
     mass_sources = attrib_dict_of(MassSourceEquipmentDescription)
     pumps = attrib_dict_of(PumpEquipmentDescription)
     valves = attrib_dict_of(ValveEquipmentDescription)
@@ -872,6 +866,10 @@ class EquipmentDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class EnvironmentPropertyDescription:
+    """
+    .. include:: /alfacase_definitions/EnvironmentPropertyDescription.txt
+    """
+
     position = attrib_scalar()
     temperature = attrib_scalar()
     type = attrib_enum(type_=constants.PipeEnvironmentHeatTransferCoefficientModelType)
@@ -882,6 +880,10 @@ class EnvironmentPropertyDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class EnvironmentDescription:
+    """
+    .. include:: /alfacase_definitions/EnvironmentDescription.txt
+    """
+
     thermal_model = attrib_enum(default=constants.PipeThermalModelType.SteadyState)
     position_input_mode = attrib_enum(default=constants.PipeThermalPositionInput.Md)
     reference_y_coordinate = attrib_scalar(default=Scalar("length", 0.0, "m"))
@@ -898,6 +900,10 @@ class EnvironmentDescription:
 
 @attr.s(slots=True)
 class PipeDescription:
+    """
+    .. include:: /alfacase_definitions/PipeDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     source: str = attr.ib(validator=instance_of(str))
     target: str = attr.ib(validator=instance_of(str))
@@ -919,25 +925,26 @@ class PipeDescription:
     initial_conditions = attrib_instance(InitialConditionsDescription)
 
 
-dict_with_scalar = deep_mapping(
-    key_validator=instance_of(str),
-    value_validator=instance_of(Scalar),
-    mapping_validator=instance_of(dict),
-)
-
-
 @attr.s(slots=True, kw_only=True)
 class PressureNodePropertiesDescription(_PressureSourceCommon):
-    """"""
+    """
+    .. include:: /alfacase_definitions/PressureNodePropertiesDescription.txt
+    """
 
 
 @attr.s(slots=True, kw_only=True)
 class MassSourceNodePropertiesDescription(_MassSourceCommon):
-    """"""
+    """
+    .. include:: /alfacase_definitions/MassSourceNodePropertiesDescription.txt
+    """
 
 
 @attr.s(slots=True, kw_only=True)
 class InternalNodePropertiesDescription:
+    """
+    .. include:: /alfacase_definitions/InternalNodePropertiesDescription.txt
+    """
+
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
@@ -947,6 +954,8 @@ class SeparatorNodePropertiesDescription:
     :ivar overall_heat_transfer_coefficient:
         η such that the overall heat transferred to the separator is
             Q = η A (T_amb - T_sep)
+
+    .. include:: /alfacase_definitions/SeparatorNodePropertiesDescription.txt
     """
 
     environment_temperature = attrib_scalar(default=Scalar(25.0, "degC"))
@@ -979,6 +988,10 @@ class SeparatorNodePropertiesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class NodeDescription:
+    """
+    .. include:: /alfacase_definitions/NodeDescription.txt
+    """
+
     name: str = attr.ib()
     node_type = attrib_enum(type_=constants.NodeCellType)
     pvt_model: Optional[str] = attr.ib(
@@ -992,6 +1005,10 @@ class NodeDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class FormationLayerDescription:
+    """
+    .. include:: /alfacase_definitions/FormationLayerDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     start = attrib_scalar()
     material: Optional[str] = attr.ib(
@@ -1001,12 +1018,20 @@ class FormationLayerDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class FormationDescription:
+    """
+    .. include:: /alfacase_definitions/FormationDescription.txt
+    """
+
     reference_y_coordinate = attrib_scalar()
     layers = attrib_instance_list(FormationLayerDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class CasingSectionDescription:
+    """
+    .. include:: /alfacase_definitions/CasingSectionDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     hanger_depth = attrib_scalar()
     settings_depth = attrib_scalar()
@@ -1028,6 +1053,10 @@ class CasingSectionDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class TubingDescription:
+    """
+    .. include:: /alfacase_definitions/TubingDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     length = attrib_scalar()
     outer_diameter = attrib_scalar()
@@ -1040,6 +1069,10 @@ class TubingDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class PackerDescription:
+    """
+    .. include:: /alfacase_definitions/PackerDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     position = attrib_scalar()
     material_above: Optional[str] = attr.ib(
@@ -1049,6 +1082,10 @@ class PackerDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class OpenHoleDescription:
+    """
+    .. include:: /alfacase_definitions/OpenHoleDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     length = attrib_scalar()
     diameter = attrib_scalar()
@@ -1057,6 +1094,10 @@ class OpenHoleDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class CasingDescription:
+    """
+    .. include:: /alfacase_definitions/CasingDescription.txt
+    """
+
     casing_sections = attrib_instance_list(CasingSectionDescription)
     tubings = attrib_instance_list(TubingDescription)
     packers = attrib_instance_list(PackerDescription)
@@ -1065,6 +1106,10 @@ class CasingDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class GasLiftValveEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/GasLiftValveEquipmentDescription.txt
+    """
+
     position = attrib_scalar()
     diameter = attrib_scalar()
     valve_type = attrib_enum(type_=constants.ValveType)
@@ -1074,6 +1119,10 @@ class GasLiftValveEquipmentDescription:
 
 @attr.s(slots=True, kw_only=True)
 class AnnulusDescription:
+    """
+    .. include:: /alfacase_definitions/AnnulusDescription.txt
+    """
+
     has_annulus_flow: bool = attr.ib(validator=instance_of(bool))
     pvt_model: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
@@ -1085,6 +1134,10 @@ class AnnulusDescription:
 
 @attr.s(slots=True, kw_only=True)
 class WellDescription:
+    """
+    .. include:: /alfacase_definitions/WellDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     pvt_model: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
@@ -1105,6 +1158,10 @@ class WellDescription:
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class MaterialDescription:
+    """
+    .. include:: /alfacase_definitions/MaterialDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     material_type = attrib_enum(default=constants.MaterialType.Solid)
     density = attrib_scalar(default=Scalar(1, "kg/m3"))
@@ -1115,7 +1172,7 @@ class MaterialDescription:
     expansion = attrib_scalar(default=Scalar(0, "1/K"))
     viscosity = attrib_scalar(default=Scalar(0, "cP"))
 
-    def as_dict(self) -> Dict[str, Union[str, Tuple[Number, str]]]:
+    def as_dict(self) -> Dict[str, Union[str, value_and_unit]]:
         """
         Helper function that returns a dict with all information needed to create a Material.
 
@@ -1133,8 +1190,11 @@ class WallLayerDescription:
     """
     Used for defining the default walls.
 
-    :ivar Tuple(float,str) thickness:
+    :ivar Scalar thickness:
     :ivar str material_name:
+    :ivar bool has_annulus_flow:
+
+    .. include:: /alfacase_definitions/WallLayerDescription.txt
     """
 
     thickness: Scalar = attr.ib(validator=instance_of(Scalar))
@@ -1144,28 +1204,54 @@ class WallLayerDescription:
 
 @attr.s
 class WallDescription:
+    """
+    .. include:: /alfacase_definitions/WallDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     inner_roughness = attrib_scalar(default=Scalar(0, "m"))
     wall_layer_container = attrib_instance_list(WallLayerDescription)
 
 
-dict_of_wall_description = deep_mapping(
-    key_validator=instance_of(str),
-    value_validator=instance_of(WallDescription),
-    mapping_validator=instance_of(dict),
-)
-list_of_numbers = deep_iterable(
-    member_validator=instance_of(Number), iterable_validator=instance_of((list, range))
-)
-dict_with_a_list_of_numbers = deep_mapping(
-    key_validator=instance_of(str),
-    value_validator=list_of_numbers,
-    mapping_validator=instance_of(dict),
-)
-
-
 @attr.s(frozen=True, slots=True)
 class PvtModelCorrelationDescription:
+    """
+
+    oil_density_std :
+        default: Scalar(850.0, "kg/m3")
+
+    gas_density_std:
+        default: Scalar(0.9, "kg/m3")
+
+    rs_sat:
+        default: Scalar(150.0, "sm3/sm3")
+
+    pvt_correlation_package:
+        default: `CorrelationPackage.Standing`
+
+
+    .. include:: /alfacase_definitions/PvtModelCorrelationDescription.txt
+
+
+    .. rubric:: Examples
+
+    .. tab:: CaseDescription
+
+        .. code-block:: python
+
+            PvtModelCorrelationDescription(
+                default_model="PVT1",
+            )
+
+    .. tab:: Schema
+
+        .. code-block:: yaml
+
+            some_value:
+                some_other_value: fooo
+
+    """
+
     oil_density_std = attrib_scalar(default=Scalar(850.0, "kg/m3"))
     gas_density_std = attrib_scalar(default=Scalar(0.9, "kg/m3"))
     rs_sat = attrib_scalar(default=Scalar(150.0, "sm3/sm3"))
@@ -1174,6 +1260,10 @@ class PvtModelCorrelationDescription:
 
 @attr.s(frozen=True, slots=True)
 class HeavyComponentDescription:
+    """
+    .. include:: /alfacase_definitions/HeavyComponentDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     scn: int = attr.ib(validator=instance_of(int), converter=int)
     MW = attrib_scalar(default=Scalar(0, "kg/mol"))
@@ -1182,6 +1272,10 @@ class HeavyComponentDescription:
 
 @attr.s(frozen=True, slots=True)
 class LightComponentDescription:
+    """
+    .. include:: /alfacase_definitions/LightComponentDescription.txt
+    """
+
     name: str = attr.ib(validator=instance_of(str))
     Pc = attrib_scalar(default=Scalar("pressure", 0, "Pa"))
     Tc = attrib_scalar(default=Scalar("temperature", 0, "K"))
@@ -1200,6 +1294,32 @@ class LightComponentDescription:
 
 @attr.s(slots=True)
 class PvtModelCompositionalDescription:
+    """
+
+    :ivar Scalar equation_of_state_type:
+        default: Scalar(850.0, "kg/m3")
+
+    :ivar Scalar surface_tension_model_type:
+        default: Scalar(0.9, "kg/m3")
+
+    :ivar Scalar viscosity_model:
+        default: Scalar(150.0, "sm3/sm3")
+
+    :ivar List[HeavyComponentDescription] heavy_components:
+        default: []
+
+    :ivar List[LightComponentDescription] light_components:
+        default: []
+
+    :ivar Dict[str, FluidDescription] fluids:
+        default: {}
+
+
+    .. include:: /alfacase_definitions/PvtModelCompositionalDescription.txt
+
+
+    """
+
     equation_of_state_type = attrib_enum(
         default=constants.EquationOfStateType.PengRobinson
     )
@@ -1212,54 +1332,6 @@ class PvtModelCompositionalDescription:
     heavy_components = attrib_instance_list(HeavyComponentDescription)
     light_components = attrib_instance_list(LightComponentDescription)
     fluids = attrib_dict_of(FluidDescription)
-
-
-def list_of(type_):
-    """
-    An attr validator that performs validation of list values.
-
-    :param type_: The type to check for, can be a type or tuple of types
-
-    :raises TypeError:
-        raises a `TypeError` if the initializer is called with a wrong type for this particular attribute
-
-    :return: An attr validator that performs validation of values of a list.
-    """
-    return deep_iterable(
-        member_validator=instance_of(type_), iterable_validator=instance_of(list)
-    )
-
-
-def numpy_array_validator(dimension: int, is_list: bool = False):
-    """
-     An attr validator that performs validation of numpy arrays
-    :param dimension:
-        The number of array dimensions accepts.
-    :param is_list:
-        A flag to indicate if the attribute is a container of ndarray
-
-    :return: An attr validator that performs validation of instances of ndarray and their dimensions.
-    """
-
-    def _numpy_array_validator(instance, attribute, value):
-        def _check_dimension(value, *, position=None):
-            """Helper method to check the dimension from ndarray"""
-            if value.ndim != dimension:
-                raise ValueError(
-                    f"attribute '{attribute.name}' from class '{instance.__class__.__name__}' only accepts ndarray "
-                    f"with dimension equals to {dimension}, got a ndarray with dimension {value.ndim}"
-                    f"{' on position ' + str(position) + '.' if position is not None else '.'}"
-                )
-
-        if is_list:
-            list_of(np.ndarray)(instance, attribute, value)
-            for index, value_from_list in enumerate(value):
-                _check_dimension(value=value_from_list, position=index)
-        else:
-            instance_of(np.ndarray)(instance, attribute, value)
-            _check_dimension(value)
-
-    return _numpy_array_validator
 
 
 @attr.s(slots=True, eq=False)
@@ -1599,14 +1671,17 @@ class PvtModelsDescription:
 
     This class is a holder for the different ways the user can enter PVT information in the application.
 
-    :cvar correlations:
+    :type compositions: Dict[str, PvtModelCompositionalDescription]
+    :type tables: Dict[str, Union[str, Path]]
+
+    :param Dict[str, PvtModelCorrelationDescription] correlations:
         Standard black-oil correlations found in the literature. The user can tune the parameters used by the correlations.
 
-    :cvar compositions:
+    :param compositions:
         Molar fluid compositions with molecular weights and densities for each component.
         It be light components and/or heavy fractions to be lumped into pseudo-components.
 
-    :cvar tables:
+    :param tables:
         Load a complete PVT table obtained (usually) from lab results and generated by various software.
         Currently the user can import the table directly from a `.tab` file or a `.alfatable` file.
 
@@ -1617,11 +1692,18 @@ class PvtModelsDescription:
             - The name of the pvt model from the Path can contains a 'pipe' character in order to select one of
               the multiples PVT tables in the same .tab file.
 
-            Ex.:
-                For Absolute Path: Path("/home/user/my_file.tab|MyPvtModel")
-                For Relative Path: Path("./my_file.tab|MyPvtModel")
+            .. rubric:: Example
 
-    :cvar table_parameters:
+            Absolute Path, using MyPvtModel
+
+            >>> Path("/home/user/my_file.tab|MyPvtModel")
+
+            Relative Path, using MyPvtModel
+
+            >>> Path("./my_file.tab|MyPvtModel")
+
+    :type table_parameters: Dict[str, PvtModelTableParametersDescription]
+    :param table_parameters:
         *INTERNAL USE ONLY*
 
         This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
@@ -1630,6 +1712,31 @@ class PvtModelsDescription:
         Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
         where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
         the PVT is trough the PvtModelTableParametersDescription.
+
+
+    .. include:: /alfacase_definitions/PvtModelsDescription.txt
+
+    .. rubric:: Examples
+
+    .. tab:: CaseDescription
+
+        .. code-block:: python
+
+            PvtModelsDescription(
+                default_model="PVT1",
+                tables={
+                    'PVT1': Path('./my_tab_file.tab')
+                },
+            )
+
+    .. tab:: Schema
+
+        .. code-block:: yaml
+
+            pvt_models:
+                default_model: PVT1
+                tables:
+                    PVT1: ./my_tab_file.tab
 
     """
 
@@ -1663,26 +1770,12 @@ class PvtModelsDescription:
         return Path(parts[0].strip()), model_name
 
 
-class DescriptionError(Exception):
-    """
-    Base exception for exceptions in case description.
-    """
-
-
-class InvalidReferenceError(DescriptionError):
-    """
-    Error raised when an attribute has a reference for an element that doesn't exist.
-    """
-
-
-class InvalidYamlData(DescriptionError):
-    """
-    Error raised when some data in the YAML file is not properly configured.
-    """
-
-
 @attr.s()
 class TracerModelConstantCoefficientsDescription:
+    """
+    .. include:: /alfacase_definitions/TracerModelConstantCoefficientsDescription.txt
+    """
+
     partition_coefficients: Dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar)
     )
@@ -1690,6 +1783,10 @@ class TracerModelConstantCoefficientsDescription:
 
 @attr.s()
 class TracersDescription:
+    """
+    .. include:: /alfacase_definitions/TracersDescription.txt
+    """
+
     constant_coefficients: Dict[
         str, TracerModelConstantCoefficientsDescription
     ] = attr.ib(
@@ -1700,6 +1797,10 @@ class TracersDescription:
 
 @attr.s()
 class PhysicsDescription:
+    """
+    .. include:: /alfacase_definitions/PhysicsDescription.txt
+    """
+
     hydrodynamic_model = attrib_enum(default=constants.HydrodynamicModelType.FourFields)
     simulation_regime = attrib_enum(default=constants.SimulationRegimeType.Transient)
     energy_model = attrib_enum(default=constants.EnergyModel.NoModel)
@@ -1720,6 +1821,10 @@ class PhysicsDescription:
 
 @attr.s()
 class TimeOptionsDescription:
+    """
+    .. include:: /alfacase_definitions/TimeOptionsDescription.txt
+    """
+
     stop_on_steady_state: bool = attr.ib(default=False, validator=instance_of(bool))
     initial_time = attrib_scalar(default=Scalar("time", 0.0, "s"))
     final_time = attrib_scalar(default=Scalar("time", 10.0, "s"))
@@ -1732,6 +1837,10 @@ class TimeOptionsDescription:
 
 @attr.s()
 class NumericalOptionsDescription:
+    """
+    .. include:: /alfacase_definitions/NumericalOptionsDescription.txt
+    """
+
     nonlinear_solver_type = attrib_enum(
         default=constants.NonlinearSolverType.AlfasimQuasiNewton
     )
@@ -1753,6 +1862,10 @@ class NumericalOptionsDescription:
 
 @attr.s()
 class CaseDescription:
+    """
+    .. include:: /alfacase_definitions/CaseDescription.txt
+    """
+
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
     physics = attrib_instance(PhysicsDescription)
     time_options = attrib_instance(TimeOptionsDescription)

@@ -1,0 +1,46 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class MassSourceNodePropertiesDescription
+            fluid: \ :class:`Optional <typing.Optional>`\[str]
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ |space|
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\ |space|
+            volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            mass_flow_rates: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            fluid: string    # optional
+            tracer_mass_fraction: 
+                values: [number]
+                unit: string
+            temperature: 
+                value: number
+                unit: string
+            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\ |space|
+            volumetric_flow_rates_std: 
+                string: 
+                    value: number
+                    unit: string
+            mass_flow_rates: 
+                string: 
+                    value: number
+                    unit: string
+            total_mass_flow_rate: 
+                value: number
+                unit: string
+            water_cut: 
+                value: number
+                unit: string
+            gas_oil_ratio: 
+                value: number
+                unit: string
