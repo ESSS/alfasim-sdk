@@ -7,7 +7,7 @@ In this section, we will create a project from scratch with a simple network and
 
 
 The root level of our :program:`ALFAcase` file is always a :class:`CaseDescription` which has the following attributes:
-For the full reference check the :ref:`alfacase-reference-section`
+For the full reference check the :ref:`alfacase-reference-section`:
 
 .. code-block:: yaml
 
@@ -23,7 +23,7 @@ For the full reference check the :ref:`alfacase-reference-section`
     ....
 
 We are going to create a simple case with a PVT model, two nodes and one pipe displaying their output.
-Each section can be inspect over the :ref:`alfacase-reference-section`
+Each section can be inspected over the :ref:`alfacase-reference-section`:
 
 .. code-block:: yaml
 
@@ -41,36 +41,36 @@ Each section can be inspect over the :ref:`alfacase-reference-section`
     tolerance: 0.0001
 
     time_options:
-    minimum_timestep:
-      value: 0.0001
-      unit: s
-    maximum_timestep:
-      value: 0.5
-      unit: s
-    final_time:
-      value: 1.0
-      unit: s
+      minimum_timestep:
+        value: 0.0001
+        unit: s
+      maximum_timestep:
+        value: 0.5
+        unit: s
+      final_time:
+        value: 1.0
+        unit: s
 
     outputs:
-    trends:
-      - curve_names:
-          - oil mass flow rate
-        element_name: pipe
-        position:
-          value: 100.0
-          unit: m
-        location: main
-    trend_frequency:
-      value: 0.1
-      unit: s
-    profiles:
-      - curve_names:
-          - pressure
-        element_name: pipe
-        location: main
-    profile_frequency:
-      value: 0.1
-      unit: s
+      trends:
+        - curve_names:
+            - oil mass flow rate
+          element_name: pipe
+          position:
+            value: 100.0
+            unit: m
+          location: main
+      trend_frequency:
+        value: 0.1
+        unit: s
+      profiles:
+        - curve_names:
+            - pressure
+          element_name: pipe
+          location: main
+      profile_frequency:
+        value: 0.1
+        unit: s
 
     pipes:
     - name: pipe

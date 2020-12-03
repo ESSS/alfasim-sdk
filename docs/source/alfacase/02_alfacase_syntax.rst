@@ -5,12 +5,12 @@ ALFAcase Syntax
 
 
 An :program:`ALFAcase` file is a text-based file that must be written following the YAML syntax, only a restricted subset of the YAML specification
-is followed and the following section and this section covers the support YAML syntax how to configure a project.
+is supported and the this section and the next cover the differences.
 
 Our root object is a map (equivalent to a dictionary) that represents a :class:`CaseDescription <alfasim_sdk.CaseDescription>`
 with its attributes.
 
-The majority of the values from :program:`ALFAcase` are based on ``key`` and ``value``, the example below illustrates some of these cases.
+The majority of the values from :program:`ALFAcase` are based on ``key`` and ``value``, the example below illustrates some of these cases:
 
 .. code-block:: yaml
    :caption: key and value syntax
@@ -180,7 +180,7 @@ List
 ----
 
 ``list`` is a sequence of values and on :program:`ALFAcase` list is denoted by a series of dashes (``-``)
-It is possible to define a list in a compressed inserting the value between brackets (``[`` ``]``)
+It is possible to define a list in a compressed inserting the value between brackets (``[`` ``]``):
 
 
 .. code-block:: yaml
@@ -207,10 +207,11 @@ Bool
 
         enable_solver_caching: True     # True
         enable_solver_caching: true     # True
-        enable_solver_caching: false    # False
         enable_solver_caching: yes      # True
-        enable_solver_caching: No       # False
         enable_solver_caching: on       # True
-        enable_solver_caching: off      # False
         enable_solver_caching: 1        # True
+        enable_solver_caching: False    # False
+        enable_solver_caching: false    # False
+        enable_solver_caching: no       # False
+        enable_solver_caching: off      # False
         enable_solver_caching: 0        # False

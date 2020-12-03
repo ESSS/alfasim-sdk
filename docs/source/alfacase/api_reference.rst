@@ -186,7 +186,7 @@ Environment
 .. autoclass:: alfasim_sdk.EnvironmentPropertyDescription()
 
 
-Equipments
+Equipment
 ----------
 
 .. autoclass:: alfasim_sdk.EquipmentDescription()

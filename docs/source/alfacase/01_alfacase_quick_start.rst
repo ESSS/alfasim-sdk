@@ -9,15 +9,18 @@ you can easily modify your project and reintroduce it, with the modification, ba
 Open an ALFAsim Project
 -----------------------
 
-Open the |alfasim| application and create a project that includes some elements on the network, after that
-export the project using the option :code:`Export ALFAsim Case file...` as illustrated on the figure bellow
+One of the easiest ways to get started is to export an existing project into a ``.alfascase`` file directly from the interface.
+Open an existing project and export it using the option :code:`Export ALFAsim Case file...` as illustrated on the figure below:
 
 .. image:: /_static/images/alfacase/export_alfacase.png
 
-The generated file will have all its settings made in the project, plus the default settings used by ALFAsim.
-Note that the default values can be omitted, so deleting this entry on the :program:`ALFAcase` will not affect your project.
+The generated file will contain all project settings, including the default values used by ALFAsim.
 
-For illustration, the project from the above could be easily expressed as:
+.. note::
+
+    Note that in general default values can be omitted when producing ``.alfacase`` files manually.
+
+For illustration, an ``.alfacase`` file looks like this:
 
 .. code-block:: yaml
    :caption: project.alfacase

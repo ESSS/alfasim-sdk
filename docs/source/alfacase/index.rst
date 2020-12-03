@@ -2,12 +2,17 @@ ALFAcase
 ========
 
 The |sdk| allows the user to create or edit a project for |alfasim| application by writing the project specification
-directly in an :program:`ALFAcase` file, which is a text document that contains all the definitions to assemble a project.
+directly in an :program:`ALFAcase` file.
 
-The purpose of the :program:`ALFAcase` files is to allow the management of the project directly from a file rather
-than opening the application. It's also possible to assemble a project using
-Python by creating an instance of a CaseDescription filling with all relevant information and using the |sdk| to
-export this class to a :program:`ALFAcase` file.
+An ALFAcase file (``.alfacase``) contains a textual description of a complete case in text format (YAML).
+This file allows the user to write case files directly and execute them directly using the command line.
+Being a text file in a standard and well supported format, it also allows the user to execute complex workflows by
+manipulating the files using external software or programming languages, providing flexibility and power.
+
+.. info::
+
+    :program:`ALFAcase` is also referenced as ``ALFAsim case file``
+
 
 To get quick and running with |sdk| you can read the :ref:`alfacase-quick-start-section` and the
 :ref:`alfacase-syntax` sections
