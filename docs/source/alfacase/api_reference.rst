@@ -12,6 +12,8 @@ Case
 
 .. autoclass:: alfasim_sdk.CaseDescription()
 
+.. _alfacase-reference-options-section:
+
 Options
 -------
 
@@ -21,6 +23,7 @@ Options
 
 .. autoclass:: alfasim_sdk.NumericalOptionsDescription()
 
+.. _alfacase-reference-output-section:
 
 Outputs
 -------
@@ -30,6 +33,9 @@ Outputs
 .. autoclass:: alfasim_sdk.ProfileOutputDescription()
 
 .. autoclass:: alfasim_sdk.TrendOutputDescription()
+
+
+.. _alfacase-reference-pvt-section:
 
 PVTs
 ----
@@ -110,6 +116,7 @@ Initial Conditions
 
 .. autoclass:: alfasim_sdk.TemperaturesContainerDescription()
 
+.. _alfacase-reference-pipe-section:
 
 Pipe
 ----
@@ -117,6 +124,9 @@ Pipe
 .. autoclass:: alfasim_sdk.PipeDescription()
 
 .. autoclass:: alfasim_sdk.PipeSegmentsDescription()
+
+
+.. _alfacase-reference-node-section:
 
 Node
 ----

@@ -9,7 +9,7 @@ This file allows the user to write case files directly and execute them directly
 Being a text file in a standard and well supported format, it also allows the user to execute complex workflows by
 manipulating the files using external software or programming languages, providing flexibility and power.
 
-.. info::
+.. note::
 
     :program:`ALFAcase` is also referenced as ``ALFAsim case file``
 
