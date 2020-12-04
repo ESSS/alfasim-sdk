@@ -1,9 +1,17 @@
 import enum
 from pathlib import Path
+from typing import Any
+from typing import Callable
+from typing import Dict
 from typing import List
+from typing import Sequence
+from typing import Tuple
+from typing import Type
 
 import attr
+from attr._make import Attribute
 from barril.units import Array
+from barril.units._scalar import Scalar
 
 from _alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
 from _alfasim_sdk.alfacase.generate_schema import is_array
@@ -49,7 +57,7 @@ def generate_definition(class_name: str) -> str:
     return "\n".join(lines)
 
 
-def _generate_declaration_for_class(class_) -> List[str]:
+def _generate_declaration_for_class(class_: Any) -> List[str]:
     """ Return all attributes for the given Class with CaseDescription definition. """
     class_fields = attr.fields_dict(class_)
     lines = [f"{INDENT*2}class {class_.__name__}"]
@@ -57,14 +65,17 @@ def _generate_declaration_for_class(class_) -> List[str]:
     return lines
 
 
-def _generate_declaration_for_schema(class_) -> List[str]:
+def _generate_declaration_for_schema(class_: Any) -> List[str]:
     """ Return all attributes for the given Class using ALFACase schema definition. """
     class_fields = attr.fields_dict(class_)
     lines = _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS)
     return lines
 
 
-def _get_declaration(class_, list_of_predicate_and_handles):
+def _get_declaration(
+    class_: Dict[str, Attribute],
+    list_of_predicate_and_handles: Sequence[Tuple[Callable, Callable]],
+) -> List[str]:
     """ Helper class to extract the logic to iterate over the attributes from the given class. """
     lines = []
     for attribute_name, value in class_.items():
@@ -76,7 +87,7 @@ def _get_declaration(class_, list_of_predicate_and_handles):
     return lines
 
 
-def _get_class_with_reference(visible_name, ref, *, add_space=True):
+def _get_class_with_reference(visible_name: str, ref: str, *, add_space=True) -> str:
     """
     Return the name of the class with a valid reference to be used by sphinx.
 
@@ -92,14 +103,14 @@ def _get_class_with_reference(visible_name, ref, *, add_space=True):
     return reference
 
 
-def _get_scalar_reference(add_space=True) -> str:
+def _get_scalar_reference(add_space: bool = True) -> str:
     """ Return a string with a cross-reference to Scalar documentation. """
     return _get_class_with_reference(
         visible_name="Scalar", ref="barril.units.Scalar", add_space=add_space
     )
 
 
-def _get_array_reference(add_space=True) -> str:
+def _get_array_reference(add_space: bool = True) -> str:
     """ Return a string with a cross-reference to Array documentation. """
     return _get_class_with_reference(
         visible_name="Array", ref="barril.units.Array", add_space=add_space
@@ -127,7 +138,7 @@ def _get_optional_reference() -> str:
     )
 
 
-def attrs_formatted(value, *, add_space=True):
+def attrs_formatted(value: Any, *, add_space=True) -> str:
     """
     Return the attr class name with a cross-referencing link for the class.
 
@@ -140,7 +151,7 @@ def attrs_formatted(value, *, add_space=True):
     return _get_class_with_reference(visible_name=name, ref=name, add_space=add_space)
 
 
-def list_formatted(value):
+def list_formatted(value: Any) -> str:
     """
     Return a string with a cross-referencing link for the List class and to the refer type.
     """
@@ -152,7 +163,7 @@ def list_formatted(value):
     return f"{list_with_ref}[{name}]"
 
 
-def dict_formatted(value):
+def dict_formatted(value: Any) -> str:
     """
     Return a string with a cross-referencing link for the Dict class and to the refer type.
     """
@@ -170,7 +181,7 @@ def dict_formatted(value):
     return f"{dict_with_reference}[str, {name}]"
 
 
-def union_formatted(value):
+def union_formatted(value: Any) -> str:
     """
     Return a string with a cross-referencing link for the Optional module.
     Note that all usages of union on CaseDescription are from the Optional module.
@@ -190,21 +201,21 @@ def union_formatted(value):
     return f"{optional_with_reference}[{name}]"
 
 
-def enum_formatted(value):
+def enum_formatted(value: Any) -> str:
     """ Return the name of the Enum a cross-referencing link for the constants section. """
     name = value.__name__
     ref_name = f"{value.__module__}.{name}"
     return _get_class_with_reference(visible_name=name, ref=ref_name)
 
 
-def attrs_formatted_for_schema(value):
+def attrs_formatted_for_schema(value: Any) -> str:
     """ Return the name of the schema with a reference for the API reference section. """
     return _get_class_with_reference(
         visible_name=obtain_schema_name(value), ref=value.__name__
     )
 
 
-def enum_formatted_for_schema(value):
+def enum_formatted_for_schema(value: enum.EnumMeta) -> str:
     """ Return the name of the schema with a reference for the API reference section. """
     return _get_class_with_reference(
         visible_name=obtain_schema_name(value),
@@ -212,7 +223,7 @@ def enum_formatted_for_schema(value):
     )
 
 
-def list_formatted_for_schema(value):
+def list_formatted_for_schema(value: Any) -> str:
     """
     Return a string showing a list with the parameters used, if the parameter is an attrs class,
     a cross-referencing link will be added.
@@ -225,7 +236,7 @@ def list_formatted_for_schema(value):
     return f"\n{block_indentation}- {argument.__name__}"
 
 
-def dict_formatted_for_schema(value):
+def dict_formatted_for_schema(value: Any) -> str:
     """
     Return a string showing a dict with the parameters used, if the parameter is class
     that has a sphinx reference (attr, Scalar, Array) a cross-referencing link will be added.
@@ -247,7 +258,7 @@ def dict_formatted_for_schema(value):
     return lines
 
 
-def union_formatted_for_schema(value):
+def union_formatted_for_schema(value: Any) -> str:
     """
     All usages of union on CaseDescription are from the Optional module, so this function will
     return a string showing parameters with a label '# optional' indicating that this field could be
@@ -271,7 +282,7 @@ def union_formatted_for_schema(value):
     return name
 
 
-def scalar_formatted_for_schema(value, *, number_of_indent=1):
+def scalar_formatted_for_schema(value: Type[Scalar], *, number_of_indent=1) -> str:
     """
     Return a string showing how to configure a Scalar.
 
@@ -283,7 +294,7 @@ def scalar_formatted_for_schema(value, *, number_of_indent=1):
     return f"\n{block_indentation}value: number\n{block_indentation}unit: string"
 
 
-def array_formatted_for_schema(value, *, number_of_indent=1):
+def array_formatted_for_schema(value: Type[Array], *, number_of_indent=1) -> str:
     """
     Return a string showing how to configure a Array.
 
