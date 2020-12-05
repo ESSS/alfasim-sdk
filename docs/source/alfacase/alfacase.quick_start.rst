@@ -1,7 +1,7 @@
 .. _alfacase-quick-start-section:
 
-ALFAcase Quick Start
-====================
+Quick Start
+===========
 
 In this section, it is shown how to create an :program:`ALFAcase` from an existent project, with this exported project
 you can easily modify your project and reintroduce it, with the modification, back to |alfasim|.

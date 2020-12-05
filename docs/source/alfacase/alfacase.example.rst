@@ -1,7 +1,7 @@
 .. _alfacase-example:
 
-ALFAcase Example
-================
+Example
+=======
 
 In this section, we will walk trough the creation of a simple network, with two nodes and one pipe, to illustrate how to
 crete a project and how to interpret the definitions available on :ref:`alfacase-reference-section`.
