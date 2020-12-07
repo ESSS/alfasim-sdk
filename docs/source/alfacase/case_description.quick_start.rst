@@ -1,7 +1,7 @@
 .. _case-description-quick-start-section:
 
-CaseDescription Quick Start
-===========================
+Quick Start
+===========
 
 
 In progress

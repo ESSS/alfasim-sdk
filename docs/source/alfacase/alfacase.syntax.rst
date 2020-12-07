@@ -1,7 +1,7 @@
 .. _alfacase-syntax:
 
-ALFAcase Syntax
-===============
+Syntax
+======
 
 
 An :program:`ALFAcase` file is a text-based file that must be written following the YAML syntax, only a restricted subset of the YAML specification
