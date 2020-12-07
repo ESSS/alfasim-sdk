@@ -5,22 +5,22 @@
     .. parsed-literal::
 
         class EnvironmentDescription
-            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\ |space|
-            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\ |space|
-            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            md_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\]
-            tvd_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\]
+            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\  = PipeThermalModelType.SteadyState
+            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\  = PipeThermalPositionInput.Md
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            md_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\] = []
+            tvd_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\ |space|
-            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\ |space|
+            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\  # optional
+            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\  # optional
             reference_y_coordinate: 
                 value: number
-                unit: string
+                unit: string # optional
             md_properties_table: 
-                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ |space|
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\  # optional
             tvd_properties_table: 
-                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ |space|
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\  # optional

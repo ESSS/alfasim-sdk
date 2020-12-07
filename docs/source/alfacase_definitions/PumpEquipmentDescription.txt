@@ -6,13 +6,13 @@
 
         class PumpEquipmentDescription
             position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\ |space|
-            pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            table: \ :class:`TablePumpDescription <TablePumpDescription>`\ |space|
-            speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\ |space|
-            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
-            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
+            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\  = PumpType.ConstantPressure
+            pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
+            thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
+            table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
+            speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\  = SpeedCurveDescription()
+            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\  = InterpolationType.Constant
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\  = FlowDirection.Forward
 
 .. tab:: Schema
 
@@ -21,14 +21,14 @@
             position: 
                 value: number
                 unit: string
-            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\ |space|
+            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\  # optional
             pressure_boost: 
                 value: number
-                unit: string
+                unit: string # optional
             thermal_efficiency: 
                 value: number
-                unit: string
-            table: \ :class:`table_pump_description_schema <TablePumpDescription>`\ |space|
-            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\ |space|
-            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
-            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
+                unit: string # optional
+            table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
+            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\  # optional
+            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\  # optional
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\  # optional

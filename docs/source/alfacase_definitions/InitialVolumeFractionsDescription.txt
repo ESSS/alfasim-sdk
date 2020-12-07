@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class InitialVolumeFractionsDescription
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
-            table_x: \ :class:`ReferencedVolumeFractionsContainerDescription <ReferencedVolumeFractionsContainerDescription>`\ |space|
-            table_y: \ :class:`ReferencedVolumeFractionsContainerDescription <ReferencedVolumeFractionsContainerDescription>`\ |space|
-            table_length: \ :class:`VolumeFractionsContainerDescription <VolumeFractionsContainerDescription>`\ |space|
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\  = TableInputType.length
+            table_x: \ :class:`ReferencedVolumeFractionsContainerDescription <ReferencedVolumeFractionsContainerDescription>`\  = ReferencedVolumeFractionsContainerDescription()
+            table_y: \ :class:`ReferencedVolumeFractionsContainerDescription <ReferencedVolumeFractionsContainerDescription>`\  = ReferencedVolumeFractionsContainerDescription()
+            table_length: \ :class:`VolumeFractionsContainerDescription <VolumeFractionsContainerDescription>`\  = VolumeFractionsContainerDescription()
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
-            table_x: \ :class:`referenced_volume_fractions_container_description_schema <ReferencedVolumeFractionsContainerDescription>`\ |space|
-            table_y: \ :class:`referenced_volume_fractions_container_description_schema <ReferencedVolumeFractionsContainerDescription>`\ |space|
-            table_length: \ :class:`volume_fractions_container_description_schema <VolumeFractionsContainerDescription>`\ |space|
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\  # optional
+            table_x: \ :class:`referenced_volume_fractions_container_description_schema <ReferencedVolumeFractionsContainerDescription>`\  # optional
+            table_y: \ :class:`referenced_volume_fractions_container_description_schema <ReferencedVolumeFractionsContainerDescription>`\  # optional
+            table_length: \ :class:`volume_fractions_container_description_schema <VolumeFractionsContainerDescription>`\  # optional

@@ -8,7 +8,7 @@
             start_positions: \ :class:`Array <barril.units.Array>`\ |space|
             diameters: \ :class:`Array <barril.units.Array>`\ |space|
             roughnesses: \ :class:`Array <barril.units.Array>`\ |space|
-            wall_names: \ :class:`Optional <typing.Optional>`\[\ :class:`List <typing.List>`\[str]]
+            wall_names: \ :class:`Optional <typing.Optional>`\[\ :class:`List <typing.List>`\[str]] = None
 
 .. tab:: Schema
 
@@ -23,5 +23,5 @@
             roughnesses: 
                 values: [number]
                 unit: string
-            wall_names:     # optional
-                - str
+            wall_names:     
+                - str # optional

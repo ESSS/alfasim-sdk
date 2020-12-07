@@ -5,42 +5,42 @@
     .. parsed-literal::
 
         class MassSourceNodePropertiesDescription
-            fluid: \ :class:`Optional <typing.Optional>`\[str]
-            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ |space|
-            temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\ |space|
-            volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
-            mass_flow_rates: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
-            total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            water_cut: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            fluid: \ :class:`Optional <typing.Optional>`\[str] = None
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
+            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\  = MassSourceType.MassFlowRates
+            volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            mass_flow_rates: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/s', 'mass flow rate')
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'volume fraction')
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            fluid: string    # optional
+            fluid: string     # optional
             tracer_mass_fraction: 
                 values: [number]
-                unit: string
+                unit: string # optional
             temperature: 
                 value: number
-                unit: string
-            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\ |space|
+                unit: string # optional
+            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\  # optional
             volumetric_flow_rates_std: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional
             mass_flow_rates: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional
             total_mass_flow_rate: 
                 value: number
-                unit: string
+                unit: string # optional
             water_cut: 
                 value: number
-                unit: string
+                unit: string # optional
             gas_oil_ratio: 
                 value: number
-                unit: string
+                unit: string # optional

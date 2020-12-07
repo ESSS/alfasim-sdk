@@ -5,14 +5,14 @@
     .. parsed-literal::
 
         class FluidDescription
-            composition: \ :class:`List <typing.List>`\[\ :class:`CompositionDescription <CompositionDescription>`\]
-            fraction_pairs: \ :class:`List <typing.List>`\[\ :class:`BipDescription <BipDescription>`\]
+            composition: \ :class:`List <typing.List>`\[\ :class:`CompositionDescription <CompositionDescription>`\] = []
+            fraction_pairs: \ :class:`List <typing.List>`\[\ :class:`BipDescription <BipDescription>`\] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             composition: 
-                - \ :class:`composition_description_schema <CompositionDescription>`\ |space|
+                - \ :class:`composition_description_schema <CompositionDescription>`\  # optional
             fraction_pairs: 
-                - \ :class:`bip_description_schema <BipDescription>`\ |space|
+                - \ :class:`bip_description_schema <BipDescription>`\  # optional

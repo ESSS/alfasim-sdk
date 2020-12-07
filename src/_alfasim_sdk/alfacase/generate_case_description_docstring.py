@@ -45,13 +45,14 @@ def generate_definition(class_name: str) -> str:
         "",
         "    .. parsed-literal::",
         "",
+        *_generate_declaration_for_class(class_name),
+        "",
+        ".. tab:: Schema",
+        "",
+        "    .. parsed-literal::",
+        "",
     ]
-    lines.extend(_generate_declaration_for_class(class_name))
-    lines.append("")
-    lines.append(".. tab:: Schema")
-    lines.append("")
-    lines.append("    .. parsed-literal::")
-    lines.append("")
+
     lines.extend(_generate_declaration_for_schema(class_name))
     lines.append("")
     return "\n".join(lines)
@@ -60,21 +61,48 @@ def generate_definition(class_name: str) -> str:
 def _generate_declaration_for_class(class_: Any) -> List[str]:
     """ Return all attributes for the given Class with CaseDescription definition. """
     class_fields = attr.fields_dict(class_)
-    lines = [f"{INDENT*2}class {class_.__name__}"]
-    lines.extend(_get_declaration(class_fields, LIST_OF_CASE_ATTRIBUTES))
-    return lines
+    return [
+        f"{INDENT*2}class {class_.__name__}",
+        *_get_declaration(class_fields, LIST_OF_CASE_ATTRIBUTES),
+    ]
 
 
 def _generate_declaration_for_schema(class_: Any) -> List[str]:
     """ Return all attributes for the given Class using ALFACase schema definition. """
     class_fields = attr.fields_dict(class_)
-    lines = _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS)
-    return lines
+    return _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS, is_schema=True)
+
+
+def _get_default_value_of_case(value: attr.Attribute) -> str:
+    """ Return the default value of a CaseDescription. """
+
+    if value.default == attr.NOTHING:
+        return ""
+
+    default_value_string = " = "
+    if isinstance(value.default, enum.Enum):
+        default_value_string += (
+            f"{value.default.__class__.__name__}.{value.default.name}"
+        )
+    elif isinstance(value.default, attr.Factory):
+        if value.default.factory is dict:
+            default_value_string += "{}"
+        elif value.default.factory is list:
+            default_value_string += "[]"
+        elif is_attrs(value.default):
+            default_value_string += f"{value.default.factory.__name__}()"
+    elif is_attrs(value.default):
+        default_value_string += f"{value.default.__class__.__name__}()"
+    else:
+        default_value_string += f"{repr(value.default)}"
+
+    return default_value_string
 
 
 def _get_declaration(
     class_: Dict[str, Attribute],
     list_of_predicate_and_handles: Sequence[Tuple[Callable, Callable]],
+    is_schema: bool = False,
 ) -> List[str]:
     """ Helper class to extract the logic to iterate over the attributes from the given class. """
     lines = []
@@ -83,7 +111,21 @@ def _get_declaration(
             for predicate_function, handle_function in list_of_predicate_and_handles:
                 if predicate_function(value.type):
                     attribute_value = handle_function(value.type)
-                    lines.append(f"{BASE_INDENT}{attribute_name}: {attribute_value}")
+                    default_value = _get_default_value_of_case(value)
+
+                    # For CaseDescription, if the attributes has a default value, the empty space is not necessary
+                    if default_value:
+                        attribute_value = attribute_value.replace("|space|", "")
+
+                    # For Schema,  if the attributes has a default value, the entry is optional
+                    if default_value and is_schema:
+                        attribute_value = attribute_value.replace("# optional", "")
+                        attribute_value += " # optional"
+                        default_value = ""
+
+                    lines.append(
+                        f"{BASE_INDENT}{attribute_name}: {attribute_value}{default_value}"
+                    )
     return lines
 
 

@@ -6,19 +6,19 @@
 
         class LightComponentDescription
             name: str
-            Pc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Tc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Vc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            omega: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            MW: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Tb: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Parachor: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            B_parameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Pc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
+            Tc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
+            Vc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm3/mol', 'molar volume')
+            omega: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            MW: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/mol', 'mass per mol')
+            Tb: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
+            Parachor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            B_parameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -27,40 +27,40 @@
             name: string
             Pc: 
                 value: number
-                unit: string
+                unit: string # optional
             Tc: 
                 value: number
-                unit: string
+                unit: string # optional
             Vc: 
                 value: number
-                unit: string
+                unit: string # optional
             omega: 
                 value: number
-                unit: string
+                unit: string # optional
             MW: 
                 value: number
-                unit: string
+                unit: string # optional
             Tb: 
                 value: number
-                unit: string
+                unit: string # optional
             Parachor: 
                 value: number
-                unit: string
+                unit: string # optional
             B_parameter: 
                 value: number
-                unit: string
+                unit: string # optional
             Cp_0: 
                 value: number
-                unit: string
+                unit: string # optional
             Cp_1: 
                 value: number
-                unit: string
+                unit: string # optional
             Cp_2: 
                 value: number
-                unit: string
+                unit: string # optional
             Cp_3: 
                 value: number
-                unit: string
+                unit: string # optional
             Cp_4: 
                 value: number
-                unit: string
+                unit: string # optional

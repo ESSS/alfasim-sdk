@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class ReferencedPressureContainerDescription
-            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
-            pressures: \ :class:`Array <barril.units.Array>`\ |space|
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
+            pressures: \ :class:`Array <barril.units.Array>`\  = Array(pressure, [100000.0], Pa)
 
 .. tab:: Schema
 
@@ -15,10 +15,10 @@
 
             reference_coordinate: 
                 value: number
-                unit: string
+                unit: string # optional
             positions: 
                 values: [number]
-                unit: string
+                unit: string # optional
             pressures: 
                 values: [number]
-                unit: string
+                unit: string # optional

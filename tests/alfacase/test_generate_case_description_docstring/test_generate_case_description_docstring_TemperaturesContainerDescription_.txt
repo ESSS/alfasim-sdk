@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class TemperaturesContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
-            temperatures: \ :class:`Array <barril.units.Array>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
+            temperatures: \ :class:`Array <barril.units.Array>`\  = Array(temperature, [288.6], K)
 
 .. tab:: Schema
 
@@ -14,7 +14,7 @@
 
             positions: 
                 values: [number]
-                unit: string
+                unit: string # optional
             temperatures: 
                 values: [number]
-                unit: string
+                unit: string # optional

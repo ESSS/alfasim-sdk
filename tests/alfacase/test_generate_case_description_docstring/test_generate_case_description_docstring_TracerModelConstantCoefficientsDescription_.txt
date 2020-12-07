@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class TracerModelConstantCoefficientsDescription
-            partition_coefficients: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            partition_coefficients: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
 
 .. tab:: Schema
 
@@ -14,4 +14,4 @@
             partition_coefficients: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional

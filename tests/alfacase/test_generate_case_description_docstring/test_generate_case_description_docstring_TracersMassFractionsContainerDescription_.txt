@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class TracersMassFractionsContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
-            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array]
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
+            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array] = []
 
 .. tab:: Schema
 
@@ -14,6 +14,6 @@
 
             positions: 
                 values: [number]
-                unit: string
+                unit: string # optional
             tracers_mass_fractions: 
-                - Array
+                - Array # optional
