@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class ReferencedVelocitiesContainerDescription
-            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\
-            positions: \ :class:`Array <barril.units.Array>`\
-            velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\]
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
+            velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\] = {}
 
 .. tab:: Schema
 
@@ -15,11 +15,11 @@
 
             reference_coordinate: 
                 value: number
-                unit: string
+                unit: string # optional
             positions: 
                 values: [number]
-                unit: string
+                unit: string # optional
             velocities: 
                 string: 
                     values: [number]
-                    unit: string
+                    unit: string # optional

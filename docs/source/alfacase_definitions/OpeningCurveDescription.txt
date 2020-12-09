@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class OpeningCurveDescription
-            time: \ :class:`Array <barril.units.Array>`\
-            opening: \ :class:`Array <barril.units.Array>`\
+            time: \ :class:`Array <barril.units.Array>`\  = Array(time, [], s)
+            opening: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
 
 .. tab:: Schema
 
@@ -14,7 +14,7 @@
 
             time: 
                 values: [number]
-                unit: string
+                unit: string # optional
             opening: 
                 values: [number]
-                unit: string
+                unit: string # optional

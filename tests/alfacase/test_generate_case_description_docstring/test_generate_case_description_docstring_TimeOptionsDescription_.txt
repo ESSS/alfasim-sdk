@@ -5,40 +5,40 @@
     .. parsed-literal::
 
         class TimeOptionsDescription
-            stop_on_steady_state: bool
-            stop_on_steady_state: bool
-            initial_time: \ :class:`Scalar <barril.units.Scalar>`\
-            final_time: \ :class:`Scalar <barril.units.Scalar>`\
-            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\
-            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\
-            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\
-            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\
-            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\
+            stop_on_steady_state: bool = False
+            stop_on_steady_state: bool = False
+            initial_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
+            final_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
+            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0001, 's', 'time')
+            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1e-12, 's', 'time')
+            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
+            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'h', 'time')
+            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            stop_on_steady_state: boolean
-            stop_on_steady_state: number
+            stop_on_steady_state: boolean # optional
+            stop_on_steady_state: number # optional
             initial_time: 
                 value: number
-                unit: string
+                unit: string # optional
             final_time: 
                 value: number
-                unit: string
+                unit: string # optional
             initial_timestep: 
                 value: number
-                unit: string
+                unit: string # optional
             minimum_timestep: 
                 value: number
-                unit: string
+                unit: string # optional
             maximum_timestep: 
                 value: number
-                unit: string
+                unit: string # optional
             restart_autosave_frequency: 
                 value: number
-                unit: string
+                unit: string # optional
             minimum_time_for_steady_state_stop: 
                 value: number
-                unit: string
+                unit: string # optional

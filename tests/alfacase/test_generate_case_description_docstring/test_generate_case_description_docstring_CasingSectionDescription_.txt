@@ -6,16 +6,16 @@
 
         class CasingSectionDescription
             name: str
-            hanger_depth: \ :class:`Scalar <barril.units.Scalar>`\
-            settings_depth: \ :class:`Scalar <barril.units.Scalar>`\
-            hole_diameter: \ :class:`Scalar <barril.units.Scalar>`\
-            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\
-            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\
-            material: \ :class:`Optional <typing.Optional>`\[str]
-            top_of_filler: \ :class:`Scalar <barril.units.Scalar>`\
-            filler_material: \ :class:`Optional <typing.Optional>`\[str]
-            material_above_filler: \ :class:`Optional <typing.Optional>`\[str]
+            hanger_depth: \ :class:`Scalar <barril.units.Scalar>`
+            settings_depth: \ :class:`Scalar <barril.units.Scalar>`
+            hole_diameter: \ :class:`Scalar <barril.units.Scalar>`
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
+            material: \ :class:`Optional <typing.Optional>`\[str] = None
+            top_of_filler: \ :class:`Scalar <barril.units.Scalar>`
+            filler_material: \ :class:`Optional <typing.Optional>`\[str] = None
+            material_above_filler: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
@@ -40,9 +40,9 @@
             inner_roughness: 
                 value: number
                 unit: string
-            material: string
+            material: string # optional
             top_of_filler: 
                 value: number
                 unit: string
-            filler_material: string
-            material_above_filler: string
+            filler_material: string # optional
+            material_above_filler: string # optional

@@ -5,13 +5,13 @@
     .. parsed-literal::
 
         class SeparatorNodePropertiesDescription
-            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\
-            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\
-            length: \ :class:`Scalar <barril.units.Scalar>`\
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\
-            radius: \ :class:`Scalar <barril.units.Scalar>`\
-            nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
-            initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
+            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(25.0, 'degC', 'temperature')
+            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\  = SeparatorGeometryType.VerticalCylinder
+            length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            radius: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {'gas': Scalar(0.5, '-', 'volume fraction'), 'oil': Scalar(0.5, '-', 'volume fraction')}
 
 .. tab:: Schema
 
@@ -19,22 +19,22 @@
 
             environment_temperature: 
                 value: number
-                unit: string
-            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\
+                unit: string # optional
+            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\ # optional
             length: 
                 value: number
-                unit: string
+                unit: string # optional
             overall_heat_transfer_coefficient: 
                 value: number
-                unit: string
+                unit: string # optional
             radius: 
                 value: number
-                unit: string
+                unit: string # optional
             nozzles: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional
             initial_phase_volume_fractions: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional

@@ -70,12 +70,41 @@ def _generate_declaration_for_class(class_: Any) -> List[str]:
 def _generate_declaration_for_schema(class_: Any) -> List[str]:
     """ Return all attributes for the given Class using ALFACase schema definition. """
     class_fields = attr.fields_dict(class_)
-    return _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS)
+    return _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS, is_schema=True)
+
+
+def _get_case_attr_default_value(value: attr.Attribute) -> str:
+    """ Return the default value of a CaseDescription. """
+
+    if value.default == attr.NOTHING:
+        return ""
+
+    default_value_string = " = "
+    if isinstance(value.default, enum.Enum):
+        default_value_string += (
+            f"{value.default.__class__.__name__}.{value.default.name}"
+        )
+    elif isinstance(value.default, attr.Factory):
+        if value.default.factory is dict:
+            default_value_string += "{}"
+        elif value.default.factory is list:
+            default_value_string += "[]"
+        elif is_attrs(value.default):
+            default_value_string += f"{value.default.factory.__name__}()"
+        else:
+            default_value_string += "UNKNOWN FACTORY"
+    elif is_attrs(value.default):
+        default_value_string += f"{value.default.__class__.__name__}()"
+    else:
+        default_value_string += f"{repr(value.default)}"
+
+    return default_value_string
 
 
 def _get_declaration(
     class_: Dict[str, Attribute],
     list_of_predicate_and_handles: Sequence[Tuple[Callable, Callable]],
+    is_schema: bool = False,
 ) -> List[str]:
     """ Helper class to extract the logic to iterate over the attributes from the given class. """
     lines = []
@@ -84,7 +113,26 @@ def _get_declaration(
             for predicate_function, handle_function in list_of_predicate_and_handles:
                 if predicate_function(value.type):
                     attribute_value = handle_function(value.type)
-                    lines.append(f"{BASE_INDENT}{attribute_name}: {attribute_value}")
+                    default_value = _get_case_attr_default_value(value)
+
+                    # For Schema: if the attributes have a default value the entry is optional.
+                    if default_value and is_schema:
+                        attribute_value += " # optional"
+                        default_value = ""
+
+                    # If attribute_value ends with backslash (because of the cross-reference), add extra space
+                    # for a default value.
+                    # Otherwise, the equal symbol will be sticky with the link.
+                    if default_value and attribute_value[-1] == "\\":
+                        default_value = f" {default_value}"
+
+                    line_content = f"{BASE_INDENT}{attribute_name}: {attribute_value}{default_value}"
+
+                    # Remove the last character if it's a backslash otherwise the line break will be avoided.
+                    if line_content.endswith("\\"):
+                        line_content = line_content[:-1]
+
+                    lines.append(line_content)
     return lines
 
 

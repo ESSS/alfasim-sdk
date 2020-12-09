@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class ReferencedTemperaturesContainerDescription
-            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\
-            positions: \ :class:`Array <barril.units.Array>`\
-            temperatures: \ :class:`Array <barril.units.Array>`\
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
+            temperatures: \ :class:`Array <barril.units.Array>`\  = Array(temperature, [], K)
 
 .. tab:: Schema
 
@@ -15,10 +15,10 @@
 
             reference_coordinate: 
                 value: number
-                unit: string
+                unit: string # optional
             positions: 
                 values: [number]
-                unit: string
+                unit: string # optional
             temperatures: 
                 values: [number]
-                unit: string
+                unit: string # optional

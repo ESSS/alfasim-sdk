@@ -5,12 +5,12 @@
     .. parsed-literal::
 
         class EnvironmentPropertyDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`\
-            temperature: \ :class:`Scalar <barril.units.Scalar>`\
-            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`\
-            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\
-            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\
+            position: \ :class:`Scalar <barril.units.Scalar>`
+            temperature: \ :class:`Scalar <barril.units.Scalar>`
+            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
+            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm/s', 'velocity')
 
 .. tab:: Schema
 
@@ -22,13 +22,13 @@
             temperature: 
                 value: number
                 unit: string
-            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`\
+            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
             heat_transfer_coefficient: 
                 value: number
-                unit: string
+                unit: string # optional
             overall_heat_transfer_coefficient: 
                 value: number
-                unit: string
+                unit: string # optional
             fluid_velocity: 
                 value: number
-                unit: string
+                unit: string # optional

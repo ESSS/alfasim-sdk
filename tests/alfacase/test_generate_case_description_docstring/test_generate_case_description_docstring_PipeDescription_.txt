@@ -8,14 +8,14 @@
             name: str
             source: str
             target: str
-            source_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <_alfasim_sdk.constants.WellConnectionPort>`\]
-            target_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <_alfasim_sdk.constants.WellConnectionPort>`\]
-            pvt_model: \ :class:`Optional <typing.Optional>`\[str]
-            profile: \ :class:`ProfileDescription <ProfileDescription>`\
-            equipment: \ :class:`EquipmentDescription <EquipmentDescription>`\
-            environment: \ :class:`EnvironmentDescription <EnvironmentDescription>`\
-            segments: \ :class:`PipeSegmentsDescription <PipeSegmentsDescription>`\
-            initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\
+            source_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <_alfasim_sdk.constants.WellConnectionPort>`\] = None
+            target_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <_alfasim_sdk.constants.WellConnectionPort>`\] = None
+            pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
+            profile: \ :class:`ProfileDescription <ProfileDescription>`\  = ProfileDescription()
+            equipment: \ :class:`EquipmentDescription <EquipmentDescription>`\  = EquipmentDescription()
+            environment: \ :class:`EnvironmentDescription <EnvironmentDescription>`\  = EnvironmentDescription()
+            segments: \ :class:`PipeSegmentsDescription <PipeSegmentsDescription>`\  = PipeSegmentsDescription()
+            initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\  = InitialConditionsDescription()
 
 .. tab:: Schema
 
@@ -24,11 +24,11 @@
             name: string
             source: string
             target: string
-            source_port: \ :class:`well_connection_port_schema <_alfasim_sdk.constants.WellConnectionPort>`\
-            target_port: \ :class:`well_connection_port_schema <_alfasim_sdk.constants.WellConnectionPort>`\
-            pvt_model: string
-            profile: \ :class:`profile_description_schema <ProfileDescription>`\
-            equipment: \ :class:`equipment_description_schema <EquipmentDescription>`\
-            environment: \ :class:`environment_description_schema <EnvironmentDescription>`\
-            segments: \ :class:`pipe_segments_description_schema <PipeSegmentsDescription>`\
-            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\
+            source_port: \ :class:`well_connection_port_schema <_alfasim_sdk.constants.WellConnectionPort>`\ # optional
+            target_port: \ :class:`well_connection_port_schema <_alfasim_sdk.constants.WellConnectionPort>`\ # optional
+            pvt_model: string # optional
+            profile: \ :class:`profile_description_schema <ProfileDescription>`\ # optional
+            equipment: \ :class:`equipment_description_schema <EquipmentDescription>`\ # optional
+            environment: \ :class:`environment_description_schema <EnvironmentDescription>`\ # optional
+            segments: \ :class:`pipe_segments_description_schema <PipeSegmentsDescription>`\ # optional
+            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\ # optional

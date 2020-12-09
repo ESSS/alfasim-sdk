@@ -5,26 +5,26 @@
     .. parsed-literal::
 
         class EquipmentDescription
-            mass_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`MassSourceEquipmentDescription <MassSourceEquipmentDescription>`\]
-            pumps: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PumpEquipmentDescription <PumpEquipmentDescription>`\]
-            valves: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ValveEquipmentDescription <ValveEquipmentDescription>`\]
-            reservoir_inflows: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ReservoirInflowEquipmentDescription <ReservoirInflowEquipmentDescription>`\]
-            heat_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`HeatSourceEquipmentDescription <HeatSourceEquipmentDescription>`\]
-            compressors: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`\]
+            mass_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`MassSourceEquipmentDescription <MassSourceEquipmentDescription>`\] = {}
+            pumps: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PumpEquipmentDescription <PumpEquipmentDescription>`\] = {}
+            valves: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ValveEquipmentDescription <ValveEquipmentDescription>`\] = {}
+            reservoir_inflows: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ReservoirInflowEquipmentDescription <ReservoirInflowEquipmentDescription>`\] = {}
+            heat_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`HeatSourceEquipmentDescription <HeatSourceEquipmentDescription>`\] = {}
+            compressors: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`\] = {}
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             mass_sources: 
-                string: \ :class:`mass_source_equipment_description_schema <MassSourceEquipmentDescription>`\
+                string: \ :class:`mass_source_equipment_description_schema <MassSourceEquipmentDescription>`\ # optional
             pumps: 
-                string: \ :class:`pump_equipment_description_schema <PumpEquipmentDescription>`\
+                string: \ :class:`pump_equipment_description_schema <PumpEquipmentDescription>`\ # optional
             valves: 
-                string: \ :class:`valve_equipment_description_schema <ValveEquipmentDescription>`\
+                string: \ :class:`valve_equipment_description_schema <ValveEquipmentDescription>`\ # optional
             reservoir_inflows: 
-                string: \ :class:`reservoir_inflow_equipment_description_schema <ReservoirInflowEquipmentDescription>`\
+                string: \ :class:`reservoir_inflow_equipment_description_schema <ReservoirInflowEquipmentDescription>`\ # optional
             heat_sources: 
-                string: \ :class:`heat_source_equipment_description_schema <HeatSourceEquipmentDescription>`\
+                string: \ :class:`heat_source_equipment_description_schema <HeatSourceEquipmentDescription>`\ # optional
             compressors: 
-                string: \ :class:`compressor_equipment_description_schema <CompressorEquipmentDescription>`\
+                string: \ :class:`compressor_equipment_description_schema <CompressorEquipmentDescription>`\ # optional

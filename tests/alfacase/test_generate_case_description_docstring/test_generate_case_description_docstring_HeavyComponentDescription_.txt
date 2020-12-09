@@ -7,8 +7,8 @@
         class HeavyComponentDescription
             name: str
             scn: int
-            MW: \ :class:`Scalar <barril.units.Scalar>`\
-            rho: \ :class:`Scalar <barril.units.Scalar>`\
+            MW: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/mol', 'mass per mol')
+            rho: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
 
 .. tab:: Schema
 
@@ -18,7 +18,7 @@
             scn: number
             MW: 
                 value: number
-                unit: string
+                unit: string # optional
             rho: 
                 value: number
-                unit: string
+                unit: string # optional

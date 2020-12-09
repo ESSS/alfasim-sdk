@@ -6,11 +6,11 @@
 
         class TubingDescription
             name: str
-            length: \ :class:`Scalar <barril.units.Scalar>`\
-            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\
-            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\
-            material: \ :class:`Optional <typing.Optional>`\[str]
+            length: \ :class:`Scalar <barril.units.Scalar>`
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
+            material: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
@@ -29,4 +29,4 @@
             inner_roughness: 
                 value: number
                 unit: string
-            material: string
+            material: string # optional

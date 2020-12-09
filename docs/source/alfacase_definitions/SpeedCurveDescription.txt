@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class SpeedCurveDescription
-            time: \ :class:`Array <barril.units.Array>`\
-            speed: \ :class:`Array <barril.units.Array>`\
+            time: \ :class:`Array <barril.units.Array>`\  = Array(time, [0], s)
+            speed: \ :class:`Array <barril.units.Array>`\  = Array(frequency, [500], rpm)
 
 .. tab:: Schema
 
@@ -14,7 +14,7 @@
 
             time: 
                 values: [number]
-                unit: string
+                unit: string # optional
             speed: 
                 values: [number]
-                unit: string
+                unit: string # optional

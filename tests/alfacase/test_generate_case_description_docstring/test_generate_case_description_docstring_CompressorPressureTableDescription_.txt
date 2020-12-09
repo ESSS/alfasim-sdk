@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class CompressorPressureTableDescription
-            speed_entries: \ :class:`Array <barril.units.Array>`\
-            corrected_mass_flow_rate_entries: \ :class:`Array <barril.units.Array>`\
-            pressure_ratio_table: \ :class:`Array <barril.units.Array>`\
-            isentropic_efficiency_table: \ :class:`Array <barril.units.Array>`\
+            speed_entries: \ :class:`Array <barril.units.Array>`\  = Array(frequency, [0], rpm)
+            corrected_mass_flow_rate_entries: \ :class:`Array <barril.units.Array>`\  = Array(mass flow rate, [0], kg/s)
+            pressure_ratio_table: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [1.0], -)
+            isentropic_efficiency_table: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [1.0], -)
 
 .. tab:: Schema
 
@@ -16,13 +16,13 @@
 
             speed_entries: 
                 values: [number]
-                unit: string
+                unit: string # optional
             corrected_mass_flow_rate_entries: 
                 values: [number]
-                unit: string
+                unit: string # optional
             pressure_ratio_table: 
                 values: [number]
-                unit: string
+                unit: string # optional
             isentropic_efficiency_table: 
                 values: [number]
-                unit: string
+                unit: string # optional

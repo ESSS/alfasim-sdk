@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class ReferencedTracersMassFractionsContainerDescription
-            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\
-            positions: \ :class:`Array <barril.units.Array>`\
-            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array]
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
+            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array] = []
 
 .. tab:: Schema
 
@@ -15,9 +15,9 @@
 
             reference_coordinate: 
                 value: number
-                unit: string
+                unit: string # optional
             positions: 
                 values: [number]
-                unit: string
+                unit: string # optional
             tracers_mass_fractions: 
-                - Array
+                - Array # optional

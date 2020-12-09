@@ -5,22 +5,22 @@
     .. parsed-literal::
 
         class CaseOutputDescription
-            trends: \ :class:`List <typing.List>`\[\ :class:`TrendOutputDescription <TrendOutputDescription>`\]
-            trend_frequency: \ :class:`Scalar <barril.units.Scalar>`\
-            profiles: \ :class:`List <typing.List>`\[\ :class:`ProfileOutputDescription <ProfileOutputDescription>`\]
-            profile_frequency: \ :class:`Scalar <barril.units.Scalar>`\
+            trends: \ :class:`List <typing.List>`\[\ :class:`TrendOutputDescription <TrendOutputDescription>`\] = []
+            trend_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
+            profiles: \ :class:`List <typing.List>`\[\ :class:`ProfileOutputDescription <ProfileOutputDescription>`\] = []
+            profile_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             trends: 
-                - \ :class:`trend_output_description_schema <TrendOutputDescription>`\
+                - \ :class:`trend_output_description_schema <TrendOutputDescription>`\ # optional
             trend_frequency: 
                 value: number
-                unit: string
+                unit: string # optional
             profiles: 
-                - \ :class:`profile_output_description_schema <ProfileOutputDescription>`\
+                - \ :class:`profile_output_description_schema <ProfileOutputDescription>`\ # optional
             profile_frequency: 
                 value: number
-                unit: string
+                unit: string # optional

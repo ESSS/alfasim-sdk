@@ -6,21 +6,21 @@
 
         class NodeDescription
             name: str
-            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`\
-            pvt_model: \ :class:`Optional <typing.Optional>`\[str]
-            pressure_properties: \ :class:`PressureNodePropertiesDescription <PressureNodePropertiesDescription>`\
-            mass_source_properties: \ :class:`MassSourceNodePropertiesDescription <MassSourceNodePropertiesDescription>`\
-            internal_properties: \ :class:`InternalNodePropertiesDescription <InternalNodePropertiesDescription>`\
-            separator_properties: \ :class:`SeparatorNodePropertiesDescription <SeparatorNodePropertiesDescription>`\
+            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`
+            pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
+            pressure_properties: \ :class:`PressureNodePropertiesDescription <PressureNodePropertiesDescription>`\  = PressureNodePropertiesDescription()
+            mass_source_properties: \ :class:`MassSourceNodePropertiesDescription <MassSourceNodePropertiesDescription>`\  = MassSourceNodePropertiesDescription()
+            internal_properties: \ :class:`InternalNodePropertiesDescription <InternalNodePropertiesDescription>`\  = InternalNodePropertiesDescription()
+            separator_properties: \ :class:`SeparatorNodePropertiesDescription <SeparatorNodePropertiesDescription>`\  = SeparatorNodePropertiesDescription()
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string
-            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`\
-            pvt_model: string
-            pressure_properties: \ :class:`pressure_node_properties_description_schema <PressureNodePropertiesDescription>`\
-            mass_source_properties: \ :class:`mass_source_node_properties_description_schema <MassSourceNodePropertiesDescription>`\
-            internal_properties: \ :class:`internal_node_properties_description_schema <InternalNodePropertiesDescription>`\
-            separator_properties: \ :class:`separator_node_properties_description_schema <SeparatorNodePropertiesDescription>`\
+            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`
+            pvt_model: string # optional
+            pressure_properties: \ :class:`pressure_node_properties_description_schema <PressureNodePropertiesDescription>`\ # optional
+            mass_source_properties: \ :class:`mass_source_node_properties_description_schema <MassSourceNodePropertiesDescription>`\ # optional
+            internal_properties: \ :class:`internal_node_properties_description_schema <InternalNodePropertiesDescription>`\ # optional
+            separator_properties: \ :class:`separator_node_properties_description_schema <SeparatorNodePropertiesDescription>`\ # optional
