@@ -15,6 +15,10 @@ def schema_file_path() -> Path:
     return Path(__file__).parent / "src/_alfasim_sdk/alfacase/schema.py"
 
 
+def alfacase_definitions_path() -> Path:
+    return Path(__file__).parent / "docs/source/alfacase_definitions"
+
+
 @invoke.task(
     help={
         "check": "Run cog in check mode ensuring that schema has not being changed.",
@@ -30,12 +34,24 @@ def cog(ctx, check=False):
         generate_definition,
     )
 
-    alfacase_definitions_path = (
-        Path(__file__).parent / "docs/source/alfacase_definitions"
-    )
     for class_ in get_all_classes_that_needs_schema(CaseDescription):
         output = generate_definition(class_)
-        Path(alfacase_definitions_path / f"{class_.__name__}.txt").write_text(output)
+        Path(alfacase_definitions_path() / f"{class_.__name__}.txt").write_text(output)
+
+    from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+        generate_list_of_units,
+    )
+
+    from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+        CATEGORIES_USED_ON_DESCRIPTION,
+    )
+
+    for category in CATEGORIES_USED_ON_DESCRIPTION:
+        output = generate_list_of_units(category)
+        category_for_path = category.replace(" ", "_")
+        Path(
+            alfacase_definitions_path() / f"list_of_unit_for_{category_for_path}.txt"
+        ).write_text(output)
 
     if check:
         check_cog(ctx)
@@ -47,3 +63,4 @@ def check_cog(ctx):
     Check if the _alfasim_sdk/alfacase/schema.py has unstaged modifications.
     """
     ctx.run(f"git diff --no-ext-diff --exit-code {schema_file_path()}")
+    ctx.run(f"git diff --no-ext-diff --exit-code {alfacase_definitions_path()}")

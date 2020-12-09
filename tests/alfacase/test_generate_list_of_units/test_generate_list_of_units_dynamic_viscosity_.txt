@@ -1,0 +1,16 @@
+.. admonition:: Available units for category 'dynamic viscosity'
+    :class: dropdown
+
+    :"cP": centipoise
+    :"dyne.s/cm2": dyne seconds/square centimetre
+    :"kgf.s/m2": kilograms force seconds/square metre
+    :"kPa.d": kilopascal day
+    :"kPa.s": kilopascal second
+    :"lbf.s/ft2": pounds force seconds/square foot
+    :"lbf.s/in2": pounds force seconds/square inch
+    :"MPa.s": megapascal seconds
+    :"mPa.s": millipascal seconds
+    :"N.s/m2": newton seconds/metre squared
+    :"P": poise
+    :"Pa.s": pascal seconds
+    :"psi.s": pound per square inch second

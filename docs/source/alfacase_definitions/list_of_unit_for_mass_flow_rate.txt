@@ -1,0 +1,14 @@
+.. admonition:: Available units for category 'mass flow rate'
+    :class: dropdown
+
+    :"g/h": grams per hour
+    :"g/min": gram per min
+    :"g/s": grams/second
+    :"kg/d": kilogram per day
+    :"kg/h": kilograms/hour
+    :"kg/min": kilogram per min
+    :"kg/s": kilograms/second
+    :"lbm/d": pound mass per day
+    :"lbm/h": pounds mass/hour
+    :"lbm/min": pounds mass/minute
+    :"lbm/s": pounds mass/second

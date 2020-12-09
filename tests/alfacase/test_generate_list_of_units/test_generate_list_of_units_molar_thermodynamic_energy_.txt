@@ -1,0 +1,13 @@
+.. admonition:: Available units for category 'molar thermodynamic energy'
+    :class: dropdown
+
+    :"Btu/lbmole": British thermal units/pound mass mol
+    :"Btu/mol(lbm)": British thermal units/pound mass mol
+    :"J/mol": joules/mole
+    :"kcal/mol": kilocalories/mole (gram)
+    :"kcal/mol(g)": kilocalories/mole (gram)
+    :"kJ/kmol": kilojoule/mole (kilogram)
+    :"kJ/mol": kilojoule/mole (kilogram)
+    :"kJ/mol(kg)": kilojoule/mole (kilogram)
+    :"MJ/kmol": megajoules/mole (kilogram)
+    :"MJ/mol(kg)": megajoules/mole (kilogram)

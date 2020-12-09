@@ -1,0 +1,7 @@
+.. admonition:: Available units for category 'time'
+    :class: dropdown
+
+    :"d": day
+    :"h": hour
+    :"min": minutes
+    :"s": second

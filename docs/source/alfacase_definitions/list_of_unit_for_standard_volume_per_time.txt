@@ -1,0 +1,23 @@
+.. admonition:: Available units for category 'standard volume per time'
+    :class: dropdown
+
+    :"ksm3/d": thousand std cubic metres/ day
+    :"MMscf(60F)/d": million standard cubic feet/day
+    :"MMscf/d": million standard cubic feet/day
+    :"MMscm(15C)/d": million std cubic metres, 15 degC/day
+    :"MMsm3/d": million std cubic metres/day
+    :"MMstb(60F)/d": million stock tank barrels, 60 deg F/day
+    :"MMstb/d": million stock tank barrels, 60 deg F/day
+    :"Mscf(60F)/d": thousand standard cubic feet/day
+    :"Mscf/d": thousand standard cubic feet/day
+    :"Mscm(15C)/d": thousand std cubic metres, 15 degC/day
+    :"Msm3/d": thousand std cubic metres/day
+    :"Mstb(60F)/d": thousand stock tank barrels,60 deg F/day
+    :"Mstb/d": thousand stock tank barrels, 60 deg F/day
+    :"scf(60F)/d": standard cubic feet/day
+    :"scf/d": standard cubic feet/day
+    :"scm(15C)/d": std cubic metres at 15 deg C/day
+    :"scm(15C)/s": std cubic metres, 15 deg C/second
+    :"sm3/d": std cubic metres/day
+    :"stb(60F)/d": stock tank barrels, 60 deg F/day
+    :"stb/d": stock tank barrels, 60 deg F/day

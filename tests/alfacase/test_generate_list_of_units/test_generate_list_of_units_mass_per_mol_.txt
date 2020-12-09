@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'mass per mol'
+    :class: dropdown
+
+    :"g/mol": g/mol
+    :"kg/mol": kg/mol
+    :"lb/lbmole": lb/lbmole

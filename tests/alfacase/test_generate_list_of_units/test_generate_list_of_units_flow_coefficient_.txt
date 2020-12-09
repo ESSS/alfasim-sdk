@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'flow coefficient'
+    :class: dropdown
+
+    :"(galUS/min)/(psi^0.5)": galUs per pressure power of 0.5 
+    :"(m3/h)/(bar^0.5)": flow rate per pressure power of 0.5 
+    :"(m3/s)/(Pa^0.5)": flow rate per pressure power of 0.5 

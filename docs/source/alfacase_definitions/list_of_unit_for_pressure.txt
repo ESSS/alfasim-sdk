@@ -1,0 +1,10 @@
+.. admonition:: Available units for category 'pressure'
+    :class: dropdown
+
+    :"atm": Atmosphere
+    :"bar": bar
+    :"kgf/cm2": kilogram per square centimeter
+    :"kPa": kilopascals
+    :"MPa": megapascals
+    :"Pa": pascal
+    :"psi": pounds/square inch

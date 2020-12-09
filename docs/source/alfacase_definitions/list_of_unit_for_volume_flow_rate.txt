@@ -1,0 +1,37 @@
+.. admonition:: Available units for category 'volume flow rate'
+    :class: dropdown
+
+    :"bbl/d": barrel/day
+    :"bbl/hr": barrel/hour
+    :"bbl/min": barrel per minute
+    :"bbl/s": barrel/second
+    :"cm3/30min": cubic centimeter per thirty minutes
+    :"cm3/h": cubic centimeter per hour
+    :"cm3/min": cubic centimeter per minute
+    :"cm3/s": cubic centimeter per second
+    :"dm3/s": cubic decimetres/second
+    :"ft3/d": cubic feet/day
+    :"ft3/h": cubic feet/hour
+    :"ft3/min": cubic feet/minute
+    :"ft3/s": cubic feet/second
+    :"galUK/d": UK gallons per day
+    :"galUK/hr": UK gallons/hour
+    :"galUK/min": UK gallons/minute
+    :"galUS/d": US gallons per day
+    :"galUS/hr": US gallons/hour
+    :"galUS/min": US gallons/minute
+    :"kbbl/d": thousand barrels per day
+    :"L/h": liter per hour
+    :"L/min": liter per minute
+    :"L/s": litres/second
+    :"m3/d": cubic metres/day
+    :"m3/h": cubic metres/hour
+    :"m3/min": cubic meter per minute
+    :"m3/s": cubic metres/second
+    :"Mbbl/d": thousand barrels/day
+    :"Mcf/d": thousand cubic feet per day
+    :"Mm3/d": thousand cubic metres per day
+    :"Mm3/h": thousand cubic metres per hour
+    :"MMcf/d": million cubic feet per day
+    :"MMm3/d": million cubic metres per day
+    :"um3/s": cubic micrometres/second

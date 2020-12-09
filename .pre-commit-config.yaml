@@ -4,7 +4,8 @@
 exclude: |
     (?x)(
         ^docs/source/alfacase_definitions/|
-        ^tests/alfacase/test_generate_case_description_docstring/
+        ^tests/alfacase/test_generate_case_description_docstring/|
+        ^tests/alfacase/test_generate_list_of_units/
     )
 repos:
 -   repo: https://github.com/asottile/reorder_python_imports

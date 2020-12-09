@@ -1,0 +1,11 @@
+.. admonition:: Available units for category 'thermal conductivity'
+    :class: dropdown
+
+    :"Btu/d.ft.degF": British thermal units/day foot deg F
+    :"Btu/hr.ft.degF": British thermal units/hour foot deg F
+    :"cal/h.cm.degC": calories/hour centimetre degree Celsius
+    :"cal/s.cm.degC": calories/second centimetre deg C
+    :"kcal/h.m.degC": kilocalories/hour metre degree Celsius
+    :"kJ/d.m.K": kilojoules/day metre kelvin
+    :"W/m.degC": watts/meter degrees Celsius
+    :"W/m.K": watts/metre kelvin
