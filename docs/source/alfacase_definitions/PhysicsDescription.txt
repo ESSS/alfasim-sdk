@@ -5,30 +5,30 @@
     .. parsed-literal::
 
         class PhysicsDescription
-            hydrodynamic_model: \ :class:`HydrodynamicModelType <_alfasim_sdk.constants.HydrodynamicModelType>`\ |space|
-            simulation_regime: \ :class:`SimulationRegimeType <_alfasim_sdk.constants.SimulationRegimeType>`\ |space|
-            energy_model: \ :class:`EnergyModel <_alfasim_sdk.constants.EnergyModel>`\ |space|
-            solids_model: \ :class:`SolidsModelType <_alfasim_sdk.constants.SolidsModelType>`\ |space|
-            initial_condition_strategy: \ :class:`InitialConditionStrategyType <_alfasim_sdk.constants.InitialConditionStrategyType>`\ |space|
-            restart_filepath: \ :class:`Optional <typing.Optional>`\[Path]
-            keep_former_results: bool
-            keep_former_results: bool
-            emulsion_model: \ :class:`EmulsionModelType <_alfasim_sdk.constants.EmulsionModelType>`\ |space|
-            flash_model: \ :class:`FlashModel <_alfasim_sdk.constants.FlashModel>`\ |space|
-            correlations_package: \ :class:`CorrelationPackageType <_alfasim_sdk.constants.CorrelationPackageType>`\ |space|
+            hydrodynamic_model: \ :class:`HydrodynamicModelType <_alfasim_sdk.constants.HydrodynamicModelType>`\  = HydrodynamicModelType.FourFields
+            simulation_regime: \ :class:`SimulationRegimeType <_alfasim_sdk.constants.SimulationRegimeType>`\  = SimulationRegimeType.Transient
+            energy_model: \ :class:`EnergyModel <_alfasim_sdk.constants.EnergyModel>`\  = EnergyModel.NoModel
+            solids_model: \ :class:`SolidsModelType <_alfasim_sdk.constants.SolidsModelType>`\  = SolidsModelType.NoModel
+            initial_condition_strategy: \ :class:`InitialConditionStrategyType <_alfasim_sdk.constants.InitialConditionStrategyType>`\  = InitialConditionStrategyType.Constant
+            restart_filepath: \ :class:`Optional <typing.Optional>`\[Path] = None
+            keep_former_results: bool = False
+            keep_former_results: bool = False
+            emulsion_model: \ :class:`EmulsionModelType <_alfasim_sdk.constants.EmulsionModelType>`\  = EmulsionModelType.NoModel
+            flash_model: \ :class:`FlashModel <_alfasim_sdk.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
+            correlations_package: \ :class:`CorrelationPackageType <_alfasim_sdk.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            hydrodynamic_model: \ :class:`HydrodynamicModelType <_alfasim_sdk.constants.HydrodynamicModelType>`\ |space|
-            simulation_regime: \ :class:`SimulationRegimeType <_alfasim_sdk.constants.SimulationRegimeType>`\ |space|
-            energy_model: \ :class:`EnergyModel <_alfasim_sdk.constants.EnergyModel>`\ |space|
-            solids_model: \ :class:`SolidsModelType <_alfasim_sdk.constants.SolidsModelType>`\ |space|
-            initial_condition_strategy: \ :class:`InitialConditionStrategyType <_alfasim_sdk.constants.InitialConditionStrategyType>`\ |space|
-            restart_filepath: string    # optional
-            keep_former_results: boolean
-            keep_former_results: number
-            emulsion_model: \ :class:`EmulsionModelType <_alfasim_sdk.constants.EmulsionModelType>`\ |space|
-            flash_model: \ :class:`FlashModel <_alfasim_sdk.constants.FlashModel>`\ |space|
-            correlations_package: \ :class:`CorrelationPackageType <_alfasim_sdk.constants.CorrelationPackageType>`\ |space|
+            hydrodynamic_model: \ :class:`HydrodynamicModelType <_alfasim_sdk.constants.HydrodynamicModelType>`\ # optional
+            simulation_regime: \ :class:`SimulationRegimeType <_alfasim_sdk.constants.SimulationRegimeType>`\ # optional
+            energy_model: \ :class:`EnergyModel <_alfasim_sdk.constants.EnergyModel>`\ # optional
+            solids_model: \ :class:`SolidsModelType <_alfasim_sdk.constants.SolidsModelType>`\ # optional
+            initial_condition_strategy: \ :class:`InitialConditionStrategyType <_alfasim_sdk.constants.InitialConditionStrategyType>`\ # optional
+            restart_filepath: string # optional
+            keep_former_results: boolean # optional
+            keep_former_results: number # optional
+            emulsion_model: \ :class:`EmulsionModelType <_alfasim_sdk.constants.EmulsionModelType>`\ # optional
+            flash_model: \ :class:`FlashModel <_alfasim_sdk.constants.FlashModel>`\ # optional
+            correlations_package: \ :class:`CorrelationPackageType <_alfasim_sdk.constants.CorrelationPackageType>`\ # optional

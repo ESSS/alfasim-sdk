@@ -6,9 +6,9 @@
 
         class OpenHoleDescription
             name: str
-            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            length: \ :class:`Scalar <barril.units.Scalar>`
+            diameter: \ :class:`Scalar <barril.units.Scalar>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
 
 .. tab:: Schema
 

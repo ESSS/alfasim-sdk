@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class InternalNodePropertiesDescription
-            fluid: \ :class:`Optional <typing.Optional>`\[str]
+            fluid: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            fluid: string    # optional
+            fluid: string # optional

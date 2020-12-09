@@ -5,20 +5,20 @@
     .. parsed-literal::
 
         class InitialConditionsDescription
-            pressures: \ :class:`InitialPressuresDescription <InitialPressuresDescription>`\ |space|
-            volume_fractions: \ :class:`InitialVolumeFractionsDescription <InitialVolumeFractionsDescription>`\ |space|
-            tracers_mass_fractions: \ :class:`InitialTracersMassFractionsDescription <InitialTracersMassFractionsDescription>`\ |space|
-            velocities: \ :class:`InitialVelocitiesDescription <InitialVelocitiesDescription>`\ |space|
-            temperatures: \ :class:`InitialTemperaturesDescription <InitialTemperaturesDescription>`\ |space|
-            fluid: \ :class:`Optional <typing.Optional>`\[str]
+            pressures: \ :class:`InitialPressuresDescription <InitialPressuresDescription>`\  = InitialPressuresDescription()
+            volume_fractions: \ :class:`InitialVolumeFractionsDescription <InitialVolumeFractionsDescription>`\  = InitialVolumeFractionsDescription()
+            tracers_mass_fractions: \ :class:`InitialTracersMassFractionsDescription <InitialTracersMassFractionsDescription>`\  = InitialTracersMassFractionsDescription()
+            velocities: \ :class:`InitialVelocitiesDescription <InitialVelocitiesDescription>`\  = InitialVelocitiesDescription()
+            temperatures: \ :class:`InitialTemperaturesDescription <InitialTemperaturesDescription>`\  = InitialTemperaturesDescription()
+            fluid: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            pressures: \ :class:`initial_pressures_description_schema <InitialPressuresDescription>`\ |space|
-            volume_fractions: \ :class:`initial_volume_fractions_description_schema <InitialVolumeFractionsDescription>`\ |space|
-            tracers_mass_fractions: \ :class:`initial_tracers_mass_fractions_description_schema <InitialTracersMassFractionsDescription>`\ |space|
-            velocities: \ :class:`initial_velocities_description_schema <InitialVelocitiesDescription>`\ |space|
-            temperatures: \ :class:`initial_temperatures_description_schema <InitialTemperaturesDescription>`\ |space|
-            fluid: string    # optional
+            pressures: \ :class:`initial_pressures_description_schema <InitialPressuresDescription>`\ # optional
+            volume_fractions: \ :class:`initial_volume_fractions_description_schema <InitialVolumeFractionsDescription>`\ # optional
+            tracers_mass_fractions: \ :class:`initial_tracers_mass_fractions_description_schema <InitialTracersMassFractionsDescription>`\ # optional
+            velocities: \ :class:`initial_velocities_description_schema <InitialVelocitiesDescription>`\ # optional
+            temperatures: \ :class:`initial_temperatures_description_schema <InitialTemperaturesDescription>`\ # optional
+            fluid: string # optional

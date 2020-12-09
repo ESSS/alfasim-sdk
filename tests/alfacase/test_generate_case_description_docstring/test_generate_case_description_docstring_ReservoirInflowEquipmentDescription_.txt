@@ -5,20 +5,20 @@
     .. parsed-literal::
 
         class ReservoirInflowEquipmentDescription
-            pressure: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            fluid: \ :class:`Optional <typing.Optional>`\[str]
-            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ |space|
-            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ |space|
-            mass_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
-            volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
-            gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            water_cut: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            start: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            productivity_ipr: \ :class:`Optional <typing.Optional>`\[str]
-            injectivity_ipr: \ :class:`Optional <typing.Optional>`\[str]
+            pressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
+            fluid: \ :class:`Optional <typing.Optional>`\[str] = None
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
+            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\  = MassInflowSplitType.ConstantVolumeFraction
+            mass_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'volume fraction')
+            start: \ :class:`Scalar <barril.units.Scalar>`
+            length: \ :class:`Scalar <barril.units.Scalar>`
+            productivity_ipr: \ :class:`Optional <typing.Optional>`\[str] = None
+            injectivity_ipr: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
@@ -26,37 +26,37 @@
 
             pressure: 
                 value: number
-                unit: string
+                unit: string # optional
             temperature: 
                 value: number
-                unit: string
-            fluid: string    # optional
+                unit: string # optional
+            fluid: string # optional
             tracer_mass_fraction: 
                 values: [number]
-                unit: string
-            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ |space|
+                unit: string # optional
+            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ # optional
             mass_fractions: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional
             volume_fractions: 
                 string: 
                     value: number
-                    unit: string
+                    unit: string # optional
             gas_liquid_ratio: 
                 value: number
-                unit: string
+                unit: string # optional
             gas_oil_ratio: 
                 value: number
-                unit: string
+                unit: string # optional
             water_cut: 
                 value: number
-                unit: string
+                unit: string # optional
             start: 
                 value: number
                 unit: string
             length: 
                 value: number
                 unit: string
-            productivity_ipr: string    # optional
-            injectivity_ipr: string    # optional
+            productivity_ipr: string # optional
+            injectivity_ipr: string # optional

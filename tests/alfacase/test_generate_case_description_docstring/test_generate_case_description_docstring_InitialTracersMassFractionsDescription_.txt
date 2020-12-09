@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class InitialTracersMassFractionsDescription
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
-            table_x: \ :class:`ReferencedTracersMassFractionsContainerDescription <ReferencedTracersMassFractionsContainerDescription>`\ |space|
-            table_y: \ :class:`ReferencedTracersMassFractionsContainerDescription <ReferencedTracersMassFractionsContainerDescription>`\ |space|
-            table_length: \ :class:`TracersMassFractionsContainerDescription <TracersMassFractionsContainerDescription>`\ |space|
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\  = TableInputType.length
+            table_x: \ :class:`ReferencedTracersMassFractionsContainerDescription <ReferencedTracersMassFractionsContainerDescription>`\  = ReferencedTracersMassFractionsContainerDescription()
+            table_y: \ :class:`ReferencedTracersMassFractionsContainerDescription <ReferencedTracersMassFractionsContainerDescription>`\  = ReferencedTracersMassFractionsContainerDescription()
+            table_length: \ :class:`TracersMassFractionsContainerDescription <TracersMassFractionsContainerDescription>`\  = TracersMassFractionsContainerDescription()
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
-            table_x: \ :class:`referenced_tracers_mass_fractions_container_description_schema <ReferencedTracersMassFractionsContainerDescription>`\ |space|
-            table_y: \ :class:`referenced_tracers_mass_fractions_container_description_schema <ReferencedTracersMassFractionsContainerDescription>`\ |space|
-            table_length: \ :class:`tracers_mass_fractions_container_description_schema <TracersMassFractionsContainerDescription>`\ |space|
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ # optional
+            table_x: \ :class:`referenced_tracers_mass_fractions_container_description_schema <ReferencedTracersMassFractionsContainerDescription>`\ # optional
+            table_y: \ :class:`referenced_tracers_mass_fractions_container_description_schema <ReferencedTracersMassFractionsContainerDescription>`\ # optional
+            table_length: \ :class:`tracers_mass_fractions_container_description_schema <TracersMassFractionsContainerDescription>`\ # optional

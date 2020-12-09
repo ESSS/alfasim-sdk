@@ -5,19 +5,19 @@
     .. parsed-literal::
 
         class PvtModelsDescription
-            default_model: \ :class:`Optional <typing.Optional>`\[str]
-            tables: \ :class:`Dict <typing.Dict>`\[str, Union[str, pathlib.Path]]
-            correlations: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`\]
-            compositions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`\]
+            default_model: \ :class:`Optional <typing.Optional>`\[str] = None
+            tables: \ :class:`Dict <typing.Dict>`\[str, Union[str, pathlib.Path]] = {}
+            correlations: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`\] = {}
+            compositions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`\] = {}
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            default_model: string    # optional
+            default_model: string # optional
             tables: 
-                string: string | Path
+                string: string | Path # optional
             correlations: 
-                string: \ :class:`pvt_model_correlation_description_schema <PvtModelCorrelationDescription>`\ |space|
+                string: \ :class:`pvt_model_correlation_description_schema <PvtModelCorrelationDescription>`\ # optional
             compositions: 
-                string: \ :class:`pvt_model_compositional_description_schema <PvtModelCompositionalDescription>`\ |space|
+                string: \ :class:`pvt_model_compositional_description_schema <PvtModelCompositionalDescription>`\ # optional

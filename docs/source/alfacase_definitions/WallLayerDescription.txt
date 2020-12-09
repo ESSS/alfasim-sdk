@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class WallLayerDescription
-            thickness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            thickness: \ :class:`Scalar <barril.units.Scalar>`
             material_name: str
-            has_annulus_flow: bool
-            has_annulus_flow: bool
+            has_annulus_flow: bool = False
+            has_annulus_flow: bool = False
 
 .. tab:: Schema
 
@@ -18,5 +18,5 @@
                 value: number
                 unit: string
             material_name: string
-            has_annulus_flow: boolean
-            has_annulus_flow: number
+            has_annulus_flow: boolean # optional
+            has_annulus_flow: number # optional

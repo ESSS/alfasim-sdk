@@ -45,13 +45,14 @@ def generate_definition(class_name: str) -> str:
         "",
         "    .. parsed-literal::",
         "",
+        *_generate_declaration_for_class(class_name),
+        "",
+        ".. tab:: Schema",
+        "",
+        "    .. parsed-literal::",
+        "",
     ]
-    lines.extend(_generate_declaration_for_class(class_name))
-    lines.append("")
-    lines.append(".. tab:: Schema")
-    lines.append("")
-    lines.append("    .. parsed-literal::")
-    lines.append("")
+
     lines.extend(_generate_declaration_for_schema(class_name))
     lines.append("")
     return "\n".join(lines)
@@ -60,21 +61,50 @@ def generate_definition(class_name: str) -> str:
 def _generate_declaration_for_class(class_: Any) -> List[str]:
     """ Return all attributes for the given Class with CaseDescription definition. """
     class_fields = attr.fields_dict(class_)
-    lines = [f"{INDENT*2}class {class_.__name__}"]
-    lines.extend(_get_declaration(class_fields, LIST_OF_CASE_ATTRIBUTES))
-    return lines
+    return [
+        f"{INDENT*2}class {class_.__name__}",
+        *_get_declaration(class_fields, LIST_OF_CASE_ATTRIBUTES),
+    ]
 
 
 def _generate_declaration_for_schema(class_: Any) -> List[str]:
     """ Return all attributes for the given Class using ALFACase schema definition. """
     class_fields = attr.fields_dict(class_)
-    lines = _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS)
-    return lines
+    return _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS, is_schema=True)
+
+
+def _get_case_attr_default_value(value: attr.Attribute) -> str:
+    """ Return the default value of a CaseDescription. """
+
+    if value.default == attr.NOTHING:
+        return ""
+
+    default_value_string = " = "
+    if isinstance(value.default, enum.Enum):
+        default_value_string += (
+            f"{value.default.__class__.__name__}.{value.default.name}"
+        )
+    elif isinstance(value.default, attr.Factory):
+        if value.default.factory is dict:
+            default_value_string += "{}"
+        elif value.default.factory is list:
+            default_value_string += "[]"
+        elif is_attrs(value.default):
+            default_value_string += f"{value.default.factory.__name__}()"
+        else:
+            default_value_string += "UNKNOWN FACTORY"
+    elif is_attrs(value.default):
+        default_value_string += f"{value.default.__class__.__name__}()"
+    else:
+        default_value_string += f"{repr(value.default)}"
+
+    return default_value_string
 
 
 def _get_declaration(
     class_: Dict[str, Attribute],
     list_of_predicate_and_handles: Sequence[Tuple[Callable, Callable]],
+    is_schema: bool = False,
 ) -> List[str]:
     """ Helper class to extract the logic to iterate over the attributes from the given class. """
     lines = []
@@ -83,72 +113,67 @@ def _get_declaration(
             for predicate_function, handle_function in list_of_predicate_and_handles:
                 if predicate_function(value.type):
                     attribute_value = handle_function(value.type)
-                    lines.append(f"{BASE_INDENT}{attribute_name}: {attribute_value}")
+                    default_value = _get_case_attr_default_value(value)
+
+                    # For Schema: if the attributes have a default value the entry is optional.
+                    if default_value and is_schema:
+                        attribute_value += " # optional"
+                        default_value = ""
+
+                    # If attribute_value ends with backslash (because of the cross-reference), add extra space
+                    # for a default value.
+                    # Otherwise, the equal symbol will be sticky with the link.
+                    if default_value and attribute_value[-1] == "\\":
+                        default_value = f" {default_value}"
+
+                    line_content = f"{BASE_INDENT}{attribute_name}: {attribute_value}{default_value}"
+
+                    # Remove the last character if it's a backslash otherwise the line break will be avoided.
+                    if line_content.endswith("\\"):
+                        line_content = line_content[:-1]
+
+                    lines.append(line_content)
     return lines
 
 
-def _get_class_with_reference(visible_name: str, ref: str, *, add_space=True) -> str:
+def _get_class_with_reference(visible_name: str, ref: str) -> str:
     """
     Return the name of the class with a valid reference to be used by sphinx.
-
-    :param bool add_space:
-        inform if the name generated will need to have a unicode space at end (generate by |space|),
-        this is necessary when the class is the only reference of an attribute causing this line
-        to be mixed with the next line over the documentation.
-
     """
-    reference = f"\\ :class:`{visible_name} <{ref}>`\\"
-    if add_space:
-        reference += " |space|"
-    return reference
+    return f"\\ :class:`{visible_name} <{ref}>`\\"
 
 
-def _get_scalar_reference(add_space: bool = True) -> str:
+def _get_scalar_reference() -> str:
     """ Return a string with a cross-reference to Scalar documentation. """
-    return _get_class_with_reference(
-        visible_name="Scalar", ref="barril.units.Scalar", add_space=add_space
-    )
+    return _get_class_with_reference(visible_name="Scalar", ref="barril.units.Scalar")
 
 
-def _get_array_reference(add_space: bool = True) -> str:
+def _get_array_reference() -> str:
     """ Return a string with a cross-reference to Array documentation. """
-    return _get_class_with_reference(
-        visible_name="Array", ref="barril.units.Array", add_space=add_space
-    )
+    return _get_class_with_reference(visible_name="Array", ref="barril.units.Array")
 
 
 def _get_list_reference() -> str:
     """ Return a string with a cross-reference to List documentation. """
-    return _get_class_with_reference(
-        visible_name="List", ref="typing.List", add_space=False
-    )
+    return _get_class_with_reference(visible_name="List", ref="typing.List")
 
 
 def _get_dict_reference() -> str:
     """ Return a string with a cross-reference to Dict documentation. """
-    return _get_class_with_reference(
-        visible_name="Dict", ref="typing.Dict", add_space=False
-    )
+    return _get_class_with_reference(visible_name="Dict", ref="typing.Dict")
 
 
 def _get_optional_reference() -> str:
     """ Return a string with a cross-reference to Optional documentation. """
-    return _get_class_with_reference(
-        visible_name="Optional", ref="typing.Optional", add_space=False
-    )
+    return _get_class_with_reference(visible_name="Optional", ref="typing.Optional")
 
 
-def attrs_formatted(value: Any, *, add_space=True) -> str:
+def attrs_formatted(value: Any) -> str:
     """
     Return the attr class name with a cross-referencing link for the class.
-
-    :param bool add_space:
-        inform if the name generated will need to have a unicode space at end (generate by |space|),
-        this is necessary when the class is the only reference of an attribute causing this line
-        to be mixed with the next line over the documentation.
     """
     name = value.__name__
-    return _get_class_with_reference(visible_name=name, ref=name, add_space=add_space)
+    return _get_class_with_reference(visible_name=name, ref=name)
 
 
 def list_formatted(value: Any) -> str:
@@ -158,7 +183,7 @@ def list_formatted(value: Any) -> str:
     name = value.__args__[0].__name__
     list_with_ref = _get_list_reference()
     if is_attrs(value.__args__[0]):
-        name = attrs_formatted(value.__args__[0], add_space=False)
+        name = attrs_formatted(value.__args__[0])
 
     return f"{list_with_ref}[{name}]"
 
@@ -170,11 +195,11 @@ def dict_formatted(value: Any) -> str:
     dict_with_reference = _get_dict_reference()
     referenced_value = value.__args__[1]
     if is_attrs(referenced_value):
-        name = attrs_formatted(referenced_value, add_space=False)
+        name = attrs_formatted(referenced_value)
     elif is_scalar(referenced_value):
-        name = _get_scalar_reference(add_space=False)
+        name = _get_scalar_reference()
     elif is_array(referenced_value):
-        name = _get_array_reference(add_space=False)
+        name = _get_array_reference()
     else:
         name = str(referenced_value).replace("typing.", "")
 
@@ -192,7 +217,7 @@ def union_formatted(value: Any) -> str:
     if isinstance(ref_value, enum.EnumMeta):
         name = enum_formatted(ref_value)
     elif is_array(ref_value):
-        name = _get_array_reference(add_space=False)
+        name = _get_array_reference()
     elif is_list(ref_value):
         name = f"{_get_list_reference()}[{ref_value.__args__[0].__name__}]"
     else:
@@ -266,19 +291,19 @@ def union_formatted_for_schema(value: Any) -> str:
     """
     parameter = value.__args__[0]
     if value.__args__ in ((str, type(None)), (Path, type(None))):
-        name = "string    # optional"
+        name = "string"
     elif value.__args__ == (Array, type(None)):
-        name = f"{INDENT}# optional"
+        name = f"{INDENT}"
         name += array_formatted_for_schema(value)
     elif isinstance(parameter, enum.EnumMeta):
-        name = f"{enum_formatted_for_schema(parameter)}  # optional"
+        name = f"{enum_formatted_for_schema(parameter)}"
     elif is_attrs(parameter):
-        name = f"{attrs_formatted_for_schema(parameter)}  # optional"
+        name = f"{attrs_formatted_for_schema(parameter)}"
     elif is_list(parameter):
-        name = f"{INDENT}# optional"
+        name = f"{INDENT}"
         name += list_formatted_for_schema(parameter)
     else:
-        name = str(value).replace("typing.", "") + " # optional"
+        name = str(value).replace("typing.", "")
     return name
 
 
