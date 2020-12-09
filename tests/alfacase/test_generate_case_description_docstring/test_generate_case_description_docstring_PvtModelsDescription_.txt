@@ -14,10 +14,10 @@
 
     .. parsed-literal::
 
-            default_model: string    # optional
+            default_model: string
             tables: 
                 string: string | Path
             correlations: 
-                string: \ :class:`pvt_model_correlation_description_schema <PvtModelCorrelationDescription>`\ |space|
+                string: \ :class:`pvt_model_correlation_description_schema <PvtModelCorrelationDescription>`\
             compositions: 
-                string: \ :class:`pvt_model_compositional_description_schema <PvtModelCompositionalDescription>`\ |space|
+                string: \ :class:`pvt_model_compositional_description_schema <PvtModelCompositionalDescription>`\

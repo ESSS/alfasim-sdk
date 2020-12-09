@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class SpeedCurveDescription
-            time: \ :class:`Array <barril.units.Array>`\ |space|
-            speed: \ :class:`Array <barril.units.Array>`\ |space|
+            time: \ :class:`Array <barril.units.Array>`\
+            speed: \ :class:`Array <barril.units.Array>`\
 
 .. tab:: Schema
 

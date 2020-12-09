@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class InitialTemperaturesDescription
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
-            table_x: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>`\ |space|
-            table_y: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>`\ |space|
-            table_length: \ :class:`TemperaturesContainerDescription <TemperaturesContainerDescription>`\ |space|
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\
+            table_x: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>`\
+            table_y: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>`\
+            table_length: \ :class:`TemperaturesContainerDescription <TemperaturesContainerDescription>`\
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ |space|
-            table_x: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>`\ |space|
-            table_y: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>`\ |space|
-            table_length: \ :class:`temperatures_container_description_schema <TemperaturesContainerDescription>`\ |space|
+            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\
+            table_x: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>`\
+            table_y: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>`\
+            table_length: \ :class:`temperatures_container_description_schema <TemperaturesContainerDescription>`\

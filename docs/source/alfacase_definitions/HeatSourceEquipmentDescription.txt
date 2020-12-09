@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class HeatSourceEquipmentDescription
-            start: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            power: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            start: \ :class:`Scalar <barril.units.Scalar>`\
+            length: \ :class:`Scalar <barril.units.Scalar>`\
+            power: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 

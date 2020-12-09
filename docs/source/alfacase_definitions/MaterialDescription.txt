@@ -6,21 +6,21 @@
 
         class MaterialDescription
             name: str
-            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\ |space|
-            density: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            inner_emissivity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            outer_emissivity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            expansion: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            viscosity: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\
+            density: \ :class:`Scalar <barril.units.Scalar>`\
+            thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\
+            heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\
+            inner_emissivity: \ :class:`Scalar <barril.units.Scalar>`\
+            outer_emissivity: \ :class:`Scalar <barril.units.Scalar>`\
+            expansion: \ :class:`Scalar <barril.units.Scalar>`\
+            viscosity: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string
-            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\ |space|
+            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\
             density: 
                 value: number
                 unit: string

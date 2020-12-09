@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class CvTableDescription
-            opening: \ :class:`Array <barril.units.Array>`\ |space|
-            flow_coefficient: \ :class:`Array <barril.units.Array>`\ |space|
+            opening: \ :class:`Array <barril.units.Array>`\
+            flow_coefficient: \ :class:`Array <barril.units.Array>`\
 
 .. tab:: Schema
 

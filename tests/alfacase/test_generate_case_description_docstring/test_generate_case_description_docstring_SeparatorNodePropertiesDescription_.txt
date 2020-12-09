@@ -5,11 +5,11 @@
     .. parsed-literal::
 
         class SeparatorNodePropertiesDescription
-            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\ |space|
-            length: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            radius: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\
+            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\
+            length: \ :class:`Scalar <barril.units.Scalar>`\
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\
+            radius: \ :class:`Scalar <barril.units.Scalar>`\
             nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
             initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
 
@@ -20,7 +20,7 @@
             environment_temperature: 
                 value: number
                 unit: string
-            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\ |space|
+            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\
             length: 
                 value: number
                 unit: string

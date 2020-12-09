@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            length:     # optional
+            length:     
                 values: [number]
                 unit: string
-            elevation:     # optional
+            elevation:     
                 values: [number]
                 unit: string

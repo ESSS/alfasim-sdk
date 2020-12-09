@@ -84,11 +84,6 @@ rst_prolog = """
 .. |marker_2| image:: /_static/images/marker_2.png
     :scale: 80%
 
-.. # define a hard space useful for literal-blocks that has empty content.
-.. |space| raw:: html
-
-    ⠀
-
 .. # define a hard line break for HTML
 .. |br| raw:: html
 

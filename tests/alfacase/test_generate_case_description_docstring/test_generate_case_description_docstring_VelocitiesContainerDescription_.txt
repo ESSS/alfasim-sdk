@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class VelocitiesContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\
             velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\]
 
 .. tab:: Schema

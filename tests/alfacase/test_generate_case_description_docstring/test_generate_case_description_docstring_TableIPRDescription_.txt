@@ -5,12 +5,12 @@
     .. parsed-literal::
 
         class TableIPRDescription
-            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ |space|
-            table: \ :class:`IPRCurveDescription <IPRCurveDescription>`\ |space|
+            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\
+            table: \ :class:`IPRCurveDescription <IPRCurveDescription>`\
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ |space|
-            table: \ :class:`ipr_curve_description_schema <IPRCurveDescription>`\ |space|
+            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\
+            table: \ :class:`ipr_curve_description_schema <IPRCurveDescription>`\

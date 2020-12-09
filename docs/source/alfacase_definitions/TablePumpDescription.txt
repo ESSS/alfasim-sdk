@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class TablePumpDescription
-            speeds: \ :class:`Array <barril.units.Array>`\ |space|
-            void_fractions: \ :class:`Array <barril.units.Array>`\ |space|
-            flow_rates: \ :class:`Array <barril.units.Array>`\ |space|
-            pressure_boosts: \ :class:`Array <barril.units.Array>`\ |space|
+            speeds: \ :class:`Array <barril.units.Array>`\
+            void_fractions: \ :class:`Array <barril.units.Array>`\
+            flow_rates: \ :class:`Array <barril.units.Array>`\
+            pressure_boosts: \ :class:`Array <barril.units.Array>`\
 
 .. tab:: Schema
 

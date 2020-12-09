@@ -11,4 +11,4 @@
 
     .. parsed-literal::
 
-            fluid: string    # optional
+            fluid: string

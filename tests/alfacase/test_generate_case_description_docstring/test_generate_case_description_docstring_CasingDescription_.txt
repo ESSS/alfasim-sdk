@@ -15,10 +15,10 @@
     .. parsed-literal::
 
             casing_sections: 
-                - \ :class:`casing_section_description_schema <CasingSectionDescription>`\ |space|
+                - \ :class:`casing_section_description_schema <CasingSectionDescription>`\
             tubings: 
-                - \ :class:`tubing_description_schema <TubingDescription>`\ |space|
+                - \ :class:`tubing_description_schema <TubingDescription>`\
             packers: 
-                - \ :class:`packer_description_schema <PackerDescription>`\ |space|
+                - \ :class:`packer_description_schema <PackerDescription>`\
             open_holes: 
-                - \ :class:`open_hole_description_schema <OpenHoleDescription>`\ |space|
+                - \ :class:`open_hole_description_schema <OpenHoleDescription>`\

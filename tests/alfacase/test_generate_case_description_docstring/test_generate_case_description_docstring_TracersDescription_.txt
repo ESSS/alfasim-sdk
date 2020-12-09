@@ -12,4 +12,4 @@
     .. parsed-literal::
 
             constant_coefficients: 
-                string: \ :class:`tracer_model_constant_coefficients_description_schema <TracerModelConstantCoefficientsDescription>`\ |space|
+                string: \ :class:`tracer_model_constant_coefficients_description_schema <TracerModelConstantCoefficientsDescription>`\

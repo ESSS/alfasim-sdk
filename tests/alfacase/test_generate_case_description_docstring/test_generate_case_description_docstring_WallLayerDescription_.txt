@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class WallLayerDescription
-            thickness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            thickness: \ :class:`Scalar <barril.units.Scalar>`\
             material_name: str
             has_annulus_flow: bool
             has_annulus_flow: bool

@@ -6,7 +6,7 @@
 
         class WallDescription
             name: str
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\
             wall_layer_container: \ :class:`List <typing.List>`\[\ :class:`WallLayerDescription <WallLayerDescription>`\]
 
 .. tab:: Schema
@@ -18,4 +18,4 @@
                 value: number
                 unit: string
             wall_layer_container: 
-                - \ :class:`wall_layer_description_schema <WallLayerDescription>`\ |space|
+                - \ :class:`wall_layer_description_schema <WallLayerDescription>`\

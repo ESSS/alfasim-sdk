@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class VolumeFractionsContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\
             fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\]
 
 .. tab:: Schema

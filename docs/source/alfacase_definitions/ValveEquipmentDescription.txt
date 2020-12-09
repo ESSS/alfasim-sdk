@@ -5,15 +5,15 @@
     .. parsed-literal::
 
         class ValveEquipmentDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\ |space|
-            diameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
-            opening_type: \ :class:`ValveOpeningType <_alfasim_sdk.constants.ValveOpeningType>`\ |space|
-            opening: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            opening_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
-            opening_curve: \ :class:`OpeningCurveDescription <OpeningCurveDescription>`\ |space|
-            cv_table: \ :class:`CvTableDescription <CvTableDescription>`\ |space|
+            position: \ :class:`Scalar <barril.units.Scalar>`\
+            type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\
+            opening_type: \ :class:`ValveOpeningType <_alfasim_sdk.constants.ValveOpeningType>`\
+            opening: \ :class:`Scalar <barril.units.Scalar>`\
+            opening_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\
+            opening_curve: \ :class:`OpeningCurveDescription <OpeningCurveDescription>`\
+            cv_table: \ :class:`CvTableDescription <CvTableDescription>`\
 
 .. tab:: Schema
 
@@ -22,15 +22,15 @@
             position: 
                 value: number
                 unit: string
-            type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\ |space|
+            type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`\
             diameter: 
                 value: number
                 unit: string
-            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ |space|
-            opening_type: \ :class:`ValveOpeningType <_alfasim_sdk.constants.ValveOpeningType>`\ |space|
+            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\
+            opening_type: \ :class:`ValveOpeningType <_alfasim_sdk.constants.ValveOpeningType>`\
             opening: 
                 value: number
                 unit: string
-            opening_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ |space|
-            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\ |space|
-            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\ |space|
+            opening_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\
+            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\
+            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\

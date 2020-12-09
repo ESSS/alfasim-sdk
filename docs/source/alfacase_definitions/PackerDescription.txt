@@ -6,7 +6,7 @@
 
         class PackerDescription
             name: str
-            position: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            position: \ :class:`Scalar <barril.units.Scalar>`\
             material_above: \ :class:`Optional <typing.Optional>`\[str]
 
 .. tab:: Schema
@@ -17,4 +17,4 @@
             position: 
                 value: number
                 unit: string
-            material_above: string    # optional
+            material_above: string

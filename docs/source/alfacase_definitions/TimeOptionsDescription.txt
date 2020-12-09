@@ -7,13 +7,13 @@
         class TimeOptionsDescription
             stop_on_steady_state: bool
             stop_on_steady_state: bool
-            initial_time: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            final_time: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            initial_time: \ :class:`Scalar <barril.units.Scalar>`\
+            final_time: \ :class:`Scalar <barril.units.Scalar>`\
+            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\
+            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\
+            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\
+            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\
+            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 

@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class IPRCurveDescription
-            pressure_difference: \ :class:`Array <barril.units.Array>`\ |space|
-            flow_rate: \ :class:`Array <barril.units.Array>`\ |space|
+            pressure_difference: \ :class:`Array <barril.units.Array>`\
+            flow_rate: \ :class:`Array <barril.units.Array>`\
 
 .. tab:: Schema
 

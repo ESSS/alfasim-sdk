@@ -6,19 +6,19 @@
 
         class LightComponentDescription
             name: str
-            Pc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Tc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Vc: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            omega: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            MW: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Tb: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Parachor: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            B_parameter: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            Pc: \ :class:`Scalar <barril.units.Scalar>`\
+            Tc: \ :class:`Scalar <barril.units.Scalar>`\
+            Vc: \ :class:`Scalar <barril.units.Scalar>`\
+            omega: \ :class:`Scalar <barril.units.Scalar>`\
+            MW: \ :class:`Scalar <barril.units.Scalar>`\
+            Tb: \ :class:`Scalar <barril.units.Scalar>`\
+            Parachor: \ :class:`Scalar <barril.units.Scalar>`\
+            B_parameter: \ :class:`Scalar <barril.units.Scalar>`\
+            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\
+            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\
+            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\
+            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\
+            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 

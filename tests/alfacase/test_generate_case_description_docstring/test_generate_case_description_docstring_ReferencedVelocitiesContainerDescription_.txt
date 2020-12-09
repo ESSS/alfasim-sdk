@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class ReferencedVelocitiesContainerDescription
-            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\
+            positions: \ :class:`Array <barril.units.Array>`\
             velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\]
 
 .. tab:: Schema

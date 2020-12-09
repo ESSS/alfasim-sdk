@@ -7,8 +7,8 @@
         class HeavyComponentDescription
             name: str
             scn: int
-            MW: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            rho: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            MW: \ :class:`Scalar <barril.units.Scalar>`\
+            rho: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 

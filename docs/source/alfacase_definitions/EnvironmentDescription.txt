@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class EnvironmentDescription
-            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\ |space|
-            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\ |space|
-            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\
+            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\
             md_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\]
             tvd_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\]
 
@@ -15,12 +15,12 @@
 
     .. parsed-literal::
 
-            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\ |space|
-            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\ |space|
+            thermal_model: \ :class:`PipeThermalModelType <_alfasim_sdk.constants.PipeThermalModelType>`\
+            position_input_mode: \ :class:`PipeThermalPositionInput <_alfasim_sdk.constants.PipeThermalPositionInput>`\
             reference_y_coordinate: 
                 value: number
                 unit: string
             md_properties_table: 
-                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ |space|
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\
             tvd_properties_table: 
-                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ |space|
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\

@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class TemperaturesContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\ |space|
-            temperatures: \ :class:`Array <barril.units.Array>`\ |space|
+            positions: \ :class:`Array <barril.units.Array>`\
+            temperatures: \ :class:`Array <barril.units.Array>`\
 
 .. tab:: Schema
 

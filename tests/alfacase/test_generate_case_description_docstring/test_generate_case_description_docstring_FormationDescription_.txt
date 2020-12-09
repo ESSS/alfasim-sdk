@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class FormationDescription
-            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\
             layers: \ :class:`List <typing.List>`\[\ :class:`FormationLayerDescription <FormationLayerDescription>`\]
 
 .. tab:: Schema
@@ -16,4 +16,4 @@
                 value: number
                 unit: string
             layers: 
-                - \ :class:`formation_layer_description_schema <FormationLayerDescription>`\ |space|
+                - \ :class:`formation_layer_description_schema <FormationLayerDescription>`\

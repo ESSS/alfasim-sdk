@@ -5,15 +5,15 @@
     .. parsed-literal::
 
         class LinearIPRDescription
-            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ |space|
-            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            well_index: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\
+            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\
+            well_index: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ |space|
+            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\
             min_pressure_difference: 
                 value: number
                 unit: string

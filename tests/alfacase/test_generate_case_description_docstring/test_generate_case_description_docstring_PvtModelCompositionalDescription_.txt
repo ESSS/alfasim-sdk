@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class PvtModelCompositionalDescription
-            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\ |space|
-            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\ |space|
-            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\ |space|
+            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\
+            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\
+            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\
             heavy_components: \ :class:`List <typing.List>`\[\ :class:`HeavyComponentDescription <HeavyComponentDescription>`\]
             light_components: \ :class:`List <typing.List>`\[\ :class:`LightComponentDescription <LightComponentDescription>`\]
             fluids: \ :class:`Dict <typing.Dict>`\[str, \ :class:`FluidDescription <FluidDescription>`\]
@@ -16,12 +16,12 @@
 
     .. parsed-literal::
 
-            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\ |space|
-            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\ |space|
-            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\ |space|
+            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\
+            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\
+            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\
             heavy_components: 
-                - \ :class:`heavy_component_description_schema <HeavyComponentDescription>`\ |space|
+                - \ :class:`heavy_component_description_schema <HeavyComponentDescription>`\
             light_components: 
-                - \ :class:`light_component_description_schema <LightComponentDescription>`\ |space|
+                - \ :class:`light_component_description_schema <LightComponentDescription>`\
             fluids: 
-                string: \ :class:`fluid_description_schema <FluidDescription>`\ |space|
+                string: \ :class:`fluid_description_schema <FluidDescription>`\

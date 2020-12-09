@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class PressureNodePropertiesDescription
-            pressure: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            temperature: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            pressure: \ :class:`Scalar <barril.units.Scalar>`\
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\
             fluid: \ :class:`Optional <typing.Optional>`\[str]
-            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ |space|
-            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ |space|
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\
+            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\
             mass_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
             volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\]
-            gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            water_cut: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 
@@ -26,11 +26,11 @@
             temperature: 
                 value: number
                 unit: string
-            fluid: string    # optional
+            fluid: string
             tracer_mass_fraction: 
                 values: [number]
                 unit: string
-            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\ |space|
+            split_type: \ :class:`MassInflowSplitType <_alfasim_sdk.constants.MassInflowSplitType>`\
             mass_fractions: 
                 string: 
                     value: number

@@ -6,8 +6,8 @@
 
         class CompositionDescription
             component: str
-            molar_fraction: \ :class:`Scalar <barril.units.Scalar>`\ |space|
-            reference_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\ |space|
+            molar_fraction: \ :class:`Scalar <barril.units.Scalar>`\
+            reference_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\
 
 .. tab:: Schema
 
