@@ -33,6 +33,57 @@ INDENT = "    "
 """ Space needed to reach the root of the literal block. """
 BASE_INDENT = " " * 12
 
+CATEGORIES_USED_ON_DESCRIPTION = sorted(
+    [
+        "angle per time",
+        "density",
+        "dimensionless",
+        "dynamic viscosity",
+        "emissivity",
+        "flow coefficient",
+        "heat transfer coefficient",
+        "length",
+        "mass flow rate",
+        "mass fraction",
+        "mass per mol",
+        "molar thermodynamic energy",
+        "molar volume",
+        "mole per mole",
+        "power",
+        "pressure",
+        "productivity index",
+        "specific heat capacity",
+        "standard volume per standard volume",
+        "standard volume per standard volume",
+        "standard volume per time",
+        "temperature",
+        "thermal conductivity",
+        "time",
+        "velocity",
+        "volume flow rate",
+        "volume fraction",
+        "volumetric thermal expansion",
+    ]
+)
+
+
+def generate_list_of_units(category: str) -> str:
+    """ Return an admonition with toggle to show the units available for a given category. """
+    from barril.units import UnitDatabase
+
+    unit_database = UnitDatabase.GetSingleton()
+    units = unit_database.GetCategoryInfo(category).valid_units_set
+    info = unit_database.unit_to_unit_info
+    body = [f'    :"{unit}": {info[unit].name}' for unit in units]
+    lines = [
+        f".. admonition:: Available units for category '{category}'",
+        "    :class: dropdown",
+        "",
+        *sorted(body, key=str.casefold),
+        "",
+    ]
+    return "\n".join(lines)
+
 
 def generate_definition(class_name: str) -> str:
     """

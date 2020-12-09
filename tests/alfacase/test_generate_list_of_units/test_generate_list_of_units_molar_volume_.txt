@@ -1,0 +1,14 @@
+.. admonition:: Available units for category 'molar volume'
+    :class: dropdown
+
+    :"dm3/kmol": cubic decimetres/kilogram mole
+    :"dm3/mol(kg)": cubic decimetres/kilogram mole
+    :"ft3/lbmole": cubic feet/mole (pound mass)
+    :"ft3/mol(lbm)": cubic feet/mole (pound mass)
+    :"L/kmol": litres/mole (kilogram)
+    :"L/mol": litres/mole (gram)
+    :"L/mol(g)": litres/mole (gram)
+    :"L/mol(kg)": litres/mole (kilogram)
+    :"m3/kmol": cubic metres/mole (kilogram)
+    :"m3/mol": cubic metres/mole
+    :"m3/mol(kg)": cubic metres/mole (kilogram)

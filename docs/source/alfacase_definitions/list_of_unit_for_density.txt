@@ -1,0 +1,13 @@
+.. admonition:: Available units for category 'density'
+    :class: dropdown
+
+    :"g/cm3": grams/cubic centimetre
+    :"g/galUK": grams/UK gallon
+    :"g/galUS": grams/US gallon
+    :"g/L": grams/litre
+    :"g/m3": grams/cubic metre
+    :"kg/L": kilogram per litre
+    :"kg/m3": kilograms/cubic metre
+    :"lbm/ft3": pounds mass/cubic foot
+    :"lbm/galUK": pounds mass/UK gallon
+    :"lbm/galUS": pounds mass/US gallon

@@ -1,0 +1,16 @@
+.. admonition:: Available units for category 'velocity'
+    :class: dropdown
+
+    :"ft/d": feet/day
+    :"ft/h": feet/hour
+    :"ft/min": feet/minute
+    :"ft/s": feet/second
+    :"in/min": inches/minute
+    :"in/s": inches/second
+    :"km/h": kilometres/hour
+    :"km/s": kilometer per second
+    :"m/d": metres/day
+    :"m/h": metres/hour
+    :"m/min": meter per minute
+    :"m/s": metres/second
+    :"mm/s": millimetres/second

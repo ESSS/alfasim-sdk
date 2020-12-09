@@ -1,0 +1,12 @@
+.. admonition:: Available units for category 'standard volume per standard volume'
+    :class: dropdown
+
+    :"Mscf/stb": thousand std cubic feet/stock tank barrel
+    :"scf(60F)/scf": std cubic feet at 60 deg Ft/std cubic foot
+    :"scf(60F)/stb": std cubic feet at 60 deg F/stock tank barrel
+    :"scf/stb": std cubic feet/stock tank barrel
+    :"scm(15C)/scm(15C)": std cubic metres, 15 deg C/std cubic metres, 15 deg C
+    :"scm3/scm3": std cubic centimetres/std cubic centimetres
+    :"sm3/sm3": std cubic metres/std cubic metres
+    :"stb(60F)/stb": stock tank barrels, 60 deg F/stock tank barrel
+    :"stb/stb": stock tank barrels/stock tank barrels

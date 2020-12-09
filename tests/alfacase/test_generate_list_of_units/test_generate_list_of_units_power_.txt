@@ -1,0 +1,19 @@
+.. admonition:: Available units for category 'power'
+    :class: dropdown
+
+    :"ch": ch
+    :"CV": cheval vapeur
+    :"ehp": electric horsepower
+    :"GW": gigawatt
+    :"hhp": hydraulic horsepower
+    :"hp": horsepower
+    :"kcal/h": kilocalories/hour
+    :"kW": kilowatts
+    :"MJ/a": megajoules/year
+    :"MW": megawatts
+    :"mW": milliwatt
+    :"nW": nanowatts
+    :"ton of refrig": tons of refrigeration
+    :"TW": terawatts
+    :"uW": microwatts
+    :"W": watt

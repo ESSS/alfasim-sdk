@@ -1,0 +1,8 @@
+.. admonition:: Available units for category 'mass fraction'
+    :class: dropdown
+
+    :"%": percent
+    :"-": -
+    :"g/g": grams/gram
+    :"kg/kg": kilograms/kilogram
+    :"lbm/lbm": pounds mass/pounds mass

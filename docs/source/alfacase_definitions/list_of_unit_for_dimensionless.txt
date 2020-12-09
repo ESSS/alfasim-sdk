@@ -1,0 +1,5 @@
+.. admonition:: Available units for category 'dimensionless'
+    :class: dropdown
+
+    :"%": percent
+    :"-": -

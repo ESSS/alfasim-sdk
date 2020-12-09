@@ -1,0 +1,8 @@
+.. admonition:: Available units for category 'length'
+    :class: dropdown
+
+    :"ft": foot
+    :"in": inch
+    :"km": kilometre
+    :"m": metre
+    :"mm": millimetres

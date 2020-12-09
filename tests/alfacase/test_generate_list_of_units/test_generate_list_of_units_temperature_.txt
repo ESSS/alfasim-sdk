@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'temperature'
+    :class: dropdown
+
+    :"degC": degrees Celsius
+    :"degF": degree Fahrenheit
+    :"K": kelvin

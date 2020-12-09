@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'volume fraction'
+    :class: dropdown
+
+    :"%": percent
+    :"-": -
+    :"m3/m3": cubic metres/cubic metre

@@ -1,0 +1,12 @@
+.. admonition:: Available units for category 'specific heat capacity'
+    :class: dropdown
+
+    :"Btu/lbm.degF": British thermal units/pound mass deg F
+    :"Btu/lbm.degR": British thermal units/pound mass deg R
+    :"cal/g.K": calories/gram degree Kelvin
+    :"J/g.K": joules/gram degree Kelvin
+    :"J/kg.degC": joules/kilogram degrees Celsius
+    :"J/kg.K": joules/kilogram degree kelvin
+    :"kcal/kg.degC": kilocalories/kilogram degree Celsius
+    :"kJ/kg.K": kilojoules/kilogram degree Kelvin
+    :"kW.h/kg.degC": kilowatt hours/kilogram degree C

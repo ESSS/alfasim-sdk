@@ -1,0 +1,14 @@
+.. admonition:: Available units for category 'productivity index'
+    :class: dropdown
+
+    :"bbl/kPa.d": barrel per day per kilopascal
+    :"bbl/psi.d": barrel per day per psi
+    :"L/bar.min": litres per minute per bar
+    :"m3/bar.d": cubic meter per day per bar
+    :"m3/bar.h": cubic meter per hour per bar
+    :"m3/bar.min": cubic meter per minute per bar
+    :"m3/kPa.d": cubic meter per day per kilopascal
+    :"m3/kPa.h": (cubic metres per hour) per kilopascal
+    :"m3/Pa.s": cubic metres/second pascal
+    :"m3/psi.d": cubic meter per day per (pound per square inch)
+    :"Mcf/psi.d": thousand cubic feet per day per psi

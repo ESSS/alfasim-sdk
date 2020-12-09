@@ -1,0 +1,11 @@
+.. admonition:: Available units for category 'angle per time'
+    :class: dropdown
+
+    :"c/s": cycles/second
+    :"dega/h": degrees of an angle per hour
+    :"dega/min": degrees of an angle/minute
+    :"dega/s": degrees of an angle per second
+    :"rad/s": radians/second
+    :"rev/min": revolutions/minute
+    :"rev/s": revolutions/second
+    :"rpm": revolutions/minute

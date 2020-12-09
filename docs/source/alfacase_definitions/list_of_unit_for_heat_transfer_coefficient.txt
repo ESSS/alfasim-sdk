@@ -1,0 +1,14 @@
+.. admonition:: Available units for category 'heat transfer coefficient'
+    :class: dropdown
+
+    :"Btu/hr.ft2.degF": Btus/hour foot squared deg F
+    :"Btu/hr.ft2.degR": Btus/hour foot squared deg R
+    :"Btu/hr.m2.degC": Btus/hour metre squared deg C
+    :"Btu/s.ft2.degF": Btus/second per square foot deg F
+    :"cal/h.cm2.degC": calories/hour square centimetre deg C
+    :"cal/s.cm2.degC": calories/second square centimetre deg C
+    :"J/s.m2.degC": joules/second square metre deg C
+    :"kcal/h.m2.degC": kilocalorie/hour square metre deg C
+    :"kJ/h.m2.K": kilojoules/hour square metre deg K
+    :"kW/m2.K": kilowatts/square metre degree Kelvin
+    :"W/m2.K": watts/square metre kelvin

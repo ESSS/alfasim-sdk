@@ -65,6 +65,8 @@ class PluginTableContainer:
 class TrendOutputDescription:
     """
     .. include:: /alfacase_definitions/TrendOutputDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     curve_names: List[str] = attr.ib(validator=list_of_strings)
@@ -88,6 +90,8 @@ class ProfileOutputDescription:
 class CaseOutputDescription:
     """
     .. include:: /alfacase_definitions/CaseOutputDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_time.txt
     """
 
     trends = attrib_instance_list(TrendOutputDescription)
@@ -124,6 +128,11 @@ class _MassSourceCommon:
             - constants.MassSourceType.FlowRateOilGorWc
             - constants.MassSourceType.FlowRateWaterGorWc
 
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_flow_rate.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass_flow_rate.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
     """
 
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
@@ -148,6 +157,15 @@ class _MassSourceCommon:
 
 @attr.s(kw_only=True)
 class _PressureSourceCommon:
+    """
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass_fraction.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
+    """
+
     pressure = attrib_scalar(default=Scalar(1.0e5, "Pa"))
     temperature = attrib_scalar(default=Scalar(constants.DEFAULT_TEMPERATURE_IN_K, "K"))
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
@@ -186,6 +204,9 @@ class CompositionDescription:
 
     .. include:: /alfacase_definitions/CompositionDescription.txt
 
+    .. include:: /alfacase_definitions/list_of_unit_for_mole_per_mole.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_molar_thermodynamic_energy.txt
+
     """
 
     component: str = attr.ib(validator=instance_of(str))
@@ -218,6 +239,8 @@ class FluidDescription:
 class MassSourceEquipmentDescription(_MassSourceCommon):
     """
     .. include:: /alfacase_definitions/MassSourceEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     position = attrib_scalar()
@@ -227,6 +250,10 @@ class MassSourceEquipmentDescription(_MassSourceCommon):
 class SpeedCurveDescription:
     """
     .. include:: /alfacase_definitions/SpeedCurveDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
+
     """
 
     time: Array = attr.ib(default=Array([0], "s"), validator=instance_of(Array))
@@ -238,6 +265,11 @@ class SpeedCurveDescription:
 class TablePumpDescription:
     """
     .. include:: /alfacase_definitions/TablePumpDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_flow_rate.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
     speeds: Array = attr.ib(
         default=Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'), validator=instance_of(Array)
@@ -281,6 +313,10 @@ class TablePumpDescription:
 class PumpEquipmentDescription:
     """
     .. include:: /alfacase_definitions/PumpEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     position = attrib_scalar()
@@ -302,6 +338,10 @@ class CompressorPressureTableDescription:
         Equivalent to `m * (T/T_ref)**0.5 / (P/P_ref)`
 
     .. include:: /alfacase_definitions/CompressorPressureTableDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass_flow_rate.txt
+       .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     speed_entries: Array = attr.ib(
@@ -347,6 +387,11 @@ class CompressorPressureTableDescription:
 class CompressorEquipmentDescription:
     """
     .. include:: /alfacase_definitions/CompressorEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
     """
 
     position = attrib_scalar()
@@ -366,6 +411,9 @@ class CompressorEquipmentDescription:
 class OpeningCurveDescription:
     """
     .. include:: /alfacase_definitions/OpeningCurveDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_time.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     time: Array = attr.ib(validator=instance_of(Array), default=Array([], "s"))
@@ -384,6 +432,9 @@ class OpeningCurveDescription:
 class CvTableDescription:
     """
     .. include:: /alfacase_definitions/CvTableDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_flow_coefficient.txt
     """
 
     opening: Array = attr.ib(validator=instance_of(Array), default=Array([], "-"))
@@ -404,6 +455,9 @@ class CvTableDescription:
 class ValveEquipmentDescription:
     """
     .. include:: /alfacase_definitions/ValveEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     position = attrib_scalar()
@@ -428,6 +482,10 @@ class ValveEquipmentDescription:
 class IPRCurveDescription:
     """
     .. include:: /alfacase_definitions/IPRCurveDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_time.txt
+
     """
 
     pressure_difference: Array = attr.ib(
@@ -447,6 +505,9 @@ class CommonIPR:
 class LinearIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/LinearIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_productivity_index.txt
     """
 
     min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
@@ -483,6 +544,8 @@ class IPRModelsDescription:
 class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     """
     .. include:: /alfacase_definitions/ReservoirInflowEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     start = attrib_scalar()
@@ -499,6 +562,9 @@ class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
 class HeatSourceEquipmentDescription:
     """
     .. include:: /alfacase_definitions/HeatSourceEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_power.txt
     """
 
     start = attrib_scalar()
@@ -510,6 +576,9 @@ class HeatSourceEquipmentDescription:
 class PipeSegmentsDescription:
     """
     .. include:: /alfacase_definitions/PipeSegmentsDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+
     """
 
     start_positions: Array = attr.ib(validator=optional(instance_of(Array)))
@@ -524,6 +593,9 @@ class PipeSegmentsDescription:
 class ReferencedPressureContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedPressureContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
@@ -535,6 +607,9 @@ class ReferencedPressureContainerDescription:
 class PressureContainerDescription:
     """
     .. include:: /alfacase_definitions/PressureContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
 
     positions: Array = attr.ib(default=Array([0.0], "m"))
@@ -563,6 +638,10 @@ class InitialPressuresDescription:
 class ReferencedVolumeFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedVolumeFractionsContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
@@ -574,6 +653,9 @@ class ReferencedVolumeFractionsContainerDescription:
 class VolumeFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/VolumeFractionsContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     positions: Array = attr.ib(default=Array([0.0], "m"))
@@ -608,6 +690,9 @@ class InitialVolumeFractionsDescription:
 class ReferencedTracersMassFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedTracersMassFractionsContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
@@ -619,6 +704,9 @@ class ReferencedTracersMassFractionsContainerDescription:
 class TracersMassFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/TracersMassFractionsContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     positions: Array = attr.ib(default=Array([], "m"))
@@ -647,6 +735,9 @@ class InitialTracersMassFractionsDescription:
 class ReferencedVelocitiesContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedVelocitiesContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
@@ -658,6 +749,9 @@ class ReferencedVelocitiesContainerDescription:
 class VelocitiesContainerDescription:
     """
     .. include:: /alfacase_definitions/VelocitiesContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
     positions: Array = attr.ib(default=Array([0.0], "m"))
@@ -692,6 +786,9 @@ class InitialVelocitiesDescription:
 class ReferencedTemperaturesContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedTemperaturesContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
@@ -703,6 +800,9 @@ class ReferencedTemperaturesContainerDescription:
 class TemperaturesContainerDescription:
     """
     .. include:: /alfacase_definitions/TemperaturesContainerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
     positions: Array = attr.ib(default=Array([0.0], "m"))
@@ -757,6 +857,11 @@ class InitialConditionsDescription:
 class InitialConditionArrays:
     """
     .. include:: /alfacase_definitions/InitialConditionArrays.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
     pressure: Array = attr.ib(validator=instance_of(Array))
@@ -780,6 +885,8 @@ class LengthAndElevationDescription:
     Describe a pipe with length and elevation.
 
     .. include:: /alfacase_definitions/LengthAndElevationDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     length: Optional[Array] = attr.ib(
@@ -805,6 +912,8 @@ class XAndYDescription:
     Describe a pipe with a sequence of coordinates.
 
     .. include:: /alfacase_definitions/XAndYDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     x: Optional[Array] = attr.ib(default=None, validator=optional(instance_of(Array)))
@@ -868,6 +977,11 @@ class EquipmentDescription:
 class EnvironmentPropertyDescription:
     """
     .. include:: /alfacase_definitions/EnvironmentPropertyDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_heat_transfer_coefficient.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
     position = attrib_scalar()
@@ -882,6 +996,8 @@ class EnvironmentPropertyDescription:
 class EnvironmentDescription:
     """
     .. include:: /alfacase_definitions/EnvironmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     thermal_model = attrib_enum(default=constants.PipeThermalModelType.SteadyState)
@@ -956,6 +1072,11 @@ class SeparatorNodePropertiesDescription:
             Q = η A (T_amb - T_sep)
 
     .. include:: /alfacase_definitions/SeparatorNodePropertiesDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_heat_transfer_coefficient.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
     """
 
     environment_temperature = attrib_scalar(default=Scalar(25.0, "degC"))
@@ -1007,6 +1128,8 @@ class NodeDescription:
 class FormationLayerDescription:
     """
     .. include:: /alfacase_definitions/FormationLayerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1020,6 +1143,8 @@ class FormationLayerDescription:
 class FormationDescription:
     """
     .. include:: /alfacase_definitions/FormationDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     reference_y_coordinate = attrib_scalar()
@@ -1030,6 +1155,8 @@ class FormationDescription:
 class CasingSectionDescription:
     """
     .. include:: /alfacase_definitions/CasingSectionDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1055,6 +1182,8 @@ class CasingSectionDescription:
 class TubingDescription:
     """
     .. include:: /alfacase_definitions/TubingDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1071,6 +1200,8 @@ class TubingDescription:
 class PackerDescription:
     """
     .. include:: /alfacase_definitions/PackerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1084,6 +1215,8 @@ class PackerDescription:
 class OpenHoleDescription:
     """
     .. include:: /alfacase_definitions/OpenHoleDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1108,6 +1241,10 @@ class CasingDescription:
 class GasLiftValveEquipmentDescription:
     """
     .. include:: /alfacase_definitions/GasLiftValveEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     position = attrib_scalar()
@@ -1160,6 +1297,13 @@ class WellDescription:
 class MaterialDescription:
     """
     .. include:: /alfacase_definitions/MaterialDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_thermal_conductivity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_specific_heat_capacity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_emissivity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volumetric_thermal_expansion.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dynamic_viscosity.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1195,6 +1339,8 @@ class WallLayerDescription:
     :ivar bool has_annulus_flow:
 
     .. include:: /alfacase_definitions/WallLayerDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     thickness: Scalar = attr.ib(validator=instance_of(Scalar))
@@ -1206,6 +1352,8 @@ class WallLayerDescription:
 class WallDescription:
     """
     .. include:: /alfacase_definitions/WallDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1250,6 +1398,8 @@ class PvtModelCorrelationDescription:
             some_value:
                 some_other_value: fooo
 
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
     """
 
     oil_density_std = attrib_scalar(default=Scalar(850.0, "kg/m3"))
@@ -1262,6 +1412,9 @@ class PvtModelCorrelationDescription:
 class HeavyComponentDescription:
     """
     .. include:: /alfacase_definitions/HeavyComponentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass_per_mol.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1274,6 +1427,13 @@ class HeavyComponentDescription:
 class LightComponentDescription:
     """
     .. include:: /alfacase_definitions/LightComponentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass_per_mol.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_molar_volume.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -1297,13 +1457,13 @@ class PvtModelCompositionalDescription:
     """
 
     :ivar Scalar equation_of_state_type:
-        default: Scalar(850.0, "kg/m3")
+        default: EquationOfStateType.PengRobinson
 
     :ivar Scalar surface_tension_model_type:
-        default: Scalar(0.9, "kg/m3")
+        default: SurfaceTensionType.Weinaugkatz
 
     :ivar Scalar viscosity_model:
-        default: Scalar(150.0, "sm3/sm3")
+        default: PVTCompositionalViscosityModel.CorrespondingStatesPrinciple
 
     :ivar List[HeavyComponentDescription] heavy_components:
         default: []
@@ -1349,6 +1509,12 @@ class PvtModelTableParametersDescription:
 
     :ivar List[str] variable_names:
         List of property names
+
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     pressure_values: Numpy1DArray = attr.ib(
@@ -1774,6 +1940,8 @@ class PvtModelsDescription:
 class TracerModelConstantCoefficientsDescription:
     """
     .. include:: /alfacase_definitions/TracerModelConstantCoefficientsDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_mass_fraction.txt
     """
 
     partition_coefficients: Dict[str, Scalar] = attr.ib(
@@ -1823,6 +1991,8 @@ class PhysicsDescription:
 class TimeOptionsDescription:
     """
     .. include:: /alfacase_definitions/TimeOptionsDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_time.txt
     """
 
     stop_on_steady_state: bool = attr.ib(default=False, validator=instance_of(bool))

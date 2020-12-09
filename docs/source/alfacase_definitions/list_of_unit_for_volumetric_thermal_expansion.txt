@@ -1,0 +1,9 @@
+.. admonition:: Available units for category 'volumetric thermal expansion'
+    :class: dropdown
+
+    :"1/degC": per degree Celsius
+    :"1/degF": per degree Fahrenheit
+    :"1/degR": per degree Rankine
+    :"1/K": per Kelvin
+    :"ppm/degC": part per million per degree Celsius
+    :"ppm/degF": part per million per degree Fahrenheit
