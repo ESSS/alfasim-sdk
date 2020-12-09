@@ -5,9 +5,14 @@ div.highlight > pre {
     padding: 1.25rem 1.5rem;
     border: 0;
 }
-div.bd-sidebar {
-    max-width: 20%;
+
+@media (min-width: 768px) {
+    div.bd-sidebar {
+        max-width: 20%;
+    }
+
 }
+
 
 div.tab-content > pre.literal-block {
     border-radius: 8px;
