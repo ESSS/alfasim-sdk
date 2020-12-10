@@ -9,7 +9,7 @@ you can easily modify your project and reintroduce it, with the modification, ba
 Open an ALFAsim Project
 -----------------------
 
-One of the easiest ways to get started is to export an existing project into a ``.alfascase`` file directly from the interface.
+One of the easiest ways to get started is to export an existing project into a ``.alfacase`` file directly from the interface.
 Open an existing project and export it using the option :code:`Export ALFAsim Case file...` as illustrated on the figure below:
 
 .. image:: /_static/images/alfacase/export_alfacase.png

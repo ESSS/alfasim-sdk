@@ -39,7 +39,7 @@ In the following section, this steps will be covered:
 Project Options
 ---------------
 
-We will start teh example by configuring the project options, as discussed in the previous section,
+We will start the example by configuring the project options, as discussed in the previous section,
 the root level of an ``ALFacase`` file is the :class:`CaseDescription <alfasim_sdk.CaseDescription>` and it has the following options:
 
 - ``physics``
