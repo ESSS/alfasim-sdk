@@ -239,7 +239,7 @@ def alfasim_get_status(
 
 
 @hookspec
-def alfasim_configure_fields():
+def alfasim_configure_fields(ctx: Context):
     """
     Allows plugins to configure new fields to be added in |alfasim|'s hydrodynamic model.
 
@@ -248,13 +248,17 @@ def alfasim_configure_fields():
      - Phase, defined by :class:`~alfasim_sdk.types.AddPhase` or :class:`~alfasim_sdk.types.UpdatePhase`.
      - Layer, defined by :class:`~alfasim_sdk.types.AddLayer` or :class:`~alfasim_sdk.types.UpdateLayer`.
 
+     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
+    of the models implemented by the user.
+
+    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
 
     Example of usage:
 
     .. code-block:: python
 
         @alfasim_sdk.hookimpl
-        def alfasim_configure_fields():
+        def alfasim_configure_fields(ctx):
            return [
                AddField(name='plugin_continuous_field'),
                AddField(name='plugin_dispersed_field'),
@@ -265,20 +269,24 @@ def alfasim_configure_fields():
 
 
 @hookspec
-def alfasim_configure_layers():
+def alfasim_configure_layers(ctx: Context):
     """
     Allows plugins to configure new layers or associate a new field with a existing layer for |alfasim|'s hydrodynamic model
 
     In order to configure a new layer, it is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
     required fields.
 
+     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
+    of the models implemented by the user.
+
+    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
 
     Example of usage:
 
     .. code-block:: python
 
         @alfasim_sdk.hookimpl
-        def alfasim_configure_layers():
+        def alfasim_configure_layers(ctx):
            return [
                AddLayer(
                    name='plugin_layer',
@@ -300,18 +308,23 @@ def alfasim_configure_layers():
 
 
 @hookspec
-def alfasim_configure_phases():
+def alfasim_configure_phases(ctx: Context):
     """
     Allows plugins to configure new phases or associate a new field with a existing phase from the application.
     In order to configure a new phase it is necessary to return an :class:`~alfasim_sdk.types.AddPhase` object defining the
     required fields.
+
+     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
+    of the models implemented by the user.
+
+    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
 
     Example of usage:
 
     .. code-block:: python
 
         @alfasim_sdk.hookimpl
-        def alfasim_configure_phases():
+        def alfasim_configure_phases(ctx):
             return [
                 AddPhase(
                     name='plugin_phase',
@@ -348,7 +361,7 @@ def alfasim_configure_phases():
     .. code-block:: python
 
         @alfasim_sdk.hookimpl
-        def alfasim_configure_phases():
+        def alfasim_configure_phases(ctx):
             return [
                 UpdatePhase(
                     name=OIL_PHASE,

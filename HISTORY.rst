@@ -2,6 +2,12 @@
 History
 =======
 
+0.8.0 (Unreleased)
+==================
+
+* Add context support on ``alfasim_configure_fields``, ``alfasim_configure_layers`` and ``alfasim_configure_phases``.
+
+
 0.7.0 (2020-11-20)
 ==================
 
