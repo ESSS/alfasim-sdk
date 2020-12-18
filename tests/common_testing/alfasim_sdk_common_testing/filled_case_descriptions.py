@@ -171,9 +171,9 @@ MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
     gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
     water_cut=Scalar(0.2, "-", "volume fraction"),
     volumetric_flow_rates_std={
-        "gas": Scalar(1000.5, "m3/s"),
-        "oil": Scalar(20.5, "m3/s"),
-        "water": Scalar(20.5, "m3/s"),
+        "gas": Scalar(1000.5, "sm3/d"),
+        "oil": Scalar(20.5, "sm3/d"),
+        "water": Scalar(20.5, "sm3/d"),
     },
     tracer_mass_fraction=Array([1.0], "-", "mass fraction"),
     temperature=Scalar(15, "degC"),
@@ -203,9 +203,9 @@ MASS_SOURCE_NODE_PROPERTIES_DESCRIPTION = (
         source_type=constants.MassSourceType.TotalMassFlowRatePvtSplit,
         total_mass_flow_rate=Scalar(0.05, "kg/s"),
         volumetric_flow_rates_std={
-            constants.FLUID_GAS: Scalar(10.0, "m3/d"),
-            constants.FLUID_OIL: Scalar(20, "m3/d"),
-            constants.FLUID_WATER: Scalar(50, "m3/d"),
+            constants.FLUID_GAS: Scalar(10.0, "sm3/d"),
+            constants.FLUID_OIL: Scalar(20, "sm3/d"),
+            constants.FLUID_WATER: Scalar(50, "sm3/d"),
         },
     )
 )

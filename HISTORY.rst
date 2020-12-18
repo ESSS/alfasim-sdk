@@ -2,6 +2,11 @@
 History
 =======
 
+UNRELEASED
+==================
+
+* Change category for `volumetric_flow_rates_std` from `volume flow rate` to `standard volume per time`.
+
 0.7.0 (2020-11-20)
 ==================
 
