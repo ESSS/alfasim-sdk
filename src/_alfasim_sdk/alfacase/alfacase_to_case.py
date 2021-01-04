@@ -867,7 +867,7 @@ def _load_mass_source_common() -> Dict[str, Callable]:
         "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
         "source_type": get_enum_loader(enum_class=constants.MassSourceType),
         "volumetric_flow_rates_std": get_dict_with_scalar_loader(
-            category="volume flow rate"
+            category="standard volume per time"
         ),
         "mass_flow_rates": get_dict_with_scalar_loader(category="mass flow rate"),
         "total_mass_flow_rate": get_scalar_loader(from_unit="kg/s"),
