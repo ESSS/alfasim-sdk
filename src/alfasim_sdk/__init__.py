@@ -124,7 +124,7 @@ from _alfasim_sdk.alfacase.case_description import WellDescription
 from _alfasim_sdk.alfacase.case_description import XAndYDescription
 
 # ALFACase: Utilities
-from _alfasim_sdk.alfacase.alfacase import convert_alfacase_to_case
+from _alfasim_sdk.alfacase.alfacase import convert_alfacase_to_description
 from _alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
 from _alfasim_sdk.alfacase.alfacase import generate_alfacase_file
 from _alfasim_sdk.alfacase.alfatable import generate_alfatable_file
@@ -310,7 +310,7 @@ __all__ = [
     "WallLayerDescription",
     "WellDescription",
     "XAndYDescription",
-    "convert_alfacase_to_case",
+    "convert_alfacase_to_description",
     "convert_description_to_alfacase",
     "generate_alfacase_file",
     "generate_alfatable_file",

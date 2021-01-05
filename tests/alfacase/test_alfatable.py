@@ -93,9 +93,9 @@ def test_alfacase_file_export(tmp_path):
     assert alfacase_file.is_file()
     assert alfatable_file.is_file()
     # Load
-    from _alfasim_sdk.alfacase.alfacase import convert_alfacase_to_case
+    from _alfasim_sdk.alfacase.alfacase import convert_alfacase_to_description
 
-    case = convert_alfacase_to_case(alfacase_file)
+    case = convert_alfacase_to_description(alfacase_file)
     assert case.pvt_models.tables == {"FLUID-A 1": alfatable_file}
 
 

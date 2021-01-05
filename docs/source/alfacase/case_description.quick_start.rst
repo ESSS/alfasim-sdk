@@ -58,14 +58,14 @@ As already informed at the beginning of the section, ALFAsim accepts only ``.alf
 are only tools that help the creation and manipulation of a project programmatically in an easier way.
 
 To convert a ``Description`` to alfacase you can use the function ``convert_description_to_alfacase`` and to convert a
-``.alfacase`` file to ``Description`` you can use the function ``convert_alfacase_to_case``.
+``.alfacase`` file to ``Description`` you can use the function ``convert_alfacase_to_description``.
 
 
 Convert an ALFAsim Project to a Description
 -------------------------------------------
 
 One of the easiest ways to create a ``.alfacase`` file is converting an existent project from an ALFAsim application.
-It's also possible to convert this ``.alfacase`` file to a ``Description`` class using the function ``convert_alfacase_to_case``.
+It's also possible to convert this ``.alfacase`` file to a ``Description`` class using the function ``convert_alfacase_to_description``.
 
 First, open an existing project and export it using the option :code:`Export ALFAsim Case file...` as illustrated in the figure below:
 
@@ -73,7 +73,7 @@ First, open an existing project and export it using the option :code:`Export ALF
 
 The generated file will contain all project settings, including the default values used by ALFAsim.
 
-In a Python file, import the ``alfasim_sdk`` module and call the ``convert_alfacase_to_case`` function informing the
+In a Python file, import the ``alfasim_sdk`` module and call the ``convert_alfacase_to_description`` function informing the
 file path of the ``.alfacase`` file.
 
 .. code-block:: python
@@ -81,8 +81,8 @@ file path of the ``.alfacase`` file.
     >>> from pathlib import Path
     >>> alfacase_file_path = Path("...")
 
-    >>> from alfasim_sdk import convert_alfacase_to_case
-    >>> case_description_from_alfacase = convert_alfacase_to_case(alfacase_file_path)
+    >>> from alfasim_sdk import convert_alfacase_to_description
+    >>> case_description_from_alfacase = convert_alfacase_to_description(alfacase_file_path)
 
 Check out the :ref:`case-description-example` section that shows how to create a simple project from scratch and gives a walkthrough
 of the main points necessary to configure a project.
