@@ -72,7 +72,9 @@ def convert_description_to_alfacase(
     return YAML(case_description_dict).as_yaml()
 
 
-def convert_alfacase_to_case(file_alfacase: Path) -> case_description.CaseDescription:
+def convert_alfacase_to_description(
+    file_alfacase: Path,
+) -> case_description.CaseDescription:
     """
     Return a alfasim_sdk.alfacase.case_description.Case with all information provided on file_yaml.
     """
