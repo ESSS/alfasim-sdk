@@ -142,3 +142,12 @@ def register_units():
         valid_units=productivity_index_units,
         override=True,
     )
+
+    # Creating separate categories for some Gas properties, so they are plotted in a separate axis
+    std_volume_per_time_units = db.GetValidUnits("standard volume per time")
+    db.AddCategory(
+        "gas standard volume per time",
+        quantity_type="standard volume per time",
+        valid_units=std_volume_per_time_units,
+    )
+    # "gas volume flow rate" is also required, but it is already registered
