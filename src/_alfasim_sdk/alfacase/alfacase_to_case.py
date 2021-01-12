@@ -362,7 +362,6 @@ def load_light_component_description(
         "MW": get_scalar_loader(from_unit="kg/mol"),
         "Tb": get_scalar_loader(from_unit="K"),
         "Parachor": get_scalar_loader(from_unit="-"),
-        "B_parameter": get_scalar_loader(from_unit="-"),
         "Cp_0": get_scalar_loader(from_unit="-"),
         "Cp_1": get_scalar_loader(from_unit="-"),
         "Cp_2": get_scalar_loader(from_unit="-"),

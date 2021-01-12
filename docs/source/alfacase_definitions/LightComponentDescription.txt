@@ -13,7 +13,6 @@
             MW: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/mol', 'mass per mol')
             Tb: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
             Parachor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            B_parameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
             Cp_0: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
             Cp_1: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
             Cp_2: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
@@ -44,9 +43,6 @@
                 value: number
                 unit: string # optional
             Parachor: 
-                value: number
-                unit: string # optional
-            B_parameter: 
                 value: number
                 unit: string # optional
             Cp_0: 

@@ -1444,7 +1444,6 @@ class LightComponentDescription:
     MW = attrib_scalar(default=Scalar("mass per mol", 0, "kg/mol"))
     Tb = attrib_scalar(default=Scalar("temperature", 0, "K"))
     Parachor = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    B_parameter = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
     Cp_0 = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
     Cp_1 = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
     Cp_2 = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
