@@ -7,7 +7,8 @@ History
 
 * Add context support on ``alfasim_configure_fields``, ``alfasim_configure_layers`` and ``alfasim_configure_phases``.
 * Change category for ``volumetric_flow_rates_std` from ``volume flow rate`` to ``standard volume per time``.
-* Rename ``convert_alfacase_to_case`` to ``convert_alfacase_to_description``
+* Rename ``convert_alfacase_to_case`` to ``convert_alfacase_to_description``.
+* Add new category: ``gas standard volume per time``, with same units as ``standard volume per time``.
 
 
 0.7.0 (2020-11-20)
