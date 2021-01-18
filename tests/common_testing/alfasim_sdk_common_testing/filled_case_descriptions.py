@@ -35,12 +35,11 @@ LIGH_COMPONENT_DESCRIPTION = case_description.LightComponentDescription(
     MW=Scalar("mass per mol", 6, "kg/mol"),
     Tb=Scalar("temperature", 7, "K"),
     Parachor=Scalar("dimensionless", 8, "-"),
-    B_parameter=Scalar("dimensionless", 9, "-"),
-    Cp_0=Scalar("dimensionless", 10, "-"),
-    Cp_1=Scalar("dimensionless", 11, "-"),
-    Cp_2=Scalar("dimensionless", 12, "-"),
-    Cp_3=Scalar("dimensionless", 13, "-"),
-    Cp_4=Scalar("dimensionless", 14, "-"),
+    Cp_0=Scalar("dimensionless", 9, "-"),
+    Cp_1=Scalar("dimensionless", 10, "-"),
+    Cp_2=Scalar("dimensionless", 11, "-"),
+    Cp_3=Scalar("dimensionless", 12, "-"),
+    Cp_4=Scalar("dimensionless", 13, "-"),
 )
 LIGH_COMPONENT_DESCRIPTION_OVERWRITE_C3 = case_description.LightComponentDescription(
     name="C3", Pc=Scalar("pressure", 42, "Pa")

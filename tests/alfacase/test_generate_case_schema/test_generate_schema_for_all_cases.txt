@@ -122,7 +122,6 @@ light_component_description_schema = Map(
         Optional("MW"): Map({"value": Float(), "unit": Str()}),
         Optional("Tb"): Map({"value": Float(), "unit": Str()}),
         Optional("Parachor"): Map({"value": Float(), "unit": Str()}),
-        Optional("B_parameter"): Map({"value": Float(), "unit": Str()}),
         Optional("Cp_0"): Map({"value": Float(), "unit": Str()}),
         Optional("Cp_1"): Map({"value": Float(), "unit": Str()}),
         Optional("Cp_2"): Map({"value": Float(), "unit": Str()}),

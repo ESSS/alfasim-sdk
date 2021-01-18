@@ -125,7 +125,6 @@ light_component_description_schema = Map(
         Optional("MW"): Map({"value": Float(), "unit": Str()}),
         Optional("Tb"): Map({"value": Float(), "unit": Str()}),
         Optional("Parachor"): Map({"value": Float(), "unit": Str()}),
-        Optional("B_parameter"): Map({"value": Float(), "unit": Str()}),
         Optional("Cp_0"): Map({"value": Float(), "unit": Str()}),
         Optional("Cp_1"): Map({"value": Float(), "unit": Str()}),
         Optional("Cp_2"): Map({"value": Float(), "unit": Str()}),
@@ -676,5 +675,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 59cb3cca17782bafaa2319b9882fd665)
+# [[[end]]] (checksum: c4e9818dd6802c264d8a65a204c0f49a)
 # fmt: on
