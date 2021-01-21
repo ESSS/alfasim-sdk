@@ -46,3 +46,38 @@ def test_validation(attr, expected_type_error, expected_message):
     attrs.update(attr)
     with pytest.raises(expected_type_error, match=expected_message):
         SecondaryVariable(**attrs)
+
+
+def test_variable_with_custom_category():
+    from barril.units import UnitDatabase
+
+    from _alfasim_sdk.variables import (
+        Location,
+        Scope,
+        SecondaryVariable,
+        Type,
+        Visibility,
+    )
+
+    db = UnitDatabase.GetSingleton()
+    length_units = ["mm", "cm", "um", "nm", "in"]
+    db.AddCategory(
+        "film thickness",
+        quantity_type="length",
+        valid_units=length_units,
+        override=True,
+        default_unit="mm",
+    )
+
+    attrs = dict(
+        name="wax_thickness",
+        caption="Wax Thickness",
+        type=Type.Double,
+        unit="mm",
+        category="film thickness",
+        visibility=Visibility.Output,
+        location=Location.Center,
+        multifield_scope=Scope.Global,
+        checked_on_gui_default=False,
+    )
+    assert SecondaryVariable(**attrs).category == "film thickness"
