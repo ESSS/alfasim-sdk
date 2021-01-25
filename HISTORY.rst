@@ -10,7 +10,7 @@ History
 * Rename ``convert_alfacase_to_case`` to ``convert_alfacase_to_description``.
 * Add new category: ``gas standard volume per time``, with same units as ``standard volume per time``.
 * Drop ``B_parameter`` as Lee-Chien method for surface tension is not supported anymore.
-
+* Add option to set the category for ``SecondaryVariable`` object
 
 0.7.0 (2020-11-20)
 ==================

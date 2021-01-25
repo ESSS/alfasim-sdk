@@ -93,6 +93,7 @@ class SecondaryVariable:
     caption: str = attrib(validator=non_empty_str)
     type = attrib(validator=instance_of(Type), default=Type.Double)
     unit = attrib(validator=[non_empty_str, valid_unit])
+    category: str = attrib(validator=optional(non_empty_str))
     visibility: Visibility = attrib(
         validator=instance_of(Visibility), default=Visibility.Output
     )
@@ -105,6 +106,6 @@ class SecondaryVariable:
     )
     checked_on_gui_default: bool = attrib(validator=instance_of(bool), default=True)
 
-    @property
-    def category(self):
+    @category.default
+    def _default_category(self):
         return UnitDatabase.GetSingleton().GetDefaultCategory(self.unit)
