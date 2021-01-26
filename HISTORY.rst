@@ -12,6 +12,7 @@ History
 * Drop ``B_parameter`` as Lee-Chien method for surface tension is not supported anymore.
 * Add option to set the category for ``SecondaryVariable`` object
 * Add ``WallsWithoutEnvironment`` to ``PipeEnvironmentHeatTransferCoefficientModelType`` enum.
+* Add properties that control automatic definition of restart autosave, trend and profile saving frequency to ``TimeOptionsDescription`` and ``CaseOutputDescription``.
 
 0.7.0 (2020-11-20)
 ==================
