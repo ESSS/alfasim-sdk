@@ -184,6 +184,7 @@ class PipeEnvironmentHeatTransferCoefficientModelType(Enum):
     Overall = "overall_heat_transfer_coefficient_model"
     WallsWithoutEnvironment = "walls_without_environment_heat_transfer_coefficient"
 
+
 class PVTCompositionalViscosityModel(Enum):
     CorrespondingStatesPrinciple = "corresponding_states_principle"
     LohrenzBrayClark = "lohrenz_bray_clark"
