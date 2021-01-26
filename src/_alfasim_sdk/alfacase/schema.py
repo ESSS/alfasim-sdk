@@ -61,7 +61,7 @@ environment_property_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
         "temperature": Map({"value": Float(), "unit": Str()}),
-        "type": Enum(['walls_and_environment_heat_transfer_coefficient', 'walls_and_water_heat_transfer_coefficient_model', 'walls_and_air_heat_transfer_coefficient_model', 'overall_heat_transfer_coefficient_model']),
+        "type": Enum(['walls_and_environment_heat_transfer_coefficient', 'walls_and_water_heat_transfer_coefficient_model', 'walls_and_air_heat_transfer_coefficient_model', 'overall_heat_transfer_coefficient_model', 'walls_without_environment_heat_transfer_coefficient']),
         Optional("heat_transfer_coefficient"): Map({"value": Float(), "unit": Str()}),
         Optional("overall_heat_transfer_coefficient"): Map({"value": Float(), "unit": Str()}),
         Optional("fluid_velocity"): Map({"value": Float(), "unit": Str()}),
@@ -675,5 +675,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: c4e9818dd6802c264d8a65a204c0f49a)
+# [[[end]]] (checksum: c1c39665e2e303605707423895f6f126)
 # fmt: on
