@@ -361,6 +361,7 @@ temperatures_container_description_schema = Map(
 time_options_description_schema = Map(
     {
         Optional("stop_on_steady_state"): Bool(),
+        Optional("automatic_restart_autosave_frequency"): Bool(),
         Optional("initial_time"): Map({"value": Float(), "unit": Str()}),
         Optional("final_time"): Map({"value": Float(), "unit": Str()}),
         Optional("initial_timestep"): Map({"value": Float(), "unit": Str()}),
@@ -426,8 +427,10 @@ x_and_y_description_schema = Map(
 )
 case_output_description_schema = Map(
     {
+        Optional("automatic_trend_frequency"): Bool(),
         Optional("trends"): Seq(trend_output_description_schema),
         Optional("trend_frequency"): Map({"value": Float(), "unit": Str()}),
+        Optional("automatic_profile_frequency"): Bool(),
         Optional("profiles"): Seq(profile_output_description_schema),
         Optional("profile_frequency"): Map({"value": Float(), "unit": Str()}),
     }
@@ -675,5 +678,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: c1c39665e2e303605707423895f6f126)
+# [[[end]]] (checksum: 246db83b8565903de6db4af4b62191c7)
 # fmt: on

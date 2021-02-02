@@ -94,8 +94,12 @@ class CaseOutputDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_time.txt
     """
 
+    automatic_trend_frequency: bool = attr.ib(default=True, validator=instance_of(bool))
     trends = attrib_instance_list(TrendOutputDescription)
     trend_frequency = attrib_scalar(default=Scalar(0.1, "s"))
+    automatic_profile_frequency: bool = attr.ib(
+        default=True, validator=instance_of(bool)
+    )
     profiles = attrib_instance_list(ProfileOutputDescription)
     profile_frequency = attrib_scalar(default=Scalar(0.1, "s"))
 
@@ -1995,6 +1999,9 @@ class TimeOptionsDescription:
     """
 
     stop_on_steady_state: bool = attr.ib(default=False, validator=instance_of(bool))
+    automatic_restart_autosave_frequency: bool = attr.ib(
+        default=True, validator=instance_of(bool)
+    )
     initial_time = attrib_scalar(default=Scalar("time", 0.0, "s"))
     final_time = attrib_scalar(default=Scalar("time", 10.0, "s"))
     initial_timestep = attrib_scalar(default=Scalar("time", 1e-4, "s"))
