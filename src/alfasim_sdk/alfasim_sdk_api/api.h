@@ -438,6 +438,9 @@ DLL_EXPORT int get_simulation_tracer_array(
     @param[in] ts_scope #TimestepScope value.
     @param[in] variable_name_c String with the variable name. See the list of possible values above.
     @return An #error_code value.
+
+    It is important to know that `dt` may have value equal to `NAN` (Not a number) during the steady
+    state simulation. In this case the plugin must handle it and not use this value.
 */
 DLL_EXPORT int get_simulation_quantity(
     void* ctx,
