@@ -13,6 +13,7 @@ History
 * Add option to set the category for ``SecondaryVariable`` object
 * Add ``WallsWithoutEnvironment`` to ``PipeEnvironmentHeatTransferCoefficientModelType`` enum.
 * Add properties that control automatic definition of restart autosave, trend and profile saving frequency to ``TimeOptionsDescription`` and ``CaseOutputDescription``.
+* Update documentation of ``get_simulation_array``, the wetted perimeters of layers are available
 
 0.7.0 (2020-11-20)
 ==================

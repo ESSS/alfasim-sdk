@@ -357,6 +357,7 @@ DLL_EXPORT int get_state_variable_array(
     - `"U_superficial"`: Superficial Velocity [m/s]
     - `"RS"`: Gas mass fraction in gas/oil mixture [kg/kg]
     - `"RSW"`: Water vapour mass fraction in gas phase [kg/kg]
+    - `"S_w"`: Wetted Perimeter of a layer [m]
     - `"ff_S_wall"`: Wall friction factor times wall perimeter [-]
     - `"ff_S_interface"`: Interface Friction factor times interface perimeter [-]
     - `"D"`: Pipe Inner Diameter [m]
