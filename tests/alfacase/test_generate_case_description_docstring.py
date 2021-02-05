@@ -1,10 +1,13 @@
 import pytest
 
-from _alfasim_sdk.alfacase import case_description
-from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+from alfasim_sdk._alfasim_sdk.alfacase import case_description
+from alfasim_sdk._alfasim_sdk.alfacase.generate_case_description_docstring import (
     generate_definition,
 )
-from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
+from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import (
+    get_all_classes_that_needs_schema,
+)
+
 
 ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
     case_description.CaseDescription

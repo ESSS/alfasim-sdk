@@ -2,8 +2,8 @@
 """Top-level package for alfasim-sdk."""
 import pluggy
 
-from _alfasim_sdk import version
-from _alfasim_sdk.units import register_units
+from alfasim_sdk._alfasim_sdk import version
+from alfasim_sdk._alfasim_sdk.units import register_units
 
 # Package information
 __author__ = "ESSS"
@@ -21,217 +21,269 @@ def get_alfasim_sdk_api_path():
     """
     Return the directory that contains the alfasim_sdk_api with the header files
     """
-    from _alfasim_sdk import hook_specs
+    from alfasim_sdk._alfasim_sdk import hook_specs
     from pathlib import Path
 
     return str(Path(hook_specs.__file__).parents[1])
 
 
 # CLI:
-from _alfasim_sdk.cli import console_main
+from alfasim_sdk._alfasim_sdk.cli import console_main
 
 # ALFACase: Descriptions
-from _alfasim_sdk.alfacase.case_description import AnnulusDescription
-from _alfasim_sdk.alfacase.case_description import BipDescription
-from _alfasim_sdk.alfacase.case_description import CaseDescription
-from _alfasim_sdk.alfacase.case_description import CaseOutputDescription
-from _alfasim_sdk.alfacase.case_description import CasingDescription
-from _alfasim_sdk.alfacase.case_description import CasingSectionDescription
-from _alfasim_sdk.alfacase.case_description import CompositionDescription
-from _alfasim_sdk.alfacase.case_description import CompressorEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import CompressorPressureTableDescription
-from _alfasim_sdk.alfacase.case_description import CvTableDescription
-from _alfasim_sdk.alfacase.case_description import EnvironmentDescription
-from _alfasim_sdk.alfacase.case_description import EnvironmentPropertyDescription
-from _alfasim_sdk.alfacase.case_description import EquipmentDescription
-from _alfasim_sdk.alfacase.case_description import FluidDescription
-from _alfasim_sdk.alfacase.case_description import FormationDescription
-from _alfasim_sdk.alfacase.case_description import FormationLayerDescription
-from _alfasim_sdk.alfacase.case_description import GasLiftValveEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import HeatSourceEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import HeavyComponentDescription
-from _alfasim_sdk.alfacase.case_description import IPRCurveDescription
-from _alfasim_sdk.alfacase.case_description import IPRModelsDescription
-from _alfasim_sdk.alfacase.case_description import InitialConditionsDescription
-from _alfasim_sdk.alfacase.case_description import InitialPressuresDescription
-from _alfasim_sdk.alfacase.case_description import InitialTemperaturesDescription
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import AnnulusDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import BipDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import CaseDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import CaseOutputDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import CasingDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import CasingSectionDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import CompositionDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    CompressorEquipmentDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    CompressorPressureTableDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import CvTableDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import EnvironmentDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    EnvironmentPropertyDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import EquipmentDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import FluidDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import FormationDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import FormationLayerDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    GasLiftValveEquipmentDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    HeatSourceEquipmentDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import HeavyComponentDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import IPRCurveDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import IPRModelsDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    InitialConditionsDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    InitialPressuresDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    InitialTemperaturesDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     InitialTracersMassFractionsDescription,
 )
-from _alfasim_sdk.alfacase.case_description import InitialVelocitiesDescription
-from _alfasim_sdk.alfacase.case_description import InitialVolumeFractionsDescription
-from _alfasim_sdk.alfacase.case_description import InternalNodePropertiesDescription
-from _alfasim_sdk.alfacase.case_description import LengthAndElevationDescription
-from _alfasim_sdk.alfacase.case_description import LightComponentDescription
-from _alfasim_sdk.alfacase.case_description import LinearIPRDescription
-from _alfasim_sdk.alfacase.case_description import MassSourceEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import MassSourceNodePropertiesDescription
-from _alfasim_sdk.alfacase.case_description import MaterialDescription
-from _alfasim_sdk.alfacase.case_description import NodeDescription
-from _alfasim_sdk.alfacase.case_description import NumericalOptionsDescription
-from _alfasim_sdk.alfacase.case_description import OpenHoleDescription
-from _alfasim_sdk.alfacase.case_description import OpeningCurveDescription
-from _alfasim_sdk.alfacase.case_description import PackerDescription
-from _alfasim_sdk.alfacase.case_description import PhysicsDescription
-from _alfasim_sdk.alfacase.case_description import PipeDescription
-from _alfasim_sdk.alfacase.case_description import PipeSegmentsDescription
-from _alfasim_sdk.alfacase.case_description import PressureContainerDescription
-from _alfasim_sdk.alfacase.case_description import PressureNodePropertiesDescription
-from _alfasim_sdk.alfacase.case_description import ProfileDescription
-from _alfasim_sdk.alfacase.case_description import ProfileOutputDescription
-from _alfasim_sdk.alfacase.case_description import PumpEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import PvtModelCompositionalDescription
-from _alfasim_sdk.alfacase.case_description import PvtModelCorrelationDescription
-from _alfasim_sdk.alfacase.case_description import PvtModelsDescription
-from _alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    InitialVelocitiesDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    InitialVolumeFractionsDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    InternalNodePropertiesDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    LengthAndElevationDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import LightComponentDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import LinearIPRDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    MassSourceEquipmentDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    MassSourceNodePropertiesDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import MaterialDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import NodeDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    NumericalOptionsDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import OpenHoleDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import OpeningCurveDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import PackerDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import PhysicsDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import PipeDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import PipeSegmentsDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    PressureContainerDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    PressureNodePropertiesDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import ProfileDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import ProfileOutputDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import PumpEquipmentDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    PvtModelCompositionalDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    PvtModelCorrelationDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import PvtModelsDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    PvtModelTableParametersDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     ReferencedPressureContainerDescription,
 )
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     ReferencedTemperaturesContainerDescription,
 )
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     ReferencedTracersMassFractionsContainerDescription,
 )
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     ReferencedVelocitiesContainerDescription,
 )
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     ReferencedVolumeFractionsContainerDescription,
 )
-from _alfasim_sdk.alfacase.case_description import ReservoirInflowEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import SeparatorNodePropertiesDescription
-from _alfasim_sdk.alfacase.case_description import SpeedCurveDescription
-from _alfasim_sdk.alfacase.case_description import TableIPRDescription
-from _alfasim_sdk.alfacase.case_description import TablePumpDescription
-from _alfasim_sdk.alfacase.case_description import TemperaturesContainerDescription
-from _alfasim_sdk.alfacase.case_description import TimeOptionsDescription
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    ReservoirInflowEquipmentDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    SeparatorNodePropertiesDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import SpeedCurveDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import TableIPRDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import TablePumpDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    TemperaturesContainerDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import TimeOptionsDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     TracerModelConstantCoefficientsDescription,
 )
-from _alfasim_sdk.alfacase.case_description import TracersDescription
-from _alfasim_sdk.alfacase.case_description import (
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import TracersDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
     TracersMassFractionsContainerDescription,
 )
-from _alfasim_sdk.alfacase.case_description import TrendOutputDescription
-from _alfasim_sdk.alfacase.case_description import TubingDescription
-from _alfasim_sdk.alfacase.case_description import ValveEquipmentDescription
-from _alfasim_sdk.alfacase.case_description import VelocitiesContainerDescription
-from _alfasim_sdk.alfacase.case_description import VolumeFractionsContainerDescription
-from _alfasim_sdk.alfacase.case_description import WallDescription
-from _alfasim_sdk.alfacase.case_description import WallLayerDescription
-from _alfasim_sdk.alfacase.case_description import WellDescription
-from _alfasim_sdk.alfacase.case_description import XAndYDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import TrendOutputDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import TubingDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import ValveEquipmentDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    VelocitiesContainerDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import (
+    VolumeFractionsContainerDescription,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import WallDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import WallLayerDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import WellDescription
+from alfasim_sdk._alfasim_sdk.alfacase.case_description import XAndYDescription
 
 # ALFACase: Utilities
-from _alfasim_sdk.alfacase.alfacase import convert_alfacase_to_description
-from _alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
-from _alfasim_sdk.alfacase.alfacase import generate_alfacase_file
-from _alfasim_sdk.alfacase.alfatable import generate_alfatable_file
-from _alfasim_sdk.alfacase.alfatable import (
+from alfasim_sdk._alfasim_sdk.alfacase.alfacase import convert_alfacase_to_description
+from alfasim_sdk._alfasim_sdk.alfacase.alfacase import convert_description_to_alfacase
+from alfasim_sdk._alfasim_sdk.alfacase.alfacase import generate_alfacase_file
+from alfasim_sdk._alfasim_sdk.alfacase.alfatable import generate_alfatable_file
+from alfasim_sdk._alfasim_sdk.alfacase.alfatable import (
     load_pvt_model_table_parameters_description_from_alfatable,
 )
 
 # Constants
-from _alfasim_sdk.constants import BUBBLE_FIELD
-from _alfasim_sdk.constants import CompressorSpeedType
-from _alfasim_sdk.constants import CorrelationPackage
-from _alfasim_sdk.constants import CorrelationPackageType
-from _alfasim_sdk.constants import DEFAULT_TEMPERATURE_IN_K
-from _alfasim_sdk.constants import DROPLET_FIELD
-from _alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
-from _alfasim_sdk.constants import EmulsionModelType
-from _alfasim_sdk.constants import EnergyModel
-from _alfasim_sdk.constants import EnergyModelPrimaryVariable
-from _alfasim_sdk.constants import EquationOfStateType
-from _alfasim_sdk.constants import EvaluationStrategyType
-from _alfasim_sdk.constants import FLUID_GAS
-from _alfasim_sdk.constants import FLUID_OIL
-from _alfasim_sdk.constants import FLUID_PHASE_NAMES
-from _alfasim_sdk.constants import FLUID_WATER
-from _alfasim_sdk.constants import FlashModel
-from _alfasim_sdk.constants import FlowDirection
-from _alfasim_sdk.constants import GAS_FIELD
-from _alfasim_sdk.constants import GAS_LAYER
-from _alfasim_sdk.constants import GAS_PHASE
-from _alfasim_sdk.constants import HydrodynamicModelType
-from _alfasim_sdk.constants import InitialConditionStrategyType
-from _alfasim_sdk.constants import InterpolationType
-from _alfasim_sdk.constants import MassInflowSplitType
-from _alfasim_sdk.constants import MassSourceType
-from _alfasim_sdk.constants import MaterialType
-from _alfasim_sdk.constants import NodeCellType
-from _alfasim_sdk.constants import NonlinearSolverType
-from _alfasim_sdk.constants import OIL_FIELD
-from _alfasim_sdk.constants import OIL_LAYER
-from _alfasim_sdk.constants import OIL_PHASE
-from _alfasim_sdk.constants import OutputAttachmentLocation
-from _alfasim_sdk.constants import PVTCompositionalViscosityModel
-from _alfasim_sdk.constants import PipeEnvironmentHeatTransferCoefficientModelType
-from _alfasim_sdk.constants import PipeThermalModelType
-from _alfasim_sdk.constants import PipeThermalPositionInput
-from _alfasim_sdk.constants import PumpType
-from _alfasim_sdk.constants import SOLID_PHASE
-from _alfasim_sdk.constants import SeparatorGeometryType
-from _alfasim_sdk.constants import SimulationModeType
-from _alfasim_sdk.constants import SimulationRegimeType
-from _alfasim_sdk.constants import SolidsModelType
-from _alfasim_sdk.constants import SurfaceTensionType
-from _alfasim_sdk.constants import TableInputType
-from _alfasim_sdk.constants import TracerModelType
-from _alfasim_sdk.constants import ValveOpeningType
-from _alfasim_sdk.constants import ValveType
-from _alfasim_sdk.constants import WATER_DROPLET_IN_OIL_FIELD
-from _alfasim_sdk.constants import WATER_FIELD
-from _alfasim_sdk.constants import WATER_LAYER
-from _alfasim_sdk.constants import WATER_PHASE
-from _alfasim_sdk.constants import WellConnectionPort
-from _alfasim_sdk.constants import WellIndexPhaseType
+from alfasim_sdk._alfasim_sdk.constants import BUBBLE_FIELD
+from alfasim_sdk._alfasim_sdk.constants import CompressorSpeedType
+from alfasim_sdk._alfasim_sdk.constants import CorrelationPackage
+from alfasim_sdk._alfasim_sdk.constants import CorrelationPackageType
+from alfasim_sdk._alfasim_sdk.constants import DEFAULT_TEMPERATURE_IN_K
+from alfasim_sdk._alfasim_sdk.constants import DROPLET_FIELD
+from alfasim_sdk._alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
+from alfasim_sdk._alfasim_sdk.constants import EmulsionModelType
+from alfasim_sdk._alfasim_sdk.constants import EnergyModel
+from alfasim_sdk._alfasim_sdk.constants import EnergyModelPrimaryVariable
+from alfasim_sdk._alfasim_sdk.constants import EquationOfStateType
+from alfasim_sdk._alfasim_sdk.constants import EvaluationStrategyType
+from alfasim_sdk._alfasim_sdk.constants import FLUID_GAS
+from alfasim_sdk._alfasim_sdk.constants import FLUID_OIL
+from alfasim_sdk._alfasim_sdk.constants import FLUID_PHASE_NAMES
+from alfasim_sdk._alfasim_sdk.constants import FLUID_WATER
+from alfasim_sdk._alfasim_sdk.constants import FlashModel
+from alfasim_sdk._alfasim_sdk.constants import FlowDirection
+from alfasim_sdk._alfasim_sdk.constants import GAS_FIELD
+from alfasim_sdk._alfasim_sdk.constants import GAS_LAYER
+from alfasim_sdk._alfasim_sdk.constants import GAS_PHASE
+from alfasim_sdk._alfasim_sdk.constants import HydrodynamicModelType
+from alfasim_sdk._alfasim_sdk.constants import InitialConditionStrategyType
+from alfasim_sdk._alfasim_sdk.constants import InterpolationType
+from alfasim_sdk._alfasim_sdk.constants import MassInflowSplitType
+from alfasim_sdk._alfasim_sdk.constants import MassSourceType
+from alfasim_sdk._alfasim_sdk.constants import MaterialType
+from alfasim_sdk._alfasim_sdk.constants import NodeCellType
+from alfasim_sdk._alfasim_sdk.constants import NonlinearSolverType
+from alfasim_sdk._alfasim_sdk.constants import OIL_FIELD
+from alfasim_sdk._alfasim_sdk.constants import OIL_LAYER
+from alfasim_sdk._alfasim_sdk.constants import OIL_PHASE
+from alfasim_sdk._alfasim_sdk.constants import OutputAttachmentLocation
+from alfasim_sdk._alfasim_sdk.constants import PVTCompositionalViscosityModel
+from alfasim_sdk._alfasim_sdk.constants import (
+    PipeEnvironmentHeatTransferCoefficientModelType,
+)
+from alfasim_sdk._alfasim_sdk.constants import PipeThermalModelType
+from alfasim_sdk._alfasim_sdk.constants import PipeThermalPositionInput
+from alfasim_sdk._alfasim_sdk.constants import PumpType
+from alfasim_sdk._alfasim_sdk.constants import SOLID_PHASE
+from alfasim_sdk._alfasim_sdk.constants import SeparatorGeometryType
+from alfasim_sdk._alfasim_sdk.constants import SimulationModeType
+from alfasim_sdk._alfasim_sdk.constants import SimulationRegimeType
+from alfasim_sdk._alfasim_sdk.constants import SolidsModelType
+from alfasim_sdk._alfasim_sdk.constants import SurfaceTensionType
+from alfasim_sdk._alfasim_sdk.constants import TableInputType
+from alfasim_sdk._alfasim_sdk.constants import TracerModelType
+from alfasim_sdk._alfasim_sdk.constants import ValveOpeningType
+from alfasim_sdk._alfasim_sdk.constants import ValveType
+from alfasim_sdk._alfasim_sdk.constants import WATER_DROPLET_IN_OIL_FIELD
+from alfasim_sdk._alfasim_sdk.constants import WATER_FIELD
+from alfasim_sdk._alfasim_sdk.constants import WATER_LAYER
+from alfasim_sdk._alfasim_sdk.constants import WATER_PHASE
+from alfasim_sdk._alfasim_sdk.constants import WellConnectionPort
+from alfasim_sdk._alfasim_sdk.constants import WellIndexPhaseType
 
 # Plugins: Layouts imports
-from _alfasim_sdk.layout import tab
-from _alfasim_sdk.layout import tabs
-from _alfasim_sdk.layout import group
+from alfasim_sdk._alfasim_sdk.layout import tab
+from alfasim_sdk._alfasim_sdk.layout import tabs
+from alfasim_sdk._alfasim_sdk.layout import group
 
 # Plugins: Models imports
-from _alfasim_sdk.models import container_model
-from _alfasim_sdk.models import data_model
+from alfasim_sdk._alfasim_sdk.models import container_model
+from alfasim_sdk._alfasim_sdk.models import data_model
 
 # Plugins: Status imports
-from _alfasim_sdk.status import WarningMessage
-from _alfasim_sdk.status import ErrorMessage
+from alfasim_sdk._alfasim_sdk.status import WarningMessage
+from alfasim_sdk._alfasim_sdk.status import ErrorMessage
 
 # Plugins: Types for configure_fields hook
-from _alfasim_sdk.types import AddField
+from alfasim_sdk._alfasim_sdk.types import AddField
 
 # Plugins: Types for configure_phases hook
-from _alfasim_sdk.types import AddPhase
-from _alfasim_sdk.types import UpdatePhase
+from alfasim_sdk._alfasim_sdk.types import AddPhase
+from alfasim_sdk._alfasim_sdk.types import UpdatePhase
 
 # Plugins: Types for configure_layers hook
-from _alfasim_sdk.types import AddLayer
-from _alfasim_sdk.types import UpdateLayer
+from alfasim_sdk._alfasim_sdk.types import AddLayer
+from alfasim_sdk._alfasim_sdk.types import UpdateLayer
 
 # Plugins: Types  for UI customization
-from _alfasim_sdk.types import Boolean
-from _alfasim_sdk.types import Enum
-from _alfasim_sdk.types import FileContent
-from _alfasim_sdk.types import MultipleReference
-from _alfasim_sdk.types import Quantity
-from _alfasim_sdk.types import Reference
-from _alfasim_sdk.types import String
-from _alfasim_sdk.types import Table
-from _alfasim_sdk.types import TableColumn
-from _alfasim_sdk.types import TracerType
+from alfasim_sdk._alfasim_sdk.types import Boolean
+from alfasim_sdk._alfasim_sdk.types import Enum
+from alfasim_sdk._alfasim_sdk.types import FileContent
+from alfasim_sdk._alfasim_sdk.types import MultipleReference
+from alfasim_sdk._alfasim_sdk.types import Quantity
+from alfasim_sdk._alfasim_sdk.types import Reference
+from alfasim_sdk._alfasim_sdk.types import String
+from alfasim_sdk._alfasim_sdk.types import Table
+from alfasim_sdk._alfasim_sdk.types import TableColumn
+from alfasim_sdk._alfasim_sdk.types import TracerType
 
 # Plugins: Type for alfasim_get_additional_variables hook
-from _alfasim_sdk.variables import SecondaryVariable
+from alfasim_sdk._alfasim_sdk.variables import SecondaryVariable
 
 # Plugins: Constants used on SecondaryVariable
-from _alfasim_sdk.variables import Visibility
-from _alfasim_sdk.variables import Scope
-from _alfasim_sdk.variables import Type
-from _alfasim_sdk.variables import Location
+from alfasim_sdk._alfasim_sdk.variables import Visibility
+from alfasim_sdk._alfasim_sdk.variables import Scope
+from alfasim_sdk._alfasim_sdk.variables import Type
+from alfasim_sdk._alfasim_sdk.variables import Location
 
 __all__ = [
     "console_main",

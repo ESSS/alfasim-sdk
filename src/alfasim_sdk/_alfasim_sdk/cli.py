@@ -171,8 +171,10 @@ def package_only(ctx, plugin_dir, package_name, dst):
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    from _alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
-    from _alfasim_sdk.alfasim_sdk_utils import get_extras_default_required_version
+    from alfasim_sdk._alfasim_sdk.constants import EXTRAS_REQUIRED_VERSION_KEY
+    from alfasim_sdk._alfasim_sdk.alfasim_sdk_utils import (
+        get_extras_default_required_version,
+    )
 
     extras_defaults = {
         EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
@@ -183,9 +185,9 @@ def package_only(ctx, plugin_dir, package_name, dst):
 
 
 def _get_hook_specs_file_path() -> Path:
-    import _alfasim_sdk.hook_specs
+    import alfasim_sdk._alfasim_sdk.hook_specs
 
-    return Path(_alfasim_sdk.hook_specs.__file__)
+    return Path(alfasim_sdk._alfasim_sdk.hook_specs.__file__)
 
 
 if __name__ == "__main__":

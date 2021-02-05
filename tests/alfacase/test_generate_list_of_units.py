@@ -1,9 +1,9 @@
 import pytest
 
-from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+from alfasim_sdk._alfasim_sdk.alfacase.generate_case_description_docstring import (
     CATEGORIES_USED_ON_DESCRIPTION,
 )
-from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+from alfasim_sdk._alfasim_sdk.alfacase.generate_case_description_docstring import (
     generate_list_of_units,
 )
 

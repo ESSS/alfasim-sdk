@@ -5,15 +5,15 @@
     .. parsed-literal::
 
         class NumericalOptionsDescription
-            nonlinear_solver_type: \ :class:`NonlinearSolverType <_alfasim_sdk.constants.NonlinearSolverType>`\  = NonlinearSolverType.AlfasimQuasiNewton
+            nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._alfasim_sdk.constants.NonlinearSolverType>`\  = NonlinearSolverType.AlfasimQuasiNewton
             tolerance: float = 0.0001
             maximum_iterations: int = 5
             maximum_timestep_change_factor: float = 2
             maximum_cfl_value: float = 1.0
             relaxed_tolerance: float = 0.0
             divergence_tolerance: float = -1.0
-            friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <_alfasim_sdk.constants.EvaluationStrategyType>`\  = EvaluationStrategyType.TimeExplicit
-            simulation_mode: \ :class:`SimulationModeType <_alfasim_sdk.constants.SimulationModeType>`\  = SimulationModeType.Default
+            friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._alfasim_sdk.constants.EvaluationStrategyType>`\  = EvaluationStrategyType.TimeExplicit
+            simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._alfasim_sdk.constants.SimulationModeType>`\  = SimulationModeType.Default
             enable_solver_caching: bool = True
             enable_solver_caching: bool = True
             caching_rtol: float = 0.01
@@ -25,15 +25,15 @@
 
     .. parsed-literal::
 
-            nonlinear_solver_type: \ :class:`NonlinearSolverType <_alfasim_sdk.constants.NonlinearSolverType>`\ # optional
+            nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._alfasim_sdk.constants.NonlinearSolverType>`\ # optional
             tolerance: number # optional
             maximum_iterations: number # optional
             maximum_timestep_change_factor: number # optional
             maximum_cfl_value: number # optional
             relaxed_tolerance: number # optional
             divergence_tolerance: number # optional
-            friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <_alfasim_sdk.constants.EvaluationStrategyType>`\ # optional
-            simulation_mode: \ :class:`SimulationModeType <_alfasim_sdk.constants.SimulationModeType>`\ # optional
+            friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._alfasim_sdk.constants.EvaluationStrategyType>`\ # optional
+            simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._alfasim_sdk.constants.SimulationModeType>`\ # optional
             enable_solver_caching: boolean # optional
             enable_solver_caching: number # optional
             caching_rtol: number # optional

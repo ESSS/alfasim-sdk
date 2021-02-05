@@ -6,13 +6,13 @@
 
         class PumpEquipmentDescription
             position: \ :class:`Scalar <barril.units.Scalar>`
-            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\  = PumpType.ConstantPressure
+            type: \ :class:`PumpType <alfasim_sdk._alfasim_sdk.constants.PumpType>`\  = PumpType.ConstantPressure
             pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
             thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
             table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\  = SpeedCurveDescription()
-            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\  = InterpolationType.Constant
-            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\  = FlowDirection.Forward
+            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._alfasim_sdk.constants.InterpolationType>`\  = InterpolationType.Constant
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._alfasim_sdk.constants.FlowDirection>`\  = FlowDirection.Forward
 
 .. tab:: Schema
 
@@ -21,7 +21,7 @@
             position: 
                 value: number
                 unit: string
-            type: \ :class:`PumpType <_alfasim_sdk.constants.PumpType>`\ # optional
+            type: \ :class:`PumpType <alfasim_sdk._alfasim_sdk.constants.PumpType>`\ # optional
             pressure_boost: 
                 value: number
                 unit: string # optional
@@ -30,5 +30,5 @@
                 unit: string # optional
             table: \ :class:`table_pump_description_schema <TablePumpDescription>`\ # optional
             speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\ # optional
-            speed_curve_interpolation_type: \ :class:`InterpolationType <_alfasim_sdk.constants.InterpolationType>`\ # optional
-            flow_direction: \ :class:`FlowDirection <_alfasim_sdk.constants.FlowDirection>`\ # optional
+            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._alfasim_sdk.constants.InterpolationType>`\ # optional
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._alfasim_sdk.constants.FlowDirection>`\ # optional

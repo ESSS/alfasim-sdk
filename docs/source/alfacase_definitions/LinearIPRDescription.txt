@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class LinearIPRDescription
-            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\  = WellIndexPhaseType.Oil
+            well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._alfasim_sdk.constants.WellIndexPhaseType>`\  = WellIndexPhaseType.Oil
             min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
             well_index: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(24.0, 'm3/bar.d', 'productivity index')
 
@@ -13,7 +13,7 @@
 
     .. parsed-literal::
 
-            well_index_phase: \ :class:`WellIndexPhaseType <_alfasim_sdk.constants.WellIndexPhaseType>`\ # optional
+            well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._alfasim_sdk.constants.WellIndexPhaseType>`\ # optional
             min_pressure_difference: 
                 value: number
                 unit: string # optional

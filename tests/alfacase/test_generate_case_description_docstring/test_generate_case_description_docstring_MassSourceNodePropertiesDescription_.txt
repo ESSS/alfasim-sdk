@@ -8,7 +8,7 @@
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
             tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
             temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
-            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\  = MassSourceType.MassFlowRates
+            source_type: \ :class:`MassSourceType <alfasim_sdk._alfasim_sdk.constants.MassSourceType>`\  = MassSourceType.MassFlowRates
             volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
             mass_flow_rates: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
             total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/s', 'mass flow rate')
@@ -26,7 +26,7 @@
             temperature: 
                 value: number
                 unit: string # optional
-            source_type: \ :class:`MassSourceType <_alfasim_sdk.constants.MassSourceType>`\ # optional
+            source_type: \ :class:`MassSourceType <alfasim_sdk._alfasim_sdk.constants.MassSourceType>`\ # optional
             volumetric_flow_rates_std: 
                 string: 
                     value: number

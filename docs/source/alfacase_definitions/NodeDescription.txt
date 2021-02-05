@@ -6,7 +6,7 @@
 
         class NodeDescription
             name: str
-            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`
+            node_type: \ :class:`NodeCellType <alfasim_sdk._alfasim_sdk.constants.NodeCellType>`
             pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
             pressure_properties: \ :class:`PressureNodePropertiesDescription <PressureNodePropertiesDescription>`\  = PressureNodePropertiesDescription()
             mass_source_properties: \ :class:`MassSourceNodePropertiesDescription <MassSourceNodePropertiesDescription>`\  = MassSourceNodePropertiesDescription()
@@ -18,7 +18,7 @@
     .. parsed-literal::
 
             name: string
-            node_type: \ :class:`NodeCellType <_alfasim_sdk.constants.NodeCellType>`
+            node_type: \ :class:`NodeCellType <alfasim_sdk._alfasim_sdk.constants.NodeCellType>`
             pvt_model: string # optional
             pressure_properties: \ :class:`pressure_node_properties_description_schema <PressureNodePropertiesDescription>`\ # optional
             mass_source_properties: \ :class:`mass_source_node_properties_description_schema <MassSourceNodePropertiesDescription>`\ # optional

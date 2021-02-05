@@ -6,7 +6,7 @@
 
         class MaterialDescription
             name: str
-            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\  = MaterialType.Solid
+            material_type: \ :class:`MaterialType <alfasim_sdk._alfasim_sdk.constants.MaterialType>`\  = MaterialType.Solid
             density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/m3', 'density')
             thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m.degC', 'thermal conductivity')
             heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'J/kg.degC', 'specific heat capacity')
@@ -20,7 +20,7 @@
     .. parsed-literal::
 
             name: string
-            material_type: \ :class:`MaterialType <_alfasim_sdk.constants.MaterialType>`\ # optional
+            material_type: \ :class:`MaterialType <alfasim_sdk._alfasim_sdk.constants.MaterialType>`\ # optional
             density: 
                 value: number
                 unit: string # optional

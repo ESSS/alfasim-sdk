@@ -9,18 +9,28 @@ from barril.units import Scalar
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
-from _alfasim_sdk import constants
-from _alfasim_sdk.alfacase import case_description
-from _alfasim_sdk.alfacase.case_description import MaterialDescription
-from _alfasim_sdk.alfacase.case_description import PvtModelTableParametersDescription
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_enum
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance_list
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
-from _alfasim_sdk.alfacase.case_description_attributes import collapse_array_repr
-from _alfasim_sdk.alfacase.case_description_attributes import InvalidReferenceError
-from _alfasim_sdk.alfacase.case_description_attributes import numpy_array_validator
-from _alfasim_sdk.constants import NodeCellType
+from alfasim_sdk import MaterialDescription
+from alfasim_sdk import NodeCellType
+from alfasim_sdk import PvtModelTableParametersDescription
+from alfasim_sdk._alfasim_sdk import constants
+from alfasim_sdk._alfasim_sdk.alfacase import case_description
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import attrib_enum
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+    attrib_instance,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+    attrib_instance_list,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+    collapse_array_repr,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+    InvalidReferenceError,
+)
+from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+    numpy_array_validator,
+)
 
 
 def test_physics_description_path_validator(tmp_path):
@@ -539,7 +549,7 @@ class TestEnsureValidReferences:
         2) default_model must be a valid pvt_model defined on pvt_models
         3) If default_model is None, all components that uses pvt_model must be assigined.
         """
-        from _alfasim_sdk.constants import NodeCellType
+        from alfasim_sdk._alfasim_sdk.constants import NodeCellType
 
         case = attr.evolve(
             default_case,
@@ -906,7 +916,7 @@ def test_material_description_as_dict():
     Ensure that the helper function AsDict returns a diction where the Scalar are tuple with value and unit.
     """
 
-    from _alfasim_sdk import constants
+    from alfasim_sdk._alfasim_sdk import constants
 
     assert MaterialDescription(name="Acme").as_dict() == {
         "density": (1.0, "kg/m3"),

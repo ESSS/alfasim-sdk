@@ -16,21 +16,21 @@ from attr.validators import optional
 from barril.units import Array
 from barril.units import Scalar
 
-from _alfasim_sdk import constants
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_dict_of
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_enum
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance_list
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
-from _alfasim_sdk.alfacase.case_description_attributes import collapse_array_repr
-from _alfasim_sdk.alfacase.case_description_attributes import dict_of
-from _alfasim_sdk.alfacase.case_description_attributes import dict_of_array
-from _alfasim_sdk.alfacase.case_description_attributes import dict_with_scalar
-from _alfasim_sdk.alfacase.case_description_attributes import InvalidReferenceError
-from _alfasim_sdk.alfacase.case_description_attributes import list_of_strings
-from _alfasim_sdk.alfacase.case_description_attributes import Numpy1DArray
-from _alfasim_sdk.alfacase.case_description_attributes import numpy_array_validator
-from _alfasim_sdk.alfacase.case_description_attributes import PhaseName
+from .case_description_attributes import attrib_dict_of
+from .case_description_attributes import attrib_enum
+from .case_description_attributes import attrib_instance
+from .case_description_attributes import attrib_instance_list
+from .case_description_attributes import attrib_scalar
+from .case_description_attributes import collapse_array_repr
+from .case_description_attributes import dict_of
+from .case_description_attributes import dict_of_array
+from .case_description_attributes import dict_with_scalar
+from .case_description_attributes import InvalidReferenceError
+from .case_description_attributes import list_of_strings
+from .case_description_attributes import Numpy1DArray
+from .case_description_attributes import numpy_array_validator
+from .case_description_attributes import PhaseName
+from alfasim_sdk._alfasim_sdk import constants
 
 
 @attr.s(frozen=True, slots=True)

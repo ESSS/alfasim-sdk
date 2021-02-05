@@ -12,7 +12,7 @@ def build(ctx):
 
 
 def schema_file_path() -> Path:
-    return Path(__file__).parent / "src/_alfasim_sdk/alfacase/schema.py"
+    return Path(__file__).parent / "src/alfasim_sdk/_alfasim_sdk/alfacase/schema.py"
 
 
 def alfacase_definitions_path() -> Path:
@@ -28,9 +28,11 @@ def cog(ctx, check=False):
     """ Executes cog on _alfasim_sdk/alfacase/schema.py to generate the schema for strictyaml. """
     ctx.run(command=f"cog -rc {schema_file_path()}", warn=True)
 
-    from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
-    from _alfasim_sdk.alfacase.case_description import CaseDescription
-    from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+    from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import (
+        get_all_classes_that_needs_schema,
+    )
+    from alfasim_sdk._alfasim_sdk.alfacase.case_description import CaseDescription
+    from alfasim_sdk._alfasim_sdk.alfacase.generate_case_description_docstring import (
         generate_definition,
     )
 
@@ -38,11 +40,8 @@ def cog(ctx, check=False):
         output = generate_definition(class_)
         Path(alfacase_definitions_path() / f"{class_.__name__}.txt").write_text(output)
 
-    from _alfasim_sdk.alfacase.generate_case_description_docstring import (
+    from alfasim_sdk._alfasim_sdk.alfacase.generate_case_description_docstring import (
         generate_list_of_units,
-    )
-
-    from _alfasim_sdk.alfacase.generate_case_description_docstring import (
         CATEGORIES_USED_ON_DESCRIPTION,
     )
 

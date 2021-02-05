@@ -7,7 +7,7 @@
         class GasLiftValveEquipmentDescription
             position: \ :class:`Scalar <barril.units.Scalar>`
             diameter: \ :class:`Scalar <barril.units.Scalar>`
-            valve_type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`
+            valve_type: \ :class:`ValveType <alfasim_sdk._alfasim_sdk.constants.ValveType>`
             delta_p_min: \ :class:`Scalar <barril.units.Scalar>`
             discharge_coeff: \ :class:`Scalar <barril.units.Scalar>`
 
@@ -21,7 +21,7 @@
             diameter: 
                 value: number
                 unit: string
-            valve_type: \ :class:`ValveType <_alfasim_sdk.constants.ValveType>`
+            valve_type: \ :class:`ValveType <alfasim_sdk._alfasim_sdk.constants.ValveType>`
             delta_p_min: 
                 value: number
                 unit: string

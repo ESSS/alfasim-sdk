@@ -12,10 +12,12 @@ import pytest
     ],
 )
 def test_get_extras_default_required_version(mocker, version, expected):
-    from _alfasim_sdk.alfasim_sdk_utils import get_extras_default_required_version
+    from alfasim_sdk._alfasim_sdk.alfasim_sdk_utils import (
+        get_extras_default_required_version,
+    )
 
     mock_version = mocker.patch(
-        "_alfasim_sdk.alfasim_sdk_utils.get_current_version", autospec=True
+        "alfasim_sdk._alfasim_sdk.alfasim_sdk_utils.get_current_version", autospec=True
     )
     mock_version.return_value = version
     assert get_extras_default_required_version() == expected
