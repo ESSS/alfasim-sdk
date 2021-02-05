@@ -3,8 +3,8 @@ from typing import Union
 
 from pluggy import HookspecMarker
 
-from alfasim_sdk._alfasim_sdk import ErrorMessage
-from alfasim_sdk._alfasim_sdk import WarningMessage
+from alfasim_sdk import ErrorMessage
+from alfasim_sdk import WarningMessage
 from alfasim_sdk._alfasim_sdk.context import Context
 from alfasim_sdk._alfasim_sdk.variables import SecondaryVariable
 
