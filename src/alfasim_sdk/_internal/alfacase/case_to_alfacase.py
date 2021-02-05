@@ -11,9 +11,9 @@ import numpy as np
 from barril.units import Array
 from barril.units import Scalar
 
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_attrs
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
+from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
 
 
 ATTRIBUTES = Union[Scalar, Array, Enum, np.ndarray, List, List[Enum]]

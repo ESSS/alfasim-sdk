@@ -5,8 +5,8 @@ from pluggy import HookspecMarker
 
 from alfasim_sdk import ErrorMessage
 from alfasim_sdk import WarningMessage
-from alfasim_sdk._alfasim_sdk.context import Context
-from alfasim_sdk._alfasim_sdk.variables import SecondaryVariable
+from alfasim_sdk._internal.context import Context
+from alfasim_sdk._internal.variables import SecondaryVariable
 
 
 hookspec = HookspecMarker("ALFAsim")

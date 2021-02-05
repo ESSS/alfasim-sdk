@@ -2,7 +2,7 @@ import functools
 from typing import Callable
 from typing import Optional
 
-from alfasim_sdk._alfasim_sdk.alfasim_sdk_utils import get_attr_class
+from alfasim_sdk._internal.alfasim_sdk_utils import get_attr_class
 
 
 def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callable:

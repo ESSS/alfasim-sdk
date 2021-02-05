@@ -9,7 +9,7 @@
             temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
             tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
-            split_type: \ :class:`MassInflowSplitType <alfasim_sdk._alfasim_sdk.constants.MassInflowSplitType>`\  = MassInflowSplitType.ConstantVolumeFraction
+            split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\  = MassInflowSplitType.ConstantVolumeFraction
             mass_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
             volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
             gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
@@ -30,7 +30,7 @@
             tracer_mass_fraction: 
                 values: [number]
                 unit: string # optional
-            split_type: \ :class:`MassInflowSplitType <alfasim_sdk._alfasim_sdk.constants.MassInflowSplitType>`\ # optional
+            split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\ # optional
             mass_fractions: 
                 string: 
                     value: number

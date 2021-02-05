@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import get_category_for
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 
 
 def generate_alfatable_file(alfacase_file, alfatable_filename, description):

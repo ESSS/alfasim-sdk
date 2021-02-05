@@ -19,8 +19,8 @@ from barril.units import Scalar
 from barril.units import UnitDatabase
 from strictyaml import YAML
 
-from alfasim_sdk._alfasim_sdk import constants
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
 
 
 @attr.s
@@ -51,8 +51,8 @@ class DescriptionDocument:
         alfacase.schema.case_schema
         """
         import strictyaml
-        from alfasim_sdk._alfasim_sdk.alfacase.schema import case_description_schema
-        from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+        from alfasim_sdk._internal.alfacase.schema import case_description_schema
+        from alfasim_sdk._internal.alfacase.case_description_attributes import (
             DescriptionError,
         )
 

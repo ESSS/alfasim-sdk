@@ -2,7 +2,7 @@ import os
 
 from click.testing import CliRunner
 
-from alfasim_sdk._alfasim_sdk.cli import console_main
+from alfasim_sdk._internal.cli import console_main
 
 
 def test_command_line_interface():

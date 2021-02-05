@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
+from alfasim_sdk._internal.alfacase import case_description
 
 
 def generate_alfacase_file(
@@ -76,7 +76,7 @@ def convert_alfacase_to_description(
     """
     Return a alfasim_sdk.alfacase.case_description.Case with all information provided on file_yaml.
     """
-    from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import load_case_description
-    from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import DescriptionDocument
+    from alfasim_sdk._internal.alfacase.alfacase_to_case import load_case_description
+    from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 
     return load_case_description(DescriptionDocument.from_file(file_alfacase))

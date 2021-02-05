@@ -77,7 +77,7 @@ def test_alfacase_file_export(tmp_path):
     pvt_model_table_parameter = {
         "FLUID-A 1": PvtModelTableParametersDescription.create_constant()
     }
-    from alfasim_sdk._alfasim_sdk.alfacase import case_description
+    from alfasim_sdk._internal.alfacase import case_description
 
     case_description = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
@@ -94,7 +94,7 @@ def test_alfacase_file_export(tmp_path):
 
 
 def test_alfacase_file_load(tmp_path):
-    from alfasim_sdk._alfasim_sdk.alfacase import case_description
+    from alfasim_sdk._internal.alfacase import case_description
 
     alfacase_file = tmp_path / "mycase.alfacase"
     pvt_table_parameters_description = (

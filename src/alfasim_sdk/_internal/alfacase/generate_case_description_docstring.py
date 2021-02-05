@@ -13,20 +13,20 @@ from attr._make import Attribute
 from barril.units import Array
 from barril.units._scalar import Scalar
 
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_array
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_attrs
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_boolean
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_dict
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_enum
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_float
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_int
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_list
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_path
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_scalar
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_str
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_union
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import obtain_schema_name
+from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
+from alfasim_sdk._internal.alfacase.generate_schema import is_array
+from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
+from alfasim_sdk._internal.alfacase.generate_schema import is_boolean
+from alfasim_sdk._internal.alfacase.generate_schema import is_dict
+from alfasim_sdk._internal.alfacase.generate_schema import is_enum
+from alfasim_sdk._internal.alfacase.generate_schema import is_float
+from alfasim_sdk._internal.alfacase.generate_schema import is_int
+from alfasim_sdk._internal.alfacase.generate_schema import is_list
+from alfasim_sdk._internal.alfacase.generate_schema import is_path
+from alfasim_sdk._internal.alfacase.generate_schema import is_scalar
+from alfasim_sdk._internal.alfacase.generate_schema import is_str
+from alfasim_sdk._internal.alfacase.generate_schema import is_union
+from alfasim_sdk._internal.alfacase.generate_schema import obtain_schema_name
 
 
 INDENT = "    "

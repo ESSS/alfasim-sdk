@@ -3,8 +3,8 @@ import pytest
 
 @pytest.fixture
 def user_data_model():
-    from alfasim_sdk._alfasim_sdk.models import data_model
-    from alfasim_sdk._alfasim_sdk.types import BaseField
+    from alfasim_sdk._internal.models import data_model
+    from alfasim_sdk._internal.types import BaseField
 
     class ValidType(BaseField):
         pass
@@ -18,8 +18,8 @@ def user_data_model():
 
 @pytest.fixture
 def user_data_container(user_data_model):
-    from alfasim_sdk._alfasim_sdk.models import container_model
-    from alfasim_sdk._alfasim_sdk.types import BaseField
+    from alfasim_sdk._internal.models import container_model
+    from alfasim_sdk._internal.types import BaseField
 
     class ValidType(BaseField):
         pass
@@ -60,8 +60,8 @@ def test_data_container(user_data_container):
 
 
 def test_invalid_attribute():
-    from alfasim_sdk._alfasim_sdk.models import data_model
-    from alfasim_sdk._alfasim_sdk.types import BaseField
+    from alfasim_sdk._internal.models import data_model
+    from alfasim_sdk._internal.types import BaseField
 
     class ValidType(BaseField):
         pass
@@ -88,8 +88,8 @@ def test_invalid_attribute():
 
 
 def test_attribute_order():
-    from alfasim_sdk._alfasim_sdk.models import data_model
-    from alfasim_sdk._alfasim_sdk.types import (
+    from alfasim_sdk._internal.models import data_model
+    from alfasim_sdk._internal.types import (
         Boolean,
         Reference,
         TracerType,

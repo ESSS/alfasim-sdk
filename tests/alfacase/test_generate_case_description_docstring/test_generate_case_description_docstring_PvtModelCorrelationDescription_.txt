@@ -8,7 +8,7 @@
             oil_density_std: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(850.0, 'kg/m3', 'density')
             gas_density_std: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.9, 'kg/m3', 'density')
             rs_sat: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(150.0, 'sm3/sm3', 'standard volume per standard volume')
-            pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._alfasim_sdk.constants.CorrelationPackage>`\  = CorrelationPackage.Standing
+            pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._internal.constants.CorrelationPackage>`\  = CorrelationPackage.Standing
 
 .. tab:: Schema
 
@@ -23,4 +23,4 @@
             rs_sat: 
                 value: number
                 unit: string # optional
-            pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._alfasim_sdk.constants.CorrelationPackage>`\ # optional
+            pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._internal.constants.CorrelationPackage>`\ # optional

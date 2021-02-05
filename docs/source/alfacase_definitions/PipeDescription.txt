@@ -8,8 +8,8 @@
             name: str
             source: str
             target: str
-            source_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <alfasim_sdk._alfasim_sdk.constants.WellConnectionPort>`\] = None
-            target_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <alfasim_sdk._alfasim_sdk.constants.WellConnectionPort>`\] = None
+            source_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <alfasim_sdk._internal.constants.WellConnectionPort>`\] = None
+            target_port: \ :class:`Optional <typing.Optional>`\[\ :class:`WellConnectionPort <alfasim_sdk._internal.constants.WellConnectionPort>`\] = None
             pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
             profile: \ :class:`ProfileDescription <ProfileDescription>`\  = ProfileDescription()
             equipment: \ :class:`EquipmentDescription <EquipmentDescription>`\  = EquipmentDescription()
@@ -24,8 +24,8 @@
             name: string
             source: string
             target: string
-            source_port: \ :class:`well_connection_port_schema <alfasim_sdk._alfasim_sdk.constants.WellConnectionPort>`\ # optional
-            target_port: \ :class:`well_connection_port_schema <alfasim_sdk._alfasim_sdk.constants.WellConnectionPort>`\ # optional
+            source_port: \ :class:`well_connection_port_schema <alfasim_sdk._internal.constants.WellConnectionPort>`\ # optional
+            target_port: \ :class:`well_connection_port_schema <alfasim_sdk._internal.constants.WellConnectionPort>`\ # optional
             pvt_model: string # optional
             profile: \ :class:`profile_description_schema <ProfileDescription>`\ # optional
             equipment: \ :class:`equipment_description_schema <EquipmentDescription>`\ # optional

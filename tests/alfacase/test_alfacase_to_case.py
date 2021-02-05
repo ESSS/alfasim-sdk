@@ -15,25 +15,25 @@ from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import
     ensure_descriptions_are_equal,
 )
 from alfasim_sdk import convert_description_to_alfacase
-from alfasim_sdk._alfasim_sdk.alfacase import alfacase_to_case
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
-from alfasim_sdk._alfasim_sdk.alfacase import schema
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import DescriptionDocument
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import get_array_loader
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import get_scalar_loader
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import load_physics_description
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import (
+from alfasim_sdk._internal.alfacase import alfacase_to_case
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase import schema
+from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
+from alfasim_sdk._internal.alfacase.alfacase_to_case import get_array_loader
+from alfasim_sdk._internal.alfacase.alfacase_to_case import get_scalar_loader
+from alfasim_sdk._internal.alfacase.alfacase_to_case import load_physics_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     load_pvt_models_description,
 )
-from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
     DescriptionError,
 )
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import convert_to_snake_case
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import (
+from alfasim_sdk._internal.alfacase.generate_schema import convert_to_snake_case
+from alfasim_sdk._internal.alfacase.generate_schema import (
     get_all_classes_that_needs_schema,
 )
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import is_attrs
+from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
+from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
 
 
 @attr.s(frozen=True)

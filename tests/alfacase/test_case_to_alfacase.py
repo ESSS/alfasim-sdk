@@ -5,8 +5,8 @@ from ..common_testing.alfasim_sdk_common_testing.case_builders import (
 )
 from alfasim_sdk import convert_description_to_alfacase
 from alfasim_sdk import NumericalOptionsDescription
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
-from alfasim_sdk._alfasim_sdk.alfacase.alfacase_to_case import DescriptionDocument
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 
 
 def test_convert_description_to_alfacase_with_empty_dict(tmp_path):

@@ -1,8 +1,8 @@
 from barril.units import Array
 from barril.units import Scalar
 
-from alfasim_sdk._alfasim_sdk import constants
-from alfasim_sdk._alfasim_sdk.alfacase import case_description
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
 
 
 def build_simple_segment():

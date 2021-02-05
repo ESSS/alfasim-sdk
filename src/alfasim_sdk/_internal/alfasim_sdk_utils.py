@@ -3,10 +3,10 @@ from typing import Tuple
 
 import attr
 
-from alfasim_sdk._alfasim_sdk.types import BaseField
-from alfasim_sdk._alfasim_sdk.types import Group
-from alfasim_sdk._alfasim_sdk.types import Tab
-from alfasim_sdk._alfasim_sdk.types import Tabs
+from alfasim_sdk._internal.types import BaseField
+from alfasim_sdk._internal.types import Group
+from alfasim_sdk._internal.types import Tab
+from alfasim_sdk._internal.types import Tabs
 
 
 def get_attr_class(

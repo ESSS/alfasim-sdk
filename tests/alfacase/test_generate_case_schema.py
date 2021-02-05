@@ -12,21 +12,21 @@ from barril.units import Scalar
 
 from alfasim_sdk import CaseDescription
 from alfasim_sdk import CompressorEquipmentDescription
-from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import attrib_enum
-from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
     attrib_instance,
 )
-from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import (
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
     attrib_instance_list,
 )
-from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
-from alfasim_sdk._alfasim_sdk.alfacase.case_description_attributes import Numpy1DArray
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import _obtain_referred_type
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import generate_alfacase_schema
-from alfasim_sdk._alfasim_sdk.alfacase.generate_schema import (
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_scalar
+from alfasim_sdk._internal.alfacase.case_description_attributes import Numpy1DArray
+from alfasim_sdk._internal.alfacase.generate_schema import _obtain_referred_type
+from alfasim_sdk._internal.alfacase.generate_schema import generate_alfacase_schema
+from alfasim_sdk._internal.alfacase.generate_schema import (
     get_all_classes_that_needs_schema,
 )
-from alfasim_sdk._alfasim_sdk.alfacase.schema import case_description_schema
+from alfasim_sdk._internal.alfacase.schema import case_description_schema
 
 
 class TestGenerateStrictYaml:

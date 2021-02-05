@@ -30,7 +30,7 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
-from alfasim_sdk._alfasim_sdk import constants
+from alfasim_sdk._internal import constants
 
 
 @attr.s(frozen=True, slots=True)
