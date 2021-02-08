@@ -8,7 +8,7 @@
             curve_names: \ :class:`List <typing.List>`\[str]
             element_name: str
             position: \ :class:`Scalar <barril.units.Scalar>`
-            location: \ :class:`OutputAttachmentLocation <_alfasim_sdk.constants.OutputAttachmentLocation>`
+            location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
 
 .. tab:: Schema
 
@@ -20,4 +20,4 @@
             position: 
                 value: number
                 unit: string
-            location: \ :class:`OutputAttachmentLocation <_alfasim_sdk.constants.OutputAttachmentLocation>`
+            location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`

@@ -6,7 +6,7 @@
 
         class SeparatorNodePropertiesDescription
             environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(25.0, 'degC', 'temperature')
-            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\  = SeparatorGeometryType.VerticalCylinder
+            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\  = SeparatorGeometryType.VerticalCylinder
             length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
             overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
             radius: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
@@ -20,7 +20,7 @@
             environment_temperature: 
                 value: number
                 unit: string # optional
-            geometry: \ :class:`SeparatorGeometryType <_alfasim_sdk.constants.SeparatorGeometryType>`\ # optional
+            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\ # optional
             length: 
                 value: number
                 unit: string # optional

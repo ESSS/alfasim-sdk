@@ -2,7 +2,7 @@
 ##[[[cog
 # import cog
 # from alfasim_sdk import CaseDescription
-# from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
+# from alfasim_sdk._internal.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
 # cog.out("from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
 # cog.out("\n\n")
 # cog.out("\n\n")

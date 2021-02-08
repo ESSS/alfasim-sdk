@@ -3,19 +3,19 @@ import re
 import pytest
 from barril.units import Scalar
 
-from _alfasim_sdk.constants import EmulsionModelType
-from _alfasim_sdk.constants import HydrodynamicModelType
-from _alfasim_sdk.constants import SolidsModelType
-from _alfasim_sdk.context import EdgeInfo
-from _alfasim_sdk.context import HydrodynamicModelInfo
-from _alfasim_sdk.context import NodeInfo
-from _alfasim_sdk.context import PhysicsOptionsInfo
-from _alfasim_sdk.context import PipelineInfo
-from _alfasim_sdk.context import PipelineSegmentInfo
+from alfasim_sdk._internal.constants import EmulsionModelType
+from alfasim_sdk._internal.constants import HydrodynamicModelType
+from alfasim_sdk._internal.constants import SolidsModelType
+from alfasim_sdk._internal.context import EdgeInfo
+from alfasim_sdk._internal.context import HydrodynamicModelInfo
+from alfasim_sdk._internal.context import NodeInfo
+from alfasim_sdk._internal.context import PhysicsOptionsInfo
+from alfasim_sdk._internal.context import PipelineInfo
+from alfasim_sdk._internal.context import PipelineSegmentInfo
 
 
 def test_plugin_info():
-    from _alfasim_sdk.context import PluginInfo
+    from alfasim_sdk._internal.context import PluginInfo
 
     error_msg = "'name' must be 'str' (got 1 that is a 'int')"
     with pytest.raises(TypeError, match=re.escape(error_msg)):

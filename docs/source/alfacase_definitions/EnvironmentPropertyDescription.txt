@@ -7,7 +7,7 @@
         class EnvironmentPropertyDescription
             position: \ :class:`Scalar <barril.units.Scalar>`
             temperature: \ :class:`Scalar <barril.units.Scalar>`
-            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
+            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
             heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
             overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
             fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm/s', 'velocity')
@@ -22,7 +22,7 @@
             temperature: 
                 value: number
                 unit: string
-            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <_alfasim_sdk.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
+            type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
             heat_transfer_coefficient: 
                 value: number
                 unit: string # optional

@@ -10,16 +10,23 @@ import pytest
 from barril.units import Array
 from barril.units import Scalar
 
-from _alfasim_sdk.alfacase.case_description import CaseDescription
-from _alfasim_sdk.alfacase.case_description import CompressorEquipmentDescription
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_enum
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_instance_list
-from _alfasim_sdk.alfacase.case_description_attributes import attrib_scalar
-from _alfasim_sdk.alfacase.case_description_attributes import Numpy1DArray
-from _alfasim_sdk.alfacase.generate_schema import _obtain_referred_type
-from _alfasim_sdk.alfacase.generate_schema import generate_alfacase_schema
-from _alfasim_sdk.alfacase.generate_schema import get_all_classes_that_needs_schema
+from alfasim_sdk import CaseDescription
+from alfasim_sdk import CompressorEquipmentDescription
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    attrib_instance,
+)
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    attrib_instance_list,
+)
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_scalar
+from alfasim_sdk._internal.alfacase.case_description_attributes import Numpy1DArray
+from alfasim_sdk._internal.alfacase.generate_schema import _obtain_referred_type
+from alfasim_sdk._internal.alfacase.generate_schema import generate_alfacase_schema
+from alfasim_sdk._internal.alfacase.generate_schema import (
+    get_all_classes_that_needs_schema,
+)
+from alfasim_sdk._internal.alfacase.schema import case_description_schema
 
 
 class TestGenerateStrictYaml:
@@ -380,8 +387,6 @@ def test_alfasim_schema_is_usable():
     Smoke test to ensure that the Schema has valid python syntax
     """
     from strictyaml import as_document
-
-    from _alfasim_sdk.alfacase.schema import case_description_schema
 
     as_document({"name": "Name"}, case_description_schema)
 

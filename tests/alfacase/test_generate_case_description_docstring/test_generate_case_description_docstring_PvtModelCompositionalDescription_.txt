@@ -5,9 +5,9 @@
     .. parsed-literal::
 
         class PvtModelCompositionalDescription
-            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\  = EquationOfStateType.PengRobinson
-            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\  = SurfaceTensionType.Weinaugkatz
-            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\  = PVTCompositionalViscosityModel.CorrespondingStatesPrinciple
+            equation_of_state_type: \ :class:`EquationOfStateType <alfasim_sdk._internal.constants.EquationOfStateType>`\  = EquationOfStateType.PengRobinson
+            surface_tension_model_type: \ :class:`SurfaceTensionType <alfasim_sdk._internal.constants.SurfaceTensionType>`\  = SurfaceTensionType.Weinaugkatz
+            viscosity_model: \ :class:`PVTCompositionalViscosityModel <alfasim_sdk._internal.constants.PVTCompositionalViscosityModel>`\  = PVTCompositionalViscosityModel.CorrespondingStatesPrinciple
             heavy_components: \ :class:`List <typing.List>`\[\ :class:`HeavyComponentDescription <HeavyComponentDescription>`\] = []
             light_components: \ :class:`List <typing.List>`\[\ :class:`LightComponentDescription <LightComponentDescription>`\] = []
             fluids: \ :class:`Dict <typing.Dict>`\[str, \ :class:`FluidDescription <FluidDescription>`\] = {}
@@ -16,9 +16,9 @@
 
     .. parsed-literal::
 
-            equation_of_state_type: \ :class:`EquationOfStateType <_alfasim_sdk.constants.EquationOfStateType>`\ # optional
-            surface_tension_model_type: \ :class:`SurfaceTensionType <_alfasim_sdk.constants.SurfaceTensionType>`\ # optional
-            viscosity_model: \ :class:`PVTCompositionalViscosityModel <_alfasim_sdk.constants.PVTCompositionalViscosityModel>`\ # optional
+            equation_of_state_type: \ :class:`EquationOfStateType <alfasim_sdk._internal.constants.EquationOfStateType>`\ # optional
+            surface_tension_model_type: \ :class:`SurfaceTensionType <alfasim_sdk._internal.constants.SurfaceTensionType>`\ # optional
+            viscosity_model: \ :class:`PVTCompositionalViscosityModel <alfasim_sdk._internal.constants.PVTCompositionalViscosityModel>`\ # optional
             heavy_components: 
                 - \ :class:`heavy_component_description_schema <HeavyComponentDescription>`\ # optional
             light_components: 

@@ -38,4 +38,4 @@ repos:
         language_version: python3
         args:
             - --ignore=E,W,N803
-            - --per-file-ignores=src/_alfasim_sdk/hook_specs.py:F722,F821
+            - --per-file-ignores=src/alfasim_sdk/_internal/hook_specs.py:F722,F821

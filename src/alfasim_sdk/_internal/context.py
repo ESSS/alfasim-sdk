@@ -8,11 +8,11 @@ from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import Scalar
 
-from _alfasim_sdk.constants import EmulsionModelType
-from _alfasim_sdk.constants import HydrodynamicModelType
-from _alfasim_sdk.constants import SolidsModelType
-from _alfasim_sdk.validators import list_of_strings
-from _alfasim_sdk.validators import non_empty_str
+from alfasim_sdk._internal.constants import EmulsionModelType
+from alfasim_sdk._internal.constants import HydrodynamicModelType
+from alfasim_sdk._internal.constants import SolidsModelType
+from alfasim_sdk._internal.validators import list_of_strings
+from alfasim_sdk._internal.validators import non_empty_str
 
 
 @attr.s(frozen=True)

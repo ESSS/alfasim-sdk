@@ -15,7 +15,7 @@ def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:
         )
 
     if not value or value.isspace():
-        from _alfasim_sdk.types import Enum
+        from alfasim_sdk._internal.types import Enum
 
         if isinstance(self, Enum):
             raise ValueError(

@@ -23,7 +23,7 @@ import pytest
     ],
 )
 def test_validation(attr, expected_type_error, expected_message):
-    from _alfasim_sdk.variables import (
+    from alfasim_sdk._internal.variables import (
         Visibility,
         Location,
         Scope,
@@ -51,7 +51,7 @@ def test_validation(attr, expected_type_error, expected_message):
 def test_variable_with_custom_category():
     from barril.units import UnitDatabase
 
-    from _alfasim_sdk.variables import (
+    from alfasim_sdk._internal.variables import (
         Location,
         Scope,
         SecondaryVariable,

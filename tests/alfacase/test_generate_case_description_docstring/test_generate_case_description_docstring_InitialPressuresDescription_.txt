@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class InitialPressuresDescription
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\  = TableInputType.length
+            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>`\  = TableInputType.length
             table_x: \ :class:`ReferencedPressureContainerDescription <ReferencedPressureContainerDescription>`\  = ReferencedPressureContainerDescription()
             table_y: \ :class:`ReferencedPressureContainerDescription <ReferencedPressureContainerDescription>`\  = ReferencedPressureContainerDescription()
             table_length: \ :class:`PressureContainerDescription <PressureContainerDescription>`\  = PressureContainerDescription()
@@ -14,7 +14,7 @@
 
     .. parsed-literal::
 
-            position_input_type: \ :class:`TableInputType <_alfasim_sdk.constants.TableInputType>`\ # optional
+            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>`\ # optional
             table_x: \ :class:`referenced_pressure_container_description_schema <ReferencedPressureContainerDescription>`\ # optional
             table_y: \ :class:`referenced_pressure_container_description_schema <ReferencedPressureContainerDescription>`\ # optional
             table_length: \ :class:`pressure_container_description_schema <PressureContainerDescription>`\ # optional

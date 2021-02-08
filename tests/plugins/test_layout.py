@@ -1,13 +1,13 @@
 import pytest
 
-from _alfasim_sdk.layout import tab
-from _alfasim_sdk.layout import tabs
-from _alfasim_sdk.types import String
+from alfasim_sdk._internal.layout import tab
+from alfasim_sdk._internal.layout import tabs
+from alfasim_sdk._internal.types import String
 
 
 def test_group():
-    from _alfasim_sdk.models import data_model
-    from _alfasim_sdk.layout import group
+    from alfasim_sdk._internal.models import data_model
+    from alfasim_sdk._internal.layout import group
 
     @data_model(caption="Foo")
     class ValidClass:
@@ -65,9 +65,9 @@ def test_group():
 
 
 def test_tabs():
-    from _alfasim_sdk.types import String
-    from _alfasim_sdk.layout import tabs, tab
-    from _alfasim_sdk.models import data_model
+    from alfasim_sdk._internal.types import String
+    from alfasim_sdk._internal.layout import tabs, tab
+    from alfasim_sdk._internal.models import data_model
 
     error_msg = "Error on attribute 'a' expecting a class decorated with @tab but received a String type"
     with pytest.raises(TypeError, match=error_msg):
