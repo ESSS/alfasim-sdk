@@ -20,10 +20,10 @@ digraph {
         invisible_3
 
         node[peripheries="0" shape="cds", color="#DA5961",  fontcolor="#DA5961" , style="" target="_top" fontsize=10]
-        hook_initialize_state_variables_calculator [label=" HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR" URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.initialize_state_variables_calculator"]
-        hook_calculate_state_variable [label=" HOOK_CALCULATE_STATE_VARIABLE", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_state_variable"]
-        hook_calculate_phase_pair_state_variable [label=" HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_phase_pair_state_variable"]
-        hook_finalize_state_variables_calculator [label=" HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR" URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.finalize_state_variables_calculator"]
+        hook_initialize_state_variables_calculator [label=" HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR" URL="../plugins/06_solver_hooks.html#alfasim_sdk._internal.hook_specs.initialize_state_variables_calculator"]
+        hook_calculate_state_variable [label=" HOOK_CALCULATE_STATE_VARIABLE", URL="../plugins/06_solver_hooks.html#alfasim_sdk._internal.hook_specs.calculate_state_variable"]
+        hook_calculate_phase_pair_state_variable [label=" HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE", URL="../plugins/06_solver_hooks.html#alfasim_sdk._internal.hook_specs.calculate_phase_pair_state_variable"]
+        hook_finalize_state_variables_calculator [label=" HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR" URL="../plugins/06_solver_hooks.html#alfasim_sdk._internal.hook_specs.finalize_state_variables_calculator"]
 
         {rank = same   node_2   hook_initialize_state_variables_calculator   }
         {rank = same   node_3   hook_calculate_state_variable   }
