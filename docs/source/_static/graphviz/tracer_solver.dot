@@ -18,12 +18,12 @@ digraph {
         hook_calculate_source_terms_point
 
         node[peripheries="0" shape="cds", color="#DA5961",  fontcolor="#DA5961" , style="" target="_top" fontsize=10]
-        hook_initialize_user_defined_tracer [label=" HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER" URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer"]
-        hook_set_bc_user_defined_tracer [label=" HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer"]
-        hook_update_variables [label=" HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver"]
-        hook_calculate_tracer_source_terms [label=" HOOK_CALCULATE_TRACER_SOURCE_TERM" URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_tracer_source_term"]
-        hook_update_bc_user_defined_tracer [label=" HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER" URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer"]
-        hook_calculate_mass_fraction_of_tracer_in_field [label=" HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD \n HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE" URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase" ]
+        hook_initialize_user_defined_tracer [label=" HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER" URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer"]
+        hook_set_bc_user_defined_tracer [label=" HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer"]
+        hook_update_variables [label=" HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver"]
+        hook_calculate_tracer_source_terms [label=" HOOK_CALCULATE_TRACER_SOURCE_TERM" URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_tracer_source_term"]
+        hook_update_bc_user_defined_tracer [label=" HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER" URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer"]
+        hook_calculate_mass_fraction_of_tracer_in_field [label=" HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD \n HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE" URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase" ]
 
         {rank = same   hook_update_variables_point   hook_update_variables}
         {rank = same   hook_calculate_source_terms_point   hook_calculate_tracer_source_terms   }

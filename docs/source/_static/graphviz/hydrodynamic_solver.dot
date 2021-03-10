@@ -5,7 +5,7 @@ digraph {
     edge [color="#8699A3", fontcolor="#2c3e50"]
 
     hydrodynamic_1 [label="Primary Variables \n (Solver Unknowns)"]
-    hydrodynamic_2 [label="Calculate \n State Variables" URL="../07_workflow.html#state-variable-calculator"]
+    hydrodynamic_2 [label="Calculate \n State Variables" URL="../plugins/07_workflow.html#state-variable-calculator"]
     hydrodynamic_3 [label="Calculate \n Secondary Variables"]
     hydrodynamic_4 [label="Calculate \n Source Terms"]
 
@@ -17,11 +17,11 @@ digraph {
 
     // Align Hooks
     node[peripheries="0", shape="cds", color="#DA5961", fontcolor="#DA5961", style=""]
-    hook_update_variables [label="HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.update_plugins_secondary_variables"]
+    hook_update_variables [label="HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.update_plugins_secondary_variables"]
 
-    hook_calculate_mass_source_terms [label="HOOK_CALCULATE_MASS_SOURCE_TERM", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_mass_source_term"]
-    hook_calculate_momentum_source_terms [label="HOOK_CALCULATE_MOMENTUM_SOURCE_TERM", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_momentum_source_term"]
-    hook_calculate_energy_source_terms [label="HOOK_CALCULATE_ENERGY_SOURCE_TERM", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_energy_source_term"]
+    hook_calculate_mass_source_terms [label="HOOK_CALCULATE_MASS_SOURCE_TERM", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_mass_source_term"]
+    hook_calculate_momentum_source_terms [label="HOOK_CALCULATE_MOMENTUM_SOURCE_TERM", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_momentum_source_term"]
+    hook_calculate_energy_source_terms [label="HOOK_CALCULATE_ENERGY_SOURCE_TERM", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.calculate_energy_source_term"]
 
     {rank = same; hook_update_variables_point; hook_update_variables        }
     {rank = same; hook_calculate_source_terms_point; hook_calculate_momentum_source_terms; }

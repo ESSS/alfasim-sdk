@@ -17,14 +17,14 @@ digraph {
 
             node[shape="rectangular", target="_top"]
             config [label="Solver Configuration"]
-            hyd_solver [label="Hydrodynamic Solver", URL="../07_workflow.html#hydrodynamic-solver"]
-            tracer_solver [label="Tracer Solver" URL="../07_workflow.html#tracer-solver"]
+            hyd_solver [label="Hydrodynamic Solver", URL="../plugins/07_workflow.html#hydrodynamic-solver"]
+            tracer_solver [label="Tracer Solver" URL="../plugins/07_workflow.html#tracer-solver"]
 
             output [label="Output Variables"]
 
             node[peripheries="0" shape="cds", color="#DA5961", fontcolor="#DA5961", style=""]
-            hook_initialize [ label="HOOK_INITIALIZE", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.initialize"]
-            hook_finalize [label="HOOK_FINALIZE", URL="../06_solver_hooks.html#_alfasim_sdk.hook_specs.finalize"]
+            hook_initialize [ label="HOOK_INITIALIZE", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.initialize"]
+            hook_finalize [label="HOOK_FINALIZE", URL="../plugins/06_solver_hooks.html#_alfasim_sdk.hook_specs.finalize"]
 
             {rank = same; hook_initialize_point; hook_initialize}
             {rank = same; hook_finalize_point; hook_finalize; }
