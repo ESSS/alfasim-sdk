@@ -28,7 +28,7 @@ For this, we will need to:
 
 #. Create a simple input, on the user interface.
 #. Add a secondary variable, to keep track of the value.
-#. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<_alfasim_sdk.hook_specs.initialize>`.
+#. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>`.
 #. Save the input data on a plugin internal data.
 #. Get the liquid velocity from the solver, during run-time.
 #. Export the value into the created/registered plugin secondary variable.
@@ -73,7 +73,7 @@ The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located 
         return [MyPluginModel]
 
 
-Notice that only models that are returned by the hook :func:`~_alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type`
+Notice that only models that are returned by the hook :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
 will be included on the user interface of |alfasim|.
 
 The image below illustrates the application with the output from the snippet above.
@@ -146,8 +146,8 @@ make use of the :ref:`ALFAsim-SDK C/C++ API <sdk_api>` in order to fetch informa
 At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared from
 :file:`myplugin.py` file and retrieve the ``Liquid Velocity`` from the |alfasim|'s Solver.
 
-First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <_alfasim_sdk.hook_specs.initialize>` and
-the :py:func:`HOOK_FINALIZE <_alfasim_sdk.hook_specs.finalize>`
+First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk._internal.hook_specs.initialize>` and
+the :py:func:`HOOK_FINALIZE <alfasim_sdk._internal.hook_specs.finalize>`
 
 With them it is possible to initialize any custom data (to store any important information) for internal use. Also it is
 needed to load and unload the |sdk| API, in which will allows the plugin to use the API in any implemented `hook`.
@@ -216,7 +216,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
     }
 
 Then, since the plugin wants to calculate its own secondary variable, the
-:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <_alfasim_sdk.hook_specs.update_plugins_secondary_variables>` must be implemented.
+:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>` must be implemented.
 As can be seen in the example below, to retrieve the velocity of the continuous liquid field
 it is necessary to use the :func:`get_simulation_array` API function.
 

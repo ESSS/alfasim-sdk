@@ -17,7 +17,7 @@ be customized would be located on: :menuselection:`myplugin --> src --> python -
 Additional Variables
 --------------------
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_additional_variables
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_get_additional_variables
 
 
 .. _multi-field-description:
@@ -36,19 +36,19 @@ the hook listed below, the plugin can:
     For each new added ``field`` is considered a mass conservation equation and for each new added ``layer`` is considered
     a momentum conservation and an energy conservation equations, depending on the energy model used at |alfasim|.
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_fields
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_configure_fields
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_phases
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_configure_layers
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers
 
 
 In order to complement the ``Hydrodynamic model`` customization, it is possible to inform |alfasim| which phases
 (added from plugin or not) will have the state variables calculated by plugin.
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_get_phase_interaction_properties_calculated_from_plugin
 
 
 .. _get_user_defined_tracer_from_plugin:
@@ -59,4 +59,4 @@ User Defined Tracers
 .. warning::
     |tracer_warn|
 
-.. autofunction:: _alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin
+.. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin
