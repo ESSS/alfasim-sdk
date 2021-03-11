@@ -873,13 +873,13 @@ class AddField:
     """
     Allows the plugin to add new fields to Hydrodynamic model.
 
-    An added field **must** be associated to a phase (Using :class:`~alfasim_sdk.types.AddPhase` or :class:`~alfasim_sdk.types.UpdatePhase`)
-    and added to a layer (Using :class:`~alfasim_sdk.types.AddLayer` or :class:`~alfasim_sdk.types.UpdateLayer`)
+    An added field **must** be associated to a phase (Using :class:`~alfasim_sdk.AddPhase` or :class:`~alfasim_sdk.UpdatePhase`)
+    and added to a layer (Using :class:`~alfasim_sdk.AddLayer` or :class:`~alfasim_sdk.UpdateLayer`)
 
     :param name: Name of the new field.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_fields` `hook`.
+        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_fields` `hook`.
 
     """
 
@@ -896,7 +896,7 @@ class AddLayer:
     :param continuous_field: Name of the continuous field of the added layer (must be in the `fields` list).
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_layers` `hook`.
+        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers` `hook`.
     """
 
     name: str = attr.ib()
@@ -919,7 +919,7 @@ class UpdateLayer:
 
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_layers` `hook`.
+        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers` `hook`.
     """
 
     name: str = attr.ib()
@@ -937,7 +937,7 @@ class AddPhase:
     :param is_solid: A boolean variable to identify if the added phase is solid.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_phases` `hook`.
+        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases` `hook`.
     """
 
     name: str = attr.ib()
@@ -960,7 +960,7 @@ class UpdatePhase:
     :param additional_fields: List of additional fields names to be appended in the fields list of the phase.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_phases` `hook`.
+        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases` `hook`.
     """
 
     name: str = attr.ib()

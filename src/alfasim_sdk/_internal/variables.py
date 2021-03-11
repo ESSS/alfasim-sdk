@@ -73,20 +73,20 @@ class SecondaryVariable:
 
     :param name: Plugin secondary variable name. This name will be used to access it in the :ref:`solver_hooks`.
     :param caption: Caption to be shown in the GUI (For output purpose).
-    :param type: a :class:`~alfasim_sdk.variables.Type` value.
+    :param type: a :class:`~alfasim_sdk.Type` value.
     :param unit: A string with the unit of the variable.
-    :param visibility: a :class:`~alfasim_sdk.variables.Visibility` value.
-    :param location: a :class:`~alfasim_sdk.variables.Location` value.
-    :param multifield_scope: a :class:`~alfasim_sdk.variables.Scope`.
+    :param visibility: a :class:`~alfasim_sdk.Visibility` value.
+    :param location: a :class:`~alfasim_sdk.Location` value.
+    :param multifield_scope: a :class:`~alfasim_sdk.Scope`.
     :param default_value: Default value to be set.
-    :param checked_on_gui_default: If the added variable has :class:`~alfasim_sdk.variables.Visibility` equal to ``Output``,
+    :param checked_on_gui_default: If the added variable has :class:`~alfasim_sdk.Visibility` equal to ``Output``,
         it indicates that this variable will be exported as output by default.
 
     The ``unit`` param accepts all units available on `Barril <https://github.com/ESSS/barril>`_ Unit Manager, for
     more information read its `documentation <https://barril.readthedocs.io/en/latest/>`_.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk.hook_specs_gui.alfasim_get_additional_variables` `hook`.
+        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_additional_variables` `hook`.
     """
 
     name: str = attrib(validator=non_empty_str)

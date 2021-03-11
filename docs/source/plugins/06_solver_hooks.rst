@@ -17,8 +17,8 @@ classification which identifies what part of the solver workflow is related to.
 
 To better visualize the interaction of the hooks with the solver, the :ref:`workflow_section` chapter has several graphs
 illustrating the solver's walkthrough, showing where each hook will be called. The following graph is the same one
-available at :ref:`main_overview` section from :ref:`workflow_section`. It illustrates where the :py:func:`HOOK_INITIALIZE<_alfasim_sdk.hook_specs.initialize>`
-and the :py:func:`HOOK_FINALIZE<_alfasim_sdk.hook_specs.finalize>` will be called.
+available at :ref:`main_overview` section from :ref:`workflow_section`. It illustrates where the :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>`
+and the :py:func:`HOOK_FINALIZE<alfasim_sdk._internal.hook_specs.finalize>` will be called.
 
 .. graphviz:: /_static/graphviz/main_flow.dot
     :align: center
@@ -32,7 +32,7 @@ Initial configuration and plugin internal data
 
 In the :ref:`User Interface Hooks <user_interface_hooks-section>` section is explained that the plugins are allowed to
 customize the |alfasim|'s user interface extending it in order to get some input data from the user. Using the solver
-:py:func:`HOOK_INITIALIZE<_alfasim_sdk.hook_specs.initialize>` the developer can obtain the input data from user interface and use it to
+:py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>` the developer can obtain the input data from user interface and use it to
 initialize the plugin internal data.
 
 As already mentioned, it is allowed that the plugins have internal data, in which can hold some important information that
@@ -42,7 +42,7 @@ will be used during the simulation, and also by other `hooks`.
     The plugin internal data will be hold by |alfasim|'s solver, however the plugin has full responsibility to allocate
     and deallocate its data from memory.
 
-.. autofunction:: _alfasim_sdk.hook_specs.initialize
+.. autofunction:: alfasim_sdk._internal.hook_specs.initialize
 
 As can be seen in the example above the function :cpp:func:`set_plugin_data` is used to tell the |alfasim|'s solver to
 hold the plugin internal data.
@@ -54,13 +54,13 @@ hold the plugin internal data.
     The |sdk| API function :cpp:func:`get_number_of_threads` is used to do it properly. See
     :ref:`plugin_internal_data` section for more information.
 
-.. autofunction:: _alfasim_sdk.hook_specs.finalize
+.. autofunction:: alfasim_sdk._internal.hook_specs.finalize
 
 As can be seen in the example above the function :cpp:func:`get_plugin_data` is used to retrieved the plugin internal
 data for each `thread` identified as ``thread_id``.
 
 .. note::
-    In the examples of usage of both :py:func:`HOOK_INITIALIZE<_alfasim_sdk.hook_specs.initialize>` and :py:func:`HOOK_FINALIZE<_alfasim_sdk.hook_specs.finalize>`
+    In the examples of usage of both :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>` and :py:func:`HOOK_FINALIZE<alfasim_sdk._internal.hook_specs.finalize>`
     there are many times where an error code is returned (``return errcode;`` or ``return OK;``). As can be seen, it is
     possible to return error codes from |sdk| API functions, however the developer can intercept this error code and
     handle it instead of returning it to the |alfasim|'s Solver.
@@ -78,9 +78,9 @@ are not obtained from |alfasim|'s Solver, these ones are called primary variable
 Using the following `hooks` the plugin is able to calculate/update those variables in three different moments of the
 simulation step. Two of them are called in the `Hydrodynamic Solver` scope and the last one is called in the
 `Tracers Solver` scope as illustrated on :ref:`hyd_solver` and :ref:`tracer_solver` workflow section. Once the solver obtain results for primary variables, it updates all secondary variables in which
-depend on primary variables. After that, :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES<_alfasim_sdk.hook_specs.update_plugins_secondary_variables>`
+depend on primary variables. After that, :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>`
 is called, but if it is running the `first time step`
-:py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<_alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`
+:py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep>`
 is called before. It is necessary because usually during the `first time step` some initialization tasks are needed. Then,
 if the plugin needs to initialize with some value that is different from the initial ``nan`` value, this hook is the place to do that.
 
@@ -89,9 +89,9 @@ if the plugin needs to initialize with some value that is different from the ini
     held by |alfasim|'s Solver. It is necessary because the variables arrays are dependent on `network` with its
     discretization and on `hydrodynamic model`, which defines the fluid flow's `phases`, `fields` and `layers`.
 
-.. autofunction:: _alfasim_sdk.hook_specs.update_plugins_secondary_variables
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables
 
-.. autofunction:: _alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep
 
 The |alfasim|'s Solver is divided in two *non-linear solvers* solvers that will solve different group of equations. The first one is
 the `hydrodynamic solver` which solves the Mass Conservation of fields, Momentum Conservation of layers and Energy Conservation
@@ -100,11 +100,11 @@ Equation for each added tracer. Since the tracers mass conservation is a transpo
 and using its results (such as `velocities`) as input data in the `Tracer Solver`. See the |alfasim|'s Technical Report
 for more information.
 
-To complete the group of `hooks` related to the plugins secondary variables there is the :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER<_alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver>`.
+To complete the group of `hooks` related to the plugins secondary variables there is the :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_tracer_solver>`.
 This `hook` is used to update plugin's variables that depends on Tracer's mass fractions and has to be updated in the
 `Tracer Solver` scope.
 
-.. autofunction:: _alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_tracer_solver
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_tracer_solver
 
 .. warning::
     It is important that the plugin developer take care of registered plugin's secondary variables, since their values
@@ -119,28 +119,28 @@ conservation equations. This is achieved by adding source terms in the residual 
 equations. Since the equations are in residual form, the negative values of source terms indicate that mass, momentum and
 energy will be consumed. Otherwise, some amount of mass, momentum, and energy will be generated.
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_mass_source_term
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_mass_source_term
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_momentum_source_term
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_momentum_source_term
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_energy_source_term
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_energy_source_term
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_tracer_source_term
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_tracer_source_term
 
 State Variables for additional phases
 -------------------------------------
 
 As can be seen in :ref:`multi-field-description` section the plugins can add new `fields`, `phases` and `layers`. Also,
 it is possible to indicate if a phase will have its state variables calculated from plugin implementing the
-:py:func:`~_alfasim_sdk.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin`.
+:py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin`.
 
-.. autofunction:: _alfasim_sdk.hook_specs.initialize_state_variables_calculator
+.. autofunction:: alfasim_sdk._internal.hook_specs.initialize_state_variables_calculator
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_state_variable
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_state_variable
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_phase_pair_state_variable
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_phase_pair_state_variable
 
-.. autofunction:: _alfasim_sdk.hook_specs.finalize_state_variables_calculator
+.. autofunction:: alfasim_sdk._internal.hook_specs.finalize_state_variables_calculator
 
 Additional solid phase
 ----------------------
@@ -150,19 +150,19 @@ to set as a `solid phase`. In this case, the particle size of `fields` that are 
 implementing the following Solver `Hooks`.Otherwise, the particle size will be considered constant and equal to
 :math:`1\times10^{-4}` meters.
 
-.. autofunction:: _alfasim_sdk.hook_specs.initialize_particle_diameter_of_solids_fields
+.. autofunction:: alfasim_sdk._internal.hook_specs.initialize_particle_diameter_of_solids_fields
 
-.. autofunction:: _alfasim_sdk.hook_specs.update_particle_diameter_of_solids_fields
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_particle_diameter_of_solids_fields
 
 Internal deposit layer
 ----------------------
 
 When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is possible
 to consider the deposition inside the pipeline walls. If so, calculate the thickness of the deposited layer on a given
-phase through the usage of :py:func:`~_alfasim_sdk.hook_specs.update_internal_deposition_layer`. By default, the layer
+phase through the usage of :py:func:`~alfasim_sdk._internal.hook_specs.update_internal_deposition_layer`. By default, the layer
 thickness will be considered equal to zero meters.
 
-.. autofunction:: _alfasim_sdk.hook_specs.update_internal_deposition_layer
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_internal_deposition_layer
 
 Unit Cell Model (UCM) Friction Factor
 -------------------------------------
@@ -177,9 +177,9 @@ flow is in the control volume.
     the API function :cpp:func:`get_ucm_friction_factor_input_variable`. Note that, the variables listed in the
     documentation of the cited function are related to one control volume, in which the Unit Cell Model is applied.
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_ucm_friction_factor_stratified
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_friction_factor_stratified
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_ucm_friction_factor_annular
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_friction_factor_annular
 
 .. note::
     Another important API function for UCM is :cpp:func:`get_ucm_fluid_geometrical_properties`. This function computes
@@ -190,7 +190,7 @@ User Defined Tracers
 --------------------
 
 The `hooks` described in this section must be implemented when at least one `user defined tracer` is added via
-:py:func:`~_alfasim_sdk.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin` `hook`.
+:py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_user_defined_tracers_from_plugin` `hook`.
 
 .. warning::
     |tracer_warn|
@@ -200,12 +200,12 @@ The plugin developer has complete freedom to change the equations, however it is
 made manipulating the transport equation terms inside the `hooks`. For that, it is important to read the `Tracers`
 Chapter at |alfasim|'s Technical Manual.
 
-.. autofunction:: _alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer
+.. autofunction:: alfasim_sdk._internal.hook_specs.initialize_mass_fraction_of_tracer
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_mass_fraction_of_tracer_in_phase
 
-.. autofunction:: _alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_field
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_mass_fraction_of_tracer_in_field
 
-.. autofunction:: _alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer
+.. autofunction:: alfasim_sdk._internal.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer
 
-.. autofunction:: _alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer
