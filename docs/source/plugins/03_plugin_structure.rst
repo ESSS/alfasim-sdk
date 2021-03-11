@@ -23,22 +23,22 @@ You can also learn about the available options of each command invoking the :gui
 
 .. _alfasim_sdk_cli_template_section:
 
-.. click:: _alfasim_sdk.cli:template
+.. click:: alfasim_sdk._internal.cli:template
     :prog: alfasim-sdk template
     :show-nested:
 
 
 .. _alfasim_sdk_cli_package_section:
 
-.. click:: _alfasim_sdk.cli:package
+.. click:: alfasim_sdk._internal.cli:package
     :prog: alfasim-sdk package
     :show-nested:
 
 
-.. click:: _alfasim_sdk.cli:package_only
+.. click:: alfasim_sdk._internal.cli:package_only
     :prog: alfasim-sdk package_only
     :show-nested:
 
-.. click:: _alfasim_sdk.cli:_compile
+.. click:: alfasim_sdk._internal.cli:_compile
     :prog: alfasim-sdk compile
     :show-nested:
