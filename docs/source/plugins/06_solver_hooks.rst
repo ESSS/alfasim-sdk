@@ -17,8 +17,8 @@ classification which identifies what part of the solver workflow is related to.
 
 To better visualize the interaction of the hooks with the solver, the :ref:`workflow_section` chapter has several graphs
 illustrating the solver's walkthrough, showing where each hook will be called. The following graph is the same one
-available at :ref:`main_overview` section from :ref:`workflow_section`. It illustrates where the :py:func:`HOOK_INITIALIZE<_alfasim_sdk.hook_specs.initialize>`
-and the :py:func:`HOOK_FINALIZE<_alfasim_sdk.hook_specs.finalize>` will be called.
+available at :ref:`main_overview` section from :ref:`workflow_section`. It illustrates where the :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>`
+and the :py:func:`HOOK_FINALIZE<alfasim_sdk._internal.hook_specs.finalize>` will be called.
 
 .. graphviz:: /_static/graphviz/main_flow.dot
     :align: center
