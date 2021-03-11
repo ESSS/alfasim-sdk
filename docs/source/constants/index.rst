@@ -4,6 +4,6 @@ Constants
 This page contains the full reference to constants available for |sdk| API.
 
 
-.. automodule:: _alfasim_sdk.constants
+.. automodule:: alfasim_sdk._internal.constants
     :members:
     :undoc-members:
