@@ -519,7 +519,7 @@ def initialize_state_variables_calculator(
     Hook for the state variables calculator initialization (internal ``ALFAsim`` structure).
 
     At this point, it is possible to pre-calculate and cache any relevant information. Then, for each state variable of
-    the phases in the python configuration file, the `hook` :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_state_variables>`
+    the phases in the python configuration file, the `hook` :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk._internal.hook_specs.calculate_state_variable>`
     is called and return the pre-calculated values.
 
     :param ctx: ALFAsim's plugins context
@@ -696,7 +696,7 @@ def calculate_phase_pair_state_variable(
     int phase1_id, int phase2_id, int property_id, void* output)``
 
     Hook to calculate the state variable given by the `property_id` (See :cpp:enum:StateVariable values), for the phase
-    pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :py:func:`get_phase_id()`
+    pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id()`
     API function - It is not advisable to use hardcoded numbers).
 
     List of affected variables:|br|
@@ -774,7 +774,7 @@ def finalize_state_variables_calculator(ctx: "void*") -> "int":
     **c++ signature** : ``HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)``
 
     Hook for the state variables calculator finalization.
-    The plugin developer should free/delete any allocated data from the :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`.
+    The plugin developer should free/delete any allocated data from the :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk._internal.hook_specs.initialize_state_variables_calculator>`.
 
     :param ctx: ALFAsim's plugins context
     :returns: Return OK if successful or anything different if failed
@@ -806,7 +806,7 @@ def initialize_particle_diameter_of_solids_fields(
     int n_control_volumes, int solids_field_id)``
 
     Internal simulator hook to initialize particle diameter of solid fields. This `hook` follows the same idea of
-    :py:func:`HOOK_UPDATE_PLUGIN_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`,
+    :py:func:`HOOK_UPDATE_PLUGIN_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep>`,
     which makes the initialization in the moment that there is no previous time step data available.
 
     :param ctx: ALFAsim's plugins context
@@ -1181,12 +1181,12 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
     int tracer_index)``
 
     Internal tracer model `hook` to set the initial prescribed boundary condition of mass fraction of tracer,
-    given by ``tracer_index`. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
-    in respect to the mass of the mixture. Note that all boundary nodes will be populated with `phi_presc` value
+    given by ``tracer_index``. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
+    in respect to the mass of the mixture. Note that all boundary nodes will be populated with ``phi_presc`` value
     set by this `hook`.
 
     Please note that this `hook` sets the first mass fraction related boundary conditions value to
-    the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
+    the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk._internal.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
     allows the plugin developer to update this value.
 
     :param ctx: ALFAsim's plugins context
@@ -1384,7 +1384,7 @@ def calculate_ucm_friction_factor_annular(
     :returns: Return OK if successful or anything different if failed
 
     Example of usage:
-        The same example presented in :py:func:`HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED<alfasim_sdk.hook_specs.calculate_ucm_friction_factor_stratified>`
+        The same example presented in :py:func:`HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED<alfasim_sdk._internal.hook_specs.calculate_ucm_friction_factor_stratified>`
         can be used, just change the `hook` name to `HOOK_CALCULATE_UCM_FRICTION_FACTOR_ANNULAR`.
     """
 

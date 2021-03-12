@@ -75,21 +75,6 @@ enum StateVariable {
 };
 
 /*!
-    It holds the possible wall layer property that can be obtained from ALFAsim's solver.
-    This `Enum` is used by The #set_wall_layer_property API function.
-*/
-enum WallLayerProperty {
-    THICKNESS=0, /*!< Wall layer tickness*/
-    DENSITY=1, /*!< Wall layer material density*/
-    THERMAL_CONDUCTIVITY=2, /*!< Wall layer material thermal conductivity*/
-    HEAT_CAPACITY=3, /*!< Wall layer material specifc heat capacity*/
-    INNER_EMISSIVITY=4, /*!< Wall layer material inner emissivity*/
-    OUTER_EMISSIVITY=5, /*!< Wall layer material outer emissivity*/
-    EXPANSION=6, /*!< Wall layer material thermal expansion coefficient*/
-    VISCOSITY=7 /*!< Wall layer material viscosity (if it is a deposit layer)*/
-};
-
-/*!
     It holds all variable scopes (grid, multifield and timestep)
 */
 struct VariableScope

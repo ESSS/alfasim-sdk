@@ -50,7 +50,7 @@ hold the plugin internal data.
 .. note::
     Since |alfasim|'s solver uses multi-threading to perform all possible parallelizable calculation, it is important that
     the plugins provide internal data to each `thread` to avoid data access concurrency problems. As can be seen the
-    ``HOOK_INITIALIZE`` example above, a ``for-loop`` is performed over the `threads` to set the plugin internal data.
+    :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>` example above, a ``for-loop`` is performed over the `threads` to set the plugin internal data.
     The |sdk| API function :cpp:func:`get_number_of_threads` is used to do it properly. See
     :ref:`plugin_internal_data` section for more information.
 

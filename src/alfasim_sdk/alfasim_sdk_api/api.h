@@ -611,7 +611,8 @@ DLL_EXPORT int get_wall_interfaces_temperature(
     - `"U"`: Velocity [m/s]
 
     It is important to know that the listed `variable_name`s are not available in any phase, only for
-    two phase systems, in which `Gas id` is 0 (zero) and `Liquid id` (sum of all liquid phases) is 1 (One).
+    two phase systems, in which `GAS` (0, zero) and `LIQUID` (1, One)(sum of all liquid phases) are
+    the possible values, and they are available in the #TwoPhaseSystem enumeration.
     Because of that, the #error_code must be checked.
 
     List of `variable_name` with one value:

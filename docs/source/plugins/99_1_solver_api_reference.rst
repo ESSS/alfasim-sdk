@@ -18,11 +18,11 @@ Enums
 
 .. doxygenenum:: MultiFieldDescriptionScope
 
+.. doxygenenum:: TwoPhaseSystem
+
 .. doxygenenum:: TimestepScope
 
 .. doxygenenum:: StateVariable
-
-.. doxygenenum:: WallLayerProperty
 
 .. doxygenenum:: sdk_load_error_code
 
