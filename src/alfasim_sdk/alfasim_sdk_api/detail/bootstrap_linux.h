@@ -81,6 +81,7 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_plugin_input_data_multiplereference_selected_size = (get_plugin_input_data_multiplereference_selected_size_func)dlsym(api->handle, "get_plugin_input_data_multiplereference_selected_size");
     api->get_ucm_friction_factor_input_variable = (get_ucm_friction_factor_input_variable_func)dlsym(api->handle, "get_ucm_friction_factor_input_variable");
     api->get_ucm_fluid_geometrical_properties = (get_ucm_fluid_geometrical_properties_func)dlsym(api->handle, "get_ucm_fluid_geometrical_properties");
+    api->get_ucm_liqliq_flow_pattern_input_variable = (get_ucm_liqliq_flow_pattern_input_variable_func)dlsym(api->handle, "get_ucm_liqliq_flow_pattern_input_variable");
 
     return SDK_OK;
 }

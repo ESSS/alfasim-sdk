@@ -50,6 +50,14 @@ enum TwoPhaseSystem {
 };
 
 /*!
+    It holds the liquid-liquid system ids for Liquid-Liquid related API functions.
+*/
+enum LiquidLiquidSystem {
+    OIL=0, /*!< Oil phase.*/
+    WATER=1, /*!< Water phase.*/
+};
+
+/*!
     It holds the variable scope in the time level to retrieve a simulation array.
 */
 enum TimestepScope

@@ -20,6 +20,8 @@ Enums
 
 .. doxygenenum:: TwoPhaseSystem
 
+.. doxygenenum:: LiquidLiquidSystem
+
 .. doxygenenum:: TimestepScope
 
 .. doxygenenum:: StateVariable
@@ -147,6 +149,7 @@ Unit Cell Model (UCM) helpers
 
 .. doxygenfunction:: get_ucm_fluid_geometrical_properties
 
+.. doxygenfunction:: get_ucm_liqliq_flow_pattern_input_variable
 
 .. _var_name_parsing:
 

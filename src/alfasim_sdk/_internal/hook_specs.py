@@ -1389,6 +1389,72 @@ def calculate_ucm_friction_factor_annular(
     """
 
 
+def calculate_ucm_liqliq_flow_pattern(
+    ctx: "void*", ll_fp: "int*", water_vol_frac: "double*"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)``
+
+    Internal `hook` to calculate the liquid-liquid flow pattern (Oil-Water) and the water volume fraction
+    in the Liquid-Liquid system. The Liquid-Liquid system is a two phase flow with Oil and Water Phases.
+    It represents the separation of Liquid phase (into oil and water phases) used in the two phase system
+    (Gas-Liquid). The output variables ``ll_fp`` and ``water_vol_frac`` are the liquid-liquid flow pattern
+    and volume fraction of water, respectively.
+
+    This `hook` allows the developer to implement your own flow pattern estimation algorithm for the liquid-liquid
+    system.
+
+    The ``ll_fp`` must be one of the following values: |br|
+    - `0 - Unknown`: Unknown Flow Pattern. |br|
+    - `1 - Ambivalent`: Ambivalent Flow Pattern between Dispersed Oil and Dispersed Water. |br|
+    - `2 - Dispersed Oil`: Dispersed oil in continuous water. |br|
+    - `3 - Dispersed Water`: Dispersed water in continuous Oil. |br|
+    - `4 - Separated`: Separated continuous oil and continuous water. |br|
+    - `5 - separated Mixed`: Separated with dispersed oil and water droplets. |br|
+    - `6 - separated Wavy`: Separated with waves. |br|
+
+    Any value different from these values will be assumed an `Unknown` flow pattern.
+
+    :param ctx: ALFAsim's plugins context
+    :param ll_fp: Liquid-Liquid Flow Pattern
+    :param water_vol_frac: Volume fraction of water in the Liquid-Liquid System
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)
+        {
+            int errcode = -1;
+            int O = LiquidLiquidSystem::OIL
+            int W = LiquidLiquidSystem::WATER
+
+            // Getting liq-liq Flow Pattern input data from context
+            double rho[2];
+            errcode = alfasim_sdk_api.get_ucm_liqliq_flow_pattebn_input_variable(
+                ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
+            if (errcode != OK){ return errcode; }
+            errcode = alfasim_plugins_api.get_ucm_liqliq_flow_pattebn_input_variable(
+                ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // U_S(superficial velocities), mu(viscosities) and D_h(liquid hydraulic diameter)
+
+            // Estimate the liquid-liquid Flow pattern and volume fraction of water
+            // using your own algorithm.
+
+
+            *ll_fp = flow_pattern;
+            *water_vol_frac = alpha_W;
+
+            return OK;
+        }
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -1563,6 +1629,8 @@ specs = HookSpecs(
         # Hooks related to Unit Cell Model
         calculate_ucm_friction_factor_stratified,
         calculate_ucm_friction_factor_annular,
+        # Hooks related to Liquiq-Liquid Point Model
+        calculate_ucm_liqliq_flow_pattern,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,

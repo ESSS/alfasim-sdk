@@ -185,6 +185,15 @@ flow is in the control volume.
     Another important API function for UCM is :cpp:func:`get_ucm_fluid_geometrical_properties`. This function computes
     the geometrical properties properly in each previous presented `hooks` depending on the flow pattern.
 
+Unit Cell Model (UCM) Liquid-Liquid System
+------------------------------------------
+
+.. note::
+    It is important to know that the main input variables needed to estimate the flow pattern is available in
+    the API function :cpp:func:`get_ucm_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the
+    documentation of the cited function are related to one control volume, in which the estimation is applied.
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern
 
 User Defined Tracers
 --------------------
