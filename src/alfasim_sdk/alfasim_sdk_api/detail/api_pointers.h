@@ -80,9 +80,8 @@ typedef int (*get_tracer_name_func)(void* ctx, char* tracer_name, void* referenc
 typedef int (*get_tracer_ref_by_name_func)(void* ctx, void** reference, const char* tracer_name, const char* plugin_id);
 typedef int (*get_tracer_partition_coefficient_func)(void* ctx, double* out, void* reference, int phase_id);
 typedef int (*get_plugin_input_data_multiplereference_selected_size_func)(void* ctx, int* indexes_size, const char* plugin_id, const char* var_name);
-typedef int (*get_ucm_friction_factor_input_variable_func)(void* ctx, double* out, const char* var_name, int phase_id);
+typedef int (*get_ucm_input_variable_func)(void* ctx, double* out, const char* var_name, int phase_id);
 typedef int (*get_ucm_fluid_geometrical_properties_func)(void* ctx, double* S_w, double* S_i, double* H, double alpha_G, double D);
-typedef int (*get_ucm_liqliq_flow_pattern_input_variable_func)(void* ctx, double* out, const char* var_name, int phase_id);
 
 struct ALFAsimSDK_API {
 #if defined(_WIN32)
@@ -137,9 +136,10 @@ struct ALFAsimSDK_API {
 
     get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
 
-    get_ucm_friction_factor_input_variable_func get_ucm_friction_factor_input_variable;
+    get_ucm_input_variable_func get_ucm_friction_factor_input_variable;
     get_ucm_fluid_geometrical_properties_func get_ucm_fluid_geometrical_properties;
-    get_ucm_liqliq_flow_pattern_input_variable_func get_ucm_liqliq_flow_pattern_input_variable;
+    get_ucm_input_variable_func get_ucm_liqliq_flow_pattern_input_variable;
+    get_ucm_input_variable_func get_ucm_liquid_effective_viscosity_input_variable;
 
 };
 

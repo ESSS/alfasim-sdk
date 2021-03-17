@@ -195,6 +195,13 @@ Unit Cell Model (UCM) Liquid-Liquid System
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern
 
+.. note::
+    It is important to know that the main input variables needed to estimate the flow pattern is available in
+    the API function :cpp:func:`get_ucm_liquid_effective_viscosity_input_variable`. Note that, the variables listed in the
+    documentation of the cited function are related to one control volume, in which the estimation is applied.
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liquid_effective_viscosity
+
 User Defined Tracers
 --------------------
 

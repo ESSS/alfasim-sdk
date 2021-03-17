@@ -1434,10 +1434,10 @@ def calculate_ucm_liqliq_flow_pattern(
 
             // Getting liq-liq Flow Pattern input data from context
             double rho[2];
-            errcode = alfasim_sdk_api.get_ucm_liqliq_flow_pattebn_input_variable(
+            errcode = alfasim_sdk_api.get_ucm_liqliq_flow_pattern_input_variable(
                 ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
             if (errcode != OK){ return errcode; }
-            errcode = alfasim_plugins_api.get_ucm_liqliq_flow_pattebn_input_variable(
+            errcode = alfasim_plugins_api.get_ucm_liqliq_flow_pattern_input_variable(
                 ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
@@ -1449,6 +1449,60 @@ def calculate_ucm_liqliq_flow_pattern(
 
             *ll_fp = flow_pattern;
             *water_vol_frac = alpha_W;
+
+            return OK;
+        }
+    """
+
+
+def calculate_ucm_liquid_effective_viscosity(
+    ctx: "void*", mu_l_eff: "double*", ll_fp: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)``
+
+    Internal `hook` to calculate the liquid (Oil-Water) effective viscosity in the Liquid-Liquid system.
+    It represents viscosity of a Liquid phase used in the two phase system (Gas-Liquid).
+    The output variables ``ll_fp`` and ``water_vol_frac`` are the liquid-liquid flow pattern
+    and volume fraction of water, respectively.
+
+    This `hook` allows the developer to implement your own liquid effective viscosity to represent an
+    unified liquid phase that represents the Oil-Water mixture.
+
+    :param ctx: ALFAsim's plugins context
+    :param mu_l_eff: Liquid Effective Viscosity
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern>` for possible values)
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_UCM_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)
+        {
+            int errcode = -1;
+            int O = LiquidLiquidSystem::OIL
+            int W = LiquidLiquidSystem::WATER
+
+            // Getting liquid Effective Viscosity input data from context
+            double rho[2];
+            errcode = alfasim_sdk_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+                ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
+            if (errcode != OK){ return errcode; }
+            errcode = alfasim_plugins_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+                ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // U_S(superficial velocities), mu(viscosities for Oil and Water) and
+            // D_h(liquid hydraulic diameter)
+
+            // Estimate the liquid effective viscosity using your own algorithm.
+            // Since the liquid effective viscosity depends on Liquid-Liquid Flow Pattern,
+            // it is provide as an Hook parameter (`ll_fp`).
+
+            *mu_l_eff = liquid_viscosity;
 
             return OK;
         }
@@ -1629,8 +1683,9 @@ specs = HookSpecs(
         # Hooks related to Unit Cell Model
         calculate_ucm_friction_factor_stratified,
         calculate_ucm_friction_factor_annular,
-        # Hooks related to Liquiq-Liquid Point Model
+        # Hooks related to Liquiq-Liquid System
         calculate_ucm_liqliq_flow_pattern,
+        calculate_ucm_liquid_effective_viscosity,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,
