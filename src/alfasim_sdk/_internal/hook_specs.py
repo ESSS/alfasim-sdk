@@ -1463,11 +1463,10 @@ def calculate_ucm_liquid_effective_viscosity(
 
     Internal `hook` to calculate the liquid (Oil-Water) effective viscosity in the Liquid-Liquid system.
     It represents viscosity of a Liquid phase used in the two phase system (Gas-Liquid).
-    The output variables ``ll_fp`` and ``water_vol_frac`` are the liquid-liquid flow pattern
-    and volume fraction of water, respectively.
+    The output variable ``mu_l_eff`` is the Liquid Effective Viscosity. It has unit equal to ``[Pa.s]``.
 
-    This `hook` allows the developer to implement your own liquid effective viscosity to represent an
-    unified liquid phase that represents the Oil-Water mixture.
+    This `hook` allows the developer to implement your own liquid effective viscosity correlation to
+    represent the viscosity of an unified liquid phase that represents the Oil-Water mixture.
 
     :param ctx: ALFAsim's plugins context
     :param mu_l_eff: Liquid Effective Viscosity
@@ -1503,6 +1502,60 @@ def calculate_ucm_liquid_effective_viscosity(
             // it is provide as an Hook parameter (`ll_fp`).
 
             *mu_l_eff = liquid_viscosity;
+
+            return OK;
+        }
+    """
+
+
+def calculate_ucm_gasliq_surface_tension(
+    ctx: "void*", sigma_gl: "double*", ll_fp: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_GASLIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)``
+
+    Internal `hook` to calculate the Gas-liquid Surface Tension based in the Liquid-Liquid System.
+    It represents Gas-Liquid surface tension used in the two phase system (Gas-Liquid).
+    The output variable ``sigma_gl`` is the Gas-Liquid Surface tension. It has unit equal to ``[N/m]``.
+
+    .. Note::
+        It is important to note that the Gas-Liquid Surface tension depends on Gas-Oil and Gas-Water
+        Surface Tensions from Liquid-Liquid system. Since it depends on the Liquid-Liquid Flow pattern,
+        the Gas-Liquid Surface Tension must take it into account.
+
+    This `hook` allows the developer to implement your own Gas-liquid Surface Tension correlation for
+    an unified liquid phase that represents the Oil-Water mixture.
+
+    :param ctx: ALFAsim's plugins context
+    :param sigma_gl: Gas-Liquid Surface Tension
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern>` for possible values)
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_UCM_GASLIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)
+        {
+            int errcode = -1;
+            int O = LiquidLiquidSystem::OIL
+            int W = LiquidLiquidSystem::WATER
+
+            // Getting liquid Effective Viscosity input data from context
+            double sigma_gll[2];
+            errcode = alfasim_sdk_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+                ctx, &sigma_gll[O], "sigma_gll", LiquidLiquidSystem::OIL);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // sigma_gw(Surface tension Gas-Water) and alpha_w(Water Volume Fraction)
+
+            // Estimate the Gas-Liquid Surface Tension using your own algorithm.
+            // Since the Gas-Liquid Surface Tension depends on Liquid-Liquid Flow Pattern,
+            // it is provide as an Hook parameter (`ll_fp`).
+
+            *sigma_gl = gas_liq_sigma;
 
             return OK;
         }
@@ -1680,12 +1733,13 @@ specs = HookSpecs(
         calculate_mass_fraction_of_tracer_in_field,
         set_prescribed_boundary_condition_of_mass_fraction_of_tracer,
         update_boundary_condition_of_mass_fraction_of_tracer,
-        # Hooks related to Unit Cell Model
+        # Hooks related to UCM Friction Factor
         calculate_ucm_friction_factor_stratified,
         calculate_ucm_friction_factor_annular,
-        # Hooks related to Liquiq-Liquid System
+        # Hooks related to UCM Liquiq-Liquid System
         calculate_ucm_liqliq_flow_pattern,
         calculate_ucm_liquid_effective_viscosity,
+        calculate_ucm_gasliq_surface_tension,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,

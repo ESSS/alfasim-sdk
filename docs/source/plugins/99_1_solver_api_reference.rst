@@ -153,6 +153,8 @@ Unit Cell Model (UCM) helpers
 
 .. doxygenfunction:: get_ucm_liquid_effective_viscosity_input_variable
 
+.. doxygenfunction:: get_ucm_gasliq_surface_tension_input_variable
+
 
 .. _var_name_parsing:
 

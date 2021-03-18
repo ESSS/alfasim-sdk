@@ -140,6 +140,7 @@ struct ALFAsimSDK_API {
     get_ucm_fluid_geometrical_properties_func get_ucm_fluid_geometrical_properties;
     get_ucm_input_variable_func get_ucm_liqliq_flow_pattern_input_variable;
     get_ucm_input_variable_func get_ucm_liquid_effective_viscosity_input_variable;
+    get_ucm_input_variable_func get_ucm_gasliq_surface_tension_input_variable;
 
 };
 

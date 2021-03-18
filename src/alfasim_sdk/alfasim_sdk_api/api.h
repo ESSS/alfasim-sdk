@@ -731,4 +731,33 @@ DLL_EXPORT int get_ucm_liquid_effective_viscosity_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 
+/*!
+    Gets the current UCM (unit cell model) input data for Gas-Liquid surface tension
+    calculation. Any available variable by this function is considered for a unit cell,
+    which means that there are variables with one value and there are variables with
+    two values related to the liquid-liquid system (OIL and WATER).
+    If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
+
+    List of `variable_name` with two values (Oil and Water):
+    - `"sigma_gll"`: Gas-Liquid-Liquid (Gas-Oil or Gas-Water) Surface Tension [N/m]
+
+    It is important to know that the listed `variable_name`s are not available in any phase, only for
+    liquid-liquid systems, in which `OIL` (0, zero) and `WATER` (1, One) are the possible values, and
+    they are available in the #LiquidLiquidSystem enumeration.
+    Because of that, the #error_code must be checked.
+
+    List of `variable_name` with one value:
+    - `"alpha_w"` : Water Volume Fraction [kg of `water phase` / kg of `liquid(Oil+Water) phase`]
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Variable value.
+    @param[in] var_name String with the variable name. See the list of possible values above.
+    @param[in] phase_id A #LiquidLiquidSystem value. When the requested variable is not associated
+                            to a phase any value can be passed.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_ucm_gasliq_surface_tension_input_variable(
+    void* ctx, double* out, const char* var_name, int phase_id
+);
+
 #endif
