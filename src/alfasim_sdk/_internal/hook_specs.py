@@ -1328,8 +1328,8 @@ def calculate_ucm_friction_factor_stratified(
             void* ctx, double* ff_wG, double* ff_wL, double* ff_i)
         {
             int errcode = -1;
-            int G = TwoPhaseSystem::GAS
-            int L = TwoPhaseSystem::LIQUID
+            int G = TwoPhaseSystem::GAS;
+            int L = TwoPhaseSystem::LIQUID;
 
             // Getting friction factor input data from context
             double alpha[2];
@@ -1429,8 +1429,8 @@ def calculate_ucm_liqliq_flow_pattern(
         int HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)
         {
             int errcode = -1;
-            int O = LiquidLiquidSystem::OIL
-            int W = LiquidLiquidSystem::WATER
+            int O = LiquidLiquidSystem::OIL;
+            int W = LiquidLiquidSystem::WATER;
 
             // Getting liq-liq Flow Pattern input data from context
             double rho[2];
@@ -1441,7 +1441,8 @@ def calculate_ucm_liqliq_flow_pattern(
                 ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
-            // U_S(superficial velocities), mu(viscosities) and D_h(liquid hydraulic diameter)
+            // U_S(superficial velocities), mu(viscosities)
+            // and D_h(liquid hydraulic diameter)
 
             // Estimate the liquid-liquid Flow pattern and volume fraction of water
             // using your own algorithm.
@@ -1482,8 +1483,8 @@ def calculate_ucm_liquid_effective_viscosity(
         int HOOK_CALCULATE_UCM_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)
         {
             int errcode = -1;
-            int O = LiquidLiquidSystem::OIL
-            int W = LiquidLiquidSystem::WATER
+            int O = LiquidLiquidSystem::OIL;
+            int W = LiquidLiquidSystem::WATER;
 
             // Getting liquid Effective Viscosity input data from context
             double rho[2];
@@ -1540,8 +1541,8 @@ def calculate_ucm_gasliq_surface_tension(
         int HOOK_CALCULATE_UCM_GASLIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)
         {
             int errcode = -1;
-            int O = LiquidLiquidSystem::OIL
-            int W = LiquidLiquidSystem::WATER
+            int O = LiquidLiquidSystem::OIL;
+            int W = LiquidLiquidSystem::WATER;
 
             // Getting liquid Effective Viscosity input data from context
             double sigma_gll[2];
@@ -1556,6 +1557,95 @@ def calculate_ucm_gasliq_surface_tension(
             // it is provide as an Hook parameter (`ll_fp`).
 
             *sigma_gl = gas_liq_sigma;
+
+            return OK;
+        }
+    """
+
+
+def calculate_ucm_liqliq_shear_force_per_volume(
+    ctx: "void*",
+    shear_w: "double*",
+    shear_i: "double*",
+    u_fields: "double*",
+    vol_frac_fields: "double*",
+    ll_fp: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_UCM_LIQLIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
+    double* shear_i, double* u_fields, double* vol_frac_fields, int ll_fp)``
+
+    Internal `hook` to calculate the Shear Force per unit volume for the Liquid-Liquid System.
+    Also Field velocities and field volume fraction must be calculated.
+    It is important to compute the shear stress term in the momentum equation for the Liquid-Liquid System.
+
+    The output variable ``shear_w`` is the Wall Shear Force per unit Volume with size equal to ``2``
+    (for Oil and Water phases) and it has unit equal to ``[N/m^3]``.
+    The output variable ``shear_i`` is the Interfacial Shear Force per unit Volume between Oil and Water
+    phases it has unit equal to ``[N/m^3]``.
+    The output variable ``u_fields`` is the field velocities with size ``4`` because values for continuous
+    fields (Oil and Water) and for dispersed fields (Oil Droplet in Water and Water Droplet in Oil) must be
+    provided and it has unit equal to ``[m/s]``.
+    The output variable ``vol_frac_fields`` is the field volume fractions also with size ``4``, just like
+    ``u_fields`` and it has unit equal to ``[kg of field/ kg of liquid-liquid mixture]``.
+
+    .. Note::
+        The outputs ``u_fields`` and ``vol_frac_fields`` are vectors in which the order of the fields are
+        Oil Continuous(``O``) for index 0, Water Continuous(``W``) for index 1, Oil Droplet in Water(``OW``)
+        for index 3 and Water Droplets in Oil(``WO``) for index 4. See the example below.
+
+    This `hook` allows the implementation of the shear force for the Liquid-Liquid System,an important
+    output of the Unit Cell Model. Since this kind of calculation depends on Liquid-Liquid Flow
+    Pattern, it is provided as an hook parameter.
+
+    :param ctx: ALFAsim's plugins context
+    :param shear_w: Wall Shear Force per unit Volume
+    :param shear_i: Interfacial (Oil-Water) Shear Force per unit Volume
+    :param u_fields: Field Velocities
+    :param vol_frac_fields: Field Voluem Fraction
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern>` for possible values)
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_UCM_LIQLIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
+            double* shear_i, double* U_fields, double* vol_frac_fields, int ll_fp)
+        {
+            int errcode = -1;
+            int O = 0;
+            int W = 1;
+            int OW = 2;
+            int WO = 3;
+
+            // Getting shear term input data from context
+            double rho[2];
+            errcode = alfasim_sdk_api.get_ucm_liqliq_shear_force_per_volume_input_variable(
+                ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
+            errcode = alfasim_sdk_api.get_ucm_liqliq_shear_force_per_volume_input_variable(
+                ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // U_S(superficial velocities), mu(viscosities for Oil and Water) and
+            // D_h(liquid hydraulic diameter)
+
+            // Calculate the wall and interfacial shear force per unit volume, fields (Liquid-Liquid System)
+            // velocities and fields (Liquid-Liquid System) volume fraction using your own algorithm.
+
+            *shear_w[O] = wall_shear_force[O];
+            *shear_w[W] = wall_shear_force[W];
+            *shear_i = interfacial_shear_force;
+            *u_fields[O] = U[O];
+            *u_fields[W] = U[W];
+            *u_fields[OW] = U[OW];
+            *u_fields[WO] = U[WO];
+            *vol_frac_fields[O] = alpha[O];
+            *vol_frac_fields[W] = alpha[W];
+            *vol_frac_fields[OW] = alpha[OW];
+            *vol_frac_fields[WO] = alpha[WO];
 
             return OK;
         }
@@ -1740,6 +1830,7 @@ specs = HookSpecs(
         calculate_ucm_liqliq_flow_pattern,
         calculate_ucm_liquid_effective_viscosity,
         calculate_ucm_gasliq_surface_tension,
+        calculate_ucm_liqliq_shear_force_per_volume,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,

@@ -760,4 +760,25 @@ DLL_EXPORT int get_ucm_gasliq_surface_tension_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 
+/*!
+    Gets the current UCM (unit cell model) input data for Shear force calculation.
+    Any available variable by this function is considered for a unit cell,
+    which means that there are variables with one value and there are variables with
+    two values related to the liquid-liquid system (OIL and WATER).
+    If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
+
+    The variables available are the same as #get_ucm_liqliq_flow_pattern_input_variable and
+    its documentation should be visited for more details.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Variable value.
+    @param[in] var_name String with the variable name. See the list of possible values above.
+    @param[in] phase_id A #LiquidLiquidSystem value. When the requested variable is not associated
+                            to a phase any value can be passed.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_ucm_liqliq_shear_force_per_volume_input_variable(
+    void* ctx, double* out, const char* var_name, int phase_id
+);
+
 #endif
