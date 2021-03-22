@@ -71,8 +71,8 @@ class TrendOutputDescription:
 
     curve_names: List[str] = attr.ib(validator=list_of_strings)
     element_name: str = attr.ib(validator=instance_of(str))
-    position = attrib_scalar()
     location = attrib_enum(type_=constants.OutputAttachmentLocation)
+    position = attrib_scalar(default=None, is_optional=True)
 
 
 @attr.s(frozen=True, slots=True)
@@ -288,7 +288,7 @@ class TablePumpDescription:
     pressure_boosts: Array = attr.ib(
         default=Array(
             [0.0] * 12
-            + [
+            +[
                 12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
                 14.0, 12.0, 10.0, 8.0, 5.5, 0.0, 13.5, 11.2, 9.5, 7.6, 5.2, 0.0,
             ],
