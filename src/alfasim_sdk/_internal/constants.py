@@ -324,6 +324,7 @@ class OutputAttachmentLocation(Enum):
 
     Main = "main"
     Annulus = "annulus"
+    Global = "global"
 
 
 class CorrelationPackage(Enum):
