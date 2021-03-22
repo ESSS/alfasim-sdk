@@ -167,7 +167,7 @@ thickness will be considered equal to zero meters.
 Unit Cell Model (UCM) Friction Factor
 -------------------------------------
 
-When the Unit Cell Model is used in ALFAsim simulation any plugin can implement your own friction factor
+When the Unit Cell Model is used in |alfasim| simulation any plugin can implement your own friction factor
 correlation. For that, two hooks MUST be implemented, one for stratified flow and one for annular flow. Both of
 them must be implemented because the |alfasim|'s Solver will call them depending on which flow pattern the fluid
 flow is in the control volume.
@@ -188,31 +188,48 @@ flow is in the control volume.
 Unit Cell Model (UCM) Liquid-Liquid System
 ------------------------------------------
 
-.. note::
-    It is important to know that the main input variables needed to estimate the flow pattern is available in
-    the API function :cpp:func:`get_ucm_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the
-    documentation of the cited function are related to one control volume, in which the estimation is applied.
+The |alfasim|'s multiphase modeling represents an one dimensional multiphase flow, in which is a result of some
+simplifications that transforms a local instantaneous three-dimensional model into a one-dimensional model. It results
+in a set of average equations for the multiphase flow. Because of those simplifications some important phenomena must
+be modeled in order to accurately represent the physical behavior. The shear stress is one of these phenomena that is
+modeled to increase the quality of the one dimensional model, in which the Unit Cell model (UCM) is used.
+
+The main goal of the Unit Cell Model is to obtain the friction factor that will be used to compute the Shear Stress
+term in the momentum equation and it depends on the flow pattern of the fluid flow. In |alfasim|'s Solver it can be
+performed for two phase (Gas-Liquid) and three phase (Gas-Oil-Water) systems. However, the three phase system is used
+only if there is a plugin in which implements the liquid-liquid (Oil-Water) system.
+
+.. note ::
+    Note that the two phase (Gas-Liquid) system of UCM can be used for both two and three phase flows, in which is
+    done in case of a liquid-liquid system is not available via plugin.
+
+In the gas-liquid system the liquid phase is considered as a sum of all liquid phases, and the model take into account
+only the interaction behavior between these two phases (Gas and Liquid). Of course, this kind of approach brings some
+limitations, since the behavior of the oil and water in the liquid phase is considered nearly homogeneous (mixture).
+On the other hand, if the liquid-liquid system considers the interaction between oil and water, it introduces a better
+modeling and representation of the tree phase system. In fact, considering the interaction between the oil and water
+phases, behaviors such as emulsion formation (oil dominated or water dominated) and stratified flow can be taken into
+account together with the gas-liquid system.
+
+The |alfasim|'s Unit Cell Model (UCM) of three phase system is divided into two steps, one for gas-liquid system and
+one for liquid-liquid system in which the complete representation uses an incremental approach. The two phase systems
+(Gas-Liquid and Liquid-Liquid) model different behaviors and are coupled in the three phase system algorithm. First the
+UCM for gas-liquid system is solved, considering a single liquid phase (Oil and Water mixture), after that the UCM for
+liquid-liquid system is solved, considering independent oil and water phases. Before assume that both have a final
+result, the properties of liquid phase are updated taking into account the solution of UCM for liquid-liquid system.
+Then, the same process is repeated until the liquid phase properties and flow patterns for both systems don't change
+significantly.
+
+To make possible the liquid-liquid system modeling via plugin, four Hooks are available in the |sdk|, three of them to
+estimate/compute properties that depends on Oil-Water interaction (Flow Pattern, Viscosity and surface tension) and one
+to properly compute the shear force of each liquid phase and between them. Other associated variables are required in
+each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern
 
-.. note::
-    It is important to know that the main input variables needed to estimate the flow pattern is available in
-    the API function :cpp:func:`get_ucm_liquid_effective_viscosity_input_variable`. Note that, the variables listed in the
-    documentation of the cited function are related to one control volume, in which the estimation is applied.
-
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liquid_effective_viscosity
 
-.. note::
-    It is important to know that the main input variables needed to estimate the flow pattern is available in
-    the API function :cpp:func:`get_ucm_gasliq_surface_tension_input_variable`. Note that, the variables listed in the
-    documentation of the cited function are related to one control volume, in which the estimation is applied.
-
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_gasliq_surface_tension
-
-.. note::
-    It is important to know that the main input variables needed to estimate the flow pattern is available in
-    the API function :cpp:func:`get_ucm_liqliq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
-    documentation of the cited function are related to one control volume, in which the estimation is applied.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_shear_force_per_volume
 

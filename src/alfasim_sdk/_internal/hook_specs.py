@@ -1401,6 +1401,11 @@ def calculate_ucm_liqliq_flow_pattern(
     (Gas-Liquid). The output variables ``ll_fp`` and ``water_vol_frac`` are the liquid-liquid flow pattern
     and volume fraction of water, respectively.
 
+    .. note::
+        The main input variables needed to estimate the flow pattern is available in the API function
+        :cpp:func:`get_ucm_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the documentation
+        of the cited function are related to one control volume, in which the estimation is applied.
+
     This `hook` allows the developer to implement your own flow pattern estimation algorithm for the liquid-liquid
     system.
 
@@ -1466,6 +1471,11 @@ def calculate_ucm_liquid_effective_viscosity(
     It represents viscosity of a Liquid phase used in the two phase system (Gas-Liquid).
     The output variable ``mu_l_eff`` is the Liquid Effective Viscosity. It has unit equal to ``[Pa.s]``.
 
+    .. note::
+        The main input variables needed to estimate the liquid effective viscosity is available in the API function
+        :cpp:func:`get_ucm_liquid_effective_viscosity_input_variable`. Note that, the variables listed in the
+        documentation of the cited function are related to one control volume, in which the estimation is applied.
+
     This `hook` allows the developer to implement your own liquid effective viscosity correlation to
     represent the viscosity of an unified liquid phase that represents the Oil-Water mixture.
 
@@ -1519,13 +1529,18 @@ def calculate_ucm_gasliq_surface_tension(
     It represents Gas-Liquid surface tension used in the two phase system (Gas-Liquid).
     The output variable ``sigma_gl`` is the Gas-Liquid Surface tension. It has unit equal to ``[N/m]``.
 
-    .. Note::
-        It is important to note that the Gas-Liquid Surface tension depends on Gas-Oil and Gas-Water
-        Surface Tensions from Liquid-Liquid system. Since it depends on the Liquid-Liquid Flow pattern,
-        the Gas-Liquid Surface Tension must take it into account.
+    .. note::
+        The main input variables needed to estimate the Gas-Liquid Surface Tension is available in the API function
+        :cpp:func:`get_ucm_gasliq_surface_tension_input_variable`. Note that, the variables listed in the
+        documentation of the cited function are related to one control volume, in which the estimation is applied.
 
     This `hook` allows the developer to implement your own Gas-liquid Surface Tension correlation for
     an unified liquid phase that represents the Oil-Water mixture.
+
+    .. note::
+        It is important to note that the Gas-Liquid Surface tension depends on Gas-Oil and Gas-Water
+        Surface Tensions from Liquid-Liquid system. Since it depends on the Liquid-Liquid Flow pattern,
+        the Gas-Liquid Surface Tension must take it into account.
 
     :param ctx: ALFAsim's plugins context
     :param sigma_gl: Gas-Liquid Surface Tension
@@ -1578,6 +1593,11 @@ def calculate_ucm_liqliq_shear_force_per_volume(
     Internal `hook` to calculate the Shear Force per unit volume for the Liquid-Liquid System.
     Also Field velocities and field volume fraction must be calculated.
     It is important to compute the shear stress term in the momentum equation for the Liquid-Liquid System.
+
+    .. note::
+        The main input variables needed to estimate the Shear Force is available in the API function
+        :cpp:func:`get_ucm_liqliq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
+        documentation of the cited function are related to one control volume, in which the estimation is applied.
 
     The output variable ``shear_w`` is the Wall Shear Force per unit Volume with size equal to ``2``
     (for Oil and Water phases) and it has unit equal to ``[N/m^3]``.
