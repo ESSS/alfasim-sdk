@@ -1,5 +1,5 @@
 # fmt: off
-##[[[cog
+# #[[[cog
 # import cog
 # from alfasim_sdk import CaseDescription
 # from alfasim_sdk._internal.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
@@ -10,9 +10,8 @@
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
-
-
+from strictyaml import (Bool, Enum, Float, Int, Map, MapPattern,  # noreorder
+                        Optional, Seq, Str)
 
 bip_description_schema = Map(
     {
@@ -263,7 +262,7 @@ profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "element_name": Str(),
-        "location": Enum(['main', 'annulus']),
+        "location": Enum(['main', 'annulus', 'global']),
     }
 )
 pvt_model_correlation_description_schema = Map(
@@ -386,8 +385,8 @@ trend_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "element_name": Str(),
-        "position": Map({"value": Float(), "unit": Str()}),
-        "location": Enum(['main', 'annulus']),
+        "location": Enum(['main', 'annulus', 'global']),
+        Optional("position"): Map({"value": Float(), "unit": Str()}),
     }
 )
 tubing_description_schema = Map(
@@ -678,5 +677,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 246db83b8565903de6db4af4b62191c7)
+# [[[end]]] (checksum: f82ca8921a5d3144ba8eabcc936d97b3)
 # fmt: on
