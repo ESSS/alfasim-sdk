@@ -1561,7 +1561,7 @@ def calculate_ucm_gasliq_surface_tension(
 
             // Getting liquid Effective Viscosity input data from context
             double sigma_gll[2];
-            errcode = alfasim_sdk_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+            errcode = alfasim_sdk_api.get_ucm_gasliq_surface_tension_input_variable(
                 ctx, &sigma_gll[O], "sigma_gll", LiquidLiquidSystem::OIL);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
@@ -1655,17 +1655,17 @@ def calculate_ucm_liqliq_shear_force_per_volume(
             // Calculate the wall and interfacial shear force per unit volume, fields (Liquid-Liquid System)
             // velocities and fields (Liquid-Liquid System) volume fraction using your own algorithm.
 
-            *shear_w[O] = wall_shear_force[O];
-            *shear_w[W] = wall_shear_force[W];
+            shear_w[O] = wall_shear_force[O];
+            shear_w[W] = wall_shear_force[W];
             *shear_i = interfacial_shear_force;
-            *u_fields[O] = U[O];
-            *u_fields[W] = U[W];
-            *u_fields[OW] = U[OW];
-            *u_fields[WO] = U[WO];
-            *vol_frac_fields[O] = alpha[O];
-            *vol_frac_fields[W] = alpha[W];
-            *vol_frac_fields[OW] = alpha[OW];
-            *vol_frac_fields[WO] = alpha[WO];
+            u_fields[O] = U[O];
+            u_fields[W] = U[W];
+            u_fields[OW] = U[OW];
+            u_fields[WO] = U[WO];
+            vol_frac_fields[O] = alpha[O];
+            vol_frac_fields[W] = alpha[W];
+            vol_frac_fields[OW] = alpha[OW];
+            vol_frac_fields[WO] = alpha[WO];
 
             return OK;
         }
