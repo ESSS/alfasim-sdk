@@ -126,6 +126,7 @@ struct ALFAsimSDK_API {
     get_simulation_quantity_func get_simulation_quantity;
 
     get_flow_pattern_func get_flow_pattern;
+    get_flow_pattern_func get_liqliq_flow_pattern;
 
     get_tracer_id_func get_tracer_id;
     get_tracer_name_size_func get_tracer_name_size;
