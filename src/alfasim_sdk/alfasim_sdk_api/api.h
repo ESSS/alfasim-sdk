@@ -486,8 +486,8 @@ DLL_EXPORT int get_flow_pattern(
     - `2 - Dispersed Oil`: Dispersed oil in continuous water.
     - `3 - Dispersed Water`: Dispersed water in continuous Oil.
     - `4 - Separated`: Separated continuous oil and continuous water.
-    - `5 - separated Mixed`: Separated with dispersed oil and water droplets.
-    - `6 - separated Wavy`: Separated with waves.
+    - `5 - Separated Mixed`: Separated with dispersed oil and water droplets.
+    - `6 - Separated Wavy`: Separated with waves.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] out Liquid-Liquid Flow Pattern values array. See list of possible values above.
