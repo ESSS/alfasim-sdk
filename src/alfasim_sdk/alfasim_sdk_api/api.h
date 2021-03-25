@@ -477,6 +477,34 @@ DLL_EXPORT int get_flow_pattern(
 );
 
 /*!
+    Gets the liquid-liquid flow pattern for each control volume. Related to the UCM
+    liquid-liquid system.
+
+    List of possible values of `Liquid-Liquid Flow Pattern` is:
+    - `0 - Unknown`: Unknown Flow Pattern.
+    - `1 - Ambivalent`: Ambivalent Flow Pattern between Dispersed Oil and Dispersed Water.
+    - `2 - Dispersed Oil`: Dispersed oil in continuous water.
+    - `3 - Dispersed Water`: Dispersed water in continuous Oil.
+    - `4 - Separated`: Separated continuous oil and continuous water.
+    - `5 - Separated Mixed`: Separated with dispersed oil and water droplets.
+    - `6 - Separated Wavy`: Separated with waves.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Liquid-Liquid Flow Pattern values array. See list of possible values above.
+    @param[in] grid_scope A #GridScope value.
+    @param[in] ts_scope A #TimestepScope value.
+    @param[in] size Size of out array of values.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_liqliq_flow_pattern(
+    void* ctx,
+    int** out,
+    enum GridScope grid_scope,
+    enum TimestepScope ts_scope,
+    int* size
+);
+
+/*!
     Retrieves the tracer ID given a tracer reference. A tracer reference may be obtained from the
     user input data (See #get_plugin_input_data_reference API function for an example).
 
