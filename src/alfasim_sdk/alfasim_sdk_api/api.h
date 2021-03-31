@@ -663,10 +663,10 @@ DLL_EXPORT int get_ucm_fluid_geometrical_properties(
 );
 
 /*!
-    Gets the current UCM (unit cell model) input data for liquid-liquid flow Pattern
-    calculation. Any available variable by this function is considered for a unit cell,
-    which means that there are variables with one value and there are variables with
-    two values related to the liquid-liquid system (OIL and WATER).
+    Gets the current control volume input data for liquid-liquid flow Pattern calculation.
+    Any available variable by this function is considered for a control volume, which
+    means that there are variables with one value and there are variables with two values
+    related to the liquid-liquid system (OIL and WATER).
     If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
 
     List of `variable_name` with two values (Oil and Water):
@@ -681,7 +681,7 @@ DLL_EXPORT int get_ucm_fluid_geometrical_properties(
 
     List of `variable_name` with one value:
     - `"D_h"`: Unit Cell Liquid (Oil-Water) Hydraulic Diameter [m]
-    - `"ks"`: Roughness [m]
+    - `"ks"`: Absolute Roughness [m]
     - `"theta"`: Inclination of the Unit Cell [rad]
     - `"sigma"`: Liquid-liquid (Oil-Water) Surface Tension [N/m]
 
@@ -692,15 +692,14 @@ DLL_EXPORT int get_ucm_fluid_geometrical_properties(
                             to a phase any value can be passed.
     @return An #error_code value.
 */
-DLL_EXPORT int get_ucm_liqliq_flow_pattern_input_variable(
+DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 
 /*!
-    Gets the current UCM (unit cell model) input data for liquid effective viscosity
-    calculation. Any available variable by this function is considered for a unit cell,
-    which means that there are variables with one value and there are variables with
-    two values related to the liquid-liquid system (OIL and WATER).
+    Gets the current input data for liquid effective viscosity calculation. Any available variable by
+    this function is considered for a control volume, which means that there are variables with one
+    value and there are variables with two values related to the liquid-liquid system (OIL and WATER).
     If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
 
     List of `variable_name` with two values (Oil and Water):
@@ -716,7 +715,7 @@ DLL_EXPORT int get_ucm_liqliq_flow_pattern_input_variable(
     List of `variable_name` with one value:
     - `"alpha_w"` : Water Volume Fraction [kg of `water phase` / kg of `liquid(Oil+Water) phase`]
     - `"D_h"`: Unit Cell Liquid (Oil-Water) Hydraulic Diameter [m]
-    - `"ks"`: Roughness [m]
+    - `"ks"`: Absolute Roughness [m]
     - `"theta"`: Inclination of the Unit Cell [rad]
     - `"sigma"`: Liquid-liquid (Oil-Water) Surface Tension [N/m]
 
@@ -727,15 +726,14 @@ DLL_EXPORT int get_ucm_liqliq_flow_pattern_input_variable(
                             to a phase any value can be passed.
     @return An #error_code value.
 */
-DLL_EXPORT int get_ucm_liquid_effective_viscosity_input_variable(
+DLL_EXPORT int get_liquid_effective_viscosity_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 
 /*!
-    Gets the current UCM (unit cell model) input data for Gas-Liquid surface tension
-    calculation. Any available variable by this function is considered for a unit cell,
-    which means that there are variables with one value and there are variables with
-    two values related to the liquid-liquid system (OIL and WATER).
+    Gets the current input data for Gas-Liquid surface tension calculation. Any available variable by
+    this function is considered for a control volume, which means that there are variables with one
+    value and there are variables with two values related to the liquid-liquid system (OIL and WATER).
     If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
 
     List of `variable_name` with two values (Oil and Water):
@@ -747,7 +745,7 @@ DLL_EXPORT int get_ucm_liquid_effective_viscosity_input_variable(
     Because of that, the #error_code must be checked.
 
     List of `variable_name` with one value:
-    - `"alpha_w"` : Water Volume Fraction [kg of `water phase` / kg of `liquid(Oil+Water) phase`]
+    - `"alpha_w"` : Water Volume Fraction [m3 of `water phase` / m3 of `liquid(Oil+Water) phase`]
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] out Variable value.
@@ -756,15 +754,14 @@ DLL_EXPORT int get_ucm_liquid_effective_viscosity_input_variable(
                             to a phase any value can be passed.
     @return An #error_code value.
 */
-DLL_EXPORT int get_ucm_gasliq_surface_tension_input_variable(
+DLL_EXPORT int get_gas_liq_surface_tension_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 
 /*!
-    Gets the current UCM (unit cell model) input data for Shear force calculation.
-    Any available variable by this function is considered for a unit cell,
-    which means that there are variables with one value and there are variables with
-    two values related to the liquid-liquid system (OIL and WATER).
+    Gets the current input data for Shear force calculation. Any available variable by this function
+    is considered for a control volume, which means that there are variables with one value and there
+    are variables with two values related to the liquid-liquid system (OIL and WATER).
     If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
 
     The variables available are the same as #get_ucm_liqliq_flow_pattern_input_variable and
@@ -777,7 +774,7 @@ DLL_EXPORT int get_ucm_gasliq_surface_tension_input_variable(
                             to a phase any value can be passed.
     @return An #error_code value.
 */
-DLL_EXPORT int get_ucm_liqliq_shear_force_per_volume_input_variable(
+DLL_EXPORT int get_liq_liq_shear_force_per_volume_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 

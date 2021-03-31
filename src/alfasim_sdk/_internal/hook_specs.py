@@ -1389,11 +1389,11 @@ def calculate_ucm_friction_factor_annular(
     """
 
 
-def calculate_ucm_liqliq_flow_pattern(
+def calculate_liq_liq_flow_pattern(
     ctx: "void*", ll_fp: "int*", water_vol_frac: "double*"
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)``
+    **c++ signature** : ``HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)``
 
     Internal `hook` to calculate the liquid-liquid flow pattern (Oil-Water) and the water volume fraction
     in the Liquid-Liquid system. The Liquid-Liquid system is a two phase flow with Oil and Water Phases.
@@ -1431,7 +1431,7 @@ def calculate_ucm_liqliq_flow_pattern(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)
+        int HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)
         {
             int errcode = -1;
             int O = LiquidLiquidSystem::OIL;
@@ -1461,11 +1461,11 @@ def calculate_ucm_liqliq_flow_pattern(
     """
 
 
-def calculate_ucm_liquid_effective_viscosity(
+def calculate_liquid_effective_viscosity(
     ctx: "void*", mu_l_eff: "double*", ll_fp: "int"
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_UCM_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)``
+    **c++ signature** : ``HOOK_CALCULATE_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)``
 
     Internal `hook` to calculate the liquid (Oil-Water) effective viscosity in the Liquid-Liquid system.
     It represents viscosity of a Liquid phase used in the two phase system (Gas-Liquid).
@@ -1481,7 +1481,7 @@ def calculate_ucm_liquid_effective_viscosity(
 
     :param ctx: ALFAsim's plugins context
     :param mu_l_eff: Liquid Effective Viscosity
-    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern>` for possible values)
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern>` for possible values)
     :returns: Return OK if successful or anything different if failed
 
     Example of usage:
@@ -1490,7 +1490,7 @@ def calculate_ucm_liquid_effective_viscosity(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_UCM_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)
+        int HOOK_CALCULATE_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)
         {
             int errcode = -1;
             int O = LiquidLiquidSystem::OIL;
@@ -1519,11 +1519,11 @@ def calculate_ucm_liquid_effective_viscosity(
     """
 
 
-def calculate_ucm_gasliq_surface_tension(
+def calculate_gas_liq_surface_tension(
     ctx: "void*", sigma_gl: "double*", ll_fp: "int"
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_UCM_GASLIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)``
+    **c++ signature** : ``HOOK_CALCULATE_GAS_LIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)``
 
     Internal `hook` to calculate the Gas-liquid Surface Tension based in the Liquid-Liquid System.
     It represents Gas-Liquid surface tension used in the two phase system (Gas-Liquid).
@@ -1544,7 +1544,7 @@ def calculate_ucm_gasliq_surface_tension(
 
     :param ctx: ALFAsim's plugins context
     :param sigma_gl: Gas-Liquid Surface Tension
-    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern>` for possible values)
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern>` for possible values)
     :returns: Return OK if successful or anything different if failed
 
     Example of usage:
@@ -1553,7 +1553,7 @@ def calculate_ucm_gasliq_surface_tension(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_UCM_GASLIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)
+        int HOOK_CALCULATE_GAS_LIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)
         {
             int errcode = -1;
             int O = LiquidLiquidSystem::OIL;
@@ -1578,7 +1578,7 @@ def calculate_ucm_gasliq_surface_tension(
     """
 
 
-def calculate_ucm_liqliq_shear_force_per_volume(
+def calculate_liq_liq_shear_force_per_volume(
     ctx: "void*",
     shear_w: "double*",
     shear_i: "double*",
@@ -1587,7 +1587,7 @@ def calculate_ucm_liqliq_shear_force_per_volume(
     ll_fp: "int",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_UCM_LIQLIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
+    **c++ signature** : ``HOOK_CALCULATE_LIQ_LIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
     double* shear_i, double* u_fields, double* vol_frac_fields, int ll_fp)``
 
     Internal `hook` to calculate the Shear Force per unit volume for the Liquid-Liquid System.
@@ -1623,7 +1623,7 @@ def calculate_ucm_liqliq_shear_force_per_volume(
     :param shear_i: Interfacial (Oil-Water) Shear Force per unit Volume
     :param u_fields: Field Velocities
     :param vol_frac_fields: Field Voluem Fraction
-    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_UCM_LIQLIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern>` for possible values)
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern>` for possible values)
     :returns: Return OK if successful or anything different if failed
 
     Example of usage:
@@ -1632,7 +1632,7 @@ def calculate_ucm_liqliq_shear_force_per_volume(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_UCM_LIQLIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
+        int HOOK_CALCULATE_LIQ_LIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
             double* shear_i, double* U_fields, double* vol_frac_fields, int ll_fp)
         {
             int errcode = -1;
@@ -1846,11 +1846,11 @@ specs = HookSpecs(
         # Hooks related to UCM Friction Factor
         calculate_ucm_friction_factor_stratified,
         calculate_ucm_friction_factor_annular,
-        # Hooks related to UCM Liquiq-Liquid System
-        calculate_ucm_liqliq_flow_pattern,
-        calculate_ucm_liquid_effective_viscosity,
-        calculate_ucm_gasliq_surface_tension,
-        calculate_ucm_liqliq_shear_force_per_volume,
+        # Hooks related to Liquiq-Liquid Mechanistic Model
+        calculate_liq_liq_flow_pattern,
+        calculate_liquid_effective_viscosity,
+        calculate_gas_liq_surface_tension,
+        calculate_liq_liq_shear_force_per_volume,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,

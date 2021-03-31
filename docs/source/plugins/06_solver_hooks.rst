@@ -185,8 +185,8 @@ flow is in the control volume.
     Another important API function for UCM is :cpp:func:`get_ucm_fluid_geometrical_properties`. This function computes
     the geometrical properties properly in each previous presented `hooks` depending on the flow pattern.
 
-Unit Cell Model (UCM) Liquid-Liquid System
-------------------------------------------
+Liquid-Liquid Mechanistic Model
+-------------------------------
 
 The |alfasim|'s multiphase modeling represents an one dimensional multiphase flow, in which is a result of some
 simplifications that transforms a local instantaneous three-dimensional model into a one-dimensional model. It results
@@ -225,13 +225,13 @@ estimate/compute properties that depends on Oil-Water interaction (Flow Pattern,
 to properly compute the shear force of each liquid phase and between them. Other associated variables are required in
 each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 
-.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_flow_pattern
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern
 
-.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liquid_effective_viscosity
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liquid_effective_viscosity
 
-.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_gasliq_surface_tension
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_gas_liq_surface_tension
 
-.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_liqliq_shear_force_per_volume
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_shear_force_per_volume
 
 User Defined Tracers
 --------------------
