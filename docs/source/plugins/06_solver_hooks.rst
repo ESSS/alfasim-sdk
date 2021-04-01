@@ -188,42 +188,47 @@ flow is in the control volume.
 Liquid-Liquid Mechanistic Model
 -------------------------------
 
-The |alfasim|'s multiphase modeling represents an one dimensional multiphase flow, in which is a result of some
-simplifications that transforms a local instantaneous three-dimensional model into a one-dimensional model. It results
-in a set of average equations for the multiphase flow. Because of those simplifications some important phenomena must
-be modeled in order to accurately represent the physical behavior. The shear stress is one of these phenomena that is
-modeled to increase the quality of the one dimensional model, in which the Unit Cell model (UCM) is used.
+|alfasim|'s resulting multiphase model is a one-dimensional system of nonlinear equations, which is a result of some
+averaging steps that transforms a local instantaneous three-dimensional model into a one-dimensional multiphase (and
+multi-field) model. The derived variables that form the nonlinear differential equations represent average values at
+a given point in time and space. It is clear that in this averaging process there are important phenomena that will
+non longer be naturally captured from the equations and therefore one of the strategies is to incorporate all the
+physics that have been lost in the averaging process in the shear stress term in order to accurately represent the
+physical behavior. Hence the shear stress is one of the most important parameters for characterizing the quality of a
+one-dimensional multiphase model.
 
-The main goal of the Unit Cell Model is to obtain the friction factor that will be used to compute the Shear Stress
+The main goal of the Mechanistic Model is to obtain the friction factor that will be used to compute the Shear Stress
 term in the momentum equation and it depends on the flow pattern of the fluid flow. In |alfasim|'s Solver it can be
 performed for two phase (Gas-Liquid) and three phase (Gas-Oil-Water) systems. However, the three phase system is used
 only if there is a plugin in which implements the liquid-liquid (Oil-Water) system.
 
 .. note ::
-    Note that the two phase (Gas-Liquid) system of UCM can be used for both two and three phase flows, in which is
-    done in case of a liquid-liquid system is not available via plugin.
+    Note that the two phase (Gas-Liquid) system of Mechanistic Model can be used for both two and three-phase flows,
+    in which is done in case of a liquid-liquid system is not available via plugin.
 
 In the gas-liquid system the liquid phase is considered as a sum of all liquid phases, and the model take into account
 only the interaction behavior between these two phases (Gas and Liquid). Of course, this kind of approach brings some
 limitations, since the behavior of the oil and water in the liquid phase is considered nearly homogeneous (mixture).
 On the other hand, if the liquid-liquid system considers the interaction between oil and water, it introduces a better
-modeling and representation of the tree phase system. In fact, considering the interaction between the oil and water
+modeling and representation of the tree-phase system. In fact, considering the interaction between the oil and water
 phases, behaviors such as emulsion formation (oil dominated or water dominated) and stratified flow can be taken into
 account together with the gas-liquid system.
 
-The |alfasim|'s Unit Cell Model (UCM) of three phase system is divided into two steps, one for gas-liquid system and
+The |alfasim|'s Mechanistic Model of three-phase system is divided into two steps, one for gas-liquid system and
 one for liquid-liquid system in which the complete representation uses an incremental approach. The two phase systems
-(Gas-Liquid and Liquid-Liquid) model different behaviors and are coupled in the three phase system algorithm. First the
-UCM for gas-liquid system is solved, considering a single liquid phase (Oil and Water mixture), after that the UCM for
-liquid-liquid system is solved, considering independent oil and water phases. Before assume that both have a final
-result, the properties of liquid phase are updated taking into account the solution of UCM for liquid-liquid system.
-Then, the same process is repeated until the liquid phase properties and flow patterns for both systems don't change
-significantly.
+(Gas-Liquid and Liquid-Liquid) model different behaviors and are coupled in the three-phase system algorithm. First the
+Mechanistic Model for gas-liquid system is solved, considering a single liquid phase (Oil and Water mixture), after
+that the Mechanistic Model for liquid-liquid system is solved, considering independent oil and water phases.  Finally,
+the properties of liquid phase are updated taking into account the solution of Mechanistic model for liquid-liquid system.
 
 To make possible the liquid-liquid system modeling via plugin, four Hooks are available in the |sdk|, three of them to
 estimate/compute properties that depends on Oil-Water interaction (Flow Pattern, Viscosity and surface tension) and one
 to properly compute the shear force of each liquid phase and between them. Other associated variables are required in
 each Liquid-Liquid system plugin hooks. In the sequence, they are presented
+
+.. warning::
+    The hooks described in this section must be implemented all of them or none of them. If just part of four hooks
+    are implemented, the |Alfasim| will show an error of configuration.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern
 
@@ -232,6 +237,7 @@ each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_gas_liq_surface_tension
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_shear_force_per_volume
+
 
 User Defined Tracers
 --------------------

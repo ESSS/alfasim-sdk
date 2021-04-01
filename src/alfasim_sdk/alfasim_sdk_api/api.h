@@ -713,7 +713,7 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
     Because of that, the #error_code must be checked.
 
     List of `variable_name` with one value:
-    - `"alpha_w"` : Water Volume Fraction [kg of `water phase` / kg of `liquid(Oil+Water) phase`]
+    - `"alpha_w"` : Water Volume Fraction [m3 of `water phase` / m3 of `liquid(Oil+Water) phase`]
     - `"D_h"`: Unit Cell Liquid (Oil-Water) Hydraulic Diameter [m]
     - `"ks"`: Absolute Roughness [m]
     - `"theta"`: Inclination of the Unit Cell [rad]
@@ -764,7 +764,7 @@ DLL_EXPORT int get_gas_liq_surface_tension_input_variable(
     are variables with two values related to the liquid-liquid system (OIL and WATER).
     If a given variable name is not available, a #NOT_AVAILABLE_DATA error is returned.
 
-    The variables available are the same as #get_ucm_liqliq_flow_pattern_input_variable and
+    The variables available are the same as #get_liq_liq_flow_pattern_input_variable and
     its documentation should be visited for more details.
 
     @param[in] ctx ALFAsim's plugins context.

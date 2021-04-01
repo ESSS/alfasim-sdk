@@ -149,13 +149,17 @@ Unit Cell Model (UCM) helpers
 
 .. doxygenfunction:: get_ucm_fluid_geometrical_properties
 
-.. doxygenfunction:: get_ucm_liqliq_flow_pattern_input_variable
 
-.. doxygenfunction:: get_ucm_liquid_effective_viscosity_input_variable
+Liquid-Liquid Mechanistic Model helpers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. doxygenfunction:: get_ucm_gasliq_surface_tension_input_variable
+.. doxygenfunction:: get_liq_liq_flow_pattern_input_variable
 
-.. doxygenfunction:: get_ucm_liqliq_shear_force_per_volume_input_variable
+.. doxygenfunction:: get_liquid_effective_viscosity_input_variable
+
+.. doxygenfunction:: get_gas_liq_surface_tension_input_variable
+
+.. doxygenfunction:: get_liq_liq_shear_force_per_volume_input_variable
 
 .. _var_name_parsing:
 
