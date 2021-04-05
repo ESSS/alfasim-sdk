@@ -50,7 +50,7 @@ hold the plugin internal data.
 .. note::
     Since |alfasim|'s solver uses multi-threading to perform all possible parallelizable calculation, it is important that
     the plugins provide internal data to each `thread` to avoid data access concurrency problems. As can be seen the
-    ``HOOK_INITIALIZE`` example above, a ``for-loop`` is performed over the `threads` to set the plugin internal data.
+    :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>` example above, a ``for-loop`` is performed over the `threads` to set the plugin internal data.
     The |sdk| API function :cpp:func:`get_number_of_threads` is used to do it properly. See
     :ref:`plugin_internal_data` section for more information.
 
@@ -167,7 +167,7 @@ thickness will be considered equal to zero meters.
 Unit Cell Model (UCM) Friction Factor
 -------------------------------------
 
-When the Unit Cell Model is used in ALFAsim simulation any plugin can implement your own friction factor
+When the Unit Cell Model is used in |alfasim| simulation any plugin can implement your own friction factor
 correlation. For that, two hooks MUST be implemented, one for stratified flow and one for annular flow. Both of
 them must be implemented because the |alfasim|'s Solver will call them depending on which flow pattern the fluid
 flow is in the control volume.
@@ -184,6 +184,59 @@ flow is in the control volume.
 .. note::
     Another important API function for UCM is :cpp:func:`get_ucm_fluid_geometrical_properties`. This function computes
     the geometrical properties properly in each previous presented `hooks` depending on the flow pattern.
+
+Liquid-Liquid Mechanistic Model
+-------------------------------
+
+|alfasim|'s resulting multiphase model is a one-dimensional system of nonlinear equations, which is a result of some
+averaging steps that transforms a local instantaneous three-dimensional model into a one-dimensional multiphase (and
+multi-field) model. The derived variables that form the nonlinear differential equations represent average values at
+a given point in time and space. It is clear that in this averaging process there are important phenomena that will
+non longer be naturally captured from the equations and therefore one of the strategies is to incorporate all the
+physics that have been lost in the averaging process in the shear stress term in order to accurately represent the
+physical behavior. Hence the shear stress is one of the most important parameters for characterizing the quality of a
+one-dimensional multiphase model.
+
+The main goal of the Mechanistic Model is to obtain the friction factor that will be used to compute the Shear Stress
+term in the momentum equation and it depends on the flow pattern of the fluid flow. In |alfasim|'s Solver it can be
+performed for two phase (Gas-Liquid) and three phase (Gas-Oil-Water) systems. However, the three phase system is used
+only if there is a plugin in which implements the liquid-liquid (Oil-Water) system.
+
+.. note ::
+    Note that the two phase (Gas-Liquid) system of Mechanistic Model can be used for both two and three-phase flows,
+    in which is done in case of a liquid-liquid system is not available via plugin.
+
+In the gas-liquid system the liquid phase is considered as a sum of all liquid phases, and the model take into account
+only the interaction behavior between these two phases (Gas and Liquid). Of course, this kind of approach brings some
+limitations, since the behavior of the oil and water in the liquid phase is considered nearly homogeneous (mixture).
+On the other hand, if the liquid-liquid system considers the interaction between oil and water, it introduces a better
+modeling and representation of the tree-phase system. In fact, considering the interaction between the oil and water
+phases, behaviors such as emulsion formation (oil dominated or water dominated) and stratified flow can be taken into
+account together with the gas-liquid system.
+
+The |alfasim|'s Mechanistic Model of three-phase system is divided into two steps, one for gas-liquid system and
+one for liquid-liquid system in which the complete representation uses an incremental approach. The two phase systems
+(Gas-Liquid and Liquid-Liquid) model different behaviors and are coupled in the three-phase system algorithm. First the
+Mechanistic Model for gas-liquid system is solved, considering a single liquid phase (Oil and Water mixture), after
+that the Mechanistic Model for liquid-liquid system is solved, considering independent oil and water phases.  Finally,
+the properties of liquid phase are updated taking into account the solution of Mechanistic model for liquid-liquid system.
+
+To make possible the liquid-liquid system modeling via plugin, four Hooks are available in the |sdk|, three of them to
+estimate/compute properties that depends on Oil-Water interaction (Flow Pattern, Viscosity and surface tension) and one
+to properly compute the shear force of each liquid phase and between them. Other associated variables are required in
+each Liquid-Liquid system plugin hooks. In the sequence, they are presented
+
+.. warning::
+    The hooks described in this section must be implemented all of them or none of them. If just part of four hooks
+    are implemented, the |Alfasim| will show an error of configuration.
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liquid_effective_viscosity
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_gas_liq_surface_tension
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_shear_force_per_volume
 
 
 User Defined Tracers

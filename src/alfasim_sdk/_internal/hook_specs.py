@@ -519,7 +519,7 @@ def initialize_state_variables_calculator(
     Hook for the state variables calculator initialization (internal ``ALFAsim`` structure).
 
     At this point, it is possible to pre-calculate and cache any relevant information. Then, for each state variable of
-    the phases in the python configuration file, the `hook` :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_state_variables>`
+    the phases in the python configuration file, the `hook` :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk._internal.hook_specs.calculate_state_variable>`
     is called and return the pre-calculated values.
 
     :param ctx: ALFAsim's plugins context
@@ -696,7 +696,7 @@ def calculate_phase_pair_state_variable(
     int phase1_id, int phase2_id, int property_id, void* output)``
 
     Hook to calculate the state variable given by the `property_id` (See :cpp:enum:StateVariable values), for the phase
-    pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :py:func:`get_phase_id()`
+    pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id()`
     API function - It is not advisable to use hardcoded numbers).
 
     List of affected variables:|br|
@@ -774,7 +774,7 @@ def finalize_state_variables_calculator(ctx: "void*") -> "int":
     **c++ signature** : ``HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)``
 
     Hook for the state variables calculator finalization.
-    The plugin developer should free/delete any allocated data from the :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`.
+    The plugin developer should free/delete any allocated data from the :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk._internal.hook_specs.initialize_state_variables_calculator>`.
 
     :param ctx: ALFAsim's plugins context
     :returns: Return OK if successful or anything different if failed
@@ -806,7 +806,7 @@ def initialize_particle_diameter_of_solids_fields(
     int n_control_volumes, int solids_field_id)``
 
     Internal simulator hook to initialize particle diameter of solid fields. This `hook` follows the same idea of
-    :py:func:`HOOK_UPDATE_PLUGIN_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk.hook_specs.update_plugins_secondary_variables_on_first_timestep>`,
+    :py:func:`HOOK_UPDATE_PLUGIN_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep>`,
     which makes the initialization in the moment that there is no previous time step data available.
 
     :param ctx: ALFAsim's plugins context
@@ -1181,12 +1181,12 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
     int tracer_index)``
 
     Internal tracer model `hook` to set the initial prescribed boundary condition of mass fraction of tracer,
-    given by ``tracer_index`. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
-    in respect to the mass of the mixture. Note that all boundary nodes will be populated with `phi_presc` value
+    given by ``tracer_index``. The output variable ``phi_presc`` is the prescribed mass fraction of the given tracer
+    in respect to the mass of the mixture. Note that all boundary nodes will be populated with ``phi_presc`` value
     set by this `hook`.
 
     Please note that this `hook` sets the first mass fraction related boundary conditions value to
-    the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
+    the user defined tracer. However the hook :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk._internal.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
     allows the plugin developer to update this value.
 
     :param ctx: ALFAsim's plugins context
@@ -1328,8 +1328,8 @@ def calculate_ucm_friction_factor_stratified(
             void* ctx, double* ff_wG, double* ff_wL, double* ff_i)
         {
             int errcode = -1;
-            int G = TwoPhaseSystem::GAS
-            int L = TwoPhaseSystem::LIQUID
+            int G = TwoPhaseSystem::GAS;
+            int L = TwoPhaseSystem::LIQUID;
 
             // Getting friction factor input data from context
             double alpha[2];
@@ -1384,8 +1384,291 @@ def calculate_ucm_friction_factor_annular(
     :returns: Return OK if successful or anything different if failed
 
     Example of usage:
-        The same example presented in :py:func:`HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED<alfasim_sdk.hook_specs.calculate_ucm_friction_factor_stratified>`
+        The same example presented in :py:func:`HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED<alfasim_sdk._internal.hook_specs.calculate_ucm_friction_factor_stratified>`
         can be used, just change the `hook` name to `HOOK_CALCULATE_UCM_FRICTION_FACTOR_ANNULAR`.
+    """
+
+
+def calculate_liq_liq_flow_pattern(
+    ctx: "void*", ll_fp: "int*", water_vol_frac: "double*"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)``
+
+    Internal `hook` to calculate the liquid-liquid flow pattern (Oil-Water) and the water volume fraction
+    in the Liquid-Liquid system. The Liquid-Liquid system is a two phase flow with Oil and Water Phases.
+    It represents the separation of Liquid phase (into oil and water phases) used in the two phase system
+    (Gas-Liquid). The output variables ``ll_fp`` and ``water_vol_frac`` are the liquid-liquid flow pattern
+    and volume fraction of water, respectively.
+
+    .. note::
+        The main input variables needed to estimate the flow pattern is available in the API function
+        :cpp:func:`get_ucm_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the documentation
+        of the cited function are related to one control volume, in which the estimation is applied.
+
+    This `hook` allows the developer to implement your own flow pattern estimation algorithm for the liquid-liquid
+    system.
+
+    The ``ll_fp`` must be one of the following values: |br|
+    - `0 - Unknown`: Unknown Flow Pattern. |br|
+    - `1 - Ambivalent`: Ambivalent Flow Pattern between Dispersed Oil and Dispersed Water. |br|
+    - `2 - Dispersed Oil`: Dispersed oil in continuous water. |br|
+    - `3 - Dispersed Water`: Dispersed water in continuous Oil. |br|
+    - `4 - Separated`: Separated continuous oil and continuous water. |br|
+    - `5 - separated Mixed`: Separated with dispersed oil and water droplets. |br|
+    - `6 - separated Wavy`: Separated with waves. |br|
+
+    Any value different from these values will be assumed an `Unknown` flow pattern.
+
+    :param ctx: ALFAsim's plugins context
+    :param ll_fp: Liquid-Liquid Flow Pattern
+    :param water_vol_frac: Volume fraction of water in the Liquid-Liquid System
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)
+        {
+            int errcode = -1;
+            int O = LiquidLiquidSystem::OIL;
+            int W = LiquidLiquidSystem::WATER;
+
+            // Getting liq-liq Flow Pattern input data from context
+            double rho[2];
+            errcode = alfasim_sdk_api.get_ucm_liqliq_flow_pattern_input_variable(
+                ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
+            if (errcode != OK){ return errcode; }
+            errcode = alfasim_plugins_api.get_ucm_liqliq_flow_pattern_input_variable(
+                ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // U_S(superficial velocities), mu(viscosities)
+            // and D_h(liquid hydraulic diameter)
+
+            // Estimate the liquid-liquid Flow pattern and volume fraction of water
+            // using your own algorithm.
+
+
+            *ll_fp = flow_pattern;
+            *water_vol_frac = alpha_W;
+
+            return OK;
+        }
+    """
+
+
+def calculate_liquid_effective_viscosity(
+    ctx: "void*", mu_l_eff: "double*", ll_fp: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)``
+
+    Internal `hook` to calculate the liquid (Oil-Water) effective viscosity in the Liquid-Liquid system.
+    It represents viscosity of a Liquid phase used in the two phase system (Gas-Liquid).
+    The output variable ``mu_l_eff`` is the Liquid Effective Viscosity. It has unit equal to ``[Pa.s]``.
+
+    .. note::
+        The main input variables needed to estimate the liquid effective viscosity is available in the API function
+        :cpp:func:`get_ucm_liquid_effective_viscosity_input_variable`. Note that, the variables listed in the
+        documentation of the cited function are related to one control volume, in which the estimation is applied.
+
+    This `hook` allows the developer to implement your own liquid effective viscosity correlation to
+    represent the viscosity of an unified liquid phase that represents the Oil-Water mixture.
+
+    :param ctx: ALFAsim's plugins context
+    :param mu_l_eff: Liquid Effective Viscosity
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern>` for possible values)
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)
+        {
+            int errcode = -1;
+            int O = LiquidLiquidSystem::OIL;
+            int W = LiquidLiquidSystem::WATER;
+
+            // Getting liquid Effective Viscosity input data from context
+            double rho[2];
+            errcode = alfasim_sdk_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+                ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
+            if (errcode != OK){ return errcode; }
+            errcode = alfasim_plugins_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+                ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // U_S(superficial velocities), mu(viscosities for Oil and Water) and
+            // D_h(liquid hydraulic diameter)
+
+            // Estimate the liquid effective viscosity using your own algorithm.
+            // Since the liquid effective viscosity depends on Liquid-Liquid Flow Pattern,
+            // it is provide as an Hook parameter (`ll_fp`).
+
+            *mu_l_eff = liquid_viscosity;
+
+            return OK;
+        }
+    """
+
+
+def calculate_gas_liq_surface_tension(
+    ctx: "void*", sigma_gl: "double*", ll_fp: "int"
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_GAS_LIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)``
+
+    Internal `hook` to calculate the Gas-liquid Surface Tension based in the Liquid-Liquid System.
+    It represents Gas-Liquid surface tension used in the two phase system (Gas-Liquid).
+    The output variable ``sigma_gl`` is the Gas-Liquid Surface tension. It has unit equal to ``[N/m]``.
+
+    .. note::
+        The main input variables needed to estimate the Gas-Liquid Surface Tension is available in the API function
+        :cpp:func:`get_ucm_gasliq_surface_tension_input_variable`. Note that, the variables listed in the
+        documentation of the cited function are related to one control volume, in which the estimation is applied.
+
+    This `hook` allows the developer to implement your own Gas-liquid Surface Tension correlation for
+    an unified liquid phase that represents the Oil-Water mixture.
+
+    .. note::
+        It is important to note that the Gas-Liquid Surface tension depends on Gas-Oil and Gas-Water
+        Surface Tensions from Liquid-Liquid system. Since it depends on the Liquid-Liquid Flow pattern,
+        the Gas-Liquid Surface Tension must take it into account.
+
+    :param ctx: ALFAsim's plugins context
+    :param sigma_gl: Gas-Liquid Surface Tension
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern>` for possible values)
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_GAS_LIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)
+        {
+            int errcode = -1;
+            int O = LiquidLiquidSystem::OIL;
+            int W = LiquidLiquidSystem::WATER;
+
+            // Getting liquid Effective Viscosity input data from context
+            double sigma_gll[2];
+            errcode = alfasim_sdk_api.get_ucm_gasliq_surface_tension_input_variable(
+                ctx, &sigma_gll[O], "sigma_gll", LiquidLiquidSystem::OIL);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // sigma_gw(Surface tension Gas-Water) and alpha_w(Water Volume Fraction)
+
+            // Estimate the Gas-Liquid Surface Tension using your own algorithm.
+            // Since the Gas-Liquid Surface Tension depends on Liquid-Liquid Flow Pattern,
+            // it is provide as an Hook parameter (`ll_fp`).
+
+            *sigma_gl = gas_liq_sigma;
+
+            return OK;
+        }
+    """
+
+
+def calculate_liq_liq_shear_force_per_volume(
+    ctx: "void*",
+    shear_w: "double*",
+    shear_i: "double*",
+    u_fields: "double*",
+    vol_frac_fields: "double*",
+    ll_fp: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_CALCULATE_LIQ_LIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
+    double* shear_i, double* u_fields, double* vol_frac_fields, int ll_fp)``
+
+    Internal `hook` to calculate the Shear Force per unit volume for the Liquid-Liquid System.
+    Also Field velocities and field volume fraction must be calculated.
+    It is important to compute the shear stress term in the momentum equation for the Liquid-Liquid System.
+
+    .. note::
+        The main input variables needed to estimate the Shear Force is available in the API function
+        :cpp:func:`get_ucm_liqliq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
+        documentation of the cited function are related to one control volume, in which the estimation is applied.
+
+    The output variable ``shear_w`` is the Wall Shear Force per unit Volume with size equal to ``2``
+    (for Oil and Water phases) and it has unit equal to ``[N/m^3]``.
+    The output variable ``shear_i`` is the Interfacial Shear Force per unit Volume between Oil and Water
+    phases it has unit equal to ``[N/m^3]``.
+    The output variable ``u_fields`` is the field velocities with size ``4`` because values for continuous
+    fields (Oil and Water) and for dispersed fields (Oil Droplet in Water and Water Droplet in Oil) must be
+    provided and it has unit equal to ``[m/s]``.
+    The output variable ``vol_frac_fields`` is the field volume fractions also with size ``4``, just like
+    ``u_fields`` and it has unit equal to ``[kg of field/ kg of liquid-liquid mixture]``.
+
+    .. Note::
+        The outputs ``u_fields`` and ``vol_frac_fields`` are vectors in which the order of the fields are
+        Oil Continuous(``O``) for index 0, Water Continuous(``W``) for index 1, Oil Droplet in Water(``OW``)
+        for index 3 and Water Droplets in Oil(``WO``) for index 4. See the example below.
+
+    This `hook` allows the implementation of the shear force for the Liquid-Liquid System,an important
+    output of the Unit Cell Model. Since this kind of calculation depends on Liquid-Liquid Flow
+    Pattern, it is provided as an hook parameter.
+
+    :param ctx: ALFAsim's plugins context
+    :param shear_w: Wall Shear Force per unit Volume
+    :param shear_i: Interfacial (Oil-Water) Shear Force per unit Volume
+    :param u_fields: Field Velocities
+    :param vol_frac_fields: Field Voluem Fraction
+    :param ll_fp: Liquid-Liquid Flow Pattern (see :py:func:`HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN<alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern>` for possible values)
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_CALCULATE_LIQ_LIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
+            double* shear_i, double* U_fields, double* vol_frac_fields, int ll_fp)
+        {
+            int errcode = -1;
+            int O = 0;
+            int W = 1;
+            int OW = 2;
+            int WO = 3;
+
+            // Getting shear term input data from context
+            double rho[2];
+            errcode = alfasim_sdk_api.get_ucm_liqliq_shear_force_per_volume_input_variable(
+                ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
+            errcode = alfasim_sdk_api.get_ucm_liqliq_shear_force_per_volume_input_variable(
+                ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
+            if (errcode != OK){ return errcode; }
+            // And so on to each input variable
+            // U_S(superficial velocities), mu(viscosities for Oil and Water) and
+            // D_h(liquid hydraulic diameter)
+
+            // Calculate the wall and interfacial shear force per unit volume, fields (Liquid-Liquid System)
+            // velocities and fields (Liquid-Liquid System) volume fraction using your own algorithm.
+
+            shear_w[O] = wall_shear_force[O];
+            shear_w[W] = wall_shear_force[W];
+            *shear_i = interfacial_shear_force;
+            u_fields[O] = U[O];
+            u_fields[W] = U[W];
+            u_fields[OW] = U[OW];
+            u_fields[WO] = U[WO];
+            vol_frac_fields[O] = alpha[O];
+            vol_frac_fields[W] = alpha[W];
+            vol_frac_fields[OW] = alpha[OW];
+            vol_frac_fields[WO] = alpha[WO];
+
+            return OK;
+        }
     """
 
 
@@ -1560,9 +1843,14 @@ specs = HookSpecs(
         calculate_mass_fraction_of_tracer_in_field,
         set_prescribed_boundary_condition_of_mass_fraction_of_tracer,
         update_boundary_condition_of_mass_fraction_of_tracer,
-        # Hooks related to Unit Cell Model
+        # Hooks related to UCM Friction Factor
         calculate_ucm_friction_factor_stratified,
         calculate_ucm_friction_factor_annular,
+        # Hooks related to Liquiq-Liquid Mechanistic Model
+        calculate_liq_liq_flow_pattern,
+        calculate_liquid_effective_viscosity,
+        calculate_gas_liq_surface_tension,
+        calculate_liq_liq_shear_force_per_volume,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,
