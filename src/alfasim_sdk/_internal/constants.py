@@ -20,7 +20,7 @@ SOLID_PHASE = "solid"
 GAS_FIELD = "gas"
 OIL_FIELD = "oil"
 WATER_FIELD = "water"
-WATER_DROPLET_IN_OIL_FIELD = "water_in_oil_droplet"
+WATER_DROPLET_IN_OIL_FIELD = "water in oil"
 DROPLET_FIELD = "droplet"
 BUBBLE_FIELD = "bubble"
 
