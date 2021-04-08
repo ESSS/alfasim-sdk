@@ -197,10 +197,9 @@ physics that have been lost in the averaging process in the shear stress term in
 physical behavior. Hence the shear stress is one of the most important parameters for characterizing the quality of a
 one-dimensional multiphase model.
 
-The main goal of the Mechanistic Model is to obtain the friction factor that will be used to compute the Shear Stress
-term in the momentum equation and it depends on the flow pattern of the fluid flow. In |alfasim|'s Solver it can be
-performed for two phase (Gas-Liquid) and three phase (Gas-Oil-Water) systems. However, the three phase system is used
-only if there is a plugin in which implements the liquid-liquid (Oil-Water) system.
+The main goal of the mechanistic model is to calculate the friction pressure drop as well as the steady-state volume
+fractions and velocities.  |alfasim| supports two-phase (gas-liquid) and three-phase (gas-oil-water) flows, but for
+three-phase flow it is required a plugin that handles the oil-water system.
 
 .. note ::
     Note that the two phase (Gas-Liquid) system of Mechanistic Model can be used for both two and three-phase flows,
