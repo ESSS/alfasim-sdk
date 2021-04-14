@@ -78,12 +78,17 @@ def alfacase_to_case_helper(tmp_path):
         def __init__(self, tmp_path) -> None:
             self.tmp_path = Path(tmp_path)
 
-        def generate_description(self, alfacase_config: AlfacaseTestConfig):
+        def generate_description(
+            self,
+            alfacase_config: AlfacaseTestConfig,
+            remove_redundant_input_type_data: bool = False,
+        ):
             """
             Helper method to generate a "Description" from the given alfacase_config
             """
             alfacase_string = convert_description_to_alfacase(
-                alfacase_config.description_expected
+                alfacase_config.description_expected,
+                remove_redundant_input_type_data=remove_redundant_input_type_data,
             )
             alfacase_content = strictyaml.dirty_load(
                 yaml_string=alfacase_string,

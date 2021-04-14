@@ -37,7 +37,10 @@ def _generate_alfatable_file_for_pvt_models_description(
 
 
 def convert_description_to_alfacase(
-    alfacase_description, *, enable_flow_style_on_numpy: bool = False
+    alfacase_description,
+    *,
+    enable_flow_style_on_numpy: bool = False,
+    remove_redundant_input_type_data: bool = True,
 ) -> str:
     """
     Convert a given case (decorated with attrs) to YAML representation.
@@ -58,6 +61,9 @@ def convert_description_to_alfacase(
 
             pressure: [1, 2]
 
+    :param remove_redundant_input_type_data:
+        For transient entries remove input type selector, and the unused constant or curve entries.
+
     """
     import attr
     from strictyaml import YAML
@@ -66,6 +72,7 @@ def convert_description_to_alfacase(
     case_description_dict = convert_dict_to_valid_alfacase_format(
         attr.asdict(alfacase_description, recurse=False),
         enable_flow_style_on_numpy=enable_flow_style_on_numpy,
+        remove_redundant_input_type_data=remove_redundant_input_type_data,
     )
     return YAML(case_description_dict).as_yaml()
 
