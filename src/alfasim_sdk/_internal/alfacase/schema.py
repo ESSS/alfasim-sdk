@@ -10,8 +10,9 @@
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import (Bool, Enum, Float, Int, Map, MapPattern,  # noreorder
-                        Optional, Seq, Str)
+from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
+
+
 
 bip_description_schema = Map(
     {
@@ -262,7 +263,7 @@ profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "element_name": Str(),
-        "location": Enum(['main', 'annulus', 'global']),
+        "location": Enum(['main', 'annulus', 'not_defined']),
     }
 )
 pvt_model_correlation_description_schema = Map(
@@ -384,9 +385,9 @@ tracers_mass_fractions_container_description_schema = Map(
 trend_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
-        "element_name": Str(),
-        "location": Enum(['main', 'annulus', 'global']),
+        "location": Enum(['main', 'annulus', 'not_defined']),
         Optional("position"): Map({"value": Float(), "unit": Str()}),
+        Optional("element_name"): Str(),
     }
 )
 tubing_description_schema = Map(
@@ -677,5 +678,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: f82ca8921a5d3144ba8eabcc936d97b3)
+# [[[end]]] (checksum: 72b22f538578e4eaf9600cb51199341f)
 # fmt: on
