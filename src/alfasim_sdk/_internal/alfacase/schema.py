@@ -143,13 +143,61 @@ mass_source_equipment_description_schema = Map(
     {
         Optional("fluid"): Str(),
         Optional("tracer_mass_fraction"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): Map({"value": Float(), "unit": Str()}),
+        Optional("temperature_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
         Optional("source_type"): Enum(['mass_source_type_mass_flow_rates', 'mass_source_type_all_volumetric_flow_rates', 'mass_source_type_flow_rate_oil_gor_wc', 'mass_source_type_flow_rate_gas_gor_wc', 'mass_source_type_flow_rate_water_gor_wc', 'mass_source_type_total_mass_flow_rate_pvt_split']),
+        Optional("volumetric_flow_rates_std_input_type"): Enum(['constant', 'curve']),
         Optional("volumetric_flow_rates_std"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
+        Optional("volumetric_flow_rates_std_curve"): MapPattern(
+            Str(),
+            Map(
+                {
+                    "image": Map({"values": Seq(Float()), "unit": Str()}),
+                    "domain": Map({"values": Seq(Float()), "unit": Str()}),
+                }
+            ),
+        ),
+        Optional("mass_flow_rates_input_type"): Enum(['constant', 'curve']),
         Optional("mass_flow_rates"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
+        Optional("mass_flow_rates_curve"): MapPattern(
+            Str(),
+            Map(
+                {
+                    "image": Map({"values": Seq(Float()), "unit": Str()}),
+                    "domain": Map({"values": Seq(Float()), "unit": Str()}),
+                }
+            ),
+        ),
+        Optional("total_mass_flow_rate_input_type"): Enum(['constant', 'curve']),
         Optional("total_mass_flow_rate"): Map({"value": Float(), "unit": Str()}),
+        Optional("total_mass_flow_rate_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("water_cut_input_type"): Enum(['constant', 'curve']),
         Optional("water_cut"): Map({"value": Float(), "unit": Str()}),
+        Optional("water_cut_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("gas_oil_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_oil_ratio"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_oil_ratio_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
         "position": Map({"value": Float(), "unit": Str()}),
     }
 )
@@ -157,13 +205,61 @@ mass_source_node_properties_description_schema = Map(
     {
         Optional("fluid"): Str(),
         Optional("tracer_mass_fraction"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): Map({"value": Float(), "unit": Str()}),
+        Optional("temperature_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
         Optional("source_type"): Enum(['mass_source_type_mass_flow_rates', 'mass_source_type_all_volumetric_flow_rates', 'mass_source_type_flow_rate_oil_gor_wc', 'mass_source_type_flow_rate_gas_gor_wc', 'mass_source_type_flow_rate_water_gor_wc', 'mass_source_type_total_mass_flow_rate_pvt_split']),
+        Optional("volumetric_flow_rates_std_input_type"): Enum(['constant', 'curve']),
         Optional("volumetric_flow_rates_std"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
+        Optional("volumetric_flow_rates_std_curve"): MapPattern(
+            Str(),
+            Map(
+                {
+                    "image": Map({"values": Seq(Float()), "unit": Str()}),
+                    "domain": Map({"values": Seq(Float()), "unit": Str()}),
+                }
+            ),
+        ),
+        Optional("mass_flow_rates_input_type"): Enum(['constant', 'curve']),
         Optional("mass_flow_rates"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
+        Optional("mass_flow_rates_curve"): MapPattern(
+            Str(),
+            Map(
+                {
+                    "image": Map({"values": Seq(Float()), "unit": Str()}),
+                    "domain": Map({"values": Seq(Float()), "unit": Str()}),
+                }
+            ),
+        ),
+        Optional("total_mass_flow_rate_input_type"): Enum(['constant', 'curve']),
         Optional("total_mass_flow_rate"): Map({"value": Float(), "unit": Str()}),
+        Optional("total_mass_flow_rate_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("water_cut_input_type"): Enum(['constant', 'curve']),
         Optional("water_cut"): Map({"value": Float(), "unit": Str()}),
+        Optional("water_cut_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("gas_oil_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_oil_ratio"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_oil_ratio_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
     }
 )
 material_description_schema = Map(

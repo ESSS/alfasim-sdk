@@ -6,6 +6,7 @@ from typing import Dict
 from typing import List
 from typing import NewType
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 from typing import Union
 
@@ -16,6 +17,7 @@ from attr.validators import deep_mapping
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
@@ -25,6 +27,27 @@ PhaseName = str
 list_of_strings = deep_iterable(
     member_validator=optional(instance_of(str)), iterable_validator=instance_of(list)
 )
+AttrNothingType = type(attr.NOTHING)
+ScalarLike = Union[Tuple[Number, str], Scalar]
+ArrayLike = Union[Tuple[Sequence[Number], str], Array]
+CurveLike = Union[Tuple[ArrayLike, ArrayLike], Curve]
+
+
+def is_two_element_tuple(value: object) -> bool:
+    """
+    Check if `value` is atwo element tuple.
+    """
+    return isinstance(value, tuple) and (len(value) == 2)
+
+
+def prepare_error_message(message: str, error_context: Optional[str] = None) -> str:
+    """
+    If `error_context` is not None prepend that to error message.
+    """
+    if error_context is not None:
+        return error_context + ": " + message
+    else:
+        return message
 
 
 def collapse_array_repr(value):
@@ -38,41 +61,111 @@ def collapse_array_repr(value):
 
 
 def to_scalar(
-    value: Union[Tuple[Number, str], Scalar], is_optional: bool = False
+    value: ScalarLike, is_optional: bool = False, *, error_context: Optional[str] = None
 ) -> Scalar:
     """
-    Converter to be used with attr.ib, accepts tuples and Scalar as input
+    Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
+    by `attrib_scalar`.
     If `is_optional` is defined, the converter will also accept None.
+    If `error_context` is not `None` it is prepended to the type error message when `value` type
+    is not respected.
 
     Ex.:
     @attr.s
     class TrendOutputDescription:
         pos = attrib_scalar()
-        temperature = attrib_scalar(converter=partial(ToScalar, is_optional=True))
+        temperature = attrib_scalar(is_optional=True))
 
-    TrendOutputDescription(position=Scalar(1,"m")
-    TrendOutputDescription(position=(1,"m")
+    TrendOutputDescription(position=Scalar(1,"m"))
+    TrendOutputDescription(position=(1,"m"))
     TrendOutputDescription(temperature=None)
     """
     if is_optional and value is None:
         return value
-    if isinstance(value, tuple) and (len(value) == 2):
+    if is_two_element_tuple(value):
         return Scalar(value)
     elif isinstance(value, Scalar):
         return value
 
-    raise TypeError(
-        f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})"
+    message = prepare_error_message(
+        f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})",
+        error_context,
     )
+    raise TypeError(message)
 
 
-attr_nothing_type = object
+def to_array(
+    value: ArrayLike, is_optional: bool = False, *, error_context: Optional[str] = None
+) -> Array:
+    """
+    Converter to be used with attr.ib, accepts tuples and Array as input.
+    If `is_optional` is defined, the converter will also accept None, same as `to_scalar`.
+    The `error_context` has the same behavior as in `to_scalar`.
+
+    Ex.:
+    @attr.s
+    class Foo:
+        bar = attr.id(converter=to_array)
+
+    Foo(bar=Array([1,2,3],"m"))
+    Foo(bar=([1,2,3],"m"))
+    Foo(bar=((1,2,3),"m"))
+    """
+    if is_optional and value is None:
+        return value
+    if is_two_element_tuple(value):
+        return Array(value)
+    elif isinstance(value, Array):
+        return value
+
+    message = prepare_error_message(
+        f"Expected pair (values, unit) or Array, got {value!r} (type: {type(value)})",
+        error_context,
+    )
+    raise TypeError(message)
+
+
+def to_curve(
+    value: CurveLike, is_optional: bool = False, *, error_context: Optional[str] = None
+) -> Curve:
+    """
+    Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
+    by `attrib_curve`.
+    If `is_optional` is defined, the converter will also accept None, same as `to_scalar`.
+    The `error_context` has the same behavior as in `to_scalar`.
+
+    Ex.:
+    @attr.s
+    class Foo:
+        bar = attrib_curve()
+
+    Foo(bar=Curve(Array([1,2,3],"m"), Array([0,10,20],"s")))
+    Foo(bar=(Array([1,2,3],"m"), Array([0,10,20],"s")))
+    Foo(bar=(([1,2,3],"m"), ([0,10,20],"s")))
+    Foo(bar=(([1,2,3],"m"), Array([0,10,20],"s")))
+    """
+    if is_optional and value is None:
+        return value
+    if is_two_element_tuple(value):
+        image = to_array(
+            value[0], error_context=prepare_error_message("Curve image", error_context)
+        )
+        domain = to_array(
+            value[1], error_context=prepare_error_message("Curve domain", error_context)
+        )
+        return Curve(image, domain)
+    elif isinstance(value, Curve):
+        return value
+
+    message = prepare_error_message(
+        f"Expected pair (image_array, domain_array) or Curve, got {value!r} (type: {type(value)})",
+        error_context,
+    )
+    raise TypeError(message)
 
 
 def attrib_scalar(
-    default: Optional[
-        Union[Tuple[Number, str], Scalar, attr_nothing_type]
-    ] = attr.NOTHING,
+    default: Union[ScalarLike, AttrNothingType] = attr.NOTHING,
     is_optional: bool = False,
 ) -> attr._make._CountingAttr:
     """
@@ -88,6 +181,25 @@ def attrib_scalar(
         default=default,
         converter=partial(to_scalar, is_optional=is_optional or not default),
         type=Optional[Scalar] if is_optional or not default else Scalar,
+    )
+
+
+def attrib_curve(
+    default: Union[CurveLike, AttrNothingType] = attr.NOTHING, is_optional: bool = False
+) -> attr._make._CountingAttr:
+    """
+    Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
+
+    :param default:
+        Value to be used as default when instantiating a class with this attr.ib
+
+        If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
+        otherwise, a `TypeError` will be raised.
+    """
+    return attr.ib(
+        default=default,
+        converter=partial(to_curve, is_optional=is_optional or not default),
+        type=Optional[Curve] if is_optional or not default else Curve,
     )
 
 

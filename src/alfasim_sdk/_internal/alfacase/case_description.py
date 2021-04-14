@@ -13,9 +13,11 @@ import numpy as np
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
+from .case_description_attributes import attrib_curve
 from .case_description_attributes import attrib_dict_of
 from .case_description_attributes import attrib_enum
 from .case_description_attributes import attrib_instance
@@ -145,19 +147,56 @@ class _MassSourceCommon:
     tracer_mass_fraction: Array = attr.ib(
         default=Array([], "-"), validator=instance_of(Array)
     )
+
+    temperature_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     temperature = attrib_scalar(default=Scalar(constants.DEFAULT_TEMPERATURE_IN_K, "K"))
+    temperature_curve = attrib_curve(
+        default=Curve(Array([], "K", "temperature"), Array([], "s", "time"))
+    )
 
     source_type = attrib_enum(default=constants.MassSourceType.MassFlowRates)
+
+    volumetric_flow_rates_std_input_type = attrib_enum(
+        default=constants.MultiInputType.Constant
+    )
     volumetric_flow_rates_std: Dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar)
     )
+    volumetric_flow_rates_std_curve: Dict[str, Curve] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(Curve)
+    )
+
+    mass_flow_rates_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     mass_flow_rates: Dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar)
     )
+    mass_flow_rates_curve: Dict[str, Curve] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(Curve)
+    )
+
+    total_mass_flow_rate_input_type = attrib_enum(
+        default=constants.MultiInputType.Constant
+    )
     total_mass_flow_rate = attrib_scalar(default=Scalar(1.0, "kg/s", "mass flow rate"))
+    total_mass_flow_rate_curve = attrib_curve(
+        default=Curve(Array([], "kg/s", "mass flow rate"), Array([], "s", "time"))
+    )
+
+    water_cut_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     water_cut = attrib_scalar(default=Scalar("volume fraction", 0.0, "-"))
+    water_cut_curve = attrib_curve(
+        default=Curve(Array("volume fraction", [], "-"), Array("time", [], "s"))
+    )
+
+    gas_oil_ratio_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     gas_oil_ratio = attrib_scalar(
         default=Scalar("standard volume per standard volume", 0.0, "sm3/sm3")
+    )
+    gas_oil_ratio_curve = attrib_curve(
+        default=Curve(
+            Array("standard volume per standard volume", [], "sm3/sm3"),
+            Array("time", [], "s"),
+        ),
     )
 
 

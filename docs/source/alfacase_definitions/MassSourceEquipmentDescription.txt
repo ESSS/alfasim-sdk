@@ -7,13 +7,25 @@
         class MassSourceEquipmentDescription
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
             tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
+            temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
+            temperature_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(K, s)[]
             source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\  = MassSourceType.MassFlowRates
+            volumetric_flow_rates_std_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            volumetric_flow_rates_std_curve: \ :class:`Dict <typing.Dict>`\[str, <class 'barril.curve.curve.Curve'>] = {}
+            mass_flow_rates_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             mass_flow_rates: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            mass_flow_rates_curve: \ :class:`Dict <typing.Dict>`\[str, <class 'barril.curve.curve.Curve'>] = {}
+            total_mass_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/s', 'mass flow rate')
+            total_mass_flow_rate_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(kg/s, s)[]
+            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'volume fraction')
+            water_cut_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
+            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            gas_oil_ratio_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/sm3, s)[]
             position: \ :class:`Scalar <barril.units.Scalar>`
 
 .. tab:: Schema
@@ -27,24 +39,56 @@
             temperature:  # optional
                 value: number
                 unit: string
+            temperature_curve: 
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string # optional
             source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\  # optional
             volumetric_flow_rates_std:  # optional
                 string: 
                     value: number
                     unit: string
             mass_flow_rates:  # optional
+                string: Curve # optional
+            mass_flow_rates_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 string: 
                     value: number
                     unit: string
             total_mass_flow_rate:  # optional
+                string: Curve # optional
+            total_mass_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
             water_cut:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string # optional
+            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
             gas_oil_ratio:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string # optional
+            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
+            gas_oil_ratio_curve: 
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string # optional
             position: 
                 value: number
                 unit: string

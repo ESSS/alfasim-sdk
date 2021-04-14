@@ -16,7 +16,7 @@ from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
 
 
-ATTRIBUTES = Union[Scalar, Array, Enum, np.ndarray, List, List[Enum]]
+ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, List, List[Enum]]
 
 
 NON_FININTE_VALUES_TO_STRING = [
@@ -60,6 +60,16 @@ def _convert_value_to_valid_alfacase_format(
 
     if isinstance(value, Array):
         return {"values": [str(i) for i in value.values], "unit": value.unit}
+
+    if isinstance(value, Curve):
+        return {
+            "image": _convert_value_to_valid_alfacase_format(
+                value.image, enable_flow_style_on_numpy
+            ),
+            "domain": _convert_value_to_valid_alfacase_format(
+                value.domain, enable_flow_style_on_numpy
+            ),
+        }
 
     if isinstance(value, Enum):
         return value.value

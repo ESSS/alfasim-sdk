@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import numpy as np
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
@@ -169,19 +170,31 @@ MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
     position=Scalar(10, "m"),
     gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
     water_cut=Scalar(0.2, "-", "volume fraction"),
+    volumetric_flow_rates_std_input_type=constants.MultiInputType.Constant,
     volumetric_flow_rates_std={
         "gas": Scalar(1000.5, "sm3/d"),
         "oil": Scalar(20.5, "sm3/d"),
         "water": Scalar(20.5, "sm3/d"),
     },
+    volumetric_flow_rates_std_curve={
+        "gas": Curve(Array([1000.5, 2000.5], "sm3/d"), Array([0, 3.5], "s")),
+        "oil": Curve(Array([20.5, 30.5], "sm3/d"), Array([0, 2.0], "s")),
+        "water": Curve(Array([20.5, 10.5], "sm3/d"), Array([0, 10], "s")),
+    },
     tracer_mass_fraction=Array([1.0], "-", "mass fraction"),
     temperature=Scalar(15, "degC"),
     fluid="fluid_1",
     source_type=constants.MassSourceType.MassFlowRates,
+    mass_flow_rates_input_type=constants.MultiInputType.Constant,
     mass_flow_rates={
         constants.FLUID_GAS: Scalar(0.005, "kg/s"),
         constants.FLUID_OIL: Scalar(0.5, "kg/s"),
         constants.FLUID_WATER: Scalar(0.001, "kg/s"),
+    },
+    mass_flow_rates_curve={
+        constants.FLUID_GAS: Curve(Array([0.005, 0.009], "kg/s"), Array([0, 5], "s")),
+        constants.FLUID_OIL: Curve(Array([0.5, 0.3], "kg/s"), Array([0, 2], "s")),
+        constants.FLUID_WATER: Curve(Array([0.001, 0.002], "kg/s"), Array([0, 7], "s")),
     },
 )
 MATERIAL_DESCRIPTION = case_description.MaterialDescription(
@@ -200,11 +213,17 @@ MASS_SOURCE_NODE_PROPERTIES_DESCRIPTION = (
         fluid="fluid_1",
         tracer_mass_fraction=Array([1.0, 0.0], "-", "mass fraction"),
         source_type=constants.MassSourceType.TotalMassFlowRatePvtSplit,
+        total_mass_flow_rate_input_type=constants.MultiInputType.Constant,
         total_mass_flow_rate=Scalar(0.05, "kg/s"),
         volumetric_flow_rates_std={
             constants.FLUID_GAS: Scalar(10.0, "sm3/d"),
             constants.FLUID_OIL: Scalar(20, "sm3/d"),
             constants.FLUID_WATER: Scalar(50, "sm3/d"),
+        },
+        volumetric_flow_rates_std_curve={
+            constants.FLUID_GAS: Curve(Array([10.0], "sm3/d"), Array([0], "s")),
+            constants.FLUID_OIL: Curve(Array([20], "sm3/d"), Array([0], "s")),
+            constants.FLUID_WATER: Curve(Array([50], "sm3/d"), Array([0], "s")),
         },
     )
 )
