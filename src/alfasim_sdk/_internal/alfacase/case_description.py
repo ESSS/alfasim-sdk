@@ -35,6 +35,25 @@ from .case_description_attributes import PhaseName
 from alfasim_sdk._internal import constants
 
 
+# [[[cog
+# # This cog has no output, it just declare and impot symbols used by cogs in this module.
+#
+# from alfasim_sdk._internal import constants
+# from alfasim_sdk._internal.alfacase.case_description_attributes import generate_multi_input
+# from alfasim_sdk._internal.alfacase.case_description_attributes import generate_multi_input_dict
+#
+# def cog_out_multi_input(prop_name, category, default_value, unit):
+#   code = generate_multi_input(prop_name, category, default_value, unit)
+#   cog.out(code)
+#
+# def cog_out_multi_input_dict(prop_name, category):
+#   code = generate_multi_input_dict(prop_name, category)
+#   cog.out(code)
+#
+# ]]]
+# [[[end]]] (checksum: d41d8cd98f00b204e9800998ecf8427e)
+
+
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
@@ -145,59 +164,100 @@ class _MassSourceCommon:
 
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
     tracer_mass_fraction: Array = attr.ib(
-        default=Array([], "-"), validator=instance_of(Array)
+        default=Array([], "-"),
+        validator=instance_of(Array),
+        metadata={"type": "array", "category": "mass fraction"},
     )
 
+    # [[[cog
+    # cog_out_multi_input("temperature", "temperature", constants.DEFAULT_TEMPERATURE_IN_K, "K")
+    # ]]]
+    # fmt: off
     temperature_input_type = attrib_enum(default=constants.MultiInputType.Constant)
-    temperature = attrib_scalar(default=Scalar(constants.DEFAULT_TEMPERATURE_IN_K, "K"))
-    temperature_curve = attrib_curve(
-        default=Curve(Array([], "K", "temperature"), Array([], "s", "time"))
+    temperature = attrib_scalar(
+        default=Scalar('temperature', 288.6, 'K')
     )
+    temperature_curve = attrib_curve(
+        default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: cfa3eacaa542b1544f9501cfc1bbc800)
 
     source_type = attrib_enum(default=constants.MassSourceType.MassFlowRates)
 
-    volumetric_flow_rates_std_input_type = attrib_enum(
-        default=constants.MultiInputType.Constant
-    )
+    # [[[cog
+    # cog_out_multi_input_dict("volumetric_flow_rates_std", "standard volume per time")
+    # ]]]
+    # fmt: off
+    volumetric_flow_rates_std_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     volumetric_flow_rates_std: Dict[str, Scalar] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Scalar)
+        default=attr.Factory(dict), validator=dict_of(Scalar),
+        metadata={"type": "scalar_dict", "category": 'standard volume per time'},
     )
     volumetric_flow_rates_std_curve: Dict[str, Curve] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Curve)
+        default=attr.Factory(dict), validator=dict_of(Curve),
+        metadata={"type": "curve_dict", "category": 'standard volume per time'},
     )
+    # fmt: on
+    # [[[end]]] (checksum: 90ffdd6b31ca61d3a254a2a4163470b5)
 
+    # [[[cog
+    # cog_out_multi_input_dict("mass_flow_rates", "mass flow rate")
+    # ]]]
+    # fmt: off
     mass_flow_rates_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     mass_flow_rates: Dict[str, Scalar] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Scalar)
+        default=attr.Factory(dict), validator=dict_of(Scalar),
+        metadata={"type": "scalar_dict", "category": 'mass flow rate'},
     )
     mass_flow_rates_curve: Dict[str, Curve] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Curve)
+        default=attr.Factory(dict), validator=dict_of(Curve),
+        metadata={"type": "curve_dict", "category": 'mass flow rate'},
     )
+    # fmt: on
+    # [[[end]]] (checksum: 14466fad7202e819caa161ebf875697c)
 
-    total_mass_flow_rate_input_type = attrib_enum(
-        default=constants.MultiInputType.Constant
+    # [[[cog
+    # cog_out_multi_input("total_mass_flow_rate", "mass flow rate", 1.0, "kg/s")
+    # ]]]
+    # fmt: off
+    total_mass_flow_rate_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    total_mass_flow_rate = attrib_scalar(
+        default=Scalar('mass flow rate', 1.0, 'kg/s')
     )
-    total_mass_flow_rate = attrib_scalar(default=Scalar(1.0, "kg/s", "mass flow rate"))
     total_mass_flow_rate_curve = attrib_curve(
-        default=Curve(Array([], "kg/s", "mass flow rate"), Array([], "s", "time"))
+        default=Curve(Array('mass flow rate', [], 'kg/s'), Array('time', [], 's'))
     )
+    # fmt: on
+    # [[[end]]] (checksum: 311c423906e498a67edbf00f8ef5779d)
 
+    # [[[cog
+    # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
+    # ]]]
+    # fmt: off
     water_cut_input_type = attrib_enum(default=constants.MultiInputType.Constant)
-    water_cut = attrib_scalar(default=Scalar("volume fraction", 0.0, "-"))
-    water_cut_curve = attrib_curve(
-        default=Curve(Array("volume fraction", [], "-"), Array("time", [], "s"))
+    water_cut = attrib_scalar(
+        default=Scalar('volume fraction', 0.0, '-')
     )
+    water_cut_curve = attrib_curve(
+        default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: fd5599325fa31c6221db6f11e2fc1123)
 
+    # [[[cog
+    # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
+    # ]]]
+    # fmt: off
     gas_oil_ratio_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     gas_oil_ratio = attrib_scalar(
-        default=Scalar("standard volume per standard volume", 0.0, "sm3/sm3")
+        default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
     )
     gas_oil_ratio_curve = attrib_curve(
-        default=Curve(
-            Array("standard volume per standard volume", [], "sm3/sm3"),
-            Array("time", [], "s"),
-        ),
+        default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
+    # fmt: on
+    # [[[end]]] (checksum: 0cc220bf4175710b45e45e6f4cc58ddd)
 
 
 @attr.s(kw_only=True)
@@ -211,30 +271,119 @@ class _PressureSourceCommon:
     .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
     """
 
-    pressure = attrib_scalar(default=Scalar(1.0e5, "Pa"))
-    temperature = attrib_scalar(default=Scalar(constants.DEFAULT_TEMPERATURE_IN_K, "K"))
+    # [[[cog
+    # cog_out_multi_input("pressure", "pressure", 1.0e5, "Pa")
+    # ]]]
+    # fmt: off
+    pressure_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    pressure = attrib_scalar(
+        default=Scalar('pressure', 100000.0, 'Pa')
+    )
+    pressure_curve = attrib_curve(
+        default=Curve(Array('pressure', [], 'Pa'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 31e9f12ceb2313cace8f856fc15581a5)
+
+    # [[[cog
+    # cog_out_multi_input("temperature", "temperature", constants.DEFAULT_TEMPERATURE_IN_K, "K")
+    # ]]]
+    # fmt: off
+    temperature_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    temperature = attrib_scalar(
+        default=Scalar('temperature', 288.6, 'K')
+    )
+    temperature_curve = attrib_curve(
+        default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: cfa3eacaa542b1544f9501cfc1bbc800)
+
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
     tracer_mass_fraction: Array = attr.ib(
-        default=Array([], "-", "mass fraction"), validator=instance_of(Array)
+        default=Array([], "-", "mass fraction"),
+        validator=instance_of(Array),
+        metadata={"type": "array", "category": "mass fraction"},
     )
 
     split_type = attrib_enum(
         default=constants.MassInflowSplitType.ConstantVolumeFraction
     )
+
+    # [[[cog
+    # cog_out_multi_input_dict("mass_fractions", "mass fraction")
+    # ]]]
+    # fmt: off
+    mass_fractions_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     mass_fractions: Dict[str, Scalar] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Scalar)
+        default=attr.Factory(dict), validator=dict_of(Scalar),
+        metadata={"type": "scalar_dict", "category": 'mass fraction'},
     )
+    mass_fractions_curve: Dict[str, Curve] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(Curve),
+        metadata={"type": "curve_dict", "category": 'mass fraction'},
+    )
+    # fmt: on
+    # [[[end]]] (checksum: cc96caed7be4897551ce0afd2c3af9f8)
+
+    # [[[cog
+    # cog_out_multi_input_dict("volume_fractions", "volume fraction")
+    # ]]]
+    # fmt: off
+    volume_fractions_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     volume_fractions: Dict[str, Scalar] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Scalar)
+        default=attr.Factory(dict), validator=dict_of(Scalar),
+        metadata={"type": "scalar_dict", "category": 'volume fraction'},
     )
+    volume_fractions_curve: Dict[str, Curve] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(Curve),
+        metadata={"type": "curve_dict", "category": 'volume fraction'},
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 73f1389ef2912c079dc3fad3cec8334b)
+
+    # [[[cog
+    # cog_out_multi_input("gas_liquid_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
+    # ]]]
+    # fmt: off
+    gas_liquid_ratio_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     gas_liquid_ratio = attrib_scalar(
-        default=Scalar("standard volume per standard volume", 0.0, "sm3/sm3")
+        default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
     )
+    gas_liquid_ratio_curve = attrib_curve(
+        default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 8799b62448023477ae46a4351289a493)
+
+    # [[[cog
+    # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
+    # ]]]
+    # fmt: off
+    gas_oil_ratio_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     gas_oil_ratio = attrib_scalar(
-        default=Scalar("standard volume per standard volume", 0.0, "sm3/sm3")
+        default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
     )
-    water_cut = attrib_scalar(default=Scalar("volume fraction", 0.0, "-"))
+    gas_oil_ratio_curve = attrib_curve(
+        default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 0cc220bf4175710b45e45e6f4cc58ddd)
+
+    # [[[cog
+    # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
+    # ]]]
+    # fmt: off
+    water_cut_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    water_cut = attrib_scalar(
+        default=Scalar('volume fraction', 0.0, '-')
+    )
+    water_cut_curve = attrib_curve(
+        default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: fd5599325fa31c6221db6f11e2fc1123)
 
 
 @attr.s(frozen=True, slots=True)

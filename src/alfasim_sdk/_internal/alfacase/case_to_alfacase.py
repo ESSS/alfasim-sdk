@@ -18,9 +18,7 @@ from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
 
-
 ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, List, List[Enum]]
-
 
 NON_FININTE_VALUES_TO_STRING = [
     (math.isnan, ".nan"),
@@ -143,8 +141,10 @@ def convert_dict_to_valid_alfacase_format(
         if is_empty_dict or value is None or ignore:
             continue
 
-        if key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX) and isinstance(
-            value, constants.MultiInputType
+        if (
+            remove_redundant_input_type_data
+            and key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
+            and isinstance(value, constants.MultiInputType)
         ):
             transient_fields[key] = value
 

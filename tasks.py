@@ -15,6 +15,12 @@ def schema_file_path() -> Path:
     return Path(__file__).parent / "src/alfasim_sdk/_internal/alfacase/schema.py"
 
 
+def case_description_source_file_path() -> Path:
+    return (
+        Path(__file__).parent / "src/alfasim_sdk/_internal/alfacase/case_description.py"
+    )
+
+
 def alfacase_definitions_path() -> Path:
     return Path(__file__).parent / "docs/source/alfacase_definitions"
 
@@ -25,7 +31,14 @@ def alfacase_definitions_path() -> Path:
     }
 )
 def cog(ctx, check=False):
-    """Executes cog on _internal/alfacase/schema.py to generate the schema for strictyaml."""
+    """
+    Executes cog:
+
+    - on `_internal/alfacase/case_description.py`;
+    - on `_internal/alfacase/schema.py` to generate the schema for strictyaml;
+    - generate some documentation files;
+    """
+    ctx.run(command=f"cog -rc {case_description_source_file_path()}", warn=True)
     ctx.run(command=f"cog -rc {schema_file_path()}", warn=True)
 
     from alfasim_sdk._internal.alfacase.generate_schema import (
@@ -59,7 +72,12 @@ def cog(ctx, check=False):
 @invoke.task
 def check_cog(ctx):
     """
-    Check if the _internal/alfacase/schema.py has unstaged modifications.
+    Check if the cogged files have unstaged modifications:
+
+    - `_internal/alfacase/case_description.py`;
+    - `_internal/alfacase/schema.py`;
+    - generated documentation files;
     """
+    ctx.run(f"git diff --no-ext-diff --exit-code {case_description_source_file_path()}")
     ctx.run(f"git diff --no-ext-diff --exit-code {schema_file_path()}")
     ctx.run(f"git diff --no-ext-diff --exit-code {alfacase_definitions_path()}")

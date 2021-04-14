@@ -1,3 +1,4 @@
+import textwrap
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
@@ -31,6 +32,38 @@ AttrNothingType = type(attr.NOTHING)
 ScalarLike = Union[Tuple[Number, str], Scalar]
 ArrayLike = Union[Tuple[Sequence[Number], str], Array]
 CurveLike = Union[Tuple[ArrayLike, ArrayLike], Curve]
+
+
+def generate_multi_input(prop_name, category, default_value, unit):
+    return textwrap.dedent(
+        f"""\
+        # fmt: off
+        {prop_name}_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        {prop_name} = attrib_scalar(
+            default=Scalar({category!r}, {default_value!r}, {unit!r})
+        )
+        {prop_name}_curve = attrib_curve(
+            default=Curve(Array({category!r}, [], {unit!r}), Array({"time"!r}, [], {"s"!r}))
+        )
+        # fmt: on"""
+    )
+
+
+def generate_multi_input_dict(prop_name, category):
+    return textwrap.dedent(
+        f"""\
+        # fmt: off
+        {prop_name}_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        {prop_name}: Dict[str, Scalar] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of(Scalar),
+            metadata={{"type": "scalar_dict", "category": {category!r}}},
+        )
+        {prop_name}_curve: Dict[str, Curve] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of(Curve),
+            metadata={{"type": "curve_dict", "category": {category!r}}},
+        )
+        # fmt: on"""
+    )
 
 
 def is_two_element_tuple(value: object) -> bool:
@@ -177,10 +210,15 @@ def attrib_scalar(
         If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
         otherwise, a `TypeError` will be raised.
     """
+    if isinstance(default, Scalar):
+        metadata = {"type": "scalar", "category": default.category}
+    else:
+        metadata = {}
     return attr.ib(
         default=default,
         converter=partial(to_scalar, is_optional=is_optional or not default),
         type=Optional[Scalar] if is_optional or not default else Scalar,
+        metadata=metadata,
     )
 
 
@@ -196,10 +234,15 @@ def attrib_curve(
         If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
         otherwise, a `TypeError` will be raised.
     """
+    if isinstance(default, Curve):
+        metadata = {"type": "curve", "category": default.image.category}
+    else:
+        metadata = {}
     return attr.ib(
         default=default,
         converter=partial(to_curve, is_optional=is_optional or not default),
         type=Optional[Curve] if is_optional or not default else Curve,
+        metadata=metadata,
     )
 
 

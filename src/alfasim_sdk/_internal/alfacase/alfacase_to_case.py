@@ -121,6 +121,36 @@ def update_multi_input_flags(
     return item_description
 
 
+def get_case_description_attribute_loader_dict(
+    class_: Any, explict_loaders: Optional[Dict[str, Callable]] = None
+) -> Dict[str, Callable]:
+    loaders: Dict[str, Callable] = (
+        {} if explict_loaders is None else explict_loaders.copy()
+    )
+
+    for attr in class_.__attrs_attrs__:
+        name = attr.name
+        if name in loaders:
+            continue
+
+        metadata = attr.metadata
+        if "type" in metadata:
+            loader_getter_name = f"get_{metadata['type']}_loader"
+            kwargs = metadata.copy()
+            del kwargs["type"]
+            loaders[name] = globals()[loader_getter_name](**kwargs)
+            continue
+
+        default = attr.default
+        if isinstance(default, enum.Enum):
+            loaders[name] = get_enum_loader(enum_class=default.__class__)
+            continue
+
+        loaders[name] = load_value
+
+    return loaders
+
+
 def load_scalar(key: str, alfacase_content: DescriptionDocument, category) -> Scalar:
     """
     Create a barril.units.Scalar instance from the given alfacase_content.
@@ -273,7 +303,7 @@ def load_dict_of_curves(
 
 
 @lru_cache(maxsize=None)
-def get_dict_of_curves_loader(
+def get_curve_dict_loader(
     *, category: Optional[str] = None, from_unit: Optional[str] = None
 ) -> Callable:
     """
@@ -313,7 +343,7 @@ def load_dict_with_scalar(
     }
 
 
-def get_dict_with_scalar_loader(*, category: str) -> Callable:
+def get_scalar_dict_loader(*, category: str) -> Callable:
     """
     Return a LoadDictWithScalar function pre-populate with the category
     """
@@ -988,41 +1018,9 @@ def load_initial_conditions_description(
 
 
 def _load_mass_source_common() -> Dict[str, Callable]:
-    return {
-        "fluid": load_value,
-        "temperature_input_type": get_enum_loader(enum_class=constants.MultiInputType),
-        "temperature": get_scalar_loader(from_unit="K"),
-        "temperature_curve": get_curve_loader(from_unit="K"),
-        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
-        "water_cut_input_type": get_enum_loader(enum_class=constants.MultiInputType),
-        "water_cut": get_scalar_loader(category="volume fraction"),
-        "water_cut_curve": get_curve_loader(category="volume fraction"),
-        "gas_oil_ratio_input_type": get_enum_loader(
-            enum_class=constants.MultiInputType
-        ),
-        "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
-        "gas_oil_ratio_curve": get_curve_loader(from_unit="sm3/sm3"),
-        "source_type": get_enum_loader(enum_class=constants.MassSourceType),
-        "volumetric_flow_rates_std_input_type": get_enum_loader(
-            enum_class=constants.MultiInputType
-        ),
-        "volumetric_flow_rates_std": get_dict_with_scalar_loader(
-            category="standard volume per time"
-        ),
-        "volumetric_flow_rates_std_curve": get_dict_of_curves_loader(
-            category="standard volume per time"
-        ),
-        "mass_flow_rates_input_type": get_enum_loader(
-            enum_class=constants.MultiInputType
-        ),
-        "mass_flow_rates": get_dict_with_scalar_loader(category="mass flow rate"),
-        "mass_flow_rates_curve": get_dict_of_curves_loader(category="mass flow rate"),
-        "total_mass_flow_rate_input_type": get_enum_loader(
-            enum_class=constants.MultiInputType
-        ),
-        "total_mass_flow_rate": get_scalar_loader(from_unit="kg/s"),
-        "total_mass_flow_rate_curve": get_curve_loader(from_unit="kg/s"),
-    }
+    return get_case_description_attribute_loader_dict(
+        case_description._MassSourceCommon
+    )
 
 
 def load_mass_source_equipment_description(
@@ -1112,8 +1110,8 @@ def load_separator_node_properties_description(
         "length": get_scalar_loader(from_unit="m"),
         "overall_heat_transfer_coefficient": get_scalar_loader(from_unit="W/m2.K"),
         "diameter": get_scalar_loader(from_unit="m"),
-        "nozzles": get_dict_with_scalar_loader(category=get_category_for("m")),
-        "initial_phase_volume_fractions": get_dict_with_scalar_loader(
+        "nozzles": get_scalar_dict_loader(category=get_category_for("m")),
+        "initial_phase_volume_fractions": get_scalar_dict_loader(
             category="volume fraction"
         ),
         "gas_separation_efficiency": get_scalar_loader(from_unit="%"),
@@ -1286,18 +1284,9 @@ def load_ipr_models_description(
 
 
 def _load_pressure_source_common() -> Dict[str, Callable]:
-    return {
-        "fluid": load_value,
-        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
-        "split_type": get_enum_loader(enum_class=constants.MassInflowSplitType),
-        "mass_fractions": get_dict_with_scalar_loader(category="mass fraction"),
-        "volume_fractions": get_dict_with_scalar_loader(category="volume fraction"),
-        "water_cut": get_scalar_loader(category="volume fraction"),
-        "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
-        "gas_liquid_ratio": get_scalar_loader(from_unit="sm3/sm3"),
-        "pressure": get_scalar_loader(from_unit="bar"),
-        "temperature": get_scalar_loader(from_unit="K"),
-    }
+    return get_case_description_attribute_loader_dict(
+        case_description._PressureSourceCommon
+    )
 
 
 def load_reservoir_inflow_equipment_description(
@@ -1824,7 +1813,7 @@ def load_tracer_model_constant_coefficients_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.TracerModelConstantCoefficientsDescription]:
     alfacase_to_case_description = {
-        "partition_coefficients": get_dict_with_scalar_loader(category="mass fraction")
+        "partition_coefficients": get_scalar_dict_loader(category="mass fraction")
     }
 
     def generate_tracer_model_constant_coefficients_description(
