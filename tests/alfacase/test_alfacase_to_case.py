@@ -1,4 +1,5 @@
 import shutil
+import textwrap
 from pathlib import Path
 
 import attr
@@ -21,6 +22,9 @@ from alfasim_sdk._internal.alfacase import schema
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_array_loader
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_scalar_loader
+from alfasim_sdk._internal.alfacase.alfacase_to_case import (
+    load_mass_source_node_properties_description,
+)
 from alfasim_sdk._internal.alfacase.alfacase_to_case import load_physics_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     load_pvt_models_description,
@@ -34,6 +38,10 @@ from alfasim_sdk._internal.alfacase.generate_schema import (
 )
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
+from alfasim_sdk._internal.alfacase.schema import (
+    mass_source_node_properties_description_schema,
+)
+from alfasim_sdk._internal.constants import MultiInputType
 
 
 @attr.s(frozen=True)
@@ -509,6 +517,64 @@ def test_convert_alfacase_to_description(alfacase_to_case_helper, class_, tmp_pa
     alfacase_to_case_helper.ensure_description_has_all_properties(
         expected_description_class=class_, obtained_description_obj=description_obtained
     )
+
+
+def test_update_multi_input_flags_behavior():
+    content = strictyaml.dirty_load(
+        yaml_string=textwrap.dedent(
+            """\
+            # Just constant, use "constant" flag.
+            volumetric_flow_rates_std:
+                gas:
+                    value: 0.0
+                    unit: sm3/d
+
+            # Constant and curve but no flag, use default flag.
+            mass_flow_rates:
+                gas:
+                    value: 0.0
+                    unit: kg/s
+            mass_flow_rates_curve:
+                gas:
+                    image:
+                        values: [0.0, 1.0]
+                        unit: kg/s
+                    domain:
+                        values: [0, 10]
+                        unit: s
+
+            # Just flag, use value from yaml;
+            total_mass_flow_rate_input_type: curve
+
+            # Just curve, use "curve" flag.
+            water_cut_curve:
+                image:
+                    values: [0.2, 0.3]
+                    unit: "-"
+                domain:
+                    values: [0, 20]
+                    unit: s
+            """
+        ),
+        schema=mass_source_node_properties_description_schema,
+        allow_flow_style=True,
+    )
+    document = DescriptionDocument(content, Path())
+    mass_source_node_properties = load_mass_source_node_properties_description(document)
+
+    assert (
+        mass_source_node_properties.volumetric_flow_rates_std_input_type
+        == MultiInputType.Constant
+    )
+    assert (
+        mass_source_node_properties.mass_flow_rates_input_type
+        == MultiInputType.Constant
+    )
+    assert (
+        mass_source_node_properties.total_mass_flow_rate_input_type
+        == MultiInputType.Curve
+    )
+    assert mass_source_node_properties.water_cut_input_type == MultiInputType.Curve
 
 
 @pytest.fixture()

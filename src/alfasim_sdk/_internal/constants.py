@@ -365,3 +365,6 @@ class WellConnectionPort(Enum):
     Top = "port"  # 'port' is being used for backwards compatibility.
     LeftAnnulus = "left_annulus_port"
     RightAnnulus = "right_annulus_port"
+
+
+MULTI_INPUT_TYPE_SUFFIX = "_input_type"
