@@ -12,8 +12,8 @@
 
     .. parsed-literal::
 
-            positions: 
+            positions: # optional
                 values: [number]
-                unit: string # optional
-            tracers_mass_fractions: 
-                - Array # optional
+                unit: string
+            tracers_mass_fractions: # optional
+                - Array

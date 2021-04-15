@@ -25,24 +25,24 @@
             stop_on_steady_state: number # optional
             automatic_restart_autosave_frequency: boolean # optional
             automatic_restart_autosave_frequency: number # optional
-            initial_time: 
+            initial_time: # optional
                 value: number
-                unit: string # optional
-            final_time: 
+                unit: string
+            final_time: # optional
                 value: number
-                unit: string # optional
-            initial_timestep: 
+                unit: string
+            initial_timestep: # optional
                 value: number
-                unit: string # optional
-            minimum_timestep: 
+                unit: string
+            minimum_timestep: # optional
                 value: number
-                unit: string # optional
-            maximum_timestep: 
+                unit: string
+            maximum_timestep: # optional
                 value: number
-                unit: string # optional
-            restart_autosave_frequency: 
+                unit: string
+            restart_autosave_frequency: # optional
                 value: number
-                unit: string # optional
-            minimum_time_for_steady_state_stop: 
+                unit: string
+            minimum_time_for_steady_state_stop: # optional
                 value: number
-                unit: string # optional
+                unit: string

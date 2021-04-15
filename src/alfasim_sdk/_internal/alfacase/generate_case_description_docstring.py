@@ -169,7 +169,10 @@ def _get_declaration(
 
                     # For Schema: if the attributes have a default value the entry is optional.
                     if default_value and is_schema:
-                        attribute_value += " # optional"
+                        if attribute_value.startswith("\n"):
+                            attribute_value = "# optional" + attribute_value
+                        else:
+                            attribute_value += " # optional"
                         default_value = ""
 
                     # If attribute_value ends with backslash (because of the cross-reference), add extra space
@@ -344,6 +347,9 @@ def union_formatted_for_schema(value: Any) -> str:
     parameter = value.__args__[0]
     if value.__args__ in ((str, type(None)), (Path, type(None))):
         name = "string"
+    elif value.__args__ == (Scalar, type(None)):
+        name = f"{INDENT}"
+        name += scalar_formatted_for_schema(value)
     elif value.__args__ == (Array, type(None)):
         name = f"{INDENT}"
         name += array_formatted_for_schema(value)

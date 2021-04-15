@@ -11,5 +11,5 @@
 
     .. parsed-literal::
 
-            constant_coefficients: 
-                string: \ :class:`tracer_model_constant_coefficients_description_schema <TracerModelConstantCoefficientsDescription>`\ # optional
+            constant_coefficients: # optional
+                string: \ :class:`tracer_model_constant_coefficients_description_schema <TracerModelConstantCoefficientsDescription>`
