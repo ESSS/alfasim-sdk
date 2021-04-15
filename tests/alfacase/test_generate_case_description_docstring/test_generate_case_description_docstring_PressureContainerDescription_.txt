@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            positions: 
+            positions: # optional
                 values: [number]
-                unit: string # optional
-            pressures: 
+                unit: string
+            pressures: # optional
                 values: [number]
-                unit: string # optional
+                unit: string

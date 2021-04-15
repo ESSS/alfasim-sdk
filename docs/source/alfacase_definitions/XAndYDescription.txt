@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            x:     
+            x: # optional
                 values: [number]
-                unit: string # optional
-            y:     
+                unit: string
+            y: # optional
                 values: [number]
-                unit: string # optional
+                unit: string

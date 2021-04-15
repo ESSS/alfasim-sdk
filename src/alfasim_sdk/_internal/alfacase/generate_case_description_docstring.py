@@ -348,11 +348,9 @@ def union_formatted_for_schema(value: Any) -> str:
     if value.__args__ in ((str, type(None)), (Path, type(None))):
         name = "string"
     elif value.__args__ == (Scalar, type(None)):
-        name = f"{INDENT}"
-        name += scalar_formatted_for_schema(value)
+        name = scalar_formatted_for_schema(value)
     elif value.__args__ == (Array, type(None)):
-        name = f"{INDENT}"
-        name += array_formatted_for_schema(value)
+        name = array_formatted_for_schema(value)
     elif isinstance(parameter, enum.EnumMeta):
         name = f"{enum_formatted_for_schema(parameter)}"
     elif is_attrs(parameter):
