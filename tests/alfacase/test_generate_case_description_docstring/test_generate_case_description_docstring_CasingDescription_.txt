@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class CasingDescription
-            casing_sections: \ :class:`List <typing.List>`\[\ :class:`CasingSectionDescription <CasingSectionDescription>`\] = []
-            tubings: \ :class:`List <typing.List>`\[\ :class:`TubingDescription <TubingDescription>`\] = []
-            packers: \ :class:`List <typing.List>`\[\ :class:`PackerDescription <PackerDescription>`\] = []
-            open_holes: \ :class:`List <typing.List>`\[\ :class:`OpenHoleDescription <OpenHoleDescription>`\] = []
+            casing_sections: \ :class:`List <typing.List>`[\ :class:`CasingSectionDescription <CasingSectionDescription>`] = []
+            tubings: \ :class:`List <typing.List>`[\ :class:`TubingDescription <TubingDescription>`] = []
+            packers: \ :class:`List <typing.List>`[\ :class:`PackerDescription <PackerDescription>`] = []
+            open_holes: \ :class:`List <typing.List>`[\ :class:`OpenHoleDescription <OpenHoleDescription>`] = []
 
 .. tab:: Schema
 

@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class VolumeFractionsContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
-            fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\] = {'gas': Array(dimensionless, [0.1], -), 'oil': Array(dimensionless, [0.9], -)}
+            positions: \ :class:`Array <barril.units.Array>` = Array(length, [0.0], m)
+            fractions: \ :class:`Dict <typing.Dict>`[str, \ :class:`Array <barril.units.Array>`] = {'gas': Array(dimensionless, [0.1], -), 'oil': Array(dimensionless, [0.9], -)}
 
 .. tab:: Schema
 
