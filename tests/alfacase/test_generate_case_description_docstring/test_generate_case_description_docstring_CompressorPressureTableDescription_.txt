@@ -14,15 +14,15 @@
 
     .. parsed-literal::
 
-            speed_entries: 
+            speed_entries: # optional
                 values: [number]
-                unit: string # optional
-            corrected_mass_flow_rate_entries: 
+                unit: string
+            corrected_mass_flow_rate_entries: # optional
                 values: [number]
-                unit: string # optional
-            pressure_ratio_table: 
+                unit: string
+            pressure_ratio_table: # optional
                 values: [number]
-                unit: string # optional
-            isentropic_efficiency_table: 
+                unit: string
+            isentropic_efficiency_table: # optional
                 values: [number]
-                unit: string # optional
+                unit: string

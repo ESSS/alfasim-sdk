@@ -22,12 +22,12 @@
                 value: number
                 unit: string
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\ # optional
-            pressure_boost: 
+            pressure_boost: # optional
                 value: number
-                unit: string # optional
-            thermal_efficiency: 
+                unit: string
+            thermal_efficiency: # optional
                 value: number
-                unit: string # optional
+                unit: string
             table: \ :class:`table_pump_description_schema <TablePumpDescription>`\ # optional
             speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\ # optional
             speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\ # optional

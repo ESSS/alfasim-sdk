@@ -23,14 +23,14 @@
                 value: number
                 unit: string
             type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`\ # optional
-            diameter: 
+            diameter: # optional
                 value: number
-                unit: string # optional
+                unit: string
             flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\ # optional
             opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\ # optional
-            opening: 
+            opening: # optional
                 value: number
-                unit: string # optional
+                unit: string
             opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\ # optional
             opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\ # optional
             cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\ # optional

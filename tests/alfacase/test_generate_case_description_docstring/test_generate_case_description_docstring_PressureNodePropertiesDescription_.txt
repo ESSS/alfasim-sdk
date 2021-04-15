@@ -20,31 +20,31 @@
 
     .. parsed-literal::
 
-            pressure: 
+            pressure: # optional
                 value: number
-                unit: string # optional
-            temperature: 
+                unit: string
+            temperature: # optional
                 value: number
-                unit: string # optional
+                unit: string
             fluid: string # optional
-            tracer_mass_fraction: 
+            tracer_mass_fraction: # optional
                 values: [number]
-                unit: string # optional
+                unit: string
             split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\ # optional
-            mass_fractions: 
+            mass_fractions: # optional
                 string: 
                     value: number
-                    unit: string # optional
-            volume_fractions: 
+                    unit: string
+            volume_fractions: # optional
                 string: 
                     value: number
-                    unit: string # optional
-            gas_liquid_ratio: 
+                    unit: string
+            gas_liquid_ratio: # optional
                 value: number
-                unit: string # optional
-            gas_oil_ratio: 
+                unit: string
+            gas_oil_ratio: # optional
                 value: number
-                unit: string # optional
-            water_cut: 
+                unit: string
+            water_cut: # optional
                 value: number
-                unit: string # optional
+                unit: string
