@@ -19,9 +19,9 @@
             equation_of_state_type: \ :class:`EquationOfStateType <alfasim_sdk._internal.constants.EquationOfStateType>`\ # optional
             surface_tension_model_type: \ :class:`SurfaceTensionType <alfasim_sdk._internal.constants.SurfaceTensionType>`\ # optional
             viscosity_model: \ :class:`PVTCompositionalViscosityModel <alfasim_sdk._internal.constants.PVTCompositionalViscosityModel>`\ # optional
-            heavy_components: 
-                - \ :class:`heavy_component_description_schema <HeavyComponentDescription>`\ # optional
-            light_components: 
-                - \ :class:`light_component_description_schema <LightComponentDescription>`\ # optional
-            fluids: 
-                string: \ :class:`fluid_description_schema <FluidDescription>`\ # optional
+            heavy_components: # optional
+                - \ :class:`heavy_component_description_schema <HeavyComponentDescription>`
+            light_components: # optional
+                - \ :class:`light_component_description_schema <LightComponentDescription>`
+            fluids: # optional
+                string: \ :class:`fluid_description_schema <FluidDescription>`

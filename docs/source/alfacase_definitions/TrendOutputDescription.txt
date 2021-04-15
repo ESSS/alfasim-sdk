@@ -17,5 +17,7 @@
             curve_names: 
                 - str
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
-            position: Union[barril.units._scalar.Scalar, NoneType] # optional
+            position:     
+                value: number
+                unit: string # optional
             element_name: string # optional

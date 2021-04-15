@@ -17,10 +17,10 @@
 
             thermal_model: \ :class:`PipeThermalModelType <alfasim_sdk._internal.constants.PipeThermalModelType>`\ # optional
             position_input_mode: \ :class:`PipeThermalPositionInput <alfasim_sdk._internal.constants.PipeThermalPositionInput>`\ # optional
-            reference_y_coordinate: 
+            reference_y_coordinate: # optional
                 value: number
-                unit: string # optional
-            md_properties_table: 
-                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ # optional
-            tvd_properties_table: 
-                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`\ # optional
+                unit: string
+            md_properties_table: # optional
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`
+            tvd_properties_table: # optional
+                - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`
