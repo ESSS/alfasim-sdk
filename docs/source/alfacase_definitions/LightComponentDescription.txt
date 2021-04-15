@@ -24,39 +24,39 @@
     .. parsed-literal::
 
             name: string
-            Pc: 
+            Pc: # optional
                 value: number
-                unit: string # optional
-            Tc: 
+                unit: string
+            Tc: # optional
                 value: number
-                unit: string # optional
-            Vc: 
+                unit: string
+            Vc: # optional
                 value: number
-                unit: string # optional
-            omega: 
+                unit: string
+            omega: # optional
                 value: number
-                unit: string # optional
-            MW: 
+                unit: string
+            MW: # optional
                 value: number
-                unit: string # optional
-            Tb: 
+                unit: string
+            Tb: # optional
                 value: number
-                unit: string # optional
-            Parachor: 
+                unit: string
+            Parachor: # optional
                 value: number
-                unit: string # optional
-            Cp_0: 
+                unit: string
+            Cp_0: # optional
                 value: number
-                unit: string # optional
-            Cp_1: 
+                unit: string
+            Cp_1: # optional
                 value: number
-                unit: string # optional
-            Cp_2: 
+                unit: string
+            Cp_2: # optional
                 value: number
-                unit: string # optional
-            Cp_3: 
+                unit: string
+            Cp_3: # optional
                 value: number
-                unit: string # optional
-            Cp_4: 
+                unit: string
+            Cp_4: # optional
                 value: number
-                unit: string # optional
+                unit: string

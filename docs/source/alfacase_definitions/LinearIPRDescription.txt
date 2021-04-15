@@ -14,9 +14,9 @@
     .. parsed-literal::
 
             well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\ # optional
-            min_pressure_difference: 
+            min_pressure_difference: # optional
                 value: number
-                unit: string # optional
-            well_index: 
+                unit: string
+            well_index: # optional
                 value: number
-                unit: string # optional
+                unit: string

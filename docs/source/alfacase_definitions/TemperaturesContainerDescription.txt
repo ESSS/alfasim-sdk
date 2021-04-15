@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            positions: 
+            positions: # optional
                 values: [number]
-                unit: string # optional
-            temperatures: 
+                unit: string
+            temperatures: # optional
                 values: [number]
-                unit: string # optional
+                unit: string
