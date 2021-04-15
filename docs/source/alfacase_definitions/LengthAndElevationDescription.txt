@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class LengthAndElevationDescription
-            length: \ :class:`Optional <typing.Optional>`\[\ :class:`Array <barril.units.Array>`\] = None
-            elevation: \ :class:`Optional <typing.Optional>`\[\ :class:`Array <barril.units.Array>`\] = None
+            length: \ :class:`Optional <typing.Optional>`[\ :class:`Array <barril.units.Array>`] = None
+            elevation: \ :class:`Optional <typing.Optional>`[\ :class:`Array <barril.units.Array>`] = None
 
 .. tab:: Schema
 

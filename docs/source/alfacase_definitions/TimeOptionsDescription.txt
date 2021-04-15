@@ -9,13 +9,13 @@
             stop_on_steady_state: bool = False
             automatic_restart_autosave_frequency: bool = True
             automatic_restart_autosave_frequency: bool = True
-            initial_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
-            final_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
-            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0001, 's', 'time')
-            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1e-12, 's', 'time')
-            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
-            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'h', 'time')
-            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
+            initial_time: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 's', 'time')
+            final_time: \ :class:`Scalar <barril.units.Scalar>` = Scalar(10.0, 's', 'time')
+            initial_timestep: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0001, 's', 'time')
+            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1e-12, 's', 'time')
+            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.1, 's', 'time')
+            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, 'h', 'time')
+            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 's', 'time')
 
 .. tab:: Schema
 

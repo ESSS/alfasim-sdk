@@ -22,7 +22,7 @@
             environment_temperature: # optional
                 value: number
                 unit: string
-            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\ # optional
+            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>` # optional
             length: # optional
                 value: number
                 unit: string

@@ -5,32 +5,32 @@
     .. parsed-literal::
 
         class CaseDescription
-            name: \ :class:`Optional <typing.Optional>`\[str] = None
-            physics: \ :class:`PhysicsDescription <PhysicsDescription>`\  = PhysicsDescription()
-            time_options: \ :class:`TimeOptionsDescription <TimeOptionsDescription>`\  = TimeOptionsDescription()
-            numerical_options: \ :class:`NumericalOptionsDescription <NumericalOptionsDescription>`\  = NumericalOptionsDescription()
-            ipr_models: \ :class:`IPRModelsDescription <IPRModelsDescription>`\  = IPRModelsDescription()
-            pvt_models: \ :class:`PvtModelsDescription <PvtModelsDescription>`\  = PvtModelsDescription()
-            tracers: \ :class:`TracersDescription <TracersDescription>`\  = TracersDescription()
-            outputs: \ :class:`CaseOutputDescription <CaseOutputDescription>`\  = CaseOutputDescription()
-            pipes: \ :class:`List <typing.List>`\[\ :class:`PipeDescription <PipeDescription>`\] = []
-            nodes: \ :class:`List <typing.List>`\[\ :class:`NodeDescription <NodeDescription>`\] = []
-            wells: \ :class:`List <typing.List>`\[\ :class:`WellDescription <WellDescription>`\] = []
-            materials: \ :class:`List <typing.List>`\[\ :class:`MaterialDescription <MaterialDescription>`\] = []
-            walls: \ :class:`List <typing.List>`\[\ :class:`WallDescription <WallDescription>`\] = []
+            name: \ :class:`Optional <typing.Optional>`[str] = None
+            physics: \ :class:`PhysicsDescription <PhysicsDescription>` = PhysicsDescription()
+            time_options: \ :class:`TimeOptionsDescription <TimeOptionsDescription>` = TimeOptionsDescription()
+            numerical_options: \ :class:`NumericalOptionsDescription <NumericalOptionsDescription>` = NumericalOptionsDescription()
+            ipr_models: \ :class:`IPRModelsDescription <IPRModelsDescription>` = IPRModelsDescription()
+            pvt_models: \ :class:`PvtModelsDescription <PvtModelsDescription>` = PvtModelsDescription()
+            tracers: \ :class:`TracersDescription <TracersDescription>` = TracersDescription()
+            outputs: \ :class:`CaseOutputDescription <CaseOutputDescription>` = CaseOutputDescription()
+            pipes: \ :class:`List <typing.List>`[\ :class:`PipeDescription <PipeDescription>`] = []
+            nodes: \ :class:`List <typing.List>`[\ :class:`NodeDescription <NodeDescription>`] = []
+            wells: \ :class:`List <typing.List>`[\ :class:`WellDescription <WellDescription>`] = []
+            materials: \ :class:`List <typing.List>`[\ :class:`MaterialDescription <MaterialDescription>`] = []
+            walls: \ :class:`List <typing.List>`[\ :class:`WallDescription <WallDescription>`] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string # optional
-            physics: \ :class:`physics_description_schema <PhysicsDescription>`\ # optional
-            time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>`\ # optional
-            numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>`\ # optional
-            ipr_models: \ :class:`ipr_models_description_schema <IPRModelsDescription>`\ # optional
-            pvt_models: \ :class:`pvt_models_description_schema <PvtModelsDescription>`\ # optional
-            tracers: \ :class:`tracers_description_schema <TracersDescription>`\ # optional
-            outputs: \ :class:`case_output_description_schema <CaseOutputDescription>`\ # optional
+            physics: \ :class:`physics_description_schema <PhysicsDescription>` # optional
+            time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>` # optional
+            numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>` # optional
+            ipr_models: \ :class:`ipr_models_description_schema <IPRModelsDescription>` # optional
+            pvt_models: \ :class:`pvt_models_description_schema <PvtModelsDescription>` # optional
+            tracers: \ :class:`tracers_description_schema <TracersDescription>` # optional
+            outputs: \ :class:`case_output_description_schema <CaseOutputDescription>` # optional
             pipes: # optional
                 - \ :class:`pipe_description_schema <PipeDescription>`
             nodes: # optional

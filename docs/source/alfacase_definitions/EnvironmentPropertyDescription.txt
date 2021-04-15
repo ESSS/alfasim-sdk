@@ -8,9 +8,9 @@
             position: \ :class:`Scalar <barril.units.Scalar>`
             temperature: \ :class:`Scalar <barril.units.Scalar>`
             type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
-            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm/s', 'velocity')
+            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'm/s', 'velocity')
 
 .. tab:: Schema
 

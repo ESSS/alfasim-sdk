@@ -7,12 +7,12 @@
         class CaseOutputDescription
             automatic_trend_frequency: bool = True
             automatic_trend_frequency: bool = True
-            trends: \ :class:`List <typing.List>`\[\ :class:`TrendOutputDescription <TrendOutputDescription>`\] = []
-            trend_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
+            trends: \ :class:`List <typing.List>`[\ :class:`TrendOutputDescription <TrendOutputDescription>`] = []
+            trend_frequency: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.1, 's', 'time')
             automatic_profile_frequency: bool = True
             automatic_profile_frequency: bool = True
-            profiles: \ :class:`List <typing.List>`\[\ :class:`ProfileOutputDescription <ProfileOutputDescription>`\] = []
-            profile_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
+            profiles: \ :class:`List <typing.List>`[\ :class:`ProfileOutputDescription <ProfileOutputDescription>`] = []
+            profile_frequency: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.1, 's', 'time')
 
 .. tab:: Schema
 
