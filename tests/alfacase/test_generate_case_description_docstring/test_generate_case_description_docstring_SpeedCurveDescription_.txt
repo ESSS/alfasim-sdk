@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            time: 
+            time: # optional
                 values: [number]
-                unit: string # optional
-            speed: 
+                unit: string
+            speed: # optional
                 values: [number]
-                unit: string # optional
+                unit: string
