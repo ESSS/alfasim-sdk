@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class CvTableDescription
-            opening: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
-            flow_coefficient: \ :class:`Array <barril.units.Array>`\  = Array(flow coefficient, [], (galUS/min)/(psi^0.5))
+            opening: \ :class:`Array <barril.units.Array>` = Array(dimensionless, [], -)
+            flow_coefficient: \ :class:`Array <barril.units.Array>` = Array(flow coefficient, [], (galUS/min)/(psi^0.5))
 
 .. tab:: Schema
 

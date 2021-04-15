@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class XAndYDescription
-            x: \ :class:`Optional <typing.Optional>`\[\ :class:`Array <barril.units.Array>`\] = None
-            y: \ :class:`Optional <typing.Optional>`\[\ :class:`Array <barril.units.Array>`\] = None
+            x: \ :class:`Optional <typing.Optional>`[\ :class:`Array <barril.units.Array>`] = None
+            y: \ :class:`Optional <typing.Optional>`[\ :class:`Array <barril.units.Array>`] = None
 
 .. tab:: Schema
 

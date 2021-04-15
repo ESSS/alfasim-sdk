@@ -6,14 +6,14 @@
 
         class CompressorEquipmentDescription
             position: \ :class:`Scalar <barril.units.Scalar>`
-            speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\  = SpeedCurveDescription()
-            reference_pressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'bar', 'pressure')
-            reference_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(25.0, 'degC', 'temperature')
-            constant_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(500.0, 'rpm', 'angle per time')
-            compressor_type: \ :class:`CompressorSpeedType <alfasim_sdk._internal.constants.CompressorSpeedType>`\  = CompressorSpeedType.SpeedCurve
-            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
-            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  = FlowDirection.Forward
-            table: \ :class:`CompressorPressureTableDescription <CompressorPressureTableDescription>`\  = CompressorPressureTableDescription()
+            speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>` = SpeedCurveDescription()
+            reference_pressure: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, 'bar', 'pressure')
+            reference_temperature: \ :class:`Scalar <barril.units.Scalar>` = Scalar(25.0, 'degC', 'temperature')
+            constant_speed: \ :class:`Scalar <barril.units.Scalar>` = Scalar(500.0, 'rpm', 'angle per time')
+            compressor_type: \ :class:`CompressorSpeedType <alfasim_sdk._internal.constants.CompressorSpeedType>` = CompressorSpeedType.SpeedCurve
+            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>` = InterpolationType.Constant
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>` = FlowDirection.Forward
+            table: \ :class:`CompressorPressureTableDescription <CompressorPressureTableDescription>` = CompressorPressureTableDescription()
 
 .. tab:: Schema
 
@@ -22,7 +22,7 @@
             position: 
                 value: number
                 unit: string
-            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\ # optional
+            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>` # optional
             reference_pressure: # optional
                 value: number
                 unit: string
@@ -32,7 +32,7 @@
             constant_speed: # optional
                 value: number
                 unit: string
-            compressor_type: \ :class:`CompressorSpeedType <alfasim_sdk._internal.constants.CompressorSpeedType>`\ # optional
-            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\ # optional
-            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\ # optional
-            table: \ :class:`compressor_pressure_table_description_schema <CompressorPressureTableDescription>`\ # optional
+            compressor_type: \ :class:`CompressorSpeedType <alfasim_sdk._internal.constants.CompressorSpeedType>` # optional
+            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>` # optional
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>` # optional
+            table: \ :class:`compressor_pressure_table_description_schema <CompressorPressureTableDescription>` # optional

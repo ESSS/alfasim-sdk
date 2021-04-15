@@ -10,7 +10,7 @@
             outer_diameter: \ :class:`Scalar <barril.units.Scalar>`
             inner_diameter: \ :class:`Scalar <barril.units.Scalar>`
             inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
-            material: \ :class:`Optional <typing.Optional>`\[str] = None
+            material: \ :class:`Optional <typing.Optional>`[str] = None
 
 .. tab:: Schema
 

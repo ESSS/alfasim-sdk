@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class InitialVelocitiesDescription
-            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>`\  = TableInputType.length
-            table_x: \ :class:`ReferencedVelocitiesContainerDescription <ReferencedVelocitiesContainerDescription>`\  = ReferencedVelocitiesContainerDescription()
-            table_y: \ :class:`ReferencedVelocitiesContainerDescription <ReferencedVelocitiesContainerDescription>`\  = ReferencedVelocitiesContainerDescription()
-            table_length: \ :class:`VelocitiesContainerDescription <VelocitiesContainerDescription>`\  = VelocitiesContainerDescription()
+            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>` = TableInputType.length
+            table_x: \ :class:`ReferencedVelocitiesContainerDescription <ReferencedVelocitiesContainerDescription>` = ReferencedVelocitiesContainerDescription()
+            table_y: \ :class:`ReferencedVelocitiesContainerDescription <ReferencedVelocitiesContainerDescription>` = ReferencedVelocitiesContainerDescription()
+            table_length: \ :class:`VelocitiesContainerDescription <VelocitiesContainerDescription>` = VelocitiesContainerDescription()
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>`\ # optional
-            table_x: \ :class:`referenced_velocities_container_description_schema <ReferencedVelocitiesContainerDescription>`\ # optional
-            table_y: \ :class:`referenced_velocities_container_description_schema <ReferencedVelocitiesContainerDescription>`\ # optional
-            table_length: \ :class:`velocities_container_description_schema <VelocitiesContainerDescription>`\ # optional
+            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>` # optional
+            table_x: \ :class:`referenced_velocities_container_description_schema <ReferencedVelocitiesContainerDescription>` # optional
+            table_y: \ :class:`referenced_velocities_container_description_schema <ReferencedVelocitiesContainerDescription>` # optional
+            table_length: \ :class:`velocities_container_description_schema <VelocitiesContainerDescription>` # optional

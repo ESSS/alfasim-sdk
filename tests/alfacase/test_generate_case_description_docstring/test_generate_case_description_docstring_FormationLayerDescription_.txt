@@ -7,7 +7,7 @@
         class FormationLayerDescription
             name: str
             start: \ :class:`Scalar <barril.units.Scalar>`
-            material: \ :class:`Optional <typing.Optional>`\[str] = None
+            material: \ :class:`Optional <typing.Optional>`[str] = None
 
 .. tab:: Schema
 
