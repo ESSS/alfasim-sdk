@@ -14,8 +14,8 @@
     .. parsed-literal::
 
             name: string
-            inner_roughness: # optional
+            inner_roughness:  # optional
                 value: number
                 unit: string
-            wall_layer_container: # optional
+            wall_layer_container:  # optional
                 - \ :class:`wall_layer_description_schema <WallLayerDescription>`

@@ -21,28 +21,28 @@
 
     .. parsed-literal::
 
-            stop_on_steady_state: boolean # optional
-            stop_on_steady_state: number # optional
-            automatic_restart_autosave_frequency: boolean # optional
-            automatic_restart_autosave_frequency: number # optional
-            initial_time: # optional
+            stop_on_steady_state: boolean  # optional
+            stop_on_steady_state: number  # optional
+            automatic_restart_autosave_frequency: boolean  # optional
+            automatic_restart_autosave_frequency: number  # optional
+            initial_time:  # optional
                 value: number
                 unit: string
-            final_time: # optional
+            final_time:  # optional
                 value: number
                 unit: string
-            initial_timestep: # optional
+            initial_timestep:  # optional
                 value: number
                 unit: string
-            minimum_timestep: # optional
+            minimum_timestep:  # optional
                 value: number
                 unit: string
-            maximum_timestep: # optional
+            maximum_timestep:  # optional
                 value: number
                 unit: string
-            restart_autosave_frequency: # optional
+            restart_autosave_frequency:  # optional
                 value: number
                 unit: string
-            minimum_time_for_steady_state_stop: # optional
+            minimum_time_for_steady_state_stop:  # optional
                 value: number
                 unit: string

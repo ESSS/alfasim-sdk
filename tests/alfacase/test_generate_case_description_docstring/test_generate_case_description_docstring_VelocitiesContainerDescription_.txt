@@ -12,10 +12,10 @@
 
     .. parsed-literal::
 
-            positions: # optional
+            positions:  # optional
                 values: [number]
                 unit: string
-            velocities: # optional
+            velocities:  # optional
                 string: 
                     values: [number]
                     unit: string

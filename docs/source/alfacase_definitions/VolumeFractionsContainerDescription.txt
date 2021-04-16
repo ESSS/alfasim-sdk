@@ -12,10 +12,10 @@
 
     .. parsed-literal::
 
-            positions: # optional
+            positions:  # optional
                 values: [number]
                 unit: string
-            fractions: # optional
+            fractions:  # optional
                 string: 
                     values: [number]
                     unit: string

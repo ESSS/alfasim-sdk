@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            opening: # optional
+            opening:  # optional
                 values: [number]
                 unit: string
-            flow_coefficient: # optional
+            flow_coefficient:  # optional
                 values: [number]
                 unit: string

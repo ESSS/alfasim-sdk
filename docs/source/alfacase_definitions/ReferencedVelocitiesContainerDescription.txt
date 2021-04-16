@@ -13,13 +13,13 @@
 
     .. parsed-literal::
 
-            reference_coordinate: # optional
+            reference_coordinate:  # optional
                 value: number
                 unit: string
-            positions: # optional
+            positions:  # optional
                 values: [number]
                 unit: string
-            velocities: # optional
+            velocities:  # optional
                 string: 
                     values: [number]
                     unit: string

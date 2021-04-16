@@ -23,14 +23,14 @@
     .. parsed-literal::
 
             name: string
-            pvt_model: string # optional
-            stagnant_fluid: string # optional
-            profile: \ :class:`profile_description_schema <ProfileDescription>`\ # optional
-            casing: \ :class:`casing_description_schema <CasingDescription>`\ # optional
-            annulus: \ :class:`annulus_description_schema <AnnulusDescription>`\ # optional
-            formation: \ :class:`formation_description_schema <FormationDescription>`\ # optional
+            pvt_model: string  # optional
+            stagnant_fluid: string  # optional
+            profile: \ :class:`profile_description_schema <ProfileDescription>`\  # optional
+            casing: \ :class:`casing_description_schema <CasingDescription>`\  # optional
+            annulus: \ :class:`annulus_description_schema <AnnulusDescription>`\  # optional
+            formation: \ :class:`formation_description_schema <FormationDescription>`\  # optional
             top_node: string
             bottom_node: string
-            environment: \ :class:`environment_description_schema <EnvironmentDescription>`\ # optional
-            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\ # optional
-            equipment: \ :class:`equipment_description_schema <EquipmentDescription>`\ # optional
+            environment: \ :class:`environment_description_schema <EnvironmentDescription>`\  # optional
+            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
+            equipment: \ :class:`equipment_description_schema <EquipmentDescription>`\  # optional

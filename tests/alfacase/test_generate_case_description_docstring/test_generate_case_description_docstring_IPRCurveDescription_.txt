@@ -12,9 +12,9 @@
 
     .. parsed-literal::
 
-            pressure_difference: # optional
+            pressure_difference:  # optional
                 values: [number]
                 unit: string
-            flow_rate: # optional
+            flow_rate:  # optional
                 values: [number]
                 unit: string

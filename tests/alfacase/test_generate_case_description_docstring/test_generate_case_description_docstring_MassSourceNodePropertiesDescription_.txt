@@ -19,28 +19,28 @@
 
     .. parsed-literal::
 
-            fluid: string # optional
-            tracer_mass_fraction: # optional
+            fluid: string  # optional
+            tracer_mass_fraction:  # optional
                 values: [number]
                 unit: string
-            temperature: # optional
+            temperature:  # optional
                 value: number
                 unit: string
-            source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\ # optional
-            volumetric_flow_rates_std: # optional
+            source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\  # optional
+            volumetric_flow_rates_std:  # optional
                 string: 
                     value: number
                     unit: string
-            mass_flow_rates: # optional
+            mass_flow_rates:  # optional
                 string: 
                     value: number
                     unit: string
-            total_mass_flow_rate: # optional
+            total_mass_flow_rate:  # optional
                 value: number
                 unit: string
-            water_cut: # optional
+            water_cut:  # optional
                 value: number
                 unit: string
-            gas_oil_ratio: # optional
+            gas_oil_ratio:  # optional
                 value: number
                 unit: string

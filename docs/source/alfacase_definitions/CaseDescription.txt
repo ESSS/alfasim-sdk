@@ -23,21 +23,21 @@
 
     .. parsed-literal::
 
-            name: string # optional
-            physics: \ :class:`physics_description_schema <PhysicsDescription>`\ # optional
-            time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>`\ # optional
-            numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>`\ # optional
-            ipr_models: \ :class:`ipr_models_description_schema <IPRModelsDescription>`\ # optional
-            pvt_models: \ :class:`pvt_models_description_schema <PvtModelsDescription>`\ # optional
-            tracers: \ :class:`tracers_description_schema <TracersDescription>`\ # optional
-            outputs: \ :class:`case_output_description_schema <CaseOutputDescription>`\ # optional
-            pipes: # optional
+            name: string  # optional
+            physics: \ :class:`physics_description_schema <PhysicsDescription>`\  # optional
+            time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>`\  # optional
+            numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>`\  # optional
+            ipr_models: \ :class:`ipr_models_description_schema <IPRModelsDescription>`\  # optional
+            pvt_models: \ :class:`pvt_models_description_schema <PvtModelsDescription>`\  # optional
+            tracers: \ :class:`tracers_description_schema <TracersDescription>`\  # optional
+            outputs: \ :class:`case_output_description_schema <CaseOutputDescription>`\  # optional
+            pipes:  # optional
                 - \ :class:`pipe_description_schema <PipeDescription>`
-            nodes: # optional
+            nodes:  # optional
                 - \ :class:`node_description_schema <NodeDescription>`
-            wells: # optional
+            wells:  # optional
                 - \ :class:`well_description_schema <WellDescription>`
-            materials: # optional
+            materials:  # optional
                 - \ :class:`material_description_schema <MaterialDescription>`
-            walls: # optional
+            walls:  # optional
                 - \ :class:`wall_description_schema <WallDescription>`

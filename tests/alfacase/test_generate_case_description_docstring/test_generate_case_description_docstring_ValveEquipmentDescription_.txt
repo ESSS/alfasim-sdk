@@ -22,15 +22,15 @@
             position: 
                 value: number
                 unit: string
-            type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`\ # optional
-            diameter: # optional
+            type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`\  # optional
+            diameter:  # optional
                 value: number
                 unit: string
-            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\ # optional
-            opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\ # optional
-            opening: # optional
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  # optional
+            opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\  # optional
+            opening:  # optional
                 value: number
                 unit: string
-            opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\ # optional
-            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\ # optional
-            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\ # optional
+            opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  # optional
+            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\  # optional
+            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional

@@ -17,7 +17,7 @@
             curve_names: 
                 - str
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
-            position: # optional
+            position:  # optional
                 value: number
                 unit: string
-            element_name: string # optional
+            element_name: string  # optional

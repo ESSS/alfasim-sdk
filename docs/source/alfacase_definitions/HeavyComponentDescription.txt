@@ -16,9 +16,9 @@
 
             name: string
             scn: number
-            MW: # optional
+            MW:  # optional
                 value: number
                 unit: string
-            rho: # optional
+            rho:  # optional
                 value: number
                 unit: string

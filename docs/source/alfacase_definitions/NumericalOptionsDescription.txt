@@ -25,18 +25,18 @@
 
     .. parsed-literal::
 
-            nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._internal.constants.NonlinearSolverType>`\ # optional
-            tolerance: number # optional
-            maximum_iterations: number # optional
-            maximum_timestep_change_factor: number # optional
-            maximum_cfl_value: number # optional
-            relaxed_tolerance: number # optional
-            divergence_tolerance: number # optional
-            friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\ # optional
-            simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\ # optional
-            enable_solver_caching: boolean # optional
-            enable_solver_caching: number # optional
-            caching_rtol: number # optional
-            caching_atol: number # optional
-            always_repeat_timestep: boolean # optional
-            always_repeat_timestep: number # optional
+            nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._internal.constants.NonlinearSolverType>`\  # optional
+            tolerance: number  # optional
+            maximum_iterations: number  # optional
+            maximum_timestep_change_factor: number  # optional
+            maximum_cfl_value: number  # optional
+            relaxed_tolerance: number  # optional
+            divergence_tolerance: number  # optional
+            friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  # optional
+            simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  # optional
+            enable_solver_caching: boolean  # optional
+            enable_solver_caching: number  # optional
+            caching_rtol: number  # optional
+            caching_atol: number  # optional
+            always_repeat_timestep: boolean  # optional
+            always_repeat_timestep: number  # optional

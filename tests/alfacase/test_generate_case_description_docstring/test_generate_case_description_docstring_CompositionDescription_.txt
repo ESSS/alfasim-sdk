@@ -14,9 +14,9 @@
     .. parsed-literal::
 
             component: string
-            molar_fraction: # optional
+            molar_fraction:  # optional
                 value: number
                 unit: string
-            reference_enthalpy: # optional
+            reference_enthalpy:  # optional
                 value: number
                 unit: string

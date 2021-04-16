@@ -11,7 +11,7 @@
 
     .. parsed-literal::
 
-            partition_coefficients: # optional
+            partition_coefficients:  # optional
                 string: 
                     value: number
                     unit: string

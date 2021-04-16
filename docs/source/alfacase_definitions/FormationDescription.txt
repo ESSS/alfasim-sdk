@@ -15,5 +15,5 @@
             reference_y_coordinate: 
                 value: number
                 unit: string
-            layers: # optional
+            layers:  # optional
                 - \ :class:`formation_layer_description_schema <FormationLayerDescription>`

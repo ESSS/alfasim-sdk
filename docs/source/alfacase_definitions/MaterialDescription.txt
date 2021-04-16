@@ -20,25 +20,25 @@
     .. parsed-literal::
 
             name: string
-            material_type: \ :class:`MaterialType <alfasim_sdk._internal.constants.MaterialType>`\ # optional
-            density: # optional
+            material_type: \ :class:`MaterialType <alfasim_sdk._internal.constants.MaterialType>`\  # optional
+            density:  # optional
                 value: number
                 unit: string
-            thermal_conductivity: # optional
+            thermal_conductivity:  # optional
                 value: number
                 unit: string
-            heat_capacity: # optional
+            heat_capacity:  # optional
                 value: number
                 unit: string
-            inner_emissivity: # optional
+            inner_emissivity:  # optional
                 value: number
                 unit: string
-            outer_emissivity: # optional
+            outer_emissivity:  # optional
                 value: number
                 unit: string
-            expansion: # optional
+            expansion:  # optional
                 value: number
                 unit: string
-            viscosity: # optional
+            viscosity:  # optional
                 value: number
                 unit: string
