@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class PressureContainerDescription
-            positions: \ :class:`Array <barril.units.Array>` = Array(length, [0.0], m)
-            pressures: \ :class:`Array <barril.units.Array>` = Array(pressure, [100000.0], Pa)
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
+            pressures: \ :class:`Array <barril.units.Array>`\  = Array(pressure, [100000.0], Pa)
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            positions: # optional
+            positions:  # optional
                 values: [number]
                 unit: string
-            pressures: # optional
+            pressures:  # optional
                 values: [number]
                 unit: string

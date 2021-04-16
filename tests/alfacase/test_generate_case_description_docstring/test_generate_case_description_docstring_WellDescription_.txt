@@ -6,31 +6,31 @@
 
         class WellDescription
             name: str
-            pvt_model: \ :class:`Optional <typing.Optional>`[str] = None
-            stagnant_fluid: \ :class:`Optional <typing.Optional>`[str] = None
-            profile: \ :class:`ProfileDescription <ProfileDescription>` = ProfileDescription()
-            casing: \ :class:`CasingDescription <CasingDescription>` = CasingDescription()
-            annulus: \ :class:`AnnulusDescription <AnnulusDescription>` = AnnulusDescription()
-            formation: \ :class:`FormationDescription <FormationDescription>` = FormationDescription()
+            pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
+            stagnant_fluid: \ :class:`Optional <typing.Optional>`\[str] = None
+            profile: \ :class:`ProfileDescription <ProfileDescription>`\  = ProfileDescription()
+            casing: \ :class:`CasingDescription <CasingDescription>`\  = CasingDescription()
+            annulus: \ :class:`AnnulusDescription <AnnulusDescription>`\  = AnnulusDescription()
+            formation: \ :class:`FormationDescription <FormationDescription>`\  = FormationDescription()
             top_node: str
             bottom_node: str
-            environment: \ :class:`EnvironmentDescription <EnvironmentDescription>` = EnvironmentDescription()
-            initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>` = InitialConditionsDescription()
-            equipment: \ :class:`EquipmentDescription <EquipmentDescription>` = EquipmentDescription()
+            environment: \ :class:`EnvironmentDescription <EnvironmentDescription>`\  = EnvironmentDescription()
+            initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\  = InitialConditionsDescription()
+            equipment: \ :class:`EquipmentDescription <EquipmentDescription>`\  = EquipmentDescription()
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string
-            pvt_model: string # optional
-            stagnant_fluid: string # optional
-            profile: \ :class:`profile_description_schema <ProfileDescription>` # optional
-            casing: \ :class:`casing_description_schema <CasingDescription>` # optional
-            annulus: \ :class:`annulus_description_schema <AnnulusDescription>` # optional
-            formation: \ :class:`formation_description_schema <FormationDescription>` # optional
+            pvt_model: string  # optional
+            stagnant_fluid: string  # optional
+            profile: \ :class:`profile_description_schema <ProfileDescription>`\  # optional
+            casing: \ :class:`casing_description_schema <CasingDescription>`\  # optional
+            annulus: \ :class:`annulus_description_schema <AnnulusDescription>`\  # optional
+            formation: \ :class:`formation_description_schema <FormationDescription>`\  # optional
             top_node: string
             bottom_node: string
-            environment: \ :class:`environment_description_schema <EnvironmentDescription>` # optional
-            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>` # optional
-            equipment: \ :class:`equipment_description_schema <EquipmentDescription>` # optional
+            environment: \ :class:`environment_description_schema <EnvironmentDescription>`\  # optional
+            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
+            equipment: \ :class:`equipment_description_schema <EquipmentDescription>`\  # optional

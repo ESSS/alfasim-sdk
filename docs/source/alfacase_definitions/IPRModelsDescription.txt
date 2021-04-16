@@ -5,14 +5,14 @@
     .. parsed-literal::
 
         class IPRModelsDescription
-            linear_models: \ :class:`Dict <typing.Dict>`[str, \ :class:`LinearIPRDescription <LinearIPRDescription>`] = {}
-            table_models: \ :class:`Dict <typing.Dict>`[str, \ :class:`TableIPRDescription <TableIPRDescription>`] = {}
+            linear_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LinearIPRDescription <LinearIPRDescription>`\] = {}
+            table_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`TableIPRDescription <TableIPRDescription>`\] = {}
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            linear_models: # optional
+            linear_models:  # optional
                 string: \ :class:`linear_ipr_description_schema <LinearIPRDescription>`
-            table_models: # optional
+            table_models:  # optional
                 string: \ :class:`table_ipr_description_schema <TableIPRDescription>`

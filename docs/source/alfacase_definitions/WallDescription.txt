@@ -6,16 +6,16 @@
 
         class WallDescription
             name: str
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'm', 'length')
-            wall_layer_container: \ :class:`List <typing.List>`[\ :class:`WallLayerDescription <WallLayerDescription>`] = []
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            wall_layer_container: \ :class:`List <typing.List>`\[\ :class:`WallLayerDescription <WallLayerDescription>`\] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string
-            inner_roughness: # optional
+            inner_roughness:  # optional
                 value: number
                 unit: string
-            wall_layer_container: # optional
+            wall_layer_container:  # optional
                 - \ :class:`wall_layer_description_schema <WallLayerDescription>`

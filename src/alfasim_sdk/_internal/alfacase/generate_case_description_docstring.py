@@ -170,9 +170,9 @@ def _get_declaration(
                     # For Schema: if the attributes have a default value the entry is optional.
                     if default_value and is_schema:
                         if attribute_value.startswith("\n"):
-                            attribute_value = "# optional" + attribute_value
+                            attribute_value = " # optional" + attribute_value
                         else:
-                            attribute_value += " # optional"
+                            attribute_value += "  # optional"
                         default_value = ""
 
                     # If attribute_value ends with backslash (because of the cross-reference), add extra space
@@ -195,7 +195,7 @@ def _get_class_with_reference(visible_name: str, ref: str) -> str:
     """
     Return the name of the class with a valid reference to be used by sphinx.
     """
-    return f"\\ :class:`{visible_name} <{ref}>`"
+    return f"\\ :class:`{visible_name} <{ref}>`\\"
 
 
 def _get_scalar_reference() -> str:
