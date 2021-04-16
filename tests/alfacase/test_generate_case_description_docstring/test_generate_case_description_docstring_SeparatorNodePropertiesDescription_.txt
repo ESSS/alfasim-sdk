@@ -19,25 +19,25 @@
 
     .. parsed-literal::
 
-            environment_temperature: # optional
+            environment_temperature:  # optional
                 value: number
                 unit: string
-            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>` # optional
-            length: # optional
+            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\  # optional
+            length:  # optional
                 value: number
                 unit: string
-            overall_heat_transfer_coefficient: # optional
+            overall_heat_transfer_coefficient:  # optional
                 value: number
                 unit: string
             diameter: # optional
                 value: number
                 unit: string
-            nozzles: # optional
-                string: 
+            nozzles:  # optional
+                string:
                     value: number
                     unit: string
-            initial_phase_volume_fractions: # optional
-                string: 
+            initial_phase_volume_fractions:  # optional
+                string:
                     value: number
                     unit: string
             gas_separation_efficiency: # optional

@@ -5,20 +5,20 @@
     .. parsed-literal::
 
         class CasingDescription
-            casing_sections: \ :class:`List <typing.List>`[\ :class:`CasingSectionDescription <CasingSectionDescription>`] = []
-            tubings: \ :class:`List <typing.List>`[\ :class:`TubingDescription <TubingDescription>`] = []
-            packers: \ :class:`List <typing.List>`[\ :class:`PackerDescription <PackerDescription>`] = []
-            open_holes: \ :class:`List <typing.List>`[\ :class:`OpenHoleDescription <OpenHoleDescription>`] = []
+            casing_sections: \ :class:`List <typing.List>`\[\ :class:`CasingSectionDescription <CasingSectionDescription>`\] = []
+            tubings: \ :class:`List <typing.List>`\[\ :class:`TubingDescription <TubingDescription>`\] = []
+            packers: \ :class:`List <typing.List>`\[\ :class:`PackerDescription <PackerDescription>`\] = []
+            open_holes: \ :class:`List <typing.List>`\[\ :class:`OpenHoleDescription <OpenHoleDescription>`\] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            casing_sections: # optional
+            casing_sections:  # optional
                 - \ :class:`casing_section_description_schema <CasingSectionDescription>`
-            tubings: # optional
+            tubings:  # optional
                 - \ :class:`tubing_description_schema <TubingDescription>`
-            packers: # optional
+            packers:  # optional
                 - \ :class:`packer_description_schema <PackerDescription>`
-            open_holes: # optional
+            open_holes:  # optional
                 - \ :class:`open_hole_description_schema <OpenHoleDescription>`
