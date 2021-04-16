@@ -323,7 +323,7 @@ class OutputAttachmentLocation(Enum):
 
     Main = "main"
     Annulus = "annulus"
-    Global = "global"
+    NotDefined = "not_defined"
 
 
 class CorrelationPackage(Enum):

@@ -23,12 +23,12 @@
                 value: number
                 unit: string
             type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
-            heat_transfer_coefficient: 
+            heat_transfer_coefficient:  # optional
                 value: number
-                unit: string # optional
-            overall_heat_transfer_coefficient: 
+                unit: string
+            overall_heat_transfer_coefficient:  # optional
                 value: number
-                unit: string # optional
-            fluid_velocity: 
+                unit: string
+            fluid_velocity:  # optional
                 value: number
-                unit: string # optional
+                unit: string

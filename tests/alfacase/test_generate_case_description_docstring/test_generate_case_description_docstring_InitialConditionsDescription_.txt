@@ -16,9 +16,9 @@
 
     .. parsed-literal::
 
-            pressures: \ :class:`initial_pressures_description_schema <InitialPressuresDescription>`\ # optional
-            volume_fractions: \ :class:`initial_volume_fractions_description_schema <InitialVolumeFractionsDescription>`\ # optional
-            tracers_mass_fractions: \ :class:`initial_tracers_mass_fractions_description_schema <InitialTracersMassFractionsDescription>`\ # optional
-            velocities: \ :class:`initial_velocities_description_schema <InitialVelocitiesDescription>`\ # optional
-            temperatures: \ :class:`initial_temperatures_description_schema <InitialTemperaturesDescription>`\ # optional
-            fluid: string # optional
+            pressures: \ :class:`initial_pressures_description_schema <InitialPressuresDescription>`\  # optional
+            volume_fractions: \ :class:`initial_volume_fractions_description_schema <InitialVolumeFractionsDescription>`\  # optional
+            tracers_mass_fractions: \ :class:`initial_tracers_mass_fractions_description_schema <InitialTracersMassFractionsDescription>`\  # optional
+            velocities: \ :class:`initial_velocities_description_schema <InitialVelocitiesDescription>`\  # optional
+            temperatures: \ :class:`initial_temperatures_description_schema <InitialTemperaturesDescription>`\  # optional
+            fluid: string  # optional

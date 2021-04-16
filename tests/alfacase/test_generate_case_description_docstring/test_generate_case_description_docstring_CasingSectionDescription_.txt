@@ -40,9 +40,9 @@
             inner_roughness: 
                 value: number
                 unit: string
-            material: string # optional
+            material: string  # optional
             top_of_filler: 
                 value: number
                 unit: string
-            filler_material: string # optional
-            material_above_filler: string # optional
+            filler_material: string  # optional
+            material_above_filler: string  # optional

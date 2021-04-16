@@ -273,7 +273,7 @@ profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "element_name": Str(),
-        "location": Enum(['main', 'annulus']),
+        "location": Enum(['main', 'annulus', 'not_defined']),
     }
 )
 
@@ -410,9 +410,9 @@ tracers_mass_fractions_container_description_schema = Map(
 trend_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
-        "element_name": Str(),
-        "position": Map({"value": Float(), "unit": Str()}),
-        "location": Enum(['main', 'annulus']),
+        "location": Enum(['main', 'annulus', 'not_defined']),
+        Optional("position"): Map({"value": Float(), "unit": Str()}),
+        Optional("element_name"): Str(),
     }
 )
 

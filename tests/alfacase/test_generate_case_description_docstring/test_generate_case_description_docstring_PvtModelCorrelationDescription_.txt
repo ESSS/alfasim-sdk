@@ -14,13 +14,13 @@
 
     .. parsed-literal::
 
-            oil_density_std: 
+            oil_density_std:  # optional
                 value: number
-                unit: string # optional
-            gas_density_std: 
+                unit: string
+            gas_density_std:  # optional
                 value: number
-                unit: string # optional
-            rs_sat: 
+                unit: string
+            rs_sat:  # optional
                 value: number
-                unit: string # optional
-            pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._internal.constants.CorrelationPackage>`\ # optional
+                unit: string
+            pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._internal.constants.CorrelationPackage>`\  # optional
