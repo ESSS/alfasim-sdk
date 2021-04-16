@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class TracersDescription
-            constant_coefficients: \ :class:`Dict <typing.Dict>`[str, \ :class:`TracerModelConstantCoefficientsDescription <TracerModelConstantCoefficientsDescription>`] = {}
+            constant_coefficients: \ :class:`Dict <typing.Dict>`\[str, \ :class:`TracerModelConstantCoefficientsDescription <TracerModelConstantCoefficientsDescription>`\] = {}
 
 .. tab:: Schema
 

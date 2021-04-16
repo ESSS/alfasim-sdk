@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class PvtModelsDescription
-            default_model: \ :class:`Optional <typing.Optional>`[str] = None
-            tables: \ :class:`Dict <typing.Dict>`[str, Union[str, pathlib.Path]] = {}
-            correlations: \ :class:`Dict <typing.Dict>`[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`] = {}
-            compositions: \ :class:`Dict <typing.Dict>`[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`] = {}
+            default_model: \ :class:`Optional <typing.Optional>`\[str] = None
+            tables: \ :class:`Dict <typing.Dict>`\[str, Union[str, pathlib.Path]] = {}
+            correlations: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`\] = {}
+            compositions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`\] = {}
 
 .. tab:: Schema
 

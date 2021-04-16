@@ -5,12 +5,12 @@
     .. parsed-literal::
 
         class EquipmentDescription
-            mass_sources: \ :class:`Dict <typing.Dict>`[str, \ :class:`MassSourceEquipmentDescription <MassSourceEquipmentDescription>`] = {}
-            pumps: \ :class:`Dict <typing.Dict>`[str, \ :class:`PumpEquipmentDescription <PumpEquipmentDescription>`] = {}
-            valves: \ :class:`Dict <typing.Dict>`[str, \ :class:`ValveEquipmentDescription <ValveEquipmentDescription>`] = {}
-            reservoir_inflows: \ :class:`Dict <typing.Dict>`[str, \ :class:`ReservoirInflowEquipmentDescription <ReservoirInflowEquipmentDescription>`] = {}
-            heat_sources: \ :class:`Dict <typing.Dict>`[str, \ :class:`HeatSourceEquipmentDescription <HeatSourceEquipmentDescription>`] = {}
-            compressors: \ :class:`Dict <typing.Dict>`[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`] = {}
+            mass_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`MassSourceEquipmentDescription <MassSourceEquipmentDescription>`\] = {}
+            pumps: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PumpEquipmentDescription <PumpEquipmentDescription>`\] = {}
+            valves: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ValveEquipmentDescription <ValveEquipmentDescription>`\] = {}
+            reservoir_inflows: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ReservoirInflowEquipmentDescription <ReservoirInflowEquipmentDescription>`\] = {}
+            heat_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`HeatSourceEquipmentDescription <HeatSourceEquipmentDescription>`\] = {}
+            compressors: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`\] = {}
 
 .. tab:: Schema
 

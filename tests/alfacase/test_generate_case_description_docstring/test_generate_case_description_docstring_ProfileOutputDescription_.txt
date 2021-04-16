@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class ProfileOutputDescription
-            curve_names: \ :class:`List <typing.List>`[str]
+            curve_names: \ :class:`List <typing.List>`\[str]
             element_name: str
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
 

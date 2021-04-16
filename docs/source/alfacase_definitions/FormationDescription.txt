@@ -6,7 +6,7 @@
 
         class FormationDescription
             reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`
-            layers: \ :class:`List <typing.List>`[\ :class:`FormationLayerDescription <FormationLayerDescription>`] = []
+            layers: \ :class:`List <typing.List>`\[\ :class:`FormationLayerDescription <FormationLayerDescription>`\] = []
 
 .. tab:: Schema
 

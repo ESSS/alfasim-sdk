@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class VelocitiesContainerDescription
-            positions: \ :class:`Array <barril.units.Array>` = Array(length, [0.0], m)
-            velocities: \ :class:`Dict <typing.Dict>`[str, \ :class:`Array <barril.units.Array>`] = {'gas': Array(velocity, [1e-08], m/s), 'oil': Array(velocity, [1e-08], m/s)}
+            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
+            velocities: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\] = {'gas': Array(velocity, [1e-08], m/s), 'oil': Array(velocity, [1e-08], m/s)}
 
 .. tab:: Schema
 

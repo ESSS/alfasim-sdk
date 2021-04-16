@@ -8,7 +8,7 @@
             start_positions: \ :class:`Array <barril.units.Array>`
             diameters: \ :class:`Array <barril.units.Array>`
             roughnesses: \ :class:`Array <barril.units.Array>`
-            wall_names: \ :class:`Optional <typing.Optional>`[\ :class:`List <typing.List>`[str]] = None
+            wall_names: \ :class:`Optional <typing.Optional>`\[\ :class:`List <typing.List>`\[str]] = None
 
 .. tab:: Schema
 

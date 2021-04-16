@@ -5,15 +5,15 @@
     .. parsed-literal::
 
         class MassSourceEquipmentDescription
-            fluid: \ :class:`Optional <typing.Optional>`[str] = None
-            tracer_mass_fraction: \ :class:`Array <barril.units.Array>` = Array(dimensionless, [], -)
-            temperature: \ :class:`Scalar <barril.units.Scalar>` = Scalar(288.6, 'K', 'temperature')
-            source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>` = MassSourceType.MassFlowRates
-            volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`[str, \ :class:`Scalar <barril.units.Scalar>`] = {}
-            mass_flow_rates: \ :class:`Dict <typing.Dict>`[str, \ :class:`Scalar <barril.units.Scalar>`] = {}
-            total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, 'kg/s', 'mass flow rate')
-            water_cut: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, '-', 'volume fraction')
-            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            fluid: \ :class:`Optional <typing.Optional>`\[str] = None
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
+            source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\  = MassSourceType.MassFlowRates
+            volumetric_flow_rates_std: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            mass_flow_rates: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            total_mass_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/s', 'mass flow rate')
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'volume fraction')
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
             position: \ :class:`Scalar <barril.units.Scalar>`
 
 .. tab:: Schema
@@ -27,7 +27,7 @@
             temperature: # optional
                 value: number
                 unit: string
-            source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>` # optional
+            source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\ # optional
             volumetric_flow_rates_std: # optional
                 string: 
                     value: number

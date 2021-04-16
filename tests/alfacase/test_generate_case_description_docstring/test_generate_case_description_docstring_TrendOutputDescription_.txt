@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class TrendOutputDescription
-            curve_names: \ :class:`List <typing.List>`[str]
+            curve_names: \ :class:`List <typing.List>`\[str]
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
-            position: \ :class:`Optional <typing.Optional>`[Scalar] = None
-            element_name: \ :class:`Optional <typing.Optional>`[str] = None
+            position: \ :class:`Optional <typing.Optional>`\[Scalar] = None
+            element_name: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 

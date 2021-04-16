@@ -5,18 +5,18 @@
     .. parsed-literal::
 
         class EnvironmentDescription
-            thermal_model: \ :class:`PipeThermalModelType <alfasim_sdk._internal.constants.PipeThermalModelType>` = PipeThermalModelType.SteadyState
-            position_input_mode: \ :class:`PipeThermalPositionInput <alfasim_sdk._internal.constants.PipeThermalPositionInput>` = PipeThermalPositionInput.Md
-            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'm', 'length')
-            md_properties_table: \ :class:`List <typing.List>`[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`] = []
-            tvd_properties_table: \ :class:`List <typing.List>`[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`] = []
+            thermal_model: \ :class:`PipeThermalModelType <alfasim_sdk._internal.constants.PipeThermalModelType>`\  = PipeThermalModelType.SteadyState
+            position_input_mode: \ :class:`PipeThermalPositionInput <alfasim_sdk._internal.constants.PipeThermalPositionInput>`\  = PipeThermalPositionInput.Md
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            md_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\] = []
+            tvd_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            thermal_model: \ :class:`PipeThermalModelType <alfasim_sdk._internal.constants.PipeThermalModelType>` # optional
-            position_input_mode: \ :class:`PipeThermalPositionInput <alfasim_sdk._internal.constants.PipeThermalPositionInput>` # optional
+            thermal_model: \ :class:`PipeThermalModelType <alfasim_sdk._internal.constants.PipeThermalModelType>`\ # optional
+            position_input_mode: \ :class:`PipeThermalPositionInput <alfasim_sdk._internal.constants.PipeThermalPositionInput>`\ # optional
             reference_y_coordinate: # optional
                 value: number
                 unit: string

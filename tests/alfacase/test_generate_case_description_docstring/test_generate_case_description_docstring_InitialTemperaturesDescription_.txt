@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class InitialTemperaturesDescription
-            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>` = TableInputType.length
-            table_x: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>` = ReferencedTemperaturesContainerDescription()
-            table_y: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>` = ReferencedTemperaturesContainerDescription()
-            table_length: \ :class:`TemperaturesContainerDescription <TemperaturesContainerDescription>` = TemperaturesContainerDescription()
+            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>`\  = TableInputType.length
+            table_x: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>`\  = ReferencedTemperaturesContainerDescription()
+            table_y: \ :class:`ReferencedTemperaturesContainerDescription <ReferencedTemperaturesContainerDescription>`\  = ReferencedTemperaturesContainerDescription()
+            table_length: \ :class:`TemperaturesContainerDescription <TemperaturesContainerDescription>`\  = TemperaturesContainerDescription()
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>` # optional
-            table_x: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>` # optional
-            table_y: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>` # optional
-            table_length: \ :class:`temperatures_container_description_schema <TemperaturesContainerDescription>` # optional
+            position_input_type: \ :class:`TableInputType <alfasim_sdk._internal.constants.TableInputType>`\ # optional
+            table_x: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>`\ # optional
+            table_y: \ :class:`referenced_temperatures_container_description_schema <ReferencedTemperaturesContainerDescription>`\ # optional
+            table_length: \ :class:`temperatures_container_description_schema <TemperaturesContainerDescription>`\ # optional

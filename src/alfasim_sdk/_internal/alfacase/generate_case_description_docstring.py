@@ -195,7 +195,7 @@ def _get_class_with_reference(visible_name: str, ref: str) -> str:
     """
     Return the name of the class with a valid reference to be used by sphinx.
     """
-    return f"\\ :class:`{visible_name} <{ref}>`"
+    return f"\\ :class:`{visible_name} <{ref}>`\\"
 
 
 def _get_scalar_reference() -> str:
