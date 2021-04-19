@@ -170,10 +170,20 @@ def test_instance_attribute():
 
 
 def test_scalar_attribute():
+    expected_msg = (
+        "If `default` is not a scalar then `category` is required to be not `None`"
+    )
+    for kwargs in [{}, {"default": None}]:
+        with pytest.raises(ValueError, match=expected_msg):
+
+            @attr.s(kw_only=True)
+            class Bar:
+                x = attrib_scalar(**kwargs)
+
     @attr.s(kw_only=True)
     class Foo:
         position = attrib_scalar(default=Scalar(1, "m"))
-        position_2 = attrib_scalar(default=None)
+        position_2 = attrib_scalar(default=None, category="length")
 
     # Check position
     instance_with_scalar = Foo(position=Scalar(1, "m"))

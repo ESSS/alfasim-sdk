@@ -32,7 +32,7 @@ def alfacase_definitions_path() -> Path:
 )
 def cog(ctx, check=False):
     """
-    Executes cog:
+    Executes cog
 
     - on `_internal/alfacase/case_description.py`;
     - on `_internal/alfacase/schema.py` to generate the schema for strictyaml;
@@ -72,7 +72,7 @@ def cog(ctx, check=False):
 @invoke.task
 def check_cog(ctx):
     """
-    Check if the cogged files have unstaged modifications:
+    Check if the cogged files have unstaged modifications
 
     - `_internal/alfacase/case_description.py`;
     - `_internal/alfacase/schema.py`;

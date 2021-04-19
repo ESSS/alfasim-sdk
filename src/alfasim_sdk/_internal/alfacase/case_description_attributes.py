@@ -200,6 +200,7 @@ def to_curve(
 def attrib_scalar(
     default: Union[ScalarLike, AttrNothingType] = attr.NOTHING,
     is_optional: bool = False,
+    category: Optional[str] = None,
 ) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
@@ -211,9 +212,18 @@ def attrib_scalar(
         otherwise, a `TypeError` will be raised.
     """
     if isinstance(default, Scalar):
-        metadata = {"type": "scalar", "category": default.category}
+        if category is None:
+            category = default.category
+        elif category != default.category:
+            raise ValueError("`default`'s category and `category` must match")
+
     else:
-        metadata = {}
+        if category is None:
+            raise ValueError(
+                "If `default` is not a scalar then `category` is required to be not `None`"
+            )
+
+    metadata = {"type": "scalar", "category": category}
     return attr.ib(
         default=default,
         converter=partial(to_scalar, is_optional=is_optional or not default),
@@ -223,7 +233,9 @@ def attrib_scalar(
 
 
 def attrib_curve(
-    default: Union[CurveLike, AttrNothingType] = attr.NOTHING, is_optional: bool = False
+    default: Union[CurveLike, AttrNothingType] = attr.NOTHING,
+    is_optional: bool = False,
+    category: Optional[str] = None,
 ) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
@@ -235,9 +247,18 @@ def attrib_curve(
         otherwise, a `TypeError` will be raised.
     """
     if isinstance(default, Curve):
-        metadata = {"type": "curve", "category": default.image.category}
+        if category is None:
+            category = default.image.category
+        elif category != default.image.category:
+            raise ValueError("`default` image's category and `category` must match")
+
     else:
-        metadata = {}
+        if category is None:
+            raise ValueError(
+                "If `default` is not a curve then `category` is required to be not `None`"
+            )
+
+    metadata = {"type": "curve", "category": category}
     return attr.ib(
         default=default,
         converter=partial(to_curve, is_optional=is_optional or not default),
@@ -304,7 +325,9 @@ def attrib_enum(
             f"Default must be a member of Enum and not the Enum class itself, got {default} while expecting"
             f" some of the following members {', '.join([str(i) for i in default])}"
         )
-    return attr.ib(default=default, validator=in_(type_), type=type_)
+
+    metadata = {"type": "enum", "enum_class": type_}
+    return attr.ib(default=default, validator=in_(type_), type=type_, metadata=metadata)
 
 
 def dict_of(type_):

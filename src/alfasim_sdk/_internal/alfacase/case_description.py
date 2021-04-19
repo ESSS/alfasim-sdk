@@ -36,7 +36,7 @@ from alfasim_sdk._internal import constants
 
 
 # [[[cog
-# # This cog has no output, it just declare and impot symbols used by cogs in this module.
+# # This cog has no output, it just declare and import symbols used by cogs in this module.
 #
 # from alfasim_sdk._internal import constants
 # from alfasim_sdk._internal.alfacase.case_description_attributes import generate_multi_input
@@ -437,7 +437,7 @@ class MassSourceEquipmentDescription(_MassSourceCommon):
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    position = attrib_scalar()
+    position = attrib_scalar(category="length")
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -513,7 +513,7 @@ class PumpEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position = attrib_scalar()
+    position = attrib_scalar(category="length")
     type = attrib_enum(default=constants.PumpType.ConstantPressure)
     pressure_boost = attrib_scalar(default=Scalar(1.0e5, "Pa"))
     thermal_efficiency = attrib_scalar(default=Scalar(100.0, "%"))
@@ -588,7 +588,7 @@ class CompressorEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
     """
 
-    position = attrib_scalar()
+    position = attrib_scalar(category="length")
     speed_curve = attrib_instance(SpeedCurveDescription)
     reference_pressure = attrib_scalar(default=Scalar(1.0, "bar"))
     reference_temperature = attrib_scalar(default=Scalar(25, "degC"))
@@ -654,7 +654,7 @@ class ValveEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position = attrib_scalar()
+    position = attrib_scalar(category="length")
     type = attrib_enum(default=constants.ValveType.PerkinsValve)
     diameter = attrib_scalar(default=Scalar(0.01, "m"))
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
@@ -742,8 +742,8 @@ class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    start = attrib_scalar()
-    length = attrib_scalar()
+    start = attrib_scalar(category="length")
+    length = attrib_scalar(category="length")
     productivity_ipr: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -761,9 +761,9 @@ class HeatSourceEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_power.txt
     """
 
-    start = attrib_scalar()
-    length = attrib_scalar()
-    power = attrib_scalar()
+    start = attrib_scalar(category="length")
+    length = attrib_scalar(category="length")
+    power = attrib_scalar(category="power")
 
 
 @attr.s(frozen=True, slots=True)
@@ -1178,8 +1178,8 @@ class EnvironmentPropertyDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
-    position = attrib_scalar()
-    temperature = attrib_scalar()
+    position = attrib_scalar(category="length")
+    temperature = attrib_scalar(category="temperature")
     type = attrib_enum(type_=constants.PipeEnvironmentHeatTransferCoefficientModelType)
     heat_transfer_coefficient = attrib_scalar(default=Scalar(0.0, "W/m2.K"))
     overall_heat_transfer_coefficient = attrib_scalar(default=Scalar(0.0, "W/m2.K"))
@@ -1339,7 +1339,7 @@ class FormationLayerDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    start = attrib_scalar()
+    start = attrib_scalar(category="length")
     material: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1353,7 +1353,7 @@ class FormationDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    reference_y_coordinate = attrib_scalar()
+    reference_y_coordinate = attrib_scalar(category="length")
     layers = attrib_instance_list(FormationLayerDescription)
 
 
@@ -1366,16 +1366,16 @@ class CasingSectionDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    hanger_depth = attrib_scalar()
-    settings_depth = attrib_scalar()
-    hole_diameter = attrib_scalar()
-    outer_diameter = attrib_scalar()
-    inner_diameter = attrib_scalar()
-    inner_roughness = attrib_scalar()
+    hanger_depth = attrib_scalar(category="length")
+    settings_depth = attrib_scalar(category="length")
+    hole_diameter = attrib_scalar(category="length")
+    outer_diameter = attrib_scalar(category="length")
+    inner_diameter = attrib_scalar(category="length")
+    inner_roughness = attrib_scalar(category="length")
     material: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    top_of_filler = attrib_scalar()
+    top_of_filler = attrib_scalar(category="length")
     filler_material: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1393,10 +1393,10 @@ class TubingDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    length = attrib_scalar()
-    outer_diameter = attrib_scalar()
-    inner_diameter = attrib_scalar()
-    inner_roughness = attrib_scalar()
+    length = attrib_scalar(category="length")
+    outer_diameter = attrib_scalar(category="length")
+    inner_diameter = attrib_scalar(category="length")
+    inner_roughness = attrib_scalar(category="length")
     material: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1411,7 +1411,7 @@ class PackerDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    position = attrib_scalar()
+    position = attrib_scalar(category="length")
     material_above: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1426,9 +1426,9 @@ class OpenHoleDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    length = attrib_scalar()
-    diameter = attrib_scalar()
-    inner_roughness = attrib_scalar()
+    length = attrib_scalar(category="length")
+    diameter = attrib_scalar(category="length")
+    inner_roughness = attrib_scalar(category="length")
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1453,11 +1453,11 @@ class GasLiftValveEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position = attrib_scalar()
-    diameter = attrib_scalar()
+    position = attrib_scalar(category="length")
+    diameter = attrib_scalar(category="length")
     valve_type = attrib_enum(type_=constants.ValveType)
-    delta_p_min = attrib_scalar()
-    discharge_coeff = attrib_scalar()
+    delta_p_min = attrib_scalar(category="pressure")
+    discharge_coeff = attrib_scalar(category="dimensionless")
 
 
 @attr.s(slots=True, kw_only=True)
