@@ -97,7 +97,7 @@ def finalize(ctx: "void*") -> "int":
         {
             // Threads information
             int n_threads = -1;
-            int errcode = alfasim.get_number_of_threads(ctx, &n_threads);
+            int errcode = alfasim_sdk_api.get_number_of_threads(ctx, &n_threads);
             f (errcode != 0){ // or errcode != OK
                 return errcode;
             }
@@ -105,7 +105,7 @@ def finalize(ctx: "void*") -> "int":
             // Plugin internal data
             for (int thread_id = 0; thread_id < n_threads; ++thread_id) {
                 void* data = nullptr;
-                errcode = alfasim.get_plugin_data(
+                errcode = alfasim_sdk_api.get_plugin_data(
                     ctx, &data, plugin_id, thread_id);
                 delete data;
             }
@@ -540,8 +540,7 @@ def initialize_state_variables_calculator(
         :emphasize-lines: 1
 
         HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR(
-            void* ctx, void* P, void* T, void* T_mix,
-            int n_control_volumes, int n_layers)
+            ctx, P, T, T_mix, n_control_volumes, n_layers)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -562,8 +561,7 @@ def initialize_state_variables_calculator(
         }
         // Then, to use the cached value:
         HOOK_CALCULATE_STATE_VARIABLE(
-            void* ctx, void* P, void* T, int n_control_volumes, i
-            nt n_layers, int phase_id, int property_id, void* output)
+            ctx, P, T, n_control_volumes, n_layers, phase_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -644,9 +642,7 @@ def calculate_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_STATE_VARIABLE(
-            void* ctx, void* P, void* T,
-            int n_control_volumes, int n_layers,
-            int phase_id, int property_id, void* output)
+            ctx, P, T, n_control_volumes, n_layers, phase_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -724,8 +720,7 @@ def calculate_phase_pair_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(
-            void* ctx, void* P, void* T_mix, int n_control_volumes,
-            int phase1_id, int phase2_id, int property_id, void* output)
+            ctx, P, T_mix, n_control_volumes, phase1_id, phase2_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -787,7 +782,7 @@ def finalize_state_variables_calculator(ctx: "void*") -> "int":
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(void* ctx)
+        HOOK_FINALIZE_STATE_VARIABLES_CALCULATOR(ctx)
         {
             return OK;
         }
@@ -823,8 +818,7 @@ def initialize_particle_diameter_of_solids_fields(
         :emphasize-lines: 1
 
         HOOK_INITIALIZE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
-            void* ctx, void* particle_diameter,
-            int n_control_volumes, int solids_field_id)
+            ctx, particle_diameter, n_control_volumes, solids_field_id)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -841,11 +835,11 @@ def initialize_particle_diameter_of_solids_fields(
             } else {
                 for (int i = 0; i < n_control_volumes; ++i) {
                     // If the particle size is constant
-                    output[i] = data.constant_particle_size;
+                    particle_diameter[i] = data.constant_particle_size;
                     // The value is calculated
                     // MyStruct has a function
                     // called 'initial_particle_size()'
-                    output[i] = data.initial_particle_size(
+                    particle_diameter[i] = data.initial_particle_size(
                              // List of params that can be
                              // retrieved by get_simulation_array()
                              );
@@ -885,8 +879,7 @@ def update_particle_diameter_of_solids_fields(
         :emphasize-lines: 1
 
         HOOK_UPDATE_PARTICLE_DIAMETER_OF_SOLIDS_FIELDS(
-            void* ctx, void* particle_diameter,
-            int n_control_volumes, int solids_field_id)
+            ctx, particle_diameter, n_control_volumes, solids_field_id)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -903,11 +896,11 @@ def update_particle_diameter_of_solids_fields(
             } else {
                 for (int i = 0; i < n_control_volumes; ++i) {
                     // If the particle size is constant
-                    output[i] = data.constant_particle_size;
+                    particle_diameter[i] = data.constant_particle_size;
                     // The value is calculated
                     // MyStruct has a function
                     // called 'compute_particle_size()'
-                    output[i] = data.compute_particle_size(
+                    particle_diameter[i] = data.compute_particle_size(
                              // List of params that can be
                              // retrieved by get_simulation_array()
                              );
@@ -990,7 +983,7 @@ def initialize_mass_fraction_of_tracer(
         :emphasize-lines: 1
 
         HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER(
-            void* ctx, void* phi_initial, int tracer_index)
+            ctx, phi_initial, tracer_index)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -1047,8 +1040,7 @@ def calculate_mass_fraction_of_tracer_in_phase(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_PHASE(
-            void* ctx, void* phi, void* phi_phase,
-            int tracer_index, int phase_index, int n_control_volumes)
+            ctx, phi, phi_phase, tracer_index, phase_index, n_control_volumes)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -1127,9 +1119,8 @@ def calculate_mass_fraction_of_tracer_in_field(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_MASS_FRACTION_OF_TRACER_IN_FIELD(
-            void* ctx, void* phi_phase, void* phi_field,
-            int tracer_index, int field_index,
-            int phase_index_of_field, int n_control_volumes)
+            ctx, phi_phase, phi_field, tracer_index, field_index,
+            phase_index_of_field, n_control_volumes)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -1201,7 +1192,7 @@ def set_prescribed_boundary_condition_of_mass_fraction_of_tracer(
         :emphasize-lines: 1
 
         HOOK_SET_PRESCRIBED_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(
-            void* ctx, void* phi_presc, int tracer_index)
+            ctx, phi_presc, tracer_index)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -1260,7 +1251,7 @@ def update_boundary_condition_of_mass_fraction_of_tracer(
         :emphasize-lines: 1
 
         HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER(
-            void* ctx, void* phi_presc, int tracer_index)
+            ctx, phi_presc, tracer_index)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -1324,8 +1315,7 @@ def calculate_ucm_friction_factor_stratified(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED(
-            void* ctx, double* ff_wG, double* ff_wL, double* ff_i)
+        HOOK_CALCULATE_UCM_FRICTION_FACTOR_STRATIFIED(ctx, ff_wG, ff_wL, ff_i)
         {
             int errcode = -1;
             int G = TwoPhaseSystem::GAS;
@@ -1336,7 +1326,7 @@ def calculate_ucm_friction_factor_stratified(
             errcode = alfasim_sdk_api.get_ucm_friction_factor_input_variable(
                 ctx, &alpha[G], "alpha", TwoPhaseSystem::GAS);
             if (errcode != OK){ return errcode; }
-            errcode = alfasim_plugins_api.get_ucm_friction_factor_input_variable(
+            errcode = alfasim_sdk_api.get_ucm_friction_factor_input_variable(
                 ctx, &alpha[L], "alpha", TwoPhaseSystem::LIQUID);
             if (errcode != OK){ return errcode; }
             // And so on to each friction factor input variable
@@ -1431,7 +1421,7 @@ def calculate_liq_liq_flow_pattern(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN(void* ctx, int* ll_fp, double* water_vol_frac)
+        HOOK_CALCULATE_LIQ_LIQ_FLOW_PATTERN(ctx, ll_fp, water_vol_frac)
         {
             int errcode = -1;
             int O = LiquidLiquidSystem::OIL;
@@ -1439,10 +1429,10 @@ def calculate_liq_liq_flow_pattern(
 
             // Getting liq-liq Flow Pattern input data from context
             double rho[2];
-            errcode = alfasim_sdk_api.get_ucm_liqliq_flow_pattern_input_variable(
+            errcode = alfasim_sdk_api.get_liq_liq_flow_pattern_input_variable(
                 ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
             if (errcode != OK){ return errcode; }
-            errcode = alfasim_plugins_api.get_ucm_liqliq_flow_pattern_input_variable(
+            errcode = alfasim_sdk_api.get_liq_liq_flow_pattern_input_variable(
                 ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
@@ -1451,7 +1441,6 @@ def calculate_liq_liq_flow_pattern(
 
             // Estimate the liquid-liquid Flow pattern and volume fraction of water
             // using your own algorithm.
-
 
             *ll_fp = flow_pattern;
             *water_vol_frac = alpha_W;
@@ -1490,7 +1479,7 @@ def calculate_liquid_effective_viscosity(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_LIQUID_EFFECTIVE_VISCOSITY(void* ctx, double* mu_l_eff, int ll_fp)
+        HOOK_CALCULATE_LIQUID_EFFECTIVE_VISCOSITY(ctx, mu_l_eff, ll_fp)
         {
             int errcode = -1;
             int O = LiquidLiquidSystem::OIL;
@@ -1498,10 +1487,10 @@ def calculate_liquid_effective_viscosity(
 
             // Getting liquid Effective Viscosity input data from context
             double rho[2];
-            errcode = alfasim_sdk_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+            errcode = alfasim_sdk_api.get_liquid_effecticve_viscosity_input_variable(
                 ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
             if (errcode != OK){ return errcode; }
-            errcode = alfasim_plugins_api.get_ucm_liquid_effecticve_viscosity_input_variable(
+            errcode = alfasim_sdk_api.get_liquid_effecticve_viscosity_input_variable(
                 ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
@@ -1531,7 +1520,7 @@ def calculate_gas_liq_surface_tension(
 
     .. note::
         The main input variables needed to estimate the Gas-Liquid Surface Tension is available in the API function
-        :cpp:func:`get_ucm_gasliq_surface_tension_input_variable`. Note that, the variables listed in the
+        :cpp:func:`get_gas_liq_surface_tension_input_variable`. Note that, the variables listed in the
         documentation of the cited function are related to one control volume, in which the estimation is applied.
 
     This `hook` allows the developer to implement your own Gas-liquid Surface Tension correlation for
@@ -1553,7 +1542,7 @@ def calculate_gas_liq_surface_tension(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_GAS_LIQ_SURFACE_TENSION(void* ctx, double* sigma_gl, int ll_fp)
+        HOOK_CALCULATE_GAS_LIQ_SURFACE_TENSION(ctx, sigma_gl, ll_fp)
         {
             int errcode = -1;
             int O = LiquidLiquidSystem::OIL;
@@ -1561,7 +1550,7 @@ def calculate_gas_liq_surface_tension(
 
             // Getting liquid Effective Viscosity input data from context
             double sigma_gll[2];
-            errcode = alfasim_sdk_api.get_ucm_gasliq_surface_tension_input_variable(
+            errcode = alfasim_sdk_api.get_gas_liq_surface_tension_input_variable(
                 ctx, &sigma_gll[O], "sigma_gll", LiquidLiquidSystem::OIL);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
@@ -1632,8 +1621,8 @@ def calculate_liq_liq_shear_force_per_volume(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_CALCULATE_LIQ_LIQ_SHEAR_FORCE_PER_VOLUME(void* ctx, double* shear_w,
-            double* shear_i, double* U_fields, double* vol_frac_fields, int ll_fp)
+        HOOK_CALCULATE_LIQ_LIQ_SHEAR_FORCE_PER_VOLUME(ctx, shear_w,
+            shear_i, U_fields, vol_frac_fields, ll_fp)
         {
             int errcode = -1;
             int O = 0;
@@ -1643,9 +1632,10 @@ def calculate_liq_liq_shear_force_per_volume(
 
             // Getting shear term input data from context
             double rho[2];
-            errcode = alfasim_sdk_api.get_ucm_liqliq_shear_force_per_volume_input_variable(
+            errcode = alfasim_sdk_api.get_liq_liq_shear_force_per_volume_input_variable(
                 ctx, &rho[O], "rho", LiquidLiquidSystem::OIL);
-            errcode = alfasim_sdk_api.get_ucm_liqliq_shear_force_per_volume_input_variable(
+            if (errcode != OK){ return errcode; }
+            errcode = alfasim_sdk_api.get_liq_liq_shear_force_per_volume_input_variable(
                 ctx, &rho[W], "rho", LiquidLiquidSystem::WATER);
             if (errcode != OK){ return errcode; }
             // And so on to each input variable
@@ -1731,8 +1721,7 @@ def calculate_relative_emulsion_viscosity(
         :linenos:
         :emphasize-lines: 1
 
-        int HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, int disp_field_index,
-            int layer_index, int n_faces)
+        HOOK_RELATIVE_EMULSION_VISCOSITY(ctx, mu_r, disp_field_index, layer_index, n_faces)
         {
             const char* plugin_id = get_plugin_id()
             errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
