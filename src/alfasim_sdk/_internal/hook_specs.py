@@ -1672,6 +1672,97 @@ def calculate_liq_liq_shear_force_per_volume(
     """
 
 
+def calculate_relative_emulsion_viscosity(
+    ctx: "void*",
+    mu_r: "double*",
+    disp_field_index: "int",
+    layer_index: "int",
+    n_faces: "int",
+) -> "int":
+    """
+    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, int disp_field_index, int layer_index, int n_faces)``
+
+    Internal `hook` to calculate the relative emulsion viscosity in the Emulsion Model.
+    This `hook` will be used in the emulsion model to calculate the apparent viscosity of the emulsion
+    (Continuous field + dispersed field).
+
+    The relative emulsion viscosity is defined by:
+
+    .. math::
+
+        \\begin{equation}
+            \mu_r = \\frac{\mu_m}{\mu_c}
+        \end{equation}
+
+
+    .. rubric:: Where
+
+    :1: :math:`\\mu_r` is the relative emulsion viscosity
+    :2: :math:`\\mu_m` is the apparent viscosity
+    :3: :math:`\\mu_c` is the viscosity of the continuous field
+
+    The output variable ``mu_r`` is the relative emulsion viscosity with size equal to ``n_faces`` and it
+    is dimensionless.
+    The ``disp_field_index`` is the index of the dipersed field. Since it is an emulsion dispersed field,
+    it can have values for ``oil in water`` and ``water in oil`` fields.
+    The ``layer_index`` is the index of the layer and continuous field in the layer. Since it is the index
+    of the main field of the emulsion, it can have values for ``oil``  or ``water`` layers (and/or continuous
+    fields).
+
+    .. Note::
+        It is important to know that the calculations for viscosity is performed over the faces (see
+        ``n_faces`` param). For that, any variable that should be retrieved using :cpp:func:`get_simulation_array`
+        must be use value ``Face`` in the :cpp:enum:`GridScope` param.
+
+    This `hook` allows the implementation of the relative emulsion viscosity correlation. Once the plugin
+    installed it is important to be selected in the emulsion model configuration inside the Physics data
+    tree in the ALFAsim application in order to be used.
+
+    :param ctx: ALFAsim's plugins context
+    :param mu_r: Relative emulsion viscosity
+    :param disp_field_index: Index of the dispersed field
+    :param layer_index: Index of the Layer or Continuous Field
+    :param n_faces: Number of faces.
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        int HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, int disp_field_index,
+            int layer_index, int n_faces)
+        {
+            const char* plugin_id = get_plugin_id()
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            // MyStruct is a developer defined struct to hold
+            // all important information for plugin hooks.
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(ctx, (void**) &data, plugin_id, thread_id);
+
+            if (disp_field_index == data.oil_in_water_index){
+                // Calculate the relative emulsion viscosity
+                // for water dominated scenario.
+                // ComputeForWaterDominated is a function implemented
+                // by plugin developer
+                ComputeForWaterDominated(mu_r, n_faces);
+            } else if (disp_field_index == data.water_in_oil_index){
+                // Calculate the relative emulsion viscosity
+                // for oil dominated scenario
+                // ComputeForOilDominated is a function implemented
+                // by plugin developer
+                ComputeForOilDominated(mu_r, n_faces);
+            }
+
+            return OK;
+        }
+    """
+
+
 def friction_factor(v1: "int", v2: "int") -> "int":
     """
     Docs for Friction Factor
@@ -1851,6 +1942,8 @@ specs = HookSpecs(
         calculate_liquid_effective_viscosity,
         calculate_gas_liq_surface_tension,
         calculate_liq_liq_shear_force_per_volume,
+        # Hooks related to Emulsion Model
+        calculate_relative_emulsion_viscosity,
         # Extra Hooks (For testing)
         friction_factor,
         env_temperature,
