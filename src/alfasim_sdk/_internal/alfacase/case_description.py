@@ -705,7 +705,20 @@ class LinearIPRDescription(CommonIPR):
     """
 
     min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
-    well_index = attrib_scalar(default=Scalar(24.0, "m3/bar.d"))
+
+    # [[[cog
+    # cog_out_multi_input("well_index", "productivity index", 24.0, "m3/bar.d")
+    # ]]]
+    # fmt: off
+    well_index_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    well_index = attrib_scalar(
+        default=Scalar('productivity index', 24.0, 'm3/bar.d')
+    )
+    well_index_curve = attrib_curve(
+        default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
 
 
 @attr.s(frozen=True, slots=True)

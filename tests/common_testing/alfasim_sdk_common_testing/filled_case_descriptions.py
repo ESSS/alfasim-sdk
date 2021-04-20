@@ -326,6 +326,7 @@ LINEAR_IPR_DESCRIPTION = case_description.LinearIPRDescription(
     well_index_phase=constants.WellIndexPhaseType.Oil,
     min_pressure_difference=Scalar(0.0, "bar"),
     well_index=Scalar(1.0e-6, "m3/Pa.s"),
+    well_index_curve=Curve(Array([1.0e-6, 0.9e-6], "m3/Pa.s"), Array([0, 1], "h")),
 )
 IPR_CURVE_DESCRIPTION = case_description.IPRCurveDescription(
     pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "Pa"),

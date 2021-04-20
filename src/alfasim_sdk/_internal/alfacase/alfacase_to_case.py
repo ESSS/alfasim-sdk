@@ -128,12 +128,12 @@ def get_case_description_attribute_loader_dict(
         {} if explict_loaders is None else explict_loaders.copy()
     )
 
-    for attr in class_.__attrs_attrs__:
-        name = attr.name
+    for attr_instance in class_.__attrs_attrs__:
+        name = attr_instance.name
         if name in loaders:
             continue
 
-        metadata = attr.metadata
+        metadata = attr_instance.metadata
         if "type" in metadata:
             loader_getter_name = f"get_{metadata['type']}_loader"
             kwargs = metadata.copy()
@@ -141,7 +141,7 @@ def get_case_description_attribute_loader_dict(
             loaders[name] = globals()[loader_getter_name](**kwargs)
             continue
 
-        default = attr.default
+        default = attr_instance.default
         if isinstance(default, enum.Enum):
             loaders[name] = get_enum_loader(enum_class=default.__class__)
             continue
@@ -1219,11 +1219,9 @@ def load_profile_output_description(
 def load_linear_ipr_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.LinearIPRDescription]:
-    alfacase_to_case_description = {
-        "well_index_phase": get_enum_loader(enum_class=constants.WellIndexPhaseType),
-        "min_pressure_difference": get_scalar_loader(from_unit="Pa"),
-        "well_index": get_scalar_loader(from_unit="m3/bar.d"),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.LinearIPRDescription
+    )
 
     def generate_linear_ipr_correlation(value: DescriptionDocument):
         case_values = to_case_values(value, alfacase_to_case_description)

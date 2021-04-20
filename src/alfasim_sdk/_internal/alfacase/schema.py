@@ -136,7 +136,14 @@ linear_ipr_description_schema = Map(
     {
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
         Optional("min_pressure_difference"): Map({"value": Float(), "unit": Str()}),
+        Optional("well_index_input_type"): Enum(['constant', 'curve']),
         Optional("well_index"): Map({"value": Float(), "unit": Str()}),
+        Optional("well_index_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
     }
 )
 mass_source_equipment_description_schema = Map(
@@ -886,5 +893,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: db371a2b17e133a486ea13264d08f4ae)
+# [[[end]]] (checksum: 246db83b8565903de6db4af4b62191c7)
 # fmt: on
