@@ -140,7 +140,12 @@ GAS_LIST_VALVE_DESCRIPTION = case_description.GasLiftValveEquipmentDescription(
     discharge_coeff=Scalar(0.826, "-"),
 )
 HEAT_SOURCE_DESCRIPTION = case_description.HeatSourceEquipmentDescription(
-    start=Scalar(200.0, "m"), length=Scalar(550.0, "m"), power=Scalar(20.0e3, "W")
+    start=Scalar(200.0, "m"),
+    length=Scalar(550.0, "m"),
+    power=Scalar(20.0e3, "W"),
+    power_curve=Curve(
+        Array("power", [2e4, 2.1e4, 2.3e4], "W"), Array("time", [0, 10, 20], "h")
+    ),
 )
 INITIAL_CONDITIONS_DESCRIPTION = case_description.InitialConditionsDescription(
     pressures=case_builders.build_constant_initial_pressure_description(50.0, "bar"),

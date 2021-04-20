@@ -79,7 +79,14 @@ heat_source_equipment_description_schema = Map(
     {
         "start": Map({"value": Float(), "unit": Str()}),
         "length": Map({"value": Float(), "unit": Str()}),
-        "power": Map({"value": Float(), "unit": Str()}),
+        Optional("power_input_type"): Enum(['constant', 'curve']),
+        Optional("power"): Map({"value": Float(), "unit": Str()}),
+        Optional("power_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
     }
 )
 

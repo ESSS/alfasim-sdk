@@ -778,12 +778,9 @@ def load_gas_lift_valve_equipment_description(
 def load_heat_source_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.HeatSourceEquipmentDescription]:
-    alfacase_to_case_description = {
-        "name": load_value,
-        "start": get_scalar_loader(from_unit="m"),
-        "length": get_scalar_loader(from_unit="m"),
-        "power": get_scalar_loader(from_unit="W"),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.HeatSourceEquipmentDescription
+    )
 
     def generate_heat_source_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)

@@ -776,7 +776,20 @@ class HeatSourceEquipmentDescription:
 
     start = attrib_scalar(category="length")
     length = attrib_scalar(category="length")
-    power = attrib_scalar(category="power")
+
+    # [[[cog
+    # cog_out_multi_input("power", "power", 0, 'W')
+    # ]]]
+    # fmt: off
+    power_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    power = attrib_scalar(
+        default=Scalar('power', 0, 'W')
+    )
+    power_curve = attrib_curve(
+        default=Curve(Array('power', [], 'W'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 5454563efcb0d6262127c023258cceba)
 
 
 @attr.s(frozen=True, slots=True)
