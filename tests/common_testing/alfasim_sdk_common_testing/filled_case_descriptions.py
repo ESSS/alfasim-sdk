@@ -231,6 +231,8 @@ SEPARATOR_NODE_PROPERTIES_DESCRIPTION = (
             constants.FLUID_OIL: Scalar("volume fraction", 0.5, "-"),
             constants.FLUID_WATER: Scalar("volume fraction", 0.5, "-"),
         },
+        gas_separation_efficiency=Scalar("dimensionless", 1.0, "-"),
+        liquid_separation_efficiency=Scalar("dimensionless", 1.0, "-"),
     )
 )
 NODE_SEPARATOR_DESCRIPTION = case_description.NodeDescription(

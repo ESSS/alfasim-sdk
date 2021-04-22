@@ -1097,6 +1097,10 @@ class SeparatorNodePropertiesDescription:
             constants.FLUID_OIL: Scalar("volume fraction", 0.5, "-"),
         }
     )
+    gas_separation_efficiency = attrib_scalar(default=Scalar("dimensionless", 1.0, "-"))
+    liquid_separation_efficiency = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
 
     @radius.validator
     def _validate_radius(self, attribute, value):
@@ -1109,6 +1113,14 @@ class SeparatorNodePropertiesDescription:
         assert (
             isinstance(value, Scalar) and value.GetCategory() == "length"
         ), "Invalid length"
+
+    @gas_separation_efficiency.validator
+    def _validate_gas_separation_efficiency(self, attribute, value):
+        assert isinstance(value, Scalar) and 0.6 <= value.GetValue("-") <= 1.0
+
+    @liquid_separation_efficiency.validator
+    def _validate_liquid_separation_efficiency(self, attribute, value):
+        assert isinstance(value, Scalar) and 0.6 <= value.GetValue("-") <= 1.0
 
 
 @attr.s(slots=True, kw_only=True)
