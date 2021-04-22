@@ -440,7 +440,6 @@ def test_get_cases_class():
         "NodeDescription",
         "NumericalOptionsDescription",
         "OpenHoleDescription",
-        "OpeningCurveDescription",
         "PackerDescription",
         "PhysicsDescription",
         "PipeDescription",

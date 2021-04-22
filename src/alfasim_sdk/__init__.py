@@ -100,7 +100,6 @@ from alfasim_sdk._internal.alfacase.case_description import (
     NumericalOptionsDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import OpenHoleDescription
-from alfasim_sdk._internal.alfacase.case_description import OpeningCurveDescription
 from alfasim_sdk._internal.alfacase.case_description import PackerDescription
 from alfasim_sdk._internal.alfacase.case_description import PhysicsDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeDescription
@@ -325,7 +324,6 @@ __all__ = [
     "NodeDescription",
     "NumericalOptionsDescription",
     "OpenHoleDescription",
-    "OpeningCurveDescription",
     "PackerDescription",
     "PhysicsDescription",
     "PipeDescription",

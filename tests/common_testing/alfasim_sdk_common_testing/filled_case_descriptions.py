@@ -116,9 +116,6 @@ CV_TABLE_DESCRIPTION_SCHEMA = case_description.CvTableDescription(
     opening=Array([0.0, 0.2, 0.5, 1.0], "-"),
     flow_coefficient=Array([0.0, 7.16, 44.97, 180.68], "(galUS/min)/(psi^0.5)"),
 )
-OPENING_CURVE_DESCRIPTION = case_description.OpeningCurveDescription(
-    time=Array([0.0, 0.1, 0.5], "s"), opening=Array([0.1, 0.2, 0.2], "-")
-)
 CASING_SECTION_DESCRIPTION = case_description.CasingSectionDescription(
     name="Casing 1",
     hanger_depth=Scalar(1, "m"),
@@ -427,7 +424,7 @@ VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     cv_table=CV_TABLE_DESCRIPTION_SCHEMA,
     opening_type=constants.ValveOpeningType.TableInterpolation,
     opening_curve_interpolation_type=constants.InterpolationType.Linear,
-    opening_curve=OPENING_CURVE_DESCRIPTION,
+    opening_curve=Curve(Array([0.1, 0.2, 0.2], "-"), Array([0.0, 0.1, 0.5], "s")),
 )
 VALVE_DESCRIPTION_CONSTANT_OPENING = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),

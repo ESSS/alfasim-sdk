@@ -232,6 +232,36 @@ def attrib_scalar(
     )
 
 
+def attrib_array(
+    default: Union[ArrayLike, AttrNothingType] = attr.NOTHING,
+    is_optional: bool = False,
+    category: Optional[str] = None,
+) -> attr._make._CountingAttr:
+    """
+    Create a new attr attribute with a converter to Array accepting also tuple(values, unit).
+
+    :param default:
+        Value to be used as default when instantiating a class with this attr.ib
+
+        If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
+        otherwise, a `TypeError` will be raised.
+    """
+    if isinstance(default, Array):
+        if category is None:
+            category = default.category
+        elif category != default.category:
+            raise ValueError("`default`'s category and `category` must match")
+
+    else:
+        if category is None:
+            raise ValueError(
+                "If `default` is not an array then `category` is required to be not `None`"
+            )
+
+    metadata = {"type": "array", "category": category}
+    return attr.ib(default=default, converter=to_array, type=Array, metadata=metadata)
+
+
 def attrib_curve(
     default: Union[CurveLike, AttrNothingType] = attr.NOTHING,
     is_optional: bool = False,
@@ -271,14 +301,16 @@ def attrib_instance(type_) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     """
+    metadata = {"type": "instance", "class_": type_}
     return attr.ib(
-        default=attr.Factory(type_), validator=instance_of(type_), type=type_
+        default=attr.Factory(type_),
+        validator=instance_of(type_),
+        type=type_,
+        metadata=metadata,
     )
 
 
-def attrib_instance_list(
-    type_, *, validator_type: Optional[Tuple[Any, ...]] = None
-) -> attr._make._CountingAttr:
+def attrib_instance_list(type_) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     All attributes created are expected to be List of the given type_
@@ -289,13 +321,17 @@ def attrib_instance_list(
 
     """
     # Config validator
-    _validator_type = validator_type or type_
     _validator = deep_iterable(
-        member_validator=instance_of(_validator_type),
+        member_validator=instance_of(type_),
         iterable_validator=instance_of(list),
     )
-
-    return attr.ib(default=attr.Factory(list), validator=_validator, type=List[type_])
+    metadata = {"type": "instance_list", "class_": type_}
+    return attr.ib(
+        default=attr.Factory(list),
+        validator=_validator,
+        type=List[type_],
+        metadata=metadata,
+    )
 
 
 def attrib_enum(

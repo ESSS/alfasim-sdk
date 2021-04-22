@@ -26,12 +26,8 @@ from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     load_mass_source_node_properties_description,
 )
 from alfasim_sdk._internal.alfacase.alfacase_to_case import load_physics_description
-from alfasim_sdk._internal.alfacase.alfacase_to_case import (
-    load_pvt_models_description,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    DescriptionError,
-)
+from alfasim_sdk._internal.alfacase.alfacase_to_case import load_pvt_models_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
 from alfasim_sdk._internal.alfacase.generate_schema import convert_to_snake_case
 from alfasim_sdk._internal.alfacase.generate_schema import (
     get_all_classes_that_needs_schema,
@@ -111,9 +107,14 @@ def alfacase_to_case_helper(tmp_path):
             description_document = DescriptionDocument(
                 content=alfacase_content, file_path=self.tmp_path / "test_case.alfacase"
             )
-            return getattr(alfacase_to_case, alfacase_config.load_function_name)(
-                description_document
-            )
+            if hasattr(alfacase_to_case, alfacase_config.load_function_name):
+                loader = getattr(alfacase_to_case, alfacase_config.load_function_name)
+            else:
+                loader = alfacase_to_case.get_instance_loader(
+                    class_=alfacase_config.description_expected.__class__
+                )
+
+            return loader(description_document)
 
         def ensure_description_has_all_properties(
             self, expected_description_class, obtained_description_obj
@@ -234,10 +235,6 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.OPEN_HOLE_DESCRIPTION,
         schema=schema.open_hole_description_schema,
         is_sequence=True,
-    ),
-    "OpeningCurveDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.OPENING_CURVE_DESCRIPTION,
-        schema=schema.opening_curve_description_schema,
     ),
     "PackerDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PACKER_DESCRIPTION,

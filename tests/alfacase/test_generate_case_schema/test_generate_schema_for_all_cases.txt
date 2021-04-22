@@ -318,13 +318,6 @@ open_hole_description_schema = Map(
     }
 )
 
-opening_curve_description_schema = Map(
-    {
-        Optional("time"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("opening"): Map({"values": Seq(Float()), "unit": Str()}),
-    }
-)
-
 packer_description_schema = Map(
     {
         "name": Str(),
@@ -835,7 +828,12 @@ valve_equipment_description_schema = Map(
         Optional("opening_type"): Enum(['constant_opening', 'table_interpolation']),
         Optional("opening"): Map({"value": Float(), "unit": Str()}),
         Optional("opening_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
-        Optional("opening_curve"): opening_curve_description_schema,
+        Optional("opening_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
         Optional("cv_table"): cv_table_description_schema,
     }
 )

@@ -121,6 +121,24 @@ def update_multi_input_flags(
     return item_description
 
 
+def load_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+    """
+    Create an instance of class_ with the attributes found in alfacase_content.
+    """
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(class_)
+    case_values = to_case_values(alfacase_content, alfacase_to_case_description)
+    item_description = class_(**case_values)
+    return update_multi_input_flags(alfacase_content, item_description)
+
+
+@lru_cache(maxsize=None)
+def get_instance_loader(*, class_: type) -> Callable:
+    """
+    Return a load  instance function pre-populate with the class_.
+    """
+    return partial(load_instance, class_=class_)
+
+
 def get_case_description_attribute_loader_dict(
     class_: Any, explict_loaders: Optional[Dict[str, Callable]] = None
 ) -> Dict[str, Callable]:
@@ -135,10 +153,11 @@ def get_case_description_attribute_loader_dict(
 
         metadata = attr_instance.metadata
         if "type" in metadata:
-            loader_getter_name = f"get_{metadata['type']}_loader"
             kwargs = metadata.copy()
-            del kwargs["type"]
-            loaders[name] = globals()[loader_getter_name](**kwargs)
+            type_ = kwargs.pop("type")
+            loader_getter_name = f"get_{type_}_loader"
+            loader = globals()[loader_getter_name]
+            loaders[name] = loader(**kwargs)
             continue
 
         default = attr_instance.default
@@ -690,18 +709,6 @@ def load_casing_section_description(
     ]
 
 
-def load_cv_table_description(
-    document: DescriptionDocument,
-) -> case_description.CvTableDescription:
-    alfacase_to_case_description = {
-        "opening": get_array_loader(from_unit="-"),
-        "flow_coefficient": get_array_loader(from_unit="(galUS/min)/(psi^0.5)"),
-    }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.CvTableDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
-
-
 def load_environment_property_description(
     document: DescriptionDocument,
 ) -> List[case_description.EnvironmentPropertyDescription]:
@@ -1146,18 +1153,6 @@ def load_node_description(
     ]
 
 
-def load_opening_curve_description(
-    document: DescriptionDocument,
-) -> case_description.OpeningCurveDescription:
-    alfacase_to_case_description = {
-        "time": get_array_loader(from_unit="s"),
-        "opening": get_array_loader(from_unit="-"),
-    }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.OpeningCurveDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
-
-
 def load_packer_description(
     document: DescriptionDocument,
 ) -> List[case_description.PackerDescription]:
@@ -1581,20 +1576,9 @@ def load_pump_equipment_description(
 def load_valve_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.ValveEquipmentDescription]:
-    alfacase_to_case_description = {
-        "name": load_value,
-        "position": get_scalar_loader(from_unit="m"),
-        "type": get_enum_loader(enum_class=constants.ValveType),
-        "diameter": get_scalar_loader(from_unit="m"),
-        "opening_type": get_enum_loader(enum_class=constants.ValveOpeningType),
-        "opening": get_scalar_loader(from_unit="-"),
-        "opening_curve_interpolation_type": get_enum_loader(
-            enum_class=constants.InterpolationType
-        ),
-        "opening_curve": load_opening_curve_description,
-        "cv_table": load_cv_table_description,
-        "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.ValveEquipmentDescription
+    )
 
     def generate_valve_description(document: DescriptionDocument):
 

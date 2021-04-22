@@ -17,6 +17,7 @@ from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
+from .case_description_attributes import attrib_array
 from .case_description_attributes import attrib_curve
 from .case_description_attributes import attrib_dict_of
 from .case_description_attributes import attrib_enum
@@ -602,27 +603,6 @@ class CompressorEquipmentDescription:
 
 
 @attr.s(frozen=True, slots=True)
-class OpeningCurveDescription:
-    """
-    .. include:: /alfacase_definitions/OpeningCurveDescription.txt
-
-    .. include:: /alfacase_definitions/list_of_unit_for_time.txt
-    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
-    """
-
-    time: Array = attr.ib(validator=instance_of(Array), default=Array([], "s"))
-    opening: Array = attr.ib(validator=instance_of(Array), default=Array([], "-"))
-
-    def __attrs_post_init__(self):
-        if len(self.time) != len(self.opening):
-            msg = (
-                f"Time and Opening must have the same size, got {len(self.time)} "
-                f"items for time and {len(self.opening)} for opening"
-            )
-            raise ValueError(msg)
-
-
-@attr.s(frozen=True, slots=True)
 class CvTableDescription:
     """
     .. include:: /alfacase_definitions/CvTableDescription.txt
@@ -631,10 +611,8 @@ class CvTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_flow_coefficient.txt
     """
 
-    opening: Array = attr.ib(validator=instance_of(Array), default=Array([], "-"))
-    flow_coefficient: Array = attr.ib(
-        validator=instance_of(Array), default=Array([], "(galUS/min)/(psi^0.5)")
-    )
+    opening = attrib_array(default=Array([], "-"))
+    flow_coefficient = attrib_array(default=Array([], "(galUS/min)/(psi^0.5)"))
 
     def __attrs_post_init__(self):
         if len(self.flow_coefficient) != len(self.opening):
@@ -667,7 +645,9 @@ class ValveEquipmentDescription:
     opening_curve_interpolation_type = attrib_enum(
         default=constants.InterpolationType.Constant
     )
-    opening_curve = attrib_instance(OpeningCurveDescription)
+    opening_curve = attrib_curve(
+        default=Curve(Array("dimensionless", [], "-"), Array("time", [], "s"))
+    )
     # When ValveType.ChokeValveWithFlowCoefficient
     cv_table = attrib_instance(CvTableDescription)
 

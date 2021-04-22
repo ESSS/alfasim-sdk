@@ -52,14 +52,6 @@ def test_physics_description_path_validator(tmp_path):
     assert case_description.PhysicsDescription(restart_filepath=None)
 
 
-def test_opening_curve_description():
-    expected_msg = "Time and Opening must have the same size, got 2 items for time and 3 for opening"
-    with pytest.raises(ValueError, match=re.escape(expected_msg)):
-        case_description.OpeningCurveDescription(
-            time=Array([0.0, 0.5], "s"), opening=Array([0.1, 0.2, 0.2], "-")
-        )
-
-
 def test_cv_table_description():
     expected_msg = "Opening and Flow Coefficient must have the same size, got 2 items for flow_coefficient and 1 for opening"
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
@@ -125,7 +117,6 @@ def test_instance_attribute_list():
     @attr.s(kw_only=True)
     class Foo:
         attr_1 = attrib_instance_list(X)
-        attr_1_validator_type = attrib_instance_list(X, validator_type=(X, Y))
 
     # Check validator of attrib_instance_list
     expected_msg = f"'attr_1' must be {list} (got X() that is a {X})."
@@ -142,7 +133,6 @@ def test_instance_attribute_list():
 
     # Smoke check
     assert Foo(attr_1=[X()])
-    assert Foo(attr_1_validator_type=[Y()])
 
 
 def test_instance_attribute():
@@ -158,7 +148,6 @@ def test_instance_attribute():
     class Foo:
         attr_1 = attrib_instance(X)
         attr_2 = attrib_instance_list(X)
-        attr_2_validator_type = attrib_instance_list(X, validator_type=(X, Y))
 
     # Check validator of attrib_instance
     expected_msg = f"'attr_1' must be {X} (got Y() that is a {Y})."
