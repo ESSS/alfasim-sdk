@@ -351,7 +351,7 @@ separator_node_properties_description_schema = Map(
         Optional("geometry"): Enum(['vertical_cylinder', 'horizontal_cylinder', 'sphere']),
         Optional("length"): Map({"value": Float(), "unit": Str()}),
         Optional("overall_heat_transfer_coefficient"): Map({"value": Float(), "unit": Str()}),
-        Optional("radius"): Map({"value": Float(), "unit": Str()}),
+        Optional("diameter"): Map({"value": Float(), "unit": Str()}),
         Optional("nozzles"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
         Optional("initial_phase_volume_fractions"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
         Optional("gas_separation_efficiency"): Map({"value": Float(), "unit": Str()}),

@@ -225,7 +225,7 @@ SEPARATOR_NODE_PROPERTIES_DESCRIPTION = (
             "Pipe3": Scalar(0.0, "m"),
         },
         overall_heat_transfer_coefficient=Scalar(0.0, "W/m2.K"),
-        radius=Scalar(2.0, "m"),
+        diameter=Scalar(4.0, "m"),
         initial_phase_volume_fractions={
             constants.FLUID_GAS: Scalar("volume fraction", 0.5, "-"),
             constants.FLUID_OIL: Scalar("volume fraction", 0.5, "-"),
