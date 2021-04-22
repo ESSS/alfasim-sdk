@@ -336,6 +336,8 @@ separator_node_properties_description_schema = Map(
         Optional("radius"): Map({"value": Float(), "unit": Str()}),
         Optional("nozzles"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
         Optional("initial_phase_volume_fractions"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
+        Optional("gas_separation_efficiency"): Map({"value": Float(), "unit": Str()}),
+        Optional("liquid_separation_efficiency"): Map({"value": Float(), "unit": Str()}),
     }
 )
 speed_curve_description_schema = Map(
@@ -678,5 +680,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 246db83b8565903de6db4af4b62191c7)
+# [[[end]]] (checksum: 76ffece5e41a24793b18c3dd7319b189)
 # fmt: on

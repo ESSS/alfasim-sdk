@@ -12,6 +12,8 @@
             radius: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
             nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
             initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {'gas': Scalar(0.5, '-', 'volume fraction'), 'oil': Scalar(0.5, '-', 'volume fraction')}
+            gas_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
+            liquid_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -38,3 +40,9 @@
                 string: 
                     value: number
                     unit: string # optional
+            gas_separation_efficiency: 
+                value: number
+                unit: string # optional
+            liquid_separation_efficiency: 
+                value: number
+                unit: string # optional

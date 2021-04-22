@@ -954,6 +954,8 @@ def load_separator_node_properties_description(
         "initial_phase_volume_fractions": get_dict_with_scalar_loader(
             category="volume fraction"
         ),
+        "gas_separation_efficiency": get_scalar_loader(from_unit="%"),
+        "liquid_separation_efficiency": get_scalar_loader(from_unit="%"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     return case_description.SeparatorNodePropertiesDescription(**case_values)

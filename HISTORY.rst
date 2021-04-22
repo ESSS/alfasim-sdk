@@ -5,7 +5,7 @@ History
 0.9.0 (unreleased)
 ==================
 
-*
+* Add gas and liquid separation efficiency to ``Separator`` model
 
 
 0.8.0 (2021-04-12)

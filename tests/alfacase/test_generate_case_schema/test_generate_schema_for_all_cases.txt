@@ -354,6 +354,8 @@ separator_node_properties_description_schema = Map(
         Optional("radius"): Map({"value": Float(), "unit": Str()}),
         Optional("nozzles"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
         Optional("initial_phase_volume_fractions"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
+        Optional("gas_separation_efficiency"): Map({"value": Float(), "unit": Str()}),
+        Optional("liquid_separation_efficiency"): Map({"value": Float(), "unit": Str()}),
     }
 )
 
