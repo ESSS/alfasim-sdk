@@ -147,7 +147,7 @@ def to_array(
     if is_optional and value is None:
         return value
     if is_two_element_tuple(value):
-        return Array(value)
+        return Array(*value)
     elif isinstance(value, Array):
         return value
 

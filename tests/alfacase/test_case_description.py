@@ -14,6 +14,7 @@ from alfasim_sdk import NodeCellType
 from alfasim_sdk import PvtModelTableParametersDescription
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_curve
 from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     attrib_instance,
@@ -156,6 +157,35 @@ def test_instance_attribute():
 
     # Smoke check
     assert Foo(attr_1=X())
+
+
+def test_curve_attributes_converter():
+    @attr.s
+    class Foo:
+        x = attrib_curve(category="length")
+
+    expected_msg = "Expected pair (image_array, domain_array) or Curve, got None (type: <class 'NoneType'>)"
+    with pytest.raises(TypeError, match=re.escape(expected_msg)):
+        Foo(x=None)
+
+    # Fail to convert image (error context).
+    expected_msg = "Curve image: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    with pytest.raises(TypeError, match=re.escape(expected_msg)):
+        Foo(x=(None, None))
+
+    # Fail to convert domain (error context).
+    expected_msg = "Curve domain: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    with pytest.raises(TypeError, match=re.escape(expected_msg)):
+        Foo(x=(([1, 11, 111], "m"), None))
+
+    # Image and domain does not have the same size.
+    expected_msg = (
+        "The length of the image (3) is different from the size of the domain (2)"
+    )
+    with pytest.raises(ValueError, match=re.escape(expected_msg)):
+        Foo(x=(([1, 11, 111], "m"), ([0, 10], "s")))
+
+    Foo(x=(([1, 11, 111], "m"), ([0, 10, 20], "s")))
 
 
 def test_scalar_attribute():
