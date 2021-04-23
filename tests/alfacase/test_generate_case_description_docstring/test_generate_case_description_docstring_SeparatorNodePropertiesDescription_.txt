@@ -29,20 +29,20 @@
             overall_heat_transfer_coefficient:  # optional
                 value: number
                 unit: string
-            diameter: # optional
+            diameter:  # optional
                 value: number
                 unit: string
             nozzles:  # optional
-                string:
+                string: 
                     value: number
                     unit: string
             initial_phase_volume_fractions:  # optional
-                string:
+                string: 
                     value: number
                     unit: string
-            gas_separation_efficiency: # optional
+            gas_separation_efficiency:  # optional
                 value: number
                 unit: string
-            liquid_separation_efficiency: # optional
+            liquid_separation_efficiency:  # optional
                 value: number
                 unit: string

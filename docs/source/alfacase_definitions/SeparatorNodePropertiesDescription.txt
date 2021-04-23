@@ -5,15 +5,15 @@
     .. parsed-literal::
 
         class SeparatorNodePropertiesDescription
-            environment_temperature: \ :class:`Scalar <barril.units.Scalar>` = Scalar(25.0, 'degC', 'temperature')
-            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>` = SeparatorGeometryType.VerticalCylinder
-            length: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, 'm', 'length')
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>` = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            diameter: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, 'm', 'length')
-            nozzles: \ :class:`Dict <typing.Dict>`[str, \ :class:`Scalar <barril.units.Scalar>`] = {}
-            initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`[str, \ :class:`Scalar <barril.units.Scalar>`] = {'gas': Scalar(0.5, '-', 'volume fraction'), 'oil': Scalar(0.5, '-', 'volume fraction')}
-            gas_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, '-', 'dimensionless')
-            liquid_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>` = Scalar(1.0, '-', 'dimensionless')
+            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(25.0, 'degC', 'temperature')
+            geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\  = SeparatorGeometryType.VerticalCylinder
+            length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {'gas': Scalar(0.5, '-', 'volume fraction'), 'oil': Scalar(0.5, '-', 'volume fraction')}
+            gas_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
+            liquid_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -29,20 +29,20 @@
             overall_heat_transfer_coefficient:  # optional
                 value: number
                 unit: string
-            diameter: # optional
+            diameter:  # optional
                 value: number
                 unit: string
             nozzles:  # optional
-                string:
+                string: 
                     value: number
                     unit: string
             initial_phase_volume_fractions:  # optional
-                string:
+                string: 
                     value: number
                     unit: string
-            gas_separation_efficiency: # optional
+            gas_separation_efficiency:  # optional
                 value: number
                 unit: string
-            liquid_separation_efficiency: # optional
+            liquid_separation_efficiency:  # optional
                 value: number
                 unit: string
