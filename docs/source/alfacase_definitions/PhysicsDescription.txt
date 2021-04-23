@@ -14,6 +14,7 @@
             keep_former_results: bool = False
             keep_former_results: bool = False
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  = EmulsionModelType.NoModel
+            emulsion_model_plugin_id: str = ''
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
 
@@ -30,5 +31,6 @@
             keep_former_results: boolean # optional
             keep_former_results: number # optional
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\ # optional
+            emulsion_model_plugin_id: string # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\ # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\ # optional

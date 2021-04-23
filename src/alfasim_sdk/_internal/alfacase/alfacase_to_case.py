@@ -1563,6 +1563,7 @@ def load_physics_description(
         'restart_filepath': load_path,
         'keep_former_results': load_value,
         'emulsion_model': get_enum_loader(enum_class=constants.EmulsionModelType),
+        'emulsion_model_plugin_id': load_value,
         'flash_model': get_enum_loader(enum_class=constants.FlashModel),
         'correlations_package': get_enum_loader(enum_class=constants.CorrelationPackageType),
     }
