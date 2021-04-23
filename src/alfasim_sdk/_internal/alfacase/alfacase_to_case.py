@@ -142,6 +142,13 @@ def get_instance_loader(*, class_: type) -> Callable:
 def get_case_description_attribute_loader_dict(
     class_: Any, explict_loaders: Optional[Dict[str, Callable]] = None
 ) -> Dict[str, Callable]:
+    """
+    Create a dict of loaders to be used with `to_case_values`.
+
+    Loaders are created for all attributes (``attr.id``) in ``class_``.
+    If ``explict_loaders`` are supplied those loaders are used instead of the
+    automatically generated ones.
+    """
     loaders: Dict[str, Callable] = (
         {} if explict_loaders is None else explict_loaders.copy()
     )
@@ -158,11 +165,6 @@ def get_case_description_attribute_loader_dict(
             loader_getter_name = f"get_{type_}_loader"
             loader = globals()[loader_getter_name]
             loaders[name] = loader(**kwargs)
-            continue
-
-        default = attr_instance.default
-        if isinstance(default, enum.Enum):
-            loaders[name] = get_enum_loader(enum_class=default.__class__)
             continue
 
         loaders[name] = load_value
