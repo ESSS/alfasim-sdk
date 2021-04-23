@@ -263,7 +263,7 @@ profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "element_name": Str(),
-        "location": Enum(['main', 'annulus', 'global']),
+        "location": Enum(['main', 'annulus', 'not_defined']),
     }
 )
 pvt_model_correlation_description_schema = Map(
@@ -387,9 +387,9 @@ tracers_mass_fractions_container_description_schema = Map(
 trend_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
-        "element_name": Str(),
-        "location": Enum(['main', 'annulus', 'global']),
+        "location": Enum(['main', 'annulus', 'not_defined']),
         Optional("position"): Map({"value": Float(), "unit": Str()}),
+        Optional("element_name"): Str(),
     }
 )
 tubing_description_schema = Map(
@@ -680,5 +680,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 2d4db5786560bbabd0e282fa5c970287)
+# [[[end]]] (checksum: db371a2b17e133a486ea13264d08f4ae)
 # fmt: on

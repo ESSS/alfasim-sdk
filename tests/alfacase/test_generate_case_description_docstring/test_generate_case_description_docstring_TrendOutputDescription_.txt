@@ -6,9 +6,9 @@
 
         class TrendOutputDescription
             curve_names: \ :class:`List <typing.List>`\[str]
-            element_name: str
-            position: \ :class:`Scalar <barril.units.Scalar>`
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
+            position: \ :class:`Optional <typing.Optional>`\[Scalar] = None
+            element_name: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
@@ -16,8 +16,6 @@
 
             curve_names: 
                 - str
-            element_name: string
-            position: 
-                value: number
-                unit: string
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
+            position: Union[barril.units._scalar.Scalar, NoneType] # optional
+            element_name: string # optional
