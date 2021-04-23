@@ -708,12 +708,18 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
 
 
 def ensure_descriptions_are_equal(
-    expected_case_description_dict, obtained_description_dict, ignored_properties
+    expected_case_description_dict,
+    obtained_description_dict,
+    ignored_properties,
+    path="",
 ):
     """
     Check that two cases description are equals.
     """
     from more_itertools import first
+
+    if path:
+        path += "."
 
     for key, expected_value in expected_case_description_dict.items():
         if key in ignored_properties:
@@ -723,6 +729,7 @@ def ensure_descriptions_are_equal(
                 expected_case_description_dict=expected_value,
                 obtained_description_dict=obtained_description_dict[key],
                 ignored_properties=ignored_properties,
+                path=f"{path}{key}",
             )
             continue
 
@@ -733,6 +740,7 @@ def ensure_descriptions_are_equal(
                     expected_case_description_dict=value,
                     obtained_description_dict=obtained_description_dict[key][index],
                     ignored_properties=ignored_properties,
+                    path=f"{path}{key}[{index}]",
                 )
             continue
 
@@ -742,7 +750,9 @@ def ensure_descriptions_are_equal(
             or is_list
             and isinstance(first(expected_value, None), np.ndarray)
         ):
-            assert np.array_equal(obtained_description_dict[key], expected_value)
+            assert np.array_equal(
+                obtained_description_dict[key], expected_value
+            ), f"Not equal on {path}{key}"
             continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
         is_array = isinstance(expected_value, Array)
@@ -752,7 +762,7 @@ def ensure_descriptions_are_equal(
             expected_values = np.array(expected_value.GetValues(unit))
             assert np.allclose(
                 obtained_values, expected_values
-            ), f"Obtained={obtained_values} != {expected_values}"
+            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
             continue  # pragma no cover [bug on coverage.py
 
         # Skip the check when materials or walls only has defaults values
@@ -761,4 +771,4 @@ def ensure_descriptions_are_equal(
 
         assert (
             obtained_description_dict[key] == expected_value
-        ), f'attribute "{key}" doesn\'t match, obtained "{obtained_description_dict[key]}" while "{expected_value}" was expected.'
+        ), f'Not equal on {path}{key}\nAttribute "{key}" doesn\'t match, obtained "{obtained_description_dict[key]}" while "{expected_value}" was expected.'
