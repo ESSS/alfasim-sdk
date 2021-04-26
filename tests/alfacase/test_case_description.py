@@ -284,7 +284,7 @@ def default_well() -> case_description.WellDescription:
 
 
 def _empty_profile():
-    """ Helper function to get a empty profile for tests. """
+    """Helper function to get a empty profile for tests."""
     return case_description.ProfileDescription(
         x_and_y=case_description.XAndYDescription(x=Array([0], "m"), y=Array([0], "m"))
     )
@@ -305,7 +305,7 @@ def test_check_pvt_model_files_handling_white_space(default_case, tmp_path):
 
 
 def test_check_restart_file_exists(default_case, tmp_path):
-    """ Ensure that the method EnsureValidReferences from CaseDescription catches errors with invalid restart files. """
+    """Ensure that the method EnsureValidReferences from CaseDescription catches errors with invalid restart files."""
     restart_file = tmp_path / "dummy.restart"
     case = attr.evolve(
         default_case,

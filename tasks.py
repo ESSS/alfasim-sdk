@@ -25,7 +25,7 @@ def alfacase_definitions_path() -> Path:
     }
 )
 def cog(ctx, check=False):
-    """ Executes cog on _internal/alfacase/schema.py to generate the schema for strictyaml. """
+    """Executes cog on _internal/alfacase/schema.py to generate the schema for strictyaml."""
     ctx.run(command=f"cog -rc {schema_file_path()}", warn=True)
 
     from alfasim_sdk._internal.alfacase.generate_schema import (

@@ -69,7 +69,7 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
 
 
 def generate_list_of_units(category: str) -> str:
-    """ Return an admonition with toggle to show the units available for a given category. """
+    """Return an admonition with toggle to show the units available for a given category."""
     from barril.units import UnitDatabase
 
     unit_database = UnitDatabase.GetSingleton()
@@ -111,7 +111,7 @@ def generate_definition(class_name: str) -> str:
 
 
 def _generate_declaration_for_class(class_: Any) -> List[str]:
-    """ Return all attributes for the given Class with CaseDescription definition. """
+    """Return all attributes for the given Class with CaseDescription definition."""
     class_fields = attr.fields_dict(class_)
     return [
         f"{INDENT*2}class {class_.__name__}",
@@ -120,13 +120,13 @@ def _generate_declaration_for_class(class_: Any) -> List[str]:
 
 
 def _generate_declaration_for_schema(class_: Any) -> List[str]:
-    """ Return all attributes for the given Class using ALFACase schema definition. """
+    """Return all attributes for the given Class using ALFACase schema definition."""
     class_fields = attr.fields_dict(class_)
     return _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS, is_schema=True)
 
 
 def _get_case_attr_default_value(value: attr.Attribute) -> str:
-    """ Return the default value of a CaseDescription. """
+    """Return the default value of a CaseDescription."""
 
     if value.default == attr.NOTHING:
         return ""
@@ -158,7 +158,7 @@ def _get_declaration(
     list_of_predicate_and_handles: Sequence[Tuple[Callable, Callable]],
     is_schema: bool = False,
 ) -> List[str]:
-    """ Helper class to extract the logic to iterate over the attributes from the given class. """
+    """Helper class to extract the logic to iterate over the attributes from the given class."""
     lines = []
     for attribute_name, value in class_.items():
         if attribute_name not in IGNORED_PROPERTIES:
@@ -196,27 +196,27 @@ def _get_class_with_reference(visible_name: str, ref: str) -> str:
 
 
 def _get_scalar_reference() -> str:
-    """ Return a string with a cross-reference to Scalar documentation. """
+    """Return a string with a cross-reference to Scalar documentation."""
     return _get_class_with_reference(visible_name="Scalar", ref="barril.units.Scalar")
 
 
 def _get_array_reference() -> str:
-    """ Return a string with a cross-reference to Array documentation. """
+    """Return a string with a cross-reference to Array documentation."""
     return _get_class_with_reference(visible_name="Array", ref="barril.units.Array")
 
 
 def _get_list_reference() -> str:
-    """ Return a string with a cross-reference to List documentation. """
+    """Return a string with a cross-reference to List documentation."""
     return _get_class_with_reference(visible_name="List", ref="typing.List")
 
 
 def _get_dict_reference() -> str:
-    """ Return a string with a cross-reference to Dict documentation. """
+    """Return a string with a cross-reference to Dict documentation."""
     return _get_class_with_reference(visible_name="Dict", ref="typing.Dict")
 
 
 def _get_optional_reference() -> str:
-    """ Return a string with a cross-reference to Optional documentation. """
+    """Return a string with a cross-reference to Optional documentation."""
     return _get_class_with_reference(visible_name="Optional", ref="typing.Optional")
 
 
@@ -279,21 +279,21 @@ def union_formatted(value: Any) -> str:
 
 
 def enum_formatted(value: Any) -> str:
-    """ Return the name of the Enum a cross-referencing link for the constants section. """
+    """Return the name of the Enum a cross-referencing link for the constants section."""
     name = value.__name__
     ref_name = f"{value.__module__}.{name}"
     return _get_class_with_reference(visible_name=name, ref=ref_name)
 
 
 def attrs_formatted_for_schema(value: Any) -> str:
-    """ Return the name of the schema with a reference for the API reference section. """
+    """Return the name of the schema with a reference for the API reference section."""
     return _get_class_with_reference(
         visible_name=obtain_schema_name(value), ref=value.__name__
     )
 
 
 def enum_formatted_for_schema(value: enum.EnumMeta) -> str:
-    """ Return the name of the schema with a reference for the API reference section. """
+    """Return the name of the schema with a reference for the API reference section."""
     return _get_class_with_reference(
         visible_name=obtain_schema_name(value),
         ref=f"{value.__module__}.{value.__name__}",
