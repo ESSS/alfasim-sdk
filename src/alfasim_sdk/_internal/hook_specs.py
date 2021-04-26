@@ -1681,8 +1681,8 @@ def calculate_relative_emulsion_viscosity(
     .. math::
 
         \\begin{equation}
-            \mu_r = \\frac{\mu_m}{\mu_c}
-        \end{equation}
+            \\mu_r = \\frac{\\mu_m}{\\mu_c}
+        \\end{equation}
 
 
     .. rubric:: Where
