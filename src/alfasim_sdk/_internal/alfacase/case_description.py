@@ -903,7 +903,7 @@ class LengthAndElevationDescription:
     def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
-        """ Returns a pair of values with length and elevation along with their units. """
+        """Returns a pair of values with length and elevation along with their units."""
         length_values = self.length.GetValues(self.length.unit)
         elevation_values = self.elevation.GetValues(self.elevation.unit)
         for length, elevation in zip(length_values, elevation_values):
@@ -926,7 +926,7 @@ class XAndYDescription:
     def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
-        """ Returns a pair of values with the x and y value along with their units. """
+        """Returns a pair of values with the x and y value along with their units."""
         for x, y in zip(self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)):
             yield (x, self.x.unit), (y, self.y.unit)
 
