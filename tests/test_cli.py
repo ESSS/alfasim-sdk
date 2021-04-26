@@ -106,9 +106,13 @@ def test_command_update(tmp_path):
 
     plugin_src_folder = tmp_path / "plugin_a" / "src"
     plugin_src_folder.mkdir(parents=True)
-    (plugin_src_folder / "hook_specs.h").write_text(data="", encoding="utf-8")
+    plugin_hook_spec_h_path = plugin_src_folder / "hook_specs.h"
+    plugin_hook_spec_h_path.write_text(data="", encoding="utf-8")
+    assert plugin_hook_spec_h_path.stat().st_size == 0
     result = runner.invoke(
         console_main, ["update", "--plugin-dir", plugin_src_folder.parent]
     )
     assert result.exception is None
     assert result.output == ""
+    assert plugin_hook_spec_h_path.stat().st_size > 0
+    assert plugin_hook_spec_h_path.read_text(encoding="utf-8") != ""
