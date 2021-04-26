@@ -203,9 +203,9 @@ def update(ctx, plugin_dir):
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
 
     plugin_folder = Path(plugin_dir)
-    hook_specs_h_folder = plugin_folder / "src" / "hook_specs.h"
+    hook_specs_h_path = plugin_folder / "src" / "hook_specs.h"
 
-    if not hook_specs_h_folder.exists() or not hook_specs_h_folder.is_file():
+    if not hook_specs_h_path.exists() or not hook_specs_h_path.is_file():
         raise FileNotFoundError(
             f"Was not possible to find 'src/hook_specs.h' file in {plugin_dir}"
         )
