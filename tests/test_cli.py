@@ -94,3 +94,25 @@ def test_compile_command(tmp_path):
     result = runner.invoke(console_main, ["compile", "--plugin-dir", tmp_path])
     assert result.exception is None
     assert result.output == ""
+
+
+def test_command_update(tmp_path):
+    runner = CliRunner()
+    result = runner.invoke(console_main, ["update", "--plugin-dir", tmp_path])
+    assert (
+        f"Was not possible to find 'src/hook_specs.h' file in {tmp_path}"
+        == result.exception.args[0]
+    )
+
+    plugin_src_folder = tmp_path / "plugin_a" / "src"
+    plugin_src_folder.mkdir(parents=True)
+    plugin_hook_spec_h_path = plugin_src_folder / "hook_specs.h"
+    plugin_hook_spec_h_path.write_text(data="", encoding="utf-8")
+    assert plugin_hook_spec_h_path.stat().st_size == 0
+    result = runner.invoke(
+        console_main, ["update", "--plugin-dir", plugin_src_folder.parent]
+    )
+    assert result.exception is None
+    assert result.output == ""
+    assert plugin_hook_spec_h_path.stat().st_size > 0
+    assert plugin_hook_spec_h_path.read_text(encoding="utf-8") != ""

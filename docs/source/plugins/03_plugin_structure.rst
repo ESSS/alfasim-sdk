@@ -20,6 +20,7 @@ You can also learn about the available options of each command invoking the :gui
    >>> alfasim-sdk template --help
    >>> alfasim-sdk package --help
    >>> alfasim-sdk compile --help
+   >>> alfasim-sdk update --help
 
 .. _alfasim_sdk_cli_template_section:
 
@@ -41,4 +42,10 @@ You can also learn about the available options of each command invoking the :gui
 
 .. click:: alfasim_sdk._internal.cli:_compile
     :prog: alfasim-sdk compile
+    :show-nested:
+
+.. _alfasim_sdk_cli_update_section:
+
+.. click:: alfasim_sdk._internal.cli:update
+    :prog: alfasim-sdk update
     :show-nested:
