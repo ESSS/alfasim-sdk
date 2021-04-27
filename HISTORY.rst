@@ -6,6 +6,7 @@ History
 ==================
 
 * Add gas and liquid separation efficiency to ``Separator`` model
+* **Breaking Change**: Replaced radius from ``Separator`` geometry definition by diameter.
 
 
 0.8.0 (2021-04-12)

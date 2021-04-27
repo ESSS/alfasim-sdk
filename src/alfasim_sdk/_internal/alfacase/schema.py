@@ -1,5 +1,5 @@
 # fmt: off
-##[[[cog
+# #[[[cog
 # import cog
 # from alfasim_sdk import CaseDescription
 # from alfasim_sdk._internal.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
@@ -333,7 +333,7 @@ separator_node_properties_description_schema = Map(
         Optional("geometry"): Enum(['vertical_cylinder', 'horizontal_cylinder', 'sphere']),
         Optional("length"): Map({"value": Float(), "unit": Str()}),
         Optional("overall_heat_transfer_coefficient"): Map({"value": Float(), "unit": Str()}),
-        Optional("radius"): Map({"value": Float(), "unit": Str()}),
+        Optional("diameter"): Map({"value": Float(), "unit": Str()}),
         Optional("nozzles"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
         Optional("initial_phase_volume_fractions"): MapPattern(Str(), Map({"value": Float(), "unit": Str()})),
         Optional("gas_separation_efficiency"): Map({"value": Float(), "unit": Str()}),
@@ -680,5 +680,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 76ffece5e41a24793b18c3dd7319b189)
+# [[[end]]] (checksum: 6dd53ee075de8ff48b4a65d40ca2cbde)
 # fmt: on

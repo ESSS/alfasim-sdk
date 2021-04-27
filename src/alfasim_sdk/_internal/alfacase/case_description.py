@@ -1087,7 +1087,7 @@ class SeparatorNodePropertiesDescription:
     geometry = attrib_enum(default=constants.SeparatorGeometryType.VerticalCylinder)
     length = attrib_scalar(default=Scalar(1.0, "m"))
     overall_heat_transfer_coefficient = attrib_scalar(default=Scalar(0.0, "W/m2.K"))
-    radius = attrib_scalar(default=Scalar(1.0, "m"))
+    diameter = attrib_scalar(default=Scalar(1.0, "m"))
     nozzles: Dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=optional(dict_with_scalar)
     )
@@ -1102,11 +1102,11 @@ class SeparatorNodePropertiesDescription:
         default=Scalar("dimensionless", 1.0, "-")
     )
 
-    @radius.validator
-    def _validate_radius(self, attribute, value):
+    @diameter.validator
+    def _validate_diameter(self, attribute, value):
         assert (
             isinstance(value, Scalar) and value.GetCategory() == "length"
-        ), "Invalid radius"
+        ), "Invalid diameter"
 
     @length.validator
     def _validate_length(self, attribute, value):

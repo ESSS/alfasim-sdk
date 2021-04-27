@@ -949,7 +949,7 @@ def load_separator_node_properties_description(
         "geometry": get_enum_loader(enum_class=constants.SeparatorGeometryType),
         "length": get_scalar_loader(from_unit="m"),
         "overall_heat_transfer_coefficient": get_scalar_loader(from_unit="W/m2.K"),
-        "radius": get_scalar_loader(from_unit="m"),
+        "diameter": get_scalar_loader(from_unit="m"),
         "nozzles": get_dict_with_scalar_loader(category=get_category_for("m")),
         "initial_phase_volume_fractions": get_dict_with_scalar_loader(
             category="volume fraction"
