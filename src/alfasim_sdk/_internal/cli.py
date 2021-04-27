@@ -193,11 +193,11 @@ def update(ctx, plugin_dir):
     The plugin folder is informed with plugin-dir option.
     When not provided plugin-dir will be the current folder location.
 
-    It is important to update the plugin automatically generated files when a new version of
-    ALFAsim-SDK is released. Otherwise compilation problems can occur.
+    It is important to update the automatically generated files from each plugin when
+    a new version of ALFAsim-SDK is released. Otherwise compilation problems can occur.
 
-    The files updated are:
-    - ´<plugin_folder>/src/hook_specs.h´
+    The files updated are: |br|
+    - ´<plugin_folder>/src/hook_specs.h´ |br|
     """
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
