@@ -322,13 +322,13 @@ def calculate_mass_source_term(
         HOOK_CALCULATE_MASS_SOURCE_TERM(
             ctx, mass_source, n_fields, n_control_volumes)
         {
-            int liq_id = -1;
+            int oil_id = -1;
             errcode = alfasim_sdk_api.get_field_id(
                 ctx, &oil_id, "oil");
             // Convertion from void* to double* and getting the
             // array range related to oil field
             double* oil_mass_source =
-                (double*) mass_source + n_control_volumes * liq_id;
+                (double*) mass_source + n_control_volumes * oil_id;
             // Make some calculations and add it to oil_mass_source.
             // In this example, we add a mass source of 3.1415 kg/s to all control volumes.
             for (int i = 0; i < n_control_volumes; ++i) {
