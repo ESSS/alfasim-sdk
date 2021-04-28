@@ -174,7 +174,6 @@ def is_curve(type_):
 
 
 def curve_to_alfacase_schema(type_, indent):
-    # sub_block_indentation = block_indentation + INDENTANTION
     map_items_indent = indent + 2
     array_schema = array_to_alfacase_schema(float, indent=map_items_indent)
 

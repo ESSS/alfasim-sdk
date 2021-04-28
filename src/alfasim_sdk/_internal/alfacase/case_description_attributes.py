@@ -268,7 +268,7 @@ def attrib_curve(
     category: Optional[str] = None,
 ) -> attr._make._CountingAttr:
     """
-    Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
+    Create a new attr attribute with a converter to Curve accepting also tuple(image, domain).
 
     :param default:
         Value to be used as default when instantiating a class with this attr.ib

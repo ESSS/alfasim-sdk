@@ -85,7 +85,8 @@ def get_category_for(unit: Optional[str]) -> Optional[str]:
 def update_multi_input_flags(document: DescriptionDocument, item_description: T) -> T:
     """
     Update the multi input flags in `item_description` if not present in `alfacase_content` and
-    can be unambiguously deduced from the presence of contant and transient inputs.
+    can be unambiguously deduced from the presence of constant and transient inputs. If deduction
+    is ambiguous or value is already correct, nothing is changed (no-op).
 
     :returns: The updated `item_description` (can return `item_description` unchanged).
     """
