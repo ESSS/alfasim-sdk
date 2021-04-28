@@ -535,7 +535,7 @@ def initialize_state_variables_calculator(
     :returns: Return OK if successful or anything different if failed
 
     The ``P`` and ``T_mix`` have size equal to ``n_control_volumes``. However, ``T`` has values contiguous in memory
-    and its dimensions are given by ``n_layers`` and ``n_control_volumes``. Finally, ``phi`` dimensions are given by 
+    and its dimensions are given by ``n_layers`` and ``n_control_volumes``. Finally, ``phi`` dimensions are given by
     ``n_tracers`` and ``n_control_volumes``.
 
     Example of usage:
