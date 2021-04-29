@@ -691,7 +691,7 @@ def calculate_phase_pair_state_variable(
     **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes,
     int phase1_id, int phase2_id, int property_id, void* output)``
 
-    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:StateVariable values), for the phase
+    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the phase
     pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id()`
     API function - It is not advisable to use hardcoded numbers).
 
