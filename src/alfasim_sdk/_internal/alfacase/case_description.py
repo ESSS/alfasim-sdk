@@ -1996,6 +1996,9 @@ class PhysicsDescription:
     )
     keep_former_results: bool = attr.ib(default=False, validator=instance_of(bool))
     emulsion_model = attrib_enum(default=constants.EmulsionModelType.NoModel)
+    emulsion_model_plugin_id: str = attr.ib(
+        default="", validator=optional(instance_of(str))
+    )
     flash_model = attrib_enum(default=constants.FlashModel.HydrocarbonAndWater)
     correlations_package = attrib_enum(
         default=constants.CorrelationPackageType.Classical

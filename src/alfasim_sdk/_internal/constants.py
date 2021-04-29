@@ -105,6 +105,7 @@ class EmulsionModelType(Enum):
     Brauner2001 = "brauner2001"
     Boxall2012 = "boxall2012"
     Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
+    FromPlugin = "from_plugin"
 
 
 class SolidsModelType(Enum):

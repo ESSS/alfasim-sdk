@@ -237,6 +237,16 @@ each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_shear_force_per_volume
 
+Emulsion Model
+-------------------------------
+
+When a simulation case uses a three-phase flow model, |alfasim| allows to select an emulsion model that will update
+the layer viscosity related to the emulsion. In that case, a relative emulsion viscosity correlation is used to
+calculate it. In order to allow the emulsion model customization, the plugin structure has a hook that accept
+the implementation of a relative emulsion viscosity correlation.
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_relative_emulsion_viscosity
+
 
 User Defined Tracers
 --------------------
