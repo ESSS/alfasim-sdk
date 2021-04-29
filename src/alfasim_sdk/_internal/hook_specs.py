@@ -691,7 +691,7 @@ def calculate_phase_pair_state_variable(
     **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes,
     int phase1_id, int phase2_id, int property_id, void* output)``
 
-    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:StateVariable values), for the phase
+    Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the phase
     pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id()`
     API function - It is not advisable to use hardcoded numbers).
 
@@ -1393,7 +1393,7 @@ def calculate_liq_liq_flow_pattern(
 
     .. note::
         The main input variables needed to estimate the flow pattern is available in the API function
-        :cpp:func:`get_ucm_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the documentation
+        :cpp:func:`get_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the documentation
         of the cited function are related to one control volume, in which the estimation is applied.
 
     This `hook` allows the developer to implement your own flow pattern estimation algorithm for the liquid-liquid
@@ -1462,7 +1462,7 @@ def calculate_liquid_effective_viscosity(
 
     .. note::
         The main input variables needed to estimate the liquid effective viscosity is available in the API function
-        :cpp:func:`get_ucm_liquid_effective_viscosity_input_variable`. Note that, the variables listed in the
+        :cpp:func:`get_liquid_effective_viscosity_input_variable`. Note that, the variables listed in the
         documentation of the cited function are related to one control volume, in which the estimation is applied.
 
     This `hook` allows the developer to implement your own liquid effective viscosity correlation to
@@ -1585,7 +1585,7 @@ def calculate_liq_liq_shear_force_per_volume(
 
     .. note::
         The main input variables needed to estimate the Shear Force is available in the API function
-        :cpp:func:`get_ucm_liqliq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
+        :cpp:func:`get_liqliq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
         documentation of the cited function are related to one control volume, in which the estimation is applied.
 
     The output variable ``shear_w`` is the Wall Shear Force per unit Volume with size equal to ``2``
