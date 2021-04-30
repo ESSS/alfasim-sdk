@@ -188,6 +188,7 @@ def _get_declaration(
                         line_content = line_content[:-1]
 
                     lines.append(line_content)
+                    break  # Match found, break inner loop
     return lines
 
 
