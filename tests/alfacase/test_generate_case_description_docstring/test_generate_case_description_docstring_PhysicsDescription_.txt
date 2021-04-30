@@ -30,6 +30,5 @@
             keep_former_results: boolean  # optional
             keep_former_results: number  # optional
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  # optional
-            emulsion_model_plugin_id: string  # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
