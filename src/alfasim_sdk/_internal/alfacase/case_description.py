@@ -10,6 +10,7 @@ from typing import Union
 
 import attr
 import numpy as np
+from alfasim_sdk._internal import constants
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -30,7 +31,6 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
-from alfasim_sdk._internal import constants
 
 
 @attr.s(frozen=True, slots=True)
@@ -1124,6 +1124,54 @@ class SeparatorNodePropertiesDescription:
 
 
 @attr.s(slots=True, kw_only=True)
+class ControllerSignalPropertiesDescription:
+    property: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    network_element: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    network_element_position = attrib_scalar(default=Scalar(0, "m"))
+
+    @network_element_position.validator
+    def _validate_network_element_position(self, attribute, value):
+        assert (
+            isinstance(value, Scalar)
+            and value.GetCategory() == "length"
+            and value.GetValue("m") >= 0.0
+        )
+
+
+@attr.s(slots=True, kw_only=True)
+class ControllerNodePropertiesDescription:
+    type = attrib_enum(default=constants.ControllerType.PID)
+    gain: float = attr.ib(default=1e-4, converter=float)
+    setpoint: float = attr.ib(default=0.0, converter=float)
+    integral_time = attrib_scalar(default=Scalar(10, "s"))
+    derivative_time = attrib_scalar(default=Scalar(1, "s"))
+
+    input_signal_properties = attrib_instance(ControllerSignalPropertiesDescription)
+    output_signal_properties = attrib_instance(ControllerSignalPropertiesDescription)
+
+    @integral_time.validator
+    def _validate_integral_time(self, attribute, value):
+        assert (
+            isinstance(value, Scalar)
+            and value.GetCategory() == "time"
+            and value.GetValue("s") > 0.0
+        )
+
+    @derivative_time.validator
+    def _validate_derivative_time(self, attribute, value):
+        assert (
+            isinstance(value, Scalar)
+            and value.GetCategory() == "time"
+            and value.GetValue("s") >= 0.0
+        )
+
+
+@attr.s(slots=True, kw_only=True)
 class NodeDescription:
     """
     .. include:: /alfacase_definitions/NodeDescription.txt
@@ -1138,6 +1186,7 @@ class NodeDescription:
     mass_source_properties = attrib_instance(MassSourceNodePropertiesDescription)
     internal_properties = attrib_instance(InternalNodePropertiesDescription)
     separator_properties = attrib_instance(SeparatorNodePropertiesDescription)
+    controller_properties = attrib_instance(ControllerNodePropertiesDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)

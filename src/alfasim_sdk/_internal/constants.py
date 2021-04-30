@@ -137,6 +137,7 @@ class NodeCellType(Enum):
     MassSource = "mass_source_boundary"
     Pressure = "pressure_boundary"
     Separator = "separator_node"
+    Controller = "controller_node"
 
 
 class MassInflowSplitType(Enum):
@@ -359,3 +360,7 @@ class WellConnectionPort(Enum):
     Top = "port"  # 'port' is being used for backwards compatibility.
     LeftAnnulus = "left_annulus_port"
     RightAnnulus = "right_annulus_port"
+
+
+class ControllerType(Enum):
+    PID = "pid"

@@ -1,0 +1,22 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ControllerSignalPropertiesDescription
+            property: str
+            unit: str
+            network_element: str
+            network_element_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            property: string
+            unit: string
+            network_element: string
+            network_element_position: 
+                value: number
+                unit: string # optional
