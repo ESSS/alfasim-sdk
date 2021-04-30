@@ -1393,7 +1393,7 @@ def calculate_liq_liq_flow_pattern(
 
     .. note::
         The main input variables needed to estimate the flow pattern is available in the API function
-        :cpp:func:`get_liqliq_flow_pattern_input_variable`. Note that, the variables listed in the documentation
+        :cpp:func:`get_liq_liq_flow_pattern_input_variable`. Note that, the variables listed in the documentation
         of the cited function are related to one control volume, in which the estimation is applied.
 
     This `hook` allows the developer to implement your own flow pattern estimation algorithm for the liquid-liquid
@@ -1585,7 +1585,7 @@ def calculate_liq_liq_shear_force_per_volume(
 
     .. note::
         The main input variables needed to estimate the Shear Force is available in the API function
-        :cpp:func:`get_liqliq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
+        :cpp:func:`get_liq_liq_shear_force_per_volume_input_variable`. Note that, the variables listed in the
         documentation of the cited function are related to one control volume, in which the estimation is applied.
 
     The output variable ``shear_w`` is the Wall Shear Force per unit Volume with size equal to ``2``
