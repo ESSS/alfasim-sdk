@@ -156,7 +156,8 @@ def array_to_alfacase_schema(type_, block_indentation):
 
 
 def is_int(type_):
-    return inspect.isclass(type_) and issubclass(type_, int)
+    # bool is a subclass of int, but we are not intersted in matching that here.
+    return inspect.isclass(type_) and issubclass(type_, int) and type_ is not bool
 
 
 def int_to_alfacase_schema(type_, block_indentation):

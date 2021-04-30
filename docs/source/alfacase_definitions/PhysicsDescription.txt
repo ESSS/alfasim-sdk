@@ -12,7 +12,6 @@
             initial_condition_strategy: \ :class:`InitialConditionStrategyType <alfasim_sdk._internal.constants.InitialConditionStrategyType>`\  = InitialConditionStrategyType.Constant
             restart_filepath: \ :class:`Optional <typing.Optional>`\[Path] = None
             keep_former_results: bool = False
-            keep_former_results: bool = False
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  = EmulsionModelType.NoModel
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
@@ -28,7 +27,6 @@
             initial_condition_strategy: \ :class:`InitialConditionStrategyType <alfasim_sdk._internal.constants.InitialConditionStrategyType>`\  # optional
             restart_filepath: string  # optional
             keep_former_results: boolean  # optional
-            keep_former_results: number  # optional
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
