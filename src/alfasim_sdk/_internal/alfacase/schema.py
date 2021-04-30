@@ -227,7 +227,6 @@ physics_description_schema = Map(
         Optional("restart_filepath"): Str(),
         Optional("keep_former_results"): Bool(),
         Optional("emulsion_model"): Enum(['no_model', 'model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012', 'brinkman1952_and_yeh1964', 'from_plugin']),
-        Optional("emulsion_model_plugin_id"): Str(),
         Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
     }
@@ -681,5 +680,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: dc34d4ca1d67717cd25e884a8649d290)
+# [[[end]]] (checksum: 41248460c8164bf2648e6a873c1af78f)
 # fmt: on
