@@ -25,7 +25,7 @@ History
 * Update documentation of ``get_simulation_array``, the wetted perimeters of layers are available.
 * Add new API functions related Liquid-Liquid Mechanistic Model Hooks.
 * Add four new hooks to calculate the Liquid-Liquid Mechanistic Model.
-* Add a new category ``gas standard volume`` from quantity ``standard volume``
+* Add a new category ``gas standard volume`` from quantity ``standard volume``.
 
 0.7.0 (2020-11-20)
 ==================
