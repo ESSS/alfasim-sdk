@@ -245,6 +245,7 @@ def _get_attr_name(key: str, value: attr.ib) -> str:
 IGNORED_PROPERTIES = (
     "plugins",
     "table_parameters",
+    "emulsion_model_plugin_id",
 )
 
 
