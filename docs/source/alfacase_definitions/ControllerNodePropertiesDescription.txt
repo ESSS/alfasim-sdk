@@ -10,8 +10,8 @@
             setpoint: float = 0.0
             integral_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
             derivative_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 's', 'time')
-            input_signal: \ :class:`ControllerSignalPropertiesDescription <ControllerSignalPropertiesDescription>`\  = ControllerSignalPropertiesDescription()
-            output_signal: \ :class:`ControllerSignalPropertiesDescription <ControllerSignalPropertiesDescription>`\  = ControllerSignalPropertiesDescription()
+            input_signal_properties: \ :class:`ControllerSignalPropertiesDescription <ControllerSignalPropertiesDescription>`\  = ControllerSignalPropertiesDescription()
+            output_signal_properties: \ :class:`ControllerSignalPropertiesDescription <ControllerSignalPropertiesDescription>`\  = ControllerSignalPropertiesDescription()
 
 .. tab:: Schema
 
@@ -26,5 +26,5 @@
             derivative_time: 
                 value: number
                 unit: string # optional
-            input_signal: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\ # optional
-            output_signal: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\ # optional
+            input_signal_properties: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\ # optional
+            output_signal_properties: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\ # optional

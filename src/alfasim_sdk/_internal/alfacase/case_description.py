@@ -1132,10 +1132,10 @@ class ControllerSignalPropertiesDescription:
     network_element: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    network_element_position = attrib_scalar(default=Scalar(0, "m"))
+    network_position_in_element = attrib_scalar(default=Scalar(0, "m"))
 
-    @network_element_position.validator
-    def _validate_network_element_position(self, attribute, value):
+    @network_position_in_element.validator
+    def _validate_network_position_in_element(self, attribute, value):
         assert (
             isinstance(value, Scalar)
             and value.GetCategory() == "length"

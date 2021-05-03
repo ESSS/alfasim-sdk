@@ -53,10 +53,10 @@ compressor_pressure_table_description_schema = Map(
 )
 controller_signal_properties_description_schema = Map(
     {
-        "property": Str(),
-        "unit": Str(),
-        "network_element": Str(),
-        Optional("network_element_position"): Map({"value": Float(), "unit": Str()}),
+        Optional("property"): Str(),
+        Optional("unit"): Str(),
+        Optional("network_element"): Str(),
+        Optional("network_position_in_element"): Map({"value": Float(), "unit": Str()}),
     }
 )
 cv_table_description_schema = Map(
@@ -474,8 +474,8 @@ controller_node_properties_description_schema = Map(
         Optional("setpoint"): Float(),
         Optional("integral_time"): Map({"value": Float(), "unit": Str()}),
         Optional("derivative_time"): Map({"value": Float(), "unit": Str()}),
-        Optional("input_signal"): controller_signal_properties_description_schema,
-        Optional("output_signal"): controller_signal_properties_description_schema,
+        Optional("input_signal_properties"): controller_signal_properties_description_schema,
+        Optional("output_signal_properties"): controller_signal_properties_description_schema,
     }
 )
 environment_description_schema = Map(
@@ -701,5 +701,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 9ffd2f9af3b0d0244a22edc82495f3ba)
+# [[[end]]] (checksum: c876bec44ac0169d1aa2e61a75532ef4)
 # fmt: on
