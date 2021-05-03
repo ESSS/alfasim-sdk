@@ -138,17 +138,17 @@ def get_instance_loader(*, class_: type) -> Callable:
 
 
 def get_case_description_attribute_loader_dict(
-    class_: Any, explict_loaders: Optional[Dict[str, Callable]] = None
+    class_: Any, explicit_loaders: Optional[Dict[str, Callable]] = None
 ) -> Dict[str, Callable]:
     """
     Create a dict of loaders to be used with `to_case_values`.
 
     Loaders are created for all attributes (``attr.id``) in ``class_``.
-    If ``explict_loaders`` are supplied those loaders are used instead of the
+    If ``explicit_loaders`` are supplied those loaders are used instead of the
     automatically generated ones.
     """
     loaders: Dict[str, Callable] = (
-        {} if explict_loaders is None else explict_loaders.copy()
+        {} if explicit_loaders is None else explicit_loaders.copy()
     )
 
     for attr_instance in attr.fields(class_):

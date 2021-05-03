@@ -745,10 +745,8 @@ def ensure_descriptions_are_equal(
             continue
 
         is_ndarray = isinstance(expected_value, np.ndarray)
-        if (
-            is_ndarray
-            or is_list
-            and isinstance(first(expected_value, None), np.ndarray)
+        if is_ndarray or (
+            is_list and isinstance(first(expected_value, None), np.ndarray)
         ):
             assert np.array_equal(
                 obtained_description_dict[key], expected_value

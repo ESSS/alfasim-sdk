@@ -193,7 +193,7 @@ def convert_dict_to_valid_alfacase_format(
                 converted_dict.pop(curve_key, None)
             elif multi_input_type == constants.MultiInputType.Curve:
                 converted_dict.pop(constant_key, None)
-            else:
+            else:  # pragma: no cover
                 raise AssertionError(f"unexpected value {key}: {multi_input_type}")
 
     return converted_dict

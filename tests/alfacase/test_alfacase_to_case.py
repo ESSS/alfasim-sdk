@@ -3,6 +3,7 @@ import textwrap
 from pathlib import Path
 
 import attr
+import numpy
 import pytest
 import strictyaml
 from barril.units import Array
@@ -521,6 +522,19 @@ def test_convert_alfacase_to_description(alfacase_to_case_helper, class_, tmp_pa
     )
 
 
+def test_ensure_descriptions_are_equal_compare_ndarray():
+    expected_dict = {"foo": numpy.array([[1, 2], [3, 4]])}
+    other_1 = {"foo": numpy.array([[0, 0], [0, 0]])}
+
+    ensure_descriptions_are_equal(expected_dict, expected_dict, [])
+
+    with pytest.raises(AssertionError, match="Not equal on foo"):
+        ensure_descriptions_are_equal(other_1, expected_dict, [])
+
+    with pytest.raises(AssertionError, match=r"Not equal on bar\.foo"):
+        ensure_descriptions_are_equal({"bar": other_1}, {"bar": expected_dict}, [])
+
+
 def test_update_multi_input_flags_behavior():
     content = strictyaml.dirty_load(
         yaml_string=textwrap.dedent(
@@ -805,3 +819,25 @@ def test_invalid_yaml_contents_parsing(tmp_path):
 
     with pytest.raises(DescriptionError, match=re.escape(expected_msg)):
         DescriptionDocument.from_file(alfacase_file)
+
+
+def test_get_case_description_attribute_loader_dict_explicit_loaders() -> None:
+    def fake_explict_loader(*args, **kwargs):
+        """No-op"""
+
+    loaders_with_explicit_loaders = (
+        alfacase_to_case.get_case_description_attribute_loader_dict(
+            case_description.BipDescription,
+            explicit_loaders={"component_1": fake_explict_loader},
+        )
+    )
+    component_1_explicit_loader = loaders_with_explicit_loaders.pop("component_1")
+
+    loaders = alfacase_to_case.get_case_description_attribute_loader_dict(
+        case_description.BipDescription
+    )
+    component_1_automatic_loader = loaders.pop("component_1")
+
+    assert loaders_with_explicit_loaders == loaders
+    assert component_1_explicit_loader is fake_explict_loader
+    assert component_1_automatic_loader is alfacase_to_case.load_value
