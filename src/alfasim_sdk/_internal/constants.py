@@ -324,6 +324,7 @@ class OutputAttachmentLocation(Enum):
 
     Main = "main"
     Annulus = "annulus"
+    NotDefined = "not_defined"
 
 
 class CorrelationPackage(Enum):

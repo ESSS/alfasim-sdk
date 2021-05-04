@@ -12,5 +12,5 @@
 
     .. parsed-literal::
 
-            well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\ # optional
-            table: \ :class:`ipr_curve_description_schema <IPRCurveDescription>`\ # optional
+            well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  # optional
+            table: \ :class:`ipr_curve_description_schema <IPRCurveDescription>`\  # optional

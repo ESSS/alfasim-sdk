@@ -12,5 +12,5 @@
 
     .. parsed-literal::
 
-            x_and_y: \ :class:`x_and_y_description_schema <XAndYDescription>`\ # optional
-            length_and_elevation: \ :class:`length_and_elevation_description_schema <LengthAndElevationDescription>`\ # optional
+            x_and_y: \ :class:`x_and_y_description_schema <XAndYDescription>`\  # optional
+            length_and_elevation: \ :class:`length_and_elevation_description_schema <LengthAndElevationDescription>`\  # optional

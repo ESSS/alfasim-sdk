@@ -18,8 +18,8 @@
 
             has_annulus_flow: boolean
             has_annulus_flow: number
-            pvt_model: string # optional
-            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\ # optional
-            gas_lift_valve_equipment: 
-                string: \ :class:`gas_lift_valve_equipment_description_schema <GasLiftValveEquipmentDescription>`\ # optional
+            pvt_model: string  # optional
+            initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
+            gas_lift_valve_equipment:  # optional
+                string: \ :class:`gas_lift_valve_equipment_description_schema <GasLiftValveEquipmentDescription>`
             top_node: string

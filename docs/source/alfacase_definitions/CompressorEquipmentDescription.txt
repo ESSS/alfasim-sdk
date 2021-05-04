@@ -22,17 +22,17 @@
             position: 
                 value: number
                 unit: string
-            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\ # optional
-            reference_pressure: 
+            speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\  # optional
+            reference_pressure:  # optional
                 value: number
-                unit: string # optional
-            reference_temperature: 
+                unit: string
+            reference_temperature:  # optional
                 value: number
-                unit: string # optional
-            constant_speed: 
+                unit: string
+            constant_speed:  # optional
                 value: number
-                unit: string # optional
-            compressor_type: \ :class:`CompressorSpeedType <alfasim_sdk._internal.constants.CompressorSpeedType>`\ # optional
-            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\ # optional
-            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\ # optional
-            table: \ :class:`compressor_pressure_table_description_schema <CompressorPressureTableDescription>`\ # optional
+                unit: string
+            compressor_type: \ :class:`CompressorSpeedType <alfasim_sdk._internal.constants.CompressorSpeedType>`\  # optional
+            speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  # optional
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  # optional
+            table: \ :class:`compressor_pressure_table_description_schema <CompressorPressureTableDescription>`\  # optional

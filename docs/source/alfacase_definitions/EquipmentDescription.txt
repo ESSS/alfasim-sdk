@@ -16,15 +16,15 @@
 
     .. parsed-literal::
 
-            mass_sources: 
-                string: \ :class:`mass_source_equipment_description_schema <MassSourceEquipmentDescription>`\ # optional
-            pumps: 
-                string: \ :class:`pump_equipment_description_schema <PumpEquipmentDescription>`\ # optional
-            valves: 
-                string: \ :class:`valve_equipment_description_schema <ValveEquipmentDescription>`\ # optional
-            reservoir_inflows: 
-                string: \ :class:`reservoir_inflow_equipment_description_schema <ReservoirInflowEquipmentDescription>`\ # optional
-            heat_sources: 
-                string: \ :class:`heat_source_equipment_description_schema <HeatSourceEquipmentDescription>`\ # optional
-            compressors: 
-                string: \ :class:`compressor_equipment_description_schema <CompressorEquipmentDescription>`\ # optional
+            mass_sources:  # optional
+                string: \ :class:`mass_source_equipment_description_schema <MassSourceEquipmentDescription>`
+            pumps:  # optional
+                string: \ :class:`pump_equipment_description_schema <PumpEquipmentDescription>`
+            valves:  # optional
+                string: \ :class:`valve_equipment_description_schema <ValveEquipmentDescription>`
+            reservoir_inflows:  # optional
+                string: \ :class:`reservoir_inflow_equipment_description_schema <ReservoirInflowEquipmentDescription>`
+            heat_sources:  # optional
+                string: \ :class:`heat_source_equipment_description_schema <HeatSourceEquipmentDescription>`
+            compressors:  # optional
+                string: \ :class:`compressor_equipment_description_schema <CompressorEquipmentDescription>`
