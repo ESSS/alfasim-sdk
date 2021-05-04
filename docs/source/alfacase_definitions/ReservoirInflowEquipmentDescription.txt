@@ -38,73 +38,80 @@
 
     .. parsed-literal::
 
+            pressure_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             pressure:  # optional
                 value: number
                 unit: string
-            temperature:  # optional
+            pressure_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
-            temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
+                    unit: string
+            temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
+            temperature:  # optional
                 value: number
                 unit: string
-            temperature_curve: 
+            temperature_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string
             fluid: string  # optional
             tracer_mass_fraction:  # optional
                 values: [number]
                 unit: string
             split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\  # optional
+            mass_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             mass_fractions:  # optional
                 string: 
                     value: number
                     unit: string
+            mass_fractions_curve:  # optional
+                string: Curve
+            volume_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             volume_fractions:  # optional
-                string: Curve # optional
-            volume_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 string: 
                     value: number
                     unit: string
+            volume_fractions_curve:  # optional
+                string: Curve
+            gas_liquid_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             gas_liquid_ratio:  # optional
-                string: Curve # optional
-            gas_liquid_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
+            gas_liquid_ratio_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
+            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             gas_oil_ratio:  # optional
+                value: number
+                unit: string
+            gas_oil_ratio_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
-            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
-                value: number
-                unit: string
+                    unit: string
+            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             water_cut:  # optional
-                image:
-                    values: [number]
-                    unit: string
-                domain:
-                    values: [number]
-                    unit: string # optional
-            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
-            water_cut_curve: 
+            water_cut_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string
             start: 
                 value: number
                 unit: string

@@ -21,14 +21,14 @@
             length: 
                 value: number
                 unit: string
-            power_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
-            power: 
+            power_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
+            power:  # optional
                 value: number
-                unit: string # optional
-            power_curve: 
+                unit: string
+            power_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string

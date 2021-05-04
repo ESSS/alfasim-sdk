@@ -93,7 +93,7 @@ class TrendOutputDescription:
 
     curve_names: List[str] = attr.ib(validator=list_of_strings)
     location = attrib_enum(type_=constants.OutputAttachmentLocation)
-    position = attrib_scalar(default=None, is_optional=True)
+    position = attrib_scalar(default=None, is_optional=True, category="length")
     element_name: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )

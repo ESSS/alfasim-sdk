@@ -36,59 +36,65 @@
             tracer_mass_fraction:  # optional
                 values: [number]
                 unit: string
+            temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             temperature:  # optional
                 value: number
                 unit: string
-            temperature_curve: 
+            temperature_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string
             source_type: \ :class:`MassSourceType <alfasim_sdk._internal.constants.MassSourceType>`\  # optional
+            volumetric_flow_rates_std_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             volumetric_flow_rates_std:  # optional
                 string: 
                     value: number
                     unit: string
+            volumetric_flow_rates_std_curve:  # optional
+                string: Curve
+            mass_flow_rates_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             mass_flow_rates:  # optional
-                string: Curve # optional
-            mass_flow_rates_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 string: 
                     value: number
                     unit: string
+            mass_flow_rates_curve:  # optional
+                string: Curve
+            total_mass_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             total_mass_flow_rate:  # optional
-                string: Curve # optional
-            total_mass_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
+            total_mass_flow_rate_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
+            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             water_cut:  # optional
+                value: number
+                unit: string
+            water_cut_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
-            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
-                value: number
-                unit: string
+                    unit: string
+            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             gas_oil_ratio:  # optional
-                image:
-                    values: [number]
-                    unit: string
-                domain:
-                    values: [number]
-                    unit: string # optional
-            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\ # optional
                 value: number
                 unit: string
-            gas_oil_ratio_curve: 
+            gas_oil_ratio_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string
             position: 
                 value: number
                 unit: string

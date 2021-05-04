@@ -19,13 +19,14 @@
             min_pressure_difference:  # optional
                 value: number
                 unit: string
+            well_index_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             well_index:  # optional
                 value: number
                 unit: string
-            well_index_curve: 
+            well_index_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string

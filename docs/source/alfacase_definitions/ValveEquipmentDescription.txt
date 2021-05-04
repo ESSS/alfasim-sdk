@@ -32,11 +32,11 @@
                 value: number
                 unit: string
             opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  # optional
-            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\  # optional
+            opening_curve:  # optional
                 image:
                     values: [number]
                     unit: string
                 domain:
                     values: [number]
-                    unit: string # optional
+                    unit: string
             cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional
