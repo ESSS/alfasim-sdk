@@ -1,8 +1,10 @@
+# mypy: disallow-untyped-defs
 import textwrap
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
 from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import List
 from typing import NewType
@@ -34,7 +36,9 @@ ArrayLike = Union[Tuple[Sequence[Number], str], Array]
 CurveLike = Union[Tuple[ArrayLike, ArrayLike], Curve]
 
 
-def generate_multi_input(prop_name, category, default_value, unit):
+def generate_multi_input(
+    prop_name: str, category: str, default_value: float, unit: str
+) -> str:
     return textwrap.dedent(
         f"""\
         # fmt: off
@@ -49,7 +53,7 @@ def generate_multi_input(prop_name, category, default_value, unit):
     )
 
 
-def generate_multi_input_dict(prop_name, category):
+def generate_multi_input_dict(prop_name: str, category: str) -> str:
     return textwrap.dedent(
         f"""\
         # fmt: off
@@ -68,7 +72,7 @@ def generate_multi_input_dict(prop_name, category):
 
 def is_two_element_tuple(value: object) -> bool:
     """
-    Check if `value` is atwo element tuple.
+    Check if `value` is a two element tuple.
     """
     return isinstance(value, tuple) and (len(value) == 2)
 
@@ -83,7 +87,7 @@ def prepare_error_message(message: str, error_context: Optional[str] = None) -> 
         return message
 
 
-def collapse_array_repr(value):
+def collapse_array_repr(value: np.ndarray) -> str:
     """
     The full repr representation of PVT model takes too much space to print all values inside a array.
     Making annoying to debug Subjects that has a PVT model on it, due to seventy-four lines with only numbers.
@@ -297,7 +301,7 @@ def attrib_curve(
     )
 
 
-def attrib_instance(type_) -> attr._make._CountingAttr:
+def attrib_instance(type_: type) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     """
@@ -310,7 +314,7 @@ def attrib_instance(type_) -> attr._make._CountingAttr:
     )
 
 
-def attrib_instance_list(type_) -> attr._make._CountingAttr:
+def attrib_instance_list(type_: type) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     All attributes created are expected to be List of the given type_
@@ -366,7 +370,7 @@ def attrib_enum(
     return attr.ib(default=default, validator=in_(type_), type=type_, metadata=metadata)
 
 
-def dict_of(type_):
+def dict_of(type_: type) -> Callable:
     """
     An attr validator that performs validation of dictionary values.
 
@@ -384,7 +388,7 @@ def dict_of(type_):
     )
 
 
-def attrib_dict_of(type_) -> attr._make._CountingAttr:
+def attrib_dict_of(type_: type) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for an atribute that is a dictionary with keys as str (to represent
     the name) and the content of an instance of type_
@@ -414,7 +418,7 @@ dict_with_a_list_of_numbers = deep_mapping(
 )
 
 
-def list_of(type_):
+def list_of(type_: type) -> Callable:
     """
     An attr validator that performs validation of list values.
 
@@ -430,7 +434,7 @@ def list_of(type_):
     )
 
 
-def numpy_array_validator(dimension: int, is_list: bool = False):
+def numpy_array_validator(dimension: int, is_list: bool = False) -> Callable:
     """
      An attr validator that performs validation of numpy arrays
     :param dimension:
@@ -441,8 +445,8 @@ def numpy_array_validator(dimension: int, is_list: bool = False):
     :return: An attr validator that performs validation of instances of ndarray and their dimensions.
     """
 
-    def _numpy_array_validator(instance, attribute, value):
-        def _check_dimension(value, *, position=None):
+    def _numpy_array_validator(instance, attribute, value) -> None:
+        def _check_dimension(value, *, position=None) -> None:
             """Helper method to check the dimension from ndarray"""
             if value.ndim != dimension:
                 raise ValueError(
