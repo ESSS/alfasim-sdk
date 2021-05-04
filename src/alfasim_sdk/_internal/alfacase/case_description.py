@@ -37,7 +37,7 @@ from alfasim_sdk._internal import constants
 
 
 # [[[cog
-# # This cog has no output, it just declare and import symbols used by cogs in this module.
+# # This cog has no output, it just declares and imports symbols used by cogs in this module.
 #
 # from alfasim_sdk._internal import constants
 # from alfasim_sdk._internal.alfacase.case_description_attributes import generate_multi_input

@@ -141,11 +141,10 @@ def convert_dict_to_valid_alfacase_format(
         if is_empty_dict or value is None or ignore:
             continue
 
-        if (
-            remove_redundant_input_type_data
-            and key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
-            and isinstance(value, constants.MultiInputType)
+        if remove_redundant_input_type_data and isinstance(
+            value, constants.MultiInputType
         ):
+            assert key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
             transient_fields[key] = value
 
         if is_attrs(value):

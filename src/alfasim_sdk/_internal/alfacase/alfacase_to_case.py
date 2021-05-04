@@ -82,28 +82,25 @@ def get_category_for(unit: Optional[str]) -> Optional[str]:
         return UnitDatabase.GetSingleton().GetDefaultCategory(unit)
 
 
-def update_multi_input_flags(
-    alfacase_content: DescriptionDocument, item_description: T
-) -> T:
+def update_multi_input_flags(document: DescriptionDocument, item_description: T) -> T:
     """
     Update the multi input flags in `item_description` if not present in `alfacase_content` and
     can be unambiguously deduced from the presence of contant and transient inputs.
 
-    :returns: The updated `item_description` (can return `item_description` unchanged.
+    :returns: The updated `item_description` (can return `item_description` unchanged).
     """
-    item_dict = attr.asdict(item_description, recurse=False)
+    item_attr_dict = attr.asdict(item_description, recurse=False)
     fields_to_update: Dict[str, constants.MultiInputType] = {}
-    for key, value in item_dict.items():
-        if (
-            key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
-            and isinstance(value, constants.MultiInputType)
-            and (key not in alfacase_content)  # Only if not explicitly set.
-        ):
+    for key, value in item_attr_dict.items():
+        is_set_in_alfacase = key in document
+        if (not is_set_in_alfacase) and isinstance(value, constants.MultiInputType):
+            assert key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
+
             constant_key = key[: -len(constants.MULTI_INPUT_TYPE_SUFFIX)]
-            has_constant_data = constant_key in alfacase_content
+            has_constant_data = constant_key in document
 
             curve_key = f"{constant_key}_curve"
-            has_curve_data = curve_key in alfacase_content
+            has_curve_data = curve_key in document
 
             new_value: Optional[constants.MultiInputType] = None
             if has_constant_data and not has_curve_data:
@@ -153,7 +150,7 @@ def get_case_description_attribute_loader_dict(
         {} if explict_loaders is None else explict_loaders.copy()
     )
 
-    for attr_instance in class_.__attrs_attrs__:
+    for attr_instance in attr.fields(class_):
         name = attr_instance.name
         if name in loaders:
             continue
@@ -310,7 +307,7 @@ def get_curve_loader(
 
 
 def load_dict_of_curves(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str, alfacase_content: DescriptionDocument, category: str
 ) -> Dict[str, Curve]:
     """
     Create a Dict of str to barril.curve.curve.Curve instances from the given YAML content.
