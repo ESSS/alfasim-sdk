@@ -5,6 +5,7 @@ History
 0.10.0 (unreleased)
 ===================
 
+* Add a new category ``gas standard volume`` from quantity ``standard volume``.
 * Add transient input for:
     - ``MassSourceNode`` and ``MassSourceEquipment``: ``temperature``, ``volumetric_flow_rates_std``, ``mass_flow_rates``, ``total_mass_flow_rate``, ``water_cut``, ``gas_oil_ratio``;
     - ``PressureNode`` and ``ReservoirInflowEquipment``: ``pressure``, ``temperature``, ``mass_fractions``, ``volume_fractions``, ``gas_liquid_ratio``, ``gas_oil_ratio``, ``water_cut``;
@@ -36,7 +37,6 @@ History
 * Update documentation of ``get_simulation_array``, the wetted perimeters of layers are available.
 * Add new API functions related Liquid-Liquid Mechanistic Model Hooks.
 * Add four new hooks to calculate the Liquid-Liquid Mechanistic Model.
-* Add a new category ``gas standard volume`` from quantity ``standard volume``.
 
 0.7.0 (2020-11-20)
 ==================
