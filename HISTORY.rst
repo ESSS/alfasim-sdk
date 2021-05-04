@@ -5,7 +5,12 @@ History
 0.10.0 (unreleased)
 ===================
 
-*
+* Add transient input for:
+    - ``MassSourceNode`` and ``MassSourceEquipment``: ``temperature``, ``volumetric_flow_rates_std``, ``mass_flow_rates``, ``total_mass_flow_rate``, ``water_cut``, ``gas_oil_ratio``;
+    - ``PressureNode`` and ``ReservoirInflowEquipment``: ``pressure``, ``temperature``, ``mass_fractions``, ``volume_fractions``, ``gas_liquid_ratio``, ``gas_oil_ratio``, ``water_cut``;
+    - ``LinearIPR``: ``well_index``;
+    - ``HeatSourceEquipment``: ``power``;
+* **Breaking Change**: Change ``OpeningCurveDescription`` (``opening_curve`` attribute) for ``Curve`` from barril.
 
 
 0.9.0 (2021-05-04)
