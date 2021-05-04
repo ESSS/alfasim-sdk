@@ -15,10 +15,8 @@
             friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  = EvaluationStrategyType.TimeExplicit
             simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  = SimulationModeType.Default
             enable_solver_caching: bool = True
-            enable_solver_caching: bool = True
             caching_rtol: float = 0.01
             caching_atol: float = 0.0001
-            always_repeat_timestep: bool = False
             always_repeat_timestep: bool = False
 
 .. tab:: Schema
@@ -35,8 +33,6 @@
             friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  # optional
             simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  # optional
             enable_solver_caching: boolean  # optional
-            enable_solver_caching: number  # optional
             caching_rtol: number  # optional
             caching_atol: number  # optional
             always_repeat_timestep: boolean  # optional
-            always_repeat_timestep: number  # optional

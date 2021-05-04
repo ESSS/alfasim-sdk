@@ -13,8 +13,8 @@ ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
     case_description.CaseDescription
 )
 
-# Useful for debugging
-# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.PvtModelsDescription]
+# # Useful for debugging
+# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.TrendOutputDescription]
 
 
 @pytest.mark.parametrize("class_", ALL_CLASSES_THAT_NEEDS_SCHEMA)

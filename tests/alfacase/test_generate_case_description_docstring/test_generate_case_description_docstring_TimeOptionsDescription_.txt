@@ -6,8 +6,6 @@
 
         class TimeOptionsDescription
             stop_on_steady_state: bool = False
-            stop_on_steady_state: bool = False
-            automatic_restart_autosave_frequency: bool = True
             automatic_restart_autosave_frequency: bool = True
             initial_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
             final_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
@@ -22,9 +20,7 @@
     .. parsed-literal::
 
             stop_on_steady_state: boolean  # optional
-            stop_on_steady_state: number  # optional
             automatic_restart_autosave_frequency: boolean  # optional
-            automatic_restart_autosave_frequency: number  # optional
             initial_time:  # optional
                 value: number
                 unit: string
