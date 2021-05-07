@@ -100,7 +100,6 @@ from alfasim_sdk._internal.alfacase.case_description import (
     NumericalOptionsDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import OpenHoleDescription
-from alfasim_sdk._internal.alfacase.case_description import OpeningCurveDescription
 from alfasim_sdk._internal.alfacase.case_description import PackerDescription
 from alfasim_sdk._internal.alfacase.case_description import PhysicsDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeDescription
@@ -210,6 +209,7 @@ from alfasim_sdk._internal.constants import InterpolationType
 from alfasim_sdk._internal.constants import MassInflowSplitType
 from alfasim_sdk._internal.constants import MassSourceType
 from alfasim_sdk._internal.constants import MaterialType
+from alfasim_sdk._internal.constants import MultiInputType
 from alfasim_sdk._internal.constants import NodeCellType
 from alfasim_sdk._internal.constants import NonlinearSolverType
 from alfasim_sdk._internal.constants import OIL_FIELD
@@ -324,7 +324,6 @@ __all__ = [
     "NodeDescription",
     "NumericalOptionsDescription",
     "OpenHoleDescription",
-    "OpeningCurveDescription",
     "PackerDescription",
     "PhysicsDescription",
     "PipeDescription",
@@ -404,6 +403,7 @@ __all__ = [
     "PipeEnvironmentHeatTransferCoefficientModelType",
     "PipeThermalModelType",
     "PipeThermalPositionInput",
+    "MultiInputType",
     "PumpType",
     "SOLID_PHASE",
     "SeparatorGeometryType",

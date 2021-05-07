@@ -10,10 +10,12 @@ from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Type
+from typing import TypeVar
 from typing import Union
 
 import attr
 from attr.validators import instance_of
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 from barril.units import UnitDatabase
@@ -21,6 +23,9 @@ from strictyaml import YAML
 
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+
+
+T = TypeVar("T")
 
 
 @attr.s
@@ -75,6 +80,94 @@ def get_category_for(unit: Optional[str]) -> Optional[str]:
     """
     if unit:
         return UnitDatabase.GetSingleton().GetDefaultCategory(unit)
+
+
+def update_multi_input_flags(document: DescriptionDocument, item_description: T) -> T:
+    """
+    Update the multi input flags in `item_description` if not present in `alfacase_content` and
+    can be unambiguously deduced from the presence of constant and transient inputs. If deduction
+    is ambiguous or value is already correct, nothing is changed (no-op).
+
+    :returns: The updated `item_description` (can return `item_description` unchanged).
+    """
+    item_attr_dict = attr.asdict(item_description, recurse=False)
+    fields_to_update: Dict[str, constants.MultiInputType] = {}
+    for key, value in item_attr_dict.items():
+        is_set_in_alfacase = key in document
+        if (not is_set_in_alfacase) and isinstance(value, constants.MultiInputType):
+            assert key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
+
+            constant_key = key[: -len(constants.MULTI_INPUT_TYPE_SUFFIX)]
+            has_constant_data = constant_key in document
+
+            curve_key = f"{constant_key}_curve"
+            has_curve_data = curve_key in document
+
+            new_value: Optional[constants.MultiInputType] = None
+            if has_constant_data and not has_curve_data:
+                new_value = constants.MultiInputType.Constant
+            elif has_curve_data and not has_constant_data:
+                new_value = constants.MultiInputType.Curve
+
+            if (new_value is not None) and (
+                getattr(item_description, key) != new_value
+            ):
+                fields_to_update[key] = new_value
+
+    if fields_to_update:
+        item_description = attr.evolve(item_description, **fields_to_update)
+    return item_description
+
+
+def load_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+    """
+    Create an instance of class_ with the attributes found in alfacase_content.
+    """
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(class_)
+    case_values = to_case_values(alfacase_content, alfacase_to_case_description)
+    item_description = class_(**case_values)
+    return update_multi_input_flags(alfacase_content, item_description)
+
+
+@lru_cache(maxsize=None)
+def get_instance_loader(*, class_: type) -> Callable:
+    """
+    Return a load  instance function pre-populate with the class_.
+    """
+    return partial(load_instance, class_=class_)
+
+
+def get_case_description_attribute_loader_dict(
+    class_: Any, explicit_loaders: Optional[Dict[str, Callable]] = None
+) -> Dict[str, Callable]:
+    """
+    Create a dict of loaders to be used with `to_case_values`.
+
+    Loaders are created for all attributes (``attr.id``) in ``class_``.
+    If ``explicit_loaders`` are supplied those loaders are used instead of the
+    automatically generated ones.
+    """
+    loaders: Dict[str, Callable] = (
+        {} if explicit_loaders is None else explicit_loaders.copy()
+    )
+
+    for attr_instance in attr.fields(class_):
+        name = attr_instance.name
+        if name in loaders:
+            continue
+
+        metadata = attr_instance.metadata
+        if "type" in metadata:
+            kwargs = metadata.copy()
+            type_ = kwargs.pop("type")
+            loader_getter_name = f"get_{type_}_loader"
+            loader = globals()[loader_getter_name]
+            loaders[name] = loader(**kwargs)
+            continue
+
+        loaders[name] = load_value
+
+    return loaders
 
 
 def load_scalar(key: str, alfacase_content: DescriptionDocument, category) -> Scalar:
@@ -161,7 +254,7 @@ def get_list_of_arrays_loader(
 
 def load_dict_of_arrays(
     key: str, alfacase_content: DescriptionDocument, category
-) -> Array:
+) -> Dict[str, Array]:
     """
     Create a Dict of str to barril.units.Array instances from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -184,6 +277,62 @@ def get_dict_of_arrays_loader(
     """
     return partial(
         load_dict_of_arrays, category=_obtain_category_for_scalar(category, from_unit)
+    )
+
+
+def load_curve(key: str, alfacase_content: DescriptionDocument, category) -> Curve:
+    """
+    Create a barril.curve.curve.Curve instance from the given YAML content.
+    # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
+    """
+    curve_in_alfacase = alfacase_content[key]
+    return Curve(
+        load_array("image", curve_in_alfacase, category),
+        load_array("domain", curve_in_alfacase, "time"),
+    )
+
+
+@lru_cache(maxsize=None)
+def get_curve_loader(
+    *, category: Optional[str] = None, from_unit: Optional[str] = None
+) -> Callable:
+    """
+    Return a load_curve function pre-populated with the category
+
+    If ``from_unit`` is provided, the category parameter will be filled with
+    the default category for the given unit.
+    """
+    return partial(
+        load_curve, category=_obtain_category_for_scalar(category, from_unit)
+    )
+
+
+def load_dict_of_curves(
+    key: str, alfacase_content: DescriptionDocument, category: str
+) -> Dict[str, Curve]:
+    """
+    Create a Dict of str to barril.curve.curve.Curve instances from the given YAML content.
+    # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
+    """
+    curve_dict_in_alfacase = alfacase_content[key]
+    return {
+        k: load_curve(k, curve_dict_in_alfacase, category)
+        for k in curve_dict_in_alfacase.content.data.keys()
+    }
+
+
+@lru_cache(maxsize=None)
+def get_curve_dict_loader(
+    *, category: Optional[str] = None, from_unit: Optional[str] = None
+) -> Callable:
+    """
+    Return a load_dict_of_curves function pre-populated with the category
+
+    If ``from_unit`` is provided, the category parameter will be filled with
+    the default category for the given unit.
+    """
+    return partial(
+        load_dict_of_curves, category=_obtain_category_for_scalar(category, from_unit)
     )
 
 
@@ -213,7 +362,7 @@ def load_dict_with_scalar(
     }
 
 
-def get_dict_with_scalar_loader(*, category: str) -> Callable:
+def get_scalar_dict_loader(*, category: str) -> Callable:
     """
     Return a LoadDictWithScalar function pre-populate with the category
     """
@@ -319,7 +468,10 @@ def load_pvt_model_correlation_description(
 
     def generate_pvt_model_correlation(value: DescriptionDocument):
         case_values = to_case_values(value, alfacase_to_case_description)
-        return case_description.PvtModelCorrelationDescription(**case_values)
+        item_description = case_description.PvtModelCorrelationDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_pvt_model_correlation(
@@ -341,7 +493,8 @@ def load_heavy_component_description(
 
     def generate_heavy_components_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.HeavyComponentDescription(**case_values)
+        item_description = case_description.HeavyComponentDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_heavy_components_description(alfacase_document)
@@ -370,7 +523,8 @@ def load_light_component_description(
 
     def generate_light_components_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.LightComponentDescription(**case_values)
+        item_description = case_description.LightComponentDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_light_components_description(alfacase_document)
@@ -389,7 +543,8 @@ def load_bip_description(
 
     def generate_bip_description(alfacase_document: DescriptionDocument):
         case_values = to_case_values(alfacase_document, alfacase_to_case_description)
-        return case_description.BipDescription(**case_values)
+        item_description = case_description.BipDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_bip_description(alfacase_document) for alfacase_document in document
@@ -407,7 +562,8 @@ def load_composition_description(
 
     def generate_composition_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.CompositionDescription(**case_values)
+        item_description = case_description.CompositionDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_composition_description(alfacase_document)
@@ -427,7 +583,8 @@ def load_fluid_description(
         value: DescriptionDocument,
     ) -> case_description.FluidDescription:
         case_values = to_case_values(value, alfacase_to_case_description)
-        return case_description.FluidDescription(**case_values)
+        item_description = case_description.FluidDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_fluid_description(
@@ -457,7 +614,10 @@ def load_pvt_model_compositional_description(
 
     def generate_pvt_model_compositional(value: DescriptionDocument):
         case_values = to_case_values(value, alfacase_to_case_description)
-        return case_description.PvtModelCompositionalDescription(**case_values)
+        item_description = case_description.PvtModelCompositionalDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_pvt_model_compositional(
@@ -477,7 +637,8 @@ def load_pvt_models_description(
         "compositions": load_pvt_model_compositional_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.PvtModelsDescription(**case_values)
+    item_description = case_description.PvtModelsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 # Used for testing - Will be ignored on the document contents
@@ -548,17 +709,6 @@ def load_casing_section_description(
     ]
 
 
-def load_cv_table_description(
-    document: DescriptionDocument,
-) -> case_description.CvTableDescription:
-    alfacase_to_case_description = {
-        "opening": get_array_loader(from_unit="-"),
-        "flow_coefficient": get_array_loader(from_unit="(galUS/min)/(psi^0.5)"),
-    }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.CvTableDescription(**case_values)
-
-
 def load_environment_property_description(
     document: DescriptionDocument,
 ) -> List[case_description.EnvironmentPropertyDescription]:
@@ -574,7 +724,10 @@ def load_environment_property_description(
     # fmt: on
     def generate_environment_property_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.EnvironmentPropertyDescription(**case_values)
+        item_description = case_description.EnvironmentPropertyDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_environment_property_description(alfacase_document)
@@ -593,7 +746,8 @@ def load_formation_layer_description(
 
     def generate_formation_layer_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.FormationLayerDescription(**case_values)
+        item_description = case_description.FormationLayerDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_formation_layer_description(alfacase_document)
@@ -615,7 +769,10 @@ def load_gas_lift_valve_equipment_description(
 
     def generate_gas_lift_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.GasLiftValveEquipmentDescription(**case_values)
+        item_description = case_description.GasLiftValveEquipmentDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_gas_lift_description(
@@ -628,16 +785,16 @@ def load_gas_lift_valve_equipment_description(
 def load_heat_source_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.HeatSourceEquipmentDescription]:
-    alfacase_to_case_description = {
-        "name": load_value,
-        "start": get_scalar_loader(from_unit="m"),
-        "length": get_scalar_loader(from_unit="m"),
-        "power": get_scalar_loader(from_unit="W"),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.HeatSourceEquipmentDescription
+    )
 
     def generate_heat_source_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.HeatSourceEquipmentDescription(**case_values)
+        item_description = case_description.HeatSourceEquipmentDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_heat_source_description(
@@ -716,7 +873,8 @@ def load_initial_velocities_description(
         "table_length": load_velocities_container_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InitialVelocitiesDescription(**case_values)
+    item_description = case_description.InitialVelocitiesDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 load_referenced_temperatures_container_description = (
@@ -747,7 +905,8 @@ def load_initial_temperatures_description(
         "table_length": load_temperatures_container_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InitialTemperaturesDescription(**case_values)
+    item_description = case_description.InitialTemperaturesDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 load_referenced_volume_fractions_container_description = (
@@ -778,7 +937,8 @@ def load_initial_volume_fractions_description(
         "table_length": load_volume_fractions_container_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InitialVolumeFractionsDescription(**case_values)
+    item_description = case_description.InitialVolumeFractionsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 load_referenced_pressure_container_description = get_initial_conditions_table_loader(
@@ -807,7 +967,8 @@ def load_initial_pressures_description(
         "table_length": load_pressure_container_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InitialPressuresDescription(**case_values)
+    item_description = case_description.InitialPressuresDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 load_referenced_tracers_mass_fractions_container_description = (
@@ -838,7 +999,10 @@ def load_initial_tracers_mass_fractions_description(
         "table_length": load_tracers_mass_fractions_container_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InitialTracersMassFractionsDescription(**case_values)
+    item_description = case_description.InitialTracersMassFractionsDescription(
+        **case_values
+    )
+    return update_multi_input_flags(document, item_description)
 
 
 def load_initial_conditions_description(
@@ -853,23 +1017,14 @@ def load_initial_conditions_description(
         "fluid": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InitialConditionsDescription(**case_values)
+    item_description = case_description.InitialConditionsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def _load_mass_source_common() -> Dict[str, Callable]:
-    return {
-        "fluid": load_value,
-        "temperature": get_scalar_loader(from_unit="K"),
-        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
-        "water_cut": get_scalar_loader(category="volume fraction"),
-        "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
-        "source_type": get_enum_loader(enum_class=constants.MassSourceType),
-        "volumetric_flow_rates_std": get_dict_with_scalar_loader(
-            category="standard volume per time"
-        ),
-        "mass_flow_rates": get_dict_with_scalar_loader(category="mass flow rate"),
-        "total_mass_flow_rate": get_scalar_loader(from_unit="kg/s"),
-    }
+    return get_case_description_attribute_loader_dict(
+        case_description._MassSourceCommon
+    )
 
 
 def load_mass_source_equipment_description(
@@ -884,7 +1039,10 @@ def load_mass_source_equipment_description(
 
     def generate_mass_source_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.MassSourceEquipmentDescription(**case_values)
+        item_description = case_description.MassSourceEquipmentDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_mass_source_description(
@@ -911,7 +1069,8 @@ def load_material_description(
 
     def generate_materials_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.MaterialDescription(**case_values)
+        item_description = case_description.MaterialDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_materials_description(alfacase_document)
@@ -924,21 +1083,26 @@ def load_internal_node_properties_description(
 ) -> case_description.InternalNodePropertiesDescription:
     alfacase_to_case_description = {"fluid": load_value}
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.InternalNodePropertiesDescription(**case_values)
+    item_description = case_description.InternalNodePropertiesDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_mass_source_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.MassSourceNodePropertiesDescription:
     case_values = to_case_values(document, _load_mass_source_common())
-    return case_description.MassSourceNodePropertiesDescription(**case_values)
+    item_description = case_description.MassSourceNodePropertiesDescription(
+        **case_values
+    )
+    return update_multi_input_flags(document, item_description)
 
 
 def load_pressure_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.PressureNodePropertiesDescription:
     case_values = to_case_values(document, _load_pressure_source_common())
-    return case_description.PressureNodePropertiesDescription(**case_values)
+    item_description = case_description.PressureNodePropertiesDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_separator_node_properties_description(
@@ -950,15 +1114,18 @@ def load_separator_node_properties_description(
         "length": get_scalar_loader(from_unit="m"),
         "overall_heat_transfer_coefficient": get_scalar_loader(from_unit="W/m2.K"),
         "diameter": get_scalar_loader(from_unit="m"),
-        "nozzles": get_dict_with_scalar_loader(category=get_category_for("m")),
-        "initial_phase_volume_fractions": get_dict_with_scalar_loader(
+        "nozzles": get_scalar_dict_loader(category=get_category_for("m")),
+        "initial_phase_volume_fractions": get_scalar_dict_loader(
             category="volume fraction"
         ),
         "gas_separation_efficiency": get_scalar_loader(from_unit="%"),
         "liquid_separation_efficiency": get_scalar_loader(from_unit="%"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.SeparatorNodePropertiesDescription(**case_values)
+    item_description = case_description.SeparatorNodePropertiesDescription(
+        **case_values
+    )
+    return update_multi_input_flags(document, item_description)
 
 
 def load_node_description(
@@ -978,22 +1145,12 @@ def load_node_description(
         document: DescriptionDocument,
     ) -> case_description.NodeDescription:
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.NodeDescription(**case_values)
+        item_description = case_description.NodeDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_node_description(alfacase_document) for alfacase_document in document
     ]
-
-
-def load_opening_curve_description(
-    document: DescriptionDocument,
-) -> case_description.OpeningCurveDescription:
-    alfacase_to_case_description = {
-        "time": get_array_loader(from_unit="s"),
-        "opening": get_array_loader(from_unit="-"),
-    }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.OpeningCurveDescription(**case_values)
 
 
 def load_packer_description(
@@ -1007,7 +1164,8 @@ def load_packer_description(
 
     def generate_packer_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.PackerDescription(**case_values)
+        item_description = case_description.PackerDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_packer_description(alfacase_document) for alfacase_document in document
@@ -1024,7 +1182,8 @@ def load_pipe_segments_description(
         "wall_names": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.PipeSegmentsDescription(**case_values)
+    item_description = case_description.PipeSegmentsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_profile_output_description(
@@ -1040,7 +1199,8 @@ def load_profile_output_description(
         document: DescriptionDocument,
     ) -> case_description.ProfileOutputDescription:
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.ProfileOutputDescription(**case_values)
+        item_description = case_description.ProfileOutputDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_profile_definitions(alfacase_document)
@@ -1051,15 +1211,14 @@ def load_profile_output_description(
 def load_linear_ipr_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.LinearIPRDescription]:
-    alfacase_to_case_description = {
-        "well_index_phase": get_enum_loader(enum_class=constants.WellIndexPhaseType),
-        "min_pressure_difference": get_scalar_loader(from_unit="Pa"),
-        "well_index": get_scalar_loader(from_unit="m3/bar.d"),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.LinearIPRDescription
+    )
 
     def generate_linear_ipr_correlation(value: DescriptionDocument):
         case_values = to_case_values(value, alfacase_to_case_description)
-        return case_description.LinearIPRDescription(**case_values)
+        item_description = case_description.LinearIPRDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_linear_ipr_correlation(
@@ -1077,7 +1236,8 @@ def load_ipr_curve_description(
         "flow_rate": get_array_loader(from_unit="sm3/d"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.IPRCurveDescription(**case_values)
+    item_description = case_description.IPRCurveDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_table_ipr_description(
@@ -1090,7 +1250,8 @@ def load_table_ipr_description(
 
     def generate_table_ipr_correlation(value: DescriptionDocument):
         case_values = to_case_values(value, alfacase_to_case_description)
-        return case_description.TableIPRDescription(**case_values)
+        item_description = case_description.TableIPRDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_table_ipr_correlation(
@@ -1108,22 +1269,14 @@ def load_ipr_models_description(
         "table_models": load_table_ipr_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.IPRModelsDescription(**case_values)
+    item_description = case_description.IPRModelsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def _load_pressure_source_common() -> Dict[str, Callable]:
-    return {
-        "fluid": load_value,
-        "tracer_mass_fraction": get_array_loader(category="mass fraction"),
-        "split_type": get_enum_loader(enum_class=constants.MassInflowSplitType),
-        "mass_fractions": get_dict_with_scalar_loader(category="mass fraction"),
-        "volume_fractions": get_dict_with_scalar_loader(category="volume fraction"),
-        "water_cut": get_scalar_loader(category="volume fraction"),
-        "gas_oil_ratio": get_scalar_loader(from_unit="sm3/sm3"),
-        "gas_liquid_ratio": get_scalar_loader(from_unit="sm3/sm3"),
-        "pressure": get_scalar_loader(from_unit="bar"),
-        "temperature": get_scalar_loader(from_unit="K"),
-    }
+    return get_case_description_attribute_loader_dict(
+        case_description._PressureSourceCommon
+    )
 
 
 def load_reservoir_inflow_equipment_description(
@@ -1144,7 +1297,10 @@ def load_reservoir_inflow_equipment_description(
 
     def generate_reservoir_inflow_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.ReservoirInflowEquipmentDescription(**case_values)
+        item_description = case_description.ReservoirInflowEquipmentDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_reservoir_inflow_description(
@@ -1162,7 +1318,8 @@ def load_speed_curve_description(
         "speed": get_array_loader(from_unit="rpm"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.SpeedCurveDescription(**case_values)
+    item_description = case_description.SpeedCurveDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_table_pump_description(
@@ -1175,7 +1332,8 @@ def load_table_pump_description(
         "pressure_boosts": get_array_loader(from_unit="bar"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.TablePumpDescription(**case_values)
+    item_description = case_description.TablePumpDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_trend_output_description(
@@ -1192,7 +1350,8 @@ def load_trend_output_description(
         document: DescriptionDocument,
     ) -> case_description.TrendOutputDescription:
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.TrendOutputDescription(**case_values)
+        item_description = case_description.TrendOutputDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_trend_description(alfacase_document) for alfacase_document in document
@@ -1213,7 +1372,8 @@ def load_tubing_description(
 
     def generate_tubings_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.TubingDescription(**case_values)
+        item_description = case_description.TubingDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_tubings_description(alfacase_document)
@@ -1232,7 +1392,8 @@ def load_wall_layer_description(
 
     def generate_wall_layer_container_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.WallLayerDescription(**case_values)
+        item_description = case_description.WallLayerDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_wall_layer_container_description(alfacase_document)
@@ -1251,7 +1412,8 @@ def load_annulus_description(
         "gas_lift_valve_equipment": load_gas_lift_valve_equipment_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.AnnulusDescription(**case_values)
+    item_description = case_description.AnnulusDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_case_output_description(
@@ -1264,7 +1426,8 @@ def load_case_output_description(
         "trend_frequency": get_scalar_loader(from_unit="s"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.CaseOutputDescription(**case_values)
+    item_description = case_description.CaseOutputDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_open_hole_description(
@@ -1279,7 +1442,8 @@ def load_open_hole_description(
 
     def generate_open_hole_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.OpenHoleDescription(**case_values)
+        item_description = case_description.OpenHoleDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_open_hole_description(alfacase_document)
@@ -1297,7 +1461,8 @@ def load_casing_description(
         "open_holes": load_open_hole_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.CasingDescription(**case_values)
+    item_description = case_description.CasingDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_compressor_pressure_table_description(
@@ -1310,7 +1475,10 @@ def load_compressor_pressure_table_description(
         "isentropic_efficiency_table": get_array_loader(from_unit="-"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.CompressorPressureTableDescription(**case_values)
+    item_description = case_description.CompressorPressureTableDescription(
+        **case_values
+    )
+    return update_multi_input_flags(document, item_description)
 
 
 def load_compressor_equipment_description(
@@ -1333,7 +1501,10 @@ def load_compressor_equipment_description(
 
     def generate_compressor_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.CompressorEquipmentDescription(**case_values)
+        item_description = case_description.CompressorEquipmentDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_compressor_description(
@@ -1356,7 +1527,8 @@ def load_environment_description(
         "tvd_properties_table": load_environment_property_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.EnvironmentDescription(**case_values)
+    item_description = case_description.EnvironmentDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_formation_description(
@@ -1367,7 +1539,8 @@ def load_formation_description(
         "layers": load_formation_layer_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.FormationDescription(**case_values)
+    item_description = case_description.FormationDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_pump_equipment_description(
@@ -1389,7 +1562,8 @@ def load_pump_equipment_description(
 
     def generate_pump_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.PumpEquipmentDescription(**case_values)
+        item_description = case_description.PumpEquipmentDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_pump_description(
@@ -1402,25 +1576,15 @@ def load_pump_equipment_description(
 def load_valve_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.ValveEquipmentDescription]:
-    alfacase_to_case_description = {
-        "name": load_value,
-        "position": get_scalar_loader(from_unit="m"),
-        "type": get_enum_loader(enum_class=constants.ValveType),
-        "diameter": get_scalar_loader(from_unit="m"),
-        "opening_type": get_enum_loader(enum_class=constants.ValveOpeningType),
-        "opening": get_scalar_loader(from_unit="-"),
-        "opening_curve_interpolation_type": get_enum_loader(
-            enum_class=constants.InterpolationType
-        ),
-        "opening_curve": load_opening_curve_description,
-        "cv_table": load_cv_table_description,
-        "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.ValveEquipmentDescription
+    )
 
     def generate_valve_description(document: DescriptionDocument):
 
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.ValveEquipmentDescription(**case_values)
+        item_description = case_description.ValveEquipmentDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return {
         key.data: generate_valve_description(
@@ -1441,7 +1605,8 @@ def load_wall_description(
 
     def generate_walls_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.WallDescription(**case_values)
+        item_description = case_description.WallDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_walls_description(alfacase_document) for alfacase_document in document
@@ -1460,7 +1625,8 @@ def load_equipment_description(
         "compressors": load_compressor_equipment_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.EquipmentDescription(**case_values)
+    item_description = case_description.EquipmentDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_x_and_y_description(
@@ -1471,7 +1637,8 @@ def load_x_and_y_description(
         "y": get_array_loader(from_unit="m"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.XAndYDescription(**case_values)
+    item_description = case_description.XAndYDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_length_and_elevation_description(
@@ -1482,7 +1649,8 @@ def load_length_and_elevation_description(
         "elevation": get_array_loader(from_unit="m"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.LengthAndElevationDescription(**case_values)
+    item_description = case_description.LengthAndElevationDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_profile_description(
@@ -1493,7 +1661,8 @@ def load_profile_description(
         "length_and_elevation": load_length_and_elevation_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.ProfileDescription(**case_values)
+    item_description = case_description.ProfileDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_pipe_description(
@@ -1516,7 +1685,8 @@ def load_pipe_description(
     # fmt: on
     def generate_pipes_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.PipeDescription(**case_values)
+        item_description = case_description.PipeDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_pipes_description(alfacase_document) for alfacase_document in document
@@ -1543,7 +1713,8 @@ def load_well_description(
 
     def generate_wells_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        return case_description.WellDescription(**case_values)
+        item_description = case_description.WellDescription(**case_values)
+        return update_multi_input_flags(document, item_description)
 
     return [
         generate_wells_description(alfacase_document) for alfacase_document in document
@@ -1569,7 +1740,8 @@ def load_physics_description(
     }
     # fmt: on
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.PhysicsDescription(**case_values)
+    item_description = case_description.PhysicsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 # fmt: off
@@ -1590,7 +1762,8 @@ def load_numerical_options_description(document: DescriptionDocument) -> case_de
         'always_repeat_timestep': load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.NumericalOptionsDescription(**case_values)
+    item_description = case_description.NumericalOptionsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 # fmt: on
 
 # fmt: off
@@ -1608,7 +1781,8 @@ def load_time_options_description(
         "minimum_time_for_steady_state_stop": get_scalar_loader(from_unit="s"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.TimeOptionsDescription(**case_values)
+    item_description = case_description.TimeOptionsDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 # fmt: on
@@ -1618,7 +1792,7 @@ def load_tracer_model_constant_coefficients_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.TracerModelConstantCoefficientsDescription]:
     alfacase_to_case_description = {
-        "partition_coefficients": get_dict_with_scalar_loader(category="mass fraction")
+        "partition_coefficients": get_scalar_dict_loader(category="mass fraction")
     }
 
     def generate_tracer_model_constant_coefficients_description(
@@ -1644,7 +1818,8 @@ def load_tracers_description(
         "constant_coefficients": load_tracer_model_constant_coefficients_description
     }
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.TracersDescription(**case_values)
+    item_description = case_description.TracersDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
 
 
 def load_case_description(
@@ -1672,4 +1847,5 @@ def load_case_description(
     }
     # fmt: on
     case_values = to_case_values(document, alfacase_to_case_description)
-    return case_description.CaseDescription(**case_values)
+    item_description = case_description.CaseDescription(**case_values)
+    return update_multi_input_flags(document, item_description)

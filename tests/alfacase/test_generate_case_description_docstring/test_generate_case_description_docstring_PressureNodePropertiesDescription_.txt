@@ -5,46 +5,106 @@
     .. parsed-literal::
 
         class PressureNodePropertiesDescription
+            pressure_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             pressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
+            pressure_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Pa, s)[]
+            temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(288.6, 'K', 'temperature')
+            temperature_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(K, s)[]
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
             tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
             split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\  = MassInflowSplitType.ConstantVolumeFraction
+            mass_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             mass_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            mass_fractions_curve: \ :class:`Dict <typing.Dict>`\[str, <class 'barril.curve.curve.Curve'>] = {}
+            volume_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            volume_fractions_curve: \ :class:`Dict <typing.Dict>`\[str, <class 'barril.curve.curve.Curve'>] = {}
+            gas_liquid_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            gas_liquid_ratio_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/sm3, s)[]
+            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            gas_oil_ratio_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/sm3, s)[]
+            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'volume fraction')
+            water_cut_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
 
 .. tab:: Schema
 
     .. parsed-literal::
 
+            pressure_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             pressure:  # optional
                 value: number
                 unit: string
+            pressure_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
+            temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             temperature:  # optional
                 value: number
                 unit: string
+            temperature_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
             fluid: string  # optional
             tracer_mass_fraction:  # optional
                 values: [number]
                 unit: string
             split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\  # optional
+            mass_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             mass_fractions:  # optional
                 string: 
                     value: number
                     unit: string
+            mass_fractions_curve:  # optional
+                string: Curve
+            volume_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             volume_fractions:  # optional
                 string: 
                     value: number
                     unit: string
+            volume_fractions_curve:  # optional
+                string: Curve
+            gas_liquid_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             gas_liquid_ratio:  # optional
                 value: number
                 unit: string
+            gas_liquid_ratio_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
+            gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             gas_oil_ratio:  # optional
                 value: number
                 unit: string
+            gas_oil_ratio_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
+            water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             water_cut:  # optional
                 value: number
                 unit: string
+            water_cut_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string

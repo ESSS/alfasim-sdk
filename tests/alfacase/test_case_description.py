@@ -1,8 +1,13 @@
 import re
+import textwrap
 from textwrap import dedent
+from typing import Any
+from typing import Callable
 
 import attr
 import pytest
+from attr._make import _CountingAttr
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
@@ -14,6 +19,8 @@ from alfasim_sdk import NodeCellType
 from alfasim_sdk import PvtModelTableParametersDescription
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_array
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_curve
 from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     attrib_instance,
@@ -26,11 +33,19 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     collapse_array_repr,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    generate_multi_input,
+)
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    generate_multi_input_dict,
+)
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
     InvalidReferenceError,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     numpy_array_validator,
 )
+from alfasim_sdk._internal.alfacase.case_description_attributes import to_array
+from alfasim_sdk._internal.alfacase.case_description_attributes import to_curve
 
 
 def test_physics_description_path_validator(tmp_path):
@@ -50,14 +65,6 @@ def test_physics_description_path_validator(tmp_path):
     tmp_file.touch()
     assert case_description.PhysicsDescription(restart_filepath=tmp_file)
     assert case_description.PhysicsDescription(restart_filepath=None)
-
-
-def test_opening_curve_description():
-    expected_msg = "Time and Opening must have the same size, got 2 items for time and 3 for opening"
-    with pytest.raises(ValueError, match=re.escape(expected_msg)):
-        case_description.OpeningCurveDescription(
-            time=Array([0.0, 0.5], "s"), opening=Array([0.1, 0.2, 0.2], "-")
-        )
 
 
 def test_cv_table_description():
@@ -125,7 +132,6 @@ def test_instance_attribute_list():
     @attr.s(kw_only=True)
     class Foo:
         attr_1 = attrib_instance_list(X)
-        attr_1_validator_type = attrib_instance_list(X, validator_type=(X, Y))
 
     # Check validator of attrib_instance_list
     expected_msg = f"'attr_1' must be {list} (got X() that is a {X})."
@@ -142,7 +148,6 @@ def test_instance_attribute_list():
 
     # Smoke check
     assert Foo(attr_1=[X()])
-    assert Foo(attr_1_validator_type=[Y()])
 
 
 def test_instance_attribute():
@@ -158,7 +163,6 @@ def test_instance_attribute():
     class Foo:
         attr_1 = attrib_instance(X)
         attr_2 = attrib_instance_list(X)
-        attr_2_validator_type = attrib_instance_list(X, validator_type=(X, Y))
 
     # Check validator of attrib_instance
     expected_msg = f"'attr_1' must be {X} (got Y() that is a {Y})."
@@ -169,11 +173,50 @@ def test_instance_attribute():
     assert Foo(attr_1=X())
 
 
+def test_curve_attributes_converter():
+    @attr.s
+    class Foo:
+        x = attrib_curve(category="length")
+
+    expected_msg = "Expected pair (image_array, domain_array) or Curve, got None (type: <class 'NoneType'>)"
+    with pytest.raises(TypeError, match=re.escape(expected_msg)):
+        Foo(x=None)
+
+    # Fail to convert image (error context).
+    expected_msg = "Curve image: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    with pytest.raises(TypeError, match=re.escape(expected_msg)):
+        Foo(x=(None, None))
+
+    # Fail to convert domain (error context).
+    expected_msg = "Curve domain: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    with pytest.raises(TypeError, match=re.escape(expected_msg)):
+        Foo(x=(([1, 11, 111], "m"), None))
+
+    # Image and domain does not have the same size.
+    expected_msg = (
+        "The length of the image (3) is different from the size of the domain (2)"
+    )
+    with pytest.raises(ValueError, match=re.escape(expected_msg)):
+        Foo(x=(([1, 11, 111], "m"), ([0, 10], "s")))
+
+    Foo(x=(([1, 11, 111], "m"), ([0, 10, 20], "s")))
+
+
 def test_scalar_attribute():
+    expected_msg = (
+        "If `default` is not a scalar then `category` is required to be not `None`"
+    )
+    for kwargs in [{}, {"default": None}]:
+        with pytest.raises(ValueError, match=expected_msg):
+
+            @attr.s(kw_only=True)
+            class Bar:
+                x = attrib_scalar(**kwargs)
+
     @attr.s(kw_only=True)
     class Foo:
         position = attrib_scalar(default=Scalar(1, "m"))
-        position_2 = attrib_scalar(default=None)
+        position_2 = attrib_scalar(default=None, category="length")
 
     # Check position
     instance_with_scalar = Foo(position=Scalar(1, "m"))
@@ -909,6 +952,114 @@ def test_check_profile_description(default_case):
 
 def test_collapse_array_repr():
     assert collapse_array_repr("array([1, 2, 3])") == "'array([...])'"
+
+
+def test_to_array():
+    type_error_msg = r"Expected pair \(values, unit\) or Array"
+
+    assert to_array(None, is_optional=True) is None
+    with pytest.raises(TypeError, match=type_error_msg):
+        to_array(None)
+
+    assert to_array(([1, 2, 3], "m")) == Array("length", [1, 2, 3], "m")
+    with pytest.raises(TypeError, match=type_error_msg):
+        to_array(("foo", [1, 2, 3], "m"))
+    with pytest.raises(TypeError, match=type_error_msg):
+        to_array("foo")
+
+    array = Array("time", [0, 1.1, 2.2], "s")
+    assert to_array(array) is array
+
+
+def test_to_curve():
+    type_error_msg = r"Expected pair \(image_array, domain_array\) or Curve"
+
+    assert to_curve(None, is_optional=True) is None
+    with pytest.raises(TypeError, match=type_error_msg):
+        to_curve(None)
+
+    image = Array("length", [1, 2, 3], "m")
+    domain = Array("time", [0, 1.1, 2.2], "s")
+    curve = Curve(image, domain)
+    assert to_curve((([1, 2, 3], "m"), domain)) == curve
+    with pytest.raises(
+        TypeError, match=r"Curve image: Expected pair \(values, unit\) or Array"
+    ):
+        to_curve((("foo", [1, 2, 3], "m"), domain))
+    with pytest.raises(TypeError, match=type_error_msg):
+        to_curve(("foo", [1, 2, 3], "m"))
+    with pytest.raises(TypeError, match=type_error_msg):
+        to_curve("foo")
+
+    assert to_curve(curve) is curve
+
+
+@pytest.mark.parametrize(
+    "attrib_creator, default",
+    [
+        (attrib_scalar, Scalar(1, "m")),
+        (attrib_array, Array([1, 2, 3], "m")),
+        (attrib_curve, Curve(Array([1, 2, 3], "m"), Array([0, 1.1, 2.2], "s"))),
+    ],
+)
+def test_attrib_category_miss_match(attrib_creator: Callable, default: Any) -> None:
+    with pytest.raises(ValueError, match="category and `category` must match"):
+        attrib_creator(default, category="time")
+
+    assert isinstance(attrib_creator(default), _CountingAttr)
+    assert isinstance(attrib_creator(default, category="length"), _CountingAttr)
+
+
+@pytest.mark.parametrize(
+    "attrib_creator, default",
+    [
+        (attrib_scalar, (1, "m")),
+        (attrib_array, ([1, 2, 3], "m")),
+        (attrib_curve, (Array([1, 2, 3], "m"), Array([0, 1.1, 2.2], "s"))),
+    ],
+)
+def test_attrib_category_required(attrib_creator, default):
+    with pytest.raises(
+        ValueError,
+        match=r"If `default` is not an? \S+ then `category` is required to be not `None`",
+    ):
+        attrib_creator(default)
+
+    assert isinstance(attrib_creator(default, category="length"), _CountingAttr)
+
+
+def test_generate_multi_input():
+    obtained = generate_multi_input("foo", "length", 1.2, "m")
+    assert obtained == textwrap.dedent(
+        """\
+        # fmt: off
+        foo_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        foo = attrib_scalar(
+            default=Scalar('length', 1.2, 'm')
+        )
+        foo_curve = attrib_curve(
+            default=Curve(Array('length', [], 'm'), Array('time', [], 's'))
+        )
+        # fmt: on"""
+    )
+
+
+def test_generate_multi_input_dict():
+    obtained = generate_multi_input_dict("foo", "length")
+    assert obtained == textwrap.dedent(
+        """\
+        # fmt: off
+        foo_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        foo: Dict[str, Scalar] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of(Scalar),
+            metadata={"type": "scalar_dict", "category": 'length'},
+        )
+        foo_curve: Dict[str, Curve] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of(Curve),
+            metadata={"type": "curve_dict", "category": 'length'},
+        )
+        # fmt: on"""
+    )
 
 
 def test_material_description_as_dict():

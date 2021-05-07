@@ -224,5 +224,3 @@ Tables
 .. autoclass:: alfasim_sdk.TablePumpDescription()
 
 .. autoclass:: alfasim_sdk.CvTableDescription()
-
-.. autoclass:: alfasim_sdk.OpeningCurveDescription()

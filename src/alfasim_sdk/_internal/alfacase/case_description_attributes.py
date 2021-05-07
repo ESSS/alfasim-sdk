@@ -1,11 +1,15 @@
+# mypy: disallow-untyped-defs
+import textwrap
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
 from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import List
 from typing import NewType
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 from typing import Union
 
@@ -16,6 +20,7 @@ from attr.validators import deep_mapping
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
@@ -25,9 +30,64 @@ PhaseName = str
 list_of_strings = deep_iterable(
     member_validator=optional(instance_of(str)), iterable_validator=instance_of(list)
 )
+AttrNothingType = type(attr.NOTHING)
+ScalarLike = Union[Tuple[Number, str], Scalar]
+ArrayLike = Union[Tuple[Sequence[Number], str], Array]
+CurveLike = Union[Tuple[ArrayLike, ArrayLike], Curve]
 
 
-def collapse_array_repr(value):
+def generate_multi_input(
+    prop_name: str, category: str, default_value: float, unit: str
+) -> str:
+    return textwrap.dedent(
+        f"""\
+        # fmt: off
+        {prop_name}_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        {prop_name} = attrib_scalar(
+            default=Scalar({category!r}, {default_value!r}, {unit!r})
+        )
+        {prop_name}_curve = attrib_curve(
+            default=Curve(Array({category!r}, [], {unit!r}), Array({"time"!r}, [], {"s"!r}))
+        )
+        # fmt: on"""
+    )
+
+
+def generate_multi_input_dict(prop_name: str, category: str) -> str:
+    return textwrap.dedent(
+        f"""\
+        # fmt: off
+        {prop_name}_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        {prop_name}: Dict[str, Scalar] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of(Scalar),
+            metadata={{"type": "scalar_dict", "category": {category!r}}},
+        )
+        {prop_name}_curve: Dict[str, Curve] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of(Curve),
+            metadata={{"type": "curve_dict", "category": {category!r}}},
+        )
+        # fmt: on"""
+    )
+
+
+def is_two_element_tuple(value: object) -> bool:
+    """
+    Check if `value` is a two element tuple.
+    """
+    return isinstance(value, tuple) and (len(value) == 2)
+
+
+def prepare_error_message(message: str, error_context: Optional[str] = None) -> str:
+    """
+    If `error_context` is not None prepend that to error message.
+    """
+    if error_context is not None:
+        return error_context + ": " + message
+    else:
+        return message
+
+
+def collapse_array_repr(value: np.ndarray) -> str:
     """
     The full repr representation of PVT model takes too much space to print all values inside a array.
     Making annoying to debug Subjects that has a PVT model on it, due to seventy-four lines with only numbers.
@@ -38,42 +98,113 @@ def collapse_array_repr(value):
 
 
 def to_scalar(
-    value: Union[Tuple[Number, str], Scalar], is_optional: bool = False
+    value: ScalarLike, is_optional: bool = False, *, error_context: Optional[str] = None
 ) -> Scalar:
     """
-    Converter to be used with attr.ib, accepts tuples and Scalar as input
+    Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
+    by `attrib_scalar`.
     If `is_optional` is defined, the converter will also accept None.
+    If `error_context` is not `None` it is prepended to the type error message when `value` type
+    is not respected.
 
     Ex.:
     @attr.s
     class TrendOutputDescription:
         pos = attrib_scalar()
-        temperature = attrib_scalar(converter=partial(ToScalar, is_optional=True))
+        temperature = attrib_scalar(is_optional=True))
 
-    TrendOutputDescription(position=Scalar(1,"m")
-    TrendOutputDescription(position=(1,"m")
+    TrendOutputDescription(position=Scalar(1,"m"))
+    TrendOutputDescription(position=(1,"m"))
     TrendOutputDescription(temperature=None)
     """
     if is_optional and value is None:
         return value
-    if isinstance(value, tuple) and (len(value) == 2):
+    if is_two_element_tuple(value):
         return Scalar(value)
     elif isinstance(value, Scalar):
         return value
 
-    raise TypeError(
-        f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})"
+    message = prepare_error_message(
+        f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})",
+        error_context,
     )
+    raise TypeError(message)
 
 
-attr_nothing_type = object
+def to_array(
+    value: ArrayLike, is_optional: bool = False, *, error_context: Optional[str] = None
+) -> Array:
+    """
+    Converter to be used with attr.ib, accepts tuples and Array as input.
+    If `is_optional` is defined, the converter will also accept None, same as `to_scalar`.
+    The `error_context` has the same behavior as in `to_scalar`.
+
+    Ex.:
+    @attr.s
+    class Foo:
+        bar = attr.id(converter=to_array)
+
+    Foo(bar=Array([1,2,3],"m"))
+    Foo(bar=([1,2,3],"m"))
+    Foo(bar=((1,2,3),"m"))
+    """
+    if is_optional and value is None:
+        return value
+    if is_two_element_tuple(value):
+        return Array(*value)
+    elif isinstance(value, Array):
+        return value
+
+    message = prepare_error_message(
+        f"Expected pair (values, unit) or Array, got {value!r} (type: {type(value)})",
+        error_context,
+    )
+    raise TypeError(message)
+
+
+def to_curve(
+    value: CurveLike, is_optional: bool = False, *, error_context: Optional[str] = None
+) -> Curve:
+    """
+    Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
+    by `attrib_curve`.
+    If `is_optional` is defined, the converter will also accept None, same as `to_scalar`.
+    The `error_context` has the same behavior as in `to_scalar`.
+
+    Ex.:
+    @attr.s
+    class Foo:
+        bar = attrib_curve()
+
+    Foo(bar=Curve(Array([1,2,3],"m"), Array([0,10,20],"s")))
+    Foo(bar=(Array([1,2,3],"m"), Array([0,10,20],"s")))
+    Foo(bar=(([1,2,3],"m"), ([0,10,20],"s")))
+    Foo(bar=(([1,2,3],"m"), Array([0,10,20],"s")))
+    """
+    if is_optional and value is None:
+        return value
+    if is_two_element_tuple(value):
+        image = to_array(
+            value[0], error_context=prepare_error_message("Curve image", error_context)
+        )
+        domain = to_array(
+            value[1], error_context=prepare_error_message("Curve domain", error_context)
+        )
+        return Curve(image, domain)
+    elif isinstance(value, Curve):
+        return value
+
+    message = prepare_error_message(
+        f"Expected pair (image_array, domain_array) or Curve, got {value!r} (type: {type(value)})",
+        error_context,
+    )
+    raise TypeError(message)
 
 
 def attrib_scalar(
-    default: Optional[
-        Union[Tuple[Number, str], Scalar, attr_nothing_type]
-    ] = attr.NOTHING,
+    default: Union[ScalarLike, AttrNothingType] = attr.NOTHING,
     is_optional: bool = False,
+    category: Optional[str] = None,
 ) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
@@ -84,25 +215,106 @@ def attrib_scalar(
         If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
         otherwise, a `TypeError` will be raised.
     """
+    if isinstance(default, Scalar):
+        if category is None:
+            category = default.category
+        elif category != default.category:
+            raise ValueError("`default`'s category and `category` must match")
+
+    else:
+        if category is None:
+            raise ValueError(
+                "If `default` is not a scalar then `category` is required to be not `None`"
+            )
+
+    metadata = {"type": "scalar", "category": category}
     return attr.ib(
         default=default,
         converter=partial(to_scalar, is_optional=is_optional or not default),
         type=Optional[Scalar] if is_optional or not default else Scalar,
+        metadata=metadata,
     )
 
 
-def attrib_instance(type_) -> attr._make._CountingAttr:
+def attrib_array(
+    default: Union[ArrayLike, AttrNothingType] = attr.NOTHING,
+    is_optional: bool = False,
+    category: Optional[str] = None,
+) -> attr._make._CountingAttr:
+    """
+    Create a new attr attribute with a converter to Array accepting also tuple(values, unit).
+
+    :param default:
+        Value to be used as default when instantiating a class with this attr.ib
+
+        If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
+        otherwise, a `TypeError` will be raised.
+    """
+    if isinstance(default, Array):
+        if category is None:
+            category = default.category
+        elif category != default.category:
+            raise ValueError("`default`'s category and `category` must match")
+
+    else:
+        if category is None:
+            raise ValueError(
+                "If `default` is not an array then `category` is required to be not `None`"
+            )
+
+    metadata = {"type": "array", "category": category}
+    return attr.ib(default=default, converter=to_array, type=Array, metadata=metadata)
+
+
+def attrib_curve(
+    default: Union[CurveLike, AttrNothingType] = attr.NOTHING,
+    is_optional: bool = False,
+    category: Optional[str] = None,
+) -> attr._make._CountingAttr:
+    """
+    Create a new attr attribute with a converter to Curve accepting also tuple(image, domain).
+
+    :param default:
+        Value to be used as default when instantiating a class with this attr.ib
+
+        If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
+        otherwise, a `TypeError` will be raised.
+    """
+    if isinstance(default, Curve):
+        if category is None:
+            category = default.image.category
+        elif category != default.image.category:
+            raise ValueError("`default` image's category and `category` must match")
+
+    else:
+        if category is None:
+            raise ValueError(
+                "If `default` is not a curve then `category` is required to be not `None`"
+            )
+
+    metadata = {"type": "curve", "category": category}
+    return attr.ib(
+        default=default,
+        converter=partial(to_curve, is_optional=is_optional or not default),
+        type=Optional[Curve] if is_optional or not default else Curve,
+        metadata=metadata,
+    )
+
+
+def attrib_instance(type_: type) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     """
+    metadata = {"type": "instance", "class_": type_}
     return attr.ib(
-        default=attr.Factory(type_), validator=instance_of(type_), type=type_
+        default=attr.Factory(type_),
+        validator=instance_of(type_),
+        type=type_,
+        metadata=metadata,
     )
 
 
-def attrib_instance_list(
-    type_, *, validator_type: Optional[Tuple[Any, ...]] = None
-) -> attr._make._CountingAttr:
+def attrib_instance_list(type_: type) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     All attributes created are expected to be List of the given type_
@@ -113,13 +325,17 @@ def attrib_instance_list(
 
     """
     # Config validator
-    _validator_type = validator_type or type_
     _validator = deep_iterable(
-        member_validator=instance_of(_validator_type),
+        member_validator=instance_of(type_),
         iterable_validator=instance_of(list),
     )
-
-    return attr.ib(default=attr.Factory(list), validator=_validator, type=List[type_])
+    metadata = {"type": "instance_list", "class_": type_}
+    return attr.ib(
+        default=attr.Factory(list),
+        validator=_validator,
+        type=List[type_],
+        metadata=metadata,
+    )
 
 
 def attrib_enum(
@@ -149,10 +365,12 @@ def attrib_enum(
             f"Default must be a member of Enum and not the Enum class itself, got {default} while expecting"
             f" some of the following members {', '.join([str(i) for i in default])}"
         )
-    return attr.ib(default=default, validator=in_(type_), type=type_)
+
+    metadata = {"type": "enum", "enum_class": type_}
+    return attr.ib(default=default, validator=in_(type_), type=type_, metadata=metadata)
 
 
-def dict_of(type_):
+def dict_of(type_: type) -> Callable:
     """
     An attr validator that performs validation of dictionary values.
 
@@ -170,7 +388,7 @@ def dict_of(type_):
     )
 
 
-def attrib_dict_of(type_) -> attr._make._CountingAttr:
+def attrib_dict_of(type_: type) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for an atribute that is a dictionary with keys as str (to represent
     the name) and the content of an instance of type_
@@ -200,7 +418,7 @@ dict_with_a_list_of_numbers = deep_mapping(
 )
 
 
-def list_of(type_):
+def list_of(type_: type) -> Callable:
     """
     An attr validator that performs validation of list values.
 
@@ -216,7 +434,7 @@ def list_of(type_):
     )
 
 
-def numpy_array_validator(dimension: int, is_list: bool = False):
+def numpy_array_validator(dimension: int, is_list: bool = False) -> Callable:
     """
      An attr validator that performs validation of numpy arrays
     :param dimension:
@@ -227,8 +445,8 @@ def numpy_array_validator(dimension: int, is_list: bool = False):
     :return: An attr validator that performs validation of instances of ndarray and their dimensions.
     """
 
-    def _numpy_array_validator(instance, attribute, value):
-        def _check_dimension(value, *, position=None):
+    def _numpy_array_validator(instance, attribute, value) -> None:
+        def _check_dimension(value, *, position=None) -> None:
             """Helper method to check the dimension from ndarray"""
             if value.ndim != dimension:
                 raise ValueError(

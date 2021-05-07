@@ -10,6 +10,7 @@ from typing import Type
 
 import attr
 from attr._make import Attribute
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units._scalar import Scalar
 
@@ -17,6 +18,7 @@ from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk._internal.alfacase.generate_schema import is_array
 from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
 from alfasim_sdk._internal.alfacase.generate_schema import is_boolean
+from alfasim_sdk._internal.alfacase.generate_schema import is_curve
 from alfasim_sdk._internal.alfacase.generate_schema import is_dict
 from alfasim_sdk._internal.alfacase.generate_schema import is_enum
 from alfasim_sdk._internal.alfacase.generate_schema import is_float
@@ -209,6 +211,13 @@ def _get_array_reference() -> str:
     return _get_class_with_reference(visible_name="Array", ref="barril.units.Array")
 
 
+def _get_curve_reference() -> str:
+    """Return a string with a cross-reference to Curve documentation."""
+    return _get_class_with_reference(
+        visible_name="Curve", ref="barril.curve.curve.Curve"
+    )
+
+
 def _get_list_reference() -> str:
     """Return a string with a cross-reference to List documentation."""
     return _get_class_with_reference(visible_name="List", ref="typing.List")
@@ -388,6 +397,21 @@ def array_formatted_for_schema(value: Type[Array], *, number_of_indent=1) -> str
     return f"\n{block_indentation}values: [number]\n{block_indentation}unit: string"
 
 
+def curve_formatted_for_schema(value: Type[Curve], *, number_of_indent=1) -> str:
+    """
+    Return a string showing how to configure a Array.
+
+    :param int number_of_indent:
+        How many indentations beyond the base should this schema have,
+        useful for when used with other schema such as Dict.
+    """
+    block_indentation = BASE_INDENT + INDENT * number_of_indent
+    array_schema = array_formatted_for_schema(
+        Array, number_of_indent=number_of_indent + 1
+    )
+    return f"\n{block_indentation}image:{array_schema}\n{block_indentation}domain:{array_schema}"
+
+
 LIST_OF_CASE_ATTRIBUTES = [
     (is_enum, enum_formatted),
     (is_attrs, attrs_formatted),
@@ -399,6 +423,7 @@ LIST_OF_CASE_ATTRIBUTES = [
     (is_union, union_formatted),
     (is_scalar, lambda value: _get_scalar_reference()),
     (is_array, lambda value: _get_array_reference()),
+    (is_curve, lambda value: _get_curve_reference()),
     (is_int, lambda value: value.__name__),
     (is_path, lambda value: value.__name__),
 ]
@@ -415,6 +440,7 @@ LIST_OF_CASE_SCHEMAS = [
     (is_union, union_formatted_for_schema),
     (is_scalar, scalar_formatted_for_schema),
     (is_array, array_formatted_for_schema),
+    (is_curve, curve_formatted_for_schema),
     (is_int, lambda value: "number"),
     (is_path, lambda value: value.__name__),
 ]

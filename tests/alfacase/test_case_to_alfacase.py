@@ -1,9 +1,14 @@
+import re
+
+import pytest
 from barril.units import Array
+from barril.units import Scalar
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
 from alfasim_sdk import convert_description_to_alfacase
+from alfasim_sdk import MultiInputType
 from alfasim_sdk import NumericalOptionsDescription
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
@@ -42,6 +47,39 @@ def test_convert_description_to_alfacase_with_empty_dict(tmp_path):
     loaded_alfacase = DescriptionDocument.from_file(simple_case_alfacase_file)
 
     assert loaded_alfacase.content["name"].data == simple_case.name
+
+
+@pytest.mark.parametrize(
+    "remove", [pytest.param(True, id="remove"), pytest.param(False, id="keep")]
+)
+@pytest.mark.parametrize("input_type", [MultiInputType.Constant, MultiInputType.Curve])
+def test_remove_redundant_input_type_data_option(
+    remove: bool, input_type: MultiInputType
+) -> None:
+    mass_source_equipment_description = case_description.MassSourceEquipmentDescription(
+        position=Scalar(0, "m"), temperature_input_type=input_type
+    )
+    yaml = convert_description_to_alfacase(
+        mass_source_equipment_description, remove_redundant_input_type_data=remove
+    )
+
+    def has_key_in_yaml(key: str) -> bool:
+        pattern = rf"^\s*{re.escape(key)}\s*:"
+        return bool(re.search(pattern, yaml, re.MULTILINE))
+
+    if remove:
+        assert not has_key_in_yaml("temperature_input_type")
+        if input_type == MultiInputType.Constant:
+            assert has_key_in_yaml("temperature")
+            assert not has_key_in_yaml("temperature_curve")
+        elif input_type == MultiInputType.Curve:
+            assert not has_key_in_yaml("temperature")
+            assert has_key_in_yaml("temperature_curve")
+
+    else:
+        assert has_key_in_yaml("temperature_input_type")
+        assert has_key_in_yaml("temperature")
+        assert has_key_in_yaml("temperature_curve")
 
 
 def test_convert_description_to_alfacase_with_nan_float():
