@@ -226,12 +226,12 @@ def attrib_scalar(
             raise ValueError(
                 "If `default` is not a scalar then `category` is required to be not `None`"
             )
-
+    is_optional = is_optional or (default is None)
     metadata = {"type": "scalar", "category": category}
     return attr.ib(
         default=default,
-        converter=partial(to_scalar, is_optional=is_optional or not default),
-        type=Optional[Scalar] if is_optional or not default else Scalar,
+        converter=partial(to_scalar, is_optional=is_optional),
+        type=Optional[Scalar] if is_optional else Scalar,
         metadata=metadata,
     )
 
@@ -292,11 +292,12 @@ def attrib_curve(
                 "If `default` is not a curve then `category` is required to be not `None`"
             )
 
+    is_optional = is_optional or (default is None)
     metadata = {"type": "curve", "category": category}
     return attr.ib(
         default=default,
-        converter=partial(to_curve, is_optional=is_optional or not default),
-        type=Optional[Curve] if is_optional or not default else Curve,
+        converter=partial(to_curve, is_optional=is_optional),
+        type=Optional[Curve] if is_optional else Curve,
         metadata=metadata,
     )
 
