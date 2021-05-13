@@ -143,7 +143,7 @@ def _get_case_attr_default_value(value: attr.Attribute) -> str:
             default_value_string += "{}"
         elif value.default.factory is list:
             default_value_string += "[]"
-        elif is_attrs(value.default):
+        elif is_attrs(value.default.factory):
             default_value_string += f"{value.default.factory.__name__}()"
         else:
             default_value_string += "UNKNOWN FACTORY"
