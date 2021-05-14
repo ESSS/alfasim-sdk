@@ -1,7 +1,9 @@
 import shutil
+import textwrap
 from pathlib import Path
 
 import attr
+import numpy
 import pytest
 import strictyaml
 from barril.units import Array
@@ -21,19 +23,22 @@ from alfasim_sdk._internal.alfacase import schema
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_array_loader
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_scalar_loader
-from alfasim_sdk._internal.alfacase.alfacase_to_case import load_physics_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
-    load_pvt_models_description,
+    load_mass_source_node_properties_description,
 )
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    DescriptionError,
-)
+from alfasim_sdk._internal.alfacase.alfacase_to_case import load_physics_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import load_pvt_models_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
 from alfasim_sdk._internal.alfacase.generate_schema import convert_to_snake_case
 from alfasim_sdk._internal.alfacase.generate_schema import (
     get_all_classes_that_needs_schema,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
 from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
+from alfasim_sdk._internal.alfacase.schema import (
+    mass_source_node_properties_description_schema,
+)
+from alfasim_sdk._internal.constants import MultiInputType
 
 
 @attr.s(frozen=True)
@@ -70,12 +75,17 @@ def alfacase_to_case_helper(tmp_path):
         def __init__(self, tmp_path) -> None:
             self.tmp_path = Path(tmp_path)
 
-        def generate_description(self, alfacase_config: AlfacaseTestConfig):
+        def generate_description(
+            self,
+            alfacase_config: AlfacaseTestConfig,
+            remove_redundant_input_type_data: bool = False,
+        ):
             """
             Helper method to generate a "Description" from the given alfacase_config
             """
             alfacase_string = convert_description_to_alfacase(
-                alfacase_config.description_expected
+                alfacase_config.description_expected,
+                remove_redundant_input_type_data=remove_redundant_input_type_data,
             )
             alfacase_content = strictyaml.dirty_load(
                 yaml_string=alfacase_string,
@@ -98,9 +108,14 @@ def alfacase_to_case_helper(tmp_path):
             description_document = DescriptionDocument(
                 content=alfacase_content, file_path=self.tmp_path / "test_case.alfacase"
             )
-            return getattr(alfacase_to_case, alfacase_config.load_function_name)(
-                description_document
-            )
+            if hasattr(alfacase_to_case, alfacase_config.load_function_name):
+                loader = getattr(alfacase_to_case, alfacase_config.load_function_name)
+            else:
+                loader = alfacase_to_case.get_instance_loader(
+                    class_=alfacase_config.description_expected.__class__
+                )
+
+            return loader(description_document)
 
         def ensure_description_has_all_properties(
             self, expected_description_class, obtained_description_obj
@@ -221,10 +236,6 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.OPEN_HOLE_DESCRIPTION,
         schema=schema.open_hole_description_schema,
         is_sequence=True,
-    ),
-    "OpeningCurveDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.OPENING_CURVE_DESCRIPTION,
-        schema=schema.opening_curve_description_schema,
     ),
     "PackerDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PACKER_DESCRIPTION,
@@ -511,6 +522,77 @@ def test_convert_alfacase_to_description(alfacase_to_case_helper, class_, tmp_pa
     )
 
 
+def test_ensure_descriptions_are_equal_compare_ndarray():
+    expected_dict = {"foo": numpy.array([[1, 2], [3, 4]])}
+    other_1 = {"foo": numpy.array([[0, 0], [0, 0]])}
+
+    ensure_descriptions_are_equal(expected_dict, expected_dict, [])
+
+    with pytest.raises(AssertionError, match="Not equal on foo"):
+        ensure_descriptions_are_equal(other_1, expected_dict, [])
+
+    with pytest.raises(AssertionError, match=r"Not equal on bar\.foo"):
+        ensure_descriptions_are_equal({"bar": other_1}, {"bar": expected_dict}, [])
+
+
+def test_update_multi_input_flags_behavior():
+    content = strictyaml.dirty_load(
+        yaml_string=textwrap.dedent(
+            """\
+            # Just constant, use "constant" flag.
+            volumetric_flow_rates_std:
+                gas:
+                    value: 0.0
+                    unit: sm3/d
+
+            # Constant and curve but no flag, use default flag.
+            mass_flow_rates:
+                gas:
+                    value: 0.0
+                    unit: kg/s
+            mass_flow_rates_curve:
+                gas:
+                    image:
+                        values: [0.0, 1.0]
+                        unit: kg/s
+                    domain:
+                        values: [0, 10]
+                        unit: s
+
+            # Just flag, use value from yaml;
+            total_mass_flow_rate_input_type: curve
+
+            # Just curve, use "curve" flag.
+            water_cut_curve:
+                image:
+                    values: [0.2, 0.3]
+                    unit: "-"
+                domain:
+                    values: [0, 20]
+                    unit: s
+            """
+        ),
+        schema=mass_source_node_properties_description_schema,
+        allow_flow_style=True,
+    )
+    document = DescriptionDocument(content, Path())
+    mass_source_node_properties = load_mass_source_node_properties_description(document)
+
+    assert (
+        mass_source_node_properties.volumetric_flow_rates_std_input_type
+        == MultiInputType.Constant
+    )
+    assert (
+        mass_source_node_properties.mass_flow_rates_input_type
+        == MultiInputType.Constant
+    )
+    assert (
+        mass_source_node_properties.total_mass_flow_rate_input_type
+        == MultiInputType.Curve
+    )
+    assert mass_source_node_properties.water_cut_input_type == MultiInputType.Curve
+
+
 @pytest.fixture()
 def description_document_for_pvt_tables_test(tmp_path):
     case = case_description.PvtModelsDescription(
@@ -737,3 +819,25 @@ def test_invalid_yaml_contents_parsing(tmp_path):
 
     with pytest.raises(DescriptionError, match=re.escape(expected_msg)):
         DescriptionDocument.from_file(alfacase_file)
+
+
+def test_get_case_description_attribute_loader_dict_explicit_loaders() -> None:
+    def fake_explict_loader(*args, **kwargs):
+        """No-op"""
+
+    loaders_with_explicit_loaders = (
+        alfacase_to_case.get_case_description_attribute_loader_dict(
+            case_description.BipDescription,
+            explicit_loaders={"component_1": fake_explict_loader},
+        )
+    )
+    component_1_explicit_loader = loaders_with_explicit_loaders.pop("component_1")
+
+    loaders = alfacase_to_case.get_case_description_attribute_loader_dict(
+        case_description.BipDescription
+    )
+    component_1_automatic_loader = loaders.pop("component_1")
+
+    assert loaders_with_explicit_loaders == loaders
+    assert component_1_explicit_loader is fake_explict_loader
+    assert component_1_automatic_loader is alfacase_to_case.load_value

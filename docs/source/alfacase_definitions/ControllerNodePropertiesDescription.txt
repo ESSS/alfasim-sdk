@@ -17,14 +17,14 @@
 
     .. parsed-literal::
 
-            type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\ # optional
-            gain: number # optional
-            setpoint: number # optional
-            integral_time: 
+            type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  # optional
+            gain: number  # optional
+            setpoint: number  # optional
+            integral_time:  # optional
                 value: number
-                unit: string # optional
-            derivative_time: 
+                unit: string
+            derivative_time:  # optional
                 value: number
-                unit: string # optional
-            input_signal_properties: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\ # optional
-            output_signal_properties: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\ # optional
+                unit: string
+            input_signal_properties: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\  # optional
+            output_signal_properties: \ :class:`controller_signal_properties_description_schema <ControllerSignalPropertiesDescription>`\  # optional

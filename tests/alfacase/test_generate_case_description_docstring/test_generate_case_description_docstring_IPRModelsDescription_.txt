@@ -12,7 +12,7 @@
 
     .. parsed-literal::
 
-            linear_models: 
-                string: \ :class:`linear_ipr_description_schema <LinearIPRDescription>`\ # optional
-            table_models: 
-                string: \ :class:`table_ipr_description_schema <TableIPRDescription>`\ # optional
+            linear_models:  # optional
+                string: \ :class:`linear_ipr_description_schema <LinearIPRDescription>`
+            table_models:  # optional
+                string: \ :class:`table_ipr_description_schema <TableIPRDescription>`

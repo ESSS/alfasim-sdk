@@ -12,7 +12,7 @@
 
     .. parsed-literal::
 
-            composition: 
-                - \ :class:`composition_description_schema <CompositionDescription>`\ # optional
-            fraction_pairs: 
-                - \ :class:`bip_description_schema <BipDescription>`\ # optional
+            composition:  # optional
+                - \ :class:`composition_description_schema <CompositionDescription>`
+            fraction_pairs:  # optional
+                - \ :class:`bip_description_schema <BipDescription>`

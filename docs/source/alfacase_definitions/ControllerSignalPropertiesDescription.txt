@@ -14,9 +14,9 @@
 
     .. parsed-literal::
 
-            property: string # optional
-            unit: string # optional
-            network_element: string # optional
-            network_position_in_element: 
+            property: string  # optional
+            unit: string  # optional
+            network_element: string  # optional
+            network_position_in_element:  # optional
                 value: number
-                unit: string # optional
+                unit: string

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import numpy as np
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
@@ -115,9 +116,6 @@ CV_TABLE_DESCRIPTION_SCHEMA = case_description.CvTableDescription(
     opening=Array([0.0, 0.2, 0.5, 1.0], "-"),
     flow_coefficient=Array([0.0, 7.16, 44.97, 180.68], "(galUS/min)/(psi^0.5)"),
 )
-OPENING_CURVE_DESCRIPTION = case_description.OpeningCurveDescription(
-    time=Array([0.0, 0.1, 0.5], "s"), opening=Array([0.1, 0.2, 0.2], "-")
-)
 CASING_SECTION_DESCRIPTION = case_description.CasingSectionDescription(
     name="Casing 1",
     hanger_depth=Scalar(1, "m"),
@@ -139,7 +137,12 @@ GAS_LIST_VALVE_DESCRIPTION = case_description.GasLiftValveEquipmentDescription(
     discharge_coeff=Scalar(0.826, "-"),
 )
 HEAT_SOURCE_DESCRIPTION = case_description.HeatSourceEquipmentDescription(
-    start=Scalar(200.0, "m"), length=Scalar(550.0, "m"), power=Scalar(20.0e3, "W")
+    start=Scalar(200.0, "m"),
+    length=Scalar(550.0, "m"),
+    power=Scalar(20.0e3, "W"),
+    power_curve=Curve(
+        Array("power", [2e4, 2.1e4, 2.3e4], "W"), Array("time", [0, 10, 20], "h")
+    ),
 )
 INITIAL_CONDITIONS_DESCRIPTION = case_description.InitialConditionsDescription(
     pressures=case_builders.build_constant_initial_pressure_description(50.0, "bar"),
@@ -169,19 +172,31 @@ MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
     position=Scalar(10, "m"),
     gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
     water_cut=Scalar(0.2, "-", "volume fraction"),
+    volumetric_flow_rates_std_input_type=constants.MultiInputType.Constant,
     volumetric_flow_rates_std={
         "gas": Scalar(1000.5, "sm3/d"),
         "oil": Scalar(20.5, "sm3/d"),
         "water": Scalar(20.5, "sm3/d"),
     },
+    volumetric_flow_rates_std_curve={
+        "gas": Curve(Array([1000.5, 2000.5], "sm3/d"), Array([0, 3.5], "s")),
+        "oil": Curve(Array([20.5, 30.5], "sm3/d"), Array([0, 2.0], "s")),
+        "water": Curve(Array([20.5, 10.5], "sm3/d"), Array([0, 10], "s")),
+    },
     tracer_mass_fraction=Array([1.0], "-", "mass fraction"),
     temperature=Scalar(15, "degC"),
     fluid="fluid_1",
     source_type=constants.MassSourceType.MassFlowRates,
+    mass_flow_rates_input_type=constants.MultiInputType.Constant,
     mass_flow_rates={
         constants.FLUID_GAS: Scalar(0.005, "kg/s"),
         constants.FLUID_OIL: Scalar(0.5, "kg/s"),
         constants.FLUID_WATER: Scalar(0.001, "kg/s"),
+    },
+    mass_flow_rates_curve={
+        constants.FLUID_GAS: Curve(Array([0.005, 0.009], "kg/s"), Array([0, 5], "s")),
+        constants.FLUID_OIL: Curve(Array([0.5, 0.3], "kg/s"), Array([0, 2], "s")),
+        constants.FLUID_WATER: Curve(Array([0.001, 0.002], "kg/s"), Array([0, 7], "s")),
     },
 )
 MATERIAL_DESCRIPTION = case_description.MaterialDescription(
@@ -200,11 +215,17 @@ MASS_SOURCE_NODE_PROPERTIES_DESCRIPTION = (
         fluid="fluid_1",
         tracer_mass_fraction=Array([1.0, 0.0], "-", "mass fraction"),
         source_type=constants.MassSourceType.TotalMassFlowRatePvtSplit,
+        total_mass_flow_rate_input_type=constants.MultiInputType.Constant,
         total_mass_flow_rate=Scalar(0.05, "kg/s"),
         volumetric_flow_rates_std={
             constants.FLUID_GAS: Scalar(10.0, "sm3/d"),
             constants.FLUID_OIL: Scalar(20, "sm3/d"),
             constants.FLUID_WATER: Scalar(50, "sm3/d"),
+        },
+        volumetric_flow_rates_std_curve={
+            constants.FLUID_GAS: Curve(Array([10.0], "sm3/d"), Array([0], "s")),
+            constants.FLUID_OIL: Curve(Array([20], "sm3/d"), Array([0], "s")),
+            constants.FLUID_WATER: Curve(Array([50], "sm3/d"), Array([0], "s")),
         },
     )
 )
@@ -307,6 +328,7 @@ LINEAR_IPR_DESCRIPTION = case_description.LinearIPRDescription(
     well_index_phase=constants.WellIndexPhaseType.Oil,
     min_pressure_difference=Scalar(0.0, "bar"),
     well_index=Scalar(1.0e-6, "m3/Pa.s"),
+    well_index_curve=Curve(Array([1.0e-6, 0.9e-6], "m3/Pa.s"), Array([0, 1], "h")),
 )
 IPR_CURVE_DESCRIPTION = case_description.IPRCurveDescription(
     pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "Pa"),
@@ -323,7 +345,10 @@ RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescript
     start=Scalar(50.0, "m"),
     length=Scalar(150.0, "m"),
     pressure=Scalar(12.0, "bar"),
+    pressure_curve=Curve(Array([12.1, 13.7], "bar"), Array([0, 11], "s")),
+    temperature_input_type=constants.MultiInputType.Curve,
     temperature=Scalar(50.0, "degC"),
+    temperature_curve=Curve(Array([50.0], "degC"), Array([0], "s")),
     productivity_ipr="Table IPR 1",
     injectivity_ipr="Linear IPR 1",
     split_type=constants.MassInflowSplitType.Pvt,
@@ -399,7 +424,7 @@ VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     cv_table=CV_TABLE_DESCRIPTION_SCHEMA,
     opening_type=constants.ValveOpeningType.TableInterpolation,
     opening_curve_interpolation_type=constants.InterpolationType.Linear,
-    opening_curve=OPENING_CURVE_DESCRIPTION,
+    opening_curve=Curve(Array([0.1, 0.2, 0.2], "-"), Array([0.0, 0.1, 0.5], "s")),
 )
 VALVE_DESCRIPTION_CONSTANT_OPENING = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),
@@ -683,12 +708,18 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
 
 
 def ensure_descriptions_are_equal(
-    expected_case_description_dict, obtained_description_dict, ignored_properties
+    expected_case_description_dict,
+    obtained_description_dict,
+    ignored_properties,
+    path="",
 ):
     """
     Check that two cases description are equals.
     """
     from more_itertools import first
+
+    if path:
+        path += "."
 
     for key, expected_value in expected_case_description_dict.items():
         if key in ignored_properties:
@@ -698,6 +729,7 @@ def ensure_descriptions_are_equal(
                 expected_case_description_dict=expected_value,
                 obtained_description_dict=obtained_description_dict[key],
                 ignored_properties=ignored_properties,
+                path=f"{path}{key}",
             )
             continue
 
@@ -708,16 +740,17 @@ def ensure_descriptions_are_equal(
                     expected_case_description_dict=value,
                     obtained_description_dict=obtained_description_dict[key][index],
                     ignored_properties=ignored_properties,
+                    path=f"{path}{key}[{index}]",
                 )
             continue
 
         is_ndarray = isinstance(expected_value, np.ndarray)
-        if (
-            is_ndarray
-            or is_list
-            and isinstance(first(expected_value, None), np.ndarray)
+        if is_ndarray or (
+            is_list and isinstance(first(expected_value, None), np.ndarray)
         ):
-            assert np.array_equal(obtained_description_dict[key], expected_value)
+            assert np.array_equal(
+                obtained_description_dict[key], expected_value
+            ), f"Not equal on {path}{key}"
             continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
         is_array = isinstance(expected_value, Array)
@@ -727,7 +760,7 @@ def ensure_descriptions_are_equal(
             expected_values = np.array(expected_value.GetValues(unit))
             assert np.allclose(
                 obtained_values, expected_values
-            ), f"Obtained={obtained_values} != {expected_values}"
+            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
             continue  # pragma no cover [bug on coverage.py
 
         # Skip the check when materials or walls only has defaults values
@@ -736,4 +769,4 @@ def ensure_descriptions_are_equal(
 
         assert (
             obtained_description_dict[key] == expected_value
-        ), f'attribute "{key}" doesn\'t match, obtained "{obtained_description_dict[key]}" while "{expected_value}" was expected.'
+        ), f'Not equal on {path}{key}\nAttribute "{key}" doesn\'t match, obtained "{obtained_description_dict[key]}" while "{expected_value}" was expected.'

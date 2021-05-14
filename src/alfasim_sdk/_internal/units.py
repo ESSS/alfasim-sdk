@@ -150,4 +150,11 @@ def register_units():
         quantity_type="standard volume per time",
         valid_units=std_volume_per_time_units,
     )
-    # "gas volume flow rate" is also required, but it is already registered
+
+    std_volume_units = db.GetValidUnits("standard volume")
+    db.AddCategory(
+        "gas standard volume",
+        quantity_type="standard volume",
+        valid_units=std_volume_units,
+    )
+    # NOTE: "gas volume flow rate" and "gas volume" are also required, but they are already registered

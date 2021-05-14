@@ -24,4 +24,4 @@
                 values: [number]
                 unit: string
             wall_names:     
-                - str # optional
+                - str  # optional

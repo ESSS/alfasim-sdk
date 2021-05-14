@@ -11,6 +11,7 @@ from typing import Set
 
 import attr
 import typing_inspect
+from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 from strictyaml.utils import flatten
@@ -26,7 +27,7 @@ def is_enum(value):
     return isinstance(value, EnumMeta)
 
 
-def enum_to_alfacase_schema(type_, block_indentation):
+def enum_to_alfacase_schema(type_, indent):
     return f"Enum({[i.value for i in type_]})"
 
 
@@ -34,7 +35,7 @@ def is_numpy_1_darray(type_):
     return typing_inspect.is_new_type(type_) and type_.__name__ == "Numpy1DArray"
 
 
-def numpy_1_darray_to_alfacase_schema(type_, block_indentation):
+def numpy_1_darray_to_alfacase_schema(type_, indent):
     return "Seq(Float())"
 
 
@@ -42,16 +43,16 @@ def is_list(type_):
     return typing_inspect.get_origin(type_) in (typing.List, list)
 
 
-def list_to_alfacase_schema(type_, block_indentation):
+def list_to_alfacase_schema(type_, indent):
     list_value = typing_inspect.get_args(type_)[0]
-    return f"Seq({_get_attr_value(list_value, block_indentation=block_indentation[:-len(INDENTANTION)])})"
+    return f"Seq({_get_attr_value(list_value, indent=indent+1)})"
 
 
 def is_float(type_):
     return inspect.isclass(type_) and issubclass(type_, float)
 
 
-def float_to_alfacase_schema(type_, block_indentation):
+def float_to_alfacase_schema(type_, indent):
     return "Float()"
 
 
@@ -59,7 +60,7 @@ def is_boolean(type_):
     return inspect.isclass(type_) and issubclass(type_, bool)
 
 
-def boolean_to_alfacase_schema(type_, block_indentation):
+def boolean_to_alfacase_schema(type_, indent):
     return "Bool()"
 
 
@@ -67,7 +68,7 @@ def is_str(type_):
     return inspect.isclass(type_) and issubclass(type_, str)
 
 
-def str_to_alfacase_schema(type_, block_indentation):
+def str_to_alfacase_schema(type_, indent):
     return "Str()"
 
 
@@ -75,7 +76,7 @@ def is_attrs(type_):
     return any((hasattr(i, "__attrs_attrs__") for i in flatten([type_])))
 
 
-def attrs_to_alfacase_schema(type_, block_indentation):
+def attrs_to_alfacase_schema(type_, indent):
     return obtain_schema_name(type_)
 
 
@@ -83,13 +84,24 @@ def is_dict(type_):
     return typing_inspect.get_origin(type_) in (typing.Dict, dict)
 
 
-def dict_to_alfacase_schema(type_, block_indentation):
+def dict_to_alfacase_schema(type_, indent):
     key_type, value_type = (
         typing_inspect.get_last_args(type_)
         if sys.version_info.minor == 6
         else typing_inspect.get_args(type_)
     )
-    return f"MapPattern(Str(), {_get_attr_value(value_type)})"
+    body_indent = indent + 1
+    value_schema = _get_attr_value(value_type, indent=body_indent)
+    if "\n" in value_schema:
+        lines = [
+            "MapPattern(",
+            f"{INDENTANTION * body_indent}Str(),",
+            f"{INDENTANTION * body_indent}{value_schema},",
+            f"{INDENTANTION * indent})",
+        ]
+        return "\n".join(lines)
+    else:
+        return f"MapPattern(Str(), {value_schema})"
 
 
 def is_union(type_):
@@ -97,15 +109,16 @@ def is_union(type_):
 
 
 @contextmanager
-def _map_section(lines, block_indentation=INDENTANTION):
+def _map_section(lines, indent=0):
+    body_indent = indent + 1
     lines.append("Map(")
-    lines.append(block_indentation + "{")
+    lines.append(f"{INDENTANTION * body_indent}{{")
     yield lines
-    lines.append(block_indentation + "}")
-    lines.append(block_indentation[: -len(INDENTANTION)] + ")")
+    lines.append(f"{INDENTANTION * body_indent}}}")
+    lines.append(f"{INDENTANTION * indent})")
 
 
-def union_to_alfacase_schema(type_, *, block_indentation=INDENTANTION):
+def union_to_alfacase_schema(type_, *, indent=0):
     """
     Creates a structure that allows multiples types for the same key.
 
@@ -128,12 +141,13 @@ def union_to_alfacase_schema(type_, *, block_indentation=INDENTANTION):
 
     # Attrs classes
     lines = []
-    with _map_section(lines, block_indentation=block_indentation):
+    map_items_indent = indent + 2
+    with _map_section(lines, indent=indent):
         for arg in type_.__args__:
             key = convert_to_snake_case(arg.__name__.replace("Description", ""))
             value = obtain_schema_name(arg)
             lines.append(
-                block_indentation + INDENTANTION + f'Optional("{key}"): Seq({value}),'
+                f'{INDENTANTION * map_items_indent}Optional("{key}"): Seq({value}),'
             )
 
     return "\n".join(lines)
@@ -143,7 +157,7 @@ def is_scalar(type_):
     return inspect.isclass(type_) and issubclass(type_, Scalar)
 
 
-def scalar_to_alfacase_schema(type_, block_indentation):
+def scalar_to_alfacase_schema(type_, indent):
     return 'Map({"value": Float(), "unit": Str()})'
 
 
@@ -151,15 +165,31 @@ def is_array(type_):
     return inspect.isclass(type_) and issubclass(type_, Array)
 
 
-def array_to_alfacase_schema(type_, block_indentation):
+def array_to_alfacase_schema(type_, indent):
     return 'Map({"values": Seq(Float()), "unit": Str()})'
 
 
+def is_curve(type_):
+    return inspect.isclass(type_) and issubclass(type_, Curve)
+
+
+def curve_to_alfacase_schema(type_, indent):
+    map_items_indent = indent + 2
+    array_schema = array_to_alfacase_schema(float, indent=map_items_indent)
+
+    with _map_section([], indent=indent) as lines:
+        lines.append(f'{INDENTANTION * map_items_indent}"image": {array_schema},')
+        lines.append(f'{INDENTANTION * map_items_indent}"domain": {array_schema},')
+
+    return "\n".join(lines)
+
+
 def is_int(type_):
-    return inspect.isclass(type_) and issubclass(type_, int)
+    # bool is a subclass of int, but we are not intersted in matching that here.
+    return inspect.isclass(type_) and issubclass(type_, int) and not is_boolean(type_)
 
 
-def int_to_alfacase_schema(type_, block_indentation):
+def int_to_alfacase_schema(type_, indent):
     return "Int()"
 
 
@@ -167,7 +197,7 @@ def is_path(type_):
     return inspect.isclass(type_) and issubclass(type_, Path)
 
 
-def path_to_alfacase_schema(type_, block_indentation):
+def path_to_alfacase_schema(type_, indent):
     return "Str()"
 
 
@@ -183,14 +213,13 @@ LIST_OF_IMPLEMENTATIONS = [
     (is_union, union_to_alfacase_schema),
     (is_scalar, scalar_to_alfacase_schema),
     (is_array, array_to_alfacase_schema),
+    (is_curve, curve_to_alfacase_schema),
     (is_int, int_to_alfacase_schema),
     (is_path, path_to_alfacase_schema),
 ]
 
 
-def _get_attr_value(
-    type_: type, block_indentation: str = INDENTANTION, key: str = "<Unknown>"
-) -> str:
+def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
     """
     Indentation is a parameter used for Union and Dict.
     If the type parameter is a "Optional" type, only the args are used (without the NoneType)
@@ -201,9 +230,7 @@ def _get_attr_value(
 
     for predicate_function, handle_function in LIST_OF_IMPLEMENTATIONS:
         if predicate_function(type_):
-            return handle_function(
-                type_, block_indentation=block_indentation + INDENTANTION
-            )
+            return handle_function(type_, indent=indent)
 
     raise RuntimeError(
         f"Alfacase Schema does not know how to handle {type_}.\n"
@@ -245,12 +272,11 @@ def _get_attr_name(key: str, value: attr.ib) -> str:
 IGNORED_PROPERTIES = (
     "plugins",
     "table_parameters",
+    "emulsion_model_plugin_id",
 )
 
 
-def _get_attribute_schema(
-    key: str, value: attr.ib, indentation=INDENTANTION * 2
-) -> str:
+def _get_attribute_schema(key: str, value: attr.ib, indent: int = 2) -> str:
     """
     Helper method that return the equivalent schema for the given key and value.
 
@@ -264,11 +290,9 @@ def _get_attribute_schema(
         )
         raise TypeError(msg)
     attribute_name = _get_attr_name(key, value)
-    attribute_value = _get_attr_value(
-        value.type, block_indentation=indentation, key=key
-    )
+    attribute_value = _get_attr_value(value.type, indent=indent, key=key)
 
-    return indentation + f"{attribute_name}: {attribute_value}" + ","
+    return f"{INDENTANTION * indent}{attribute_name}: {attribute_value}" + ","
 
 
 def generate_alfacase_schema(class_: type) -> str:

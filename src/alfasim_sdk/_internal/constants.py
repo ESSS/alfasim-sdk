@@ -297,6 +297,11 @@ class SimulationModeType(Enum):
 DEFAULT_TEMPERATURE_IN_K = 288.6
 
 
+class MultiInputType(Enum):
+    Constant = "constant"
+    Curve = "curve"
+
+
 class PumpType(Enum):
     ConstantPressure = "constant_pressure"
     TableInterpolation = "table_interpolation"
@@ -325,6 +330,7 @@ class OutputAttachmentLocation(Enum):
 
     Main = "main"
     Annulus = "annulus"
+    NotDefined = "not_defined"
 
 
 class CorrelationPackage(Enum):
@@ -364,3 +370,6 @@ class WellConnectionPort(Enum):
 
 class ControllerType(Enum):
     PID = "pid"
+
+
+MULTI_INPUT_TYPE_SUFFIX = "_input_type"

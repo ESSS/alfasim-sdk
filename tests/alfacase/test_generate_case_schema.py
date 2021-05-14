@@ -125,8 +125,8 @@ class TestGenerateStrictYaml:
     def test_scalar(self):
         @attr.s
         class Foo:
-            scalar_1 = attrib_scalar()
-            scalar_2 = attrib_scalar(default=None)
+            scalar_1 = attrib_scalar(category="length")
+            scalar_2 = attrib_scalar(default=None, category="length")
             scalar_3 = attrib_scalar(default=Scalar(1, "K"))
 
         schema = generate_alfacase_schema(Foo)
@@ -440,7 +440,6 @@ def test_get_cases_class():
         "NodeDescription",
         "NumericalOptionsDescription",
         "OpenHoleDescription",
-        "OpeningCurveDescription",
         "PackerDescription",
         "PhysicsDescription",
         "PipeDescription",

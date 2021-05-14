@@ -12,7 +12,7 @@
             opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\  = ValveOpeningType.ConstantOpening
             opening: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
             opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
-            opening_curve: \ :class:`OpeningCurveDescription <OpeningCurveDescription>`\  = OpeningCurveDescription()
+            opening_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
             cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
 
 .. tab:: Schema
@@ -22,15 +22,21 @@
             position: 
                 value: number
                 unit: string
-            type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`\ # optional
-            diameter: 
+            type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`\  # optional
+            diameter:  # optional
                 value: number
-                unit: string # optional
-            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\ # optional
-            opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\ # optional
-            opening: 
+                unit: string
+            flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  # optional
+            opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\  # optional
+            opening:  # optional
                 value: number
-                unit: string # optional
-            opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\ # optional
-            opening_curve: \ :class:`opening_curve_description_schema <OpeningCurveDescription>`\ # optional
-            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\ # optional
+                unit: string
+            opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  # optional
+            opening_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
+            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional
