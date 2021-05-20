@@ -79,7 +79,9 @@ enum StateVariable {
     DRHO_DT, /*!< Partial derivative of density in relation to temperature*/
     H, /*!< Enthalpy*/
     K, /*!< Thermal Conductivity*/
-    SIGMA /*!< Interfacial tension*/
+    SIGMA, /*!< Interfacial tension*/
+    RS, /*!< gas mass fraction w.r.t. to hydrocarbon system*/
+    RSW /*!< vapor mass fraction w.r.t. to gas system*/
 };
 
 /*!
