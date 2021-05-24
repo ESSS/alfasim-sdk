@@ -58,7 +58,7 @@ from alfasim_sdk._internal import constants
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    gui_models = attr.ib(default=attr.Factory(list))
+    gui_models = attr.ib(default=attr.Factory(dict))
     additional_variables = attr.ib(default=None)
 
 
@@ -390,12 +390,12 @@ class _PressureSourceCommon:
 @attr.s(frozen=True, slots=True)
 class CompositionDescription:
     """
-    :ivar str Component:
+    :ivar component:
         Name of the component available created on:
             PvtModelCompositionalDescription.light_components
             PvtModelCompositionalDescription.heavy_components
 
-        ..note:: CompositionDescription can only refer to components created from the same PvtModelCompositionalDescription
+        .. note:: CompositionDescription can only refer to components created from the same PvtModelCompositionalDescription
 
     .. include:: /alfacase_definitions/CompositionDescription.txt
 
@@ -536,7 +536,7 @@ class CompressorPressureTableDescription:
 
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
     .. include:: /alfacase_definitions/list_of_unit_for_mass_flow_rate.txt
-       .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
     speed_entries: Array = attr.ib(
@@ -713,8 +713,10 @@ class TableIPRDescription(CommonIPR):
 @attr.s(frozen=True, slots=True)
 class IPRModelsDescription:
     """
-    :cvar Dict[str, Union[str, IPRDescription]] tables:
+    :ivar linear_models:
         A dictionary with the name of the IPR and the instance of the IPR Model.
+
+    :ivar table_models:
 
     .. include:: /alfacase_definitions/IPRModelsDescription.txt
     """
@@ -1099,11 +1101,14 @@ class LengthAndElevationDescription:
     def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
-        """Returns a pair of values with length and elevation along with their units."""
-        length_values = self.length.GetValues(self.length.unit)
-        elevation_values = self.elevation.GetValues(self.elevation.unit)
-        for length, elevation in zip(length_values, elevation_values):
-            yield (length, self.length.unit), (elevation, self.elevation.unit)
+        """Returns an iterator containing a pair of values with length and elevation along with their units."""
+        if self.length and self.elevation:
+            length_values = self.length.GetValues(self.length.unit)
+            elevation_values = self.elevation.GetValues(self.elevation.unit)
+            for length, elevation in zip(length_values, elevation_values):
+                yield (length, self.length.unit), (elevation, self.elevation.unit)
+
+        return iter(())
 
 
 @attr.s(frozen=True, slots=True)
@@ -1132,11 +1137,11 @@ class ProfileDescription:
     """
     Describe a pipe by either length and inclination or by X and Y coordinates.
 
-    :ivar Optional[XAndYDescription] LengthAndElevation:
+    :ivar length_and_elevation:
         A list of points with the length and elevation.
         The first item *MUST* always be (0, 0), otherwise a ValueError is raised.
 
-    :ivar Optional[LengthAndElevationDescription] XAndY:
+    :ivar x_and_y:
         A list of points (X, Y), describing the coordinates.
 
     .. note:: x_and_y and length_and_elevation are mutually exclusive.
@@ -1322,14 +1327,16 @@ class SeparatorNodePropertiesDescription:
 @attr.s(slots=True, kw_only=True)
 class ControllerInputSignalPropertiesDescription:
     """
-    :ivar str target_variable:
+    :ivar target_variable:
         Measured variable target of controller setpoint
-    :ivar str unit:
+    :ivar unit:
         Measuring unit of target variable
-    :ivar str network_element_name:
+    :ivar network_element_name:
         Name of network element where target variable is measured
-    :ivar Scalar position_in_network_element:
+    :ivar position_in_network_element:
         Position of measurement of target variable
+
+    .. include:: /alfacase_definitions/ControllerInputSignalPropertiesDescription.txt
     """
 
     target_variable: Optional[str] = attr.ib(
@@ -1353,18 +1360,20 @@ class ControllerInputSignalPropertiesDescription:
 @attr.s(slots=True, kw_only=True)
 class ControllerOutputSignalPropertiesDescription:
     """
-    :ivar str controlled_property:
+    :ivar controlled_property:
         Property under control to make target variable reach setpoint
-    :ivar str unit:
+    :ivar unit:
         Measuring unit of controlled property
-    :ivar str network_element_name:
+    :ivar network_element_name:
         Name of network element that has controlled property
-    :ivar float min_value:
+    :ivar min_value:
         Minimum value of output signal
-    :ivar float max_value:
+    :ivar max_value:
         Maximum value of output signal
-    :ivar float max_rate_of_change:
+    :ivar max_rate_of_change:
         Maximum rate of change of output signal
+
+    .. include:: /alfacase_definitions/ControllerOutputSignalPropertiesDescription.txt
     """
 
     controlled_property: Optional[str] = attr.ib(
@@ -1386,20 +1395,22 @@ class ControllerOutputSignalPropertiesDescription:
 @attr.s(slots=True, kw_only=True)
 class ControllerNodePropertiesDescription:
     """
-    :ivar ControllerType type:
+    :ivar type:
         Type of controlling model
-    :ivar float gain:
+    :ivar gain:
         Proportional constant of PID controller
-    :ivar float setpoint:
+    :ivar setpoint:
         Target value for input signal
-    :ivar Scalar integral_time:
+    :ivar integral_time:
         Integral constant of PID controller
-    :ivar Scalar derivative_time:
+    :ivar derivative_time:
         Derivative constant of PID controller
-    :ivar ControllerInputSignalPropertiesDescription input_signal_properties:
+    :ivar input_signal_properties:
         Properties of input signal
-    :ivar ControllerOutputSignalPropertiesDescription output_signal_properties:
+    :ivar output_signal_properties:
         Properties of output signal
+
+    .. include:: /alfacase_definitions/ControllerNodePropertiesDescription.txt
     """
 
     type = attrib_enum(default=constants.ControllerType.PID)
@@ -1660,9 +1671,9 @@ class WallLayerDescription:
     """
     Used for defining the default walls.
 
-    :ivar Scalar thickness:
-    :ivar str material_name:
-    :ivar bool has_annulus_flow:
+    :ivar thickness:
+    :ivar material_name:
+    :ivar has_annulus_flow:
 
     .. include:: /alfacase_definitions/WallLayerDescription.txt
 
@@ -1691,16 +1702,16 @@ class WallDescription:
 class PvtModelCorrelationDescription:
     """
 
-    oil_density_std :
+    :ivar oil_density_std:
         default: Scalar(850.0, "kg/m3")
 
-    gas_density_std:
+    :ivar gas_density_std:
         default: Scalar(0.9, "kg/m3")
 
-    rs_sat:
+    :ivar rs_sat:
         default: Scalar(150.0, "sm3/sm3")
 
-    pvt_correlation_package:
+    :ivar pvt_correlation_package:
         default: `CorrelationPackage.Standing`
 
 
@@ -1781,22 +1792,22 @@ class LightComponentDescription:
 class PvtModelCompositionalDescription:
     """
 
-    :ivar Scalar equation_of_state_type:
+    :ivar equation_of_state_type:
         default: EquationOfStateType.PengRobinson
 
-    :ivar Scalar surface_tension_model_type:
+    :ivar surface_tension_model_type:
         default: SurfaceTensionType.Weinaugkatz
 
-    :ivar Scalar viscosity_model:
+    :ivar viscosity_model:
         default: PVTCompositionalViscosityModel.CorrespondingStatesPrinciple
 
-    :ivar List[HeavyComponentDescription] heavy_components:
+    :ivar heavy_components:
         default: []
 
-    :ivar List[LightComponentDescription] light_components:
+    :ivar light_components:
         default: []
 
-    :ivar Dict[str, FluidDescription] fluids:
+    :ivar fluids:
         default: {}
 
 
@@ -1822,17 +1833,17 @@ class PvtModelCompositionalDescription:
 @attr.s(slots=True, eq=False)
 class PvtModelTableParametersDescription:
     """
-    :ivar ndarray(shape=(M,1)) pressure_values:
+    :ivar pressure_values:
         Array like of sorted pressure values (m number of entries). [Pa]
 
-    :ivar ndarray(shape=(N,1)) temperature_values:
+    :ivar temperature_values:
         Array like of sorted temperature values (n number of entries). [K]
 
-    :ivar List[ndarray(shape=(MxN,1))] table_variables:
+    :ivar table_variables:
         List of array like values for each property such as densities, specific heats,
         enthalpies, etc.
 
-    :ivar List[str] variable_names:
+    :ivar variable_names:
         List of property names
 
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
@@ -2162,17 +2173,14 @@ class PvtModelsDescription:
 
     This class is a holder for the different ways the user can enter PVT information in the application.
 
-    :type compositions: Dict[str, PvtModelCompositionalDescription]
-    :type tables: Dict[str, Union[str, Path]]
-
-    :param Dict[str, PvtModelCorrelationDescription] correlations:
+    :ivar correlations:
         Standard black-oil correlations found in the literature. The user can tune the parameters used by the correlations.
 
-    :param compositions:
+    :ivar compositions:
         Molar fluid compositions with molecular weights and densities for each component.
         It be light components and/or heavy fractions to be lumped into pseudo-components.
 
-    :param tables:
+    :ivar tables:
         Load a complete PVT table obtained (usually) from lab results and generated by various software.
         Currently the user can import the table directly from a `.tab` file or a `.alfatable` file.
 
@@ -2193,8 +2201,7 @@ class PvtModelsDescription:
 
             >>> Path("./my_file.tab|MyPvtModel")
 
-    :type table_parameters: Dict[str, PvtModelTableParametersDescription]
-    :param table_parameters:
+    :ivar table_parameters:
         *INTERNAL USE ONLY*
 
         This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
@@ -2390,7 +2397,7 @@ class CaseDescription:
         - The property "pvt_model" from all elements that are defined must be a valid pvt_model
         - If default_model is None, all components that uses pvt_model must be defined.
 
-        :param bool reset_invalid_reference:
+        :param reset_invalid_reference:
             Set the element to None if a insistence is found instead of raising an exception.
 
         """

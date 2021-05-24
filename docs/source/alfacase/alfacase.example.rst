@@ -6,7 +6,7 @@ Example
 In this section, we will walk trough the creation of a simple network, with two nodes and one pipe, to illustrate how to
 crete a project and how to interpret the definitions available on :ref:`alfacase-reference-section`.
 
-The root level of our :program:`ALFAcase` file is always a :class:`CaseDescription <alfasim_sdk.CaseDescription>`
+The root level of our :program:`ALFAcase` file is always a :py:class:`CaseDescription <alfasim_sdk.CaseDescription>`
 which has the following attributes:
 
 .. code-block:: yaml
@@ -40,7 +40,7 @@ Project Options
 ---------------
 
 We will start the example by configuring the project options, as discussed in the previous section,
-the root level of an ``ALFacase`` file is the :class:`CaseDescription <alfasim_sdk.CaseDescription>` and it has the following options:
+the root level of an ``ALFacase`` file is the :py:class:`CaseDescription <alfasim_sdk.CaseDescription>` and it has the following options:
 
 - ``physics``
 - ``time_options``
@@ -85,10 +85,10 @@ PVT Model
 
 The second step will add a ``PVTModel`` to the project and configure it as the default PVT for the entire project.
 
-The ``pvt_models`` field from :class:`CaseDescription <alfasim_sdk.CaseDescription>` needs to be configured with the
-definition provided from :class:`PvtModelsDescription <alfasim_sdk.PvtModelsDescription>`.
+The ``pvt_models`` field from :py:class:`CaseDescription <alfasim_sdk.CaseDescription>` needs to be configured with the
+definition provided from :py:class:`PvtModelsDescription <alfasim_sdk.PvtModelsDescription>`.
 
-The :class:`PvtModelsDescription <alfasim_sdk.PvtModelsDescription>` is the root configuration of all PVTs over the application,
+The :py:class:`PvtModelsDescription <alfasim_sdk.PvtModelsDescription>` is the root configuration of all PVTs over the application,
 its possible to add new PVTs and defined one of them to be used automatically on all fields that requires a
 PVT through the option `default_model`
 
@@ -142,7 +142,7 @@ All nodes that will be used on the application need to be added over the ``nodes
 The :class:`NodeDescription <alfasim_sdk.NodeDescription>` is responsible to configure several types of nodes
 through the ``node_type`` field and their respective property fields.
 
-For example, when the ``node_type`` is  ``mass_source_boundary``, besides the fields from :class:`NodeDescription <alfasim_sdk.NodeDescription>`
+For example, when the ``node_type`` is  ``mass_source_boundary``, besides the fields from :py:class:`NodeDescription <alfasim_sdk.NodeDescription>`
 only the fields available at ``mass_source_properties`` will be considered.
 
 And when ``node_type`` is ``pressure_boundary`` only the fields from  ``pressure_properties`` will be considered.
@@ -208,10 +208,10 @@ Pipes
 
 The fourth step will add a Pipe to the application through the ``pipes`` fields.
 
-The ``pipes`` accepts a list of :class:`PipeDescription <alfasim_sdk.PipeDescription>` definitions which connects two nodes.
+The ``pipes`` accepts a list of :py:class:`PipeDescription <alfasim_sdk.PipeDescription>` definitions which connects two nodes.
 
 The connection occurs with the fields ``source`` and ``target`` and to configure these fields, it is only necessary
-to inform the name of the :class:`NodeDescription <alfasim_sdk.NodeDescription>` that will be used.
+to inform the name of the :py:class:`NodeDescription <alfasim_sdk.NodeDescription>` that will be used.
 
 .. note::
 
@@ -250,8 +250,8 @@ Output
 
 The final step for our example will add a trend and a profile for our project.
 
-As indicate on :class:`CaseDescription <alfasim_sdk.CaseDescription>`, the ``outputs`` field must be filled with
-the definition of :class:`CaseOutputDescription <alfasim_sdk.CaseOutputDescription>` which allows the configuration of ``trends``
+As indicate on :py:class:`CaseDescription <alfasim_sdk.CaseDescription>`, the ``outputs`` field must be filled with
+the definition of :py:class:`CaseOutputDescription <alfasim_sdk.CaseOutputDescription>` which allows the configuration of ``trends``
 and ``profiles``.
 
 .. note::

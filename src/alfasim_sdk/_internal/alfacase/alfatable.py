@@ -4,7 +4,11 @@ from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 
 
-def generate_alfatable_file(alfacase_file, alfatable_filename, description):
+def generate_alfatable_file(
+    alfacase_file: Path,
+    alfatable_filename: str,
+    description: case_description.CaseDescription,
+) -> Path:
     """
     Create `.alfatable` file for the given description.
     """
@@ -24,7 +28,7 @@ def generate_alfatable_file(alfacase_file, alfatable_filename, description):
 
 
 def load_pvt_model_table_parameters_description_from_alfatable(
-    file_path,
+    file_path: Path,
 ) -> case_description.PvtModelTableParametersDescription:
     """
     Load the content from the alfatable in the given file_path. The validation is turned off due to performance issues.

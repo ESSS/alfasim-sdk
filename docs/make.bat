@@ -10,6 +10,7 @@ if "%SPHINXBUILD%" == "" (
 set SOURCEDIR=source
 set BUILDDIR=_build
 set SPHINXPROJ=ALFASIM-SDK
+set SPHINXOPTS=-W --keep-going
 
 if "%1" == "" goto help
 

@@ -11,11 +11,11 @@ from alfasim_sdk._internal.types import Tabs
 
 def tabs() -> Callable:
     """
-    Create a tab bar layout, to group multiples :func:"~alfasim_sdk.layout.tab" instances.
+    Create a tab bar layout, to group multiples :func:"tab" instances.
 
-    With the ``tabs``, you can split up complex dialog into "pages" using a :func:"~alfasim_sdk.layout.tab" instance.
+    With the ``tabs``, you can split up complex dialog into "pages" using a :func:"tab" instance.
 
-    Notice that only classes decorated with :func:"~alfasim_sdk.layout.tab" can be placed inside a ``tab bar``.
+    Notice that only classes decorated with :func:"tab" can be placed inside a ``tab bar``.
 
     Example of usage:
 
@@ -74,7 +74,7 @@ def tabs() -> Callable:
 
 def tab(*, caption: str) -> Callable:
     """
-    The tab represents a single entry, on the :func:`~alfasim_sdk.layout.tabs` layout.
+    The tab represents a single entry, on the :func:`~tabs` layout.
 
     Notice that only components available at the :ref:`types modules <api-types-section>` can be placed inside a tab.
     """

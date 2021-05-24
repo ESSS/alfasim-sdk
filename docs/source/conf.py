@@ -61,7 +61,6 @@ extensions = [
     "sphinx_togglebutton",
 ]
 add_module_names = False
-autodoc_typehints = "none"
 templates_path = ["_templates"]
 source_suffix = ".rst"
 
@@ -73,11 +72,11 @@ rst_prolog = """
 .. |sdk| replace:: :program:`ALFAsim-SDK`
 
 .. |template-command| replace:: :ref:`Template Command <alfasim_sdk_cli_template_section>`
-.. |gui_hook| replace:: :py:func:`alfasim_get_data_model_type`
-.. |container| replace:: :py:func:`alfasim_sdk.container_model`
-.. |model| replace:: :py:func:`alfasim_sdk.data_model`
-.. |s_variable| replace:: :py:func:`alfasim_sdk.SecondaryVariable`
-.. |s_variable_hook| replace:: :py:func:`alfasim_get_additional_variables`
+.. |gui_hook| replace:: :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
+.. |container| replace:: :py:func:`~alfasim_sdk.container_model`
+.. |model| replace:: :py:func:`~alfasim_sdk.data_model`
+.. |s_variable| replace:: :py:func:`~alfasim_sdk.SecondaryVariable`
+.. |s_variable_hook| replace:: :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_additional_variables`
 
 .. |marker_1| image:: /_static/images/marker_1.png
     :scale: 80%
@@ -130,4 +129,19 @@ intersphinx_mapping = {
 
 # -- Options for Autodoc -----------------------------------------------------
 
+autodoc_typehints = "none"
 autodoc_member_order = "groupwise"
+
+# -- Nitpicky config ---------------------------------------------------------
+
+nitpicky = True
+nitpick_ignore = [
+    ("py:class", "type"),
+    ("py:class", "barril.curve.curve.Curve"),  # Barril doesn't have Curve documented.
+    ("py:class", "Path"),
+    ("py:exc", "FrozenInstanceError"),
+    ("cpp:identifier", "ALFAsimSDK_API"),  # Must be checked.
+    ("py:class", "void*"),
+    ("py:class", "double*"),
+    ("py:class", "int*"),
+]

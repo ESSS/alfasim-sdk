@@ -6,7 +6,7 @@ Example
 In this section, we will walk trough the creation of a simple network, with two nodes and one pipe, to illustrate how to
 create a project and how to interpret the definitions available on :ref:`alfacase-reference-section`.
 
-The root level of a ``Description`` is always the class :class:`CaseDescription <alfasim_sdk.CaseDescription>`
+The root level of a ``Description`` is always the class :py:class:`CaseDescription <alfasim_sdk.CaseDescription>`
 which has the following attributes:
 
 .. note::
@@ -48,7 +48,7 @@ Project Options
 ---------------
 
 We will start the example by configuring the project options, as discussed in the previous section,
-the root level of an ``ALFacase`` file is the :class:`CaseDescription <alfasim_sdk.CaseDescription>` and it has the following options:
+the root level of an ``ALFacase`` file is the :py:class:`CaseDescription <alfasim_sdk.CaseDescription>` and it has the following options:
 
 .. code-block:: python
 
@@ -92,7 +92,7 @@ PVT Model
 
 The second step will add a PVT model to the project and configure it as the default PVT for the entire project.
 
-The :class:`PvtModelsDescription <alfasim_sdk.PvtModelsDescription>` class configures PVT models used in the project.
+The :py:class:`PvtModelsDescription <alfasim_sdk.PvtModelsDescription>` class configures PVT models used in the project.
 
 Each element in the project can have a PVT model assigned, however it is possible to configure a default model that
 will be used when an element doesn't have an assigned PVT model.
@@ -133,15 +133,15 @@ Nodes
 
 The third step will add two different types of nodes: a mass source node and a pressure node.
 
-Nodes are added over the ``nodes`` section of the :class:`CaseDescription <alfasim_sdk.CaseDescription>`.
+Nodes are added over the ``nodes`` section of the :py:class:`CaseDescription <alfasim_sdk.CaseDescription>`.
 
-The :class:`NodeDescription <alfasim_sdk.NodeDescription>` class configures several types of nodes
+The :py:class:`NodeDescription <alfasim_sdk.NodeDescription>` class configures several types of nodes
 through the ``node_type`` field and their respective property fields.
 
 For example:
 
-* When ``node_type`` is  ``NodeCellType.MassSource``, ``mass_source_properties`` will be taken in account.
-* When ``node_type`` is ``NodeCellType.Pressure``, ``pressure_properties`` will be taken in account.
+* When ``node_type`` is :py:class:`NodeCellType.MassSource <alfasim_sdk._internal.constants.NodeCellType.MassSource>`, ``mass_source_properties`` will be taken in account.
+* When ``node_type`` is :py:class:`NodeCellType.Pressure <alfasim_sdk._internal.constants.NodeCellType.Pressure>`, ``pressure_properties`` will be taken in account.
 
 The other properties not related to the ``node_type`` are read by the application, but are not considered for the solution.
 
@@ -194,10 +194,10 @@ Pipes
 
 Let's add a Pipe to the application through the ``pipes`` fields.
 
-The ``pipes`` attribute accepts a list of :class:`PipeDescription <alfasim_sdk.PipeDescription>` definitions that connects two nodes.
+The ``pipes`` attribute accepts a list of :py:class:`PipeDescription <alfasim_sdk.PipeDescription>` definitions that connects two nodes.
 
 The connection is defined by the ``source`` and ``target`` fields, and to configure them it is only necessary
-to inform the name of the :class:`NodeDescription <alfasim_sdk.NodeDescription>` that will be used.
+to inform the name of the :py:class:`NodeDescription <alfasim_sdk.NodeDescription>` that will be used.
 
 .. note::
 
@@ -246,8 +246,8 @@ Output
 
 The final step for our example will configure a trend and a profile for our project.
 
-As indicated on :class:`CaseDescription <alfasim_sdk.CaseDescription>`, the ``outputs`` field must be filled with
-a :class:`CaseOutputDescription <alfasim_sdk.CaseOutputDescription>` instance which configures ``trends``
+As indicated on :py:class:`CaseDescription <alfasim_sdk.CaseDescription>`, the ``outputs`` field must be filled with
+a :py:class:`CaseOutputDescription <alfasim_sdk.CaseOutputDescription>` instance which configures ``trends``
 and ``profiles``.
 
 .. note::

@@ -18,7 +18,7 @@ from alfasim_sdk._internal.validators import valid_unit
 
 @attr.s(kw_only=True)
 class ALFAsimType:
-    name = attrib(default="ALFAsim")
+    name: str = attrib(default="ALFAsim")
 
 
 @attr.s(kw_only=True)
@@ -52,13 +52,13 @@ class BaseField:
     """
     A base field for all types available at ALFAsim.
 
-    :param caption: Label to be displayed on the right side of the component.
+    :ivar caption: Label to be displayed on the right side of the component.
 
-    :param tooltip: Shows a tip, a short piece of text.
+    :ivar tooltip: Shows a tip, a short piece of text.
 
-    :param Callable enable_expr: Function to evaluate if the component will be enabled or not.
+    :ivar enable_expr: Function to evaluate if the component will be enabled or not.
 
-    :param Callable visible_expr: Function to inform if the component will be visible or not.
+    :ivar visible_expr: Function to inform if the component will be visible or not.
 
     .. rubric:: **Caption and Tooltip**:
 
@@ -108,7 +108,7 @@ class BaseField:
 
     Accepts a python function that controls either the component will be enabled, or disabled.
     The python function will receive two arguments, an instance of itself (to check local values) and an instance of
-    :func:`alfasim_sdk.context.Context` to retrieve information about the application.
+    :class:`~alfasim_sdk._internal.context.Context` to retrieve information about the application.
 
     This function must return a boolean, informing True (for enabled) or False (for disabled).
 
@@ -153,7 +153,7 @@ class BaseField:
 
     Accepts a python function that controls either the component will be visible, or not.
     The python function will receive two arguments, an instance of itself (to check local values) and an instance of
-    :func:`alfasim_sdk.context.Context` to retrieve information about the application.
+    :func:`~alfasim_sdk._internal.context.Context` to retrieve information about the application.
 
     This function must return a boolean, informing True (for visible) or False (for invisible).
 
@@ -190,7 +190,7 @@ class BaseField:
 
     .. Development only
 
-        The BaseField class and all others classes that inheritance from BaseField must use kw_only=True for all attributes.
+        The :class:`~BaseField` class and all others classes that inheritance from it, must use kw_only=True for all attributes.
         This is due to the necessity to make enable_expr and visible_expr an optional value and the only way to have
         properties with default values mixed with required properties is with key-word only arguments.
     """
@@ -210,9 +210,9 @@ class String(BaseField):
     """
     The String field represents an input that allows the user to enter and edit a single line of plain text.
 
-    The String field have all options available from :func:`~alfasim_sdk.types.BaseField`, plus the following ones
+    The String field have all options available from :class:`BaseField`, plus the following ones
 
-    :parameter str value: property to hold the value informed by the user.
+    :ivar value: property to hold the value informed by the user.
 
     .. rubric:: Example myplugin.py
 
@@ -234,7 +234,7 @@ class String(BaseField):
 
     .. rubric:: **Accessing String Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the String field will return the currently text as ``str``.
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the String field will return the currently text as ``str``.
 
     .. code-block:: python
 
@@ -255,10 +255,10 @@ class Enum(BaseField):
     The Enum field provides list of options to the user, showing  only the select item but providing a way to display
     a list of all options through a combo-box.
 
-    The Enum field have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
+    The Enum field have all options available from :class:`~BaseField`, besides the listed the ones listed above:
 
-    :param values: A list of strings with the available options.
-    :param initial: Indicates which one of the options should be selected per default.
+    :ivar values: A list of strings with the available options.
+    :ivar initial: Indicates which one of the options should be selected per default.
                     If not given, the first item in ``values`` will be used as default.
 
     .. rubric:: Example myplugin.py
@@ -281,7 +281,7 @@ class Enum(BaseField):
 
     .. rubric:: **Accessing Enum Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the Enum field will return the currently selected option
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the Enum field will return the currently selected option
     as ``str``.
 
     .. code-block:: python
@@ -306,7 +306,7 @@ class Enum(BaseField):
     """
 
     values: List[str] = attrib()
-    initial: str = attrib(validator=optional(instance_of(str)), default=None)
+    initial: Optional[str] = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
     def check(  # pylint: disable=arguments-differ
@@ -333,8 +333,10 @@ class Enum(BaseField):
 
 @attr.s(kw_only=True)
 class BaseReference(BaseField):
-    ref_type = attrib()
-    container_type = attrib(default=None, validator=optional(non_empty_str))
+    ref_type: type = attrib()
+    container_type: Optional[str] = attrib(
+        default=None, validator=optional(non_empty_str)
+    )
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
@@ -375,13 +377,11 @@ class Reference(BaseReference):
     .. note::
         In order to reference custom data, the model must be inside a container.
 
-    :param str caption:
-        Property used as a label for the field.
+    :ivar caption: Property used as a label for the field.
 
-    :param ref_type:
-        Property that indicates which type of data the Reference will hold.
+    :ivar ref_type: Property that indicates which type of data the Reference will hold.
 
-    :param container_type:
+    :ivar container_type:
         The name of the class that holds the ref_type, this property must be used when the ``ref_type`` references model from the plugin.
 
     .. rubric:: Example using ``ALFAsimTypes`` on myplugin.py
@@ -424,7 +424,7 @@ class Reference(BaseReference):
 
     .. rubric:: **Accessing Reference Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the Reference field will return the currently selected option
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the Reference field will return the currently selected option
     object instance.
 
     With the instance, you can access all attributes from the object normally. Check the example below.
@@ -467,7 +467,7 @@ class Reference(BaseReference):
 @attr.s(kw_only=True)
 class MultipleReference(BaseReference):
     """
-    The MultipleReference field works similar to :func:`~alfasim_sdk.types.Reference`, providing a list of options
+    The MultipleReference field works similar to :class:`Reference`, providing a list of options
     to the user, but allowing multiple values, of the same type, to be chosen.
 
     There are two types of models supported by this field.
@@ -477,7 +477,7 @@ class MultipleReference(BaseReference):
     .. note::
         In order to reference a custom data the model must be inside a container.
 
-    :ivar str caption:
+    :ivar caption:
         Property used as a label for the field.
 
     :ivar ref_type:
@@ -525,7 +525,7 @@ class MultipleReference(BaseReference):
 
     .. rubric:: **Accessing MultipleReference Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the MultipleReference field will return a list with
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the MultipleReference field will return a list with
     the currently selected option objects instances.
 
     With the instance, you can access all attributes from the object. Check the example below.
@@ -565,9 +565,9 @@ class Quantity(BaseField):
     """
     The Quantity field provides a way to the user provide a scalar value into the application.
 
-    The Quantity field have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
-    :param values:  A number value.
-    :param unit:    Unit for the given scalar.
+    The Quantity field have all options available from :class:`~BaseField`, besides the listed the ones listed above:
+    :ivar values:  A number value.
+    :ivar unit:    Unit for the given scalar.
 
     All scalar values are created using the `Barril library`_
 
@@ -578,7 +578,7 @@ class Quantity(BaseField):
         If you want to check the input value, is recommended to include a status monitor in your plugin
         to make sure that the provided value is valid.
 
-        For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
+        For more details about status monitor check :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_status`
 
     .. rubric:: Example myplugin.py
 
@@ -599,7 +599,7 @@ class Quantity(BaseField):
 
     .. rubric:: **Accessing Quantity Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the Quantity field will return a ``Scalar`` object, with
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the Quantity field will return a :class:`barril.units.Scalar` object, with
     the current value and unit.
     Check out the `Scalar documentation from Barril`_ for more details about the usage.
 
@@ -637,15 +637,15 @@ class Quantity(BaseField):
 @attr.s(kw_only=True, frozen=True)
 class TableColumn(BaseField):
     """
-    The TableColumn component provides columns for a :func:`~alfasim_sdk.type.Table` field.
-    Currently only columns with a :func:`~alfasim_sdk.type.Quantity` fields are available.
+    The TableColumn component provides columns for a :class:`Table` field.
+    Currently only columns with a :class:`Quantity` fields are available.
 
-    Check out the documentation from :func:`~alfasim_sdk.type.Table` to see more details about the usage and how to retrieve values.
+    Check out the documentation from :class:`Table` to see more details about the usage and how to retrieve values.
     """
 
     id: str = attrib(validator=non_empty_str)
     value: Quantity = attrib()
-    caption = attrib(init=False, default="")
+    caption: str = attrib(init=False, default="")
 
     def __attrs_post_init__(self) -> None:
         object.__setattr__(self, "caption", self.value.caption)
@@ -711,7 +711,7 @@ class Table(BaseField):
 
     .. rubric:: **Accessing Table Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the Table field will return a model, with information about
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the Table field will return a model, with information about
     all columns.
 
 
@@ -768,8 +768,8 @@ class Boolean(BaseField):
     """
     The Boolean field provides a checkbox to select/deselect a property.
 
-    The Boolean fields have all options available from :func:`~alfasim_sdk.types.BaseField`, besides the listed the ones listed above:
-    :param value:  A boolean informing the initial state from the Field
+    The Boolean fields have all options available from :class:`~BaseField`, besides the listed the ones listed above:
+    :ivar value:  A boolean informing the initial state from the Field
 
     .. rubric:: Example myplugin.py
 
@@ -790,7 +790,7 @@ class Boolean(BaseField):
 
     .. rubric:: **Accessing Quantity Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the Boolean field will return a boolean value
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the Boolean field will return a boolean value
 
     .. code-block:: bash
 
@@ -820,9 +820,9 @@ class FileContent(BaseField):
         If you want to make the file mandatory it is recommended to include a status monitor in your plugin
         to make sure that a file is selected.
 
-        For more details about status monitor check :func:`~alfasim_sdk.hooks_specs_gui.alfasim_get_status`
+        For more details about status monitor check :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_status`
 
-    :param caption: Label to be displayed on the right side of the component.
+    :ivar caption: Label to be displayed on the right side of the component.
 
     .. rubric:: Example myplugin.py
 
@@ -841,15 +841,15 @@ class FileContent(BaseField):
 
     .. rubric:: **Accessing Quantity Field from Context**:
 
-    When accessed from the :func:`~alfasim_sdk.context.Context`, the FileContent field will return a FileContent object,
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the FileContent field will return a FileContent object,
     a Model that represent a file from the filesystem.
 
     Class FileContent
 
-    :path:          Return a `Path object`_ of the file.
-    :content:       The content from the file in binary format.
-    :size:          The size of the file in bytes.
-    :modified_data: Return a `Datetime object`_, with the last time the file was modified
+    :ivar path:          Return a `Path object`_ of the file.
+    :ivar content:       The content from the file in binary format.
+    :ivar size:          The size of the file in bytes.
+    :ivar modified_data: Return a `Datetime object`_, with the last time the file was modified
 
     >>> ctx.get_model("MyModel").file_content_field.path
     WindowsPath('C:/ol-wax-1.wax')
@@ -873,10 +873,10 @@ class AddField:
     """
     Allows the plugin to add new fields to Hydrodynamic model.
 
-    An added field **must** be associated to a phase (Using :class:`~alfasim_sdk.AddPhase` or :class:`~alfasim_sdk.UpdatePhase`)
-    and added to a layer (Using :class:`~alfasim_sdk.AddLayer` or :class:`~alfasim_sdk.UpdateLayer`)
+    An added field **must** be associated to a phase (Using :class:`AddPhase` or :class:`UpdatePhase`)
+    and added to a layer (Using :class:`AddLayer` or :class:`UpdateLayer`)
 
-    :param name: Name of the new field.
+    :ivar name: Name of the new field.
 
     .. note::
         This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_fields` `hook`.
@@ -891,16 +891,18 @@ class AddLayer:
     """
     Allows the plugin to add new layers to Hydrodynamic model.
 
-    :param name: Name of the new layer.
-    :param fields: List of fields names contained in the added layer.
-    :param continuous_field: Name of the continuous field of the added layer (must be in the `fields` list).
+    :ivar name: Name of the new layer.
+
+    :ivar fields: List of fields names contained in the added layer.
+
+    :ivar continuous_field: Name of the continuous field of the added layer (must be in the `fields` list).
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers` `hook`.
+        This type is supposed to be used in the :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers` `hook`.
     """
 
     name: str = attr.ib()
-    fields: list = attr.ib()
+    fields: List[str] = attr.ib()
     continuous_field: str = attr.ib()
 
 
@@ -914,16 +916,16 @@ class UpdateLayer:
      - ``OIL_LAYER``
      - ``WATER_LAYER`` (If a three phase hydrodynamic model is used)
 
-    :param name: Name of the updated layer.
-    :param additional_fields: List of additional fields names to be appended in the fields list of the layer.
+    :ivar name: Name of the updated layer.
 
+    :ivar additional_fields: List of additional fields names to be appended in the fields list of the layer.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers` `hook`.
+        This type is supposed to be used in the :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers` `hook`.
     """
 
     name: str = attr.ib()
-    additional_fields: list = attr.ib()
+    additional_fields: List[str] = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
@@ -931,17 +933,20 @@ class AddPhase:
     """
     Allows the plugin to add new phases to Hydrodynamic model.
 
-    :param name: Name of the new phase.
-    :param fields: List of fields names associated to the added phase. It is important to know how to calculate the state variables of fields.
-    :param primary_field: Reference field when a phase property calculation is performed through the fields of the phase.
-    :param is_solid: A boolean variable to identify if the added phase is solid.
+    :ivar name: Name of the new phase.
+    :ivar fields: List of fields names associated to the added phase. It is important to know how to calculate
+        the state variables of fields.
+
+    :ivar primary_field: Reference field when a phase property calculation is performed through the fields of the phase.
+
+    :ivar is_solid: A boolean variable to identify if the added phase is solid.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases` `hook`.
+        This type is supposed to be used in the :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases` `hook`.
     """
 
     name: str = attr.ib()
-    fields: list = attr.ib()
+    fields: List[str] = attr.ib()
     primary_field: str = attr.ib()
     is_solid: bool = attr.ib(default=False)
 
@@ -956,12 +961,12 @@ class UpdatePhase:
      - ``OIL_PHASE``
      - ``WATER_PHASE`` (If a three phase hydrodynamic model is used)
 
-    :param name: Name of the new phase.
-    :param additional_fields: List of additional fields names to be appended in the fields list of the phase.
+    :ivar name: Name of the new phase.
+    :ivar additional_fields: List of additional fields names to be appended in the fields list of the phase.
 
     .. note::
-        This type is supposed to be used in the :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases` `hook`.
+        This type is supposed to be used in the :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_configure_phases` `hook`.
     """
 
     name: str = attr.ib()
-    additional_fields: list = attr.ib()
+    additional_fields: List[str] = attr.ib()

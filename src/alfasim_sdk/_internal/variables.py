@@ -71,15 +71,15 @@ class SecondaryVariable:
     Secondary variables are those variables that are not unknowns from the nonlinear system.
     That is, they are not directly solved in the nonlinear system, but they are calculated based on the nonlinear system results.
 
-    :param name: Plugin secondary variable name. This name will be used to access it in the :ref:`solver_hooks`.
-    :param caption: Caption to be shown in the GUI (For output purpose).
-    :param type: a :class:`~alfasim_sdk.Type` value.
-    :param unit: A string with the unit of the variable.
-    :param visibility: a :class:`~alfasim_sdk.Visibility` value.
-    :param location: a :class:`~alfasim_sdk.Location` value.
-    :param multifield_scope: a :class:`~alfasim_sdk.Scope`.
-    :param default_value: Default value to be set.
-    :param checked_on_gui_default: If the added variable has :class:`~alfasim_sdk.Visibility` equal to ``Output``,
+    :ivar name: Plugin secondary variable name. This name will be used to access it in the :ref:`solver_hooks`.
+    :ivar caption: Caption to be shown in the GUI (For output purpose).
+    :ivar type: a :class:`~Type` value.
+    :ivar unit: A string with the unit of the variable.
+    :ivar visibility: a :class:`~Visibility` value.
+    :ivar location: a :class:`~Location` value.
+    :ivar multifield_scope: a :class:`~Scope`.
+    :ivar default_value: Default value to be set.
+    :ivar checked_on_gui_default: If the added variable has :class:`~Visibility` equal to ``Output``,
         it indicates that this variable will be exported as output by default.
 
     The ``unit`` param accepts all units available on `Barril <https://github.com/ESSS/barril>`_ Unit Manager, for

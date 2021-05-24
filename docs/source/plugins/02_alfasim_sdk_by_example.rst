@@ -51,8 +51,8 @@ the locations where a custom model can be inserted using the hook |gui_hook|.
 |marker_1| illustrates the section where the models |container| or |model| will be placed. |br|
 |marker_2| illustrates the section where the inputs fields will be placed.
 
-For this example we will use a :func:`~alfasim_sdk.data_model` entry over the Tree,
-using a :func:`~alfasim_sdk.Quantity` field to get exponent value from the user.
+For this example we will use a :py:func:`~alfasim_sdk.data_model` entry over the Tree,
+using a :py:class:`~alfasim_sdk.Quantity` field to get exponent value from the user.
 
 The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located on :file:`myplugin/src/python` folder.
 
@@ -73,7 +73,7 @@ The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located 
         return [MyPluginModel]
 
 
-Notice that only models that are returned by the hook :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
+Notice that only models that are returned by the hook :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
 will be included on the user interface of |alfasim|.
 
 The image below illustrates the application with the output from the snippet above.
@@ -216,9 +216,9 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
     }
 
 Then, since the plugin wants to calculate its own secondary variable, the
-:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>` must be implemented.
+:py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>` must be implemented.
 As can be seen in the example below, to retrieve the velocity of the continuous liquid field
-it is necessary to use the :func:`get_simulation_array` API function.
+it is necessary to use the :cpp:func:`get_simulation_array` API function.
 
 
 .. code-block:: cpp

@@ -5,7 +5,7 @@ from alfasim_sdk._internal.alfacase import case_description
 
 def generate_alfacase_file(
     alfacase_description: case_description.CaseDescription, alfacase_file: Path
-):
+) -> None:
     """
     Dump the case_description to the given alfacase_file, using YAML format.
 
@@ -20,7 +20,7 @@ def generate_alfacase_file(
 
 def _generate_alfatable_file_for_pvt_models_description(
     pvt_models: case_description.PvtModelsDescription, alfacase_file: Path
-):
+) -> None:
     """
     Create `.alfatable` files for each pvt_model which the mode is constants.PVT_MODEL_TABLE.
     """
@@ -37,7 +37,7 @@ def _generate_alfatable_file_for_pvt_models_description(
 
 
 def convert_description_to_alfacase(
-    alfacase_description,
+    alfacase_description: case_description.CaseDescription,
     *,
     enable_flow_style_on_numpy: bool = False,
     remove_redundant_input_type_data: bool = True,
@@ -45,6 +45,9 @@ def convert_description_to_alfacase(
     """
     Convert a given case (decorated with attrs) to YAML representation.
     The strictyaml conversion ("as_yaml") requires that all items from dict are strings.
+
+    :param alfacase_description:
+        Alfasim case description.
 
     :param enable_flow_style_on_numpy:
         Signalize that numpy arrays should dumped with flow style enabled.
@@ -81,7 +84,7 @@ def convert_alfacase_to_description(
     file_alfacase: Path,
 ) -> case_description.CaseDescription:
     """
-    Return a alfasim_sdk.alfacase.case_description.Case with all information provided on file_yaml.
+    Return a :class:`alfasim_sdk._internal.alfacase.case_description` with all information provided on file_yaml.
     """
     from alfasim_sdk._internal.alfacase.alfacase_to_case import load_case_description
     from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument

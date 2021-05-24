@@ -40,8 +40,8 @@ See section :ref:`alfacase-reference-section` for all available classes and opti
 as well as which types and validators are applied at the time of object instantiation.
 
 Knowing the type is important to create instantiate a class properly. For example, if you try to create a
-:class:`NodeDescription <alfasim_sdk.NodeDescription>`, the ``node_type`` attribute
-must be a string of one of the options available on :class:`NodeCellType <alfasim_sdk.NodeCellType>`, otherwise, a
+:py:class:`NodeDescription <alfasim_sdk.NodeDescription>`, the ``node_type`` attribute
+must be a string of one of the options available on :py:class:`NodeCellType <alfasim_sdk._internal.constants.NodeCellType>`, otherwise, a
 ``ValueError`` is raised.
 
 .. code-block:: python

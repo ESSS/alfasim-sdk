@@ -274,6 +274,7 @@ from alfasim_sdk._internal.types import AddLayer
 from alfasim_sdk._internal.types import UpdateLayer
 
 # Plugins: Types  for UI customization
+from alfasim_sdk._internal.types import BaseField
 from alfasim_sdk._internal.types import Boolean
 from alfasim_sdk._internal.types import Enum
 from alfasim_sdk._internal.types import FileContent
@@ -450,6 +451,7 @@ __all__ = [
     "Enum",
     "FileContent",
     "MultipleReference",
+    "BaseField",
     "Quantity",
     "Reference",
     "String",
