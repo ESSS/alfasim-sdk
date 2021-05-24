@@ -12,6 +12,7 @@ History
     - ``LinearIPR``: ``well_index``;
     - ``HeatSourceEquipment``: ``power``;
 * **Breaking Change**: Change ``OpeningCurveDescription`` (``opening_curve`` attribute) for ``Curve`` from barril.
+* **Breaking Change**: Change signature of ``HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR``.
 
 
 0.9.0 (2021-05-04)

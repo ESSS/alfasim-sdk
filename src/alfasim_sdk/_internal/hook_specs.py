@@ -509,12 +509,14 @@ def initialize_state_variables_calculator(
     P: "void*",
     T: "void*",
     T_mix: "void*",
+    phi: "void*",
     n_control_volumes: "int",
     n_layers: "int",
+    n_tracers: "int",
 ) -> "int":
     """
     **c++ signature** : ``HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR(void* ctx, void* P, void* T, void* T_mix,
-    int n_control_volumes, int n_layers)``
+    void* phi, int n_control_volumes, int n_layers, int n_tracers)``
 
     Hook for the state variables calculator initialization (internal ``ALFAsim`` structure).
 
@@ -526,12 +528,15 @@ def initialize_state_variables_calculator(
     :param P: Pressure values array
     :param T: Temperature values array
     :param T_mix: Mixture temperature values array
+    :param phi: Tracer mass fraction values array
     :param n_control_volumes: Number of control volumes
     :param n_layers: Number of layers
+    :param n_tracers: Number of tracers in the system
     :returns: Return OK if successful or anything different if failed
 
     The ``P`` and ``T_mix`` have size equal to ``n_control_volumes``. However, ``T`` has values contiguous in memory
-    and its dimensions are given by ``n_layers`` and ``n_control_volumes``
+    and its dimensions are given by ``n_layers`` and ``n_control_volumes``. Finally, ``phi`` dimensions are given by
+    ``n_tracers`` and ``n_control_volumes``.
 
     Example of usage:
 
@@ -540,7 +545,7 @@ def initialize_state_variables_calculator(
         :emphasize-lines: 1
 
         HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR(
-            ctx, P, T, T_mix, n_control_volumes, n_layers)
+            ctx, P, T, T_mix, phi, n_control_volumes, n_layers, n_tracers)
         {
             // getting plugin internal data
             int errcode = -1;
