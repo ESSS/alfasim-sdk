@@ -130,6 +130,7 @@ class SolidsModelType(Enum):
     Thomas1965Equilibrium = "thomas1965_equilibrium"
     Mills1985Equilibrium = "mills1985_equilibrium"
     Santamaria2010Equilibrium = "santamaria2010_equilibrium"
+    FromPlugin = "from_plugin"
 
 
 class NodeCellType(Enum):
