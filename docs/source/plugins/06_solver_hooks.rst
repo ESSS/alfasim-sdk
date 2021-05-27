@@ -159,7 +159,7 @@ Solids Model
 
 When a new solid phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is
 possible simulate a case with solid phase dispersed in fluids. In this kind of simulation a solids model can be
-chosen by user through the |alfasim|'s GUI. Those models are able to calculate the slurry viscosity of the layer
+chosen by the user through |alfasim|'s GUI. Those models are able to calculate the slurry viscosity of the layer
 and the slip velocity of the dispersed solid phase. Currently, there are only three solids model available, however
 any plugin can add its own solids model. For that, it is necessary to implement the following hooks.
 

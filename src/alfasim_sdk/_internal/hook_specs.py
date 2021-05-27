@@ -934,7 +934,7 @@ def calculate_slip_velocity(
     The output variable ``U_slip`` is the slip velocity with size equal to ``n_faces`` and it
     is dimensionless.
     The ``solid_field_index`` is the index of the dispersed solid field.
-    The ``layer_index`` is the index of the layer and continuous field in the layer(in which the solid
+    The ``layer_index`` is the index of the layer and continuous field in the layer (in which the solid
     field is dispersed).
 
     .. Note::
@@ -1013,7 +1013,7 @@ def calculate_relative_slurry_viscosity(
     The output variable ``mu_r`` is the relative slurry viscosity with size equal to ``n_faces`` and it
     is dimensionless.
     The ``solid_field_index`` is the index of the dispersed solid field.
-    The ``layer_index`` is the index of the layer and continuous field in the layer(in which the solid
+    The ``layer_index`` is the index of the layer and continuous field in the layer (in which the solid
     field is dispersed).
 
     .. Note::
