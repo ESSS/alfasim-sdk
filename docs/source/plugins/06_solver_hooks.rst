@@ -147,12 +147,25 @@ Additional solid phase
 
 When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is possible
 to set as a `solid phase`. In this case, the particle size of `fields` that are `solid phase` can be calculated by
-implementing the following Solver `Hooks`.Otherwise, the particle size will be considered constant and equal to
+implementing the following Solver `Hooks`. Otherwise, the particle size will be considered constant and equal to
 :math:`1\times10^{-4}` meters.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.initialize_particle_diameter_of_solids_fields
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.update_particle_diameter_of_solids_fields
+
+Solids Model
+------------
+
+When a new solid phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is
+possible simulate a case with solid phase dispersed in fluids. In this kind of simulation a solids model can be
+chosen by the user through |alfasim|'s GUI. Those models are able to calculate the slurry viscosity of the layer
+and the slip velocity of the dispersed solid phase. Currently, there are only three solids model available, however
+any plugin can add its own solids model. For that, it is necessary to implement the following hooks.
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_relative_slurry_viscosity
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_slip_velocity
 
 Internal deposit layer
 ----------------------
@@ -238,7 +251,7 @@ each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_shear_force_per_volume
 
 Emulsion Model
--------------------------------
+--------------
 
 When a simulation case uses a three-phase flow model, |alfasim| allows to select an emulsion model that will update
 the layer viscosity related to the emulsion. In that case, a relative emulsion viscosity correlation is used to

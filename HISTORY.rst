@@ -11,6 +11,7 @@ History
     - ``PressureNode`` and ``ReservoirInflowEquipment``: ``pressure``, ``temperature``, ``mass_fractions``, ``volume_fractions``, ``gas_liquid_ratio``, ``gas_oil_ratio``, ``water_cut``;
     - ``LinearIPR``: ``well_index``;
     - ``HeatSourceEquipment``: ``power``;
+* Add two new hooks to calculate solids model (for slurry viscosity and slip velocity)
 * **Breaking Change**: Change ``OpeningCurveDescription`` (``opening_curve`` attribute) for ``Curve`` from barril.
 * **Breaking Change**: Change signature of ``HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR``.
 

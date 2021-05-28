@@ -124,12 +124,16 @@ class SolidsModelType(Enum):
 
     - Thomas1965Equilibrium - Thomas (1965):
         Employs the equilibrium slip velocity model and the Thomas (1965) effective dynamic viscosity expression.
+
+    - FromPlugin:
+        Slip velocity and slurry viscosity are calculated from plugin hooks with an external implementation.
     """
 
     NoModel = "no_model"
     Thomas1965Equilibrium = "thomas1965_equilibrium"
     Mills1985Equilibrium = "mills1985_equilibrium"
     Santamaria2010Equilibrium = "santamaria2010_equilibrium"
+    FromPlugin = "from_plugin"
 
 
 class NodeCellType(Enum):

@@ -2184,6 +2184,7 @@ class PhysicsDescription:
     simulation_regime = attrib_enum(default=constants.SimulationRegimeType.Transient)
     energy_model = attrib_enum(default=constants.EnergyModel.NoModel)
     solids_model = attrib_enum(default=constants.SolidsModelType.NoModel)
+    solids_model_plugin_id: str = attr.ib(default="", validator=instance_of(str))
     initial_condition_strategy = attrib_enum(
         default=constants.InitialConditionStrategyType.Constant
     )
