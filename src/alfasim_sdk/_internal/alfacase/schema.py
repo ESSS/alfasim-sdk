@@ -56,7 +56,7 @@ controller_signal_properties_description_schema = Map(
         Optional("property"): Str(),
         Optional("unit"): Str(),
         Optional("network_element"): Str(),
-        Optional("network_position_in_element"): Map({"value": Float(), "unit": Str()}),
+        Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
     }
 )
 cv_table_description_schema = Map(

@@ -1328,15 +1328,22 @@ class ControllerSignalPropertiesDescription:
     network_element: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    network_position_in_element = attrib_scalar(default=Scalar(0, "m"))
+    position_in_network_element = attrib_scalar(default=Scalar(0, "m"))
+    min_value: float = attr.ib(default=-1.0e50, converter=float)
+    max_value: float = attr.ib(default=1.0e50, converter=float)
+    max_rate_of_change: float = attr.ib(default=1.0e50, converter=float)
 
-    @network_position_in_element.validator
-    def _validate_network_position_in_element(self, attribute, value):
+    @position_in_network_element.validator
+    def _validate_position_in_network_element(self, attribute, value):
         assert (
             isinstance(value, Scalar)
             and value.GetCategory() == "length"
             and value.GetValue("m") >= 0.0
         )
+
+    @max_rate_of_change.validator
+    def _validate_max_rate_of_change(self, attribute, value):
+        assert isinstance(value, float) and value >= 0.0
 
 
 @attr.s(slots=True, kw_only=True)
