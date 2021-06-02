@@ -175,7 +175,8 @@ from alfasim_sdk._internal.alfacase.case_description import (
     ControllerNodePropertiesDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
-    ControllerSignalPropertiesDescription,
+    ControllerInputSignalPropertiesDescription,
+    ControllerOutputSignalPropertiesDescription,
 )
 
 # ALFACase: Utilities
@@ -304,7 +305,8 @@ __all__ = [
     "CompressorEquipmentDescription",
     "CompressorPressureTableDescription",
     "ControllerNodePropertiesDescription",
-    "ControllerSignalPropertiesDescription",
+    "ControllerInputSignalPropertiesDescription",
+    "ControllerOutputSignalPropertiesDescription",
     "ControllerType",
     "CvTableDescription",
     "EnvironmentDescription",

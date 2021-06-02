@@ -51,12 +51,19 @@ compressor_pressure_table_description_schema = Map(
         Optional("isentropic_efficiency_table"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
-controller_signal_properties_description_schema = Map(
+controller_input_signal_properties_description_schema = Map(
     {
         Optional("property"): Str(),
         Optional("unit"): Str(),
         Optional("network_element"): Str(),
         Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
+    }
+)
+controller_output_signal_properties_description_schema = Map(
+    {
+        Optional("property"): Str(),
+        Optional("unit"): Str(),
+        Optional("network_element"): Str(),
         Optional("min_value"): Float(),
         Optional("max_value"): Float(),
         Optional("max_rate_of_change"): Float(),
@@ -690,8 +697,8 @@ controller_node_properties_description_schema = Map(
         Optional("setpoint"): Float(),
         Optional("integral_time"): Map({"value": Float(), "unit": Str()}),
         Optional("derivative_time"): Map({"value": Float(), "unit": Str()}),
-        Optional("input_signal_properties"): controller_signal_properties_description_schema,
-        Optional("output_signal_properties"): controller_signal_properties_description_schema,
+        Optional("input_signal_properties"): controller_input_signal_properties_description_schema,
+        Optional("output_signal_properties"): controller_output_signal_properties_description_schema,
     }
 )
 environment_description_schema = Map(
@@ -922,5 +929,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 4a3969455e43813903309c4cfa57c4a3)
+# [[[end]]] (checksum: bfe1e25e289580846e3291a65c18f7b3)
 # fmt: on

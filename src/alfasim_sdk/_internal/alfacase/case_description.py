@@ -1320,7 +1320,7 @@ class SeparatorNodePropertiesDescription:
 
 
 @attr.s(slots=True, kw_only=True)
-class ControllerSignalPropertiesDescription:
+class ControllerInputSignalPropertiesDescription:
     property: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1329,9 +1329,6 @@ class ControllerSignalPropertiesDescription:
         default=None, validator=optional(instance_of(str))
     )
     position_in_network_element = attrib_scalar(default=Scalar(0, "m"))
-    min_value: float = attr.ib(default=-1.0e50, converter=float)
-    max_value: float = attr.ib(default=1.0e50, converter=float)
-    max_rate_of_change: float = attr.ib(default=1.0e50, converter=float)
 
     @position_in_network_element.validator
     def _validate_position_in_network_element(self, attribute, value):
@@ -1340,6 +1337,20 @@ class ControllerSignalPropertiesDescription:
             and value.GetCategory() == "length"
             and value.GetValue("m") >= 0.0
         )
+
+
+@attr.s(slots=True, kw_only=True)
+class ControllerOutputSignalPropertiesDescription:
+    property: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    network_element: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    min_value: float = attr.ib(default=-1.0e50, converter=float)
+    max_value: float = attr.ib(default=1.0e50, converter=float)
+    max_rate_of_change: float = attr.ib(default=1.0e50, converter=float)
 
     @max_rate_of_change.validator
     def _validate_max_rate_of_change(self, attribute, value):
@@ -1354,8 +1365,12 @@ class ControllerNodePropertiesDescription:
     integral_time = attrib_scalar(default=Scalar(10, "s"))
     derivative_time = attrib_scalar(default=Scalar(1, "s"))
 
-    input_signal_properties = attrib_instance(ControllerSignalPropertiesDescription)
-    output_signal_properties = attrib_instance(ControllerSignalPropertiesDescription)
+    input_signal_properties = attrib_instance(
+        ControllerInputSignalPropertiesDescription
+    )
+    output_signal_properties = attrib_instance(
+        ControllerOutputSignalPropertiesDescription
+    )
 
     @integral_time.validator
     def _validate_integral_time(self, attribute, value):

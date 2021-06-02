@@ -1,0 +1,24 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ControllerOutputSignalPropertiesDescription
+            property: \ :class:`Optional <typing.Optional>`\[str] = None
+            unit: \ :class:`Optional <typing.Optional>`\[str] = None
+            network_element: \ :class:`Optional <typing.Optional>`\[str] = None
+            min_value: float = -1e+50
+            max_value: float = 1e+50
+            max_rate_of_change: float = 1e+50
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            property: string  # optional
+            unit: string  # optional
+            network_element: string  # optional
+            min_value: number  # optional
+            max_value: number  # optional
+            max_rate_of_change: number  # optional
