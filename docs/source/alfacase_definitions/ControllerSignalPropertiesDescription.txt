@@ -8,7 +8,10 @@
             property: \ :class:`Optional <typing.Optional>`\[str] = None
             unit: \ :class:`Optional <typing.Optional>`\[str] = None
             network_element: \ :class:`Optional <typing.Optional>`\[str] = None
-            network_position_in_element: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            position_in_network_element: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            min_value: float = -1e+50
+            max_value: float = 1e+50
+            max_rate_of_change: float = 1e+50
 
 .. tab:: Schema
 
@@ -17,6 +20,9 @@
             property: string  # optional
             unit: string  # optional
             network_element: string  # optional
-            network_position_in_element:  # optional
+            position_in_network_element:  # optional
                 value: number
                 unit: string
+            min_value: number  # optional
+            max_value: number  # optional
+            max_rate_of_change: number  # optional

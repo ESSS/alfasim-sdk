@@ -57,6 +57,9 @@ controller_signal_properties_description_schema = Map(
         Optional("unit"): Str(),
         Optional("network_element"): Str(),
         Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
+        Optional("min_value"): Float(),
+        Optional("max_value"): Float(),
+        Optional("max_rate_of_change"): Float(),
     }
 )
 cv_table_description_schema = Map(
@@ -919,5 +922,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: b0f325494a9a62ca95bba2e0c0031b36)
+# [[[end]]] (checksum: 4a3969455e43813903309c4cfa57c4a3)
 # fmt: on
