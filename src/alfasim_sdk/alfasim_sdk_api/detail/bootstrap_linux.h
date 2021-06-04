@@ -85,6 +85,7 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_liquid_effective_viscosity_input_variable = (get_input_variable_func)dlsym(api->handle, "get_liquid_effective_viscosity_input_variable");
     api->get_gas_liq_surface_tension_input_variable = (get_input_variable_func)dlsym(api->handle, "get_gas_liq_surface_tension_input_variable");
     api->get_liq_liq_shear_force_per_volume_input_variable = (get_input_variable_func)dlsym(api->handle, "get_liq_liq_shear_force_per_volume_input_variable");
+    api->get_relative_emulsion_viscosity = (get_relative_emulsion_viscosity_func)dlsym(api->handle, "get_relative_emulsion_viscosity");
 
     return SDK_OK;
 }
