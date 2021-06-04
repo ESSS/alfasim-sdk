@@ -790,10 +790,10 @@ DLL_EXPORT int get_liq_liq_shear_force_per_volume_input_variable(
     (dispersed field + continuous field) and the continuous field.
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] out Relative Emulsion Viscosity [-].
+    @param[out] Relative Emulsion Viscosity [-].
     @param[in] mu_disp Dispersed Field Viscosity [Pa.s].
     @param[in] mu_cont Continuous Field Viscosity [Pa.s].
-    @param[in] alpha_disp_in_layer   Dispersed Field Volume Fraction in the layer (emulsion) [m3 of dispersed field /m3 of layer].
+    @param[in] alpha_disp_in_layer Dispersed Field Volume Fraction in the layer (emulsion) [m3 of dispersed field /m3 of layer].
     @param[in] disp_field_id  Dispersed Field Id (Can be "oil in water" or "water in oil" fields).
     @param[in] cont_field_id  Continuous Field Id (Can be "oil" or "water" fields).
     @return An #error_code value.

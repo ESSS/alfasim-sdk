@@ -243,8 +243,8 @@ each Liquid-Liquid system plugin hooks. In the sequence, they are presented
     are implemented, the |alfasim| will show an error of configuration.
 
 .. note ::
-    Note that the all of the hooks related to the liquid-liquid system of Mechanistic Model can use same emulsion
-    viscosity model used internally by |alfasim|. It is made by helper function :cpp:func:`get_relative_emulsion_viscosity`.
+    Note that the all of the hooks related to the liquid-liquid system of Mechanistic Model can use the same emulsion
+    viscosity model used internally by |alfasim|. It can be obtained by using the helper function :cpp:func:`get_relative_emulsion_viscosity`.
     Since the liquid-liquid system is an emulsion, this helper function is important to keep the consistency between
     |alfasim| and its plugins that implement the following hooks.
 
@@ -268,8 +268,9 @@ the implementation of a relative emulsion viscosity correlation.
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_relative_emulsion_viscosity
 
 .. warning::
-    The emulsion viscosity hook must be implemented as a simple correlation, in which all data is available as
-    parameters (Dispersed and continuous viscosities, for example). For this hook only the API functions
+    The relative emulsion viscosity hook has a limited API. Therefore the user-implemented correlations will have
+    access only to dispersed field viscosity, continuous field viscosity and volume fraction of the dispersed phase.
+    These variables are passed as arguments of the hook signature. For this hook only the API functions
     :cpp:func:`get_field_id`, :cpp:func:`get_phase_id` and :cpp:func:`get_layer_id` are available, any other API
     function will return an error code different from ``OK`` (:cpp:enum:`error_code` values) if called from this hook.
 
