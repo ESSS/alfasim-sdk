@@ -1507,8 +1507,8 @@ def calculate_liq_liq_flow_pattern(
     - `2 - Dispersed Oil`: Dispersed oil in continuous water. |br|
     - `3 - Dispersed Water`: Dispersed water in continuous Oil. |br|
     - `4 - Separated`: Separated continuous oil and continuous water. |br|
-    - `5 - separated Mixed`: Separated with dispersed oil and water droplets. |br|
-    - `6 - separated Wavy`: Separated with waves. |br|
+    - `5 - Separated Wavy`: Separated with waves. |br|
+    - `6 - Separated Mixed`: Separated with dispersed oil and water droplets. |br|
 
     Any value different from these values will be assumed an `Unknown` flow pattern.
 
