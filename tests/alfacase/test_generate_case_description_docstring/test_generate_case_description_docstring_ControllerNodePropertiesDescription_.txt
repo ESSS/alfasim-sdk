@@ -1,0 +1,30 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ControllerNodePropertiesDescription
+            type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  = ControllerType.PID
+            gain: float = 0.0001
+            setpoint: float = 0.0
+            integral_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
+            derivative_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 's', 'time')
+            input_signal_properties: \ :class:`ControllerInputSignalPropertiesDescription <ControllerInputSignalPropertiesDescription>`\  = ControllerInputSignalPropertiesDescription()
+            output_signal_properties: \ :class:`ControllerOutputSignalPropertiesDescription <ControllerOutputSignalPropertiesDescription>`\  = ControllerOutputSignalPropertiesDescription()
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  # optional
+            gain: number  # optional
+            setpoint: number  # optional
+            integral_time:  # optional
+                value: number
+                unit: string
+            derivative_time:  # optional
+                value: number
+                unit: string
+            input_signal_properties: \ :class:`controller_input_signal_properties_description_schema <ControllerInputSignalPropertiesDescription>`\  # optional
+            output_signal_properties: \ :class:`controller_output_signal_properties_description_schema <ControllerOutputSignalPropertiesDescription>`\  # optional

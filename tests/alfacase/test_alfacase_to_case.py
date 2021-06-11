@@ -464,6 +464,18 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.COMPRESSOR_PRESSURE_TABLE_DESCRIPTION,
         schema=schema.compressor_pressure_table_description_schema,
     ),
+    "ControllerInputSignalPropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION,
+        schema=schema.controller_input_signal_properties_description_schema,
+    ),
+    "ControllerOutputSignalPropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION,
+        schema=schema.controller_output_signal_properties_description_schema,
+    ),
+    "ControllerNodePropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_NODE_PROPERTIES_DESCRIPTION,
+        schema=schema.controller_node_properties_description_schema,
+    ),
 }
 
 ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(

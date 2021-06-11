@@ -1,0 +1,22 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ControllerInputSignalPropertiesDescription
+            property: \ :class:`Optional <typing.Optional>`\[str] = None
+            unit: \ :class:`Optional <typing.Optional>`\[str] = None
+            network_element: \ :class:`Optional <typing.Optional>`\[str] = None
+            position_in_network_element: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            property: string  # optional
+            unit: string  # optional
+            network_element: string  # optional
+            position_in_network_element:  # optional
+                value: number
+                unit: string
