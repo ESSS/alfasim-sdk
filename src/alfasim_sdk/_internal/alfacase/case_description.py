@@ -1321,11 +1321,11 @@ class SeparatorNodePropertiesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class ControllerInputSignalPropertiesDescription:
-    property: Optional[str] = attr.ib(
+    target_variable: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    network_element: Optional[str] = attr.ib(
+    network_element_name: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     position_in_network_element = attrib_scalar(default=Scalar(0, "m"))
@@ -1341,11 +1341,11 @@ class ControllerInputSignalPropertiesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class ControllerOutputSignalPropertiesDescription:
-    property: Optional[str] = attr.ib(
+    controlled_property: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    network_element: Optional[str] = attr.ib(
+    network_element_name: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     min_value: float = attr.ib(default=-1.0e50, converter=float)

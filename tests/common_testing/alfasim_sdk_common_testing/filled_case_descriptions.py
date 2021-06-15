@@ -708,18 +708,18 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
 
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerInputSignalPropertiesDescription(
-        property="pressure",
+        target_variable="pressure",
         unit="bar",
-        network_element="pipe_1",
+        network_element_name="pipe_1",
         position_in_network_element=Scalar(0, "m"),
     )
 )
 
 CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerOutputSignalPropertiesDescription(
-        property="opening",
+        controlled_property="opening",
         unit="%",
-        network_element="valve_1",
+        network_element_name="valve_1",
         min_value=0.0,
         max_value=1.0,
         max_rate_of_change=1.0,

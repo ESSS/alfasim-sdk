@@ -41,18 +41,18 @@ compressor_pressure_table_description_schema = Map(
 
 controller_input_signal_properties_description_schema = Map(
     {
-        Optional("property"): Str(),
+        Optional("target_variable"): Str(),
         Optional("unit"): Str(),
-        Optional("network_element"): Str(),
+        Optional("network_element_name"): Str(),
         Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
     }
 )
 
 controller_output_signal_properties_description_schema = Map(
     {
-        Optional("property"): Str(),
+        Optional("controlled_property"): Str(),
         Optional("unit"): Str(),
-        Optional("network_element"): Str(),
+        Optional("network_element_name"): Str(),
         Optional("min_value"): Float(),
         Optional("max_value"): Float(),
         Optional("max_rate_of_change"): Float(),
