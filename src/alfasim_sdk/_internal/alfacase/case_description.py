@@ -1321,6 +1321,17 @@ class SeparatorNodePropertiesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class ControllerInputSignalPropertiesDescription:
+    """
+    :ivar str target_variable:
+        Measured variable target of controller setpoint
+    :ivar str unit:
+        Measuring unit of target variable
+    :ivar str network_element_name:
+        Name of network element where target variable is measured
+    :ivar Scalar position_in_network_element:
+        Position of measurement of target variable
+    """
+
     target_variable: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1341,6 +1352,21 @@ class ControllerInputSignalPropertiesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class ControllerOutputSignalPropertiesDescription:
+    """
+    :ivar str controlled_property:
+        Property under control to make target variable reach setpoint
+    :ivar str unit:
+        Measuring unit of controlled property
+    :ivar str network_element_name:
+        Name of network element that has controlled property
+    :ivar float min_value:
+        Minimum value of output signal
+    :ivar float max_value:
+        Maximum value of output signal
+    :ivar float max_rate_of_change:
+        Maximum rate of change of output signal
+    """
+
     controlled_property: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1359,6 +1385,23 @@ class ControllerOutputSignalPropertiesDescription:
 
 @attr.s(slots=True, kw_only=True)
 class ControllerNodePropertiesDescription:
+    """
+    :ivar ControllerType type:
+        Type of controlling model
+    :ivar float gain:
+        Proportional constant of PID controller
+    :ivar float setpoint:
+        Target value for input signal
+    :ivar Scalar integral_time:
+        Integral constant of PID controller
+    :ivar Scalar derivative_time:
+        Derivative constant of PID controller
+    :ivar ControllerInputSignalPropertiesDescription input_signal_properties:
+        Properties of input signal
+    :ivar ControllerOutputSignalPropertiesDescription output_signal_properties:
+        Properties of output signal
+    """
+
     type = attrib_enum(default=constants.ControllerType.PID)
     gain: float = attr.ib(default=1e-4, converter=float)
     setpoint: float = attr.ib(default=0.0, converter=float)
