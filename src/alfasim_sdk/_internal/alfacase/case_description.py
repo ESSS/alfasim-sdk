@@ -1320,6 +1320,119 @@ class SeparatorNodePropertiesDescription:
 
 
 @attr.s(slots=True, kw_only=True)
+class ControllerInputSignalPropertiesDescription:
+    """
+    :ivar str target_variable:
+        Measured variable target of controller setpoint
+    :ivar str unit:
+        Measuring unit of target variable
+    :ivar str network_element_name:
+        Name of network element where target variable is measured
+    :ivar Scalar position_in_network_element:
+        Position of measurement of target variable
+    """
+
+    target_variable: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    network_element_name: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    position_in_network_element = attrib_scalar(default=Scalar(0, "m"))
+
+    @position_in_network_element.validator
+    def _validate_position_in_network_element(self, attribute, value):
+        assert (
+            isinstance(value, Scalar)
+            and value.GetCategory() == "length"
+            and value.GetValue("m") >= 0.0
+        )
+
+
+@attr.s(slots=True, kw_only=True)
+class ControllerOutputSignalPropertiesDescription:
+    """
+    :ivar str controlled_property:
+        Property under control to make target variable reach setpoint
+    :ivar str unit:
+        Measuring unit of controlled property
+    :ivar str network_element_name:
+        Name of network element that has controlled property
+    :ivar float min_value:
+        Minimum value of output signal
+    :ivar float max_value:
+        Maximum value of output signal
+    :ivar float max_rate_of_change:
+        Maximum rate of change of output signal
+    """
+
+    controlled_property: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    network_element_name: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    min_value: float = attr.ib(default=-1.0e50, converter=float)
+    max_value: float = attr.ib(default=1.0e50, converter=float)
+    max_rate_of_change: float = attr.ib(default=1.0e50, converter=float)
+
+    @max_rate_of_change.validator
+    def _validate_max_rate_of_change(self, attribute, value):
+        assert isinstance(value, float) and value >= 0.0
+
+
+@attr.s(slots=True, kw_only=True)
+class ControllerNodePropertiesDescription:
+    """
+    :ivar ControllerType type:
+        Type of controlling model
+    :ivar float gain:
+        Proportional constant of PID controller
+    :ivar float setpoint:
+        Target value for input signal
+    :ivar Scalar integral_time:
+        Integral constant of PID controller
+    :ivar Scalar derivative_time:
+        Derivative constant of PID controller
+    :ivar ControllerInputSignalPropertiesDescription input_signal_properties:
+        Properties of input signal
+    :ivar ControllerOutputSignalPropertiesDescription output_signal_properties:
+        Properties of output signal
+    """
+
+    type = attrib_enum(default=constants.ControllerType.PID)
+    gain: float = attr.ib(default=1e-4, converter=float)
+    setpoint: float = attr.ib(default=0.0, converter=float)
+    integral_time = attrib_scalar(default=Scalar(10, "s"))
+    derivative_time = attrib_scalar(default=Scalar(1, "s"))
+
+    input_signal_properties = attrib_instance(
+        ControllerInputSignalPropertiesDescription
+    )
+    output_signal_properties = attrib_instance(
+        ControllerOutputSignalPropertiesDescription
+    )
+
+    @integral_time.validator
+    def _validate_integral_time(self, attribute, value):
+        assert (
+            isinstance(value, Scalar)
+            and value.GetCategory() == "time"
+            and value.GetValue("s") > 0.0
+        )
+
+    @derivative_time.validator
+    def _validate_derivative_time(self, attribute, value):
+        assert (
+            isinstance(value, Scalar)
+            and value.GetCategory() == "time"
+            and value.GetValue("s") >= 0.0
+        )
+
+
+@attr.s(slots=True, kw_only=True)
 class NodeDescription:
     """
     .. include:: /alfacase_definitions/NodeDescription.txt
@@ -1334,6 +1447,7 @@ class NodeDescription:
     mass_source_properties = attrib_instance(MassSourceNodePropertiesDescription)
     internal_properties = attrib_instance(InternalNodePropertiesDescription)
     separator_properties = attrib_instance(SeparatorNodePropertiesDescription)
+    controller_properties = attrib_instance(ControllerNodePropertiesDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)

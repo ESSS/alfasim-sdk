@@ -51,6 +51,24 @@ compressor_pressure_table_description_schema = Map(
         Optional("isentropic_efficiency_table"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
+controller_input_signal_properties_description_schema = Map(
+    {
+        Optional("target_variable"): Str(),
+        Optional("unit"): Str(),
+        Optional("network_element_name"): Str(),
+        Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
+    }
+)
+controller_output_signal_properties_description_schema = Map(
+    {
+        Optional("controlled_property"): Str(),
+        Optional("unit"): Str(),
+        Optional("network_element_name"): Str(),
+        Optional("min_value"): Float(),
+        Optional("max_value"): Float(),
+        Optional("max_rate_of_change"): Float(),
+    }
+)
 cv_table_description_schema = Map(
     {
         Optional("opening"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -672,6 +690,17 @@ compressor_equipment_description_schema = Map(
         Optional("table"): compressor_pressure_table_description_schema,
     }
 )
+controller_node_properties_description_schema = Map(
+    {
+        Optional("type"): Enum(['pid']),
+        Optional("gain"): Float(),
+        Optional("setpoint"): Float(),
+        Optional("integral_time"): Map({"value": Float(), "unit": Str()}),
+        Optional("derivative_time"): Map({"value": Float(), "unit": Str()}),
+        Optional("input_signal_properties"): controller_input_signal_properties_description_schema,
+        Optional("output_signal_properties"): controller_output_signal_properties_description_schema,
+    }
+)
 environment_description_schema = Map(
     {
         Optional("thermal_model"): Enum(['adiabatic_walls', 'steady_state_heat_transfer', 'transient_heat_transfer']),
@@ -731,17 +760,6 @@ initial_volume_fractions_description_schema = Map(
         Optional("table_x"): referenced_volume_fractions_container_description_schema,
         Optional("table_y"): referenced_volume_fractions_container_description_schema,
         Optional("table_length"): volume_fractions_container_description_schema,
-    }
-)
-node_description_schema = Map(
-    {
-        "name": Str(),
-        "node_type": Enum(['internal_node', 'mass_source_boundary', 'pressure_boundary', 'separator_node']),
-        Optional("pvt_model"): Str(),
-        Optional("pressure_properties"): pressure_node_properties_description_schema,
-        Optional("mass_source_properties"): mass_source_node_properties_description_schema,
-        Optional("internal_properties"): internal_node_properties_description_schema,
-        Optional("separator_properties"): separator_node_properties_description_schema,
     }
 )
 profile_description_schema = Map(
@@ -824,6 +842,18 @@ initial_conditions_description_schema = Map(
         Optional("fluid"): Str(),
     }
 )
+node_description_schema = Map(
+    {
+        "name": Str(),
+        "node_type": Enum(['internal_node', 'mass_source_boundary', 'pressure_boundary', 'separator_node', 'controller_node']),
+        Optional("pvt_model"): Str(),
+        Optional("pressure_properties"): pressure_node_properties_description_schema,
+        Optional("mass_source_properties"): mass_source_node_properties_description_schema,
+        Optional("internal_properties"): internal_node_properties_description_schema,
+        Optional("separator_properties"): separator_node_properties_description_schema,
+        Optional("controller_properties"): controller_node_properties_description_schema,
+    }
+)
 pvt_model_compositional_description_schema = Map(
     {
         Optional("equation_of_state_type"): Enum(['pvt_compositional_peng_robinson', 'pvt_compositional_soave_redlich_kwong']),
@@ -899,5 +929,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 8a39d081b8f7e4de0b80db2a5564e24f)
+# [[[end]]] (checksum: 910489ebbe6ced3eafc0069c077a859b)
 # fmt: on

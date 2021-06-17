@@ -706,6 +706,36 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
     )
 )
 
+CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
+    case_description.ControllerInputSignalPropertiesDescription(
+        target_variable="pressure",
+        unit="bar",
+        network_element_name="pipe_1",
+        position_in_network_element=Scalar(0, "m"),
+    )
+)
+
+CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
+    case_description.ControllerOutputSignalPropertiesDescription(
+        controlled_property="opening",
+        unit="%",
+        network_element_name="valve_1",
+        min_value=0.0,
+        max_value=1.0,
+        max_rate_of_change=1.0,
+    )
+)
+
+CONTROLLER_NODE_PROPERTIES_DESCRIPTION = case_description.ControllerNodePropertiesDescription(
+    type=constants.ControllerType.PID,
+    gain=1e-4,
+    setpoint=1.0,
+    integral_time=Scalar(1, "s"),
+    derivative_time=Scalar(1, "s"),
+    input_signal_properties=case_description.ControllerInputSignalPropertiesDescription(),
+    output_signal_properties=case_description.ControllerOutputSignalPropertiesDescription(),
+)
+
 
 def ensure_descriptions_are_equal(
     expected_case_description_dict,

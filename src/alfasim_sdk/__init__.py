@@ -172,6 +172,14 @@ from alfasim_sdk._internal.alfacase.case_description import WallLayerDescription
 from alfasim_sdk._internal.alfacase.case_description import WellDescription
 from alfasim_sdk._internal.alfacase.case_description import XAndYDescription
 
+from alfasim_sdk._internal.alfacase.case_description import (
+    ControllerNodePropertiesDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
+    ControllerInputSignalPropertiesDescription,
+    ControllerOutputSignalPropertiesDescription,
+)
+
 # ALFACase: Utilities
 from alfasim_sdk._internal.alfacase.alfacase import convert_alfacase_to_description
 from alfasim_sdk._internal.alfacase.alfacase import convert_description_to_alfacase
@@ -186,6 +194,7 @@ from alfasim_sdk._internal.constants import BUBBLE_FIELD
 from alfasim_sdk._internal.constants import CompressorSpeedType
 from alfasim_sdk._internal.constants import CorrelationPackage
 from alfasim_sdk._internal.constants import CorrelationPackageType
+from alfasim_sdk._internal.constants import ControllerType
 from alfasim_sdk._internal.constants import DEFAULT_TEMPERATURE_IN_K
 from alfasim_sdk._internal.constants import DROPLET_FIELD
 from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
@@ -296,6 +305,10 @@ __all__ = [
     "CompositionDescription",
     "CompressorEquipmentDescription",
     "CompressorPressureTableDescription",
+    "ControllerNodePropertiesDescription",
+    "ControllerInputSignalPropertiesDescription",
+    "ControllerOutputSignalPropertiesDescription",
+    "ControllerType",
     "CvTableDescription",
     "EnvironmentDescription",
     "EnvironmentPropertyDescription",
