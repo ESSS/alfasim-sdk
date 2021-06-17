@@ -30,6 +30,10 @@ typedef int (*get_field_id_func)(void* ctx, int* out, const char* name);
 typedef int (*get_primary_field_id_of_phase_func)(void* ctx, int* out, const char* name);
 typedef int (*get_phase_id_func)(void* ctx, int* out, const char* name);
 typedef int (*get_layer_id_func)(void* ctx, int* out, const char* name);
+typedef int (*get_number_of_fields_func)(void*, int*);
+typedef int (*get_number_of_phases_func)(void*, int*);
+typedef int (*get_number_of_layers_func)(void*, int*);
+typedef int (*get_number_of_phase_pairs_func)(void*, int*);
 typedef int (*get_state_variable_array_func)(
     void* ctx,
     double** out,
@@ -120,6 +124,10 @@ struct ALFAsimSDK_API {
     get_primary_field_id_of_phase_func get_primary_field_id_of_phase;
     get_phase_id_func get_phase_id;
     get_layer_id_func get_layer_id;
+    get_number_of_fields_func get_number_of_fields;
+    get_number_of_phases_func get_number_of_phases;
+    get_number_of_layers_func get_number_of_layers;
+    get_number_of_phase_pairs_func get_number_of_phase_pairs;
 
     get_state_variable_array_func get_state_variable_array;
     get_simulation_array_func get_simulation_array;

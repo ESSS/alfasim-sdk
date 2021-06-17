@@ -107,6 +107,14 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_layer_id
 
+.. doxygenfunction:: get_number_of_fields
+
+.. doxygenfunction:: get_number_of_phases
+
+.. doxygenfunction:: get_number_of_layers
+
+.. doxygenfunction:: get_number_of_phase_pairs
+
 .. doxygenfunction:: get_state_variable_array
 
 .. warning::

@@ -311,6 +311,47 @@ DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_layer_id(void* ctx, int* out, const char* name);
 
 /*!
+    Gives the number of fields in the hydrodynamic model being solved including dispersed
+    and continuous fields. This information may be important when new fields are added by
+    plugins.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of Fields.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_fields(void* ctx, int* out);
+
+/*!
+    Gives the number of phases in the hydrodynamic model being solved. This information
+    may be important when new phases are added by plugins.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of Phases.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_phases(void* ctx, int* out);
+
+/*!
+    Gives the number of layers in the hydrodynamic model being solved. This information
+    may be important when new layers are added by plugins.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of layers.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_layers(void* ctx, int* out);
+
+/*!
+    Gives the number of phase pairs in the hydrodynamic model being solved. It depends
+    on number of phases and may be important to calculate the phase pair state variables.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of phase pairs.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_phase_pairs(void* ctx, int* out);
+
+/*!
     Gets the current contents of a given state variable (For an array data pointer).
     A state variable is any variable calculated from pressure and temperature,
     as any thermodynamic variable.
