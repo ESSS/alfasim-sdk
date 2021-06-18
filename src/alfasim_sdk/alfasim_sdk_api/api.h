@@ -778,4 +778,38 @@ DLL_EXPORT int get_liq_liq_shear_force_per_volume_input_variable(
     void* ctx, double* out, const char* var_name, int phase_id
 );
 
+/*!
+    Gets the relative emulsion viscosity for liquid-liquid calculations.
+
+    During the implementation of any HOOK related to the Liquid-Liquid Mechanistic model, this
+    function provides the relative emulsion viscosity from Emulsion Model (selected through GUI).
+
+    It allows the plugin HOOKs to use the same emulsion model used internally by ALFAsim.
+
+    The definition of relative viscosity is given by the ratio between the apparent viscosity
+    (dispersed field + continuous field) and the continuous field.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] Relative Emulsion Viscosity [-].
+    @param[in] mu_disp Dispersed Field Viscosity [Pa.s].
+    @param[in] mu_cont Continuous Field Viscosity [Pa.s].
+    @param[in] alpha_disp_in_layer Dispersed Field Volume Fraction in the layer (emulsion) [m3 of dispersed field /m3 of layer].
+    @param[in] disp_field_id  Dispersed Field Id (Can be "oil in water" or "water in oil" fields).
+    @param[in] cont_field_id  Continuous Field Id (Can be "oil" or "water" fields).
+    @return An #error_code value.
+
+    It is important to know that `disp_field_id` and `cont_field_id` must be passed because
+    the emulsion model can have different correlations for each one.
+    To use the correct Field Ids the API function #get_field_id must be used.
+*/
+DLL_EXPORT int get_relative_emulsion_viscosity(
+    void* ctx,
+    double* out,
+    double mu_disp,
+    double mu_cont,
+    double alpha_disp_in_layer,
+    int disp_field_id,
+    int cont_field_id
+);
+
 #endif

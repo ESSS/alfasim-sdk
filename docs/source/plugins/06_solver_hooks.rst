@@ -147,12 +147,25 @@ Additional solid phase
 
 When a new phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is possible
 to set as a `solid phase`. In this case, the particle size of `fields` that are `solid phase` can be calculated by
-implementing the following Solver `Hooks`.Otherwise, the particle size will be considered constant and equal to
+implementing the following Solver `Hooks`. Otherwise, the particle size will be considered constant and equal to
 :math:`1\times10^{-4}` meters.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.initialize_particle_diameter_of_solids_fields
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.update_particle_diameter_of_solids_fields
+
+Solids Model
+------------
+
+When a new solid phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is
+possible simulate a case with solid phase dispersed in fluids. In this kind of simulation a solids model can be
+chosen by the user through |alfasim|'s GUI. Those models are able to calculate the slurry viscosity of the layer
+and the slip velocity of the dispersed solid phase. Currently, there are only three solids model available, however
+any plugin can add its own solids model. For that, it is necessary to implement the following hooks.
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_relative_slurry_viscosity
+
+.. autofunction:: alfasim_sdk._internal.hook_specs.calculate_slip_velocity
 
 Internal deposit layer
 ----------------------
@@ -227,7 +240,14 @@ each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 
 .. warning::
     The hooks described in this section must be implemented all of them or none of them. If just part of four hooks
-    are implemented, the |Alfasim| will show an error of configuration.
+    are implemented, the |alfasim| will show an error of configuration.
+
+.. note ::
+    Note that the all of the hooks related to the liquid-liquid system of Mechanistic Model can use the same emulsion
+    viscosity model used internally by |alfasim|. It can be obtained by using the helper function :cpp:func:`get_relative_emulsion_viscosity`.
+    Since the liquid-liquid system is an emulsion, this helper function is important to keep the consistency between
+    |alfasim| and its plugins that implement the following hooks.
+
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_flow_pattern
 
@@ -238,7 +258,7 @@ each Liquid-Liquid system plugin hooks. In the sequence, they are presented
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_liq_liq_shear_force_per_volume
 
 Emulsion Model
--------------------------------
+--------------
 
 When a simulation case uses a three-phase flow model, |alfasim| allows to select an emulsion model that will update
 the layer viscosity related to the emulsion. In that case, a relative emulsion viscosity correlation is used to
@@ -246,6 +266,13 @@ calculate it. In order to allow the emulsion model customization, the plugin str
 the implementation of a relative emulsion viscosity correlation.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_relative_emulsion_viscosity
+
+.. warning::
+    The relative emulsion viscosity hook has a limited API. Therefore the user-implemented correlations will have
+    access only to dispersed field viscosity, continuous field viscosity and volume fraction of the dispersed phase.
+    These variables are passed as arguments of the hook signature. For this hook only the API functions
+    :cpp:func:`get_field_id`, :cpp:func:`get_phase_id` and :cpp:func:`get_layer_id` are available, any other API
+    function will return an error code different from ``OK`` (:cpp:enum:`error_code` values) if called from this hook.
 
 
 User Defined Tracers

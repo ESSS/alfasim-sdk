@@ -344,7 +344,8 @@ physics_description_schema = Map(
         Optional("hydrodynamic_model"): Enum(['hydrodynamic_model_2_fields', 'hydrodynamic_model_4_fields', 'hydrodynamic_model_3_layers_gas_oil_water', 'hydrodynamic_model_5_fields_solid', 'hydrodynamic_model_5_fields_water', 'hydrodynamic_model_5_fields_co2', 'hydrodynamic_model_3_layers_no_bubble_gas_oil_water', 'hydrodynamic_model_3_layers_water_with_co2', 'hydrodynamic_model_3_layers_7_fields_gas_oil_water', 'hydrodynamic_model_3_layers_9_fields_gas_oil_water']),
         Optional("simulation_regime"): Enum(['simulation_regime_transient', 'simulation_regime_steady_state']),
         Optional("energy_model"): Enum(['no_model', 'global_model', 'layers_model']),
-        Optional("solids_model"): Enum(['no_model', 'thomas1965_equilibrium', 'mills1985_equilibrium', 'santamaria2010_equilibrium']),
+        Optional("solids_model"): Enum(['no_model', 'thomas1965_equilibrium', 'mills1985_equilibrium', 'santamaria2010_equilibrium', 'from_plugin']),
+        Optional("solids_model_plugin_id"): Str(),
         Optional("initial_condition_strategy"): Enum(['constant', 'steady_state', 'restart']),
         Optional("restart_filepath"): Str(),
         Optional("keep_former_results"): Bool(),
@@ -929,5 +930,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 910489ebbe6ced3eafc0069c077a859b)
+# [[[end]]] (checksum: 85cf95cbfba280bda2eac2c17f1ca3a0)
 # fmt: on
