@@ -919,50 +919,147 @@ def update_particle_diameter_of_solids_fields(
 
 def calculate_slip_velocity(
     ctx: "void*",
-    U_fields: "void*",
-    alpha_f: "void*",
-    d_disp_fields: "void*",
-    P: "void*",
-    rho_f: "void*",
-    mu_f: "void*",
-    sin_theta_f: "void*",
-    delta_x_f: "void*",
+    U_slip: "double*",
+    solid_field_index: "int",
+    layer_index: "int",
+    n_faces: "int",
 ) -> "int":
     """
-    Internal simulator hook to calculate slip velocity between fluids
-    and solid phase.
+    **c++ signature** : ``HOOK_CALCULATE_SLIP_VELOCITY(void* ctx, double* U_slip, int solid_field_index, int layer_index, int n_faces)``
+
+    Internal `hook` to calculate slip velocity in the Solids Model.
+    This `hook` will be used in the solids model to calculate the slip velocity between
+    fluid and solid phase.
+
+    The output variable ``U_slip`` is the slip velocity with size equal to ``n_faces`` and it
+    is dimensionless.
+    The ``solid_field_index`` is the index of the dispersed solid field.
+    The ``layer_index`` is the index of the layer and continuous field in the layer (in which the solid
+    field is dispersed).
+
+    .. Note::
+        It is important to know that the calculations for velocity is performed over the faces (see
+        ``n_faces`` param). For that, any variable that should be retrieved using :cpp:func:`get_simulation_array`
+        must be use value ``FACE`` in the :cpp:enum:`GridScope` param.
 
     :param ctx: ALFAsim's plugins context
-    :param U_fields: Field velocities,
-    :param alpha_f: Field Volume fractions on faces,
-    :param d_disp_fields: Diameter of dispersed fields,
-    :param P: Pressure,
-    :param rho_f: Field densities on faces,
-    :param mu_f: Field viscosities on faces,
-    :param sin_theta_f: Sin of Theta on faces in which Theta is the angle between the Pipe and the Y-Axis,
-    :param delta_x_f: The control volume lenght related to the faces,
+    :param U_slip: Slip velocity between fluid and solid phase
+    :param solid_field_index: Index of the dispersed solid field
+    :param layer_index: Index of the Layer or Continuous Field
+    :param n_faces: Number of faces.
 
     :returns: Return OK if successful or anything different if failed
 
-    It is expected to be changed the U_fields of solid phase, whose index will be available via API.
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_CALCULATE_SLIP_VELOCITY(ctx, U_slip, disp_field_index, layer_index, n_faces)
+        {
+            const char* plugin_id = get_plugin_id()
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            // MyStruct is a developer defined struct to hold
+            // all important information for plugin hooks.
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(ctx, (void**) &data, plugin_id, thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+
+            // compute the slip velocity using your own correlation
+            for (int i = 0; i < n_faces; ++i){
+                U_slip[i] = slip_velocity[i];
+            }
+
+            return OK;
+        }
     """
 
 
-def calculate_slurry_viscosity(
-    ctx: "void*", alpha_f: "void*", mu_f: "void*", mu_f_layer: "void*"
+def calculate_relative_slurry_viscosity(
+    ctx: "void*",
+    mu_r: "double*",
+    solid_field_index: "int",
+    layer_index: "int",
+    n_faces: "int",
 ) -> "int":
     """
-    Internal simulator hook to calculate slurry viscosity of layer(s).
+    **c++ signature** : ``HOOK_RELATIVE_SLURRY_VISCOSITY(void* ctx, double* mu_r, int solid_field_index, int layer_index, int n_faces)``
+
+    Internal `hook` to calculate the relative slurry viscosity in the Solids Model.
+    This `hook` will be used in the Solids model to calculate the effective viscosity of the slurry
+    (solid field + continuous field).
+
+    The relative slurry viscosity is defined by:
+
+    .. math::
+
+        \\begin{equation}
+            \\mu_r = \\frac{\\mu_{eff}}{\\mu_c}
+        \\end{equation}
+
+
+    .. rubric:: Where
+
+    :1: :math:`\\mu_r` is the relative emulsion viscosity
+    :2: :math:`\\mu_{eff}` is the effective viscosity
+    :3: :math:`\\mu_c` is the viscosity of the continuous field
+
+    The output variable ``mu_r`` is the relative slurry viscosity with size equal to ``n_faces`` and it
+    is dimensionless.
+    The ``solid_field_index`` is the index of the dispersed solid field.
+    The ``layer_index`` is the index of the layer and continuous field in the layer (in which the solid
+    field is dispersed).
+
+    .. Note::
+        It is important to know that the calculations for viscosity is performed over the faces (see
+        ``n_faces`` param). For that, any variable that should be retrieved using :cpp:func:`get_simulation_array`
+        must be use value ``FACE`` in the :cpp:enum:`GridScope` param.
+
+    This `hook` allows the implementation of the relative slurry viscosity correlation. Once the plugin
+    installed it is important to be selected in the solids model configuration inside the Physics data
+    tree in the ALFAsim application in order to be used.
 
     :param ctx: ALFAsim's plugins context
-    :param alpha_f: Fields Volume fractions on faces,
-    :param mu_f: Field viscosities on faces,
-    :param mu_f_layer: Layer Viscosities on faces,
-
+    :param mu_r: Relative slurry viscosity
+    :param solid_field_index: Index of the dispersed solid field
+    :param layer_index: Index of the Layer or Continuous Field
+    :param n_faces: Number of faces.
     :returns: Return OK if successful or anything different if failed
 
-    It is expected to be changed the mu_f_layer of oil layer(continuous oil and dispersed solid),
-    whose index will be available via API.
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_RELATIVE_SLURRY_VISCOSITY(ctx, mu_r, solid_field_index, layer_index, n_faces)
+        {
+            const char* plugin_id = get_plugin_id()
+            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+            // MyStruct is a developer defined struct to hold
+            // all important information for plugin hooks.
+            MyStruct* data = nullptr;
+            errcode = alfasim_sdk_api.get_plugin_data(ctx, (void**) &data, plugin_id, thread_id);
+            if (errcode != OK) {
+                return errcode;
+            }
+
+            // compute the relative slurry viscosity using your own correlation
+            for (int i = 0; i < n_faces; ++i){
+                mu_r[i] = relative_slurry_viscosity[i];
+            }
+
+            return OK;
+        }
     """
 
 
@@ -1410,8 +1507,8 @@ def calculate_liq_liq_flow_pattern(
     - `2 - Dispersed Oil`: Dispersed oil in continuous water. |br|
     - `3 - Dispersed Water`: Dispersed water in continuous Oil. |br|
     - `4 - Separated`: Separated continuous oil and continuous water. |br|
-    - `5 - separated Mixed`: Separated with dispersed oil and water droplets. |br|
-    - `6 - separated Wavy`: Separated with waves. |br|
+    - `5 - Separated Wavy`: Separated with waves. |br|
+    - `6 - Separated Mixed`: Separated with dispersed oil and water droplets. |br|
 
     Any value different from these values will be assumed an `Unknown` flow pattern.
 
@@ -1670,16 +1767,18 @@ def calculate_liq_liq_shear_force_per_volume(
 def calculate_relative_emulsion_viscosity(
     ctx: "void*",
     mu_r: "double*",
+    mu_disp: "double",
+    mu_cont: "double",
+    alpha_disp_in_layer: "double",
     disp_field_index: "int",
-    layer_index: "int",
-    n_faces: "int",
+    cont_field_index: "int",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, int disp_field_index, int layer_index, int n_faces)``
+    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont, double alpha_disp_in_layer)``
 
     Internal `hook` to calculate the relative emulsion viscosity in the Emulsion Model.
     This `hook` will be used in the emulsion model to calculate the apparent viscosity of the emulsion
-    (Continuous field + dispersed field).
+    (Continuous field + dispersed field = layer).
 
     The relative emulsion viscosity is defined by:
 
@@ -1696,18 +1795,10 @@ def calculate_relative_emulsion_viscosity(
     :2: :math:`\\mu_m` is the apparent viscosity
     :3: :math:`\\mu_c` is the viscosity of the continuous field
 
-    The output variable ``mu_r`` is the relative emulsion viscosity with size equal to ``n_faces`` and it
-    is dimensionless.
-    The ``disp_field_index`` is the index of the dipersed field. Since it is an emulsion dispersed field,
-    it can have values for ``oil in water`` and ``water in oil`` fields.
-    The ``layer_index`` is the index of the layer and continuous field in the layer. Since it is the index
-    of the main field of the emulsion, it can have values for ``oil``  or ``water`` layers (and/or continuous
-    fields).
-
-    .. Note::
-        It is important to know that the calculations for viscosity is performed over the faces (see
-        ``n_faces`` param). For that, any variable that should be retrieved using :cpp:func:`get_simulation_array`
-        must be use value ``Face`` in the :cpp:enum:`GridScope` param.
+    The output variable ``mu_r`` is the relative emulsion viscosity, ``mu_disp`` is the dispersed field
+    viscosity, ``mu_cont`` is the continuous field viscosity and ``alpha_disp_in_layer`` is the volume
+    fraction of dispersed field in the layer. Finally ``disp_field_index`` and ``cont_field_index`` are
+    the Dispersed and Continuous Field indexes of the emulsion, respectively.
 
     This `hook` allows the implementation of the relative emulsion viscosity correlation. Once the plugin
     installed it is important to be selected in the emulsion model configuration inside the Physics data
@@ -1715,9 +1806,12 @@ def calculate_relative_emulsion_viscosity(
 
     :param ctx: ALFAsim's plugins context
     :param mu_r: Relative emulsion viscosity
+    :param mu_disp: Dispersed field viscosity
+    :param mu_cont: Continuous field viscosity
+    :param alpha_disp_in_layer: Volume fraction of dispersed field in layer.
     :param disp_field_index: Index of the dispersed field
-    :param layer_index: Index of the Layer or Continuous Field
-    :param n_faces: Number of faces.
+    :param cont_field_index: Index of the continuous field
+
     :returns: Return OK if successful or anything different if failed
 
     Example of usage:
@@ -1726,25 +1820,27 @@ def calculate_relative_emulsion_viscosity(
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_RELATIVE_EMULSION_VISCOSITY(ctx, mu_r, disp_field_index, layer_index, n_faces)
+        HOOK_RELATIVE_EMULSION_VISCOSITY(ctx, mu_r, mu_disp, mu_cont, alpha_disp_in_layer)
         {
-            const char* plugin_id = get_plugin_id()
-            errcode = alfasim_sdk_api.get_thread_id(ctx, &thread_id);
+            int water_in_oil_id = -1;
+            errcode = alfasim_sdk_api.get_field_id(ctx, &water_in_oil_id, "water in oil");
             if (errcode != OK) {
                 return errcode;
             }
-            // MyStruct is a developer defined struct to hold
-            // all important information for plugin hooks.
-            MyStruct* data = nullptr;
-            errcode = alfasim_sdk_api.get_plugin_data(ctx, (void**) &data, plugin_id, thread_id);
 
-            if (disp_field_index == data.oil_in_water_index){
+            int oil_in_water_id = -1;
+            errcode = alfasim_sdk_api.get_field_id(ctx, &oil_in_water_id, "oil in water");
+            if (errcode != OK) {
+                return errcode;
+            }
+
+            if (disp_field_index == oil_in_water_id){
                 // Calculate the relative emulsion viscosity
                 // for water dominated scenario.
                 // ComputeForWaterDominated is a function implemented
                 // by plugin developer
-                ComputeForWaterDominated(mu_r, n_faces);
-            } else if (disp_field_index == data.water_in_oil_index){
+                ComputeForWaterDominated(mu_r, mu_disp, mu_cont);
+            } else if (disp_field_index == water_in_oil_id){
                 // Calculate the relative emulsion viscosity
                 // for oil dominated scenario
                 // ComputeForOilDominated is a function implemented
@@ -1920,8 +2016,9 @@ specs = HookSpecs(
         # Hooks related to solids phases
         initialize_particle_diameter_of_solids_fields,
         update_particle_diameter_of_solids_fields,
+        # Hooks related to Solids Model
         calculate_slip_velocity,
-        calculate_slurry_viscosity,
+        calculate_relative_slurry_viscosity,
         # Hooks related to Tracer added by plugin
         initialize_mass_fraction_of_tracer,
         calculate_mass_fraction_of_tracer_in_phase,

@@ -161,6 +161,8 @@ Liquid-Liquid Mechanistic Model helpers
 
 .. doxygenfunction:: get_liq_liq_shear_force_per_volume_input_variable
 
+.. doxygenfunction:: get_relative_emulsion_viscosity
+
 .. _var_name_parsing:
 
 Variable Name Parsing
