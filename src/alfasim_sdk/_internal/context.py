@@ -22,10 +22,10 @@ class PluginInfo:
     models defined from this plugin.
     """
 
-    caption = attr.attrib(validator=non_empty_str)
-    name = attr.attrib(validator=non_empty_str)
-    enabled = attr.attrib(validator=instance_of(bool))
-    models = attr.attrib(validator=list_of_strings)
+    caption: str = attr.attrib(validator=non_empty_str)
+    name: str = attr.attrib(validator=non_empty_str)
+    enabled: bool = attr.attrib(validator=instance_of(bool))
+    models: List[str] = attr.attrib(validator=list_of_strings)
 
 
 @attr.s(frozen=True)
@@ -34,23 +34,23 @@ class PipelineSegmentInfo:
     The PipelineSegmentInfo provides information about segments associated with a pipeline.
 
     PipelineSegmentInfo provides the following attributes:
-        edge_name: name of the edge that the segment is associated with
 
-        start_position: Defines point where this segment starts in MD (measured depth).
+    :ivar start_position: Defines point where this segment starts in MD (measured depth).
 
-        inner_diameter: Inner diameter of pipe annulus.
+    :ivar inner_diameter: Inner diameter of pipe annulus.
 
-        roughness: Absolute roughness of the wall of this segment.
-            When ```is_custom``` is true, the reported roughness is customized for this segment,
-            otherwise, the reported roughness is the original reported by the wall.
+    :ivar roughness: Absolute roughness of the wall of this segment.
+        When ```is_custom``` is true, the reported roughness is customized for this segment,
+        otherwise, the reported roughness is the original reported by the wall.
 
-        is_custom: Informs either the roughness value is custom or original from the wall
+    :ivar is_custom: Informs either the roughness value is custom or original from the wall
+
     """
 
-    inner_diameter = attr.attrib(validator=instance_of(Scalar))
-    start_position = attr.attrib(validator=instance_of(Scalar))
-    is_custom = attr.attrib(validator=instance_of(bool))
-    roughness = attr.attrib(validator=instance_of(Scalar))
+    inner_diameter: Scalar = attr.attrib(validator=instance_of(Scalar))
+    start_position: Scalar = attr.attrib(validator=instance_of(Scalar))
+    is_custom: bool = attr.attrib(validator=instance_of(bool))
+    roughness: Scalar = attr.attrib(validator=instance_of(Scalar))
 
 
 list_of_segments = deep_iterable(
@@ -65,15 +65,14 @@ class PipelineInfo:
     The PipelineInfo provides information about the geometry of a pipeline.
 
     PipelineSegmentInfo provides the following attributes:
-        name: Name associated with this ``Pipeline`` on ALFAsim
+    :ivar name: Name associated with this ``Pipeline`` on ALFAsim
 
-        edge_name: Name of the edge that this ``Pipeline`` is associated with.
+    :ivar edge_name: Name of the edge that this ``Pipeline`` is associated with.
 
-        segments: List of segments associates with this ``Pipeline``
-        For more information check `alfasim_sdk.context.PipelineSegmentInfo`
+    :ivar segments: List of segments associates with this ``Pipeline``
+        For more information check :class:`~PipelineSegmentInfo`
 
-        total_length: Total length of the pipeline.
-
+    :ivar total_length: Total length of the pipeline.
     """
 
     name = attr.attrib(type=str, validator=non_empty_str)
@@ -89,8 +88,8 @@ class NodeInfo:
     phases that the associate PVT model has.
     """
 
-    name = attr.attrib(validator=non_empty_str)
-    number_of_phases_from_associated_pvt = attr.attrib(
+    name: str = attr.attrib(validator=non_empty_str)
+    number_of_phases_from_associated_pvt: Optional[int] = attr.attrib(
         validator=optional(instance_of(int))
     )
 
@@ -102,8 +101,8 @@ class EdgeInfo:
     phases that the associate pvt model has.
     """
 
-    name = attr.attrib(validator=non_empty_str)
-    number_of_phases_from_associated_pvt = attr.attrib(
+    name: str = attr.attrib(validator=non_empty_str)
+    number_of_phases_from_associated_pvt: Optional[int] = attr.attrib(
         validator=optional(instance_of(int))
     )
 
@@ -114,34 +113,37 @@ class HydrodynamicModelInfo:
     HydrodynamicModelInfo provides information about which layer, fields, and phases the currently Hydrodynamic model is using.
     """
 
-    selected_base_type = attr.attrib(validator=in_(HydrodynamicModelType))
-    phases = attr.attrib(validator=list_of_strings)
-    fields = attr.attrib(validator=list_of_strings)
-    layers = attr.attrib(validator=list_of_strings)
+    selected_base_type: HydrodynamicModelType = attr.attrib(
+        validator=in_(HydrodynamicModelType)
+    )
+    phases: List[str] = attr.attrib(validator=list_of_strings)
+    fields: List[str] = attr.attrib(validator=list_of_strings)
+    layers: List[str] = attr.attrib(validator=list_of_strings)
     has_water_phase = attr.attrib(type=bool, validator=instance_of(bool))
 
 
 @attr.s(frozen=True)
 class PhysicsOptionsInfo:
     """
-    PhysicsOptionsInfo provides information about the ``Physics Options`` available at ``ALFAsim``.
+    ``PhysicsOptionsInfo`` provides information about the physics options available at ``ALFAsim``.
 
     The following option can be accessed:
 
     Emulsion Model: Informs which emulsion model the application is currently using.
-    For more information about all options available check ``alfasim_sdk.context.EmulsionModelType``
+    For more information about all options available check :py:class:`~alfasim_sdk._internal.constants.EmulsionModelType`
 
     Solids Model: Informs the current solid model being used by the application
-    For more information about all options available check ``alfasim_sdk.context.SolidsModelType``
+    For more information about all options available check :py:class:`~alfasim_sdk._internal.constants.SolidsModelType`
 
-    Hydrodynamic Model: Provides a ``alfasim_sdk.context.HydrodynamicModelInfo`` informing which layers, fields and phases
+    Hydrodynamic Model: Provides a :class:`HydrodynamicModelInfo` informing which layers, fields and phases
     the application is currently using.
-    For more information about all options available check ``alfasim_sdk.context.HydrodynamicModelInfo``
     """
 
-    emulsion_model = attr.attrib(validator=in_(EmulsionModelType))
-    solids_model = attr.attrib(validator=in_(SolidsModelType))
-    hydrodynamic_model = attr.attrib(validator=instance_of(HydrodynamicModelInfo))
+    emulsion_model: EmulsionModelType = attr.attrib(validator=in_(EmulsionModelType))
+    solids_model: SolidsModelType = attr.attrib(validator=in_(SolidsModelType))
+    hydrodynamic_model: HydrodynamicModelInfo = attr.attrib(
+        validator=instance_of(HydrodynamicModelInfo)
+    )
 
 
 class Context:
@@ -149,21 +151,21 @@ class Context:
     The context class provides information about the current state of the application
     and the models implemented by the user.
 
-    The following methods provide an instance of :func:`~alfasim_sdk.context.Context` to inform the current state
+    The following methods provide an instance of ``Context`` to inform the current state
     of the application:
 
     - :ref:`visible-expression-section` parameter from all fields
     - :ref:`enable-expression-section` parameter from all fields
-    - :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_status` hook
+    - :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_status` hook
     """
 
     def get_model(self, model_name: str) -> Optional[type]:
         """
         Returns an instance of the given ``model_name``.
 
-        The parameter ``model_name`` must be the name of a model defined within the plugin.
+        :param model_name: must be the name of a model defined within the plugin.
 
-        In the example below, the Context is used to access a property from the model ``MyModel``
+        In the example below, the ``Context`` is used to access a property from the model ``MyModel``
 
         ``ctx.GetModel("Acme")`` as exemplified in the code below.
 
@@ -191,8 +193,8 @@ class Context:
             >>> ctx.get_model('MyModel').name
             'ALFAsim'
 
-        At runtime, you can also verify the names of the models defined by a given plugin. For this, you need to
-        For more information check :func:`~alfasim_sdk.context.Context.GetPluginInfoById`
+        At runtime, you can also verify the names of the models defined by a given plugin.
+        For more information check cpp:func:`~alfasim_sdk.context.Context.GetPluginInfoById`
 
         :raises TypeError: When the given ``model_name`` does not exist.
         :raises FrozenInstanceError: When trying to modify a value
@@ -202,7 +204,7 @@ class Context:
     def get_pipelines(self) -> Optional[List[PipelineInfo]]:
         """
         Return a list with all Pipes available on the Network from the Project.
-        Each Pipe is represented by an instance of :func:`~alfasim_sdk.context.PipelineInfo`.
+        Each Pipe is represented by an instance of :class:`~alfasim_sdk._internal.context.PipelineInfo`.
 
         .. rubric:: Usage Example of GetPipelines
 
@@ -230,17 +232,17 @@ class Context:
 
             The values from PipelineInfo are read-only, they cannot be modified.
 
-        Checkout the :func:`~alfasim_sdk.context.PipelineInfo` section to know more about the properties available.
+        Checkout the :class:`~alfasim_sdk._internal.context.PipelineInfo` section to know more about the properties available.
         """
 
     def get_plugins_infos(self) -> List[PluginInfo]:
         """
         Return a list of all plugins available on ALFAsim.
-        Each plugin is represented by an instance of :func:`~alfasim_sdk.context.PluginInfo`.
+        Each plugin is represented by an instance of :class:`PluginInfo`.
 
         .. rubric:: Usage Example of GetPluginsInfos
 
-        The example demonstrated how you can access information about the plugin from using the :func:`~alfasim_sdk.context.GetPluginsInfos`
+        The example demonstrated how you can access information about the plugin from using the cpp:func:`~alfasim_sdk.context.Context.GetPluginsInfos`
         method.
 
         .. rubric:: Setting up the model
@@ -271,15 +273,15 @@ class Context:
             ['MyModel']
 
 
-        Checkout the :func:`~alfasim_sdk.context.PluginInfo` section to know more about the properties available.
+        Checkout the :class:`PluginInfo` section to know more about the properties available.
         """
 
     def get_plugin_info_by_id(self, plugin_id: str) -> PluginInfo:
         """
-        Similar to :func:`~alfasim_sdk.context.GetPluginsInfos` but returns a single instance of :func:`~alfasim_sdk.context.PluginInfo`
+        Similar to :func:`get_plugins_infos` but returns a single instance of :class:`PluginInfo`
         from the given ``plugin_id`` parameter.
 
-        Checkout the :func:`~alfasim_sdk.context.PluginInfo` section to know more about the properties available.
+        Checkout the :class:`PluginInfo` section to know more about the properties available.
 
         :raises ValueError: When the plugin informed by ``plugin_id`` it's not available.
         """
@@ -287,13 +289,13 @@ class Context:
     def get_edges(self) -> Optional[List[EdgeInfo]]:
         """
         Return a list of all Edges available on ALFAsim.
-        Each Edge is represented by an instance of :func:`~alfasim_sdk.context.EdgeInfo`.
+        Each Edge is represented by an instance of :class:`EdgeInfo`.
 
         .. rubric:: Example of GetEdges
 
         .. image:: /_static/images/api/context_access_network.png
 
-        The image above has two Edges configured, in order to access the available Edges, it's possible to use the method ``GetEdges`` as
+        The image above has two Edges configured, in order to access the available Edges, it's possible to use the method ``get_edges`` as
         demonstrated below.
 
         .. rubric:: Accessing GetEdges from the context
@@ -306,19 +308,19 @@ class Context:
             >>> ctx.get_pipelines()[0].number_of_phases_from_associated_pvt
             'Pipe 1'
 
-        Checkout the :func:`~alfasim_sdk.context.EdgeInfo` section to know more about the properties available.
+        Checkout the :class:`EdgeInfo` section to know more about the properties available.
         """
 
     def get_nodes(self) -> Optional[List[NodeInfo]]:
         """
         Return a list of all Nodes available on ALFAsim.
-        Each Node is represented by an instance of :func:`alfasim_sdk.context.NodeInfo`.
+        Each Node is represented by an instance of :class:`NodeInfo`.
 
         .. rubric:: Usage Example of GetNodes
 
         .. image:: /_static/images/api/context_access_network.png
 
-        The image above has three nodes configured, you can access this information by using the method ``GetNodes`` as
+        The image above has three nodes configured, you can access this information by using the method ``get_nodes`` as
         demonstrated below.
 
         .. code-block:: console
@@ -333,7 +335,7 @@ class Context:
 
             The values from NodeInfo are read-only, they cannot be modified.
 
-        Checkout the :func:`~alfasim_sdk.context.NodeInfo` section to know more about the properties available.
+        Checkout the :class:`NodeInfo` section to know more about the properties available.
         """
 
     def get_physics_options(self) -> PhysicsOptionsInfo:
@@ -374,6 +376,6 @@ class Context:
             >>> ctx.get_physics_options().hydrodynamic_model.phases
             ['gas', 'oil']
 
-        Checkout the :func:`~alfasim_sdk.context.PhysicsOptionsInfo` section to know more about the properties available.
+        Checkout the :class:`PhysicsOptionsInfo` section to know more about the properties available.
 
         """

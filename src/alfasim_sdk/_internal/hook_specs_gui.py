@@ -1,13 +1,6 @@
-from typing import List
-from typing import Union
-
 from pluggy import HookspecMarker
 
-from alfasim_sdk import ErrorMessage
-from alfasim_sdk import WarningMessage
 from alfasim_sdk._internal.context import Context
-from alfasim_sdk._internal.variables import SecondaryVariable
-
 
 hookspec = HookspecMarker("ALFAsim")
 
@@ -23,8 +16,8 @@ def alfasim_get_data_model_type():
 
     This hook needs to return a class decorated with one of the following options:
 
-    - :func:`alfasim_sdk.models.container_model`
-    - :func:`alfasim_sdk.models.data_model`
+    - :func:`~alfasim_sdk.container_model`
+    - :func:`~alfasim_sdk.data_model`
 
     The image below shows the locations where a custom model can be inserted implementing the hook.
 
@@ -40,7 +33,7 @@ def alfasim_get_data_model_type():
     .. |m_2| image:: /_static/images/marker_2.png
         :scale: 80%
 
-    |m_1| Location to where the models :func:`~alfasim_sdk.models.container_model` or :func:`~alfasim_sdk.models.data_model` will be placed. |br|
+    |m_1| Location to where the models :func:`~alfasim_sdk.container_model` or :func:`~alfasim_sdk.data_model` will be placed. |br|
     |m_2| Location to where the :ref:`inputs fields <api-types-section>` will be placed.
 
     Example 1: The following example shows how to create a new model.
@@ -67,8 +60,8 @@ def alfasim_get_data_model_type():
 
     Example 2: This second example shows how to create a new container model.
 
-    Notice that when using the :func:`~alfasim_sdk.models.container_model` you only need to inform the container class
-    to the :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_data_model_type` hook
+    Notice that when using the :func:`~alfasim_sdk.container_model` you only need to inform the container class
+    to the :func:`~alfasim_get_data_model_type` hook
 
     .. code-block:: python
 
@@ -128,7 +121,7 @@ def alfasim_get_data_model_type():
 
 
 @hookspec
-def alfasim_get_additional_variables() -> List[SecondaryVariable]:
+def alfasim_get_additional_variables():
     """
     Allows plugins to register new additional variables on ALFAsim.
 
@@ -136,7 +129,7 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
     output to the user in the plot window (on application). To calculate and update the registered variables the Solver
     `hooks` described on :ref:`update_secondary_variables` section must be implemented.
 
-    This method expects to return a list of :func:`alfasim_sdk.variables.SecondaryVariable`, for more details checkout
+    This method expects to return a list of :class:`~alfasim_sdk.SecondaryVariable`, for more details checkout
     the reference section with all details about :ref:`variables <api-variables-section>`
 
     Usage example:
@@ -166,22 +159,22 @@ def alfasim_get_additional_variables() -> List[SecondaryVariable]:
 @hookspec
 def alfasim_get_status(
     ctx: Context,
-) -> List[Union[WarningMessage, ErrorMessage]]:
+):
     """
     Allows plugins to execute custom checks on ALFAsim.
     These checks can be used to guarantee the consistency of the data or compatibility with some configuration made on |alfasim|.
 
     The status monitor accepts two types of message:
 
-     - :func:`~alfasim_sdk.status.ErrorMessage`:
+    :class:`~alfasim_sdk.ErrorMessage`:
         Signalize the application to block the simulation until the error is fixed.
 
-     - :func:`~alfasim_sdk.status.WarningMessage`:
+    :class:`~alfasim_sdk.WarningMessage`:
         Signalize the application that the user needs to fix this problem, but does not need to block the simulation.
 
     When no errors are detected, an empty list must be returned.
 
-    The ``alfasim_get_status`` will be called for:
+    The :func:`alfasim_get_status` will be called for:
 
      - Each time a model from the plugin is modified.
      - Each time a ``Physics options`` from |alfasim| are modified. |br|
@@ -190,9 +183,9 @@ def alfasim_get_status(
     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
     of the models implemented by the user.
 
-    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
+    Check out the full documentation of :class:`~alfasim_sdk._internal.context.Context` for more details.
 
-    The following example shows how to display an ErrorMessage when a :func:`~alfasim_sdk.types.Quantity` field does not have the desired value.
+    The following example shows how to display an ErrorMessage when a :class:`~alfasim_sdk.Quantity` field does not have the desired value.
 
     .. code-block:: python
 
@@ -245,13 +238,13 @@ def alfasim_configure_fields(ctx: Context):
 
     An added ``field`` must be associated with:
 
-     - Phase, defined by :class:`~alfasim_sdk.types.AddPhase` or :class:`~alfasim_sdk.types.UpdatePhase`.
-     - Layer, defined by :class:`~alfasim_sdk.types.AddLayer` or :class:`~alfasim_sdk.types.UpdateLayer`.
+     - Phase, defined by :class:`~alfasim_sdk.AddPhase` or :class:`~alfasim_sdk.UpdatePhase`.
+     - Layer, defined by :class:`~alfasim_sdk.AddLayer` or :class:`~alfasim_sdk.UpdateLayer`.
 
-     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
+    The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
     of the models implemented by the user.
 
-    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
+    Check out the full documentation of :class:`~alfasim_sdk._internal.context.Context` for more details.
 
     Example of usage:
 
@@ -273,13 +266,13 @@ def alfasim_configure_layers(ctx: Context):
     """
     Allows plugins to configure new layers or associate a new field with a existing layer for |alfasim|'s hydrodynamic model
 
-    In order to configure a new layer, it is necessary to return an :class:`~alfasim_sdk.types.AddLayer` object defining the
+    In order to configure a new layer, it is necessary to return an :class:`~alfasim_sdk.AddLayer` object defining the
     required fields.
 
-     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
+    The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
     of the models implemented by the user.
 
-    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
+    Check out the full documentation of :class:`~alfasim_sdk._internal.context.Context` for more details.
 
     Example of usage:
 
@@ -311,13 +304,13 @@ def alfasim_configure_layers(ctx: Context):
 def alfasim_configure_phases(ctx: Context):
     """
     Allows plugins to configure new phases or associate a new field with a existing phase from the application.
-    In order to configure a new phase it is necessary to return an :class:`~alfasim_sdk.types.AddPhase` object defining the
+    In order to configure a new phase it is necessary to return an :class:`~alfasim_sdk.AddPhase` object defining the
     required fields.
 
-     The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
+    The ``ctx`` parameter is provided to retrieve information about the current state of the application and the current value
     of the models implemented by the user.
 
-    Check out the full documentation of :class:`alfasim_sdk.context.Context` for more details.
+    Check out the full documentation of :class:`~alfasim_sdk._internal.context.Context` for more details.
 
     Example of usage:
 
@@ -338,7 +331,7 @@ def alfasim_configure_phases(ctx: Context):
             ]
 
     With this new phase, all existing hydrodynamic models from the application will have this additional phase.
-    Notice that the ``fields`` parameter must be a field registered from the hook :func:`~alfasim_sdk.hook_specs_gui.alfasim_configure_fields`.
+    Notice that the ``fields`` parameter must be a field registered from the hook :func:`alfasim_configure_fields`.
 
     .. note::
 
@@ -346,7 +339,7 @@ def alfasim_configure_phases(ctx: Context):
             For example, if your plugin does not work with the water phase you can block the simulation
             if the user is using a hydrodynamic model with water.
 
-            For more details check out the documentation of :func:`~alfasim_sdk.hook_specs_gui.alfasim_get_status`
+            For more details check out the documentation of :func:`alfasim_get_status`
 
 
     The image below shows the new added phase on the application.
@@ -354,7 +347,7 @@ def alfasim_configure_phases(ctx: Context):
     .. image:: /_static/images/hooks/alfasim_configure_phase_example_1.png
         :scale: 80%
 
-    It is also possible to add additional fields to existent phases using the :class:`~alfasim_sdk.types.UpdatePhase`.
+    It is also possible to add additional fields to existent phases using the :class:`~alfasim_sdk.UpdatePhase`.
 
     Example of usage:
 
@@ -380,10 +373,10 @@ def alfasim_get_phase_properties_calculated_from_plugin():
     Must return a list of phase names in which state variables will be computed for. If the plugin implements this `hook`
     four C/C++ Solver `hooks` also must be implemented. They are:
 
-     - :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.initialize_state_variables_calculator>`
-     - :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_state_variable>`
-     - :py:func:`HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_phase_pair_state_variable>`
-     - :py:func:`HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk.hook_specs.finalize_state_variables_calculator>`
+     - :py:func:`HOOK_INITIALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk._internal.hook_specs.initialize_state_variables_calculator>`
+     - :py:func:`HOOK_CALCULATE_STATE_VARIABLE<alfasim_sdk._internal.hook_specs.calculate_state_variable>`
+     - :py:func:`HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE<alfasim_sdk._internal.hook_specs.calculate_phase_pair_state_variable>`
+     - :py:func:`HOOK_FINALIZE_STATE_VARIABLE_CALCULATOR<alfasim_sdk._internal.hook_specs.finalize_state_variables_calculator>`
 
     The first and last hooks are called immediately before and after the state variables are calculated, respectively.
 
@@ -406,7 +399,7 @@ def alfasim_get_phase_interaction_properties_calculated_from_plugin():
     Allows the plugin to calculate the properties that are related to a pair of phases, like `surface tension`.
 
     Must return a list of tuple of phases in which state variables will be computed for. In order to
-    implement the properties, :py:func:`HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE<alfasim_sdk.hook_specs.calculate_phase_pair_state_variable>`
+    implement the properties, :py:func:`HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE<alfasim_sdk._internal.hook_specs.calculate_phase_pair_state_variable>`
     must be implemented on the C/C++ part of the plugin.
 
     Example of usage:
@@ -434,11 +427,11 @@ def alfasim_get_user_defined_tracers_from_plugin():
     Must return a list of tracers in which the internal tracer model `hooks` will be implemented.
     The following C/C++ Solver `hooks` must be implemented:
 
-     - :py:func:`HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.initialize_mass_fraction_of_tracer>`
-     - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE<alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_phase>`
-     - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_FIELD<alfasim_sdk.hook_specs.calculate_mass_fraction_of_tracer_in_field>`
-     - :py:func:`HOOK_SET_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer>`
-     - :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
+     - :py:func:`HOOK_INITIALIZE_MASS_FRACTION_OF_TRACER<alfasim_sdk._internal.hook_specs.initialize_mass_fraction_of_tracer>`
+     - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_PHASE<alfasim_sdk._internal.hook_specs.calculate_mass_fraction_of_tracer_in_phase>`
+     - :py:func:`HOOK_COMPUTE_MASS_FRACTION_OF_TRACER_IN_FIELD<alfasim_sdk._internal.hook_specs.calculate_mass_fraction_of_tracer_in_field>`
+     - :py:func:`HOOK_SET_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk._internal.hook_specs.set_prescribed_boundary_condition_of_mass_fraction_of_tracer>`
+     - :py:func:`HOOK_UPDATE_BOUNDARY_CONDITION_OF_MASS_FRACTION_OF_TRACER<alfasim_sdk._internal.hook_specs.update_boundary_condition_of_mass_fraction_of_tracer>`
 
     Example of usage:
 

@@ -2,7 +2,7 @@ from functools import lru_cache
 
 
 @lru_cache()
-def register_units():
+def register_units() -> None:
     """
     Register new categories for Barril and limit the number of units shown to users.
 

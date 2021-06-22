@@ -43,7 +43,7 @@ the hook listed below, the plugin can:
 .. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_configure_layers
 
 
-In order to complement the ``Hydrodynamic model`` customization, it is possible to inform |alfasim| which phases
+In order to complement the :py:class<alfasim-sdk.HydrodynamicModelType> customization, it is possible to inform |alfasim| which phases
 (added from plugin or not) will have the state variables calculated by plugin.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin

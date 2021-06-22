@@ -19,5 +19,6 @@
     :"scm(15C)/d": std cubic metres at 15 deg C/day
     :"scm(15C)/s": std cubic metres, 15 deg C/second
     :"sm3/d": std cubic metres/day
+    :"sm3/s": std cubic metres/second
     :"stb(60F)/d": stock tank barrels, 60 deg F/day
     :"stb/d": stock tank barrels, 60 deg F/day

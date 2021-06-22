@@ -8,18 +8,18 @@ from alfasim_sdk._internal.alfasim_sdk_utils import get_attr_class
 def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callable:
     """
     ``container_model`` is an object that keeps together many different properties defined by the plugin and allows developers
-    to build user interfaces in a declarative way similar to :func:`~alfasim_sdk.models.data_model`.
+    to build user interfaces in a declarative way similar to :func:`data_model`.
 
-    :func:`~alfasim_sdk.models.container_model` can also hold a reference to a :func:`~alfasim_sdk.models.data_model`
-    declared from the plugin, making this object a parent for all new :func:`~alfasim_sdk.models.data_model` created.
+    ``container_model`` can also hold a reference to a :func:`data_model`
+    declared from the plugin, making this object a parent for all new :func:`data_model` created.
 
     .. rubric:: **Application Required**:
 
-    The following options are required when declaring a :func:`~alfasim_sdk.models.container_model`.
+    The following options are required when declaring a ``container_model``.
 
-    :caption:   A text to be displayed over the Tree.
-    :icon:      Name of the icon to be used over the Tree.
-    :model:     A reference to a class decorated with :func:`~alfasim_sdk.models.data_model`.
+    :param caption:   A text to be displayed over the Tree.
+    :param icon:      Name of the icon to be used over the Tree.
+    :param model:     A reference to a class decorated with :func:`data_model`.
 
     .. note::
 
@@ -102,15 +102,15 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
 
 def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
     """
-    ```data_model``` is an object that keeps together many different properties defined by the plugin and allows developers
+    ``data_model`` is an object that keeps together many different properties defined by the plugin and allows developers
     to build user interfaces in a declarative way.
 
     .. rubric:: **Application Required**:
 
     The following options are required when declaring a data_model and are used into the user interface
 
-        :caption:   A text to be displayed over the Tree.
-        :icon:      Name of the icon to be used over the Tree.
+    :param caption:   A text to be displayed over the Tree.
+    :param icon:      Name of the icon to be used over the Tree.
 
     .. note::
 

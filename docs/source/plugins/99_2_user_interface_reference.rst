@@ -30,7 +30,7 @@ Models are the primary elements to create user interfaces on |alfasim|, models c
 and provide a container for other fields that should be grouped together.
 
 
-.. autoclass:: alfasim_sdk._internal.types.BaseField()
+.. autoclass:: alfasim_sdk.BaseField()
 
 .. autoclass:: alfasim_sdk.String()
 

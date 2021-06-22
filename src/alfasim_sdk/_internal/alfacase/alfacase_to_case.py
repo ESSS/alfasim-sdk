@@ -170,7 +170,9 @@ def get_case_description_attribute_loader_dict(
     return loaders
 
 
-def load_scalar(key: str, alfacase_content: DescriptionDocument, category) -> Scalar:
+def load_scalar(
+    key: str, alfacase_content: DescriptionDocument, category: str
+) -> Scalar:
     """
     Create a barril.units.Scalar instance from the given alfacase_content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -197,7 +199,7 @@ def get_scalar_loader(
     )
 
 
-def load_array(key: str, alfacase_content: DescriptionDocument, category) -> Array:
+def load_array(key: str, alfacase_content: DescriptionDocument, category: str) -> Array:
     """
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -225,7 +227,9 @@ def get_array_loader(
 
 
 def load_list_of_arrays(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
 ) -> List[Array]:
     """
     Create a barril.units.Array instance from the given YAML content.
@@ -253,7 +257,9 @@ def get_list_of_arrays_loader(
 
 
 def load_dict_of_arrays(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
 ) -> Dict[str, Array]:
     """
     Create a Dict of str to barril.units.Array instances from the given YAML content.
@@ -280,7 +286,7 @@ def get_dict_of_arrays_loader(
     )
 
 
-def load_curve(key: str, alfacase_content: DescriptionDocument, category) -> Curve:
+def load_curve(key: str, alfacase_content: DescriptionDocument, category: str) -> Curve:
     """
     Create a barril.curve.curve.Curve instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -354,7 +360,9 @@ def _obtain_category_for_scalar(category: str, from_unit: str) -> str:
 
 
 def load_dict_with_scalar(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
 ) -> Dict[str, Scalar]:
     return {
         key: Scalar(category, value["value"], value["unit"])
@@ -466,7 +474,9 @@ def load_pvt_model_correlation_description(
         ),
     }
 
-    def generate_pvt_model_correlation(value: DescriptionDocument):
+    def generate_pvt_model_correlation(
+        value: DescriptionDocument,
+    ) -> case_description.PvtModelCorrelationDescription:
         case_values = to_case_values(value, alfacase_to_case_description)
         item_description = case_description.PvtModelCorrelationDescription(
             **case_values

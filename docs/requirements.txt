@@ -1,5 +1,6 @@
-breathe==4.22.1
-sphinx-click==2.5.0
+sphinx==4.0.2
+breathe==4.30.0
+sphinx-click
 pydata-sphinx-theme
 sphinx-inline-tabs
 sphinx-copybutton

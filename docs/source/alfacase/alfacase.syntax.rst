@@ -7,7 +7,7 @@ Syntax
 An :program:`ALFAcase` file is a text-based file that must be written following the YAML syntax, only a restricted subset of the YAML specification
 is supported and the this section and the next cover the differences.
 
-Our root object is a map (equivalent to a dictionary) that represents a :class:`CaseDescription <alfasim_sdk.CaseDescription>`
+Our root object is a map (equivalent to a dictionary) that represents a :py:class:`CaseDescription <alfasim_sdk.CaseDescription>`
 with its attributes.
 
 The majority of the values from :program:`ALFAcase` are based on ``key`` and ``value``, the example below illustrates some of these cases:
@@ -104,7 +104,7 @@ Case 4:
 
 Case 5:
     In this case, the value is an ``Enum`` and one of the options must be filled, each attribute listed on :ref:`alfacase-reference-section`
-    has a link for the respective ``Enum`` to check all options, on the example, bellow is used a :class:`NodeCellType <alfasim_sdk.NodeCellType>`
+    has a link for the respective ``Enum`` to check all options, on the example, bellow is used a :py:class:`NodeCellType <alfasim_sdk._internal.constants.NodeCellType>`
     that has the following options
 
     .. autoclass:: alfasim_sdk.NodeCellType
@@ -119,7 +119,7 @@ Case 5:
 
 Case 6:
     The last case is a composition of components, the definition is informing that the value of physics must be
-    filled with the key and values defined for :class:`PhysicsDescription <alfasim_sdk.PhysicsDescription>`
+    filled with the key and values defined for :py:class:`PhysicsDescription <alfasim_sdk.PhysicsDescription>`
 
 
     .. rubric:: Example

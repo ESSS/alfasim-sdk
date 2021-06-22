@@ -249,6 +249,10 @@ def attrib_array(
 
         If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
         otherwise, a `TypeError` will be raised.
+
+    :param category:
+        Name of the array category.
+
     """
     if isinstance(default, Array):
         if category is None:
@@ -279,6 +283,10 @@ def attrib_curve(
 
         If a default is not set (``attr.NOTHING``), a value must be supplied when instantiating;
         otherwise, a `TypeError` will be raised.
+
+    :param category:
+        Category of the curve image array.
+
     """
     if isinstance(default, Curve):
         if category is None:

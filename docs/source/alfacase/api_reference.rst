@@ -141,6 +141,12 @@ Node
 
 .. autoclass:: alfasim_sdk.SeparatorNodePropertiesDescription()
 
+.. autoclass:: alfasim_sdk.ControllerInputSignalPropertiesDescription()
+
+.. autoclass:: alfasim_sdk.ControllerOutputSignalPropertiesDescription()
+
+.. autoclass:: alfasim_sdk.ControllerNodePropertiesDescription()
+
 
 Well
 ----
