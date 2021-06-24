@@ -83,31 +83,81 @@ class PluginTableContainer:
     columns = attr.ib(default=attr.Factory(dict))
 
 
-@attr.s(frozen=True, slots=True)
-class TrendOutputDescription:
+@attr.s(kw_only=True)
+class _BaseTrendOutputDescription:
+    curve_names: List[str] = attr.ib(validator=list_of_strings)
+
+
+@attr.s()
+class PositionalPipeTrendDescription(_BaseTrendOutputDescription):
     """
-    .. include:: /alfacase_definitions/TrendOutputDescription.txt
+    .. include:: /alfacase_definitions/PositionalPipeTrendDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    curve_names: List[str] = attr.ib(validator=list_of_strings)
     location = attrib_enum(type_=constants.OutputAttachmentLocation)
-    position = attrib_scalar(default=None, is_optional=True, category="length")
-    element_name: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    position = attrib_scalar(category="length")
+    element_name: str = attr.ib(validator=instance_of(str))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s()
+class GlobalTrendDescription(_BaseTrendOutputDescription):
+    """
+    .. include:: /alfacase_definitions/GlobalTrendDescription.txt
+    """
+
+
+@attr.s()
+class OverallPipeTrendDescription(_BaseTrendOutputDescription):
+    """
+    .. include:: /alfacase_definitions/OverallPipeTrendDescription.txt
+    """
+
+    location = attrib_enum(type_=constants.OutputAttachmentLocation)
+    element_name: str = attr.ib(validator=instance_of(str))
+
+
+@attr.s()
+class EquipmentTrendDescription(_BaseTrendOutputDescription):
+    """
+    .. include:: /alfacase_definitions/EquipmentTrendDescription.txt
+    """
+
+    element_name: str = attr.ib(validator=instance_of(str))
+
+
+@attr.s()
+class SeparatorTrendDescription(_BaseTrendOutputDescription):
+    """
+    .. include:: /alfacase_definitions/SeparatorTrendDescription.txt
+    """
+
+    element_name: str = attr.ib(validator=instance_of(str))
+
+
+@attr.s()
 class ProfileOutputDescription:
     """
     .. include:: /alfacase_definitions/ProfileOutputDescription.txt
     """
 
     curve_names: List[str] = attr.ib(validator=list_of_strings)
-    element_name: str = attr.ib(validator=instance_of(str))
     location = attrib_enum(type_=constants.OutputAttachmentLocation)
+    element_name: str = attr.ib(validator=optional(instance_of(str)))
+
+
+@attr.s()
+class TrendsOutputDescription:
+    """
+    .. include:: /alfacase_definitions/TrendsOutputDescription.txt
+    """
+
+    positional_pipe_trends = attrib_instance_list(PositionalPipeTrendDescription)
+    overall_pipe_trends = attrib_instance_list(OverallPipeTrendDescription)
+    global_trends = attrib_instance_list(GlobalTrendDescription)
+    equipment_trends = attrib_instance_list(EquipmentTrendDescription)
+    separator_trends = attrib_instance_list(SeparatorTrendDescription)
 
 
 @attr.s(frozen=True, slots=True)
@@ -119,7 +169,7 @@ class CaseOutputDescription:
     """
 
     automatic_trend_frequency: bool = attr.ib(default=True, validator=instance_of(bool))
-    trends = attrib_instance_list(TrendOutputDescription)
+    trends = attrib_instance(TrendsOutputDescription)
     trend_frequency = attrib_scalar(default=Scalar(0.1, "s"))
     automatic_profile_frequency: bool = attr.ib(
         default=True, validator=instance_of(bool)

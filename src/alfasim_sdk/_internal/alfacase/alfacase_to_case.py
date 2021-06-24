@@ -1346,25 +1346,100 @@ def load_table_pump_description(
     return update_multi_input_flags(document, item_description)
 
 
-def load_trend_output_description(
+def generate_trend_description(
     document: DescriptionDocument,
-) -> List[case_description.TrendOutputDescription]:
+    alfacase_to_case_description: Dict[str, Callable],
+    description_type: [T],
+) -> [T]:
+    case_values = to_case_values(document, alfacase_to_case_description)
+    item_description = description_type(**case_values)
+    return update_multi_input_flags(document, item_description)
+
+
+def load_positional_pipe_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.PositionalPipeTrendDescription]:
     alfacase_to_case_description = {
         "curve_names": load_value,
         "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
         "element_name": load_value,
         "position": get_scalar_loader(from_unit="m"),
     }
-
-    def generate_trend_description(
-        document: DescriptionDocument,
-    ) -> case_description.TrendOutputDescription:
-        case_values = to_case_values(document, alfacase_to_case_description)
-        item_description = case_description.TrendOutputDescription(**case_values)
-        return update_multi_input_flags(document, item_description)
-
     return [
-        generate_trend_description(alfacase_document) for alfacase_document in document
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.PositionalPipeTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_equipment_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.EquipmentTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.EquipmentTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_separator_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.SeparatorTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.SeparatorTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_global_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.GlobalTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.GlobalTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_overall_pipe_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.OverallPipeTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+        "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.OverallPipeTrendDescription,
+        )
+        for alfacase_document in document
     ]
 
 
@@ -1426,13 +1501,28 @@ def load_annulus_description(
     return update_multi_input_flags(document, item_description)
 
 
+def load_trends_output_description(
+    document: DescriptionDocument,
+) -> case_description.TrendsOutputDescription:
+    alfacase_to_case_description = {
+        "positional_pipe_trends": load_positional_pipe_trend_description,
+        "equipment_trends": load_equipment_trend_description,
+        "global_trends": load_global_trend_description,
+        "overall_pipe_trends": load_overall_pipe_trend_description,
+        "separator_trends": load_separator_trend_description,
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    item_description = case_description.TrendsOutputDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
+
+
 def load_case_output_description(
     document: DescriptionDocument,
 ) -> case_description.CaseOutputDescription:
     alfacase_to_case_description = {
         "profiles": load_profile_output_description,
-        "trends": load_trend_output_description,
         "profile_frequency": get_scalar_loader(from_unit="s"),
+        "trends": load_trends_output_description,
         "trend_frequency": get_scalar_loader(from_unit="s"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)

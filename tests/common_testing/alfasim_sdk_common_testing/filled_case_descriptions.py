@@ -368,11 +368,36 @@ TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
     flow_rates=Array([1.0] * 4 + [0.05] * 4, "m3/s"),
     pressure_boosts=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "bar"),
 )
-TREND_OUTPUT_DESCRIPTION = case_description.TrendOutputDescription(
-    curve_names=["oil mass flow rate"],
+POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION = (
+    case_description.PositionalPipeTrendDescription(
+        curve_names=["oil mass flow rate"],
+        element_name="pipe 1",
+        position=Scalar(2950.0, "m"),
+        location=constants.OutputAttachmentLocation.Main,
+    )
+)
+GLOBAL_TREND_OUTPUT_DESCRIPTION = case_description.GlobalTrendDescription(
+    curve_names=["timestep"],
+)
+EQUIPMENT_TREND_OUTPUT_DESCRIPTION = case_description.EquipmentTrendDescription(
+    curve_names=["mass source temperature"],
+    element_name="MASS SOURCE",
+)
+OVERALL_PIPE_TREND_OUTPUT_DESCRIPTION = case_description.OverallPipeTrendDescription(
+    curve_names=["pipe total liquid volume"],
     element_name="pipe 1",
-    position=Scalar(2950.0, "m"),
     location=constants.OutputAttachmentLocation.Main,
+)
+SEPARATOR_TREND_OUTPUT_DESCRIPTION = case_description.SeparatorTrendDescription(
+    curve_names=["separator liquid level"],
+    element_name="separator_node",
+)
+TRENDS_OUTPUT_DESCRIPTION = case_description.TrendsOutputDescription(
+    positional_pipe_trends=[POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION],
+    equipment_trends=[EQUIPMENT_TREND_OUTPUT_DESCRIPTION],
+    overall_pipe_trends=[OVERALL_PIPE_TREND_OUTPUT_DESCRIPTION],
+    global_trends=[GLOBAL_TREND_OUTPUT_DESCRIPTION],
+    separator_trends=[SEPARATOR_TREND_OUTPUT_DESCRIPTION],
 )
 TUBING_DESCRIPTION = case_description.TubingDescription(
     name="Tubing 1",
@@ -393,13 +418,11 @@ ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
     gas_lift_valve_equipment={"My gas-lift valve": GAS_LIST_VALVE_DESCRIPTION},
 )
 CASE_OUTPUT_DEFINITION = case_description.CaseOutputDescription(
-    trends=[TREND_OUTPUT_DESCRIPTION],
+    trends=TRENDS_OUTPUT_DESCRIPTION,
     trend_frequency=Scalar(0.1, "s"),
     profiles=[PROFILE_OUTPUT_DESCRIPTION],
     profile_frequency=Scalar(0.1, "s"),
 )
-
-
 CASING_DESCRIPTION = case_description.CasingDescription(
     casing_sections=[CASING_SECTION_DESCRIPTION],
     tubings=[TUBING_DESCRIPTION],

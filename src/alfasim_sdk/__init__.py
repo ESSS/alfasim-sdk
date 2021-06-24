@@ -158,7 +158,14 @@ from alfasim_sdk._internal.alfacase.case_description import TracersDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     TracersMassFractionsContainerDescription,
 )
-from alfasim_sdk._internal.alfacase.case_description import TrendOutputDescription
+from alfasim_sdk._internal.alfacase.case_description import (
+    TrendsOutputDescription,
+    PositionalPipeTrendDescription,
+    OverallPipeTrendDescription,
+    GlobalTrendDescription,
+    EquipmentTrendDescription,
+    SeparatorTrendDescription,
+)
 from alfasim_sdk._internal.alfacase.case_description import TubingDescription
 from alfasim_sdk._internal.alfacase.case_description import ValveEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -366,7 +373,12 @@ __all__ = [
     "TracerModelConstantCoefficientsDescription",
     "TracersDescription",
     "TracersMassFractionsContainerDescription",
-    "TrendOutputDescription",
+    "TrendsOutputDescription",
+    "PositionalPipeTrendDescription",
+    "OverallPipeTrendDescription",
+    "GlobalTrendDescription",
+    "EquipmentTrendDescription",
+    "SeparatorTrendDescription",
     "TubingDescription",
     "ValveEquipmentDescription",
     "VelocitiesContainerDescription",
