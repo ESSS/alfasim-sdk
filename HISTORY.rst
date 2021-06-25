@@ -11,7 +11,8 @@ History
     - ``GlobalTrendDescription``;
     - ``OverallPipeTrendDescription``;
     - ``EquipmentTrendDescription``;
-    - ``SeparatorTrendDescription``;
+    - ``SeparatorTrendDescription``;?* Add new API functions related to Multi-Field Description info: ``get_number_of_fields``, ``get_number_of_phases``, ``get_number_of_layers`` and ``get_number_of_phase_pairs``.
+* Add new API functions related to Multi-Field Description phase and field ids: ``get_phase_id_of_fields``, ``get_field_ids_in_layer`` and ``get_phase_pair_id``.
 
 
 0.10.1 (2021-06-30)

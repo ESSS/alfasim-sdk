@@ -101,8 +101,6 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_field_id
 
-.. doxygenfunction:: get_primary_field_id_of_phase
-
 .. doxygenfunction:: get_phase_id
 
 .. doxygenfunction:: get_layer_id
@@ -116,6 +114,14 @@ ALFAsim's Solver Data
 .. doxygenfunction:: get_number_of_phase_pairs
 
 .. doxygenfunction:: get_state_variable_array
+
+.. doxygenfunction:: get_primary_field_id_of_phase
+
+.. doxygenfunction:: get_phase_id_of_fields
+
+.. doxygenfunction:: get_field_ids_in_layer
+
+.. doxygenfunction:: get_phase_pair_id
 
 .. warning::
     Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
