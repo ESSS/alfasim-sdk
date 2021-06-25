@@ -98,7 +98,7 @@ def finalize(ctx: "void*") -> "int":
             // Threads information
             int n_threads = -1;
             int errcode = alfasim_sdk_api.get_number_of_threads(ctx, &n_threads);
-            f (errcode != 0){ // or errcode != OK
+            if (errcode != 0){ // or errcode != OK
                 return errcode;
             }
             const char* plugin_id = get_plugin_id();
@@ -566,7 +566,7 @@ def initialize_state_variables_calculator(
         }
         // Then, to use the cached value:
         HOOK_CALCULATE_STATE_VARIABLE(
-            ctx, P, T, n_control_volumes, n_layers, phase_id, property_id, output)
+            ctx, P, T, n_control_volumes, phase_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -608,7 +608,7 @@ def calculate_state_variable(
     output: "void*",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_CALCULATE_STATE_VARIABLE(void* ctx, void* P, void* T, int n_control_volumes, int n_layers,
+    **c++ signature** : ``HOOK_CALCULATE_STATE_VARIABLE(void* ctx, void* P, void* T, int n_control_volumes,
     int phase_id, int property_id, void* output)``
 
     Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the
@@ -628,7 +628,6 @@ def calculate_state_variable(
     :param P: Pressure values array
     :param T: Temperature values array
     :param n_control_volumes: Number of control volumes
-    :param n_layers: Number of layers
     :param n_phase_id: Id of phase in which the property must be calculated
     :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
                         property must be calculated
@@ -647,7 +646,7 @@ def calculate_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_STATE_VARIABLE(
-            ctx, P, T, n_control_volumes, n_layers, phase_id, property_id, output)
+            ctx, P, T, n_control_volumes, phase_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
