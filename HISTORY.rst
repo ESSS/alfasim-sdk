@@ -2,7 +2,7 @@
 History
 =======
 
-0.10.0 (unreleased)
+0.10.0 (2021-06-29)
 ===================
 
 * Add a new category ``gas standard volume`` from quantity ``standard volume``.
