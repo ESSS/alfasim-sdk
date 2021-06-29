@@ -566,7 +566,7 @@ def initialize_state_variables_calculator(
         }
         // Then, to use the cached value:
         HOOK_CALCULATE_STATE_VARIABLE(
-            ctx, P, T, n_control_volumes, phase_id, property_id, output)
+            ctx, P, T, n_control_volumes, phase_id, field_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
@@ -604,12 +604,13 @@ def calculate_state_variable(
     T: "void*",
     n_control_volumes: "int",
     phase_id: "int",
+    field_id: "int",
     property_id: "int",
     output: "void*",
 ) -> "int":
     """
     **c++ signature** : ``HOOK_CALCULATE_STATE_VARIABLE(void* ctx, void* P, void* T, int n_control_volumes,
-    int phase_id, int property_id, void* output)``
+    int phase_id, int field_id, int property_id, void* output)``
 
     Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the
     phase with `phase_id` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id` API
@@ -629,6 +630,7 @@ def calculate_state_variable(
     :param T: Temperature values array
     :param n_control_volumes: Number of control volumes
     :param n_phase_id: Id of phase in which the property must be calculated
+    :param n_field_id: Id of field in which the property must be calculated (Associated to the phase)
     :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
                         property must be calculated
     :param output: Output values array
@@ -639,6 +641,13 @@ def calculate_state_variable(
     are given in order to perform the calculation. The number of control volumes is also given for
     convenience.
 
+    In case of calculating all properties and caching them in the :py:func:`HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR<alfasim_sdk._internal.hook_specs.initialize_state_variables_calculator>`
+    (depending on the model used inside the plugin) the ``field_id`` can be used to retrieve the cached
+    properties for a specific field associated to the phase in which ``phase_id`` is informed. For
+    example, when the energy model for layers is used in a simulation, fields of a phase may be in
+    others layers ("oil in water" is located in the "water" layer) in which the temperature are different.
+
+
     Example of usage:
 
     .. code-block:: c++
@@ -646,7 +655,7 @@ def calculate_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_STATE_VARIABLE(
-            ctx, P, T, n_control_volumes, phase_id, property_id, output)
+            ctx, P, T, n_control_volumes, phase_id, field_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
