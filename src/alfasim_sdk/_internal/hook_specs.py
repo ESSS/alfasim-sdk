@@ -697,12 +697,13 @@ def calculate_phase_pair_state_variable(
     n_control_volumes: "int",
     phase1_id: "int",
     phase2_id: "int",
+    phase_pair_id: "int",
     property_id: "int",
     output: "void*",
 ) -> "int":
     """
     **c++ signature** : ``HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(void* ctx, void* P, void* T_mix, int n_control_volumes,
-    int phase1_id, int phase2_id, int property_id, void* output)``
+    int phase1_id, int phase2_id, int phase_pair_id, int property_id, void* output)``
 
     Hook to calculate the state variable given by the `property_id` (See :cpp:enum:`StateVariable` values), for the phase
     pair `(phase1_id, phase2_id)` (Note that the phase id is the same as the one retrieved from the :cpp:func:`get_phase_id()`
@@ -715,8 +716,9 @@ def calculate_phase_pair_state_variable(
     :param P: Pressure values array
     :param T_mix: Mixture temperature values array
     :param n_control_volumes: Number of control volumes
-    :param n_phase1_id: Id of phase one in which the property must be calculated
-    :param n_phase2_id: Id of phase two in which the property must be calculated
+    :param phase1_id: Id of phase one in which the property must be calculated
+    :param phase2_id: Id of phase two in which the property must be calculated
+    :param phase_pair_id: Id of the phase pair in which the property must be calculated
     :param property_id: A :cpp:enum:`StateVariable` value. It indicates which
                         property must be calculated
     :param output: Output values array
@@ -726,6 +728,11 @@ def calculate_phase_pair_state_variable(
     pressure ``P`` and mixture temperature ``T_mix`` are given in order to perform the calculation.
     The number of control volumes is also given for convenience.
 
+    Since the state properties calculated by this hook is performed for phase pairs, the information
+    of the phases involved is provided by the ``phase_pair_id`` and also by the single phase IDs called
+    ``phase1_id`` and  ``phase2_id``. To identify which ``phase_pair_id`` are being passed it is possible
+    to retrieve the phase pair IDs by using :cpp:func:`get_phase_pair_id`.
+
     Example of usage:
 
     .. code-block:: c++
@@ -733,7 +740,7 @@ def calculate_phase_pair_state_variable(
         :emphasize-lines: 1
 
         HOOK_CALCULATE_PHASE_PAIR_STATE_VARIABLE(
-            ctx, P, T_mix, n_control_volumes, phase1_id, phase2_id, property_id, output)
+            ctx, P, T_mix, n_control_volumes, phase1_id, phase2_id, phase_pair_id, property_id, output)
         {
             // getting plugin internal data
             int errcode = -1;
