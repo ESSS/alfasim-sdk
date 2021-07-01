@@ -6,6 +6,5 @@ pytest
 pytest-cov
 pytest-mock
 pytest-regressions
-strictyaml
 toposort
-typing_inspect
+ruamel.yaml
