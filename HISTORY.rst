@@ -2,6 +2,12 @@
 History
 =======
 
+0.10.1 (2021-06-30)
+===================
+
+* Temporarily pin ``strictyaml`` dependency due to conflicts.
+
+
 0.10.0 (2021-06-29)
 ===================
 
