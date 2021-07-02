@@ -2,7 +2,13 @@
 History
 =======
 
-0.10.0 (unreleased)
+0.10.1 (2021-06-30)
+===================
+
+* Temporarily pin ``strictyaml`` dependency due to conflicts.
+
+
+0.10.0 (2021-06-29)
 ===================
 
 * Add a new category ``gas standard volume`` from quantity ``standard volume``.
