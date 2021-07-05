@@ -117,7 +117,15 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_primary_field_id_of_phase
 
+.. warning::
+    Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
+    The plugin must **NEVER** change the contents returned by this function.
+
 .. doxygenfunction:: get_phase_id_of_fields
+
+.. warning::
+    Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
+    The plugin must **NEVER** change the contents returned by this function.
 
 .. doxygenfunction:: get_field_ids_in_layer
 
