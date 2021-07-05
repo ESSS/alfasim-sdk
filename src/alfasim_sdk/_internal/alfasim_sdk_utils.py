@@ -1,3 +1,5 @@
+from typing import Any
+from typing import Dict
 from typing import Optional
 from typing import Tuple
 
@@ -31,7 +33,7 @@ def get_attr_class(
     return attr_class
 
 
-def is_a_valid_field(value) -> bool:
+def is_a_valid_field(value: type) -> bool:
     """
     A utility method to indicate if the given value is BaseField or a Tab layout
     """
@@ -49,7 +51,7 @@ def is_a_valid_field(value) -> bool:
     return valid_field
 
 
-def get_all_attributes(class_: type):
+def get_all_attributes(class_: type) -> Dict[str, Any]:
     """
     Return a dictionary with all attributes from the given class_ converted to an attr.Attribute, ignoring all "dunders"
     method and raising a TypeError to avoid attributes with a "_" at the beginning of the name
@@ -74,19 +76,17 @@ def get_all_attributes(class_: type):
     return attributes
 
 
-def get_current_version():
+def get_current_version() -> str:
     """
     Checks current version of alfasim-sdk. Extracted to be easier to mock in tests.
-    :return:
     """
     import alfasim_sdk
 
     return alfasim_sdk.__version__
 
 
-def get_extras_default_required_version():
+def get_extras_default_required_version() -> str:
     """
-    :rtype str:
     :return:
         Returns a string with default alfasim-sdk version requirement for plugins. Default is
         greater or equal current version and lesser than next major release.

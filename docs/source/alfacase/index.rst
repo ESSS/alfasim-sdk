@@ -19,7 +19,7 @@ ALFAcase file (``.alfacase``):
 
 CaseDescription instance:
     A class that helps to generate a valid ``.alfacase`` file programmatically using |SDK| by instantiating a
-    :class:`CaseDescription <alfasim_sdk.CaseDescription>` object to define an ``ALFAsim`` project.
+    :py:class:`CaseDescription <alfasim_sdk.CaseDescription>` object to define an ``ALFAsim`` project.
 
 
 To get quick and running with |sdk| you can read the :ref:`alfacase-quick-start-section` and the

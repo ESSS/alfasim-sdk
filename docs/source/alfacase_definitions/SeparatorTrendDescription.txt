@@ -1,0 +1,17 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class SeparatorTrendDescription
+            curve_names: \ :class:`List <typing.List>`\[str]
+            element_name: str
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            curve_names: 
+                - str
+            element_name: string

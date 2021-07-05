@@ -1,0 +1,15 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class GlobalTrendDescription
+            curve_names: \ :class:`List <typing.List>`\[str]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            curve_names: 
+                - str

@@ -300,9 +300,33 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.tracer_model_constant_coefficients_description_schema,
         is_dict=True,
     ),
-    "TrendOutputDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.TREND_OUTPUT_DESCRIPTION,
-        schema=schema.trend_output_description_schema,
+    "TrendsOutputDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.TRENDS_OUTPUT_DESCRIPTION,
+        schema=schema.trends_output_description_schema,
+    ),
+    "PositionalPipeTrendDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION,
+        schema=schema.positional_pipe_trend_description_schema,
+        is_sequence=True,
+    ),
+    "GlobalTrendDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.GLOBAL_TREND_OUTPUT_DESCRIPTION,
+        schema=schema.global_trend_description_schema,
+        is_sequence=True,
+    ),
+    "EquipmentTrendDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.EQUIPMENT_TREND_OUTPUT_DESCRIPTION,
+        schema=schema.equipment_trend_description_schema,
+        is_sequence=True,
+    ),
+    "OverallPipeTrendDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.OVERALL_PIPE_TREND_OUTPUT_DESCRIPTION,
+        schema=schema.overall_pipe_trend_description_schema,
+        is_sequence=True,
+    ),
+    "SeparatorTrendDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.SEPARATOR_TREND_OUTPUT_DESCRIPTION,
+        schema=schema.separator_trend_description_schema,
         is_sequence=True,
     ),
     "TubingDescription": AlfacaseTestConfig(
@@ -463,6 +487,18 @@ ALFACASE_TEST_CONFIG_MAP = {
     "CompressorPressureTableDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.COMPRESSOR_PRESSURE_TABLE_DESCRIPTION,
         schema=schema.compressor_pressure_table_description_schema,
+    ),
+    "ControllerInputSignalPropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION,
+        schema=schema.controller_input_signal_properties_description_schema,
+    ),
+    "ControllerOutputSignalPropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION,
+        schema=schema.controller_output_signal_properties_description_schema,
+    ),
+    "ControllerNodePropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_NODE_PROPERTIES_DESCRIPTION,
+        schema=schema.controller_node_properties_description_schema,
     ),
 }
 

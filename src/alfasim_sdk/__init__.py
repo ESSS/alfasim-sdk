@@ -158,7 +158,14 @@ from alfasim_sdk._internal.alfacase.case_description import TracersDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     TracersMassFractionsContainerDescription,
 )
-from alfasim_sdk._internal.alfacase.case_description import TrendOutputDescription
+from alfasim_sdk._internal.alfacase.case_description import (
+    TrendsOutputDescription,
+    PositionalPipeTrendDescription,
+    OverallPipeTrendDescription,
+    GlobalTrendDescription,
+    EquipmentTrendDescription,
+    SeparatorTrendDescription,
+)
 from alfasim_sdk._internal.alfacase.case_description import TubingDescription
 from alfasim_sdk._internal.alfacase.case_description import ValveEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -171,6 +178,14 @@ from alfasim_sdk._internal.alfacase.case_description import WallDescription
 from alfasim_sdk._internal.alfacase.case_description import WallLayerDescription
 from alfasim_sdk._internal.alfacase.case_description import WellDescription
 from alfasim_sdk._internal.alfacase.case_description import XAndYDescription
+
+from alfasim_sdk._internal.alfacase.case_description import (
+    ControllerNodePropertiesDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
+    ControllerInputSignalPropertiesDescription,
+    ControllerOutputSignalPropertiesDescription,
+)
 
 # ALFACase: Utilities
 from alfasim_sdk._internal.alfacase.alfacase import convert_alfacase_to_description
@@ -186,6 +201,7 @@ from alfasim_sdk._internal.constants import BUBBLE_FIELD
 from alfasim_sdk._internal.constants import CompressorSpeedType
 from alfasim_sdk._internal.constants import CorrelationPackage
 from alfasim_sdk._internal.constants import CorrelationPackageType
+from alfasim_sdk._internal.constants import ControllerType
 from alfasim_sdk._internal.constants import DEFAULT_TEMPERATURE_IN_K
 from alfasim_sdk._internal.constants import DROPLET_FIELD
 from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
@@ -265,6 +281,7 @@ from alfasim_sdk._internal.types import AddLayer
 from alfasim_sdk._internal.types import UpdateLayer
 
 # Plugins: Types  for UI customization
+from alfasim_sdk._internal.types import BaseField
 from alfasim_sdk._internal.types import Boolean
 from alfasim_sdk._internal.types import Enum
 from alfasim_sdk._internal.types import FileContent
@@ -296,6 +313,10 @@ __all__ = [
     "CompositionDescription",
     "CompressorEquipmentDescription",
     "CompressorPressureTableDescription",
+    "ControllerNodePropertiesDescription",
+    "ControllerInputSignalPropertiesDescription",
+    "ControllerOutputSignalPropertiesDescription",
+    "ControllerType",
     "CvTableDescription",
     "EnvironmentDescription",
     "EnvironmentPropertyDescription",
@@ -352,7 +373,12 @@ __all__ = [
     "TracerModelConstantCoefficientsDescription",
     "TracersDescription",
     "TracersMassFractionsContainerDescription",
-    "TrendOutputDescription",
+    "TrendsOutputDescription",
+    "PositionalPipeTrendDescription",
+    "OverallPipeTrendDescription",
+    "GlobalTrendDescription",
+    "EquipmentTrendDescription",
+    "SeparatorTrendDescription",
     "TubingDescription",
     "ValveEquipmentDescription",
     "VelocitiesContainerDescription",
@@ -437,6 +463,7 @@ __all__ = [
     "Enum",
     "FileContent",
     "MultipleReference",
+    "BaseField",
     "Quantity",
     "Reference",
     "String",

@@ -19,72 +19,71 @@ from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
 
-
 INDENTANTION = "    "
 
 
-def is_enum(value):
+def is_enum(value: typing.Any):
     return isinstance(value, EnumMeta)
 
 
-def enum_to_alfacase_schema(type_, indent):
+def enum_to_alfacase_schema(type_: type, indent: int) -> str:
     return f"Enum({[i.value for i in type_]})"
 
 
-def is_numpy_1_darray(type_):
+def is_numpy_1_darray(type_: type) -> bool:
     return typing_inspect.is_new_type(type_) and type_.__name__ == "Numpy1DArray"
 
 
-def numpy_1_darray_to_alfacase_schema(type_, indent):
+def numpy_1_darray_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Seq(Float())"
 
 
-def is_list(type_):
+def is_list(type_: type) -> bool:
     return typing_inspect.get_origin(type_) in (typing.List, list)
 
 
-def list_to_alfacase_schema(type_, indent):
+def list_to_alfacase_schema(type_: type, indent: int) -> str:
     list_value = typing_inspect.get_args(type_)[0]
     return f"Seq({_get_attr_value(list_value, indent=indent+1)})"
 
 
-def is_float(type_):
+def is_float(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, float)
 
 
-def float_to_alfacase_schema(type_, indent):
+def float_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Float()"
 
 
-def is_boolean(type_):
+def is_boolean(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, bool)
 
 
-def boolean_to_alfacase_schema(type_, indent):
+def boolean_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Bool()"
 
 
-def is_str(type_):
+def is_str(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, str)
 
 
-def str_to_alfacase_schema(type_, indent):
+def str_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Str()"
 
 
-def is_attrs(type_):
+def is_attrs(type_: type) -> bool:
     return any((hasattr(i, "__attrs_attrs__") for i in flatten([type_])))
 
 
-def attrs_to_alfacase_schema(type_, indent):
+def attrs_to_alfacase_schema(type_: type, indent: int) -> str:
     return obtain_schema_name(type_)
 
 
-def is_dict(type_):
+def is_dict(type_: type) -> bool:
     return typing_inspect.get_origin(type_) in (typing.Dict, dict)
 
 
-def dict_to_alfacase_schema(type_, indent):
+def dict_to_alfacase_schema(type_: type, indent: int) -> str:
     key_type, value_type = (
         typing_inspect.get_last_args(type_)
         if sys.version_info.minor == 6
@@ -104,12 +103,12 @@ def dict_to_alfacase_schema(type_, indent):
         return f"MapPattern(Str(), {value_schema})"
 
 
-def is_union(type_):
+def is_union(type_: type) -> bool:
     return typing_inspect.is_union_type(type_)
 
 
 @contextmanager
-def _map_section(lines, indent=0):
+def _map_section(lines: List[str], indent=0) -> List[str]:
     body_indent = indent + 1
     lines.append("Map(")
     lines.append(f"{INDENTANTION * body_indent}{{")
@@ -118,7 +117,7 @@ def _map_section(lines, indent=0):
     lines.append(f"{INDENTANTION * indent})")
 
 
-def union_to_alfacase_schema(type_, *, indent=0):
+def union_to_alfacase_schema(type_: type, *, indent=0) -> str:
     """
     Creates a structure that allows multiples types for the same key.
 
@@ -153,27 +152,27 @@ def union_to_alfacase_schema(type_, *, indent=0):
     return "\n".join(lines)
 
 
-def is_scalar(type_):
+def is_scalar(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Scalar)
 
 
-def scalar_to_alfacase_schema(type_, indent):
+def scalar_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"value": Float(), "unit": Str()})'
 
 
-def is_array(type_):
+def is_array(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Array)
 
 
-def array_to_alfacase_schema(type_, indent):
+def array_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"values": Seq(Float()), "unit": Str()})'
 
 
-def is_curve(type_):
+def is_curve(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Curve)
 
 
-def curve_to_alfacase_schema(type_, indent):
+def curve_to_alfacase_schema(type_: type, indent: int) -> str:
     map_items_indent = indent + 2
     array_schema = array_to_alfacase_schema(float, indent=map_items_indent)
 
@@ -184,24 +183,24 @@ def curve_to_alfacase_schema(type_, indent):
     return "\n".join(lines)
 
 
-def is_int(type_):
+def is_int(type_: type) -> bool:
     # bool is a subclass of int, but we are not intersted in matching that here.
     return inspect.isclass(type_) and issubclass(type_, int) and not is_boolean(type_)
 
 
-def int_to_alfacase_schema(type_, indent):
+def int_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Int()"
 
 
-def is_path(type_):
+def is_path(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Path)
 
 
-def path_to_alfacase_schema(type_, indent):
+def path_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Str()"
 
 
-LIST_OF_IMPLEMENTATIONS = [
+LIST_OF_IMPLEMENTATIONS: List[typing.Tuple[type, typing.Callable]] = [
     (is_enum, enum_to_alfacase_schema),
     (is_attrs, attrs_to_alfacase_schema),
     (is_list, list_to_alfacase_schema),

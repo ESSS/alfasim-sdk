@@ -1,0 +1,23 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PositionalPipeTrendDescription
+            curve_names: \ :class:`List <typing.List>`\[str]
+            location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
+            position: \ :class:`Scalar <barril.units.Scalar>`
+            element_name: str
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            curve_names: 
+                - str
+            location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
+            position: 
+                value: number
+                unit: string
+            element_name: string

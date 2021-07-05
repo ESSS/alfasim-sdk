@@ -6,6 +6,7 @@
     :"Btu/hr.m2.degC": Btus/hour metre squared deg C
     :"Btu/s.ft2.degF": Btus/second per square foot deg F
     :"cal/h.cm2.degC": calories/hour square centimetre deg C
+    :"cal/h.m2.degC": calorie/hour square metre deg C
     :"cal/s.cm2.degC": calories/second square centimetre deg C
     :"J/s.m2.degC": joules/second square metre deg C
     :"kcal/h.m2.degC": kilocalorie/hour square metre deg C

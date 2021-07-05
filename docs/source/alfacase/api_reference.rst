@@ -32,8 +32,17 @@ Outputs
 
 .. autoclass:: alfasim_sdk.ProfileOutputDescription()
 
-.. autoclass:: alfasim_sdk.TrendOutputDescription()
+.. autoclass:: alfasim_sdk.TrendsOutputDescription()
 
+.. autoclass:: alfasim_sdk.PositionalPipeTrendDescription()
+
+.. autoclass:: alfasim_sdk.EquipmentTrendDescription()
+
+.. autoclass:: alfasim_sdk.SeparatorTrendDescription()
+
+.. autoclass:: alfasim_sdk.GlobalTrendDescription()
+
+.. autoclass:: alfasim_sdk.OverallPipeTrendDescription()
 
 .. _alfacase-reference-pvt-section:
 
@@ -140,6 +149,12 @@ Node
 .. autoclass:: alfasim_sdk.InternalNodePropertiesDescription()
 
 .. autoclass:: alfasim_sdk.SeparatorNodePropertiesDescription()
+
+.. autoclass:: alfasim_sdk.ControllerInputSignalPropertiesDescription()
+
+.. autoclass:: alfasim_sdk.ControllerOutputSignalPropertiesDescription()
+
+.. autoclass:: alfasim_sdk.ControllerNodePropertiesDescription()
 
 
 Well

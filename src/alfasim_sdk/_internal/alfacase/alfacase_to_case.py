@@ -170,7 +170,9 @@ def get_case_description_attribute_loader_dict(
     return loaders
 
 
-def load_scalar(key: str, alfacase_content: DescriptionDocument, category) -> Scalar:
+def load_scalar(
+    key: str, alfacase_content: DescriptionDocument, category: str
+) -> Scalar:
     """
     Create a barril.units.Scalar instance from the given alfacase_content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -197,7 +199,7 @@ def get_scalar_loader(
     )
 
 
-def load_array(key: str, alfacase_content: DescriptionDocument, category) -> Array:
+def load_array(key: str, alfacase_content: DescriptionDocument, category: str) -> Array:
     """
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -225,7 +227,9 @@ def get_array_loader(
 
 
 def load_list_of_arrays(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
 ) -> List[Array]:
     """
     Create a barril.units.Array instance from the given YAML content.
@@ -253,7 +257,9 @@ def get_list_of_arrays_loader(
 
 
 def load_dict_of_arrays(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
 ) -> Dict[str, Array]:
     """
     Create a Dict of str to barril.units.Array instances from the given YAML content.
@@ -280,7 +286,7 @@ def get_dict_of_arrays_loader(
     )
 
 
-def load_curve(key: str, alfacase_content: DescriptionDocument, category) -> Curve:
+def load_curve(key: str, alfacase_content: DescriptionDocument, category: str) -> Curve:
     """
     Create a barril.curve.curve.Curve instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -354,7 +360,9 @@ def _obtain_category_for_scalar(category: str, from_unit: str) -> str:
 
 
 def load_dict_with_scalar(
-    key: str, alfacase_content: DescriptionDocument, category
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
 ) -> Dict[str, Scalar]:
     return {
         key: Scalar(category, value["value"], value["unit"])
@@ -466,7 +474,9 @@ def load_pvt_model_correlation_description(
         ),
     }
 
-    def generate_pvt_model_correlation(value: DescriptionDocument):
+    def generate_pvt_model_correlation(
+        value: DescriptionDocument,
+    ) -> case_description.PvtModelCorrelationDescription:
         case_values = to_case_values(value, alfacase_to_case_description)
         item_description = case_description.PvtModelCorrelationDescription(
             **case_values
@@ -1336,25 +1346,100 @@ def load_table_pump_description(
     return update_multi_input_flags(document, item_description)
 
 
-def load_trend_output_description(
+def generate_trend_description(
     document: DescriptionDocument,
-) -> List[case_description.TrendOutputDescription]:
+    alfacase_to_case_description: Dict[str, Callable],
+    description_type: [T],
+) -> [T]:
+    case_values = to_case_values(document, alfacase_to_case_description)
+    item_description = description_type(**case_values)
+    return update_multi_input_flags(document, item_description)
+
+
+def load_positional_pipe_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.PositionalPipeTrendDescription]:
     alfacase_to_case_description = {
         "curve_names": load_value,
         "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
         "element_name": load_value,
         "position": get_scalar_loader(from_unit="m"),
     }
-
-    def generate_trend_description(
-        document: DescriptionDocument,
-    ) -> case_description.TrendOutputDescription:
-        case_values = to_case_values(document, alfacase_to_case_description)
-        item_description = case_description.TrendOutputDescription(**case_values)
-        return update_multi_input_flags(document, item_description)
-
     return [
-        generate_trend_description(alfacase_document) for alfacase_document in document
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.PositionalPipeTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_equipment_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.EquipmentTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.EquipmentTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_separator_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.SeparatorTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.SeparatorTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_global_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.GlobalTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.GlobalTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
+def load_overall_pipe_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.OverallPipeTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+        "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.OverallPipeTrendDescription,
+        )
+        for alfacase_document in document
     ]
 
 
@@ -1416,13 +1501,28 @@ def load_annulus_description(
     return update_multi_input_flags(document, item_description)
 
 
+def load_trends_output_description(
+    document: DescriptionDocument,
+) -> case_description.TrendsOutputDescription:
+    alfacase_to_case_description = {
+        "positional_pipe_trends": load_positional_pipe_trend_description,
+        "equipment_trends": load_equipment_trend_description,
+        "global_trends": load_global_trend_description,
+        "overall_pipe_trends": load_overall_pipe_trend_description,
+        "separator_trends": load_separator_trend_description,
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    item_description = case_description.TrendsOutputDescription(**case_values)
+    return update_multi_input_flags(document, item_description)
+
+
 def load_case_output_description(
     document: DescriptionDocument,
 ) -> case_description.CaseOutputDescription:
     alfacase_to_case_description = {
         "profiles": load_profile_output_description,
-        "trends": load_trend_output_description,
         "profile_frequency": get_scalar_loader(from_unit="s"),
+        "trends": load_trends_output_description,
         "trend_frequency": get_scalar_loader(from_unit="s"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)

@@ -13,9 +13,7 @@ from barril.units import Scalar
 from alfasim_sdk import CaseDescription
 from alfasim_sdk import CompressorEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    attrib_instance,
-)
+from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_instance
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     attrib_instance_list,
 )
@@ -412,6 +410,9 @@ def test_get_cases_class():
         "CompositionDescription",
         "CompressorEquipmentDescription",
         "CompressorPressureTableDescription",
+        "ControllerInputSignalPropertiesDescription",
+        "ControllerNodePropertiesDescription",
+        "ControllerOutputSignalPropertiesDescription",
         "CvTableDescription",
         "EnvironmentDescription",
         "EnvironmentPropertyDescription",
@@ -467,7 +468,12 @@ def test_get_cases_class():
         "TracerModelConstantCoefficientsDescription",
         "TracersDescription",
         "TracersMassFractionsContainerDescription",
-        "TrendOutputDescription",
+        "TrendsOutputDescription",
+        "PositionalPipeTrendDescription",
+        "EquipmentTrendDescription",
+        "SeparatorTrendDescription",
+        "GlobalTrendDescription",
+        "OverallPipeTrendDescription",
         "TubingDescription",
         "ValveEquipmentDescription",
         "VelocitiesContainerDescription",

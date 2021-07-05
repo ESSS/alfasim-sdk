@@ -51,6 +51,24 @@ compressor_pressure_table_description_schema = Map(
         Optional("isentropic_efficiency_table"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
+controller_input_signal_properties_description_schema = Map(
+    {
+        Optional("target_variable"): Str(),
+        Optional("unit"): Str(),
+        Optional("network_element_name"): Str(),
+        Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
+    }
+)
+controller_output_signal_properties_description_schema = Map(
+    {
+        Optional("controlled_property"): Str(),
+        Optional("unit"): Str(),
+        Optional("network_element_name"): Str(),
+        Optional("min_value"): Float(),
+        Optional("max_value"): Float(),
+        Optional("max_rate_of_change"): Float(),
+    }
+)
 cv_table_description_schema = Map(
     {
         Optional("opening"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -67,6 +85,12 @@ environment_property_description_schema = Map(
         Optional("fluid_velocity"): Map({"value": Float(), "unit": Str()}),
     }
 )
+equipment_trend_description_schema = Map(
+    {
+        "curve_names": Seq(Str()),
+        "element_name": Str(),
+    }
+)
 formation_layer_description_schema = Map(
     {
         "name": Str(),
@@ -81,6 +105,11 @@ gas_lift_valve_equipment_description_schema = Map(
         "valve_type": Enum(['perkins_valve', 'choke_valve_with_flow_coefficient', 'check_valve']),
         "delta_p_min": Map({"value": Float(), "unit": Str()}),
         "discharge_coeff": Map({"value": Float(), "unit": Str()}),
+    }
+)
+global_trend_description_schema = Map(
+    {
+        "curve_names": Seq(Str()),
     }
 )
 heat_source_equipment_description_schema = Map(
@@ -314,6 +343,13 @@ open_hole_description_schema = Map(
         "inner_roughness": Map({"value": Float(), "unit": Str()}),
     }
 )
+overall_pipe_trend_description_schema = Map(
+    {
+        "curve_names": Seq(Str()),
+        "location": Enum(['main', 'annulus', 'not_defined']),
+        "element_name": Str(),
+    }
+)
 packer_description_schema = Map(
     {
         "name": Str(),
@@ -342,6 +378,14 @@ pipe_segments_description_schema = Map(
         "diameters": Map({"values": Seq(Float()), "unit": Str()}),
         "roughnesses": Map({"values": Seq(Float()), "unit": Str()}),
         Optional("wall_names"): Seq(Str()),
+    }
+)
+positional_pipe_trend_description_schema = Map(
+    {
+        "curve_names": Seq(Str()),
+        "location": Enum(['main', 'annulus', 'not_defined']),
+        "position": Map({"value": Float(), "unit": Str()}),
+        "element_name": Str(),
     }
 )
 pressure_container_description_schema = Map(
@@ -422,8 +466,8 @@ pressure_node_properties_description_schema = Map(
 profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
-        "element_name": Str(),
         "location": Enum(['main', 'annulus', 'not_defined']),
+        "element_name": Str(),
     }
 )
 pvt_model_correlation_description_schema = Map(
@@ -555,6 +599,12 @@ separator_node_properties_description_schema = Map(
         Optional("liquid_separation_efficiency"): Map({"value": Float(), "unit": Str()}),
     }
 )
+separator_trend_description_schema = Map(
+    {
+        "curve_names": Seq(Str()),
+        "element_name": Str(),
+    }
+)
 speed_curve_description_schema = Map(
     {
         Optional("time"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -599,14 +649,6 @@ tracers_mass_fractions_container_description_schema = Map(
         Optional("tracers_mass_fractions"): Seq(Map({"values": Seq(Float()), "unit": Str()})),
     }
 )
-trend_output_description_schema = Map(
-    {
-        "curve_names": Seq(Str()),
-        "location": Enum(['main', 'annulus', 'not_defined']),
-        Optional("position"): Map({"value": Float(), "unit": Str()}),
-        Optional("element_name"): Str(),
-    }
-)
 tubing_description_schema = Map(
     {
         "name": Str(),
@@ -642,16 +684,6 @@ x_and_y_description_schema = Map(
         Optional("y"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
-case_output_description_schema = Map(
-    {
-        Optional("automatic_trend_frequency"): Bool(),
-        Optional("trends"): Seq(trend_output_description_schema),
-        Optional("trend_frequency"): Map({"value": Float(), "unit": Str()}),
-        Optional("automatic_profile_frequency"): Bool(),
-        Optional("profiles"): Seq(profile_output_description_schema),
-        Optional("profile_frequency"): Map({"value": Float(), "unit": Str()}),
-    }
-)
 casing_description_schema = Map(
     {
         Optional("casing_sections"): Seq(casing_section_description_schema),
@@ -671,6 +703,17 @@ compressor_equipment_description_schema = Map(
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("table"): compressor_pressure_table_description_schema,
+    }
+)
+controller_node_properties_description_schema = Map(
+    {
+        Optional("type"): Enum(['pid']),
+        Optional("gain"): Float(),
+        Optional("setpoint"): Float(),
+        Optional("integral_time"): Map({"value": Float(), "unit": Str()}),
+        Optional("derivative_time"): Map({"value": Float(), "unit": Str()}),
+        Optional("input_signal_properties"): controller_input_signal_properties_description_schema,
+        Optional("output_signal_properties"): controller_output_signal_properties_description_schema,
     }
 )
 environment_description_schema = Map(
@@ -734,17 +777,6 @@ initial_volume_fractions_description_schema = Map(
         Optional("table_length"): volume_fractions_container_description_schema,
     }
 )
-node_description_schema = Map(
-    {
-        "name": Str(),
-        "node_type": Enum(['internal_node', 'mass_source_boundary', 'pressure_boundary', 'separator_node']),
-        Optional("pvt_model"): Str(),
-        Optional("pressure_properties"): pressure_node_properties_description_schema,
-        Optional("mass_source_properties"): mass_source_node_properties_description_schema,
-        Optional("internal_properties"): internal_node_properties_description_schema,
-        Optional("separator_properties"): separator_node_properties_description_schema,
-    }
-)
 profile_description_schema = Map(
     {
         Optional("x_and_y"): x_and_y_description_schema,
@@ -774,6 +806,15 @@ tracers_description_schema = Map(
         Optional("constant_coefficients"): MapPattern(Str(), tracer_model_constant_coefficients_description_schema),
     }
 )
+trends_output_description_schema = Map(
+    {
+        Optional("positional_pipe_trends"): Seq(positional_pipe_trend_description_schema),
+        Optional("overall_pipe_trends"): Seq(overall_pipe_trend_description_schema),
+        Optional("global_trends"): Seq(global_trend_description_schema),
+        Optional("equipment_trends"): Seq(equipment_trend_description_schema),
+        Optional("separator_trends"): Seq(separator_trend_description_schema),
+    }
+)
 valve_equipment_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
@@ -797,6 +838,16 @@ wall_description_schema = Map(
         "name": Str(),
         Optional("inner_roughness"): Map({"value": Float(), "unit": Str()}),
         Optional("wall_layer_container"): Seq(wall_layer_description_schema),
+    }
+)
+case_output_description_schema = Map(
+    {
+        Optional("automatic_trend_frequency"): Bool(),
+        Optional("trends"): trends_output_description_schema,
+        Optional("trend_frequency"): Map({"value": Float(), "unit": Str()}),
+        Optional("automatic_profile_frequency"): Bool(),
+        Optional("profiles"): Seq(profile_output_description_schema),
+        Optional("profile_frequency"): Map({"value": Float(), "unit": Str()}),
     }
 )
 equipment_description_schema = Map(
@@ -823,6 +874,18 @@ initial_conditions_description_schema = Map(
         Optional("velocities"): initial_velocities_description_schema,
         Optional("temperatures"): initial_temperatures_description_schema,
         Optional("fluid"): Str(),
+    }
+)
+node_description_schema = Map(
+    {
+        "name": Str(),
+        "node_type": Enum(['internal_node', 'mass_source_boundary', 'pressure_boundary', 'separator_node', 'controller_node']),
+        Optional("pvt_model"): Str(),
+        Optional("pressure_properties"): pressure_node_properties_description_schema,
+        Optional("mass_source_properties"): mass_source_node_properties_description_schema,
+        Optional("internal_properties"): internal_node_properties_description_schema,
+        Optional("separator_properties"): separator_node_properties_description_schema,
+        Optional("controller_properties"): controller_node_properties_description_schema,
     }
 )
 pvt_model_compositional_description_schema = Map(
@@ -900,5 +963,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 710fb058c518db160703194f4a2e87fc)
+# [[[end]]] (checksum: 2ae7e29c38656cbeb56adb4770e1c912)
 # fmt: on
