@@ -1,0 +1,27 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class TrendsOutputDescription
+            positional_pipe_trends: \ :class:`List <typing.List>`\[\ :class:`PositionalPipeTrendDescription <PositionalPipeTrendDescription>`\] = []
+            overall_pipe_trends: \ :class:`List <typing.List>`\[\ :class:`OverallPipeTrendDescription <OverallPipeTrendDescription>`\] = []
+            global_trends: \ :class:`List <typing.List>`\[\ :class:`GlobalTrendDescription <GlobalTrendDescription>`\] = []
+            equipment_trends: \ :class:`List <typing.List>`\[\ :class:`EquipmentTrendDescription <EquipmentTrendDescription>`\] = []
+            separator_trends: \ :class:`List <typing.List>`\[\ :class:`SeparatorTrendDescription <SeparatorTrendDescription>`\] = []
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            positional_pipe_trends:  # optional
+                - \ :class:`positional_pipe_trend_description_schema <PositionalPipeTrendDescription>`
+            overall_pipe_trends:  # optional
+                - \ :class:`overall_pipe_trend_description_schema <OverallPipeTrendDescription>`
+            global_trends:  # optional
+                - \ :class:`global_trend_description_schema <GlobalTrendDescription>`
+            equipment_trends:  # optional
+                - \ :class:`equipment_trend_description_schema <EquipmentTrendDescription>`
+            separator_trends:  # optional
+                - \ :class:`separator_trend_description_schema <SeparatorTrendDescription>`

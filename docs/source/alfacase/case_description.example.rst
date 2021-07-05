@@ -262,7 +262,8 @@ and ``profiles``.
     from alfasim_sdk import (
         CaseDescription,
         CaseOutputDescription,
-        TrendOutputDescription,
+        TrendsOutputDescription,
+        PositionalPipeTrendDescription,
         OutputAttachmentLocation,
         ProfileOutputDescription,
     )
@@ -270,14 +271,16 @@ and ``profiles``.
     CaseDescription(
         # Omitting fields that configure Options, Pvt, Node and Pipes
         outputs=CaseOutputDescription(
-            trends=[
-                TrendOutputDescription(
-                    element_name="pipe",
-                    curve_names=["oil mass flow rate"],
-                    position=Scalar(100.0, "m"),
-                    location=OutputAttachmentLocation.Main,
-                )
-            ],
+            trends=TrendsOutputDescription(
+                positional_pipe_trends=[
+                    PositionalPipeTrendDescription(
+                        element_name="pipe",
+                        curve_names=["oil mass flow rate"],
+                        position=Scalar(100.0, "m"),
+                        location=OutputAttachmentLocation.Main,
+                    )
+                ]
+            ),
             trend_frequency=Scalar(0.1, "s"),
             profiles=[
                 ProfileOutputDescription(
@@ -314,7 +317,8 @@ Description with a project configuration and being converted to a ``.alfacase`` 
         LengthAndElevationDescription,
         PipeSegmentsDescription,
         CaseOutputDescription,
-        TrendOutputDescription,
+        TrendsOutputDescription,
+        PositionalPipeTrendDescription,
         OutputAttachmentLocation,
         ProfileOutputDescription,
         CaseOutputDescription,
@@ -378,14 +382,16 @@ Description with a project configuration and being converted to a ``.alfacase`` 
             ),
         ],
         outputs=CaseOutputDescription(
-            trends=[
-                TrendOutputDescription(
-                    element_name="pipe",
-                    curve_names=["oil mass flow rate"],
-                    position=Scalar(100.0, "m"),
-                    location=OutputAttachmentLocation.Main,
-                )
-            ],
+            trends=TrendsOutputDescription(
+                positional_pipe_trends=[
+                    PositionalPipeTrendDescription(
+                        element_name="pipe",
+                        curve_names=["oil mass flow rate"],
+                        position=Scalar(100.0, "m"),
+                        location=OutputAttachmentLocation.Main,
+                    )
+                ]
+            ),
             trend_frequency=Scalar(0.1, "s"),
             profiles=[
                 ProfileOutputDescription(

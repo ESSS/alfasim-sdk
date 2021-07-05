@@ -14,7 +14,7 @@ ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
 )
 
 # # Useful for debugging
-# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.TrendOutputDescription]
+# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.PositionalPipeTrendDefinition]
 
 
 @pytest.mark.parametrize("class_", ALL_CLASSES_THAT_NEEDS_SCHEMA)

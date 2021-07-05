@@ -109,13 +109,13 @@ def to_scalar(
 
     Ex.:
     @attr.s
-    class TrendOutputDescription:
+    class PositionalOutputDescription:
         pos = attrib_scalar()
         temperature = attrib_scalar(is_optional=True))
 
-    TrendOutputDescription(position=Scalar(1,"m"))
-    TrendOutputDescription(position=(1,"m"))
-    TrendOutputDescription(temperature=None)
+    PositionalOutputDescription(position=Scalar(1,"m"))
+    PositionalOutputDescription(position=(1,"m"))
+    PositionalOutputDescription(temperature=None)
     """
     if is_optional and value is None:
         return value

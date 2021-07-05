@@ -4,9 +4,8 @@
 
     .. parsed-literal::
 
-        class ProfileOutputDescription
+        class SeparatorTrendDescription
             curve_names: \ :class:`List <typing.List>`\[str]
-            location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
             element_name: str
 
 .. tab:: Schema
@@ -15,5 +14,4 @@
 
             curve_names: 
                 - str
-            location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
             element_name: string
