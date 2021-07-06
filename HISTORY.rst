@@ -2,7 +2,25 @@
 History
 =======
 
-0.10.0 (unreleased)
+
+0.11.0 (unreleased)
+===================
+
+* **Breaking Change**: Change ``TrendOutputDescription`` to support different trends types. Now trends in ``CaseOutputDescription`` are an object of ``TrendsOutputDescription`` that contains a list for each trend type. The available trend types are:
+    - ``PositionalPipeTrendDescription``;
+    - ``GlobalTrendDescription``;
+    - ``OverallPipeTrendDescription``;
+    - ``EquipmentTrendDescription``;
+    - ``SeparatorTrendDescription``;
+
+
+0.10.1 (2021-06-30)
+===================
+
+* Temporarily pin ``strictyaml`` dependency due to conflicts.
+
+
+0.10.0 (2021-06-29)
 ===================
 
 * Add a new category ``gas standard volume`` from quantity ``standard volume``.
@@ -16,12 +34,6 @@ History
 * **Breaking Change**: Change signature of ``HOOK_INITIALIZE_STATE_VARIABLES_CALCULATOR``.
 * **Breaking Change**: Change signature of ``HOOK_CALCULATE_RELATIVE_EMULSION_VISCOSITY``.
 * Add new API function ``get_relative_emulsion_viscosity`` which is a helper function that can be used in the Hooks of Liquid-Liquid Mechanistic Model.
-* **Breaking Change**: Change ``TrendOutputDescription`` to support different trends types. Now trends in ``CaseOutputDescription`` are an object of ``TrendsOutputDescription`` that contains a list for each trend type. The available trend types are:
-    - ``PositionalPipeTrendDescription``;
-    - ``GlobalTrendDescription``;
-    - ``OverallPipeTrendDescription``;
-    - ``EquipmentTrendDescription``;
-    - ``SeparatorTrendDescription``;
 
 
 0.9.0 (2021-05-04)

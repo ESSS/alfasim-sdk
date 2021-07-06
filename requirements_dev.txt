@@ -1,4 +1,3 @@
-barril
 cogapp
 coverage
 invoke
@@ -7,8 +6,4 @@ pytest
 pytest-cov
 pytest-mock
 pytest-regressions
-strictyaml==1.3.2
 toposort
-typing_inspect
-ruamel.yaml==0.16.12
-ruamel.yaml.clib==0.2.2
