@@ -262,7 +262,7 @@ DLL_EXPORT int get_plugin_input_data_multiplereference_selected_size(void* ctx, 
 DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, enum TimestepScope ts_scope, int* size);
 
 /*!
-    Gets the field ID of the given name. Althought this depends on the hydrodynamic model being
+    Gets the field ID of the given name. Although this depends on the hydrodynamic model being
     solved, common values include "gas", "oil", "droplet" and "bubble". This functions supports
     retrieve ID of field added by plugin.
 
@@ -274,7 +274,7 @@ DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_n
 DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
 
 /*!
-    Gets the phase ID of the given name. Althought this depends on the hydrodynamic model
+    Gets the phase ID of the given name. Although this depends on the hydrodynamic model
     being solved, common values include "gas", "oil" and "water". This functions supports
     retrieve ID of phase added by plugin.
 
@@ -286,7 +286,7 @@ DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
 
 /*!
-    Gets the layer ID of the given name. Althought this depends on the hydrodynamic model
+    Gets the layer ID of the given name. Although this depends on the hydrodynamic model
     being solved, common values include "gas", "oil" and "water". This functions supports
     retrieve ID of layer added by plugin.
 
