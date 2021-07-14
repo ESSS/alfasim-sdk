@@ -86,9 +86,16 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_plugin_input_data_reference = (get_plugin_input_data_reference_func)GetProcAddress(api->handle, "get_plugin_input_data_reference");
     api->get_plugin_variable = (get_plugin_variable_func)GetProcAddress(api->handle, "get_plugin_variable");
     api->get_field_id = (get_field_id_func)GetProcAddress(api->handle, "get_field_id");
-    api->get_primary_field_id_of_phase = (get_primary_field_id_of_phase_func)GetProcAddress(api->handle, "get_primary_field_id_of_phase");
     api->get_phase_id = (get_phase_id_func)GetProcAddress(api->handle, "get_phase_id");
     api->get_layer_id = (get_layer_id_func)GetProcAddress(api->handle, "get_layer_id");
+    api->get_number_of_fields = (get_number_of_fields_func)GetProcAddress(api->handle, "get_number_of_fields");
+    api->get_number_of_phases = (get_number_of_phases_func)GetProcAddress(api->handle, "get_number_of_phases");
+    api->get_number_of_layers = (get_number_of_layers_func)GetProcAddress(api->handle, "get_number_of_layers");
+    api->get_number_of_phase_pairs = (get_number_of_phase_pairs_func)GetProcAddress(api->handle, "get_number_of_phase_pairs");
+    api->get_primary_field_id_of_phase = (get_primary_field_id_of_phase_func)GetProcAddress(api->handle, "get_primary_field_id_of_phase");
+    api->get_phase_id_of_fields = (get_phase_id_of_fields_func)GetProcAddress(api->handle, "get_phase_id_of_fields");
+    api->get_field_ids_in_layer = (get_field_ids_in_layer_func)GetProcAddress(api->handle, "get_field_ids_in_layer");
+    api->get_phase_pair_id = (get_phase_pair_id_func)GetProcAddress(api->handle, "get_phase_pair_id");
     api->get_state_variable_array = (get_state_variable_array_func)GetProcAddress(api->handle, "get_state_variable_array");
     api->get_simulation_array = (get_simulation_array_func)GetProcAddress(api->handle, "get_simulation_array");
     api->get_simulation_tracer_array = (get_simulation_tracer_array_func)GetProcAddress(api->handle, "get_simulation_tracer_array");

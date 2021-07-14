@@ -262,7 +262,7 @@ DLL_EXPORT int get_plugin_input_data_multiplereference_selected_size(void* ctx, 
 DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_name, int line_index, enum TimestepScope ts_scope, int* size);
 
 /*!
-    Gets the field ID of the given name. Althought this depends on the hydrodynamic model being
+    Gets the field ID of the given name. Although this depends on the hydrodynamic model being
     solved, common values include "gas", "oil", "droplet" and "bubble". This functions supports
     retrieve ID of field added by plugin.
 
@@ -272,6 +272,71 @@ DLL_EXPORT int get_plugin_variable(void* ctx, void** out, const char* variable_n
     @return An #error_code value.
 */
 DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
+
+/*!
+    Gets the phase ID of the given name. Although this depends on the hydrodynamic model
+    being solved, common values include "gas", "oil" and "water". This functions supports
+    retrieve ID of phase added by plugin.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Phase ID.
+    @param[in] name Name of the phase to retrieve the ID.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
+
+/*!
+    Gets the layer ID of the given name. Although this depends on the hydrodynamic model
+    being solved, common values include "gas", "oil" and "water". This functions supports
+    retrieve ID of layer added by plugin.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Layer ID.
+    @param[in] name Name of the layer to retrieve the ID.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_layer_id(void* ctx, int* out, const char* name);
+
+/*!
+    Gives the number of fields in the hydrodynamic model being solved including dispersed
+    and continuous fields. This information may be important when new fields are added by
+    plugins.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of Fields.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_fields(void* ctx, int* out);
+
+/*!
+    Gives the number of phases in the hydrodynamic model being solved. This information
+    may be important when new phases are added by plugins.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of Phases.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_phases(void* ctx, int* out);
+
+/*!
+    Gives the number of layers in the hydrodynamic model being solved. This information
+    may be important when new layers are added by plugins.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of layers.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_layers(void* ctx, int* out);
+
+/*!
+    Gives the number of phase pairs in the hydrodynamic model being solved. It depends
+    on number of phases and may be important to calculate the phase pair state variables.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Number of phase pairs.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_number_of_phase_pairs(void* ctx, int* out);
 
 /*!
     Gets the primary field ID of the phase with given name. For example, the "oil" phase has
@@ -287,28 +352,63 @@ DLL_EXPORT int get_field_id(void* ctx, int* out, const char* name);
 DLL_EXPORT int get_primary_field_id_of_phase(void* ctx, int* out, const char* name);
 
 /*!
-    Gets the phase ID of the given name. Althought this depends on the hydrodynamic model
-    being solved, common values include "gas", "oil" and "water". This functions supports
-    retrieve ID of phase added by plugin.
+    Gets an array of phase IDs, in which each element is related to the fields in the hydrodynamic
+    model. This function is usefull when is necessary to get information from a phase of a specific
+    field (for example "oil in water" field is a "oil" phase).
+
+    Example of usage:
+    ~~~~~{.cpp}
+    errcode = get_phase_id_of_fields(ctx, &phase_of_field, &size);
+    int oil_in_water_phase_id = phase_of_field[oil_in_water_field_id];
+    ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] out Phase ID.
-    @param[in] name Name of the phase to retrieve the ID.
+    @param[out] out Phase IDs array.
+    @param[out] size Size of the `out` array of IDs.
     @return An #error_code value.
 */
-DLL_EXPORT int get_phase_id(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_phase_id_of_fields(void* ctx, int** out, int* size);
 
 /*!
-    Gets the layer ID of the given name. Althought this depends on the hydrodynamic model
-    being solved, common values include "gas", "oil" and "water". This functions supports
-    retrieve ID of layer added by plugin.
+    Gets an array of field IDs which are contained in a layer. For example: the "oil" layer could
+    be formed by continuous "oil" field with dispersed "bubble"(gas) and dispersed "water in oil"
+    fields (and also other dispersed fields added by plugins).
+
+    Example of usage:
+    ~~~~~{.cpp}
+    errcode = get_field_ids_in_layer(ctx, &fields_in_Layer, layer_id, &size);
+    ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] out Layer ID.
-    @param[in] name Name of the layer to retrieve the ID.
+    @param[out] out Field IDs array.
+    @param[in] layer_id Layer ID in which the field IDs are required.
+    @param[out] size Size of the `out` array of IDs.
     @return An #error_code value.
 */
-DLL_EXPORT int get_layer_id(void* ctx, int* out, const char* name);
+DLL_EXPORT int get_field_ids_in_layer(void* ctx, int** out, int layer_id, int* size);
+
+/*!
+    Gets the phase pair ID given a pair of phase ID's. It is important to calculate a phase pair
+    properties (like surface tension) for more that one phase pair (For example: Gas-Oil,
+    Gas-Water and Oil-Water).
+
+    Since this function has phase ID's in parameters, it MUST be used in conjunction with
+    #get_phase_id function.
+
+    Example of usage:
+    ~~~~~{.cpp}
+    errcode = get_phase_id(ctx, &oil_phase_id, "oil");
+    errcode = get_phase_id(ctx, &water_phase_id, "water");
+    errcode = get_phase_pair_id(ctx, &oil_water_id, oil_phase_id, water_phase_id);
+    ~~~~~
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Phase pair ID.
+    @param[in] phase_0_id First phase ID of the pair.
+    @param[in] phase_1_id Second phase ID of the pair.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_phase_pair_id(void* ctx, int* out, int phase_0_id, int phase_1_id);
 
 /*!
     Gets the current contents of a given state variable (For an array data pointer).
@@ -318,7 +418,7 @@ DLL_EXPORT int get_layer_id(void* ctx, int* out, const char* name);
     Example of usage:
     ~~~~~{.cpp}
     errcode = get_state_variable_array(
-        ctx, enthalpy, StateVariable::H, FIELD_GAS, size);
+        ctx, &enthalpy, StateVariable::H, FIELD_GAS, &size);
     ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
@@ -790,7 +890,7 @@ DLL_EXPORT int get_liq_liq_shear_force_per_volume_input_variable(
     (dispersed field + continuous field) and the continuous field.
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] Relative Emulsion Viscosity [-].
+    @param[out] out Relative Emulsion Viscosity [-].
     @param[in] mu_disp Dispersed Field Viscosity [Pa.s].
     @param[in] mu_cont Continuous Field Viscosity [Pa.s].
     @param[in] alpha_disp_in_layer Dispersed Field Volume Fraction in the layer (emulsion) [m3 of dispersed field /m3 of layer].
