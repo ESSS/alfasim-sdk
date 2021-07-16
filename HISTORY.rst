@@ -7,11 +7,13 @@ History
 ===================
 
 * **Breaking Change**: Change ``TrendOutputDescription`` to support different trends types. Now trends in ``CaseOutputDescription`` are an object of ``TrendsOutputDescription`` that contains a list for each trend type. The available trend types are:
-    - ``PositionalPipeTrendDescription``;
-    - ``GlobalTrendDescription``;
-    - ``OverallPipeTrendDescription``;
-    - ``EquipmentTrendDescription``;
-    - ``SeparatorTrendDescription``;
+
+  - ``PositionalPipeTrendDescription``;
+  - ``GlobalTrendDescription``;
+  - ``OverallPipeTrendDescription``;
+  - ``EquipmentTrendDescription``;
+  - ``SeparatorTrendDescription``;
+  
 * Add new API functions related to Multi-Field Description info: ``get_number_of_fields``, ``get_number_of_phases``, ``get_number_of_layers`` and ``get_number_of_phase_pairs``.
 * Add new API functions related to Multi-Field Description phase and field ids: ``get_phase_id_of_fields``, ``get_field_ids_in_layer`` and ``get_phase_pair_id``.
 
