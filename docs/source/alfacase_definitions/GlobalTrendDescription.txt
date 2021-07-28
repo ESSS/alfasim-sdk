@@ -5,11 +5,13 @@
     .. parsed-literal::
 
         class GlobalTrendDescription
+            name: \ :class:`Optional <typing.Optional>`\[str] = None
             curve_names: \ :class:`List <typing.List>`\[str]
 
 .. tab:: Schema
 
     .. parsed-literal::
 
+            name: string  # optional
             curve_names: 
                 - str

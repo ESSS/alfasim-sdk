@@ -5,6 +5,7 @@
     .. parsed-literal::
 
         class SeparatorTrendDescription
+            name: \ :class:`Optional <typing.Optional>`\[str] = None
             curve_names: \ :class:`List <typing.List>`\[str]
             element_name: str
 
@@ -12,6 +13,7 @@
 
     .. parsed-literal::
 
+            name: string  # optional
             curve_names: 
                 - str
             element_name: string

@@ -6,17 +6,13 @@
 
         class ControllerInputSignalPropertiesDescription
             target_variable: \ :class:`Optional <typing.Optional>`\[str] = None
+            input_trend_name: \ :class:`Optional <typing.Optional>`\[str] = None
             unit: \ :class:`Optional <typing.Optional>`\[str] = None
-            network_element_name: \ :class:`Optional <typing.Optional>`\[str] = None
-            position_in_network_element: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             target_variable: string  # optional
+            input_trend_name: string  # optional
             unit: string  # optional
-            network_element_name: string  # optional
-            position_in_network_element:  # optional
-                value: number
-                unit: string
