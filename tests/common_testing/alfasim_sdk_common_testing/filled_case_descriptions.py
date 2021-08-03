@@ -1,15 +1,15 @@
 from pathlib import Path
 
 import numpy as np
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
 from . import case_builders
 from . import get_acme_tab_file_path
-from alfasim_sdk._internal import constants
-from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 
 BIP_DESCRIPTION = case_description.BipDescription(
     component_1="C1", component_2="C2", value=0.5
@@ -417,7 +417,7 @@ ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
     initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
     gas_lift_valve_equipment={"My gas-lift valve": GAS_LIST_VALVE_DESCRIPTION},
 )
-CASE_OUTPUT_DEFINITION = case_description.CaseOutputDescription(
+CASE_OUTPUT_DESCRIPTION = case_description.CaseOutputDescription(
     trends=TRENDS_OUTPUT_DESCRIPTION,
     trend_frequency=Scalar(0.1, "s"),
     profiles=[PROFILE_OUTPUT_DESCRIPTION],
@@ -601,7 +601,7 @@ CASE = case_description.CaseDescription(
     ipr_models=IPR_MODELS_DESCRIPTION,
     pvt_models=PVT_MODELS_DEFINITION,
     tracers=TRACERS_DESCRIPTION,
-    outputs=CASE_OUTPUT_DEFINITION,
+    outputs=CASE_OUTPUT_DESCRIPTION,
     pipes=[PIPE_DESCRIPTION],
     nodes=[
         NODE_MASS_SOURCE_DESCRIPTION,
