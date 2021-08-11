@@ -348,7 +348,7 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.annulus_description_schema,
     ),
     "CaseOutputDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.CASE_OUTPUT_DEFINITION,
+        description_expected=filled_case_descriptions.CASE_OUTPUT_DESCRIPTION,
         schema=schema.case_output_description_schema,
     ),
     "CasingDescription": AlfacaseTestConfig(

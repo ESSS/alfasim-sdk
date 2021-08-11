@@ -417,7 +417,7 @@ ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
     initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
     gas_lift_valve_equipment={"My gas-lift valve": GAS_LIST_VALVE_DESCRIPTION},
 )
-CASE_OUTPUT_DEFINITION = case_description.CaseOutputDescription(
+CASE_OUTPUT_DESCRIPTION = case_description.CaseOutputDescription(
     trends=TRENDS_OUTPUT_DESCRIPTION,
     trend_frequency=Scalar(0.1, "s"),
     profiles=[PROFILE_OUTPUT_DESCRIPTION],
@@ -601,7 +601,7 @@ CASE = case_description.CaseDescription(
     ipr_models=IPR_MODELS_DESCRIPTION,
     pvt_models=PVT_MODELS_DEFINITION,
     tracers=TRACERS_DESCRIPTION,
-    outputs=CASE_OUTPUT_DEFINITION,
+    outputs=CASE_OUTPUT_DESCRIPTION,
     pipes=[PIPE_DESCRIPTION],
     nodes=[
         NODE_MASS_SOURCE_DESCRIPTION,
