@@ -1391,7 +1391,9 @@ class ControllerInputSignalPropertiesDescription:
     target_variable: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    input_trend_name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    input_trend_name: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
     unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
