@@ -1382,8 +1382,8 @@ class ControllerInputSignalPropertiesDescription:
         Measured variable target of controller setpoint
     :ivar unit:
         Measuring unit of target variable
-    :ivar network_element_name:
-        Name of network element where target variable is measured
+    :ivar input_trend_name:
+        Name of input trend where target variable is measured
 
     .. include:: /alfacase_definitions/ControllerInputSignalPropertiesDescription.txt
     """
