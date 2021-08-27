@@ -5,6 +5,7 @@
     .. parsed-literal::
 
         class PositionalPipeTrendDescription
+            name: \ :class:`Optional <typing.Optional>`\[str] = None
             curve_names: \ :class:`List <typing.List>`\[str]
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
             position: \ :class:`Scalar <barril.units.Scalar>`
@@ -14,6 +15,7 @@
 
     .. parsed-literal::
 
+            name: string  # optional
             curve_names: 
                 - str
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`

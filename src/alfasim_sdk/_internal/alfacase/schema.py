@@ -54,9 +54,8 @@ compressor_pressure_table_description_schema = Map(
 controller_input_signal_properties_description_schema = Map(
     {
         Optional("target_variable"): Str(),
+        Optional("input_trend_name"): Str(),
         Optional("unit"): Str(),
-        Optional("network_element_name"): Str(),
-        Optional("position_in_network_element"): Map({"value": Float(), "unit": Str()}),
     }
 )
 controller_output_signal_properties_description_schema = Map(
@@ -87,6 +86,7 @@ environment_property_description_schema = Map(
 )
 equipment_trend_description_schema = Map(
     {
+        Optional("name"): Str(),
         "curve_names": Seq(Str()),
         "element_name": Str(),
     }
@@ -109,6 +109,7 @@ gas_lift_valve_equipment_description_schema = Map(
 )
 global_trend_description_schema = Map(
     {
+        Optional("name"): Str(),
         "curve_names": Seq(Str()),
     }
 )
@@ -345,6 +346,7 @@ open_hole_description_schema = Map(
 )
 overall_pipe_trend_description_schema = Map(
     {
+        Optional("name"): Str(),
         "curve_names": Seq(Str()),
         "location": Enum(['main', 'annulus', 'not_defined']),
         "element_name": Str(),
@@ -382,6 +384,7 @@ pipe_segments_description_schema = Map(
 )
 positional_pipe_trend_description_schema = Map(
     {
+        Optional("name"): Str(),
         "curve_names": Seq(Str()),
         "location": Enum(['main', 'annulus', 'not_defined']),
         "position": Map({"value": Float(), "unit": Str()}),
@@ -601,6 +604,7 @@ separator_node_properties_description_schema = Map(
 )
 separator_trend_description_schema = Map(
     {
+        Optional("name"): Str(),
         "curve_names": Seq(Str()),
         "element_name": Str(),
     }
@@ -963,5 +967,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 2ae7e29c38656cbeb56adb4770e1c912)
+# [[[end]]] (checksum: da6c6ecde38eddc619f44f60d4ce73eb)
 # fmt: on

@@ -487,7 +487,7 @@ class InvalidReferenceError(DescriptionError):
     """
 
 
-class InvalidYamlData(DescriptionError):
+class InvalidYamlDataError(DescriptionError):
     """
     Error raised when some data in the YAML file is not properly configured.
     """

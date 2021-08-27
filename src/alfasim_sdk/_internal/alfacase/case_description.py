@@ -85,6 +85,7 @@ class PluginTableContainer:
 
 @attr.s(kw_only=True)
 class _BaseTrendOutputDescription:
+    name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
     curve_names: List[str] = attr.ib(validator=list_of_strings)
 
 
@@ -1381,10 +1382,8 @@ class ControllerInputSignalPropertiesDescription:
         Measured variable target of controller setpoint
     :ivar unit:
         Measuring unit of target variable
-    :ivar network_element_name:
-        Name of network element where target variable is measured
-    :ivar position_in_network_element:
-        Position of measurement of target variable
+    :ivar input_trend_name:
+        Name of input trend where target variable is measured
 
     .. include:: /alfacase_definitions/ControllerInputSignalPropertiesDescription.txt
     """
@@ -1392,19 +1391,10 @@ class ControllerInputSignalPropertiesDescription:
     target_variable: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    network_element_name: Optional[str] = attr.ib(
+    input_trend_name: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    position_in_network_element = attrib_scalar(default=Scalar(0, "m"))
-
-    @position_in_network_element.validator
-    def _validate_position_in_network_element(self, attribute, value):
-        assert (
-            isinstance(value, Scalar)
-            and value.GetCategory() == "length"
-            and value.GetValue("m") >= 0.0
-        )
+    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(slots=True, kw_only=True)

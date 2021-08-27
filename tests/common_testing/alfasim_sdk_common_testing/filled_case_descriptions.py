@@ -732,9 +732,8 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerInputSignalPropertiesDescription(
         target_variable="pressure",
+        input_trend_name="observed_by_controller",
         unit="bar",
-        network_element_name="pipe_1",
-        position_in_network_element=Scalar(0, "m"),
     )
 )
 
@@ -749,14 +748,22 @@ CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     )
 )
 
-CONTROLLER_NODE_PROPERTIES_DESCRIPTION = case_description.ControllerNodePropertiesDescription(
-    type=constants.ControllerType.PID,
-    gain=1e-4,
-    setpoint=1.0,
-    integral_time=Scalar(1, "s"),
-    derivative_time=Scalar(1, "s"),
-    input_signal_properties=case_description.ControllerInputSignalPropertiesDescription(),
-    output_signal_properties=case_description.ControllerOutputSignalPropertiesDescription(),
+CONTROLLER_NODE_PROPERTIES_DESCRIPTION = (
+    case_description.ControllerNodePropertiesDescription(
+        type=constants.ControllerType.PID,
+        gain=1e-4,
+        setpoint=1.0,
+        integral_time=Scalar(1, "s"),
+        derivative_time=Scalar(1, "s"),
+        input_signal_properties=CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION,
+        output_signal_properties=CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION,
+    )
+)
+
+NODE_CONTROLLER_DESCRIPTION = case_description.NodeDescription(
+    name="controller_node",
+    node_type=constants.NodeCellType.Controller,
+    controller_properties=CONTROLLER_NODE_PROPERTIES_DESCRIPTION,
 )
 
 
