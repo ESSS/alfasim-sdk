@@ -10,6 +10,7 @@ from typing import Union
 
 import attr
 import numpy as np
+from alfasim_sdk._internal import constants
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -33,7 +34,6 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
-from alfasim_sdk._internal import constants
 
 
 # [[[cog
@@ -703,6 +703,31 @@ class ValveEquipmentDescription:
     cv_table = attrib_instance(CvTableDescription)
 
 
+@attr.s(frozen=True, slots=True)
+class LeakEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/LeakEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    """
+
+    position = attrib_scalar(category="length")
+    diameter = attrib_scalar(default=Scalar(0.05, "m"))
+    opening_type = attrib_enum(default=constants.ValveOpeningType.ConstantOpening)
+    opening = attrib_scalar(default=Scalar("dimensionless", 100, "%"))
+    opening_curve_interpolation_type = attrib_enum(
+        default=constants.InterpolationType.Constant
+    )
+    opening_curve = attrib_curve(
+        default=Curve(Array("dimensionless", [], "-"), Array("time", [], "s"))
+    )
+    discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
+    target_pipe: str = attr.ib(default="", validator=instance_of(str))
+    target_position = attrib_scalar(default=Scalar(0.0, "m"))
+    backflow: bool = attr.ib(default=False, validator=instance_of(bool))
+
+
 @attr.s(frozen=True, slots=True, kw_only=True)
 class IPRCurveDescription:
     """
@@ -1227,6 +1252,7 @@ class EquipmentDescription:
     reservoir_inflows = attrib_dict_of(ReservoirInflowEquipmentDescription)
     heat_sources = attrib_dict_of(HeatSourceEquipmentDescription)
     compressors = attrib_dict_of(CompressorEquipmentDescription)
+    leaks = attrib_dict_of(LeakEquipmentDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)

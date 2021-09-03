@@ -146,6 +146,25 @@ internal_node_properties_description_schema = Map(
         Optional("fluid"): Str(),
     }
 )
+leak_equipment_description_schema = Map(
+    {
+        "position": Map({"value": Float(), "unit": Str()}),
+        Optional("diameter"): Map({"value": Float(), "unit": Str()}),
+        Optional("opening_type"): Enum(['constant_opening', 'table_interpolation']),
+        Optional("opening"): Map({"value": Float(), "unit": Str()}),
+        Optional("opening_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
+        Optional("opening_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
+        Optional("target_pipe"): Str(),
+        Optional("target_position"): Map({"value": Float(), "unit": Str()}),
+        Optional("backflow"): Bool(),
+    }
+)
 length_and_elevation_description_schema = Map(
     {
         Optional("length"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -862,6 +881,7 @@ equipment_description_schema = Map(
         Optional("reservoir_inflows"): MapPattern(Str(), reservoir_inflow_equipment_description_schema),
         Optional("heat_sources"): MapPattern(Str(), heat_source_equipment_description_schema),
         Optional("compressors"): MapPattern(Str(), compressor_equipment_description_schema),
+        Optional("leaks"): MapPattern(Str(), leak_equipment_description_schema),
     }
 )
 ipr_models_description_schema = Map(
@@ -967,5 +987,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: da6c6ecde38eddc619f44f60d4ce73eb)
+# [[[end]]] (checksum: 5d116e7c79d9735441e5c3151ef34436)
 # fmt: on

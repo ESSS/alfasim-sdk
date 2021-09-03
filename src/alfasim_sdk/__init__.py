@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Top-level package for alfasim-sdk."""
 import pluggy
-
 from alfasim_sdk._internal import version
 from alfasim_sdk._internal.units import register_units
 
@@ -83,6 +82,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
 from alfasim_sdk._internal.alfacase.case_description import (
     InternalNodePropertiesDescription,
 )
+from alfasim_sdk._internal.alfacase.case_description import LeakEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     LengthAndElevationDescription,
 )
@@ -337,6 +337,7 @@ __all__ = [
     "InitialVolumeFractionsDescription",
     "InternalNodePropertiesDescription",
     "LengthAndElevationDescription",
+    "LeakEquipmentDescription",
     "LightComponentDescription",
     "LinearIPRDescription",
     "MassSourceEquipmentDescription",
