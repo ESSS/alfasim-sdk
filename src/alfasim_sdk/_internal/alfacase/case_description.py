@@ -713,6 +713,7 @@ class LeakEquipmentDescription:
     """
 
     position = attrib_scalar(category="length")
+    location = attrib_enum(default=constants.LeakLocation.Main)
     diameter = attrib_scalar(default=Scalar(0.05, "m"))
     opening_type = attrib_enum(default=constants.ValveOpeningType.ConstantOpening)
     opening = attrib_scalar(default=Scalar("dimensionless", 100, "%"))
@@ -725,6 +726,7 @@ class LeakEquipmentDescription:
     discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
     target_pipe: str = attr.ib(default="", validator=instance_of(str))
     target_position = attrib_scalar(default=Scalar(0.0, "m"))
+    target_location = attrib_enum(default=constants.LeakLocation.Main)
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
 
 
