@@ -500,6 +500,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.CONTROLLER_NODE_PROPERTIES_DESCRIPTION,
         schema=schema.controller_node_properties_description_schema,
     ),
+    "LeakEquipmentDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.LEAK_EQUIPMENT_DESCRIPTION,
+        schema=schema.leak_equipment_description_schema,
+    ),
 }
 
 ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(

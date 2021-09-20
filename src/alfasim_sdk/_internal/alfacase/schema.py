@@ -149,6 +149,7 @@ internal_node_properties_description_schema = Map(
 leak_equipment_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
+        Optional("location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("diameter"): Map({"value": Float(), "unit": Str()}),
         Optional("opening_type"): Enum(['constant_opening', 'table_interpolation']),
         Optional("opening"): Map({"value": Float(), "unit": Str()}),
@@ -162,6 +163,7 @@ leak_equipment_description_schema = Map(
         Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
         Optional("target_pipe"): Str(),
         Optional("target_position"): Map({"value": Float(), "unit": Str()}),
+        Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("backflow"): Bool(),
     }
 )
@@ -987,5 +989,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 5d116e7c79d9735441e5c3151ef34436)
+# [[[end]]] (checksum: e1e705fd58b3c25de23c769e60c9ded4)
 # fmt: on

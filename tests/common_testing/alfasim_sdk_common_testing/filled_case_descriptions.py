@@ -729,6 +729,13 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
     )
 )
 
+
+LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
+    position=Scalar(350.0, "m"),
+    diameter=Scalar(0.025, "m"),
+    discharge_coefficient=Scalar(0.825, "-"),
+)
+
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerInputSignalPropertiesDescription(
         target_variable="pressure",
