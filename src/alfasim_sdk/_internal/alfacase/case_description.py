@@ -10,6 +10,7 @@ from typing import Union
 
 import attr
 import numpy as np
+from alfasim_sdk._internal import constants
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -33,7 +34,6 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
-from alfasim_sdk._internal import constants
 
 
 # [[[cog
@@ -714,7 +714,16 @@ class LeakEquipmentDescription:
 
     position = attrib_scalar(category="length")
     location = attrib_enum(default=constants.LeakLocation.Main)
+    model = attrib_enum(default=constants.LeakModel.PerkinsValve)
+
+    # Perkins model parameters
     diameter = attrib_scalar(default=Scalar(0.05, "m"))
+    discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
+
+    # Flow coefficient model parameter
+    cv_table = attrib_instance(CvTableDescription)
+
+    # Parameters of leak opening
     opening_type = attrib_enum(default=constants.ValveOpeningType.ConstantOpening)
     opening = attrib_scalar(default=Scalar("dimensionless", 100, "%"))
     opening_curve_interpolation_type = attrib_enum(
@@ -723,10 +732,11 @@ class LeakEquipmentDescription:
     opening_curve = attrib_curve(
         default=Curve(Array("dimensionless", [], "-"), Array("time", [], "s"))
     )
-    discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
+
     target_pipe: str = attr.ib(default="", validator=instance_of(str))
     target_position = attrib_scalar(default=Scalar(0.0, "m"))
     target_location = attrib_enum(default=constants.LeakLocation.Main)
+
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
 
 

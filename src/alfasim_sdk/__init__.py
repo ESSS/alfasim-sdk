@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Top-level package for alfasim-sdk."""
 import pluggy
-
 from alfasim_sdk._internal import version
 from alfasim_sdk._internal.units import register_units
 
@@ -223,6 +222,7 @@ from alfasim_sdk._internal.constants import GAS_PHASE
 from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import InitialConditionStrategyType
 from alfasim_sdk._internal.constants import InterpolationType
+from alfasim_sdk._internal.constants import LeakModel
 from alfasim_sdk._internal.constants import MassInflowSplitType
 from alfasim_sdk._internal.constants import MassSourceType
 from alfasim_sdk._internal.constants import MaterialType
@@ -418,6 +418,7 @@ __all__ = [
     "HydrodynamicModelType",
     "InitialConditionStrategyType",
     "InterpolationType",
+    "LeakModel",
     "MassInflowSplitType",
     "MassSourceType",
     "MaterialType",
