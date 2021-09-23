@@ -151,9 +151,8 @@ leak_equipment_description_schema = Map(
         "position": Map({"value": Float(), "unit": Str()}),
         Optional("location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("diameter"): Map({"value": Float(), "unit": Str()}),
-        Optional("opening_type"): Enum(['constant_opening', 'table_interpolation']),
+        Optional("opening_input_type"): Enum(['constant', 'curve']),
         Optional("opening"): Map({"value": Float(), "unit": Str()}),
-        Optional("opening_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
         Optional("opening_curve"): Map(
             {
                 "image": Map({"values": Seq(Float()), "unit": Str()}),
