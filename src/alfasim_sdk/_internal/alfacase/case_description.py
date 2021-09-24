@@ -714,7 +714,7 @@ class LeakEquipmentDescription:
 
     position = attrib_scalar(category="length")
     location = attrib_enum(default=constants.LeakLocation.Main)
-    model = attrib_enum(default=constants.LeakModel.PerkinsValve)
+    model = attrib_enum(default=constants.LeakModel.Orifice)
 
     # Perkins model parameters
     diameter = attrib_scalar(default=Scalar(0.05, "m"))

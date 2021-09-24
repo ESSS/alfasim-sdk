@@ -323,8 +323,8 @@ class ValveType(Enum):
 
 
 class LeakModel(Enum):
-    PerkinsValve = "perkins_valve"
-    ChokeValveWithFlowCoefficient = "choke_valve_with_flow_coefficient"
+    Orifice = "orifice"
+    FlowCoefficient = "flow_coefficient"
 
 
 class CompressorSpeedType(Enum):
