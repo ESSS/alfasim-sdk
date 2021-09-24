@@ -232,6 +232,8 @@ Equipment
 
 .. autoclass:: alfasim_sdk.CompressorPressureTableDescription()
 
+.. autoclass:: alfasim_sdk.LeakEquipmentDescription()
+
 
 Tables
 ------
