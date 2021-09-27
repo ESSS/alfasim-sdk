@@ -104,6 +104,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
 from alfasim_sdk._internal.alfacase.case_description import OpenHoleDescription
 from alfasim_sdk._internal.alfacase.case_description import PackerDescription
 from alfasim_sdk._internal.alfacase.case_description import PhysicsDescription
+from alfasim_sdk._internal.alfacase.case_description import PigEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeSegmentsDescription
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -239,6 +240,8 @@ from alfasim_sdk._internal.constants import OIL_LAYER
 from alfasim_sdk._internal.constants import OIL_PHASE
 from alfasim_sdk._internal.constants import OutputAttachmentLocation
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
+from alfasim_sdk._internal.constants import PigRoutingMode
+from alfasim_sdk._internal.constants import PigTrappingMode
 from alfasim_sdk._internal.constants import (
     PipeEnvironmentHeatTransferCoefficientModelType,
 )
@@ -355,6 +358,7 @@ __all__ = [
     "OpenHoleDescription",
     "PackerDescription",
     "PhysicsDescription",
+    "PigEquipmentDescription",
     "PipeDescription",
     "PipeSegmentsDescription",
     "PressureContainerDescription",
