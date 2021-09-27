@@ -340,6 +340,7 @@ __all__ = [
     "InternalNodePropertiesDescription",
     "LengthAndElevationDescription",
     "LeakEquipmentDescription",
+    "LeakLocation",
     "LightComponentDescription",
     "LinearIPRDescription",
     "MassSourceEquipmentDescription",

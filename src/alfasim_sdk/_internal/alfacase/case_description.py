@@ -35,7 +35,6 @@ from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
 
-
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
 #
@@ -724,14 +723,19 @@ class LeakEquipmentDescription:
     cv_table = attrib_instance(CvTableDescription)
 
     # Parameters of leak opening
-    opening_type = attrib_enum(default=constants.ValveOpeningType.ConstantOpening)
-    opening = attrib_scalar(default=Scalar("dimensionless", 100, "%"))
-    opening_curve_interpolation_type = attrib_enum(
-        default=constants.InterpolationType.Constant
+    # [[[cog
+    # cog_out_multi_input("opening", "dimensionless", 1.0, "-")
+    # ]]]
+    # fmt: off
+    opening_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    opening = attrib_scalar(
+        default=Scalar('dimensionless', 1.0, '-')
     )
     opening_curve = attrib_curve(
-        default=Curve(Array("dimensionless", [], "-"), Array("time", [], "s"))
+        default=Curve(Array('dimensionless', [], '-'), Array('time', [], 's'))
     )
+    # fmt: on
+    # [[[end]]] (checksum: 28bd1bf52b80d19b34c0fabcd9e93b33)
 
     target_pipe: str = attr.ib(default="", validator=instance_of(str))
     target_position = attrib_scalar(default=Scalar(0.0, "m"))

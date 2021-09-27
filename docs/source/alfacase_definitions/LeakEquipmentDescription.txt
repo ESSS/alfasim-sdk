@@ -11,9 +11,8 @@
             diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'length')
             discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
             cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
-            opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\  = ValveOpeningType.ConstantOpening
-            opening: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
-            opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
+            opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
+            opening: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
             opening_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
             target_pipe: str = ''
             target_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
@@ -32,15 +31,10 @@
             diameter:  # optional
                 value: number
                 unit: string
-            discharge_coefficient:  # optional
-                value: number
-                unit: string
-            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional
-            opening_type: \ :class:`ValveOpeningType <alfasim_sdk._internal.constants.ValveOpeningType>`\  # optional
+            opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             opening:  # optional
                 value: number
                 unit: string
-            opening_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  # optional
             opening_curve:  # optional
                 image:
                     values: [number]
