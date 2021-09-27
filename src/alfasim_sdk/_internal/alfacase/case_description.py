@@ -678,8 +678,6 @@ class PigEquipmentDescription:
     """
     .. include:: /alfacase_definitions/PigEquipmentDescription.txt
 
-    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
-
     TODO: ASIM-4380: Review this docstring
     """
 
@@ -690,7 +688,9 @@ class PigEquipmentDescription:
     diameter = attrib_scalar(category="length")
     launch_position = attrib_scalar(category="length")
 
-    launch_times = attrib_array(default=Array([0.0], "s"))
+    launch_time: Array = attr.ib(
+        default=Array([0.0], "s"), validator=instance_of(Array)
+    )
 
     # [[[cog
     # cog_out_multi_input("mass", "mass", 140.0, "kg")

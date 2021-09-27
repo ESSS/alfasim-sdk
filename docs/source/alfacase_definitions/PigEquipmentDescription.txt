@@ -103,5 +103,5 @@
                 unit: string
             trap_pipe_name: string  # optional
             route_mode: \ :class:`PigRoutingMode <alfasim_sdk._internal.constants.PigRoutingMode>`\  # optional
-            pipe_route_names:     
-                - str  # optional
+            pipe_route_names:  # optional
+                - str
