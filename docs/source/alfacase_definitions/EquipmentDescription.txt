@@ -11,6 +11,7 @@
             reservoir_inflows: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ReservoirInflowEquipmentDescription <ReservoirInflowEquipmentDescription>`\] = {}
             heat_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`HeatSourceEquipmentDescription <HeatSourceEquipmentDescription>`\] = {}
             compressors: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`\] = {}
+            leaks: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LeakEquipmentDescription <LeakEquipmentDescription>`\] = {}
 
 .. tab:: Schema
 
@@ -28,3 +29,5 @@
                 string: \ :class:`heat_source_equipment_description_schema <HeatSourceEquipmentDescription>`
             compressors:  # optional
                 string: \ :class:`compressor_equipment_description_schema <CompressorEquipmentDescription>`
+            leaks:  # optional
+                string: \ :class:`leak_equipment_description_schema <LeakEquipmentDescription>`

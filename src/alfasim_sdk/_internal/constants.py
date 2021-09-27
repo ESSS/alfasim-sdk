@@ -337,6 +337,9 @@ class OutputAttachmentLocation(Enum):
     NotDefined = "not_defined"
 
 
+LeakLocation = OutputAttachmentLocation
+
+
 class CorrelationPackage(Enum):
     Lasater = "pvt_correlation_package_lasater"
     Standing = "pvt_correlation_package_standing"

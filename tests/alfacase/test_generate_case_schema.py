@@ -432,6 +432,7 @@ def test_get_cases_class():
         "InitialVelocitiesDescription",
         "InitialVolumeFractionsDescription",
         "InternalNodePropertiesDescription",
+        "LeakEquipmentDescription",
         "LengthAndElevationDescription",
         "LightComponentDescription",
         "LinearIPRDescription",

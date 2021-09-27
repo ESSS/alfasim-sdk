@@ -7,6 +7,7 @@ from barril.units import Scalar
 
 from . import case_builders
 from . import get_acme_tab_file_path
+from alfasim_sdk import LeakLocation
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
@@ -727,6 +728,18 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
         table_y=REFERENCED_TRACERS_MASS_FRACTIONS_CONTAINER_DESCRIPTION,
         table_length=TRACERS_MASS_FRACTIONS_CONTAINER_DESCRIPTION,
     )
+)
+
+
+LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
+    position=Scalar(350.0, "m"),
+    diameter=Scalar(0.025, "m"),
+    discharge_coefficient=Scalar(0.825, "-"),
+    location=LeakLocation.Annulus,
+    target_pipe="other_pipe",
+    target_position=Scalar(20.0, "m"),
+    target_location=LeakLocation.Main,
+    backflow=True,
 )
 
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (

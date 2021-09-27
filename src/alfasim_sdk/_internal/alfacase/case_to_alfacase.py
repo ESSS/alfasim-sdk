@@ -207,4 +207,5 @@ EquipmentTypes = Union[
     case_description.ValveEquipmentDescription,
     case_description.PumpEquipmentDescription,
     case_description.GasLiftValveEquipmentDescription,
+    case_description.LeakEquipmentDescription,
 ]

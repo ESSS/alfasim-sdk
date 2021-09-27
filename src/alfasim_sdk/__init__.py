@@ -83,6 +83,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
 from alfasim_sdk._internal.alfacase.case_description import (
     InternalNodePropertiesDescription,
 )
+from alfasim_sdk._internal.alfacase.case_description import LeakEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     LengthAndElevationDescription,
 )
@@ -222,6 +223,7 @@ from alfasim_sdk._internal.constants import GAS_PHASE
 from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import InitialConditionStrategyType
 from alfasim_sdk._internal.constants import InterpolationType
+from alfasim_sdk._internal.constants import LeakLocation
 from alfasim_sdk._internal.constants import MassInflowSplitType
 from alfasim_sdk._internal.constants import MassSourceType
 from alfasim_sdk._internal.constants import MaterialType
@@ -337,6 +339,8 @@ __all__ = [
     "InitialVolumeFractionsDescription",
     "InternalNodePropertiesDescription",
     "LengthAndElevationDescription",
+    "LeakEquipmentDescription",
+    "LeakLocation",
     "LightComponentDescription",
     "LinearIPRDescription",
     "MassSourceEquipmentDescription",
