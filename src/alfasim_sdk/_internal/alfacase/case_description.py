@@ -674,6 +674,107 @@ class CvTableDescription:
 
 
 @attr.s(frozen=True, slots=True)
+class PigEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/PigEquipmentDescription.txt
+
+    TODO: ASIM-4380: Review this docstring
+    """
+
+    # NOTE: If PIG diameter is smaller than pipe diameter, back leakage between
+    # the PIG and the wall will occur.
+    # If no diameter is given, the diameter of the pig is set to the inner pipe
+    # diameter minus 4 times the wall roughness.
+    diameter = attrib_scalar(category="length")
+    launch_position = attrib_scalar(category="length")
+
+    launch_time: Array = attr.ib(
+        default=Array([0.0], "s"), validator=instance_of(Array)
+    )
+
+    # [[[cog
+    # cog_out_multi_input("mass", "mass", 140.0, "kg")
+    # ]]]
+    # fmt: off
+    mass_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    mass = attrib_scalar(
+        default=Scalar('mass', 140.0, 'kg')
+    )
+    mass_curve = attrib_curve(
+        default=Curve(Array('mass', [], 'kg'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: a7bf92b6669c03c650b80056852aa630)
+
+    # [[[cog
+    # cog_out_multi_input("static_force", "force", 1000.0, "N")
+    # ]]]
+    # fmt: off
+    static_force_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    static_force = attrib_scalar(
+        default=Scalar('force', 1000.0, 'N')
+    )
+    static_force_curve = attrib_curve(
+        default=Curve(Array('force', [], 'N'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 5a557bb3367d5632e14723da23d9f35a)
+
+    # [[[cog
+    # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "Ns/m")
+    # ]]]
+    # fmt: off
+    wall_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    wall_friction = attrib_scalar(
+        default=Scalar('force per velocity', 1000.0, 'Ns/m')
+    )
+    wall_friction_curve = attrib_curve(
+        default=Curve(Array('force per velocity', [], 'Ns/m'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: f46c0fa30eaa08da80cd6afb28151c9d)
+
+    # [[[cog
+    # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "Ns/m")
+    # ]]]
+    # fmt: off
+    linear_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    linear_friction = attrib_scalar(
+        default=Scalar('force per velocity', 10.0, 'Ns/m')
+    )
+    linear_friction_curve = attrib_curve(
+        default=Curve(Array('force per velocity', [], 'Ns/m'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: db67aade6613b2403c1d72291d2498c7)
+
+    # TODO: ASIM-4380: Unit here for quadratic_friction should be force per square velocity [N.s2/m2]!
+    # Moreover, it would be better to rename 'Ns/m' to 'N.s/m' (for consistency with other units)
+    # [[[cog
+    # cog_out_multi_input("quadratic_friction", "force per velocity", 0.0, "Ns/m")
+    # ]]]
+    # fmt: off
+    quadratic_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    quadratic_friction = attrib_scalar(
+        default=Scalar('force per velocity', 0.0, 'Ns/m')
+    )
+    quadratic_friction_curve = attrib_curve(
+        default=Curve(Array('force per velocity', [], 'Ns/m'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: f1796ac1c9061085c5c7da6f875b64a9)
+
+    # TODO: ASIM-4380: Review these attributes
+    trap_mode = attrib_enum(default=constants.PigTrappingMode.Automatic)
+    trap_position = attrib_scalar(default=Scalar(0.0, "m"), category="length")
+    trap_pipe_name: str = attr.ib(
+        default="",
+    )
+    route_mode = attrib_enum(default=constants.PigRoutingMode.Automatic)
+    pipe_route_names: List[str] = attr.ib(default=[], validator=list_of_strings)
+
+
+@attr.s(frozen=True, slots=True)
 class ValveEquipmentDescription:
     """
     .. include:: /alfacase_definitions/ValveEquipmentDescription.txt
@@ -1271,6 +1372,7 @@ class EquipmentDescription:
     heat_sources = attrib_dict_of(HeatSourceEquipmentDescription)
     compressors = attrib_dict_of(CompressorEquipmentDescription)
     leaks = attrib_dict_of(LeakEquipmentDescription)
+    pigs = attrib_dict_of(PigEquipmentDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)

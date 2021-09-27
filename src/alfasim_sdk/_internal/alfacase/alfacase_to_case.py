@@ -24,7 +24,6 @@ from strictyaml import YAML
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 
-
 T = TypeVar("T")
 
 
@@ -56,10 +55,11 @@ class DescriptionDocument:
         alfacase.schema.case_schema
         """
         import strictyaml
-        from alfasim_sdk._internal.alfacase.schema import case_description_schema
+
         from alfasim_sdk._internal.alfacase.case_description_attributes import (
             DescriptionError,
         )
+        from alfasim_sdk._internal.alfacase.schema import case_description_schema
 
         try:
             content = strictyaml.dirty_load(
@@ -731,6 +731,7 @@ def load_environment_property_description(
         'overall_heat_transfer_coefficient': get_scalar_loader(from_unit='W/m2.K'),
         'fluid_velocity': get_scalar_loader(from_unit='m/s'),
     }
+
     # fmt: on
     def generate_environment_property_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
@@ -1643,6 +1644,17 @@ def load_formation_description(
     return update_multi_input_flags(document, item_description)
 
 
+def _generate_description(
+    # document: DescriptionDocument,
+    document,
+    alfacase_to_case_description,
+    description_type,
+):
+    case_values = to_case_values(document, alfacase_to_case_description)
+    item_description = description_type(**case_values)
+    return update_multi_input_flags(document, item_description)
+
+
 def load_pump_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.PumpEquipmentDescription]:
@@ -1660,14 +1672,11 @@ def load_pump_equipment_description(
         "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
     }
 
-    def generate_pump_description(document: DescriptionDocument):
-        case_values = to_case_values(document, alfacase_to_case_description)
-        item_description = case_description.PumpEquipmentDescription(**case_values)
-        return update_multi_input_flags(document, item_description)
-
     return {
-        key.data: generate_pump_description(
-            DescriptionDocument(value, document.file_path)
+        key.data: _generate_description(
+            DescriptionDocument(value, document.file_path),
+            alfacase_to_case_description,
+            case_description.PumpEquipmentDescription,
         )
         for key, value in document.content.items()
     }
@@ -1680,15 +1689,28 @@ def load_valve_equipment_description(
         case_description.ValveEquipmentDescription
     )
 
-    def generate_valve_description(document: DescriptionDocument):
+    return {
+        key.data: _generate_description(
+            DescriptionDocument(value, document.file_path),
+            alfacase_to_case_description,
+            case_description.ValveEquipmentDescription,
+        )
+        for key, value in document.content.items()
+    }
 
-        case_values = to_case_values(document, alfacase_to_case_description)
-        item_description = case_description.ValveEquipmentDescription(**case_values)
-        return update_multi_input_flags(document, item_description)
+
+def load_pig_equipment_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.PigEquipmentDescription]:
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.PigEquipmentDescription
+    )
 
     return {
-        key.data: generate_valve_description(
-            DescriptionDocument(value, document.file_path)
+        key.data: _generate_description(
+            DescriptionDocument(value, document.file_path),
+            alfacase_to_case_description,
+            case_description.PigEquipmentDescription,
         )
         for key, value in document.content.items()
     }
@@ -1703,13 +1725,13 @@ def load_wall_description(
         "wall_layer_container": load_wall_layer_description,
     }
 
-    def generate_walls_description(document: DescriptionDocument):
-        case_values = to_case_values(document, alfacase_to_case_description)
-        item_description = case_description.WallDescription(**case_values)
-        return update_multi_input_flags(document, item_description)
-
     return [
-        generate_walls_description(alfacase_document) for alfacase_document in document
+        _generate_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.WallDescription,
+        )
+        for alfacase_document in document
     ]
 
 
@@ -1724,9 +1746,11 @@ def load_equipment_description(
         "heat_sources": load_heat_source_equipment_description,
         "compressors": load_compressor_equipment_description,
     }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.EquipmentDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
+    return _generate_description(
+        document,
+        alfacase_to_case_description,
+        case_description.EquipmentDescription,
+    )
 
 
 def load_x_and_y_description(
@@ -1736,9 +1760,11 @@ def load_x_and_y_description(
         "x": get_array_loader(from_unit="m"),
         "y": get_array_loader(from_unit="m"),
     }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.XAndYDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
+    return _generate_description(
+        document,
+        alfacase_to_case_description,
+        case_description.XAndYDescription,
+    )
 
 
 def load_length_and_elevation_description(
@@ -1748,9 +1774,11 @@ def load_length_and_elevation_description(
         "length": get_array_loader(from_unit="m"),
         "elevation": get_array_loader(from_unit="m"),
     }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.LengthAndElevationDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
+    return _generate_description(
+        document,
+        alfacase_to_case_description,
+        case_description.LengthAndElevationDescription,
+    )
 
 
 def load_profile_description(
@@ -1782,6 +1810,7 @@ def load_pipe_description(
         "source_port": get_enum_loader(enum_class=constants.WellConnectionPort),
         "target_port": get_enum_loader(enum_class=constants.WellConnectionPort),
     }
+
     # fmt: on
     def generate_pipes_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
@@ -1866,6 +1895,7 @@ def load_numerical_options_description(document: DescriptionDocument) -> case_de
     return update_multi_input_flags(document, item_description)
 # fmt: on
 
+
 # fmt: off
 def load_time_options_description(
     document: DescriptionDocument
@@ -1883,7 +1913,6 @@ def load_time_options_description(
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.TimeOptionsDescription(**case_values)
     return update_multi_input_flags(document, item_description)
-
 
 # fmt: on
 

@@ -389,4 +389,14 @@ class ControllerType(Enum):
     PID = "pid"
 
 
+class PigTrappingMode(Enum):
+    Automatic = "automatic"
+    UserDefined = "user_defined"
+
+
+class PigRoutingMode(Enum):
+    Automatic = "automatic"
+    UserDefined = "user_defined"
+
+
 MULTI_INPUT_TYPE_SUFFIX = "_input_type"
