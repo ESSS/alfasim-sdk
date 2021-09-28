@@ -785,13 +785,12 @@ leak_equipment_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
         Optional("location"): Enum(['main', 'annulus', 'not_defined']),
-        Optional("model"): Enum(['perkins_valve', 'choke_valve_with_flow_coefficient']),
+        Optional("model"): Enum(['orifice', 'flow_coefficient']),
         Optional("diameter"): Map({"value": Float(), "unit": Str()}),
         Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
         Optional("cv_table"): cv_table_description_schema,
-        Optional("opening_type"): Enum(['constant_opening', 'table_interpolation']),
+        Optional("opening_input_type"): Enum(['constant', 'curve']),
         Optional("opening"): Map({"value": Float(), "unit": Str()}),
-        Optional("opening_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
         Optional("opening_curve"): Map(
             {
                 "image": Map({"values": Seq(Float()), "unit": Str()}),
@@ -991,5 +990,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]]
+# [[[end]]] (checksum: 3a804474f5373efaaec7f8a42b2f0bea)
 # fmt: on

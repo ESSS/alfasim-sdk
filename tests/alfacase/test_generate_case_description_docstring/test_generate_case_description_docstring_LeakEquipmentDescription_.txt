@@ -7,7 +7,7 @@
         class LeakEquipmentDescription
             position: \ :class:`Scalar <barril.units.Scalar>`
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
-            model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  = LeakModel.PerkinsValve
+            model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  = LeakModel.Orifice
             diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'length')
             discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
             cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
@@ -31,6 +31,10 @@
             diameter:  # optional
                 value: number
                 unit: string
+            discharge_coefficient:  # optional
+                value: number
+                unit: string
+            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional
             opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             opening:  # optional
                 value: number
