@@ -786,6 +786,7 @@ leak_equipment_description_schema = Map(
         "position": Map({"value": Float(), "unit": Str()}),
         Optional("location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("model"): Enum(['orifice', 'flow_coefficient']),
+        Optional("type"): Enum(['internal', 'external']),
         Optional("diameter"): Map({"value": Float(), "unit": Str()}),
         Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
         Optional("cv_table"): cv_table_description_schema,
@@ -990,5 +991,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 3a804474f5373efaaec7f8a42b2f0bea)
+# [[[end]]] (checksum: 7e75670dbc61d8ea88cb6ba7f9a9f2cb)
 # fmt: on

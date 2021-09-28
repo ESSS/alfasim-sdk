@@ -10,7 +10,6 @@ from typing import Union
 
 import attr
 import numpy as np
-from alfasim_sdk._internal import constants
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -34,6 +33,7 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
+from alfasim_sdk._internal import constants
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -714,6 +714,7 @@ class LeakEquipmentDescription:
     position = attrib_scalar(category="length")
     location = attrib_enum(default=constants.LeakLocation.Main)
     model = attrib_enum(default=constants.LeakModel.Orifice)
+    type = attrib_enum(default=constants.LeakType.Internal)
 
     # Perkins model parameters
     diameter = attrib_scalar(default=Scalar(0.05, "m"))
