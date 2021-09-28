@@ -849,6 +849,7 @@ leak_equipment_description_schema = Map(
         Optional("target_position"): Map({"value": Float(), "unit": Str()}),
         Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("backflow"): Bool(),
+        Optional("backpressure"): Map({"value": Float(), "unit": Str()}),
     }
 )
 

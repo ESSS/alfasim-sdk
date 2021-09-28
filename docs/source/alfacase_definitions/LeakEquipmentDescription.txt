@@ -19,6 +19,7 @@
             target_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             backflow: bool = False
+            backpressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'bar', 'pressure')
 
 .. tab:: Schema
 
@@ -54,3 +55,6 @@
                 unit: string
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  # optional
             backflow: boolean  # optional
+            backpressure:  # optional
+                value: number
+                unit: string

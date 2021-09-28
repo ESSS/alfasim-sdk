@@ -802,6 +802,7 @@ leak_equipment_description_schema = Map(
         Optional("target_position"): Map({"value": Float(), "unit": Str()}),
         Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("backflow"): Bool(),
+        Optional("backpressure"): Map({"value": Float(), "unit": Str()}),
     }
 )
 profile_description_schema = Map(
@@ -991,5 +992,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 7e75670dbc61d8ea88cb6ba7f9a9f2cb)
+# [[[end]]] (checksum: 68f5d9e825ea52458f2ddccfe21e5975)
 # fmt: on

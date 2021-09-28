@@ -743,6 +743,7 @@ class LeakEquipmentDescription:
     target_location = attrib_enum(default=constants.LeakLocation.Main)
 
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
+    backpressure = attrib_scalar(default=Scalar(1.0, "bar"))
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
