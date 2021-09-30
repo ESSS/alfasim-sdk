@@ -224,6 +224,7 @@ from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import InitialConditionStrategyType
 from alfasim_sdk._internal.constants import InterpolationType
 from alfasim_sdk._internal.constants import LeakLocation
+from alfasim_sdk._internal.constants import LeakModel
 from alfasim_sdk._internal.constants import MassInflowSplitType
 from alfasim_sdk._internal.constants import MassSourceType
 from alfasim_sdk._internal.constants import MaterialType
@@ -420,6 +421,8 @@ __all__ = [
     "HydrodynamicModelType",
     "InitialConditionStrategyType",
     "InterpolationType",
+    "LeakLocation",
+    "LeakModel",
     "MassInflowSplitType",
     "MassSourceType",
     "MaterialType",

@@ -7,11 +7,13 @@
         class LeakEquipmentDescription
             position: \ :class:`Scalar <barril.units.Scalar>`
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
+            model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  = LeakModel.Orifice
             diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'length')
+            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
+            cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
             opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             opening: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
             opening_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
-            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
             target_pipe: str = ''
             target_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
@@ -25,9 +27,14 @@
                 value: number
                 unit: string
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  # optional
+            model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  # optional
             diameter:  # optional
                 value: number
                 unit: string
+            discharge_coefficient:  # optional
+                value: number
+                unit: string
+            cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional
             opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             opening:  # optional
                 value: number
@@ -39,9 +46,6 @@
                 domain:
                     values: [number]
                     unit: string
-            discharge_coefficient:  # optional
-                value: number
-                unit: string
             target_pipe: string  # optional
             target_position:  # optional
                 value: number

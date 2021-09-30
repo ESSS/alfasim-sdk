@@ -713,7 +713,16 @@ class LeakEquipmentDescription:
 
     position = attrib_scalar(category="length")
     location = attrib_enum(default=constants.LeakLocation.Main)
+    model = attrib_enum(default=constants.LeakModel.Orifice)
+
+    # Perkins model parameters
     diameter = attrib_scalar(default=Scalar(0.05, "m"))
+    discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
+
+    # Flow coefficient model parameter
+    cv_table = attrib_instance(CvTableDescription)
+
+    # Parameters of leak opening
     # [[[cog
     # cog_out_multi_input("opening", "dimensionless", 1.0, "-")
     # ]]]
@@ -728,10 +737,10 @@ class LeakEquipmentDescription:
     # fmt: on
     # [[[end]]] (checksum: 28bd1bf52b80d19b34c0fabcd9e93b33)
 
-    discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
     target_pipe: str = attr.ib(default="", validator=instance_of(str))
     target_position = attrib_scalar(default=Scalar(0.0, "m"))
     target_location = attrib_enum(default=constants.LeakLocation.Main)
+
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
 
 

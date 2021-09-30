@@ -146,26 +146,6 @@ internal_node_properties_description_schema = Map(
         Optional("fluid"): Str(),
     }
 )
-leak_equipment_description_schema = Map(
-    {
-        "position": Map({"value": Float(), "unit": Str()}),
-        Optional("location"): Enum(['main', 'annulus', 'not_defined']),
-        Optional("diameter"): Map({"value": Float(), "unit": Str()}),
-        Optional("opening_input_type"): Enum(['constant', 'curve']),
-        Optional("opening"): Map({"value": Float(), "unit": Str()}),
-        Optional("opening_curve"): Map(
-            {
-                "image": Map({"values": Seq(Float()), "unit": Str()}),
-                "domain": Map({"values": Seq(Float()), "unit": Str()}),
-            }
-        ),
-        Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
-        Optional("target_pipe"): Str(),
-        Optional("target_position"): Map({"value": Float(), "unit": Str()}),
-        Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
-        Optional("backflow"): Bool(),
-    }
-)
 length_and_elevation_description_schema = Map(
     {
         Optional("length"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -801,6 +781,28 @@ initial_volume_fractions_description_schema = Map(
         Optional("table_length"): volume_fractions_container_description_schema,
     }
 )
+leak_equipment_description_schema = Map(
+    {
+        "position": Map({"value": Float(), "unit": Str()}),
+        Optional("location"): Enum(['main', 'annulus', 'not_defined']),
+        Optional("model"): Enum(['orifice', 'flow_coefficient']),
+        Optional("diameter"): Map({"value": Float(), "unit": Str()}),
+        Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
+        Optional("cv_table"): cv_table_description_schema,
+        Optional("opening_input_type"): Enum(['constant', 'curve']),
+        Optional("opening"): Map({"value": Float(), "unit": Str()}),
+        Optional("opening_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("target_pipe"): Str(),
+        Optional("target_position"): Map({"value": Float(), "unit": Str()}),
+        Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
+        Optional("backflow"): Bool(),
+    }
+)
 profile_description_schema = Map(
     {
         Optional("x_and_y"): x_and_y_description_schema,
@@ -988,5 +990,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: bfabe09de2f1c08120d7100b00b3db58)
+# [[[end]]] (checksum: 3a804474f5373efaaec7f8a42b2f0bea)
 # fmt: on
