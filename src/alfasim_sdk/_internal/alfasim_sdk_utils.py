@@ -33,6 +33,13 @@ def get_attr_class(
     return attr_class
 
 
+def get_metadata(obj: Any) -> Dict[str, Any]:
+    """
+    Return the metadata associated with a class created by the SDK.
+    """
+    return obj._alfasim_metadata
+
+
 def is_a_valid_field(value: type) -> bool:
     """
     A utility method to indicate if the given value is BaseField or a Tab layout
