@@ -327,6 +327,11 @@ class LeakModel(Enum):
     FlowCoefficient = "flow_coefficient"
 
 
+class LeakType(Enum):
+    Internal = "internal"
+    External = "external"
+
+
 class CompressorSpeedType(Enum):
     SpeedCurve = "speed_curve"
     ConstantSpeed = "constant_speed"

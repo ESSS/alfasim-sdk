@@ -714,6 +714,7 @@ class LeakEquipmentDescription:
     position = attrib_scalar(category="length")
     location = attrib_enum(default=constants.LeakLocation.Main)
     model = attrib_enum(default=constants.LeakModel.Orifice)
+    type = attrib_enum(default=constants.LeakType.Internal)
 
     # Perkins model parameters
     diameter = attrib_scalar(default=Scalar(0.05, "m"))
@@ -742,6 +743,7 @@ class LeakEquipmentDescription:
     target_location = attrib_enum(default=constants.LeakLocation.Main)
 
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
+    backpressure = attrib_scalar(default=Scalar(1.0, "bar"))
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)

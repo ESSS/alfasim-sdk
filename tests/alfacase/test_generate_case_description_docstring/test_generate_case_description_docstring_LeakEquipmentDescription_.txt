@@ -8,6 +8,7 @@
             position: \ :class:`Scalar <barril.units.Scalar>`
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  = LeakModel.Orifice
+            type: \ :class:`LeakType <alfasim_sdk._internal.constants.LeakType>`\  = LeakType.Internal
             diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'length')
             discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
             cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
@@ -18,6 +19,7 @@
             target_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             backflow: bool = False
+            backpressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'bar', 'pressure')
 
 .. tab:: Schema
 
@@ -28,6 +30,7 @@
                 unit: string
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  # optional
             model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  # optional
+            type: \ :class:`LeakType <alfasim_sdk._internal.constants.LeakType>`\  # optional
             diameter:  # optional
                 value: number
                 unit: string
@@ -52,3 +55,6 @@
                 unit: string
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  # optional
             backflow: boolean  # optional
+            backpressure:  # optional
+                value: number
+                unit: string
