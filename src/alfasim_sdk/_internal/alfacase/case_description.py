@@ -688,7 +688,7 @@ class PigEquipmentDescription:
     diameter = attrib_scalar(category="length")
     launch_position = attrib_scalar(category="length")
 
-    launch_time = attrib_array(default=Array([0.0], "s"))
+    launch_times = attrib_array(default=Array([0.0], "s"))
 
     # [[[cog
     # cog_out_multi_input("mass", "mass", 140.0, "kg")
@@ -760,14 +760,15 @@ class PigEquipmentDescription:
     # fmt: on
     # [[[end]]] (checksum: 57937de27b34d2f159ecce17563ba34d)
 
-    # TODO: ASIM-4380: Review these attributes
     trap_mode = attrib_enum(default=constants.PigTrappingMode.Automatic)
     trap_position = attrib_scalar(default=Scalar(0.0, "m"), category="length")
-    trap_pipe_name: str = attr.ib(
-        default="",
+    trap_pipe_name: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
     )
     route_mode = attrib_enum(default=constants.PigRoutingMode.Automatic)
-    pipe_route_names: List[str] = attr.ib(default=[], validator=list_of_strings)
+    pipe_route_names: Optional[List[str]] = attr.ib(
+        default=None, validator=optional(list_of_strings)
+    )
 
 
 @attr.s(frozen=True, slots=True)
