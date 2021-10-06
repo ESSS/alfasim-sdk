@@ -678,6 +678,9 @@ class PigEquipmentDescription:
     """
     .. include:: /alfacase_definitions/PigEquipmentDescription.txt
 
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass.txt
+
     TODO: ASIM-4380: Review this docstring
     """
 
