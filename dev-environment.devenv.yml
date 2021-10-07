@@ -4,13 +4,20 @@ includes:
   - {{ root }}/environment.devenv.yml
 
 dependencies:
+  - breathe
   - cogapp
   - doxygen
   - graphviz
   - invoke
   - pip
   - pre-commit
+  - pytest
+  - pytest-cov
+  - pytest-datadir
+  - pytest-mock
   - python
+  - python-hookman
+  - sphinx-click
   - toposort
   - tox
   - typing_inspect

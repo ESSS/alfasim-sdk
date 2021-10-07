@@ -36,7 +36,7 @@ When the type is from an external library, you must pass full path:
 Building
 --------
 
-To build the docs, execute:
+To build the docs, execute from the repository root:
 
 .. code-block::
 
