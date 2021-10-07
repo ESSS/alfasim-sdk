@@ -110,3 +110,4 @@ ENV/
 **/_build
 dev-environment.yml
 environment.yml
+docs/alfasim_sdk_api/

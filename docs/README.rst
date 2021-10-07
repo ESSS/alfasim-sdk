@@ -42,4 +42,4 @@ To build the docs, execute:
 
     $ conda devenv --file dev-environment.devenv.yml
     $ conda activate alfasim-sdk-dev
-    $ tox -e docs
+    $ inv docs

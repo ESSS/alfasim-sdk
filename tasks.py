@@ -81,3 +81,10 @@ def check_cog(ctx):
     ctx.run(f"git diff --no-ext-diff --exit-code {case_description_source_file_path()}")
     ctx.run(f"git diff --no-ext-diff --exit-code {schema_file_path()}")
     ctx.run(f"git diff --no-ext-diff --exit-code {alfacase_definitions_path()}")
+
+
+@invoke.task
+def docs(ctx):
+    with ctx.cd("docs"):
+        ctx.run("doxygen alfasim_sdk_api.cfg")
+        ctx.run("sphinx-build --keep-going -W -b html source _build/html")
