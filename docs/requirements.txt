@@ -5,3 +5,4 @@ pydata-sphinx-theme
 sphinx-inline-tabs
 sphinx-copybutton
 sphinx_togglebutton
+docutils==0.16
