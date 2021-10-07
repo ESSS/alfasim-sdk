@@ -1,0 +1,17 @@
+name: alfasim-sdk-dev
+
+includes:
+  - {{ root }}/environment.devenv.yml
+
+dependencies:
+  - cogapp
+  - doxygen
+  - invoke
+  - pip
+  - pre-commit
+  - python >=3.7
+  - toposort
+  - tox
+  - typing_inspect
+  - pip:
+    - "-r docs/requirements.txt"

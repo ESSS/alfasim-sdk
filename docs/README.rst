@@ -31,3 +31,15 @@ When the type is from an external library, you must pass full path:
     :param velocity: How fast we are going.
     :type velocity: ~barril.units.Scalar
     """
+
+
+Building
+--------
+
+To build the docs, execute:
+
+.. code-block::
+
+    $ conda devenv --file dev-environment.devenv.yml
+    $ conda activate alfasim-sdk-dev
+    $ tox -e docs
