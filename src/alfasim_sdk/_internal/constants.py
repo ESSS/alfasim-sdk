@@ -348,6 +348,7 @@ class OutputAttachmentLocation(Enum):
     Output Attachment Location will tell the location in which this attachment's data should be retrieved from.
     """
 
+    # TODO/RAMON: check how to use tr() below, error with cog (and testExportAndImportWithPluginAndOutput)
     Main = "main"
     Annulus = "annulus"
     NotDefined = "not_defined"
