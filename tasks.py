@@ -72,7 +72,7 @@ def cog(ctx, check=False):
             f"list_of_unit_for_{category_for_path}.txt", output
         )
 
-    for filepath in alfacase_definitions_path().glob("*.*"):
+    for filepath in alfacase_definitions_path().glob("*.txt"):
         filename = filepath.name
         if filename not in alfacase_definitions_cogged_files:
             print(f"Removing {filepath}")
