@@ -687,9 +687,7 @@ class PigEquipmentDescription:
     diameter = attrib_scalar(category="length")
     launch_position = attrib_scalar(category="length")
 
-    launch_time: Array = attr.ib(
-        default=Array([0.0], "s"), validator=instance_of(Array)
-    )
+    launch_times = attrib_array(default=Array([0.0], "s"))
 
     # [[[cog
     # cog_out_multi_input("mass", "mass", 140.0, "kg")
