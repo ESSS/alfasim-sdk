@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'mass'
+    :class: dropdown
+
+    :"g": gram
+    :"kg": kilogram
+    :"lbm": pounds mass

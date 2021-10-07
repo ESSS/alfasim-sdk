@@ -678,7 +678,10 @@ class PigEquipmentDescription:
     """
     .. include:: /alfacase_definitions/PigEquipmentDescription.txt
 
-    TODO: ASIM-4380: Review this docstring
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_mass.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_force.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_force_per_velocity.txt
     """
 
     # NOTE: If PIG diameter is smaller than pipe diameter, back leakage between

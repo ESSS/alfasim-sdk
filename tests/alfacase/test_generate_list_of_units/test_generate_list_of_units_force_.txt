@@ -1,0 +1,20 @@
+.. admonition:: Available units for category 'force'
+    :class: dropdown
+
+    :"daN": decanewtons
+    :"dyne": dynes
+    :"gf": gram force
+    :"kdyne": kilkodynes
+    :"kgf": kilogram force
+    :"klbf": thousand pounds force
+    :"kN": kilonewtons
+    :"lbf": pounds force
+    :"Mgf": thousand kilograms force
+    :"MN": meganewtons
+    :"mN": millinewtons
+    :"N": newton
+    :"ozf": ounce force
+    :"pdl": poundals
+    :"tonfUK": UK tons force
+    :"tonfUS": US tons force
+    :"uN": micronewtons
