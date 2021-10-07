@@ -171,7 +171,7 @@ def _get_declaration(
 
                     # For Schema: if the attributes have a default value the entry is optional.
                     if default_value and is_schema:
-                        if attribute_value.startswith("\n"):
+                        if attribute_value.lstrip(" \t").startswith("\n"):
                             attribute_value = " # optional" + attribute_value
                         else:
                             attribute_value += "  # optional"
