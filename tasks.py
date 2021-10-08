@@ -49,9 +49,16 @@ def cog(ctx, check=False):
         generate_definition,
     )
 
+    alfacase_definitions_path().mkdir(parents=True, exist_ok=True)
+    alfacase_definitions_cogged_files = set()
+
+    def write_alfacase_definitions_cogged_file(filename, content):
+        alfacase_definitions_cogged_files.add(filename)
+        Path(alfacase_definitions_path() / filename).write_text(content)
+
     for class_ in get_all_classes_that_needs_schema(CaseDescription):
         output = generate_definition(class_)
-        Path(alfacase_definitions_path() / f"{class_.__name__}.txt").write_text(output)
+        write_alfacase_definitions_cogged_file(f"{class_.__name__}.txt", output)
 
     from alfasim_sdk._internal.alfacase.generate_case_description_docstring import (
         generate_list_of_units,
@@ -61,9 +68,15 @@ def cog(ctx, check=False):
     for category in CATEGORIES_USED_ON_DESCRIPTION:
         output = generate_list_of_units(category)
         category_for_path = category.replace(" ", "_")
-        Path(
-            alfacase_definitions_path() / f"list_of_unit_for_{category_for_path}.txt"
-        ).write_text(output)
+        write_alfacase_definitions_cogged_file(
+            f"list_of_unit_for_{category_for_path}.txt", output
+        )
+
+    for filepath in alfacase_definitions_path().glob("*.txt"):
+        filename = filepath.name
+        if filename not in alfacase_definitions_cogged_files:
+            print(f"Removing {filepath}")
+            filepath.unlink()
 
     if check:
         check_cog(ctx)
@@ -81,3 +94,10 @@ def check_cog(ctx):
     ctx.run(f"git diff --no-ext-diff --exit-code {case_description_source_file_path()}")
     ctx.run(f"git diff --no-ext-diff --exit-code {schema_file_path()}")
     ctx.run(f"git diff --no-ext-diff --exit-code {alfacase_definitions_path()}")
+
+
+@invoke.task
+def docs(ctx):
+    with ctx.cd("docs"):
+        ctx.run("doxygen alfasim_sdk_api.cfg")
+        ctx.run("sphinx-build --keep-going -W -b html source _build/html")

@@ -2,14 +2,9 @@ name: alfasim-sdk
 
 
 dependencies:
-- click
-- attrs >= 19.1.0
-- pytest
-- pytest-cov
-- pytest-datadir
-- pytest-mock
-- sphinx-click
-- breathe
+  - click
+  - attrs >= 19.1.0
+  - barril
 
 environment:
   PYTHONPATH:

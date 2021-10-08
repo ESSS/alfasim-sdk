@@ -5,3 +5,5 @@ pydata-sphinx-theme
 sphinx-inline-tabs
 sphinx-copybutton
 sphinx_togglebutton
+# Pin docutils because of circular include warnings (see #193)
+docutils==0.16
