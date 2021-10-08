@@ -325,11 +325,17 @@ class ValveType(Enum):
 class LeakModel(Enum):
     Orifice = "orifice"
     FlowCoefficient = "flow_coefficient"
+    GasLiftValve = "gas_lift_valve"
 
 
 class LeakType(Enum):
     Internal = "internal"
     External = "external"
+
+
+class GasLiftValveOpeningType(Enum):
+    MinimumPressureDifference = "minimum_pressure_difference"
+    PressureOperated = "pressure_operated"
 
 
 class CompressorSpeedType(Enum):

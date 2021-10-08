@@ -10,6 +10,7 @@ from typing import Union
 
 import attr
 import numpy as np
+from alfasim_sdk._internal import constants
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -33,7 +34,6 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
-from alfasim_sdk._internal import constants
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -722,6 +722,24 @@ class LeakEquipmentDescription:
 
     # Flow coefficient model parameter
     cv_table = attrib_instance(CvTableDescription)
+
+    # Gas-Lift Valve parameters
+    # diameter and discharge_coefficient are also a gas-lift valve parameter, but they are already defined
+    gas_lift_valve_opening_type = attrib_enum(
+        default=constants.GasLiftValveOpeningType.MinimumPressureDifference
+    )
+
+    # Gas-lift parameters of minimum pressure difference opening type
+    minimum_pressure_difference = attrib_scalar(default=Scalar("pressure", 0.0, "Pa"))
+
+    # Gas-lift parameters of pressure operated opening type
+    bellows_reference_pressure = attrib_scalar(default=Scalar("pressure", 10, "bar"))
+    bellows_reference_temperature = attrib_scalar(
+        default=Scalar("temperature", 15, "degC")
+    )
+    port_to_bellows_area_ratio = attrib_scalar(
+        default=Scalar("dimensionless", 0.1, "-")
+    )
 
     # Parameters of leak opening
     # [[[cog
