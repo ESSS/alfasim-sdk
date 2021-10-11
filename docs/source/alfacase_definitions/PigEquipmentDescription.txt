@@ -6,7 +6,7 @@
 
         class PigEquipmentDescription
             diameter: \ :class:`Scalar <barril.units.Scalar>`
-            launch_position: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Scalar <barril.units.Scalar>`
             launch_times: \ :class:`Array <barril.units.Array>`\  = Array(time, [0.0], s)
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             mass: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(140.0, 'kg', 'mass')
@@ -36,7 +36,7 @@
             diameter: 
                 value: number
                 unit: string
-            launch_position: 
+            position: 
                 value: number
                 unit: string
             launch_times:  # optional

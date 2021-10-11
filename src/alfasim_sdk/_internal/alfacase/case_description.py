@@ -685,7 +685,7 @@ class PigEquipmentDescription:
     """
 
     diameter = attrib_scalar(category="length")
-    launch_position = attrib_scalar(category="length")
+    position = attrib_scalar(category="length")
 
     launch_times = attrib_array(default=Array([0.0], "s"))
 
