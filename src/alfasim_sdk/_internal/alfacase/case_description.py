@@ -689,7 +689,7 @@ class PigEquipmentDescription:
     # If no diameter is given, the diameter of the pig is set to the inner pipe
     # diameter minus 4 times the wall roughness.
     diameter = attrib_scalar(category="length")
-    launch_position = attrib_scalar(category="length")
+    position = attrib_scalar(category="length")
 
     launch_times = attrib_array(default=Array([0.0], "s"))
 

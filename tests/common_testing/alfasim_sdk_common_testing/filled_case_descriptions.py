@@ -431,7 +431,7 @@ CASING_DESCRIPTION = case_description.CasingDescription(
     open_holes=[OPEN_HOLE_DESCRIPTION],
 )
 PIG_DESCRIPTION = case_description.PigEquipmentDescription(
-    launch_position=Scalar(120.0, "m"),
+    position=Scalar(120.0, "m"),
     launch_times=Array([0.0, 50.0], "s"),
     diameter=Scalar(0.02, "m"),
     mass_input_type=constants.MultiInputType.Curve,
