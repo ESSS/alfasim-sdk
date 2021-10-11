@@ -202,23 +202,24 @@ from alfasim_sdk._internal.alfacase.alfatable import (
 # Constants
 from alfasim_sdk._internal.constants import BUBBLE_FIELD
 from alfasim_sdk._internal.constants import CompressorSpeedType
+from alfasim_sdk._internal.constants import ControllerType
 from alfasim_sdk._internal.constants import CorrelationPackage
 from alfasim_sdk._internal.constants import CorrelationPackageType
-from alfasim_sdk._internal.constants import ControllerType
 from alfasim_sdk._internal.constants import DEFAULT_TEMPERATURE_IN_K
+from alfasim_sdk._internal.constants import DrainageRateMode
 from alfasim_sdk._internal.constants import DROPLET_FIELD
-from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 from alfasim_sdk._internal.constants import EmulsionModelType
 from alfasim_sdk._internal.constants import EnergyModel
 from alfasim_sdk._internal.constants import EnergyModelPrimaryVariable
 from alfasim_sdk._internal.constants import EquationOfStateType
 from alfasim_sdk._internal.constants import EvaluationStrategyType
+from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
+from alfasim_sdk._internal.constants import FlashModel
+from alfasim_sdk._internal.constants import FlowDirection
 from alfasim_sdk._internal.constants import FLUID_GAS
 from alfasim_sdk._internal.constants import FLUID_OIL
 from alfasim_sdk._internal.constants import FLUID_PHASE_NAMES
 from alfasim_sdk._internal.constants import FLUID_WATER
-from alfasim_sdk._internal.constants import FlashModel
-from alfasim_sdk._internal.constants import FlowDirection
 from alfasim_sdk._internal.constants import GAS_FIELD
 from alfasim_sdk._internal.constants import GAS_LAYER
 from alfasim_sdk._internal.constants import GAS_PHASE
@@ -248,12 +249,13 @@ from alfasim_sdk._internal.constants import (
 from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
-from alfasim_sdk._internal.constants import SOLID_PHASE
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
 from alfasim_sdk._internal.constants import SimulationRegimeType
+from alfasim_sdk._internal.constants import SOLID_PHASE
 from alfasim_sdk._internal.constants import SolidsModelType
 from alfasim_sdk._internal.constants import SurfaceTensionType
+from alfasim_sdk._internal.constants import SurgeVolumeTimeMode
 from alfasim_sdk._internal.constants import TableInputType
 from alfasim_sdk._internal.constants import TracerModelType
 from alfasim_sdk._internal.constants import ValveOpeningType
@@ -411,6 +413,7 @@ __all__ = [
     "CorrelationPackage",
     "CorrelationPackageType",
     "DEFAULT_TEMPERATURE_IN_K",
+    "DrainageRateMode",
     "DROPLET_FIELD",
     "EXTRAS_REQUIRED_VERSION_KEY",
     "EmulsionModelType",
@@ -456,6 +459,7 @@ __all__ = [
     "SimulationRegimeType",
     "SolidsModelType",
     "SurfaceTensionType",
+    "SurgeVolumeTimeMode",
     "TableInputType",
     "TracerModelType",
     "ValveOpeningType",

@@ -252,6 +252,28 @@ class FlashModel(Enum):
     HydrocarbonAndWater = "hydrocarbon_and_water"
 
 
+class DrainageRateMode(Enum):
+    """
+    Drainage Rate mode used by Surge Volume curves calculation.
+    """
+
+    #: Uses a default drain flow rate = (AccLiq(end_time) - AccLiq(start_time))/(end_time - start_time)
+    Automatic = "automatic"
+    #: Allows the user to input a maximum drainage rate
+    UserDefined = "user_defined"
+
+
+class SurgeVolumeTimeMode(Enum):
+    """
+    Time mode used by Surge Volume curves calculation.
+    """
+
+    #: Uses the initial and final time of the whole simulation.
+    AllSimulation = "all_simulation"
+    #: Uses custom initial/final time input by the user.
+    UserDefined = "user_defined"
+
+
 class FlowDirection(Enum):
     Forward = "forward"
     Backward = "backward"
