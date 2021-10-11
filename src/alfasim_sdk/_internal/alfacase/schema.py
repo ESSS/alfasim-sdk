@@ -785,11 +785,16 @@ leak_equipment_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
         Optional("location"): Enum(['main', 'annulus', 'not_defined']),
-        Optional("model"): Enum(['orifice', 'flow_coefficient']),
+        Optional("model"): Enum(['orifice', 'flow_coefficient', 'gas_lift_valve']),
         Optional("type"): Enum(['internal', 'external']),
         Optional("diameter"): Map({"value": Float(), "unit": Str()}),
         Optional("discharge_coefficient"): Map({"value": Float(), "unit": Str()}),
         Optional("cv_table"): cv_table_description_schema,
+        Optional("gas_lift_valve_opening_type"): Enum(['minimum_pressure_difference', 'pressure_operated']),
+        Optional("minimum_pressure_difference"): Map({"value": Float(), "unit": Str()}),
+        Optional("bellows_reference_pressure"): Map({"value": Float(), "unit": Str()}),
+        Optional("bellows_reference_temperature"): Map({"value": Float(), "unit": Str()}),
+        Optional("port_to_bellows_area_ratio"): Map({"value": Float(), "unit": Str()}),
         Optional("opening_input_type"): Enum(['constant', 'curve']),
         Optional("opening"): Map({"value": Float(), "unit": Str()}),
         Optional("opening_curve"): Map(
@@ -992,5 +997,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 68f5d9e825ea52458f2ddccfe21e5975)
+# [[[end]]] (checksum: 01b5d6117654984d227df8c4a508cec8)
 # fmt: on
