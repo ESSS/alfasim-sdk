@@ -721,48 +721,46 @@ class PigEquipmentDescription:
     # [[[end]]] (checksum: 5a557bb3367d5632e14723da23d9f35a)
 
     # [[[cog
-    # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "Ns/m")
+    # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "N.s/m")
     # ]]]
     # fmt: off
     wall_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     wall_friction = attrib_scalar(
-        default=Scalar('force per velocity', 1000.0, 'Ns/m')
+        default=Scalar('force per velocity', 1000.0, 'N.s/m')
     )
     wall_friction_curve = attrib_curve(
-        default=Curve(Array('force per velocity', [], 'Ns/m'), Array('time', [], 's'))
+        default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: f46c0fa30eaa08da80cd6afb28151c9d)
+    # [[[end]]] (checksum: eac7071ce8c5158f10592694891eef3c)
 
     # [[[cog
-    # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "Ns/m")
+    # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "N.s/m")
     # ]]]
     # fmt: off
     linear_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     linear_friction = attrib_scalar(
-        default=Scalar('force per velocity', 10.0, 'Ns/m')
+        default=Scalar('force per velocity', 10.0, 'N.s/m')
     )
     linear_friction_curve = attrib_curve(
-        default=Curve(Array('force per velocity', [], 'Ns/m'), Array('time', [], 's'))
+        default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: db67aade6613b2403c1d72291d2498c7)
+    # [[[end]]] (checksum: c1db146868277c945f0290b3de6c1ac1)
 
-    # TODO: ASIM-4380: Unit here for quadratic_friction should be force per square velocity [N.s2/m2]!
-    # Moreover, it would be better to rename 'Ns/m' to 'N.s/m' (for consistency with other units)
     # [[[cog
-    # cog_out_multi_input("quadratic_friction", "force per velocity", 0.0, "Ns/m")
+    # cog_out_multi_input("quadratic_friction", "force per velocity squared", 0.0, "N.s2/m2")
     # ]]]
     # fmt: off
     quadratic_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     quadratic_friction = attrib_scalar(
-        default=Scalar('force per velocity', 0.0, 'Ns/m')
+        default=Scalar('force per velocity squared', 0.0, 'N.s2/m2')
     )
     quadratic_friction_curve = attrib_curve(
-        default=Curve(Array('force per velocity', [], 'Ns/m'), Array('time', [], 's'))
+        default=Curve(Array('force per velocity squared', [], 'N.s2/m2'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: f1796ac1c9061085c5c7da6f875b64a9)
+    # [[[end]]] (checksum: 57937de27b34d2f159ecce17563ba34d)
 
     # TODO: ASIM-4380: Review these attributes
     trap_mode = attrib_enum(default=constants.PigTrappingMode.Automatic)

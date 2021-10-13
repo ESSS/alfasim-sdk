@@ -158,3 +158,72 @@ def register_units() -> None:
         valid_units=std_volume_units,
     )
     # NOTE: "gas volume flow rate" and "gas volume" are also required, but they are already registered
+
+    # TODO: ASIM-4452: Add "force per square velocity" to barril and update PIG quadratic friction
+    # After the issue above is solved, the code below may be removed
+    from barril.units.posc import MakeCustomaryToBase
+    from barril.units.posc import MakeBaseToCustomary
+
+    old_unit = "Ns/m"
+    quantity_type = db.GetQuantityType(old_unit)
+    unit_name = db.GetUnitName(quantity_type, old_unit)
+
+    f_unit_to_base = MakeCustomaryToBase(0.0, 1.0, 1.0, 0.0)
+    f_base_to_unit = MakeBaseToCustomary(0.0, 1.0, 1.0, 0.0)
+    db.AddUnit(
+        quantity_type=quantity_type,
+        name=unit_name,
+        unit="N.s/m",
+        frombase=f_unit_to_base,
+        tobase=f_base_to_unit,
+        default_category="force per velocity",
+    )
+    db.AddCategory(
+        "force per velocity",
+        "force per velocity",
+        valid_units=["N.s/m", "lbf.s/ft", "lbf.s/in", "kgf.s/m"],
+        override=True,
+    )
+
+    db.AddUnitBase(
+        "force per velocity squared",
+        "Newton second squared per meter squared",
+        "N.s2/m2",
+    )
+
+    f_unit_to_base = MakeCustomaryToBase(0.0, 47.8802631216, 1.0, 0.0)
+    f_base_to_unit = MakeBaseToCustomary(0.0, 47.8802631216, 1.0, 0.0)
+    db.AddUnit(
+        "force per velocity squared",
+        "Pound force second squared per foot squared",
+        "lbf.s2/ft2",
+        f_base_to_unit,
+        f_unit_to_base,
+        default_category=None,
+    )
+    f_unit_to_base = MakeCustomaryToBase(0.0, 6894.75788952, 1.0, 0.0)
+    f_base_to_unit = MakeBaseToCustomary(0.0, 6894.75788952, 1.0, 0.0)
+    db.AddUnit(
+        "force per velocity squared",
+        "Pound force second squared per inch squared",
+        "lbf.s2/in2",
+        f_base_to_unit,
+        f_unit_to_base,
+        default_category=None,
+    )
+    f_unit_to_base = MakeCustomaryToBase(0.0, 9.80665, 1.0, 0.0)
+    f_base_to_unit = MakeBaseToCustomary(0.0, 9.80665, 1.0, 0.0)
+    db.AddUnit(
+        "force per velocity squared",
+        "Kilogram force second squared per meter squared",
+        "kgf.s2/m2",
+        f_base_to_unit,
+        f_unit_to_base,
+        default_category=None,
+    )
+    db.AddCategory(
+        "force per velocity squared",
+        "force per velocity squared",
+        valid_units=["N.s2/m2", "lbf.s2/ft2", "lbf.s2/in2", "kgf.s2/m2"],
+        override=True,
+    )
