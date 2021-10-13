@@ -1050,5 +1050,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: d683deae6c1c3243fbb42949512a5da2)
+# [[[end]]] (checksum: 44afb00d03877d934d1956a5425c6c59)
 # fmt: on
