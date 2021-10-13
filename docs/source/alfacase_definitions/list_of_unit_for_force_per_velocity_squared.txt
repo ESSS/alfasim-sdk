@@ -1,0 +1,7 @@
+.. admonition:: Available units for category 'force per velocity squared'
+    :class: dropdown
+
+    :"kgf.s2/m2": Kilogram force second squared per meter squared
+    :"lbf.s2/ft2": Pound force second squared per foot squared
+    :"lbf.s2/in2": Pound force second squared per inch squared
+    :"N.s2/m2": Newton second squared per meter squared

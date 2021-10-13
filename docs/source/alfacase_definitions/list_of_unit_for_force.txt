@@ -4,7 +4,7 @@
     :"daN": decanewtons
     :"dyne": dynes
     :"gf": gram force
-    :"kdyne": kilkodynes
+    :"kdyne": kilodynes
     :"kgf": kilogram force
     :"klbf": thousand pounds force
     :"kN": kilonewtons

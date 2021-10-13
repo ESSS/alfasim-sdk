@@ -46,6 +46,7 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
         "flow coefficient",
         "force",
         "force per velocity",
+        "force per velocity squared",
         "heat transfer coefficient",
         "length",
         "mass",
