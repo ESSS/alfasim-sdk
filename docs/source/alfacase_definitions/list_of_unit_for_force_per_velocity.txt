@@ -4,4 +4,4 @@
     :"kgf.s/m": Kilogram force second per meter
     :"lbf.s/ft": Pound force second per foot
     :"lbf.s/in": Pound force second per inch
-    :"Ns/m": Newton second per meter
+    :"N.s/m": Newton second per meter
