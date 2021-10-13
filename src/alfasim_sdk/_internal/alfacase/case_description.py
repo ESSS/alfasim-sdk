@@ -723,6 +723,24 @@ class LeakEquipmentDescription:
     # Flow coefficient model parameter
     cv_table = attrib_instance(CvTableDescription)
 
+    # Gas-Lift Valve parameters
+    # diameter and discharge_coefficient are also a gas-lift valve parameter, but they are already defined
+    gas_lift_valve_opening_type = attrib_enum(
+        default=constants.GasLiftValveOpeningType.MinimumPressureDifference
+    )
+
+    # Gas-lift parameters of minimum pressure difference opening type
+    minimum_pressure_difference = attrib_scalar(default=Scalar("pressure", 0.0, "Pa"))
+
+    # Gas-lift parameters of pressure operated opening type
+    bellows_reference_pressure = attrib_scalar(default=Scalar("pressure", 10, "bar"))
+    bellows_reference_temperature = attrib_scalar(
+        default=Scalar("temperature", 15, "degC")
+    )
+    port_to_bellows_area_ratio = attrib_scalar(
+        default=Scalar("dimensionless", 0.1, "-")
+    )
+
     # Parameters of leak opening
     # [[[cog
     # cog_out_multi_input("opening", "dimensionless", 1.0, "-")

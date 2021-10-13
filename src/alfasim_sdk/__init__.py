@@ -221,6 +221,7 @@ from alfasim_sdk._internal.constants import FlowDirection
 from alfasim_sdk._internal.constants import GAS_FIELD
 from alfasim_sdk._internal.constants import GAS_LAYER
 from alfasim_sdk._internal.constants import GAS_PHASE
+from alfasim_sdk._internal.constants import GasLiftValveOpeningType
 from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import InitialConditionStrategyType
 from alfasim_sdk._internal.constants import InterpolationType
@@ -420,6 +421,7 @@ __all__ = [
     "GAS_FIELD",
     "GAS_LAYER",
     "GAS_PHASE",
+    "GasLiftValveOpeningType",
     "get_metadata",
     "HydrodynamicModelType",
     "InitialConditionStrategyType",
