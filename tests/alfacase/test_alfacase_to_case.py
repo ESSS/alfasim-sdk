@@ -507,6 +507,7 @@ ALFACASE_TEST_CONFIG_MAP = {
     "PigEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PIG_EQUIPMENT_DESCRIPTION,
         schema=schema.pig_equipment_description_schema,
+        is_dict=True,
     ),
 }
 

@@ -1739,6 +1739,7 @@ def load_equipment_description(
 ) -> case_description.EquipmentDescription:
     alfacase_to_case_description = {
         "mass_sources": load_mass_source_equipment_description,
+        "pigs": load_pig_equipment_description,
         "pumps": load_pump_equipment_description,
         "valves": load_valve_equipment_description,
         "reservoir_inflows": load_reservoir_inflow_equipment_description,
