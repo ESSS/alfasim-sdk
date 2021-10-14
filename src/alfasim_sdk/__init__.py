@@ -359,6 +359,8 @@ __all__ = [
     "PackerDescription",
     "PhysicsDescription",
     "PigEquipmentDescription",
+    "PigRoutingMode",
+    "PigTrappingMode",
     "PipeDescription",
     "PipeSegmentsDescription",
     "PressureContainerDescription",
