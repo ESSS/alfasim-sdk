@@ -742,6 +742,24 @@ LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
     backflow=True,
 )
 
+PIG_EQUIPMENT_DESCRIPTION = case_description.PigEquipmentDescription(
+    diameter=Scalar(0.1, "m"),
+    launch_position=Scalar(0.0, "m"),
+    launch_time=Array(
+        [
+            0.0,
+        ],
+        "s",
+    ),
+    mass=Scalar(140.0, "kg"),
+    static_force=Scalar(1000.0, "N"),
+    wall_friction=Scalar(1000.0, "N.s/m"),
+    linear_friction=Scalar(10.0, "N.s/m"),
+    quadratic_friction=Scalar(0.0, "N.s2/m2"),
+    trap_mode=constants.PigTrappingMode.Automatic,
+    route_mode=constants.PigRoutingMode.Automatic,
+)
+
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerInputSignalPropertiesDescription(
         target_variable="pressure",

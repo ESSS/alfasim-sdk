@@ -1645,7 +1645,6 @@ def load_formation_description(
 
 
 def _generate_description(
-    # document: DescriptionDocument,
     document,
     alfacase_to_case_description,
     description_type,
