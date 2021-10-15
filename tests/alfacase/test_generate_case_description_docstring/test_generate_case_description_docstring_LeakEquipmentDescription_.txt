@@ -67,7 +67,7 @@
                 domain:
                     values: [number]
                     unit: string
-            target_pipe: string  # optional
+            target_pipe_name: string  # optional
             target_position:  # optional
                 value: number
                 unit: string
