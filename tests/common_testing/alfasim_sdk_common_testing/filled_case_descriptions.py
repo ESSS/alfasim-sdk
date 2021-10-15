@@ -184,7 +184,7 @@ MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
         "oil": Curve(Array([20.5, 30.5], "sm3/d"), Array([0, 2.0], "s")),
         "water": Curve(Array([20.5, 10.5], "sm3/d"), Array([0, 10], "s")),
     },
-    tracer_mass_fraction=Array([1.0], "-", "mass fraction"),
+    tracer_mass_fraction=Array([1.0, 0.0], "-", "mass fraction"),
     temperature=Scalar(15, "degC"),
     fluid="fluid_1",
     source_type=constants.MassSourceType.MassFlowRates,
@@ -360,7 +360,7 @@ RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescript
         constants.FLUID_OIL: Scalar("mass fraction", 0.6, "-"),
         constants.FLUID_WATER: Scalar("mass fraction", 0.8, "-"),
     },
-    tracer_mass_fraction=Array("mass fraction", [1.0], "-"),
+    tracer_mass_fraction=Array("mass fraction", [1.0, 0.0], "-"),
     fluid="fluid_1",
 )
 TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
