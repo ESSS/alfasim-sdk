@@ -1645,10 +1645,10 @@ def load_formation_description(
 
 
 def _generate_description(
-    document,
-    alfacase_to_case_description,
-    description_type,
-):
+    document: DescriptionDocument,
+    alfacase_to_case_description: Dict[str, Callable],
+    description_type: Type[T],
+) -> T:
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = description_type(**case_values)
     return update_multi_input_flags(document, item_description)

@@ -681,10 +681,6 @@ class PigEquipmentDescription:
     TODO: ASIM-4380: Review this docstring
     """
 
-    # NOTE: If PIG diameter is smaller than pipe diameter, back leakage between
-    # the PIG and the wall will occur.
-    # If no diameter is given, the diameter of the pig is set to the inner pipe
-    # diameter minus 4 times the wall roughness.
     diameter = attrib_scalar(category="length")
     launch_position = attrib_scalar(category="length")
 
