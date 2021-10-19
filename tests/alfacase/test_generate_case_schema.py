@@ -444,6 +444,7 @@ def test_get_cases_class():
         "OpenHoleDescription",
         "PackerDescription",
         "PhysicsDescription",
+        "PigEquipmentDescription",
         "PipeDescription",
         "PipeSegmentsDescription",
         "PressureContainerDescription",

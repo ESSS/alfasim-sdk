@@ -12,6 +12,7 @@
             heat_sources: \ :class:`Dict <typing.Dict>`\[str, \ :class:`HeatSourceEquipmentDescription <HeatSourceEquipmentDescription>`\] = {}
             compressors: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`\] = {}
             leaks: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LeakEquipmentDescription <LeakEquipmentDescription>`\] = {}
+            pigs: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PigEquipmentDescription <PigEquipmentDescription>`\] = {}
 
 .. tab:: Schema
 
@@ -31,3 +32,5 @@
                 string: \ :class:`compressor_equipment_description_schema <CompressorEquipmentDescription>`
             leaks:  # optional
                 string: \ :class:`leak_equipment_description_schema <LeakEquipmentDescription>`
+            pigs:  # optional
+                string: \ :class:`pig_equipment_description_schema <PigEquipmentDescription>`

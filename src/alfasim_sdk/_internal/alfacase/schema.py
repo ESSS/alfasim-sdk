@@ -374,6 +374,58 @@ physics_description_schema = Map(
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
     }
 )
+pig_equipment_description_schema = Map(
+    {
+        "diameter": Map({"value": Float(), "unit": Str()}),
+        "launch_position": Map({"value": Float(), "unit": Str()}),
+        Optional("launch_time"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("mass_input_type"): Enum(['constant', 'curve']),
+        Optional("mass"): Map({"value": Float(), "unit": Str()}),
+        Optional("mass_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("static_force_input_type"): Enum(['constant', 'curve']),
+        Optional("static_force"): Map({"value": Float(), "unit": Str()}),
+        Optional("static_force_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("wall_friction_input_type"): Enum(['constant', 'curve']),
+        Optional("wall_friction"): Map({"value": Float(), "unit": Str()}),
+        Optional("wall_friction_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("linear_friction_input_type"): Enum(['constant', 'curve']),
+        Optional("linear_friction"): Map({"value": Float(), "unit": Str()}),
+        Optional("linear_friction_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("quadratic_friction_input_type"): Enum(['constant', 'curve']),
+        Optional("quadratic_friction"): Map({"value": Float(), "unit": Str()}),
+        Optional("quadratic_friction_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("trap_mode"): Enum(['automatic', 'user_defined']),
+        Optional("trap_position"): Map({"value": Float(), "unit": Str()}),
+        Optional("trap_pipe_name"): Str(),
+        Optional("route_mode"): Enum(['automatic', 'user_defined']),
+        Optional("pipe_route_names"): Seq(Str()),
+    }
+)
 pipe_segments_description_schema = Map(
     {
         "start_positions": Map({"values": Seq(Float()), "unit": Str()}),
@@ -892,6 +944,7 @@ equipment_description_schema = Map(
         Optional("heat_sources"): MapPattern(Str(), heat_source_equipment_description_schema),
         Optional("compressors"): MapPattern(Str(), compressor_equipment_description_schema),
         Optional("leaks"): MapPattern(Str(), leak_equipment_description_schema),
+        Optional("pigs"): MapPattern(Str(), pig_equipment_description_schema),
     }
 )
 ipr_models_description_schema = Map(
@@ -997,5 +1050,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 01b5d6117654984d227df8c4a508cec8)
+# [[[end]]] (checksum: d683deae6c1c3243fbb42949512a5da2)
 # fmt: on
