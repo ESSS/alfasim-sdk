@@ -184,7 +184,7 @@ MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
         "oil": Curve(Array([20.5, 30.5], "sm3/d"), Array([0, 2.0], "s")),
         "water": Curve(Array([20.5, 10.5], "sm3/d"), Array([0, 10], "s")),
     },
-    tracer_mass_fraction=Array([1.0], "-", "mass fraction"),
+    tracer_mass_fraction=Array([1.0, 0.0], "-", "mass fraction"),
     temperature=Scalar(15, "degC"),
     fluid="fluid_1",
     source_type=constants.MassSourceType.MassFlowRates,
@@ -360,7 +360,7 @@ RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescript
         constants.FLUID_OIL: Scalar("mass fraction", 0.6, "-"),
         constants.FLUID_WATER: Scalar("mass fraction", 0.8, "-"),
     },
-    tracer_mass_fraction=Array("mass fraction", [1.0], "-"),
+    tracer_mass_fraction=Array("mass fraction", [1.0, 0.0], "-"),
     fluid="fluid_1",
 )
 TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
@@ -740,6 +740,24 @@ LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
     target_position=Scalar(20.0, "m"),
     target_location=LeakLocation.Main,
     backflow=True,
+)
+
+PIG_EQUIPMENT_DESCRIPTION = case_description.PigEquipmentDescription(
+    diameter=Scalar(0.1, "m"),
+    launch_position=Scalar(0.0, "m"),
+    launch_time=Array(
+        [
+            0.0,
+        ],
+        "s",
+    ),
+    mass=Scalar(140.0, "kg"),
+    static_force=Scalar(1000.0, "N"),
+    wall_friction=Scalar(1000.0, "N.s/m"),
+    linear_friction=Scalar(10.0, "N.s/m"),
+    quadratic_friction=Scalar(0.0, "N.s2/m2"),
+    trap_mode=constants.PigTrappingMode.Automatic,
+    route_mode=constants.PigRoutingMode.Automatic,
 )
 
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (

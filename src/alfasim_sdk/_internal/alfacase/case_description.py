@@ -674,6 +674,99 @@ class CvTableDescription:
 
 
 @attr.s(frozen=True, slots=True)
+class PigEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/PigEquipmentDescription.txt
+
+    TODO: ASIM-4380: Review this docstring
+    """
+
+    diameter = attrib_scalar(category="length")
+    launch_position = attrib_scalar(category="length")
+
+    launch_time = attrib_array(default=Array([0.0], "s"))
+
+    # [[[cog
+    # cog_out_multi_input("mass", "mass", 140.0, "kg")
+    # ]]]
+    # fmt: off
+    mass_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    mass = attrib_scalar(
+        default=Scalar('mass', 140.0, 'kg')
+    )
+    mass_curve = attrib_curve(
+        default=Curve(Array('mass', [], 'kg'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: a7bf92b6669c03c650b80056852aa630)
+
+    # [[[cog
+    # cog_out_multi_input("static_force", "force", 1000.0, "N")
+    # ]]]
+    # fmt: off
+    static_force_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    static_force = attrib_scalar(
+        default=Scalar('force', 1000.0, 'N')
+    )
+    static_force_curve = attrib_curve(
+        default=Curve(Array('force', [], 'N'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 5a557bb3367d5632e14723da23d9f35a)
+
+    # [[[cog
+    # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "N.s/m")
+    # ]]]
+    # fmt: off
+    wall_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    wall_friction = attrib_scalar(
+        default=Scalar('force per velocity', 1000.0, 'N.s/m')
+    )
+    wall_friction_curve = attrib_curve(
+        default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: eac7071ce8c5158f10592694891eef3c)
+
+    # [[[cog
+    # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "N.s/m")
+    # ]]]
+    # fmt: off
+    linear_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    linear_friction = attrib_scalar(
+        default=Scalar('force per velocity', 10.0, 'N.s/m')
+    )
+    linear_friction_curve = attrib_curve(
+        default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: c1db146868277c945f0290b3de6c1ac1)
+
+    # [[[cog
+    # cog_out_multi_input("quadratic_friction", "force per velocity squared", 0.0, "N.s2/m2")
+    # ]]]
+    # fmt: off
+    quadratic_friction_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    quadratic_friction = attrib_scalar(
+        default=Scalar('force per velocity squared', 0.0, 'N.s2/m2')
+    )
+    quadratic_friction_curve = attrib_curve(
+        default=Curve(Array('force per velocity squared', [], 'N.s2/m2'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 57937de27b34d2f159ecce17563ba34d)
+
+    # TODO: ASIM-4380: Review these attributes
+    trap_mode = attrib_enum(default=constants.PigTrappingMode.Automatic)
+    trap_position = attrib_scalar(default=Scalar(0.0, "m"), category="length")
+    trap_pipe_name: str = attr.ib(
+        default="",
+    )
+    route_mode = attrib_enum(default=constants.PigRoutingMode.Automatic)
+    pipe_route_names: List[str] = attr.ib(default=[], validator=list_of_strings)
+
+
+@attr.s(frozen=True, slots=True)
 class ValveEquipmentDescription:
     """
     .. include:: /alfacase_definitions/ValveEquipmentDescription.txt
@@ -1289,6 +1382,7 @@ class EquipmentDescription:
     heat_sources = attrib_dict_of(HeatSourceEquipmentDescription)
     compressors = attrib_dict_of(CompressorEquipmentDescription)
     leaks = attrib_dict_of(LeakEquipmentDescription)
+    pigs = attrib_dict_of(PigEquipmentDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)

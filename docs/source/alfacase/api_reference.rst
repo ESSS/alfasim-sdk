@@ -234,6 +234,8 @@ Equipment
 
 .. autoclass:: alfasim_sdk.LeakEquipmentDescription()
 
+.. autoclass:: alfasim_sdk.PigEquipmentDescription()
+
 
 Tables
 ------

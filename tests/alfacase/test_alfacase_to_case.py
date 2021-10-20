@@ -504,6 +504,11 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.LEAK_EQUIPMENT_DESCRIPTION,
         schema=schema.leak_equipment_description_schema,
     ),
+    "PigEquipmentDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.PIG_EQUIPMENT_DESCRIPTION,
+        schema=schema.pig_equipment_description_schema,
+        is_dict=True,
+    ),
 }
 
 ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
