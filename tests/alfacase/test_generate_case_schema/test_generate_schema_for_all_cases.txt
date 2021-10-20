@@ -850,7 +850,7 @@ leak_equipment_description_schema = Map(
                 "domain": Map({"values": Seq(Float()), "unit": Str()}),
             }
         ),
-        Optional("target_pipe"): Str(),
+        Optional("target_pipe_name"): Str(),
         Optional("target_position"): Map({"value": Float(), "unit": Str()}),
         Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("backflow"): Bool(),
