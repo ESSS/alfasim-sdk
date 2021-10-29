@@ -6,8 +6,8 @@
 
         class PigEquipmentDescription
             diameter: \ :class:`Scalar <barril.units.Scalar>`
-            launch_position: \ :class:`Scalar <barril.units.Scalar>`
-            launch_time: \ :class:`Array <barril.units.Array>`\  = Array(time, [0.0], s)
+            position: \ :class:`Scalar <barril.units.Scalar>`
+            launch_times: \ :class:`Array <barril.units.Array>`\  = Array(time, [0.0], s)
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             mass: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(140.0, 'kg', 'mass')
             mass_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(kg, s)[]
@@ -25,9 +25,9 @@
             quadratic_friction_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(N.s2/m2, s)[]
             trap_mode: \ :class:`PigTrappingMode <alfasim_sdk._internal.constants.PigTrappingMode>`\  = PigTrappingMode.Automatic
             trap_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
-            trap_pipe_name: str = ''
+            trap_pipe_name: \ :class:`Optional <typing.Optional>`\[str] = None
             route_mode: \ :class:`PigRoutingMode <alfasim_sdk._internal.constants.PigRoutingMode>`\  = PigRoutingMode.Automatic
-            pipe_route_names: \ :class:`List <typing.List>`\[str] = []
+            pipe_route_names: \ :class:`Optional <typing.Optional>`\[\ :class:`List <typing.List>`\[str]] = None
 
 .. tab:: Schema
 
@@ -36,10 +36,10 @@
             diameter: 
                 value: number
                 unit: string
-            launch_position: 
+            position: 
                 value: number
                 unit: string
-            launch_time:  # optional
+            launch_times:  # optional
                 values: [number]
                 unit: string
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
@@ -103,5 +103,5 @@
                 unit: string
             trap_pipe_name: string  # optional
             route_mode: \ :class:`PigRoutingMode <alfasim_sdk._internal.constants.PigRoutingMode>`\  # optional
-            pipe_route_names:  # optional
+            pipe_route_names:  # optional    
                 - str

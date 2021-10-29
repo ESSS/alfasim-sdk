@@ -1,0 +1,7 @@
+.. admonition:: Available units for category 'force per velocity'
+    :class: dropdown
+
+    :"kgf.s/m": Kilogram force second per meter
+    :"lbf.s/ft": Pound force second per foot
+    :"lbf.s/in": Pound force second per inch
+    :"N.s/m": Newton second per meter

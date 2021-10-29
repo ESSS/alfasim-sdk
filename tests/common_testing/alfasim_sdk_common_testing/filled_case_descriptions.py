@@ -430,6 +430,31 @@ CASING_DESCRIPTION = case_description.CasingDescription(
     packers=[PACKER_DESCRIPTION],
     open_holes=[OPEN_HOLE_DESCRIPTION],
 )
+PIG_DESCRIPTION = case_description.PigEquipmentDescription(
+    position=Scalar(120.0, "m"),
+    launch_times=Array([0.0, 50.0], "s"),
+    diameter=Scalar(0.02, "m"),
+    mass_input_type=constants.MultiInputType.Curve,
+    mass=Scalar(50.0, "kg"),
+    mass_curve=Curve(Array([50.0], "kg"), Array([0], "s")),
+    static_force_input_type=constants.MultiInputType.Curve,
+    static_force=Scalar(60, "N"),
+    static_force_curve=Curve(Array([60.0], "N"), Array([0], "s")),
+    wall_friction_input_type=constants.MultiInputType.Curve,
+    wall_friction=Scalar(70, "N.s/m"),
+    wall_friction_curve=Curve(Array([70.0], "N.s/m"), Array([0], "s")),
+    linear_friction_input_type=constants.MultiInputType.Curve,
+    linear_friction=Scalar(80, "N.s/m"),
+    linear_friction_curve=Curve(Array([80.0], "N.s/m"), Array([0], "s")),
+    quadratic_friction_input_type=constants.MultiInputType.Curve,
+    quadratic_friction=Scalar(90, "N.s2/m2"),
+    quadratic_friction_curve=Curve(Array([90.0], "N.s2/m2"), Array([0], "s")),
+    trap_mode=constants.PigTrappingMode.UserDefined,
+    trap_pipe_name="pipe 1",
+    trap_position=Scalar(40, "m"),
+    route_mode=constants.PigRoutingMode.Automatic,  # Not using UserDefined for the filled case.
+    pipe_route_names=None,
+)
 PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     type=constants.PumpType.TableInterpolation,
     position=Scalar(350.0, "m"),
@@ -474,6 +499,7 @@ EQUIPMENT_DESCRIPTION = case_description.EquipmentDescription(
     reservoir_inflows={"RESERVOIR": RESERVOIR_INFLOW_DESCRIPTION},
     heat_sources={"HEAT": HEAT_SOURCE_DESCRIPTION},
     compressors={"COMPRESSOR": COMPRESSOR_DESCRIPTION},
+    pigs={"PIG": PIG_DESCRIPTION},
 )
 ENVIRONMENT_PROPERTY_DESCRIPTION = case_description.EnvironmentPropertyDescription(
     position=Scalar(1, "m"),
@@ -742,22 +768,30 @@ LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
     backflow=True,
 )
 
-PIG_EQUIPMENT_DESCRIPTION = case_description.PigEquipmentDescription(
-    diameter=Scalar(0.1, "m"),
-    launch_position=Scalar(0.0, "m"),
-    launch_time=Array(
-        [
-            0.0,
-        ],
-        "s",
-    ),
-    mass=Scalar(140.0, "kg"),
-    static_force=Scalar(1000.0, "N"),
-    wall_friction=Scalar(1000.0, "N.s/m"),
-    linear_friction=Scalar(10.0, "N.s/m"),
-    quadratic_friction=Scalar(0.0, "N.s2/m2"),
-    trap_mode=constants.PigTrappingMode.Automatic,
-    route_mode=constants.PigRoutingMode.Automatic,
+PIG_DESCRIPTION = case_description.PigEquipmentDescription(
+    position=Scalar(120.0, "m"),
+    launch_times=Array([0.0, 50.0], "s"),
+    diameter=Scalar(0.02, "m"),
+    mass_input_type=constants.MultiInputType.Curve,
+    mass=Scalar(50.0, "kg"),
+    mass_curve=Curve(Array([50.0], "kg"), Array([0], "s")),
+    static_force_input_type=constants.MultiInputType.Curve,
+    static_force=Scalar(60, "N"),
+    static_force_curve=Curve(Array([60.0], "N"), Array([0], "s")),
+    wall_friction_input_type=constants.MultiInputType.Curve,
+    wall_friction=Scalar(70, "N.s/m"),
+    wall_friction_curve=Curve(Array([70.0], "N.s/m"), Array([0], "s")),
+    linear_friction_input_type=constants.MultiInputType.Curve,
+    linear_friction=Scalar(80, "N.s/m"),
+    linear_friction_curve=Curve(Array([80.0], "N.s/m"), Array([0], "s")),
+    quadratic_friction_input_type=constants.MultiInputType.Curve,
+    quadratic_friction=Scalar(90, "N.s2/m2"),
+    quadratic_friction_curve=Curve(Array([90.0], "N.s2/m2"), Array([0], "s")),
+    trap_mode=constants.PigTrappingMode.UserDefined,
+    trap_pipe_name="pipe 1",
+    trap_position=Scalar(40, "m"),
+    route_mode=constants.PigRoutingMode.Automatic,  # Not using UserDefined for the filled case.
+    pipe_route_names=None,
 )
 
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (

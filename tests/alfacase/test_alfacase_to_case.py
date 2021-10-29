@@ -377,6 +377,11 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.PROFILE_DESCRIPTION_WITH_XY,
         schema=schema.profile_description_schema,
     ),
+    "PigEquipmentDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.PIG_DESCRIPTION,
+        schema=schema.pig_equipment_description_schema,
+        is_dict=True,
+    ),
     "PumpEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PUMP_DESCRIPTION,
         schema=schema.pump_equipment_description_schema,
@@ -503,11 +508,6 @@ ALFACASE_TEST_CONFIG_MAP = {
     "LeakEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.LEAK_EQUIPMENT_DESCRIPTION,
         schema=schema.leak_equipment_description_schema,
-    ),
-    "PigEquipmentDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.PIG_EQUIPMENT_DESCRIPTION,
-        schema=schema.pig_equipment_description_schema,
-        is_dict=True,
     ),
 }
 

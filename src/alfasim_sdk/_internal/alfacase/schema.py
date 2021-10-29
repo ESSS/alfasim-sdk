@@ -377,8 +377,8 @@ physics_description_schema = Map(
 pig_equipment_description_schema = Map(
     {
         "diameter": Map({"value": Float(), "unit": Str()}),
-        "launch_position": Map({"value": Float(), "unit": Str()}),
-        Optional("launch_time"): Map({"values": Seq(Float()), "unit": Str()}),
+        "position": Map({"value": Float(), "unit": Str()}),
+        Optional("launch_times"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("mass_input_type"): Enum(['constant', 'curve']),
         Optional("mass"): Map({"value": Float(), "unit": Str()}),
         Optional("mass_curve"): Map(
@@ -1050,5 +1050,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 8fd86dd6792b20202d940abbf39273af)
+# [[[end]]] (checksum: 9dc44ea5364226d193daf332bbdebe00)
 # fmt: on

@@ -23,5 +23,5 @@
             roughnesses: 
                 values: [number]
                 unit: string
-            wall_names:     
-                - str  # optional
+            wall_names:  # optional    
+                - str
