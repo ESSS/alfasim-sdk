@@ -398,28 +398,28 @@ class ControllerType(Enum):
 class PigTrappingMode(Enum):
     """
     Trapping mode of a PIG equipment.
-
-    - Automatic: the Pig is automatically trapped whenever it reaches a boundary node (e.g.,
-        pressure or mass boundary).
-    - UserDefined: the Pig is trapped according to user-defined pipe and position unless it
-        reaches a boundary node first.
     """
 
+    #: The PIG is automatically trapped whenever it reaches a boundary node (e.g.,
+    #: pressure or mass boundary).
     Automatic = "automatic"
+
+    #: The PIG is trapped according to user-defined pipe and position unless it
+    #: reaches a boundary node first.
     UserDefined = "user_defined"
 
 
 class PigRoutingMode(Enum):
     """
     Trapping mode of a PIG equipment.
-
-    - Automatic: When a PIG encounters an internal node, the next pipe in which the PIG goes to
-        is selected based on the pipe with greatest total mass flow rate at that point.
-    - UserDefined: When a PIG encounters an internal node, the next pipe in which the PIG goes
-        to is selected based on a user-defined trajectory (edge group).
     """
 
+    #: When a PIG encounters an internal node, the next pipe in which the PIG goes to
+    #: is selected based on the pipe with greatest total mass flow rate at that point.
     Automatic = "automatic"
+
+    #: When a PIG encounters an internal node, the next pipe in which the PIG goes
+    #: to is selected based on a user-defined trajectory (edge group).
     UserDefined = "user_defined"
 
 
