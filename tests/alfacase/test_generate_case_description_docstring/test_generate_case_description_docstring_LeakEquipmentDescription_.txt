@@ -20,7 +20,7 @@
             opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             opening: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
             opening_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
-            target_pipe_name: str = ''
+            target_pipe_name: \ :class:`Optional <typing.Optional>`\[str] = None
             target_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             backflow: bool = False

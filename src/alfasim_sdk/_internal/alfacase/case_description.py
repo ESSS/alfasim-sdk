@@ -854,7 +854,9 @@ class LeakEquipmentDescription:
     # fmt: on
     # [[[end]]] (checksum: 28bd1bf52b80d19b34c0fabcd9e93b33)
 
-    target_pipe_name: str = attr.ib(default="", validator=instance_of(str))
+    target_pipe_name: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
     target_position = attrib_scalar(default=Scalar(0.0, "m"))
     target_location = attrib_enum(default=constants.LeakLocation.Main)
 
