@@ -90,8 +90,13 @@ class SurgeVolumeOptionsDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_volume_flow_rate.txt
     """
 
-    time_mode = attrib_enum(type_=constants.SurgeVolumeTimeMode)
-    drainage_mode = attrib_enum(type_=constants.DrainageRateMode)
+    time_mode = attrib_enum(
+        type_=constants.SurgeVolumeTimeMode,
+        default=constants.SurgeVolumeTimeMode.AllSimulation,
+    )
+    drainage_mode = attrib_enum(
+        type_=constants.DrainageRateMode, default=constants.DrainageRateMode.Automatic
+    )
     start_time = attrib_scalar(category="time", is_optional=True, default=None)
     end_time = attrib_scalar(category="time", is_optional=True, default=None)
     maximum_drainage_rate = attrib_scalar(

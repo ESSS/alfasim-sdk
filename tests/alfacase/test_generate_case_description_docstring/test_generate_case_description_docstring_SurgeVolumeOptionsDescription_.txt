@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class SurgeVolumeOptionsDescription
-            time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`
-            drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`
+            time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`\  = SurgeVolumeTimeMode.AllSimulation
+            drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`\  = DrainageRateMode.Automatic
             start_time: \ :class:`Optional <typing.Optional>`\[Scalar] = None
             end_time: \ :class:`Optional <typing.Optional>`\[Scalar] = None
             maximum_drainage_rate: \ :class:`Optional <typing.Optional>`\[Scalar] = None
@@ -15,8 +15,8 @@
 
     .. parsed-literal::
 
-            time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`
-            drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`
+            time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`\  # optional
+            drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`\  # optional
             start_time:  # optional
                 value: number
                 unit: string

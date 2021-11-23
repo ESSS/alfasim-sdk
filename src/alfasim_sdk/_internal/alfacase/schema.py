@@ -660,8 +660,8 @@ speed_curve_description_schema = Map(
 )
 surge_volume_options_description_schema = Map(
     {
-        "time_mode": Enum(['all_simulation', 'user_defined']),
-        "drainage_mode": Enum(['automatic', 'user_defined']),
+        Optional("time_mode"): Enum(['all_simulation', 'user_defined']),
+        Optional("drainage_mode"): Enum(['automatic', 'user_defined']),
         Optional("start_time"): Map({"value": Float(), "unit": Str()}),
         Optional("end_time"): Map({"value": Float(), "unit": Str()}),
         Optional("maximum_drainage_rate"): Map({"value": Float(), "unit": Str()}),
@@ -1060,5 +1060,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: c0d2e9748d3d2741d3d554aaf9e4dcc9)
+# [[[end]]] (checksum: 7831a597443e52a67a878e61ea546187)
 # fmt: on
