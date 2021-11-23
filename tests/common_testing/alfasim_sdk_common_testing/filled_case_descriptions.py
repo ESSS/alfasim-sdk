@@ -369,12 +369,20 @@ TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
     flow_rates=Array([1.0] * 4 + [0.05] * 4, "m3/s"),
     pressure_boosts=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "bar"),
 )
+SURGE_VOLUME_OPTIONS_DESCRIPTION = case_description.SurgeVolumeOptionsDescription(
+    time_mode=constants.SurgeVolumeTimeMode.UserDefined,
+    start_time=Scalar(10, "s"),
+    end_time=Scalar(100, "s"),
+    drainage_mode=constants.DrainageRateMode.UserDefined,
+    maximum_drainage_rate=Scalar(1, "m3/s"),
+)
 POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION = (
     case_description.PositionalPipeTrendDescription(
         curve_names=["oil mass flow rate"],
         element_name="pipe 1",
         position=Scalar(2950.0, "m"),
         location=constants.OutputAttachmentLocation.Main,
+        surge_volume_options=SURGE_VOLUME_OPTIONS_DESCRIPTION,
     )
 )
 GLOBAL_TREND_OUTPUT_DESCRIPTION = case_description.GlobalTrendDescription(
@@ -520,7 +528,6 @@ ENVIRONMENT_DESCRIPTION = case_description.EnvironmentDescription(
 X_AND_Y_DESCRIPTION = case_description.XAndYDescription(
     x=Array([1, 2, 3], "m"), y=Array([4, 5, 6], "m")
 )
-
 
 PROFILE_DESCRIPTION_WITH_XY = case_description.ProfileDescription(
     x_and_y=X_AND_Y_DESCRIPTION
@@ -755,7 +762,6 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
         table_length=TRACERS_MASS_FRACTIONS_CONTAINER_DESCRIPTION,
     )
 )
-
 
 LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
     position=Scalar(350.0, "m"),

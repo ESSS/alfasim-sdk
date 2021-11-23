@@ -8,13 +8,12 @@ from alfasim_sdk._internal.alfacase.generate_schema import (
     get_all_classes_that_needs_schema,
 )
 
-
 ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
     case_description.CaseDescription
 )
 
 # # Useful for debugging
-# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.PositionalPipeTrendDefinition]
+# ALL_CLASSES_THAT_NEEDS_SCHEMA = [case_description.PositionalPipeTrendDescription]
 
 
 @pytest.mark.parametrize("class_", ALL_CLASSES_THAT_NEEDS_SCHEMA)

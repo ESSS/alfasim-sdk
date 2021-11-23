@@ -1,0 +1,28 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class SurgeVolumeOptionsDescription
+            time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`
+            drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`
+            start_time: \ :class:`Optional <typing.Optional>`\[Scalar] = None
+            end_time: \ :class:`Optional <typing.Optional>`\[Scalar] = None
+            maximum_drainage_rate: \ :class:`Optional <typing.Optional>`\[Scalar] = None
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`
+            drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`
+            start_time:  # optional
+                value: number
+                unit: string
+            end_time:  # optional
+                value: number
+                unit: string
+            maximum_drainage_rate:  # optional
+                value: number
+                unit: string

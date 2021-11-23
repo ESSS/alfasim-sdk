@@ -10,6 +10,7 @@
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
             position: \ :class:`Scalar <barril.units.Scalar>`
             element_name: str
+            surge_volume_options: \ :class:`SurgeVolumeOptionsDescription <SurgeVolumeOptionsDescription>`\  = SurgeVolumeOptionsDescription()
 
 .. tab:: Schema
 
@@ -23,3 +24,4 @@
                 value: number
                 unit: string
             element_name: string
+            surge_volume_options: \ :class:`surge_volume_options_description_schema <SurgeVolumeOptionsDescription>`\  # optional

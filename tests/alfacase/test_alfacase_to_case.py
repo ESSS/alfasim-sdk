@@ -287,6 +287,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.SPEED_CURVE_DESCRIPTION,
         schema=schema.speed_curve_description_schema,
     ),
+    "SurgeVolumeOptionsDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.SURGE_VOLUME_OPTIONS_DESCRIPTION,
+        schema=schema.surge_volume_options_description_schema,
+    ),
     "TablePumpDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.TABLE_PUMP_DESCRIPTION,
         schema=schema.table_pump_description_schema,
