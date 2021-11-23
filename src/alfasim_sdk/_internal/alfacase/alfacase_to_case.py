@@ -1357,33 +1357,12 @@ def generate_trend_description(
     return update_multi_input_flags(document, item_description)
 
 
-def load_surge_volume_options_description(
-    document: DescriptionDocument,
-) -> case_description.SurgeVolumeOptionsDescription:
-    alfacase_to_case_description = {
-        "time_mode": get_enum_loader(enum_class=constants.SurgeVolumeTimeMode),
-        "drainage_mode": get_enum_loader(enum_class=constants.DrainageRateMode),
-        "start_time": get_scalar_loader(from_unit="s"),
-        "end_time": get_scalar_loader(from_unit="s"),
-        "maximum_drainage_rate": get_scalar_loader(from_unit="m3/s"),
-    }
-    return generate_trend_description(
-        document,
-        alfacase_to_case_description,
-        case_description.SurgeVolumeOptionsDescription,
-    )
-
-
 def load_positional_pipe_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.PositionalPipeTrendDescription]:
-    alfacase_to_case_description = {
-        "curve_names": load_value,
-        "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
-        "element_name": load_value,
-        "position": get_scalar_loader(from_unit="m"),
-        "surge_volume_options": load_surge_volume_options_description,
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.PositionalPipeTrendDescription
+    )
     return [
         generate_trend_description(
             alfacase_document,
