@@ -34,6 +34,8 @@ Outputs
 
 .. autoclass:: alfasim_sdk.TrendsOutputDescription()
 
+.. autoclass:: alfasim_sdk.SurgeVolumeOptionsDescription()
+
 .. autoclass:: alfasim_sdk.PositionalPipeTrendDescription()
 
 .. autoclass:: alfasim_sdk.EquipmentTrendDescription()
