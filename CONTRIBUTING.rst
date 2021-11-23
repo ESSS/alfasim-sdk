@@ -120,11 +120,4 @@ Before you submit a pull request, check that it meets these guidelines:
 Building the Docs
 -----------------
 
-Inside the folder docs, there is a makefile with all instructions necessary to build the documentation locally. In order to execute this instruction type `make html` inside the `docs` folder, and an HTML file will be generated under `_build\html`
-
-```bash
-cd docs
-make html
-cd  _build\html\
-start index.html
-```
+See `README.rst` in /docs for instructions and tips about building the docs.
