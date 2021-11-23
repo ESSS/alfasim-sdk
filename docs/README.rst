@@ -49,4 +49,5 @@ To build the docs, execute from the repository root:
 
     $ conda devenv --file dev-environment.devenv.yml
     $ conda activate alfasim-sdk-dev
+    # rm -rf docs/_build  # Clears previous generated docs, not doing so may hide Warnings being investigated
     $ inv docs
