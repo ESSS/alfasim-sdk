@@ -82,6 +82,29 @@ class PluginTableContainer:
     columns = attr.ib(default=attr.Factory(dict))
 
 
+@attr.s(frozen=True, slots=True)
+class SurgeVolumeOptionsDescription:
+    """
+    .. include:: /alfacase_definitions/SurgeVolumeOptionsDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_time.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_flow_rate.txt
+    """
+
+    time_mode = attrib_enum(
+        type_=constants.SurgeVolumeTimeMode,
+        default=constants.SurgeVolumeTimeMode.AllSimulation,
+    )
+    drainage_mode = attrib_enum(
+        type_=constants.DrainageRateMode, default=constants.DrainageRateMode.Automatic
+    )
+    start_time = attrib_scalar(category="time", is_optional=True, default=None)
+    end_time = attrib_scalar(category="time", is_optional=True, default=None)
+    maximum_drainage_rate = attrib_scalar(
+        category="volume flow rate", is_optional=True, default=None
+    )
+
+
 @attr.s(kw_only=True)
 class _BaseTrendOutputDescription:
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
@@ -99,6 +122,7 @@ class PositionalPipeTrendDescription(_BaseTrendOutputDescription):
     location = attrib_enum(type_=constants.OutputAttachmentLocation)
     position = attrib_scalar(category="length")
     element_name: str = attr.ib(validator=instance_of(str))
+    surge_volume_options = attrib_instance(SurgeVolumeOptionsDescription)
 
 
 @attr.s()

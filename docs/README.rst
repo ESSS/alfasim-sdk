@@ -32,6 +32,13 @@ When the type is from an external library, you must pass full path:
     :type velocity: ~barril.units.Scalar
     """
 
+Remember to add a new case description class to *api_reference.rst* file. Not doing so will result in errors like this one when generating the docs:
+
+.. code-block::
+
+    source/alfacase_definitions/PositionalPipeTrendDescription.txt:5: WARNING: py:class reference target not found: SurgeVolumeOptionsDescription
+    source/alfacase_definitions/PositionalPipeTrendDescription.txt:17: WARNING: py:class reference target not found: SurgeVolumeOptionsDescription
+
 
 Building
 --------
@@ -42,4 +49,6 @@ To build the docs, execute from the repository root:
 
     $ conda devenv --file dev-environment.devenv.yml
     $ conda activate alfasim-sdk-dev
+    $ rm -rf docs/_build  # Clears previous generated docs, not doing so may hide Warnings being investigated
+    $ inv cog  # Some cogged resources are used during docs generation
     $ inv docs

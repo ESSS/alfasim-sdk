@@ -148,6 +148,9 @@ from alfasim_sdk._internal.alfacase.case_description import (
     SeparatorNodePropertiesDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import SpeedCurveDescription
+from alfasim_sdk._internal.alfacase.case_description import (
+    SurgeVolumeOptionsDescription,
+)
 from alfasim_sdk._internal.alfacase.case_description import TableIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import TablePumpDescription
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -382,6 +385,7 @@ __all__ = [
     "ReservoirInflowEquipmentDescription",
     "SeparatorNodePropertiesDescription",
     "SpeedCurveDescription",
+    "SurgeVolumeOptionsDescription",
     "TableIPRDescription",
     "TablePumpDescription",
     "TemperaturesContainerDescription",

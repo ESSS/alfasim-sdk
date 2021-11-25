@@ -1360,12 +1360,9 @@ def generate_trend_description(
 def load_positional_pipe_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.PositionalPipeTrendDescription]:
-    alfacase_to_case_description = {
-        "curve_names": load_value,
-        "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
-        "element_name": load_value,
-        "position": get_scalar_loader(from_unit="m"),
-    }
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.PositionalPipeTrendDescription
+    )
     return [
         generate_trend_description(
             alfacase_document,

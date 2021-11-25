@@ -463,6 +463,7 @@ def test_get_cases_class():
         "ReservoirInflowEquipmentDescription",
         "SeparatorNodePropertiesDescription",
         "SpeedCurveDescription",
+        "SurgeVolumeOptionsDescription",
         "TableIPRDescription",
         "TablePumpDescription",
         "TemperaturesContainerDescription",
