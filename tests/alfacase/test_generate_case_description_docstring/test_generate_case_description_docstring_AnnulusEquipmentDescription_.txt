@@ -1,0 +1,18 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class AnnulusEquipmentDescription
+            leaks: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LeakEquipmentDescription <LeakEquipmentDescription>`\] = {}
+            gas_lift_valves: \ :class:`Dict <typing.Dict>`\[str, \ :class:`GasLiftValveEquipmentDescription <GasLiftValveEquipmentDescription>`\] = {}
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            leaks:  # optional
+                string: \ :class:`leak_equipment_description_schema <LeakEquipmentDescription>`
+            gas_lift_valves:  # optional
+                string: \ :class:`gas_lift_valve_equipment_description_schema <GasLiftValveEquipmentDescription>`

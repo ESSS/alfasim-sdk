@@ -402,6 +402,7 @@ def test_get_cases_class():
     obtained = {class_.__name__ for class_ in list_of_classes_that_needs_schema}
     expected = {
         "AnnulusDescription",
+        "AnnulusEquipmentDescription",
         "BipDescription",
         "CaseDescription",
         "CaseOutputDescription",

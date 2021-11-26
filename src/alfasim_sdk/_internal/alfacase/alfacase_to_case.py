@@ -1492,7 +1492,7 @@ def load_annulus_description(
         "pvt_model": load_value,
         "top_node": load_value,
         "initial_conditions": load_initial_conditions_description,
-        "gas_lift_valve_equipment": load_gas_lift_valve_equipment_description,
+        "equipment": load_annulus_equipment_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.AnnulusDescription(**case_values)
@@ -1731,6 +1731,28 @@ def load_wall_description(
     ]
 
 
+def load_leak_equipment_description(
+    document: DescriptionDocument,
+) -> List[case_description.LeakEquipmentDescription]:
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        case_description.LeakEquipmentDescription
+    )
+
+    def generate_leak_equipment_description(document: DescriptionDocument):
+        case_values = to_case_values(document, alfacase_to_case_description)
+        item_description = case_description.LeakEquipmentDescription(
+            **case_values
+        )
+        return update_multi_input_flags(document, item_description)
+
+    return {
+        key.data: generate_leak_equipment_description(
+            DescriptionDocument(value, document.file_path)
+        )
+        for key, value in document.content.items()
+    }
+
+
 def load_equipment_description(
     document: DescriptionDocument,
 ) -> case_description.EquipmentDescription:
@@ -1742,11 +1764,26 @@ def load_equipment_description(
         "reservoir_inflows": load_reservoir_inflow_equipment_description,
         "heat_sources": load_heat_source_equipment_description,
         "compressors": load_compressor_equipment_description,
+        "leaks": load_leak_equipment_description,
     }
     return _generate_description(
         document,
         alfacase_to_case_description,
         case_description.EquipmentDescription,
+    )
+
+
+def load_annulus_equipment_description(
+    document: DescriptionDocument,
+) -> case_description.AnnulusEquipmentDescription:
+    alfacase_to_case_description = {
+        "gas_lift_valves": load_gas_lift_valve_equipment_description,
+        "leaks": load_leak_equipment_description,
+    }
+    return _generate_description(
+        document,
+        alfacase_to_case_description,
+        case_description.AnnulusEquipmentDescription,
     )
 
 

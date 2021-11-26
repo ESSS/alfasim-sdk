@@ -926,6 +926,12 @@ wall_description_schema = Map(
         Optional("wall_layer_container"): Seq(wall_layer_description_schema),
     }
 )
+annulus_equipment_description_schema = Map(
+    {
+        Optional("leaks"): MapPattern(Str(), leak_equipment_description_schema),
+        Optional("gas_lift_valves"): MapPattern(Str(), gas_lift_valve_equipment_description_schema),
+    }
+)
 equipment_description_schema = Map(
     {
         Optional("mass_sources"): MapPattern(Str(), mass_source_equipment_description_schema),
@@ -990,7 +996,7 @@ annulus_description_schema = Map(
         "has_annulus_flow": Bool(),
         Optional("pvt_model"): Str(),
         Optional("initial_conditions"): initial_conditions_description_schema,
-        Optional("gas_lift_valve_equipment"): MapPattern(Str(), gas_lift_valve_equipment_description_schema),
+        Optional("equipment"): annulus_equipment_description_schema,
         "top_node": Str(),
     }
 )
@@ -1060,5 +1066,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 7831a597443e52a67a878e61ea546187)
+# [[[end]]] (checksum: 23201f736ec577dad1d8948215d7cef3)
 # fmt: on

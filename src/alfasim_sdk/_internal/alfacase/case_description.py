@@ -1818,6 +1818,16 @@ class GasLiftValveEquipmentDescription:
     discharge_coeff = attrib_scalar(category="dimensionless")
 
 
+@attr.s()
+class AnnulusEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/AnnulusEquipmentDescription.txt
+    """
+
+    leaks = attrib_dict_of(LeakEquipmentDescription)
+    gas_lift_valves = attrib_dict_of(GasLiftValveEquipmentDescription)
+
+
 @attr.s(slots=True, kw_only=True)
 class AnnulusDescription:
     """
@@ -1829,7 +1839,7 @@ class AnnulusDescription:
         default=None, validator=optional(instance_of(str))
     )
     initial_conditions = attrib_instance(InitialConditionsDescription)
-    gas_lift_valve_equipment = attrib_dict_of(GasLiftValveEquipmentDescription)
+    equipment = attrib_instance(AnnulusEquipmentDescription)
     top_node: str = attr.ib(validator=instance_of(str))
 
 
