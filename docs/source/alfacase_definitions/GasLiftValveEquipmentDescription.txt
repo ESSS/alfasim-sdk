@@ -9,7 +9,7 @@
             diameter: \ :class:`Scalar <barril.units.Scalar>`
             valve_type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`
             delta_p_min: \ :class:`Scalar <barril.units.Scalar>`
-            discharge_coeff: \ :class:`Scalar <barril.units.Scalar>`
+            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`
 
 .. tab:: Schema
 
@@ -25,6 +25,6 @@
             delta_p_min: 
                 value: number
                 unit: string
-            discharge_coeff: 
+            discharge_coefficient: 
                 value: number
                 unit: string
