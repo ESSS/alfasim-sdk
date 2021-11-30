@@ -2,8 +2,7 @@
 History
 =======
 
-
-0.11.0 (unreleased)
+0.11.0 (2021-11-30)
 ===================
 
 * **Breaking Change**: Change ``TrendOutputDescription`` to support different trends types. Now trends in ``CaseOutputDescription`` are an object of ``TrendsOutputDescription`` that contains a list for each trend type. The available trend types are:
