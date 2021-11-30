@@ -1740,9 +1740,7 @@ def load_leak_equipment_description(
 
     def generate_leak_equipment_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
-        item_description = case_description.LeakEquipmentDescription(
-            **case_values
-        )
+        item_description = case_description.LeakEquipmentDescription(**case_values)
         return update_multi_input_flags(document, item_description)
 
     return {
