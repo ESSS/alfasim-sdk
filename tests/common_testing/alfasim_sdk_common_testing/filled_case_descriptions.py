@@ -419,15 +419,6 @@ TUBING_DESCRIPTION = case_description.TubingDescription(
 WALL_LAYER_DESCRIPTION = case_description.WallLayerDescription(
     thickness=Scalar(25.4, "mm"), material_name="Carbon Steel", has_annulus_flow=True
 )
-ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
-    has_annulus_flow=True,
-    pvt_model="gavea",
-    top_node="mass_source_node",
-    initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
-    equipment=case_description.AnnulusEquipmentDescription(
-        gas_lift_valves={"My gas-lift valve": GAS_LIST_VALVE_DESCRIPTION},
-    ),
-)
 CASE_OUTPUT_DESCRIPTION = case_description.CaseOutputDescription(
     trends=TRENDS_OUTPUT_DESCRIPTION,
     trend_frequency=Scalar(0.1, "s"),
@@ -525,6 +516,13 @@ EQUIPMENT_DESCRIPTION = case_description.EquipmentDescription(
 ANNULUS_EQUIPMENT_DESCRIPTION = case_description.AnnulusEquipmentDescription(
     leaks={"LEAK": LEAK_EQUIPMENT_DESCRIPTION},
     gas_lift_valves={"GAS LIFT VALVE": GAS_LIST_VALVE_DESCRIPTION},
+)
+ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
+    has_annulus_flow=True,
+    pvt_model="gavea",
+    top_node="mass_source_node",
+    initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
+    equipment=ANNULUS_EQUIPMENT_DESCRIPTION,
 )
 ENVIRONMENT_PROPERTY_DESCRIPTION = case_description.EnvironmentPropertyDescription(
     position=Scalar(1, "m"),
