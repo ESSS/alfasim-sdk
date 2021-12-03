@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Top-level package for alfasim-sdk."""
 import pluggy
-
 from alfasim_sdk._internal import version
 from alfasim_sdk._internal.alfasim_sdk_utils import get_metadata
 from alfasim_sdk._internal.units import register_units
@@ -172,6 +171,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
     GlobalTrendDescription,
     EquipmentTrendDescription,
     SeparatorTrendDescription,
+    ControllerTrendDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import TubingDescription
 from alfasim_sdk._internal.alfacase.case_description import ValveEquipmentDescription
@@ -403,6 +403,7 @@ __all__ = [
     "GlobalTrendDescription",
     "EquipmentTrendDescription",
     "SeparatorTrendDescription",
+    "ControllerTrendDescription",
     "TubingDescription",
     "ValveEquipmentDescription",
     "VelocitiesContainerDescription",

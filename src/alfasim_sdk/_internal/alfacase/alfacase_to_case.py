@@ -14,15 +14,14 @@ from typing import TypeVar
 from typing import Union
 
 import attr
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
 from attr.validators import instance_of
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 from barril.units import UnitDatabase
 from strictyaml import YAML
-
-from alfasim_sdk._internal import constants
-from alfasim_sdk._internal.alfacase import case_description
 
 T = TypeVar("T")
 
@@ -1421,6 +1420,23 @@ def load_separator_trend_description(
     ]
 
 
+def load_controller_trend_description(
+    document: DescriptionDocument,
+) -> List[case_description.ControllerTrendDescription]:
+    alfacase_to_case_description = {
+        "curve_names": load_value,
+        "element_name": load_value,
+    }
+    return [
+        generate_trend_description(
+            alfacase_document,
+            alfacase_to_case_description,
+            case_description.ControllerTrendDescription,
+        )
+        for alfacase_document in document
+    ]
+
+
 def load_global_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.GlobalTrendDescription]:
@@ -1524,6 +1540,7 @@ def load_trends_output_description(
         "global_trends": load_global_trend_description,
         "overall_pipe_trends": load_overall_pipe_trend_description,
         "separator_trends": load_separator_trend_description,
+        "controller_trends": load_controller_trend_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.TrendsOutputDescription(**case_values)

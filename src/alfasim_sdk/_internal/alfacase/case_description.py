@@ -10,6 +10,7 @@ from typing import Union
 
 import attr
 import numpy as np
+from alfasim_sdk._internal import constants
 from attr.validators import in_
 from attr.validators import instance_of
 from attr.validators import optional
@@ -33,7 +34,6 @@ from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
-from alfasim_sdk._internal import constants
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -161,6 +161,15 @@ class SeparatorTrendDescription(_BaseTrendOutputDescription):
 
 
 @attr.s()
+class ControllerTrendDescription(_BaseTrendOutputDescription):
+    """
+    .. include:: /alfacase_definitions/ControllerTrendDescription.txt
+    """
+
+    element_name: str = attr.ib(validator=instance_of(str))
+
+
+@attr.s()
 class ProfileOutputDescription:
     """
     .. include:: /alfacase_definitions/ProfileOutputDescription.txt
@@ -182,6 +191,7 @@ class TrendsOutputDescription:
     global_trends = attrib_instance_list(GlobalTrendDescription)
     equipment_trends = attrib_instance_list(EquipmentTrendDescription)
     separator_trends = attrib_instance_list(SeparatorTrendDescription)
+    controller_trends = attrib_instance_list(ControllerTrendDescription)
 
 
 @attr.s(frozen=True, slots=True)

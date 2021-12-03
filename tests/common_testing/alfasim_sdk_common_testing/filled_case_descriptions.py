@@ -1,16 +1,16 @@
 from pathlib import Path
 
 import numpy as np
+from alfasim_sdk import LeakLocation
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
 from . import case_builders
 from . import get_acme_tab_file_path
-from alfasim_sdk import LeakLocation
-from alfasim_sdk._internal import constants
-from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 
 BIP_DESCRIPTION = case_description.BipDescription(
     component_1="C1", component_2="C2", value=0.5
@@ -401,12 +401,17 @@ SEPARATOR_TREND_OUTPUT_DESCRIPTION = case_description.SeparatorTrendDescription(
     curve_names=["separator liquid level"],
     element_name="separator_node",
 )
+CONTROLLER_TREND_OUTPUT_DESCRIPTION = case_description.ControllerTrendDescription(
+    curve_names=["controller output signal"],
+    element_name="controller_node",
+)
 TRENDS_OUTPUT_DESCRIPTION = case_description.TrendsOutputDescription(
     positional_pipe_trends=[POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION],
     equipment_trends=[EQUIPMENT_TREND_OUTPUT_DESCRIPTION],
     overall_pipe_trends=[OVERALL_PIPE_TREND_OUTPUT_DESCRIPTION],
     global_trends=[GLOBAL_TREND_OUTPUT_DESCRIPTION],
     separator_trends=[SEPARATOR_TREND_OUTPUT_DESCRIPTION],
+    controller_trends=[CONTROLLER_TREND_OUTPUT_DESCRIPTION],
 )
 TUBING_DESCRIPTION = case_description.TubingDescription(
     name="Tubing 1",

@@ -1,0 +1,19 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class ControllerTrendDescription
+            name: \ :class:`Optional <typing.Optional>`\[str] = None
+            curve_names: \ :class:`List <typing.List>`\[str]
+            element_name: str
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string  # optional
+            curve_names: 
+                - str
+            element_name: string
