@@ -374,8 +374,16 @@ class OutputAttachmentLocation(Enum):
     Annulus = "annulus"
     NotDefined = "not_defined"
 
-
 LeakLocation = OutputAttachmentLocation
+
+class EquipmentAttachmentLocation(Enum):
+    """
+    Location in which an equipment can be attached.
+    """
+
+    Main = "main"
+    Annulus = "annulus"
+    Both = "both"
 
 
 class CorrelationPackage(Enum):

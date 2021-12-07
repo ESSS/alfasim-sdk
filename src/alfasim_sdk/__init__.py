@@ -232,6 +232,7 @@ from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import InitialConditionStrategyType
 from alfasim_sdk._internal.constants import InterpolationType
 from alfasim_sdk._internal.constants import LeakLocation
+from alfasim_sdk._internal.constants import EquipmentAttachmentLocation
 from alfasim_sdk._internal.constants import LeakModel
 from alfasim_sdk._internal.constants import LeakType
 from alfasim_sdk._internal.constants import MassInflowSplitType
@@ -355,6 +356,7 @@ __all__ = [
     "LengthAndElevationDescription",
     "LeakEquipmentDescription",
     "LeakLocation",
+    "EquipmentAttachmentLocation",
     "LightComponentDescription",
     "LinearIPRDescription",
     "MassSourceEquipmentDescription",
@@ -441,7 +443,6 @@ __all__ = [
     "HydrodynamicModelType",
     "InitialConditionStrategyType",
     "InterpolationType",
-    "LeakLocation",
     "LeakModel",
     "LeakType",
     "MassInflowSplitType",
