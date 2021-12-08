@@ -1815,7 +1815,7 @@ class GasLiftValveEquipmentDescription:
     diameter = attrib_scalar(category="length")
     valve_type = attrib_enum(type_=constants.ValveType)
     delta_p_min = attrib_scalar(category="pressure")
-    discharge_coeff = attrib_scalar(category="dimensionless")
+    discharge_coefficient = attrib_scalar(category="dimensionless")
 
 
 @attr.s(slots=True, kw_only=True)

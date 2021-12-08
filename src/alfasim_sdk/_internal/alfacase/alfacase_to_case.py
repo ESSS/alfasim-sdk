@@ -775,7 +775,7 @@ def load_gas_lift_valve_equipment_description(
         "diameter": get_scalar_loader(from_unit="m"),
         "valve_type": get_enum_loader(enum_class=constants.ValveType),
         "delta_p_min": get_scalar_loader(from_unit="Pa"),
-        "discharge_coeff": get_scalar_loader(from_unit="-"),
+        "discharge_coefficient": get_scalar_loader(from_unit="-"),
     }
 
     def generate_gas_lift_description(document: DescriptionDocument):

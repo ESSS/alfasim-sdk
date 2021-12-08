@@ -135,7 +135,7 @@ GAS_LIST_VALVE_DESCRIPTION = case_description.GasLiftValveEquipmentDescription(
     diameter=Scalar(1.0, "cm"),
     valve_type=constants.ValveType.CheckValve,
     delta_p_min=Scalar(4.0e6, "Pa"),
-    discharge_coeff=Scalar(0.826, "-"),
+    discharge_coefficient=Scalar(0.826, "-"),
 )
 HEAT_SOURCE_DESCRIPTION = case_description.HeatSourceEquipmentDescription(
     start=Scalar(200.0, "m"),
