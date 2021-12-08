@@ -6,7 +6,7 @@ History
 0.12.0 (unreleased)
 ===================
 
-*
+* Removed *force per square velocity* unit definition, it is present in the new barril version.
 
 
 0.11.0 (2021-11-30)
