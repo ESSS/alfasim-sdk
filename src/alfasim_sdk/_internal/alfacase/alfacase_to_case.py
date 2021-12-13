@@ -120,26 +120,23 @@ def load_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
 @lru_cache(maxsize=None)
 def get_instance_loader(*, class_: type) -> Callable:
     """
-    Return a load  instance function pre-populate with the class_.
+    Return a load instance function pre-populate with the class_.
     """
     return partial(load_instance, class_=class_)
 
 
+def load_dict_of_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+    return {
+        key.data: load_instance(
+            DescriptionDocument(value, alfacase_content.file_path), class_=class_
+        )
+        for key, value in alfacase_content.content.items()
+    }
+
 @lru_cache(maxsize=None)
-def get_dict_of_loader(*, class_: type) -> Callable:
-    """
-    Return a load  instance function pre-populate with the class_. @ramon change the docstring
-    """
-
-    def _get_dict_of_loader(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
-        return {
-            key.data: load_instance(
-                DescriptionDocument(value, alfacase_content.file_path), class_=class_
-            )
-            for key, value in alfacase_content.content.items()
-        }
-
-    return partial(_get_dict_of_loader, class_=class_)
+def get_dict_of_instance_loader(*, class_: type) -> Callable:
+    print('here')
+    return partial(load_dict_of_instance, class_=class_)
     
 
 def get_case_description_attribute_loader_dict(
@@ -1498,7 +1495,7 @@ def load_annulus_description(
         "pvt_model": load_value,
         "top_node": load_value,
         "initial_conditions": load_initial_conditions_description,
-        "equipment": partial(load_instance, class_=case_description.AnnulusEquipmentDescription),
+        "equipment": get_instance_loader(class_=case_description.AnnulusEquipmentDescription),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.AnnulusDescription(**case_values)
@@ -1748,7 +1745,7 @@ def load_equipment_description(
         "reservoir_inflows": load_reservoir_inflow_equipment_description,
         "heat_sources": load_heat_source_equipment_description,
         "compressors": load_compressor_equipment_description,
-        "leaks": partial(load_instance, class_=case_description.LeakEquipmentDescription),
+        "leaks": get_dict_of_instance_loader(class_=case_description.LeakEquipmentDescription),
     }
     return _generate_description(
         document,

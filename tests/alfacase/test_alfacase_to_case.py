@@ -516,7 +516,7 @@ ALFACASE_TEST_CONFIG_MAP = {
     "LeakEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.LEAK_EQUIPMENT_DESCRIPTION,
         schema=schema.leak_equipment_description_schema,
-        is_dict=True,
+        is_dict=False,
     ),
 }
 

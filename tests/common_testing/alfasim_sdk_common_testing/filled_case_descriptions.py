@@ -514,7 +514,7 @@ EQUIPMENT_DESCRIPTION = case_description.EquipmentDescription(
     leaks={"LEAK": LEAK_EQUIPMENT_DESCRIPTION},
 )
 ANNULUS_EQUIPMENT_DESCRIPTION = case_description.AnnulusEquipmentDescription(
-    leaks={"LEAK": LEAK_EQUIPMENT_DESCRIPTION},
+    leaks={"ANNULUS LEAK": LEAK_EQUIPMENT_DESCRIPTION},
     gas_lift_valves={"GAS LIFT VALVE": GAS_LIST_VALVE_DESCRIPTION},
 )
 ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
