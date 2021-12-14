@@ -14,14 +14,15 @@ from typing import TypeVar
 from typing import Union
 
 import attr
-from alfasim_sdk._internal import constants
-from alfasim_sdk._internal.alfacase import case_description
 from attr.validators import instance_of
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 from barril.units import UnitDatabase
 from strictyaml import YAML
+
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
 
 T = TypeVar("T")
 

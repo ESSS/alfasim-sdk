@@ -6,6 +6,16 @@ import attr
 import numpy
 import pytest
 import strictyaml
+from barril.units import Array
+from barril.units import Scalar
+from ruamel.yaml.comments import CommentedMap
+from strictyaml import YAML
+
+from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
+from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
+from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
+    ensure_descriptions_are_equal,
+)
 from alfasim_sdk import convert_description_to_alfacase
 from alfasim_sdk._internal.alfacase import alfacase_to_case
 from alfasim_sdk._internal.alfacase import case_description
@@ -29,16 +39,6 @@ from alfasim_sdk._internal.alfacase.schema import (
     mass_source_node_properties_description_schema,
 )
 from alfasim_sdk._internal.constants import MultiInputType
-from barril.units import Array
-from barril.units import Scalar
-from ruamel.yaml.comments import CommentedMap
-from strictyaml import YAML
-
-from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
-from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
-from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
-    ensure_descriptions_are_equal,
-)
 
 
 @attr.s(frozen=True)
