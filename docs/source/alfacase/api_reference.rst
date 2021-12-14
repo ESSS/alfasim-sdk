@@ -46,6 +46,8 @@ Outputs
 
 .. autoclass:: alfasim_sdk.OverallPipeTrendDescription()
 
+.. autoclass:: alfasim_sdk.ControllerTrendDescription()
+
 .. _alfacase-reference-pvt-section:
 
 PVTs
