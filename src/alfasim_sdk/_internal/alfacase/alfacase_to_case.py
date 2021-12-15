@@ -135,7 +135,6 @@ def load_dict_of_instance(alfacase_content: DescriptionDocument, class_: Type[T]
 
 @lru_cache(maxsize=None)
 def get_dict_of_instance_loader(*, class_: type) -> Callable:
-    print('here')
     return partial(load_dict_of_instance, class_=class_)
     
 
@@ -1737,22 +1736,8 @@ def load_wall_description(
 def load_equipment_description(
     document: DescriptionDocument,
 ) -> case_description.EquipmentDescription:
-    alfacase_to_case_description = {
-        "mass_sources": load_mass_source_equipment_description,
-        "pigs": load_pig_equipment_description,
-        "pumps": load_pump_equipment_description,
-        "valves": load_valve_equipment_description,
-        "reservoir_inflows": load_reservoir_inflow_equipment_description,
-        "heat_sources": load_heat_source_equipment_description,
-        "compressors": load_compressor_equipment_description,
-        "leaks": get_dict_of_instance_loader(class_=case_description.LeakEquipmentDescription),
-    }
-    return _generate_description(
-        document,
-        alfacase_to_case_description,
-        case_description.EquipmentDescription,
-    )
-
+    return load_instance(document, case_description.EquipmentDescription)
+    
 
 def load_x_and_y_description(
     document: DescriptionDocument,

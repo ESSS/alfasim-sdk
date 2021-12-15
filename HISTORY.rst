@@ -6,6 +6,11 @@ History
 0.12.0 (unreleased)
 ===================
 
+* **Breaking Change**: Change in ``AnnulusDescription`` to support different types of annulus equipment. Now ``AnnulusDescription``` has an attribute ``AnnulusEquipmentDescription``, which holds a dict that can contain multiple different equipment types, for which the current available options are:
+  
+  - ``LeakEquipmentDescription``;
+  - ``GasLiftValveEquipmentDescription``;
+
 * Removed *force per square velocity* unit definition, it is present in the new barril version.
 
 
