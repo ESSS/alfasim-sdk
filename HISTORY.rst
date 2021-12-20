@@ -11,7 +11,30 @@ History
   - ``LeakEquipmentDescription``;
   - ``GasLiftValveEquipmentDescription``;
 
-* Removed *force per square velocity* unit definition, it is present in the new barril version.
+* Example on how to update previous .alfacase files with annulus equipment:
+
+  - Before::
+
+      annulus:
+        gas_lift_valve_equipment:
+          Gas Lift Valve (Well 1 > Annulus) 1:
+            position:
+              value: 100.0
+              unit: m
+            ...  # Other properties
+
+  - After::
+
+    annulus:
+      equipment:
+        gas_lift_valves:
+          Gas Lift Valve (Well 1 > Annulus) 1:
+            position:
+              value: 100.0
+              unit: m
+            ...  # Other properties
+
+* Removed *forc e per square velocity* unit definition, it is present in the new barril version.
 
 
 0.11.0 (2021-11-30)
