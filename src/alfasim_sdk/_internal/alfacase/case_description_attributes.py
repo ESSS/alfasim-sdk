@@ -404,7 +404,7 @@ def attrib_dict_of(type_: type) -> attr._make._CountingAttr:
     """
     metadata = {"type": "dict_of_instance", "class_": type_}
     return attr.ib(
-        default=attr.Factory(dict), 
+        default=attr.Factory(dict),
         validator=dict_of(type_),
         type=Dict[str, type_],
         metadata=metadata,
