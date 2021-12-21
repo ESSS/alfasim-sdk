@@ -218,6 +218,8 @@ Equipment
 
 .. autoclass:: alfasim_sdk.EquipmentDescription()
 
+.. autoclass:: alfasim_sdk.AnnulusEquipmentDescription()
+
 .. autoclass:: alfasim_sdk.MassSourceEquipmentDescription()
 
 .. autoclass:: alfasim_sdk.PumpEquipmentDescription()

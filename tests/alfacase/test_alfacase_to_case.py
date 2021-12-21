@@ -414,6 +414,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.EQUIPMENT_DESCRIPTION,
         schema=schema.equipment_description_schema,
     ),
+    "AnnulusEquipmentDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.ANNULUS_EQUIPMENT_DESCRIPTION,
+        schema=schema.annulus_equipment_description_schema,
+    ),
     "PipeDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PIPE_DESCRIPTION,
         schema=schema.pipe_description_schema,
@@ -512,6 +516,7 @@ ALFACASE_TEST_CONFIG_MAP = {
     "LeakEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.LEAK_EQUIPMENT_DESCRIPTION,
         schema=schema.leak_equipment_description_schema,
+        is_dict=False,
     ),
 }
 

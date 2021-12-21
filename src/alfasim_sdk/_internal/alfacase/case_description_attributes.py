@@ -402,8 +402,12 @@ def attrib_dict_of(type_: type) -> attr._make._CountingAttr:
     Create a new attr attribute with validator for an atribute that is a dictionary with keys as str (to represent
     the name) and the content of an instance of type_
     """
+    metadata = {"type": "dict_of_instance", "class_": type_}
     return attr.ib(
-        default=attr.Factory(dict), validator=dict_of(type_), type=Dict[str, type_]
+        default=attr.Factory(dict),
+        validator=dict_of(type_),
+        type=Dict[str, type_],
+        metadata=metadata,
     )
 
 

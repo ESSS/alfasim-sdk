@@ -51,6 +51,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
     EnvironmentPropertyDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import EquipmentDescription
+from alfasim_sdk._internal.alfacase.case_description import AnnulusEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import FluidDescription
 from alfasim_sdk._internal.alfacase.case_description import FormationDescription
 from alfasim_sdk._internal.alfacase.case_description import FormationLayerDescription
@@ -335,6 +336,7 @@ __all__ = [
     "EnvironmentDescription",
     "EnvironmentPropertyDescription",
     "EquipmentDescription",
+    "AnnulusEquipmentDescription",
     "FluidDescription",
     "FormationDescription",
     "FormationLayerDescription",

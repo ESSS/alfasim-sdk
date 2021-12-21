@@ -419,13 +419,6 @@ TUBING_DESCRIPTION = case_description.TubingDescription(
 WALL_LAYER_DESCRIPTION = case_description.WallLayerDescription(
     thickness=Scalar(25.4, "mm"), material_name="Carbon Steel", has_annulus_flow=True
 )
-ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
-    has_annulus_flow=True,
-    pvt_model="gavea",
-    top_node="mass_source_node",
-    initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
-    gas_lift_valve_equipment={"My gas-lift valve": GAS_LIST_VALVE_DESCRIPTION},
-)
 CASE_OUTPUT_DESCRIPTION = case_description.CaseOutputDescription(
     trends=TRENDS_OUTPUT_DESCRIPTION,
     trend_frequency=Scalar(0.1, "s"),
@@ -492,6 +485,16 @@ VALVE_DESCRIPTION_CONSTANT_OPENING = case_description.ValveEquipmentDescription(
     opening_type=constants.ValveOpeningType.ConstantOpening,
     opening=Scalar("dimensionless", 42, "%"),
 )
+LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
+    position=Scalar(350.0, "m"),
+    diameter=Scalar(0.025, "m"),
+    discharge_coefficient=Scalar(0.825, "-"),
+    location=LeakLocation.Main,
+    target_pipe_name=None,
+    target_position=Scalar(20.0, "m"),
+    target_location=LeakLocation.Main,
+    backflow=True,
+)
 WALL_DESCRIPTION = case_description.WallDescription(
     name="Flowline",
     inner_roughness=Scalar(1, "mm"),
@@ -508,6 +511,18 @@ EQUIPMENT_DESCRIPTION = case_description.EquipmentDescription(
     heat_sources={"HEAT": HEAT_SOURCE_DESCRIPTION},
     compressors={"COMPRESSOR": COMPRESSOR_DESCRIPTION},
     pigs={"PIG": PIG_DESCRIPTION},
+    leaks={"LEAK": LEAK_EQUIPMENT_DESCRIPTION},
+)
+ANNULUS_EQUIPMENT_DESCRIPTION = case_description.AnnulusEquipmentDescription(
+    leaks={"ANNULUS LEAK": LEAK_EQUIPMENT_DESCRIPTION},
+    gas_lift_valves={"GAS LIFT VALVE": GAS_LIST_VALVE_DESCRIPTION},
+)
+ANNULUS_DESCRIPTION = case_description.AnnulusDescription(
+    has_annulus_flow=True,
+    pvt_model="gavea",
+    top_node="mass_source_node",
+    initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
+    equipment=ANNULUS_EQUIPMENT_DESCRIPTION,
 )
 ENVIRONMENT_PROPERTY_DESCRIPTION = case_description.EnvironmentPropertyDescription(
     position=Scalar(1, "m"),
@@ -761,17 +776,6 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
         table_y=REFERENCED_TRACERS_MASS_FRACTIONS_CONTAINER_DESCRIPTION,
         table_length=TRACERS_MASS_FRACTIONS_CONTAINER_DESCRIPTION,
     )
-)
-
-LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
-    position=Scalar(350.0, "m"),
-    diameter=Scalar(0.025, "m"),
-    discharge_coefficient=Scalar(0.825, "-"),
-    location=LeakLocation.Annulus,
-    target_pipe_name="other_pipe",
-    target_position=Scalar(20.0, "m"),
-    target_location=LeakLocation.Main,
-    backflow=True,
 )
 
 PIG_DESCRIPTION = case_description.PigEquipmentDescription(

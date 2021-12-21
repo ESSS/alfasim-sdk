@@ -132,9 +132,23 @@ def load_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
 @lru_cache(maxsize=None)
 def get_instance_loader(*, class_: type) -> Callable:
     """
-    Return a load  instance function pre-populate with the class_.
+    Return a load instance function pre-populate with the class_.
     """
     return partial(load_instance, class_=class_)
+
+
+def load_dict_of_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+    return {
+        key.data: load_instance(
+            DescriptionDocument(value, alfacase_content.file_path), class_=class_
+        )
+        for key, value in alfacase_content.content.items()
+    }
+
+
+@lru_cache(maxsize=None)
+def get_dict_of_instance_loader(*, class_: type) -> Callable:
+    return partial(load_dict_of_instance, class_=class_)
 
 
 def get_case_description_attribute_loader_dict(
@@ -1492,7 +1506,9 @@ def load_annulus_description(
         "pvt_model": load_value,
         "top_node": load_value,
         "initial_conditions": load_initial_conditions_description,
-        "gas_lift_valve_equipment": load_gas_lift_valve_equipment_description,
+        "equipment": get_instance_loader(
+            class_=case_description.AnnulusEquipmentDescription
+        ),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.AnnulusDescription(**case_values)
@@ -1734,20 +1750,7 @@ def load_wall_description(
 def load_equipment_description(
     document: DescriptionDocument,
 ) -> case_description.EquipmentDescription:
-    alfacase_to_case_description = {
-        "mass_sources": load_mass_source_equipment_description,
-        "pigs": load_pig_equipment_description,
-        "pumps": load_pump_equipment_description,
-        "valves": load_valve_equipment_description,
-        "reservoir_inflows": load_reservoir_inflow_equipment_description,
-        "heat_sources": load_heat_source_equipment_description,
-        "compressors": load_compressor_equipment_description,
-    }
-    return _generate_description(
-        document,
-        alfacase_to_case_description,
-        case_description.EquipmentDescription,
-    )
+    return load_instance(document, case_description.EquipmentDescription)
 
 
 def load_x_and_y_description(

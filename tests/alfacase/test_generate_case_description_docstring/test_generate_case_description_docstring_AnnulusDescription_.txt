@@ -8,7 +8,7 @@
             has_annulus_flow: bool
             pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
             initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\  = InitialConditionsDescription()
-            gas_lift_valve_equipment: \ :class:`Dict <typing.Dict>`\[str, \ :class:`GasLiftValveEquipmentDescription <GasLiftValveEquipmentDescription>`\] = {}
+            equipment: \ :class:`AnnulusEquipmentDescription <AnnulusEquipmentDescription>`\  = AnnulusEquipmentDescription()
             top_node: str
 
 .. tab:: Schema
@@ -18,6 +18,5 @@
             has_annulus_flow: boolean
             pvt_model: string  # optional
             initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
-            gas_lift_valve_equipment:  # optional
-                string: \ :class:`gas_lift_valve_equipment_description_schema <GasLiftValveEquipmentDescription>`
+            equipment: \ :class:`annulus_equipment_description_schema <AnnulusEquipmentDescription>`\  # optional
             top_node: string

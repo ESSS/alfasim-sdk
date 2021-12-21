@@ -525,8 +525,8 @@ class SpeedCurveDescription:
 
     """
 
-    time: Array = attr.ib(default=Array([0], "s"), validator=instance_of(Array))
-    speed: Array = attr.ib(default=Array([500], "rpm"), validator=instance_of(Array))
+    time = attrib_array(Array([0], "s"))
+    speed = attrib_array(Array([500], "rpm"))
 
 
 # fmt: off
@@ -540,26 +540,18 @@ class TablePumpDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
-    speeds: Array = attr.ib(
-        default=Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'), validator=instance_of(Array)
-    )
-    void_fractions: Array = attr.ib(
-        default=Array(([0.0] * 6 + [0.1] * 6) * 3, '-'), validator=instance_of(Array)
-    )
-    flow_rates: Array = attr.ib(
-        default=Array([0.0, 0.05, 0.1, 0.15, 0.2, 0.3] * 6, 'm3/s'), validator=instance_of(Array)
-    )
+    speeds = attrib_array(Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'))
+    void_fractions = attrib_array(Array(([0.0] * 6 + [0.1] * 6) * 3, '-'))
+    flow_rates = attrib_array(Array([0.0, 0.05, 0.1, 0.15, 0.2, 0.3] * 6, 'm3/s'))
 
-    pressure_boosts: Array = attr.ib(
-        default=Array(
+    pressure_boosts = attrib_array(Array(
             [0.0] * 12
             +[
                 12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
                 14.0, 12.0, 10.0, 8.0, 5.5, 0.0, 13.5, 11.2, 9.5, 7.6, 5.2, 0.0,
             ],
             'bar',
-        ),
-        validator=instance_of(Array),
+        )
     )
 
     def __attrs_post_init__(self):
@@ -613,18 +605,10 @@ class CompressorPressureTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    speed_entries: Array = attr.ib(
-        default=Array([0], "rpm"), validator=instance_of(Array)
-    )
-    corrected_mass_flow_rate_entries: Array = attr.ib(
-        default=Array([0], "kg/s"), validator=instance_of(Array)
-    )
-    pressure_ratio_table: Array = attr.ib(
-        default=Array([1.0], "-"), validator=instance_of(Array)
-    )
-    isentropic_efficiency_table: Array = attr.ib(
-        default=Array([1.0], "-"), validator=instance_of(Array)
-    )
+    speed_entries = attrib_array(Array([0], "rpm"))
+    corrected_mass_flow_rate_entries = attrib_array(Array([0], "kg/s"))
+    pressure_ratio_table = attrib_array(Array([1.0], "-"))
+    isentropic_efficiency_table = attrib_array(Array([1.0], "-"))
 
     def __attrs_post_init__(self):
         expected_length = len(self.speed_entries)
@@ -1818,6 +1802,16 @@ class GasLiftValveEquipmentDescription:
     discharge_coeff = attrib_scalar(category="dimensionless")
 
 
+@attr.s()
+class AnnulusEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/AnnulusEquipmentDescription.txt
+    """
+
+    leaks = attrib_dict_of(LeakEquipmentDescription)
+    gas_lift_valves = attrib_dict_of(GasLiftValveEquipmentDescription)
+
+
 @attr.s(slots=True, kw_only=True)
 class AnnulusDescription:
     """
@@ -1829,7 +1823,7 @@ class AnnulusDescription:
         default=None, validator=optional(instance_of(str))
     )
     initial_conditions = attrib_instance(InitialConditionsDescription)
-    gas_lift_valve_equipment = attrib_dict_of(GasLiftValveEquipmentDescription)
+    equipment = attrib_instance(AnnulusEquipmentDescription)
     top_node: str = attr.ib(validator=instance_of(str))
 
 
