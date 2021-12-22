@@ -40,7 +40,7 @@ def test_plugin_info():
 
 def test_pipeline_info():
     pipeline_segment_info = PipelineSegmentInfo(
-        inner_diameter=Scalar(0.15, "m"),
+        inner_diameter=Scalar('diameter', 0.15, "m"),
         start_position=Scalar(0.0, "m"),
         is_custom=True,
         roughness=Scalar(0.0, "m"),
@@ -57,7 +57,7 @@ def test_pipeline_info():
 
 def test_pipeline_segments():
     pipeline_segment_info = PipelineSegmentInfo(
-        inner_diameter=Scalar(0.15, "m"),
+        inner_diameter=Scalar('diameter', 0.15, "m"),
         start_position=Scalar(0.0, "m"),
         is_custom=True,
         roughness=Scalar(0.0, "m"),
@@ -79,7 +79,7 @@ def test_pipeline_segments():
 
     with pytest.raises(TypeError, match=re.escape(position_msg)):
         PipelineSegmentInfo(
-            inner_diameter=Scalar(0.15, "m"),
+            inner_diameter=Scalar('diameter', 0.15, "m"),
             start_position=1,
             is_custom=None,
             roughness=1,
@@ -87,7 +87,7 @@ def test_pipeline_segments():
 
     with pytest.raises(TypeError, match=re.escape(is_custom_msg)):
         PipelineSegmentInfo(
-            inner_diameter=Scalar(0.15, "m"),
+            inner_diameter=Scalar('diameter', 0.15, "m"),
             start_position=Scalar(0.0, "m"),
             is_custom=None,
             roughness=1,
@@ -95,7 +95,7 @@ def test_pipeline_segments():
 
     with pytest.raises(TypeError, match=re.escape(roughness_msg)):
         PipelineSegmentInfo(
-            inner_diameter=Scalar(0.15, "m"),
+            inner_diameter=Scalar('diameter', 0.15, "m"),
             start_position=Scalar(0.0, "m"),
             is_custom=True,
             roughness=1,

@@ -693,7 +693,7 @@ class PigEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_force_per_velocity_squared.txt
     """
 
-    diameter = attrib_scalar(category="length")
+    diameter = attrib_scalar(category="diameter")
     position = attrib_scalar(category="length")
 
     launch_times = attrib_array(default=Array([0.0], "s"))
@@ -778,6 +778,12 @@ class PigEquipmentDescription:
         default=None, validator=optional(list_of_strings)
     )
 
+    @diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
+
 
 @attr.s(frozen=True, slots=True)
 class ValveEquipmentDescription:
@@ -790,7 +796,7 @@ class ValveEquipmentDescription:
 
     position = attrib_scalar(category="length")
     type = attrib_enum(default=constants.ValveType.PerkinsValve)
-    diameter = attrib_scalar(default=Scalar(0.01, "m"))
+    diameter = attrib_scalar(default=Scalar('diameter', 0.01, "m"))
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
 
     # When ValveType is not CheckValve
@@ -806,6 +812,12 @@ class ValveEquipmentDescription:
     )
     # When ValveType.ChokeValveWithFlowCoefficient
     cv_table = attrib_instance(CvTableDescription)
+
+    @diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
 
 
 @attr.s(frozen=True, slots=True)
@@ -823,7 +835,7 @@ class LeakEquipmentDescription:
     type = attrib_enum(default=constants.LeakType.Internal)
 
     # Perkins model parameters
-    diameter = attrib_scalar(default=Scalar(0.05, "m"))
+    diameter = attrib_scalar(default=Scalar('diameter', 0.05, "m"))
     discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
 
     # Flow coefficient model parameter
@@ -870,6 +882,13 @@ class LeakEquipmentDescription:
 
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
     backpressure = attrib_scalar(default=Scalar(1.0, "bar"))
+
+    @diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
+
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1510,7 +1529,7 @@ class SeparatorNodePropertiesDescription:
     geometry = attrib_enum(default=constants.SeparatorGeometryType.VerticalCylinder)
     length = attrib_scalar(default=Scalar(1.0, "m"))
     overall_heat_transfer_coefficient = attrib_scalar(default=Scalar(0.0, "W/m2.K"))
-    diameter = attrib_scalar(default=Scalar(1.0, "m"))
+    diameter = attrib_scalar(default=Scalar('diameter', 1.0, "m"))
     nozzles: Dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=optional(dict_with_scalar)
     )
@@ -1528,7 +1547,7 @@ class SeparatorNodePropertiesDescription:
     @diameter.validator
     def _validate_diameter(self, attribute, value):
         assert (
-            isinstance(value, Scalar) and value.GetCategory() == "length"
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
         ), "Invalid diameter"
 
     @length.validator
@@ -1710,9 +1729,9 @@ class CasingSectionDescription:
     name: str = attr.ib(validator=instance_of(str))
     hanger_depth = attrib_scalar(category="length")
     settings_depth = attrib_scalar(category="length")
-    hole_diameter = attrib_scalar(category="length")
-    outer_diameter = attrib_scalar(category="length")
-    inner_diameter = attrib_scalar(category="length")
+    hole_diameter = attrib_scalar(category="diameter")
+    outer_diameter = attrib_scalar(category="diameter")
+    inner_diameter = attrib_scalar(category="diameter")
     inner_roughness = attrib_scalar(category="length")
     material: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
@@ -1725,6 +1744,16 @@ class CasingSectionDescription:
         default=None, validator=optional(instance_of(str))
     )
 
+    @hole_diameter.validator
+    @outer_diameter.validator
+    @inner_diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
+
+
+
 
 @attr.s(frozen=True, slots=True, kw_only=True)
 class TubingDescription:
@@ -1736,12 +1765,19 @@ class TubingDescription:
 
     name: str = attr.ib(validator=instance_of(str))
     length = attrib_scalar(category="length")
-    outer_diameter = attrib_scalar(category="length")
-    inner_diameter = attrib_scalar(category="length")
+    outer_diameter = attrib_scalar(category="diameter")
+    inner_diameter = attrib_scalar(category="diameter")
     inner_roughness = attrib_scalar(category="length")
     material: Optional[str] = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
+
+    @outer_diameter.validator
+    @inner_diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1769,8 +1805,14 @@ class OpenHoleDescription:
 
     name: str = attr.ib(validator=instance_of(str))
     length = attrib_scalar(category="length")
-    diameter = attrib_scalar(category="length")
+    diameter = attrib_scalar(category="diameter")
     inner_roughness = attrib_scalar(category="length")
+
+    @diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1796,10 +1838,16 @@ class GasLiftValveEquipmentDescription:
     """
 
     position = attrib_scalar(category="length")
-    diameter = attrib_scalar(category="length")
+    diameter = attrib_scalar(category="diameter")
     valve_type = attrib_enum(type_=constants.ValveType)
     delta_p_min = attrib_scalar(category="pressure")
     discharge_coeff = attrib_scalar(category="dimensionless")
+
+    @diameter.validator
+    def _validate_diameter(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "diameter"
+        ), "Invalid diameter"
 
 
 @attr.s()
