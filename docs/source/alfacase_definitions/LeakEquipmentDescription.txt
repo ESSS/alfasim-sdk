@@ -9,7 +9,7 @@
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  = LeakModel.Orifice
             type: \ :class:`LeakType <alfasim_sdk._internal.constants.LeakType>`\  = LeakType.Internal
-            diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'length')
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'diameter')
             discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
             cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
             gas_lift_valve_opening_type: \ :class:`GasLiftValveOpeningType <alfasim_sdk._internal.constants.GasLiftValveOpeningType>`\  = GasLiftValveOpeningType.MinimumPressureDifference

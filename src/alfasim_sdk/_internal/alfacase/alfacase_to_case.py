@@ -713,9 +713,9 @@ def load_casing_section_description(
         "name": load_value,
         "hanger_depth": get_scalar_loader(from_unit="m"),
         "settings_depth": get_scalar_loader(from_unit="m"),
-        "hole_diameter": get_scalar_loader(from_unit="m"),
-        "outer_diameter": get_scalar_loader(from_unit="m"),
-        "inner_diameter": get_scalar_loader(from_unit="m"),
+        "hole_diameter": get_scalar_loader(category="diameter"),
+        "outer_diameter": get_scalar_loader(category="diameter"),
+        "inner_diameter": get_scalar_loader(category="diameter"),
         "inner_roughness": get_scalar_loader(from_unit="m"),
         "material": load_value,
         "top_of_filler": get_scalar_loader(from_unit="m"),
@@ -786,7 +786,7 @@ def load_gas_lift_valve_equipment_description(
     alfacase_to_case_description = {
         "name": load_value,
         "position": get_scalar_loader(from_unit="m"),
-        "diameter": get_scalar_loader(from_unit="m"),
+        "diameter": get_scalar_loader(category="diameter"),
         "valve_type": get_enum_loader(enum_class=constants.ValveType),
         "delta_p_min": get_scalar_loader(from_unit="Pa"),
         "discharge_coeff": get_scalar_loader(from_unit="-"),
@@ -1138,7 +1138,7 @@ def load_separator_node_properties_description(
         "geometry": get_enum_loader(enum_class=constants.SeparatorGeometryType),
         "length": get_scalar_loader(from_unit="m"),
         "overall_heat_transfer_coefficient": get_scalar_loader(from_unit="W/m2.K"),
-        "diameter": get_scalar_loader(from_unit="m"),
+        "diameter": get_scalar_loader(category="diameter"),
         "nozzles": get_scalar_dict_loader(category=get_category_for("m")),
         "initial_phase_volume_fractions": get_scalar_dict_loader(
             category="volume fraction"
@@ -1461,8 +1461,8 @@ def load_tubing_description(
     alfacase_to_case_description = {
         "name": load_value,
         "length": get_scalar_loader(from_unit="m"),
-        "outer_diameter": get_scalar_loader(from_unit="m"),
-        "inner_diameter": get_scalar_loader(from_unit="m"),
+        "outer_diameter": get_scalar_loader(category="diameter"),
+        "inner_diameter": get_scalar_loader(category="diameter"),
         "inner_roughness": get_scalar_loader(from_unit="m"),
         "material": load_value,
     }
@@ -1550,7 +1550,7 @@ def load_open_hole_description(
     alfacase_to_case_description = {
         "name": load_value,
         "length": get_scalar_loader(from_unit="m"),
-        "diameter": get_scalar_loader(from_unit="m"),
+        "diameter": get_scalar_loader(category="diameter"),
         "inner_roughness": get_scalar_loader(from_unit="m"),
     }
 

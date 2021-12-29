@@ -121,9 +121,9 @@ CASING_SECTION_DESCRIPTION = case_description.CasingSectionDescription(
     name="Casing 1",
     hanger_depth=Scalar(1, "m"),
     settings_depth=Scalar(2, "m"),
-    hole_diameter=Scalar(2.0, "m"),
-    outer_diameter=Scalar(0.65, "m"),
-    inner_diameter=Scalar(0.6, "m"),
+    hole_diameter=Scalar("diameter", 2.0, "m"),
+    outer_diameter=Scalar("diameter", 0.65, "m"),
+    inner_diameter=Scalar("diameter", 0.6, "m"),
     inner_roughness=Scalar(0.0, "m"),
     material="Carbon Steel",
     top_of_filler=Scalar(0.0, "m"),
@@ -132,7 +132,7 @@ CASING_SECTION_DESCRIPTION = case_description.CasingSectionDescription(
 )
 GAS_LIST_VALVE_DESCRIPTION = case_description.GasLiftValveEquipmentDescription(
     position=Scalar(800.0, "m"),
-    diameter=Scalar(1.0, "cm"),
+    diameter=Scalar("diameter", 1.0, "cm"),
     valve_type=constants.ValveType.CheckValve,
     delta_p_min=Scalar(4.0e6, "Pa"),
     discharge_coeff=Scalar(0.826, "-"),
@@ -247,7 +247,7 @@ SEPARATOR_NODE_PROPERTIES_DESCRIPTION = (
             "Pipe3": Scalar(0.0, "m"),
         },
         overall_heat_transfer_coefficient=Scalar(0.0, "W/m2.K"),
-        diameter=Scalar(4.0, "m"),
+        diameter=Scalar("diameter", 4.0, "m"),
         initial_phase_volume_fractions={
             constants.FLUID_GAS: Scalar("volume fraction", 0.5, "-"),
             constants.FLUID_OIL: Scalar("volume fraction", 0.5, "-"),
@@ -311,7 +311,7 @@ PACKER_DESCRIPTION = case_description.PackerDescription(
 OPEN_HOLE_DESCRIPTION = case_description.OpenHoleDescription(
     name="Open Hole 1",
     length=Scalar(101.0, "m"),
-    diameter=Scalar(102.0, "m"),
+    diameter=Scalar("diameter", 102.0, "m"),
     inner_roughness=Scalar(103.0, "m"),
 )
 PIPE_WALL_DESCRIPTION = case_description.PipeSegmentsDescription(
@@ -411,8 +411,8 @@ TRENDS_OUTPUT_DESCRIPTION = case_description.TrendsOutputDescription(
 TUBING_DESCRIPTION = case_description.TubingDescription(
     name="Tubing 1",
     length=Scalar(42, "m"),
-    outer_diameter=Scalar(0.35, "m"),
-    inner_diameter=Scalar(0.3, "m"),
+    outer_diameter=Scalar("diameter", 0.35, "m"),
+    inner_diameter=Scalar("diameter", 0.3, "m"),
     inner_roughness=Scalar(0.0, "m"),
     material="Carbon Steel",
 )
@@ -434,7 +434,7 @@ CASING_DESCRIPTION = case_description.CasingDescription(
 PIG_DESCRIPTION = case_description.PigEquipmentDescription(
     position=Scalar(120.0, "m"),
     launch_times=Array([0.0, 50.0], "s"),
-    diameter=Scalar(0.02, "m"),
+    diameter=Scalar("diameter", 0.02, "m"),
     mass_input_type=constants.MultiInputType.Curve,
     mass=Scalar(50.0, "kg"),
     mass_curve=Curve(Array([50.0], "kg"), Array([0], "s")),
@@ -468,7 +468,7 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),
-    diameter=Scalar(0.01, "m"),
+    diameter=Scalar("diameter", 0.01, "m"),
     flow_direction=constants.FlowDirection.Backward,
     type=constants.ValveType.ChokeValveWithFlowCoefficient,
     cv_table=CV_TABLE_DESCRIPTION_SCHEMA,
@@ -478,27 +478,27 @@ VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
 )
 VALVE_DESCRIPTION_CONSTANT_OPENING = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),
-    diameter=Scalar(0.01, "m"),
+    diameter=Scalar("diameter", 0.01, "m"),
     flow_direction=constants.FlowDirection.Backward,
     type=constants.ValveType.ChokeValveWithFlowCoefficient,
     cv_table=CV_TABLE_DESCRIPTION_SCHEMA,
     opening_type=constants.ValveOpeningType.ConstantOpening,
     opening=Scalar("dimensionless", 42, "%"),
 )
+WALL_DESCRIPTION = case_description.WallDescription(
+    name="Flowline",
+    inner_roughness=Scalar(1, "mm"),
+    wall_layer_container=[WALL_LAYER_DESCRIPTION, WALL_LAYER_DESCRIPTION],
+)
 LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(
     position=Scalar(350.0, "m"),
-    diameter=Scalar(0.025, "m"),
+    diameter=Scalar("diameter", 0.025, "m"),
     discharge_coefficient=Scalar(0.825, "-"),
     location=LeakLocation.Main,
     target_pipe_name=None,
     target_position=Scalar(20.0, "m"),
     target_location=LeakLocation.Main,
     backflow=True,
-)
-WALL_DESCRIPTION = case_description.WallDescription(
-    name="Flowline",
-    inner_roughness=Scalar(1, "mm"),
-    wall_layer_container=[WALL_LAYER_DESCRIPTION, WALL_LAYER_DESCRIPTION],
 )
 EQUIPMENT_DESCRIPTION = case_description.EquipmentDescription(
     mass_sources={"MASS SOURCE": MASS_SOURCE_DESCRIPTION},
@@ -642,6 +642,7 @@ TRACERS_DESCRIPTION = case_description.TracersDescription(
         "Tracer 1": TRACER_MODEL_CONSTANT_COEFFICIENTS_DESCRIPTION,
     }
 )
+
 CASE = case_description.CaseDescription(
     name="divergent_pipes",
     time_options=TIME_OPTIONS_DESCRIPTION,
@@ -778,10 +779,11 @@ INITIAL_TRACERS_MASS_FRACTIONS_DESCRIPTION = (
     )
 )
 
+
 PIG_DESCRIPTION = case_description.PigEquipmentDescription(
     position=Scalar(120.0, "m"),
     launch_times=Array([0.0, 50.0], "s"),
-    diameter=Scalar(0.02, "m"),
+    diameter=Scalar("diameter", 0.02, "m"),
     mass_input_type=constants.MultiInputType.Curve,
     mass=Scalar(50.0, "kg"),
     mass_curve=Curve(Array([50.0], "kg"), Array([0], "s")),
