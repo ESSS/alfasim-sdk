@@ -374,7 +374,9 @@ class OutputAttachmentLocation(Enum):
     Annulus = "annulus"
     NotDefined = "not_defined"
 
+
 LeakLocation = OutputAttachmentLocation
+
 
 class EquipmentAttachmentLocation(Enum):
     """
