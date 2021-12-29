@@ -796,7 +796,7 @@ class ValveEquipmentDescription:
 
     position = attrib_scalar(category="length")
     type = attrib_enum(default=constants.ValveType.PerkinsValve)
-    diameter = attrib_scalar(default=Scalar('diameter', 0.01, "m"))
+    diameter = attrib_scalar(default=Scalar("diameter", 0.01, "m"))
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
 
     # When ValveType is not CheckValve
@@ -835,7 +835,7 @@ class LeakEquipmentDescription:
     type = attrib_enum(default=constants.LeakType.Internal)
 
     # Perkins model parameters
-    diameter = attrib_scalar(default=Scalar('diameter', 0.05, "m"))
+    diameter = attrib_scalar(default=Scalar("diameter", 0.05, "m"))
     discharge_coefficient = attrib_scalar(default=Scalar("dimensionless", 0.85, "-"))
 
     # Flow coefficient model parameter
@@ -888,7 +888,6 @@ class LeakEquipmentDescription:
         assert (
             isinstance(value, Scalar) and value.GetCategory() == "diameter"
         ), "Invalid diameter"
-
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1529,7 +1528,7 @@ class SeparatorNodePropertiesDescription:
     geometry = attrib_enum(default=constants.SeparatorGeometryType.VerticalCylinder)
     length = attrib_scalar(default=Scalar(1.0, "m"))
     overall_heat_transfer_coefficient = attrib_scalar(default=Scalar(0.0, "W/m2.K"))
-    diameter = attrib_scalar(default=Scalar('diameter', 1.0, "m"))
+    diameter = attrib_scalar(default=Scalar("diameter", 1.0, "m"))
     nozzles: Dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=optional(dict_with_scalar)
     )
@@ -1751,8 +1750,6 @@ class CasingSectionDescription:
         assert (
             isinstance(value, Scalar) and value.GetCategory() == "diameter"
         ), "Invalid diameter"
-
-
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
