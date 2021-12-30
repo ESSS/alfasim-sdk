@@ -378,6 +378,16 @@ class OutputAttachmentLocation(Enum):
 LeakLocation = OutputAttachmentLocation
 
 
+class EquipmentAttachmentLocation(Enum):
+    """
+    Location in which an equipment can be attached.
+    """
+
+    Main = "main"
+    Annulus = "annulus"
+    Both = "both"
+
+
 class CorrelationPackage(Enum):
     Lasater = "pvt_correlation_package_lasater"
     Standing = "pvt_correlation_package_standing"
