@@ -104,7 +104,7 @@ gas_lift_valve_equipment_description_schema = Map(
         "diameter": Map({"value": Float(), "unit": Str()}),
         "valve_type": Enum(['perkins_valve', 'choke_valve_with_flow_coefficient', 'check_valve']),
         "delta_p_min": Map({"value": Float(), "unit": Str()}),
-        "discharge_coeff": Map({"value": Float(), "unit": Str()}),
+        "discharge_coefficient": Map({"value": Float(), "unit": Str()}),
     }
 )
 global_trend_description_schema = Map(
@@ -1066,5 +1066,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 23201f736ec577dad1d8948215d7cef3)
+# [[[end]]] (checksum: b15791693ba5dce623dd301a851d625e)
 # fmt: on
