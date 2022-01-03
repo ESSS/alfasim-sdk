@@ -34,7 +34,7 @@ History
               unit: m
             ...  # Other properties
 
-* Removed *forc e per square velocity* unit definition, it is present in the new barril version.
+* Removed *force per square velocity* unit definition, it is present in the new barril version.
 
 
 0.11.0 (2021-11-30)
