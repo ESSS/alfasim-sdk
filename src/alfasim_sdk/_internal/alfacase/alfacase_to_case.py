@@ -119,6 +119,20 @@ def update_multi_input_flags(document: DescriptionDocument, item_description: T)
     return item_description
 
 
+@lru_cache(maxsize=None)
+def get_instance_list_loader(*, class_: type) -> Callable:
+    return partial(load_list_of_instance, class_=class_)
+
+
+def load_list_of_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+    return [
+        load_instance(
+            DescriptionDocument(value, alfacase_content.file_path), class_=class_
+        )
+        for value in alfacase_content.content
+    ]
+
+
 def load_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
     """
     Create an instance of class_ with the attributes found in alfacase_content.
@@ -1535,17 +1549,7 @@ def load_annulus_description(
 def load_trends_output_description(
     document: DescriptionDocument,
 ) -> case_description.TrendsOutputDescription:
-    alfacase_to_case_description = {
-        "positional_pipe_trends": load_positional_pipe_trend_description,
-        "equipment_trends": load_equipment_trend_description,
-        "global_trends": load_global_trend_description,
-        "overall_pipe_trends": load_overall_pipe_trend_description,
-        "separator_trends": load_separator_trend_description,
-        "controller_trends": load_controller_trend_description,
-    }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.TrendsOutputDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
+    return load_instance(document, case_description.TrendsOutputDescription)
 
 
 def load_case_output_description(
