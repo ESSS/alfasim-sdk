@@ -124,7 +124,9 @@ def get_instance_list_loader(*, class_: type) -> Callable:
     return partial(load_list_of_instance, class_=class_)
 
 
-def load_list_of_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> List[T]:
+def load_list_of_instance(
+    alfacase_content: DescriptionDocument, class_: Type[T]
+) -> List[T]:
     return [
         load_instance(
             DescriptionDocument(value, alfacase_content.file_path), class_=class_
