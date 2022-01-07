@@ -161,6 +161,15 @@ class SeparatorTrendDescription(_BaseTrendOutputDescription):
 
 
 @attr.s()
+class ControllerTrendDescription(_BaseTrendOutputDescription):
+    """
+    .. include:: /alfacase_definitions/ControllerTrendDescription.txt
+    """
+
+    element_name: str = attr.ib(validator=instance_of(str))
+
+
+@attr.s()
 class ProfileOutputDescription:
     """
     .. include:: /alfacase_definitions/ProfileOutputDescription.txt
@@ -182,6 +191,7 @@ class TrendsOutputDescription:
     global_trends = attrib_instance_list(GlobalTrendDescription)
     equipment_trends = attrib_instance_list(EquipmentTrendDescription)
     separator_trends = attrib_instance_list(SeparatorTrendDescription)
+    controller_trends = attrib_instance_list(ControllerTrendDescription)
 
 
 @attr.s(frozen=True, slots=True)

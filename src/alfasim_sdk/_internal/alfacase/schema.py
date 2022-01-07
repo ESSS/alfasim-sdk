@@ -68,6 +68,13 @@ controller_output_signal_properties_description_schema = Map(
         Optional("max_rate_of_change"): Float(),
     }
 )
+controller_trend_description_schema = Map(
+    {
+        Optional("name"): Str(),
+        "curve_names": Seq(Str()),
+        "element_name": Str(),
+    }
+)
 cv_table_description_schema = Map(
     {
         Optional("opening"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -989,6 +996,7 @@ trends_output_description_schema = Map(
         Optional("global_trends"): Seq(global_trend_description_schema),
         Optional("equipment_trends"): Seq(equipment_trend_description_schema),
         Optional("separator_trends"): Seq(separator_trend_description_schema),
+        Optional("controller_trends"): Seq(controller_trend_description_schema),
     }
 )
 annulus_description_schema = Map(
@@ -1066,5 +1074,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: b15791693ba5dce623dd301a851d625e)
+# [[[end]]] (checksum: 541961e6ae18c141559c84a1e7b88090)
 # fmt: on

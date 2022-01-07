@@ -333,6 +333,11 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.separator_trend_description_schema,
         is_sequence=True,
     ),
+    "ControllerTrendDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.CONTROLLER_TREND_OUTPUT_DESCRIPTION,
+        schema=schema.controller_trend_description_schema,
+        is_sequence=True,
+    ),
     "TubingDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.TUBING_DESCRIPTION,
         schema=schema.tubing_description_schema,

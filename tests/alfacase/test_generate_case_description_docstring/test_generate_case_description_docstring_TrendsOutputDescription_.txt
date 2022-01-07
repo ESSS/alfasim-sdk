@@ -10,6 +10,7 @@
             global_trends: \ :class:`List <typing.List>`\[\ :class:`GlobalTrendDescription <GlobalTrendDescription>`\] = []
             equipment_trends: \ :class:`List <typing.List>`\[\ :class:`EquipmentTrendDescription <EquipmentTrendDescription>`\] = []
             separator_trends: \ :class:`List <typing.List>`\[\ :class:`SeparatorTrendDescription <SeparatorTrendDescription>`\] = []
+            controller_trends: \ :class:`List <typing.List>`\[\ :class:`ControllerTrendDescription <ControllerTrendDescription>`\] = []
 
 .. tab:: Schema
 
@@ -25,3 +26,5 @@
                 - \ :class:`equipment_trend_description_schema <EquipmentTrendDescription>`
             separator_trends:  # optional
                 - \ :class:`separator_trend_description_schema <SeparatorTrendDescription>`
+            controller_trends:  # optional
+                - \ :class:`controller_trend_description_schema <ControllerTrendDescription>`

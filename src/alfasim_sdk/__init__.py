@@ -172,6 +172,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
     GlobalTrendDescription,
     EquipmentTrendDescription,
     SeparatorTrendDescription,
+    ControllerTrendDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import TubingDescription
 from alfasim_sdk._internal.alfacase.case_description import ValveEquipmentDescription
@@ -403,6 +404,7 @@ __all__ = [
     "GlobalTrendDescription",
     "EquipmentTrendDescription",
     "SeparatorTrendDescription",
+    "ControllerTrendDescription",
     "TubingDescription",
     "ValveEquipmentDescription",
     "VelocitiesContainerDescription",

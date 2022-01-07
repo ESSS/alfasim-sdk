@@ -401,12 +401,17 @@ SEPARATOR_TREND_OUTPUT_DESCRIPTION = case_description.SeparatorTrendDescription(
     curve_names=["separator liquid level"],
     element_name="separator_node",
 )
+CONTROLLER_TREND_OUTPUT_DESCRIPTION = case_description.ControllerTrendDescription(
+    curve_names=["controller output signal"],
+    element_name="controller_node",
+)
 TRENDS_OUTPUT_DESCRIPTION = case_description.TrendsOutputDescription(
     positional_pipe_trends=[POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION],
     equipment_trends=[EQUIPMENT_TREND_OUTPUT_DESCRIPTION],
     overall_pipe_trends=[OVERALL_PIPE_TREND_OUTPUT_DESCRIPTION],
     global_trends=[GLOBAL_TREND_OUTPUT_DESCRIPTION],
     separator_trends=[SEPARATOR_TREND_OUTPUT_DESCRIPTION],
+    controller_trends=[CONTROLLER_TREND_OUTPUT_DESCRIPTION],
 )
 TUBING_DESCRIPTION = case_description.TubingDescription(
     name="Tubing 1",

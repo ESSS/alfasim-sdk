@@ -476,6 +476,7 @@ def test_get_cases_class():
         "PositionalPipeTrendDescription",
         "EquipmentTrendDescription",
         "SeparatorTrendDescription",
+        "ControllerTrendDescription",
         "GlobalTrendDescription",
         "OverallPipeTrendDescription",
         "TubingDescription",
