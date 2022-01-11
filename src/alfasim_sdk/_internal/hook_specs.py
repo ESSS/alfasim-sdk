@@ -1906,13 +1906,15 @@ def calculate_entrained_liquid_fraction(
 
 def update_internal_deposition_layer(
     ctx: "void*",
-    thickness: "void*",
+    phase_id: "int*",
+    deposition_volumetric_rate: "void*",
     density: "void*",
     heat_capacity: "void*",
     thermal_conductivity: "void*",
     n_control_volumes: "int",
 ) -> "int":
     """
+    TODO: update docs
     **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSITION_LAYER(void* ctx, void* thickness, void* density, void* heat_capacity, void* thermal_conductivity,
     int n_control_volumes)``
 
