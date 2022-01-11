@@ -604,6 +604,11 @@ DLL_EXPORT int get_liqliq_flow_pattern(
     int* size
 );
 
+// TODO: ADD DOCS
+DLL_EXPORT int get_deposition_thickness(
+   void* ctx, double** out, int phase_id, enum TimestepScope ts_scope, int* size
+);
+
 /*!
     Retrieves the tracer ID given a tracer reference. A tracer reference may be obtained from the
     user input data (See #get_plugin_input_data_reference API function for an example).

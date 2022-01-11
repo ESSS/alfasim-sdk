@@ -81,6 +81,7 @@ typedef int (*get_flow_pattern_func)(
     enum TimestepScope ts_scope,
     int* size
 );
+typedef int (*get_deposition_thickness_func)(void* ctx, double** out, int phase_id, enum TimestepScope ts_scope, int* size);
 typedef int (*get_tracer_id_func)(void* ctx, int* tracer_id, void* reference);
 typedef int (*get_tracer_name_size_func)(void* ctx, int* tracer_name_size, void* reference);
 typedef int (*get_tracer_name_func)(void* ctx, char* tracer_name, void* reference, int size);
@@ -142,6 +143,8 @@ struct ALFAsimSDK_API {
 
     get_flow_pattern_func get_flow_pattern;
     get_flow_pattern_func get_liqliq_flow_pattern;
+
+    get_deposition_thickness_func get_deposition_thickness;
 
     get_tracer_id_func get_tracer_id;
     get_tracer_name_size_func get_tracer_name_size;
