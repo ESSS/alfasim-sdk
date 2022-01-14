@@ -604,7 +604,16 @@ DLL_EXPORT int get_liqliq_flow_pattern(
     int* size
 );
 
-// TODO: ADD DOCS
+/*!
+    Returns the thickness of the deposition of phase 'phase_id' on pipe inner wall.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Thickness of phase deposited on inner wall.
+    @param[in] phase_id Phase index.
+    @param[in] ts_scope A #TimestepScope value.
+    @param[in] size Size of out array of values.
+    @return An #error_code value.
+*/
 DLL_EXPORT int get_deposition_thickness(
    void* ctx, double** out, int phase_id, enum TimestepScope ts_scope, int* size
 );
