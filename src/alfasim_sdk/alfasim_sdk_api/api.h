@@ -605,7 +605,7 @@ DLL_EXPORT int get_liqliq_flow_pattern(
 );
 
 /*!
-    Returns the thickness of the deposition of phase 'phase_id' on pipe inner wall.
+    Returns the thickness of the deposition of phase on pipe inner wall.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] out Thickness of phase deposited on inner wall.

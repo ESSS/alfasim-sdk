@@ -1915,7 +1915,7 @@ def update_internal_deposition_layer(
 ) -> "int":
     """
     **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSITION_LAYER(void* ctx, int* phase_id, void* thickness_variation_rate,
-        void* density, void* heat_capacity, void* thermal_conductivity, int n_control_volumes)``
+    void* density, void* heat_capacity, void* thermal_conductivity, int n_control_volumes)``
 
     Internal simulator hook to evaluate the deposition volumetric rate and thermal properties of the deposited layer on
     pipeline walls. This is called for accounting the inner diameter reduction and wall thermal effects.
@@ -1958,7 +1958,7 @@ def update_internal_deposition_layer(
             }
             *phase_id = phase_wax_id;
 
-            // Handle first time step, because you won't have the previously information
+            // Handle first time step. At this point there is no data from previous time step.
             double current_time = -1.0;
             errcode = alfasim.get_simulation_quantity(
                 ctx, &current_time, TimestepScope::CURRENT, (char*) "time");
