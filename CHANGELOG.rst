@@ -3,7 +3,7 @@ History
 =======
 
 
-0.12.0 (unreleased)
+0.12.0 (2022-01-18)
 ===================
 
 * **Breaking Change**: Change in ``AnnulusDescription`` to support different types of annulus equipment. Now ``AnnulusDescription``` has an attribute ``AnnulusEquipmentDescription``, which holds a dict that can contain multiple different equipment types, for which the current available options are:
@@ -25,14 +25,14 @@ History
 
   - After::
 
-    annulus:
-      equipment:
-        gas_lift_valves:
-          Gas Lift Valve (Well 1 > Annulus) 1:
-            position:
-              value: 100.0
-              unit: m
-            ...  # Other properties
+      annulus:
+        equipment:
+          gas_lift_valves:
+            Gas Lift Valve (Well 1 > Annulus) 1:
+              position:
+                value: 100.0
+                unit: m
+              ...  # Other properties
 
 * Removed *force per square velocity* unit definition, it is present in the new barril version.
 
