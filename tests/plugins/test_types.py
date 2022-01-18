@@ -14,7 +14,7 @@ def test_enable_expr_and_visible_expr(expression_type):
     with pytest.raises(TypeError, match=f"'{expression_type}' must be callable"):
         String(**inputs)
 
-    def function_definition():
+    def function_definition():  # pragma: no cover
         pass
 
     valid_input_1 = {"value": "value", "caption": "caption", expression_type: None}
