@@ -2,7 +2,7 @@
 Releasing
 =========
 
-When releasing a new branch should be created to update the release date for the version in ``HISTORY.str``.
+When releasing a new branch should be created to update the release date for the version in ``CHANGELOG.str``.
 
 The version being released is listed in https://github.com/ESSS/alfasim-sdk/blob/master/src/alfasim_sdk/_internal/version.py, if needed this value should be changed to match accordingly.
 
