@@ -3,6 +3,12 @@ History
 =======
 
 
+0.13.0 (unreleased)
+===================
+
+* Added ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
+
+
 0.12.0 (2022-01-18)
 ===================
 

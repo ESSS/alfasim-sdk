@@ -33,3 +33,5 @@ ignore:
   - "hook_specs_*.py"
   - "src/alfasim_sdk/_internal/hook_specs_gui.py"
   - "src/alfasim_sdk/_internal/constants.py"
+  - "src/alfasim_sdk/_internal/version.py"
+  - "*.rst"
