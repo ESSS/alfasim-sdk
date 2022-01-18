@@ -150,7 +150,7 @@ def _get_case_attr_default_value(value: attr.Attribute) -> str:
         elif is_attrs(value.default.factory):
             default_value_string += f"{value.default.factory.__name__}()"
         else:
-            default_value_string += "UNKNOWN FACTORY"
+            assert False, "Unknown factory"  # pragma: no cover
     elif is_attrs(value.default):
         default_value_string += f"{value.default.__class__.__name__}()"
     else:
