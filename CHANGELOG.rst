@@ -2,15 +2,16 @@
 History
 =======
 
+
 0.13.0 (unreleased)
 ===================
 
 * **Breaking Change**:  Change signature of hook ``update_internal_deposition_layer``. Now, instead of the deposition thickness, it is returned the phase index of phase being deposited and the thickness variation rate.
-
+* Added ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
 * Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
 
 
-0.12.0 (2021-12-30)
+0.12.0 (2022-01-18)
 ===================
 
 * **Breaking Change**: Change in ``AnnulusDescription`` to support different types of annulus equipment. Now ``AnnulusDescription``` has an attribute ``AnnulusEquipmentDescription``, which holds a dict that can contain multiple different equipment types, for which the current available options are:
@@ -32,14 +33,14 @@ History
 
   - After::
 
-    annulus:
-      equipment:
-        gas_lift_valves:
-          Gas Lift Valve (Well 1 > Annulus) 1:
-            position:
-              value: 100.0
-              unit: m
-            ...  # Other properties
+      annulus:
+        equipment:
+          gas_lift_valves:
+            Gas Lift Valve (Well 1 > Annulus) 1:
+              position:
+                value: 100.0
+                unit: m
+              ...  # Other properties
 
 * Removed *force per square velocity* unit definition, it is present in the new barril version.
 
