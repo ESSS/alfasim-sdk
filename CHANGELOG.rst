@@ -6,7 +6,9 @@ History
 0.13.0 (unreleased)
 ===================
 
+* **Breaking Change**:  Change signature of hook ``update_internal_deposition_layer``. Now, instead of the deposition thickness, it is returned the phase index of phase being deposited and the thickness variation rate.
 * Added ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
+* Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
 
 
 0.12.0 (2022-01-18)

@@ -1906,24 +1906,27 @@ def calculate_entrained_liquid_fraction(
 
 def update_internal_deposition_layer(
     ctx: "void*",
-    thickness: "void*",
+    phase_id: "int*",
+    thickness_variation_rate: "void*",
     density: "void*",
     heat_capacity: "void*",
     thermal_conductivity: "void*",
     n_control_volumes: "int",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSITION_LAYER(void* ctx, void* thickness, void* density, void* heat_capacity, void* thermal_conductivity,
-    int n_control_volumes)``
+    **c++ signature** : ``HOOK_UPDATE_INTERNAL_DEPOSITION_LAYER(void* ctx, int* phase_id, void* thickness_variation_rate,
+    void* density, void* heat_capacity, void* thermal_conductivity, int n_control_volumes)``
 
-    Internal simulator hook to evaluate the thickness and thermal properties of the deposited layer at the inside of the pipeline walls.
-    This is called for accounting the diameter reduction and wall thermal effects.
+    Internal simulator hook to evaluate the deposition volumetric rate and thermal properties of the deposited layer on
+    pipeline walls. This is called for accounting the inner diameter reduction and wall thermal effects.
 
-    The plugin is supposed to change the given ``thickness``, ``density``, ``heat_capacity``, ``thermal_conductivity`` array pointers. Its values are contiguous
-    in memory and the dimension is given by ``n_control_volumes``. It has unit equal to ``[m]``.
+    The plugin is supposed to change ``thickness_variation_rate``, ``density``, ``heat_capacity``,
+    ``thermal_conductivity`` array pointers, as well as the integer value phase_id. The array pointers must be contiguous
+    in memory and their dimension is given by ``n_control_volumes``.
 
     :param ctx: ALFAsim's plugins context
-    :param thickness: Thickness of the internal deposit layer
+    :param phase_id: Id of phase that is being deposited on pipe walls
+    :param thickness_variation_rate: Rate of change of deposition layer thickness
     :param density: Density of the internal deposit layer [kg/m3]
     :param heat_capacity: Heat capacity of the internal deposit layer [J/(kg.K)]
     :param thermal_conductivity: Thermal conductivity of the internal deposit layer [W/(m.K)]
@@ -1937,7 +1940,7 @@ def update_internal_deposition_layer(
         :emphasize-lines: 1
 
         HOOK_UPDATE_INTERNAL_DEPOSITION_LAYER(
-            ctx, thickness, density, heat_capacity, thermal_conductivity, n_control_volumes)
+            ctx, phase_id, thickness_variation_rate, density, heat_capacity, thermal_conductivity, n_control_volumes)
         {
             auto errcode = -1;
 
@@ -1948,7 +1951,14 @@ def update_internal_deposition_layer(
                 return errcode;
             }
 
-            // Handle first time step, because you won't have the previously information
+            int phase_wax_id = -1;
+            errcode = alfasim.get_phase_id(ctx, &phase_wax_id, "wax");
+            if (errcode != 0) {
+                return errcode;
+            }
+            *phase_id = phase_wax_id;
+
+            // Handle first time step. At this point there is no data from previous time step.
             double current_time = -1.0;
             errcode = alfasim.get_simulation_quantity(
                 ctx, &current_time, TimestepScope::CURRENT, (char*) "time");
@@ -1963,34 +1973,18 @@ def update_internal_deposition_layer(
             if (current_time == 0.0){
                 // Set a value for the deposition layer thickness
                  for (int i = 0; i < n_control_volumes; ++i) {
-                   (double*) thickness[i] = 0.0; // [m]
+                   (double*) thickness_variation_rate[i] = 0.0; // [m]
                    (double*) density[i] = wax_density; // [kg/m3]
                    (double*) heat_capacity[i] = wax_heat_capacity; //  [J/(kg.K)]
                    (double*) thermal_conductivity[i] = wax_thermal_conductivity; // [W/(m.K)]
                 }
             } else{
-                // Get previously deposition layer thickness to obtain the current
-                void* thickness_old_raw_ptr;
-                errcode = alfasim.get_plugin_variable(
-                    ctx,
-                    &thickness_old_raw_ptr,
-                    "thickness",
-                    0,
-                    TimestepScope::PREVIOUS,
-                    &size);
-                if (errcode != 0) {
-                    return errcode;
-                }
-                auto* thickness_old =
-                    (double*) (thickness_old_raw_ptr);
-
                 // Calculate the variation of the deposition layer in one time step
                 double* d_deposit_layer_dt = 0.0001; // [m/s]
 
                 // Sum this variation with the thickness of the older time step
                 for (int i = 0; i < n_control_volumes; ++i) {
-                    (double*) thickness[i] =
-                        thickness_old[i] + d_deposit_layer_dt * dt; // [m]
+                    (double*) thickness_variation_rate[i] = d_deposit_layer_dt; // [m3/s]
                    (double*) density[i] = wax_density; // [kg/m3]
                    (double*) heat_capacity[i] = wax_heat_capacity; //  [J/(kg.K)]
                    (double*) thermal_conductivity[i] = wax_thermal_conductivity; // [W/(m.K)]
