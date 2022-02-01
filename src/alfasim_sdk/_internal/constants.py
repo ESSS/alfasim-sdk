@@ -455,4 +455,13 @@ class PigRoutingMode(Enum):
     UserDefined = "user_defined"
 
 
+class FlowPatternModel(Enum):
+    """
+    Model used for identify the current flow pattern in a given pipe position.
+    """
+
+    UnitCell = "unit_cell"
+    RegimeCapturing = "regime_capturing"
+
+
 MULTI_INPUT_TYPE_SUFFIX = "_input_type"
