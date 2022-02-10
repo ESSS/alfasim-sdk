@@ -1,0 +1,17 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PvtModelCombinedDescription
+            reference_pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
+            fluids: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CombinedFluidDescription <CombinedFluidDescription>`\] = {}
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            reference_pvt_model: string  # optional
+            fluids:  # optional
+                string: \ :class:`combined_fluid_description_schema <CombinedFluidDescription>`

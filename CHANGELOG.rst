@@ -11,6 +11,7 @@ History
 * Add ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
 * Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
 * Add ``flow_pattern_model`` and ``regime_capturing_mesh_treshold`` attributes to ``PipeDescription``.
+* Add Combined PVT model description classes (``PvtModelCombinedDescription`` and ``CombinedFluidDescription``).
 
 
 0.12.0 (2022-01-18)

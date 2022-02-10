@@ -9,6 +9,7 @@
             tables: \ :class:`Dict <typing.Dict>`\[str, Union[str, pathlib.Path]] = {}
             correlations: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`\] = {}
             compositions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`\] = {}
+            combined: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCombinedDescription <PvtModelCombinedDescription>`\] = {}
 
 .. tab:: Schema
 
@@ -21,3 +22,5 @@
                 string: \ :class:`pvt_model_correlation_description_schema <PvtModelCorrelationDescription>`
             compositions:  # optional
                 string: \ :class:`pvt_model_compositional_description_schema <PvtModelCompositionalDescription>`
+            combined:  # optional
+                string: \ :class:`pvt_model_combined_description_schema <PvtModelCombinedDescription>`

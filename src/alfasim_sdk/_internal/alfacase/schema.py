@@ -36,6 +36,11 @@ casing_section_description_schema = Map(
         Optional("material_above_filler"): Str(),
     }
 )
+combined_fluid_description_schema = Map(
+    {
+        Optional("pvt_model"): Str(),
+    }
+)
 composition_description_schema = Map(
     {
         "component": Str(),
@@ -897,6 +902,12 @@ pump_equipment_description_schema = Map(
         Optional("flow_direction"): Enum(['forward', 'backward']),
     }
 )
+pvt_model_combined_description_schema = Map(
+    {
+        Optional("reference_pvt_model"): Str(),
+        Optional("fluids"): MapPattern(Str(), combined_fluid_description_schema),
+    }
+)
 table_ipr_description_schema = Map(
     {
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
@@ -1041,6 +1052,7 @@ pvt_models_description_schema = Map(
         Optional("tables"): MapPattern(Str(), Str()),
         Optional("correlations"): MapPattern(Str(), pvt_model_correlation_description_schema),
         Optional("compositions"): MapPattern(Str(), pvt_model_compositional_description_schema),
+        Optional("combined"): MapPattern(Str(), pvt_model_combined_description_schema),
     }
 )
 well_description_schema = Map(
@@ -1076,5 +1088,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 2b63e03d8d0f20fad052f0a1f63fa7d7)
+# [[[end]]] (checksum: 963c498411c0de91401c837ffc846f67)
 # fmt: on
