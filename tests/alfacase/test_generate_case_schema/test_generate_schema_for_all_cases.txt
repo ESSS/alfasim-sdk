@@ -22,6 +22,12 @@ casing_section_description_schema = Map(
     }
 )
 
+combined_fluid_description_schema = Map(
+    {
+        Optional("pvt_model"): Str(),
+    }
+)
+
 composition_description_schema = Map(
     {
         "component": Str(),
@@ -950,6 +956,13 @@ pump_equipment_description_schema = Map(
     }
 )
 
+pvt_model_combined_description_schema = Map(
+    {
+        Optional("reference_pvt_model"): Str(),
+        Optional("fluids"): MapPattern(Str(), combined_fluid_description_schema),
+    }
+)
+
 table_ipr_description_schema = Map(
     {
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
@@ -1108,6 +1121,7 @@ pvt_models_description_schema = Map(
         Optional("tables"): MapPattern(Str(), Str()),
         Optional("correlations"): MapPattern(Str(), pvt_model_correlation_description_schema),
         Optional("compositions"): MapPattern(Str(), pvt_model_compositional_description_schema),
+        Optional("combined"): MapPattern(Str(), pvt_model_combined_description_schema),
     }
 )
 

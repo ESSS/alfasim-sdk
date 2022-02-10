@@ -514,6 +514,17 @@ class FluidDescription:
     fraction_pairs = attrib_instance_list(BipDescription)
 
 
+@attr.s(frozen=True, slots=True)
+class CombinedFluidDescription:
+    """
+    .. include:: /alfacase_definitions/CombinedFluidDescription.txt
+    """
+
+    pvt_model: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+
+
 @attr.s(slots=True, kw_only=True)
 class MassSourceEquipmentDescription(_MassSourceCommon):
     """
@@ -2109,6 +2120,27 @@ class PvtModelCompositionalDescription:
     fluids = attrib_dict_of(FluidDescription)
 
 
+@attr.s(slots=True)
+class PvtModelCombinedDescription:
+    """
+    :ivar reference_pvt_model:
+        PVT model that will be used to calculate reference values such as properties
+        at standard conditions.
+
+    :ivar fluids:
+        default: {}
+
+    .. include:: /alfacase_definitions/PvtModelCombinedDescription.txt
+
+
+    """
+
+    reference_pvt_model: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    fluids = attrib_dict_of(CombinedFluidDescription)
+
+
 @attr.s(slots=True, eq=False)
 class PvtModelTableParametersDescription:
     """
@@ -2524,16 +2556,11 @@ class PvtModelsDescription:
     tables: Dict[str, Union[str, Path]] = attr.ib(
         default=attr.Factory(dict), validator=dict_of((str, Path))
     )
-    correlations: Dict[str, PvtModelCorrelationDescription] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(PvtModelCorrelationDescription)
-    )
-    compositions: Dict[str, PvtModelCompositionalDescription] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(PvtModelCompositionalDescription)
-    )
-    table_parameters: Dict[str, PvtModelTableParametersDescription] = attr.ib(
-        default=attr.Factory(dict),
-        validator=dict_of(PvtModelTableParametersDescription),
-    )
+
+    correlations = attrib_dict_of(PvtModelCorrelationDescription)
+    compositions = attrib_dict_of(PvtModelCompositionalDescription)
+    combined = attrib_dict_of(PvtModelCombinedDescription)
+    table_parameters = attrib_dict_of(PvtModelTableParametersDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(

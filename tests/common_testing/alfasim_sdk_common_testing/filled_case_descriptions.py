@@ -67,6 +67,13 @@ PVT_MODEL_COMPOSITIONAL_DEFINITION = case_description.PvtModelCompositionalDescr
     ],
     fluids={"fluid_1": FLUID_DESCRIPTION},
 )
+COMBINED_FLUID_DESCRIPTION = case_description.CombinedFluidDescription(
+    pvt_model="acme",
+)
+PVT_MODEL_COMBINED_DEFINITION = case_description.PvtModelCombinedDescription(
+    reference_pvt_model="acme",
+    fluids={"combined_fluid_1": COMBINED_FLUID_DESCRIPTION},
+)
 PVT_MODEL_TABLE_PARAMETERS = (
     case_description.PvtModelTableParametersDescription.create_constant(has_water=True)
 )
@@ -75,6 +82,9 @@ PVT_MODELS_DEFINITION = case_description.PvtModelsDescription(
     compositions={
         "composition 1": PVT_MODEL_COMPOSITIONAL_DEFINITION,
         "composition 2": PVT_MODEL_COMPOSITIONAL_DEFINITION,
+    },
+    combined={
+        "combined 1": PVT_MODEL_COMBINED_DEFINITION,
     },
     correlations={
         "correlation 1": PVT_MODEL_CORRELATION_DEFINITION,

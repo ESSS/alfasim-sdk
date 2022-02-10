@@ -38,6 +38,7 @@ from alfasim_sdk._internal.alfacase.case_description import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description import CaseOutputDescription
 from alfasim_sdk._internal.alfacase.case_description import CasingDescription
 from alfasim_sdk._internal.alfacase.case_description import CasingSectionDescription
+from alfasim_sdk._internal.alfacase.case_description import CombinedFluidDescription
 from alfasim_sdk._internal.alfacase.case_description import CompositionDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     CompressorEquipmentDescription,
@@ -117,6 +118,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
 from alfasim_sdk._internal.alfacase.case_description import ProfileDescription
 from alfasim_sdk._internal.alfacase.case_description import ProfileOutputDescription
 from alfasim_sdk._internal.alfacase.case_description import PumpEquipmentDescription
+from alfasim_sdk._internal.alfacase.case_description import PvtModelCombinedDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     PvtModelCompositionalDescription,
 )
@@ -334,6 +336,7 @@ __all__ = [
     "CaseOutputDescription",
     "CasingDescription",
     "CasingSectionDescription",
+    "CombinedFluidDescription",
     "CompositionDescription",
     "CompressorEquipmentDescription",
     "CompressorPressureTableDescription",
@@ -437,6 +440,7 @@ __all__ = [
     "ProfileOutputDescription",
     "PumpEquipmentDescription",
     "PumpType",
+    "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
     "PvtModelTableParametersDescription",

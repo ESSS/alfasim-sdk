@@ -60,6 +60,14 @@ PVTs
 .. autoclass:: alfasim_sdk.PvtModelTableParametersDescription()
 
 
+PVT Combined
+-----------------
+
+.. autoclass:: alfasim_sdk.PvtModelCombinedDescription()
+
+.. autoclass:: alfasim_sdk.CombinedFluidDescription()
+
+
 PVT Compositional
 -----------------
 
