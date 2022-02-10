@@ -1031,6 +1031,8 @@ pipe_description_schema = Map(
         Optional("environment"): environment_description_schema,
         Optional("segments"): pipe_segments_description_schema,
         Optional("initial_conditions"): initial_conditions_description_schema,
+        Optional("flow_pattern_model"): Enum(['unit_cell', 'regime_capturing']),
+        Optional("regime_capturing_mesh_threshold"): Map({"value": Float(), "unit": Str()}),
     }
 )
 pvt_models_description_schema = Map(
@@ -1074,5 +1076,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 541961e6ae18c141559c84a1e7b88090)
+# [[[end]]] (checksum: 2b63e03d8d0f20fad052f0a1f63fa7d7)
 # fmt: on

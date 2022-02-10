@@ -16,6 +16,8 @@
             environment: \ :class:`EnvironmentDescription <EnvironmentDescription>`\  = EnvironmentDescription()
             segments: \ :class:`PipeSegmentsDescription <PipeSegmentsDescription>`\  = PipeSegmentsDescription()
             initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\  = InitialConditionsDescription()
+            flow_pattern_model: \ :class:`FlowPatternModel <alfasim_sdk._internal.constants.FlowPatternModel>`\  = FlowPatternModel.UnitCell
+            regime_capturing_mesh_threshold: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -32,3 +34,7 @@
             environment: \ :class:`environment_description_schema <EnvironmentDescription>`\  # optional
             segments: \ :class:`pipe_segments_description_schema <PipeSegmentsDescription>`\  # optional
             initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
+            flow_pattern_model: \ :class:`FlowPatternModel <alfasim_sdk._internal.constants.FlowPatternModel>`\  # optional
+            regime_capturing_mesh_threshold:  # optional
+                value: number
+                unit: string

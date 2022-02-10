@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 import pytest
 from barril.units import Array
@@ -14,9 +15,9 @@ from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 
 
-def test_convert_description_to_alfacase_with_empty_dict(tmp_path):
+def test_convert_description_to_alfacase_with_empty_dict(datadir: Path) -> None:
     """
-    Ensure that the convertion from a description into a Alfacase it's not generating empty dict.
+    Ensure that the conversion from a description into a Alfacase it's not generating empty dict.
     Since it's not a valid syntax for strictyaml resulting in an InconsistentIndentationDisallowed error
     """
 
@@ -40,7 +41,7 @@ def test_convert_description_to_alfacase_with_empty_dict(tmp_path):
     assert "wall_description: {}" not in simple_case_alfacase_content
     assert "tables: {}" not in simple_case_alfacase_content
     # Smoke check, ensures that the alfacase is loaded correctly without errors
-    simple_case_alfacase_file = tmp_path / "simple_case.alfacase"
+    simple_case_alfacase_file = datadir / "simple_case.alfacase"
     simple_case_alfacase_file.write_text(
         data=simple_case_alfacase_content, encoding="UTF-8"
     )

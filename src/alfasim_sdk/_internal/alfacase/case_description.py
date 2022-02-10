@@ -1495,6 +1495,9 @@ class PipeDescription:
     # Initial Condition Section
     initial_conditions = attrib_instance(InitialConditionsDescription)
 
+    flow_pattern_model = attrib_enum(default=constants.FlowPatternModel.UnitCell)
+    regime_capturing_mesh_threshold = attrib_scalar(default=Scalar(0.0, "-"))
+
 
 @attr.s(slots=True, kw_only=True)
 class PressureNodePropertiesDescription(_PressureSourceCommon):

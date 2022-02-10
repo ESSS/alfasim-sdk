@@ -1097,6 +1097,8 @@ pipe_description_schema = Map(
         Optional("environment"): environment_description_schema,
         Optional("segments"): pipe_segments_description_schema,
         Optional("initial_conditions"): initial_conditions_description_schema,
+        Optional("flow_pattern_model"): Enum(['unit_cell', 'regime_capturing']),
+        Optional("regime_capturing_mesh_threshold"): Map({"value": Float(), "unit": Str()}),
     }
 )
 
