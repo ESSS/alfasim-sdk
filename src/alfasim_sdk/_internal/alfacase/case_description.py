@@ -2243,7 +2243,7 @@ class PvtModelTableParametersDescription:
             return 1 / (r * t)
 
         def gas_density_derivative_respect_temperature(p, t):
-            return -p / (r * t ** 2)
+            return -p / (r * t**2)
 
         def constant_density_model(p, t):
             return rho_l_ref + 0 * p
