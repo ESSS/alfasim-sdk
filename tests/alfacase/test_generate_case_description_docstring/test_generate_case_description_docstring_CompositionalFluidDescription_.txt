@@ -4,7 +4,7 @@
 
     .. parsed-literal::
 
-        class FluidDescription
+        class CompositionalFluidDescription
             composition: \ :class:`List <typing.List>`\[\ :class:`CompositionDescription <CompositionDescription>`\] = []
             fraction_pairs: \ :class:`List <typing.List>`\[\ :class:`BipDescription <BipDescription>`\] = []
 

@@ -618,9 +618,9 @@ def load_composition_description(
     ]
 
 
-def load_fluid_description(
+def load_compositional_fluid_description(
     document: DescriptionDocument,
-) -> Dict[str, case_description.FluidDescription]:
+) -> Dict[str, case_description.CompositionalFluidDescription]:
     alfacase_to_case_description = {
         "composition": load_composition_description,
         "fraction_pairs": load_bip_description,
@@ -628,9 +628,9 @@ def load_fluid_description(
 
     def generate_fluid_description(
         value: DescriptionDocument,
-    ) -> case_description.FluidDescription:
+    ) -> case_description.CompositionalFluidDescription:
         case_values = to_case_values(value, alfacase_to_case_description)
-        item_description = case_description.FluidDescription(**case_values)
+        item_description = case_description.CompositionalFluidDescription(**case_values)
         return update_multi_input_flags(document, item_description)
 
     return {
@@ -656,7 +656,7 @@ def load_pvt_model_compositional_description(
         ),
         "heavy_components": load_heavy_component_description,
         "light_components": load_light_component_description,
-        "fluids": load_fluid_description,
+        "fluids": load_compositional_fluid_description,
     }
 
     def generate_pvt_model_compositional(value: DescriptionDocument):
