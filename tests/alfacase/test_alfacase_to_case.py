@@ -373,9 +373,9 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.ENVIRONMENT_DESCRIPTION,
         schema=schema.environment_description_schema,
     ),
-    "FluidDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.FLUID_DESCRIPTION,
-        schema=schema.fluid_description_schema,
+    "CompositionalFluidDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.COMPOSITIONAL_FLUID_DESCRIPTION,
+        schema=schema.compositional_fluid_description_schema,
         is_dict=True,
     ),
     "CombinedFluidDescription": AlfacaseTestConfig(

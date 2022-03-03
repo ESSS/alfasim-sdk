@@ -10,7 +10,7 @@
             viscosity_model: \ :class:`PVTCompositionalViscosityModel <alfasim_sdk._internal.constants.PVTCompositionalViscosityModel>`\  = PVTCompositionalViscosityModel.CorrespondingStatesPrinciple
             heavy_components: \ :class:`List <typing.List>`\[\ :class:`HeavyComponentDescription <HeavyComponentDescription>`\] = []
             light_components: \ :class:`List <typing.List>`\[\ :class:`LightComponentDescription <LightComponentDescription>`\] = []
-            fluids: \ :class:`Dict <typing.Dict>`\[str, \ :class:`FluidDescription <FluidDescription>`\] = {}
+            fluids: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompositionalFluidDescription <CompositionalFluidDescription>`\] = {}
 
 .. tab:: Schema
 
@@ -24,4 +24,4 @@
             light_components:  # optional
                 - \ :class:`light_component_description_schema <LightComponentDescription>`
             fluids:  # optional
-                string: \ :class:`fluid_description_schema <FluidDescription>`
+                string: \ :class:`compositional_fluid_description_schema <CompositionalFluidDescription>`

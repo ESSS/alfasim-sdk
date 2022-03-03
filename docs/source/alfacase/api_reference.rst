@@ -77,7 +77,7 @@ PVT Compositional
 
 .. autoclass:: alfasim_sdk.LightComponentDescription()
 
-.. autoclass:: alfasim_sdk.FluidDescription()
+.. autoclass:: alfasim_sdk.CompositionalFluidDescription()
 
 .. autoclass:: alfasim_sdk.CompositionDescription()
 

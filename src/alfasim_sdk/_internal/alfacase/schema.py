@@ -760,6 +760,12 @@ casing_description_schema = Map(
         Optional("open_holes"): Seq(open_hole_description_schema),
     }
 )
+compositional_fluid_description_schema = Map(
+    {
+        Optional("composition"): Seq(composition_description_schema),
+        Optional("fraction_pairs"): Seq(bip_description_schema),
+    }
+)
 compressor_equipment_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
@@ -791,12 +797,6 @@ environment_description_schema = Map(
         Optional("reference_y_coordinate"): Map({"value": Float(), "unit": Str()}),
         Optional("md_properties_table"): Seq(environment_property_description_schema),
         Optional("tvd_properties_table"): Seq(environment_property_description_schema),
-    }
-)
-fluid_description_schema = Map(
-    {
-        Optional("composition"): Seq(composition_description_schema),
-        Optional("fraction_pairs"): Seq(bip_description_schema),
     }
 )
 formation_description_schema = Map(
@@ -997,7 +997,7 @@ pvt_model_compositional_description_schema = Map(
         Optional("viscosity_model"): Enum(['corresponding_states_principle', 'lohrenz_bray_clark']),
         Optional("heavy_components"): Seq(heavy_component_description_schema),
         Optional("light_components"): Seq(light_component_description_schema),
-        Optional("fluids"): MapPattern(Str(), fluid_description_schema),
+        Optional("fluids"): MapPattern(Str(), compositional_fluid_description_schema),
     }
 )
 trends_output_description_schema = Map(
@@ -1051,7 +1051,7 @@ pvt_models_description_schema = Map(
         Optional("default_model"): Str(),
         Optional("tables"): MapPattern(Str(), Str()),
         Optional("correlations"): MapPattern(Str(), pvt_model_correlation_description_schema),
-        Optional("compositions"): MapPattern(Str(), pvt_model_compositional_description_schema),
+        Optional("compositional"): MapPattern(Str(), pvt_model_compositional_description_schema),
         Optional("combined"): MapPattern(Str(), pvt_model_combined_description_schema),
     }
 )
@@ -1088,5 +1088,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 963c498411c0de91401c837ffc846f67)
+# [[[end]]] (checksum: ecc53a4621703890071145dadb78e781)
 # fmt: on
