@@ -465,3 +465,15 @@ class FlowPatternModel(Enum):
 
 
 MULTI_INPUT_TYPE_SUFFIX = "_input_type"
+
+
+class CorrelationsOilViscosity(Enum):
+    Egbogah = "Egbogah"
+
+
+class CorrelationsGasViscosity(Enum):
+    LeeGonzalezEakin = "Lee Gonzalez Eakin"
+
+
+class CorrelationsSurfaceTension(Enum):
+    BakerSwerdloff = "Baker Swerdloff"
