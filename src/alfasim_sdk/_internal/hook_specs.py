@@ -1785,8 +1785,6 @@ def calculate_relative_emulsion_viscosity(
     mu_disp: "double",
     mu_cont: "double",
     alpha_disp_in_layer: "double",
-    disp_field_index: "int",
-    cont_field_index: "int",
 ) -> "int":
     """
     **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont, double alpha_disp_in_layer)``
@@ -1812,8 +1810,7 @@ def calculate_relative_emulsion_viscosity(
 
     The output variable ``mu_r`` is the relative emulsion viscosity, ``mu_disp`` is the dispersed field
     viscosity, ``mu_cont`` is the continuous field viscosity and ``alpha_disp_in_layer`` is the volume
-    fraction of dispersed field in the layer. Finally ``disp_field_index`` and ``cont_field_index`` are
-    the Dispersed and Continuous Field indexes of the emulsion, respectively.
+    fraction of dispersed field in the layer.
 
     This `hook` allows the implementation of the relative emulsion viscosity correlation. Once the plugin
     installed it is important to be selected in the emulsion model configuration inside the Physics data
@@ -1824,8 +1821,6 @@ def calculate_relative_emulsion_viscosity(
     :param mu_disp: Dispersed field viscosity
     :param mu_cont: Continuous field viscosity
     :param alpha_disp_in_layer: Volume fraction of dispersed field in layer.
-    :param disp_field_index: Index of the dispersed field
-    :param cont_field_index: Index of the continuous field
 
     :returns: Return OK if successful or anything different if failed
 
@@ -1837,31 +1832,8 @@ def calculate_relative_emulsion_viscosity(
 
         HOOK_RELATIVE_EMULSION_VISCOSITY(ctx, mu_r, mu_disp, mu_cont, alpha_disp_in_layer)
         {
-            int water_in_oil_id = -1;
-            errcode = alfasim_sdk_api.get_field_id(ctx, &water_in_oil_id, "water in oil");
-            if (errcode != OK) {
-                return errcode;
-            }
-
-            int oil_in_water_id = -1;
-            errcode = alfasim_sdk_api.get_field_id(ctx, &oil_in_water_id, "oil in water");
-            if (errcode != OK) {
-                return errcode;
-            }
-
-            if (disp_field_index == oil_in_water_id){
-                // Calculate the relative emulsion viscosity
-                // for water dominated scenario.
-                // ComputeForWaterDominated is a function implemented
-                // by plugin developer
-                ComputeForWaterDominated(mu_r, mu_disp, mu_cont);
-            } else if (disp_field_index == water_in_oil_id){
-                // Calculate the relative emulsion viscosity
-                // for oil dominated scenario
-                // ComputeForOilDominated is a function implemented
-                // by plugin developer
-                ComputeForOilDominated(mu_r, n_faces);
-            }
+            // Einstein (1906) relative viscosity model
+            mu_r = 1.0 + 2.5 * alpha_disp_in_layer;
 
             return OK;
         }

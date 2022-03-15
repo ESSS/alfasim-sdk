@@ -7,6 +7,7 @@ History
 ===================
 
 * **Breaking Change**:  Change signature of hook ``update_internal_deposition_layer``. Now, instead of the deposition thickness, it is returned the phase index of phase being deposited and the thickness variation rate.
+* **Breaking Change**:  Change signature of hook ``calculate_relative_emulsion_viscosity`` and function ``get_relative_emulsion_viscosity``. Indices of continuous and dispersed fields were removed.
 * Add ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
 * Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
 * Add ``flow_pattern_model`` and ``regime_capturing_mesh_treshold`` attributes to ``PipeDescription``.
