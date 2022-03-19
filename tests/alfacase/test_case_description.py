@@ -558,7 +558,7 @@ class TestEnsureValidReferences:
         assert case.pvt_models.default_model == "PVT2"
 
     def test_pvt_models_with_invalid_pvtfile(self, tmp_path):
-        """7
+        """
         When a PVTModel assigned on case.pvt_models.tables doesn't exist,
         a InvalidReferenceError exception must be raised when case.EnsureValidReferences is called.
         """
