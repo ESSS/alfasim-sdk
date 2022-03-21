@@ -6,11 +6,32 @@ History
 0.13.0 (unreleased)
 ===================
 
+* **Breaking Change**: Change in ``PvtModelsDescription`` renamed experimental compositional models holder property from ``compositions`` to ``compositional``;
+
+* Example on how to update previous .alfacase files with compositional PVT models:
+
+  - Before::
+
+      pvt_models:
+        compositions:
+          Compositional model 1:
+            equation_of_state_type: pvt_compositional_peng_robinson
+            ...  # Other properties
+
+  - After::
+
+      pvt_models:
+        compositional:
+          Compositional model 1:
+            equation_of_state_type: pvt_compositional_peng_robinson
+            ...  # Other properties
+
 * **Breaking Change**:  Change signature of hook ``update_internal_deposition_layer``. Now, instead of the deposition thickness, it is returned the phase index of phase being deposited and the thickness variation rate.
 * **Breaking Change**:  Change signature of hook ``calculate_relative_emulsion_viscosity`` and function ``get_relative_emulsion_viscosity``. Indices of continuous and dispersed fields were removed.
 * Add ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
 * Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
 * Add ``flow_pattern_model`` and ``regime_capturing_mesh_treshold`` attributes to ``PipeDescription``.
+* Add Combined PVT model description classes (``PvtModelCombinedDescription`` and ``CombinedFluidDescription``).
 
 
 0.12.0 (2022-01-18)

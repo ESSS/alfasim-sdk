@@ -290,7 +290,7 @@ def default_case(tmp_path) -> case_description.CaseDescription:
             default_model="PVT2",
             tables={"PVT1": f"{tab_file}"},
             correlations={"PVT2": case_description.PvtModelCorrelationDescription()},
-            compositions={"PVT3": case_description.PvtModelCompositionalDescription()},
+            compositional={"PVT3": case_description.PvtModelCompositionalDescription()},
             table_parameters={
                 "PVT4": case_description.PvtModelTableParametersDescription.create_empty()
             },
@@ -1100,9 +1100,9 @@ def test_invalid_fluid_reference_on_nodes():
     case = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
             default_model="PVT",
-            compositions={
+            compositional={
                 "PVT": case_description.PvtModelCompositionalDescription(
-                    fluids={"Fluid 1": case_description.FluidDescription()}
+                    fluids={"Fluid 1": case_description.CompositionalFluidDescription()}
                 )
             },
         ),
@@ -1149,9 +1149,9 @@ def test_invalid_fluid_reference_on_pipes():
     case = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
             default_model="PVT",
-            compositions={
+            compositional={
                 "PVT": case_description.PvtModelCompositionalDescription(
-                    fluids={"Fluid 1": case_description.FluidDescription()}
+                    fluids={"Fluid 1": case_description.CompositionalFluidDescription()}
                 )
             },
         ),
@@ -1197,9 +1197,9 @@ def test_invalid_fluid_reference_on_wells(default_well):
     case = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
             default_model="PVT",
-            compositions={
+            compositional={
                 "PVT": case_description.PvtModelCompositionalDescription(
-                    fluids={"Fluid 1": case_description.FluidDescription()}
+                    fluids={"Fluid 1": case_description.CompositionalFluidDescription()}
                 )
             },
         ),
@@ -1255,17 +1255,17 @@ def test_case_description_duplicate_names(default_well):
             correlations={
                 "PVT1": case_description.PvtModelCorrelationDescription(),
             },
-            compositions={
+            compositional={
                 "PVT1": case_description.PvtModelCompositionalDescription(
                     fluids={
-                        "Fluid 0": case_description.FluidDescription(),
-                        "Fluid 1": case_description.FluidDescription(),
+                        "Fluid 0": case_description.CompositionalFluidDescription(),
+                        "Fluid 1": case_description.CompositionalFluidDescription(),
                     },
                 ),
                 "PVT2": case_description.PvtModelCompositionalDescription(
                     fluids={
-                        "Fluid 0": case_description.FluidDescription(),
-                        "Fluid 1": case_description.FluidDescription(),
+                        "Fluid 0": case_description.CompositionalFluidDescription(),
+                        "Fluid 1": case_description.CompositionalFluidDescription(),
                     }
                 ),
             },

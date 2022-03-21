@@ -1,0 +1,14 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class CombinedFluidDescription
+            pvt_model: \ :class:`Optional <typing.Optional>`\[str] = None
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            pvt_model: string  # optional

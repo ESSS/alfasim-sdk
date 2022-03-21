@@ -373,9 +373,14 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.ENVIRONMENT_DESCRIPTION,
         schema=schema.environment_description_schema,
     ),
-    "FluidDescription": AlfacaseTestConfig(
-        description_expected=filled_case_descriptions.FLUID_DESCRIPTION,
-        schema=schema.fluid_description_schema,
+    "CompositionalFluidDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.COMPOSITIONAL_FLUID_DESCRIPTION,
+        schema=schema.compositional_fluid_description_schema,
+        is_dict=True,
+    ),
+    "CombinedFluidDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.COMBINED_FLUID_DESCRIPTION,
+        schema=schema.combined_fluid_description_schema,
         is_dict=True,
     ),
     "FormationDescription": AlfacaseTestConfig(
@@ -409,6 +414,11 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.WALL_DESCRIPTION,
         schema=schema.wall_description_schema,
         is_sequence=True,
+    ),
+    "PvtModelCombinedDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.PVT_MODEL_COMBINED_DEFINITION,
+        schema=schema.pvt_model_combined_description_schema,
+        is_dict=True,
     ),
     "PvtModelCompositionalDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PVT_MODEL_COMPOSITIONAL_DEFINITION,

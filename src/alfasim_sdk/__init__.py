@@ -52,7 +52,10 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import EquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import AnnulusEquipmentDescription
-from alfasim_sdk._internal.alfacase.case_description import FluidDescription
+from alfasim_sdk._internal.alfacase.case_description import CombinedFluidDescription
+from alfasim_sdk._internal.alfacase.case_description import (
+    CompositionalFluidDescription,
+)
 from alfasim_sdk._internal.alfacase.case_description import FormationDescription
 from alfasim_sdk._internal.alfacase.case_description import FormationLayerDescription
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -119,6 +122,9 @@ from alfasim_sdk._internal.alfacase.case_description import ProfileOutputDescrip
 from alfasim_sdk._internal.alfacase.case_description import PumpEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     PvtModelCompositionalDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
+    PvtModelCombinedDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
     PvtModelCorrelationDescription,
@@ -370,7 +376,8 @@ __all__ = [
     "FlashModel",
     "FlowDirection",
     "FlowPatternModel",
-    "FluidDescription",
+    "CompositionalFluidDescription",
+    "CombinedFluidDescription",
     "FormationDescription",
     "FormationLayerDescription",
     "GAS_FIELD",
@@ -437,6 +444,7 @@ __all__ = [
     "ProfileOutputDescription",
     "PumpEquipmentDescription",
     "PumpType",
+    "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
     "PvtModelTableParametersDescription",

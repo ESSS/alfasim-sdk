@@ -1,3 +1,4 @@
+from itertools import chain
 from numbers import Number
 from pathlib import Path
 from typing import Dict
@@ -505,13 +506,24 @@ class BipDescription:
 
 
 @attr.s(frozen=True, slots=True)
-class FluidDescription:
+class CompositionalFluidDescription:
     """
-    .. include:: /alfacase_definitions/FluidDescription.txt
+    .. include:: /alfacase_definitions/CompositionalFluidDescription.txt
     """
 
     composition = attrib_instance_list(CompositionDescription)
     fraction_pairs = attrib_instance_list(BipDescription)
+
+
+@attr.s(frozen=True, slots=True)
+class CombinedFluidDescription:
+    """
+    .. include:: /alfacase_definitions/CombinedFluidDescription.txt
+    """
+
+    pvt_model: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
 
 
 @attr.s(slots=True, kw_only=True)
@@ -2106,7 +2118,28 @@ class PvtModelCompositionalDescription:
     )
     heavy_components = attrib_instance_list(HeavyComponentDescription)
     light_components = attrib_instance_list(LightComponentDescription)
-    fluids = attrib_dict_of(FluidDescription)
+    fluids = attrib_dict_of(CompositionalFluidDescription)
+
+
+@attr.s(slots=True)
+class PvtModelCombinedDescription:
+    """
+    :ivar reference_pvt_model:
+        PVT model that will be used to calculate reference values such as properties
+        at standard conditions.
+
+    :ivar fluids:
+        default: {}
+
+    .. include:: /alfacase_definitions/PvtModelCombinedDescription.txt
+
+
+    """
+
+    reference_pvt_model: Optional[str] = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
+    fluids = attrib_dict_of(CombinedFluidDescription)
 
 
 @attr.s(slots=True, eq=False)
@@ -2524,16 +2557,10 @@ class PvtModelsDescription:
     tables: Dict[str, Union[str, Path]] = attr.ib(
         default=attr.Factory(dict), validator=dict_of((str, Path))
     )
-    correlations: Dict[str, PvtModelCorrelationDescription] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(PvtModelCorrelationDescription)
-    )
-    compositions: Dict[str, PvtModelCompositionalDescription] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(PvtModelCompositionalDescription)
-    )
-    table_parameters: Dict[str, PvtModelTableParametersDescription] = attr.ib(
-        default=attr.Factory(dict),
-        validator=dict_of(PvtModelTableParametersDescription),
-    )
+    correlations = attrib_dict_of(PvtModelCorrelationDescription)
+    compositional = attrib_dict_of(PvtModelCompositionalDescription)
+    combined = attrib_dict_of(PvtModelCombinedDescription)
+    table_parameters = attrib_dict_of(PvtModelTableParametersDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(
@@ -2686,7 +2713,8 @@ class CaseDescription:
             chain(
                 self.pvt_models.tables.keys(),
                 self.pvt_models.correlations.keys(),
-                self.pvt_models.compositions.keys(),
+                self.pvt_models.compositional.keys(),
+                self.pvt_models.combined.keys(),
                 self.pvt_models.table_parameters.keys(),
             )
         )
@@ -2828,8 +2856,8 @@ class CaseDescription:
         elements_with_invalid_fluid = []
         fluids_available = set(
             fluid
-            for composition in self.pvt_models.compositions.values()
-            for fluid in composition.fluids.keys()
+            for compositional_model in self.pvt_models.compositional.values()
+            for fluid in compositional_model.fluids.keys()
         )
 
         def _handle_invalid_fluid(element, element_name):
@@ -2905,11 +2933,16 @@ class CaseDescription:
         all_material_names = [i.name for i in self.materials]
         all_pvt_names = list(self.pvt_models.tables.keys())
         all_pvt_names += list(self.pvt_models.correlations.keys())
-        all_pvt_names += list(self.pvt_models.compositions.keys())
+        all_pvt_names += list(self.pvt_models.compositional.keys())
+        all_pvt_names += list(self.pvt_models.combined.keys())
 
+        pvt_models_with_fluids = chain(
+            self.pvt_models.compositional.values(),
+            self.pvt_models.combined.values(),
+        )
         all_fluids = [
             fluid
-            for pvt_model in self.pvt_models.compositions.values()
+            for pvt_model in pvt_models_with_fluids
             for fluid in pvt_model.fluids.keys()
         ]
 

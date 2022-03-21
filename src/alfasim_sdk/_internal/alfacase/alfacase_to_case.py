@@ -135,11 +135,17 @@ def load_list_of_instance(
     ]
 
 
-def load_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+def load_instance(
+    alfacase_content: DescriptionDocument,
+    class_: Type[T],
+    explicit_loaders: Optional[Dict[str, Callable]] = None,
+) -> T:
     """
     Create an instance of class_ with the attributes found in alfacase_content.
     """
-    alfacase_to_case_description = get_case_description_attribute_loader_dict(class_)
+    alfacase_to_case_description = get_case_description_attribute_loader_dict(
+        class_, explicit_loaders=explicit_loaders
+    )
     case_values = to_case_values(alfacase_content, alfacase_to_case_description)
     item_description = class_(**case_values)
     return update_multi_input_flags(alfacase_content, item_description)
@@ -447,6 +453,7 @@ PvtModelTable = str
 PvtModels = Union[
     PvtModelTable,
     case_description.PvtModelCompositionalDescription,
+    case_description.PvtModelCombinedDescription,
     case_description.PvtModelCorrelationDescription,
 ]
 
@@ -611,9 +618,9 @@ def load_composition_description(
     ]
 
 
-def load_fluid_description(
+def load_compositional_fluid_description(
     document: DescriptionDocument,
-) -> Dict[str, case_description.FluidDescription]:
+) -> Dict[str, case_description.CompositionalFluidDescription]:
     alfacase_to_case_description = {
         "composition": load_composition_description,
         "fraction_pairs": load_bip_description,
@@ -621,9 +628,9 @@ def load_fluid_description(
 
     def generate_fluid_description(
         value: DescriptionDocument,
-    ) -> case_description.FluidDescription:
+    ) -> case_description.CompositionalFluidDescription:
         case_values = to_case_values(value, alfacase_to_case_description)
-        item_description = case_description.FluidDescription(**case_values)
+        item_description = case_description.CompositionalFluidDescription(**case_values)
         return update_multi_input_flags(document, item_description)
 
     return {
@@ -649,7 +656,7 @@ def load_pvt_model_compositional_description(
         ),
         "heavy_components": load_heavy_component_description,
         "light_components": load_light_component_description,
-        "fluids": load_fluid_description,
+        "fluids": load_compositional_fluid_description,
     }
 
     def generate_pvt_model_compositional(value: DescriptionDocument):
@@ -667,18 +674,26 @@ def load_pvt_model_compositional_description(
     }
 
 
+def load_combined_fluid_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.CombinedFluidDescription]:
+    return load_dict_of_instance(document, case_description.CombinedFluidDescription)
+
+
+def load_pvt_model_combined_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.PvtModelCombinedDescription]:
+    return load_dict_of_instance(document, case_description.PvtModelCombinedDescription)
+
+
 def load_pvt_models_description(
     document: DescriptionDocument,
 ) -> case_description.PvtModelsDescription:
-    alfacase_to_case_description = {
-        "default_model": load_value,
-        "tables": load_pvt_tables,
-        "correlations": load_pvt_model_correlation_description,
-        "compositions": load_pvt_model_compositional_description,
-    }
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.PvtModelsDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
+    return load_instance(
+        document,
+        case_description.PvtModelsDescription,
+        explicit_loaders={"tables": load_pvt_tables},
+    )
 
 
 # Used for testing - Will be ignored on the document contents
