@@ -6,6 +6,8 @@ History
 0.13.0 (unreleased)
 ===================
 
+* Add black-oil properties to PVT Correlations case description ```PvtModelCorrelationDescription```
+
 * **Breaking Change**: Change in ``PvtModelsDescription`` renamed experimental compositional models holder property from ``compositions`` to ``compositional``;
 
 * Example on how to update previous .alfacase files with compositional PVT models:
