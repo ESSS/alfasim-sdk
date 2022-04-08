@@ -2012,10 +2012,10 @@ class PvtModelCorrelationDescription:
 
     :ivar oil_viscosity:
         default: `CorrelationsOilViscosity.Egbogah`
-    
+
     :ivar gas_viscosity:
         default: `CorrelationsGasViscosity.LeeGonzalezEakin`
-    
+
     :ivar surface_tension:
         default: `CorrelationsSurfaceTension.BakerSwerdloff`
 
@@ -2050,8 +2050,12 @@ class PvtModelCorrelationDescription:
     h2s_mol_frac = attrib_scalar(default=Scalar(0, "-"))
     co2_mol_frac = attrib_scalar(default=Scalar(0, "-"))
     oil_viscosity = attrib_enum(default=constants.CorrelationsOilViscosity.Egbogah)
-    gas_viscosity = attrib_enum(default=constants.CorrelationsGasViscosity.LeeGonzalezEakin)
-    surface_tension = attrib_enum(default=constants.CorrelationsSurfaceTension.BakerSwerdloff)
+    gas_viscosity = attrib_enum(
+        default=constants.CorrelationsGasViscosity.LeeGonzalezEakin
+    )
+    surface_tension = attrib_enum(
+        default=constants.CorrelationsSurfaceTension.BakerSwerdloff
+    )
 
 
 @attr.s(frozen=True, slots=True)
