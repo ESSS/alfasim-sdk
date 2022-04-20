@@ -534,6 +534,11 @@ pvt_model_correlation_description_schema = Map(
         Optional("gas_density_std"): Map({"value": Float(), "unit": Str()}),
         Optional("rs_sat"): Map({"value": Float(), "unit": Str()}),
         Optional("pvt_correlation_package"): Enum(['pvt_correlation_package_lasater', 'pvt_correlation_package_standing', 'pvt_correlation_package_vazquez_beggs', 'pvt_correlation_package_glaso']),
+        Optional("h2s_mol_frac"): Map({"value": Float(), "unit": Str()}),
+        Optional("co2_mol_frac"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_viscosity"): Enum(['Egbogah']),
+        Optional("gas_viscosity"): Enum(['Lee Gonzalez Eakin']),
+        Optional("surface_tension"): Enum(['Baker Swerdloff']),
     }
 )
 referenced_pressure_container_description_schema = Map(
@@ -1088,5 +1093,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: ecc53a4621703890071145dadb78e781)
+# [[[end]]] (checksum: e6aa3dfb3009e392699be3bdc6f7d670)
 # fmt: on

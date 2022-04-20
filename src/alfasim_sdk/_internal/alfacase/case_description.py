@@ -1992,7 +1992,6 @@ class WallDescription:
 @attr.s(frozen=True, slots=True)
 class PvtModelCorrelationDescription:
     """
-
     :ivar oil_density_std:
         default: Scalar(850.0, "kg/m3")
 
@@ -2005,6 +2004,20 @@ class PvtModelCorrelationDescription:
     :ivar pvt_correlation_package:
         default: `CorrelationPackage.Standing`
 
+    :ivar h2s_mol_frac:
+        default: Scalar(0.000001, "-")
+
+    :ivar co2_mol_frac:
+        default: Scalar(0.999999, "-")
+
+    :ivar oil_viscosity:
+        default: `CorrelationsOilViscosity.Egbogah`
+
+    :ivar gas_viscosity:
+        default: `CorrelationsGasViscosity.LeeGonzalezEakin`
+
+    :ivar surface_tension:
+        default: `CorrelationsSurfaceTension.BakerSwerdloff`
 
     .. include:: /alfacase_definitions/PvtModelCorrelationDescription.txt
 
@@ -2034,6 +2047,15 @@ class PvtModelCorrelationDescription:
     gas_density_std = attrib_scalar(default=Scalar(0.9, "kg/m3"))
     rs_sat = attrib_scalar(default=Scalar(150.0, "sm3/sm3"))
     pvt_correlation_package = attrib_enum(default=constants.CorrelationPackage.Standing)
+    h2s_mol_frac = attrib_scalar(default=Scalar(0, "-"))
+    co2_mol_frac = attrib_scalar(default=Scalar(0, "-"))
+    oil_viscosity = attrib_enum(default=constants.CorrelationsOilViscosity.Egbogah)
+    gas_viscosity = attrib_enum(
+        default=constants.CorrelationsGasViscosity.LeeGonzalezEakin
+    )
+    surface_tension = attrib_enum(
+        default=constants.CorrelationsSurfaceTension.BakerSwerdloff
+    )
 
 
 @attr.s(frozen=True, slots=True)

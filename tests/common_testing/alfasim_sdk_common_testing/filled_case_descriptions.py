@@ -51,6 +51,11 @@ PVT_MODEL_CORRELATION_DEFINITION = case_description.PvtModelCorrelationDescripti
     gas_density_std=Scalar(2, "kg/m3"),
     rs_sat=Scalar(4, "sm3/sm3"),
     pvt_correlation_package=constants.CorrelationPackage.Lasater,
+    h2s_mol_frac=Scalar(0, "-"),
+    co2_mol_frac=Scalar(0, "-"),
+    oil_viscosity=constants.CorrelationsOilViscosity.Egbogah,
+    gas_viscosity=constants.CorrelationsGasViscosity.LeeGonzalezEakin,
+    surface_tension=constants.CorrelationsSurfaceTension.BakerSwerdloff,
 )
 COMPOSITIONAL_FLUID_DESCRIPTION = case_description.CompositionalFluidDescription(
     composition=[COMPOSITION_DESCRIPTION_C1, COMPOSITION_DESCRIPTION_C2],
