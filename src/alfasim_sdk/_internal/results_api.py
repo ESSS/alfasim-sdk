@@ -1,31 +1,35 @@
+import contextlib
 import json
+import os
 from collections import namedtuple
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple, DefaultDict
+from typing import Any
+from typing import DefaultDict
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
 
-import h5py
-from barril.units import Array
 import attr
+import h5py
 import numpy
-from alfasim_sdk._internal.constants import (
-    TIME_SET_DSET_NAME,
-    PROFILES_GROUP_NAME,
-    TRENDS_GROUP_NAME,
-    META_GROUP_NAME,
-    PROFILES_STATISTICS_DSET_NAME_SUFFIX,
-    RESULT_FILE_PREFIX
-    )
-import contextlib
-import os
+from barril.units import Array
+
+from alfasim_sdk._internal.constants import META_GROUP_NAME
+from alfasim_sdk._internal.constants import PROFILES_GROUP_NAME
+from alfasim_sdk._internal.constants import PROFILES_STATISTICS_DSET_NAME_SUFFIX
+from alfasim_sdk._internal.constants import RESULT_FILE_PREFIX
+from alfasim_sdk._internal.constants import TIME_SET_DSET_NAME
+from alfasim_sdk._internal.constants import TRENDS_GROUP_NAME
 
 
-TimeSetInfoItem = namedtuple('TimeSetInfoItem', 'global_start size uuid')
+TimeSetInfoItem = namedtuple("TimeSetInfoItem", "global_start size uuid")
 TimeSetKeyType = Tuple[int, ...]
 SourceTimeSetKeyType = Tuple[str, TimeSetKeyType]
 BaseTimeStepIndexToMetaList = Dict[int, Dict]
 
-_PROFILE_ID_ATTR = 'profile_id'
-_TREND_ID_ATTR = 'trend_id'
+_PROFILE_ID_ATTR = "profile_id"
+_TREND_ID_ATTR = "trend_id"
 _SOURCE_ID_TO_GROUP_NAME = {
     _PROFILE_ID_ATTR: PROFILES_GROUP_NAME,
     _TREND_ID_ATTR: TRENDS_GROUP_NAME,
@@ -56,7 +60,7 @@ class ALFASimResultMetadata:
     time_set_info = attr.ib(validator=attr.validators.instance_of(dict))
     result_directory = attr.ib(validator=attr.validators.instance_of(Path))
     app_version_info = attr.ib(validator=attr.validators.instance_of(dict))
-    
+
 
 @attr.s(slots=True, hash=False)
 class _MergedMetadataWithStatistics:
@@ -71,8 +75,8 @@ class _MergedMetadataWithStatistics:
     profile_key_to_metadata = attr.ib(validator=attr.validators.instance_of(dict))
     trend_key_to_metadata = attr.ib(validator=attr.validators.instance_of(dict))
     time_set_keys = attr.ib(validator=attr.validators.instance_of(list))
-    
-    
+
+
 class ResultsNeedFullReloadError(RuntimeError):
     pass
 
@@ -81,9 +85,9 @@ class ResultsNeedFullReloadError(RuntimeError):
 # Several built-in types such as list and dict do not directly support weak references but can
 # add support through subclassing:
 class _Dict(dict):
-    __slots__ = ['__weakref__']
-    
-    
+    __slots__ = ["__weakref__"]
+
+
 def get_number_of_base_time_steps_from(time_set_info_source_dict):
     from itertools import chain
 
@@ -129,8 +133,8 @@ def read_global_metadata(
     all_profiles_meta: BaseTimeStepIndexToMetaList = {}
     all_trends_meta: BaseTimeStepIndexToMetaList = {}
     for base_ts, result_file in result_files.items():
-        update_global_metadata(result_file, all_profiles_meta, base_ts, 'profiles')
-        update_global_metadata(result_file, all_trends_meta, base_ts, 'trends')
+        update_global_metadata(result_file, all_profiles_meta, base_ts, "profiles")
+        update_global_metadata(result_file, all_trends_meta, base_ts, "trends")
     return all_profiles_meta, all_trends_meta
 
 
@@ -150,40 +154,48 @@ def read_time_set_info(result_files, container_group_name):
 
     time_set_info = {}
     start = 0
-    TimeSetLimits = namedtuple('TimeSetLimits', ('first', 'last', 'values'))
+    TimeSetLimits = namedtuple("TimeSetLimits", ("first", "last", "values"))
     limits = {}
 
     for key, file in result_files.items():
         dataset = file[container_group_name][TIME_SET_DSET_NAME]
-        time_set_uuid = file[META_GROUP_NAME].attrs.get('time_set_uuid', default='<NO UUID>')
+        time_set_uuid = file[META_GROUP_NAME].attrs.get(
+            "time_set_uuid", default="<NO UUID>"
+        )
         size = dataset.size
         if size > 0:
             limits[key] = TimeSetLimits(dataset[0], dataset[-1], dataset)
-        time_set_info[key] = TimeSetInfoItem(global_start=start, size=size, uuid=time_set_uuid)
+        time_set_info[key] = TimeSetInfoItem(
+            global_start=start, size=size, uuid=time_set_uuid
+        )
         start += size
 
     # Restart with former results may need to adjust the time set infos for correct reading
-    for (previous_key, previous_data), (next_key, next_data) in pairwise_iter(limits.items()):
+    for (previous_key, previous_data), (next_key, next_data) in pairwise_iter(
+        limits.items()
+    ):
         if next_data.first <= previous_data.last:
             index = bisect_left(previous_data.values, next_data.first)
 
             previous_old_info = time_set_info[previous_key]
-            previous_new_uuid = f'{previous_old_info.uuid}-trunc-at-{index}'
+            previous_new_uuid = f"{previous_old_info.uuid}-trunc-at-{index}"
             time_set_info[previous_key] = TimeSetInfoItem(
-                global_start=previous_old_info.global_start, size=index, uuid=previous_new_uuid,
+                global_start=previous_old_info.global_start,
+                size=index,
+                uuid=previous_new_uuid,
             )
 
             next_old_info = time_set_info[next_key]
             new_start = previous_old_info.global_start + index
-            next_new_uuid = f'{next_old_info.uuid}-trunc-prev-at-{index}'
+            next_new_uuid = f"{next_old_info.uuid}-trunc-prev-at-{index}"
             time_set_info[next_key] = TimeSetInfoItem(
-                global_start=new_start, size=next_old_info.size, uuid=next_new_uuid,
+                global_start=new_start,
+                size=next_old_info.size,
+                uuid=next_new_uuid,
             )
 
     return time_set_info
 
-
-    
 
 def map_output_key_to_time_set_key(all_metadata):
     """
@@ -225,7 +237,6 @@ def map_base_time_set_to_time_set_keys(output_key_to_time_set_key_dict):
     return {k: tuple(sorted(v)) for k, v in base_ts_index_dict.items()}
 
 
-
 def _merge_metadata_and_read_global_statistics(
     result_files: Dict[int, h5py.File],
     global_profiles_metadata: Dict[int, Dict],
@@ -250,30 +261,40 @@ def _merge_metadata_and_read_global_statistics(
         meta = attr.ib(default=attr.Factory(dict), init=False)  # type: Dict
         output_type_name = attr.ib(validator=attr.validators.instance_of(str))
 
-    profiles_helper = Helper(output_type_name='profile_id')
-    trends_helper = Helper(output_type_name='trend_id')
+    profiles_helper = Helper(output_type_name="profile_id")
+    trends_helper = Helper(output_type_name="trend_id")
 
     profiles_to_time_set_key = map_output_key_to_time_set_key(global_profiles_metadata)
-    profiles_base_ts_to_time_set_keys = map_base_time_set_to_time_set_keys(profiles_to_time_set_key)
+    profiles_base_ts_to_time_set_keys = map_base_time_set_to_time_set_keys(
+        profiles_to_time_set_key
+    )
 
     trends_to_time_set_key = map_output_key_to_time_set_key(global_trends_metadata)
-    trends_base_ts_to_time_set_keys = map_base_time_set_to_time_set_keys(trends_to_time_set_key)
+    trends_base_ts_to_time_set_keys = map_base_time_set_to_time_set_keys(
+        trends_to_time_set_key
+    )
 
     time_set_info = {
         PROFILES_GROUP_NAME: profiles_time_set_info,
         TRENDS_GROUP_NAME: trends_time_set_info,
     }
     time_step_index_range_to_read = {
-        PROFILES_GROUP_NAME: (initial_profiles_time_step_index, final_profiles_time_step_index),
-        TRENDS_GROUP_NAME: (initial_trends_time_step_index, final_trends_time_step_index),
+        PROFILES_GROUP_NAME: (
+            initial_profiles_time_step_index,
+            final_profiles_time_step_index,
+        ),
+        TRENDS_GROUP_NAME: (
+            initial_trends_time_step_index,
+            final_trends_time_step_index,
+        ),
     }
 
     time_set_ranges: Dict[SourceTimeSetKeyType, List[Tuple[int, int]]] = {}
     global_profiles_statistics: DefaultDict[int, Dict[str, float]] = defaultdict(
-        lambda: {'global_max': numpy.nan, 'global_min': numpy.nan}
+        lambda: {"global_max": numpy.nan, "global_min": numpy.nan}
     )
     trends_statistics: DefaultDict[int, Dict[str, float]] = defaultdict(
-        lambda: {'max': numpy.nan, 'min': numpy.nan}
+        lambda: {"max": numpy.nan, "min": numpy.nan}
     )
 
     def read_profiles_statistics(ts_index: int):
@@ -281,44 +302,54 @@ def _merge_metadata_and_read_global_statistics(
         profile_group = f[PROFILES_GROUP_NAME]
 
         for output_id, meta in global_profiles_metadata[ts_index].items():
-            source_time_set_key = 'profile_id', profiles_to_time_set_key[output_id]
+            source_time_set_key = "profile_id", profiles_to_time_set_key[output_id]
             partial_indices = time_set_ranges[source_time_set_key]
             start_index, stop_index = partial_indices[-1]  # The most recent.
 
             if start_index == stop_index:
                 continue
 
-            statistics_id = meta['data_id'] + PROFILES_STATISTICS_DSET_NAME_SUFFIX
+            statistics_id = meta["data_id"] + PROFILES_STATISTICS_DSET_NAME_SUFFIX
             statistics = global_profiles_statistics[output_id]
             profile_statistics_dset = profile_group[statistics_id]
-            if 'global_min' in profile_statistics_dset.attrs:
-                statistics['global_min'] = numpy.nanmin(  # type:ignore[call-overload]
-                    (statistics['global_min'], profile_statistics_dset.attrs['global_min'],)
+            if "global_min" in profile_statistics_dset.attrs:
+                statistics["global_min"] = numpy.nanmin(  # type:ignore[call-overload]
+                    (
+                        statistics["global_min"],
+                        profile_statistics_dset.attrs["global_min"],
+                    )
                 )
-                statistics['global_max'] = numpy.nanmax(  # type:ignore[call-overload]
-                    (statistics['global_max'], profile_statistics_dset.attrs['global_max'],)
+                statistics["global_max"] = numpy.nanmax(  # type:ignore[call-overload]
+                    (
+                        statistics["global_max"],
+                        profile_statistics_dset.attrs["global_max"],
+                    )
                 )
 
     def read_trends_statistics(ts_index):
         f = result_files[ts_index]
         trends_group = f[TRENDS_GROUP_NAME]
-        if 'trends_statistic' not in trends_group:
+        if "trends_statistic" not in trends_group:
             return
 
-        trends_statistic = trends_group['trends_statistic'][:, :]
+        trends_statistic = trends_group["trends_statistic"][:, :]
         for output_id, meta in global_trends_metadata[ts_index].items():
-            source_time_set_key = 'trend_id', trends_to_time_set_key[output_id]
+            source_time_set_key = "trend_id", trends_to_time_set_key[output_id]
             partial_indices = time_set_ranges[source_time_set_key]
             start_index, stop_index = partial_indices[-1]  # The most recent.
 
             if start_index < stop_index:
-                statistics = trends_statistics[output_id]  # type: Dict[str, numpy.ndarray]
-                data_index = meta['index']
+                statistics = trends_statistics[
+                    output_id
+                ]  # type: Dict[str, numpy.ndarray]
+                data_index = meta["index"]
                 min_value, max_value = trends_statistic[:, data_index]
-                statistics['min'] = numpy.nanmin((min_value, statistics['min']))
-                statistics['max'] = numpy.nanmax((max_value, statistics['max']))
+                statistics["min"] = numpy.nanmin((min_value, statistics["min"]))
+                statistics["max"] = numpy.nanmax((max_value, statistics["max"]))
 
-    def update_helper(helper, ts_index, global_metadata_dict, base_ts_to_time_set_keys_dict):
+    def update_helper(
+        helper, ts_index, global_metadata_dict, base_ts_to_time_set_keys_dict
+    ):
         """
         Updates the helper. Use/update `global_time_set_indices` from outer scope.
         Merges the index/data_id_domain_id from the various base time set indices into a
@@ -336,7 +367,7 @@ def _merge_metadata_and_read_global_statistics(
             return SKIP
 
         output_type_name = helper.output_type_name
-        is_profile = output_type_name == 'profile_id'
+        is_profile = output_type_name == "profile_id"
         output_group_name = PROFILES_GROUP_NAME if is_profile else TRENDS_GROUP_NAME
 
         time_set_key_list = base_ts_to_time_set_keys_dict[ts_index]
@@ -345,8 +376,12 @@ def _merge_metadata_and_read_global_statistics(
         time_set_size = time_set_info_item.size
         start_index, stop_index = time_step_index_range_to_read[output_group_name]
 
-        start_index = _global_index_to_file_based_index(start_index, time_set_start, time_set_size)
-        stop_index = _global_index_to_file_based_index(stop_index, time_set_start, time_set_size)
+        start_index = _global_index_to_file_based_index(
+            start_index, time_set_start, time_set_size
+        )
+        stop_index = _global_index_to_file_based_index(
+            stop_index, time_set_start, time_set_size
+        )
         if start_index == stop_index:
             return SKIP
 
@@ -364,29 +399,37 @@ def _merge_metadata_and_read_global_statistics(
             else:
                 item_meta = output_key_meta_dict[output_id] = output_meta.copy()
                 if is_profile:
-                    item_meta['data_id'] = {}
-                    item_meta['domain_id'] = {}
+                    item_meta["data_id"] = {}
+                    item_meta["domain_id"] = {}
                 else:
-                    item_meta['index'] = {}
+                    item_meta["index"] = {}
             # Update.
             if is_profile:
-                item_meta['data_id'][ts_index] = output_meta['data_id']
-                item_meta['domain_id'][ts_index] = output_meta['domain_id']
+                item_meta["data_id"][ts_index] = output_meta["data_id"]
+                item_meta["domain_id"][ts_index] = output_meta["domain_id"]
             else:
-                item_meta['index'][ts_index] = output_meta['index']
+                item_meta["index"][ts_index] = output_meta["index"]
 
     app_version_info = {}
     for index, raw_result_file in result_files.items():
-        app_version_info[index] = raw_result_file[META_GROUP_NAME].attrs.get('application_version')
+        app_version_info[index] = raw_result_file[META_GROUP_NAME].attrs.get(
+            "application_version"
+        )
 
         skip = update_helper(
-            profiles_helper, index, global_profiles_metadata, profiles_base_ts_to_time_set_keys
+            profiles_helper,
+            index,
+            global_profiles_metadata,
+            profiles_base_ts_to_time_set_keys,
         )
         if not skip:
             read_profiles_statistics(index)
 
         skip = update_helper(
-            trends_helper, index, global_trends_metadata, trends_base_ts_to_time_set_keys
+            trends_helper,
+            index,
+            global_trends_metadata,
+            trends_base_ts_to_time_set_keys,
         )
         if not skip:
             read_trends_statistics(index)
@@ -394,15 +437,15 @@ def _merge_metadata_and_read_global_statistics(
     # Put collected statistics into metadata.
     for output_key, metadata_item in profiles_helper.meta.items():
         profile_statistics = global_profiles_statistics[output_key]
-        metadata_item['time_set_key'] = profiles_to_time_set_key[output_key]
-        metadata_item['global_max'] = profile_statistics['global_max']
-        metadata_item['global_min'] = profile_statistics['global_min']
+        metadata_item["time_set_key"] = profiles_to_time_set_key[output_key]
+        metadata_item["global_max"] = profile_statistics["global_max"]
+        metadata_item["global_min"] = profile_statistics["global_min"]
 
     for output_key, metadata_item in trends_helper.meta.items():
         trend_statistics = trends_statistics[output_key]
-        metadata_item['time_set_key'] = trends_to_time_set_key[output_key]
-        metadata_item['max'] = float(trend_statistics['max'])
-        metadata_item['min'] = float(trend_statistics['min'])
+        metadata_item["time_set_key"] = trends_to_time_set_key[output_key]
+        metadata_item["max"] = float(trend_statistics["max"])
+        metadata_item["min"] = float(trend_statistics["min"])
 
     return _MergedMetadataWithStatistics(
         app_version_info=app_version_info,
@@ -410,8 +453,8 @@ def _merge_metadata_and_read_global_statistics(
         trend_key_to_metadata=trends_helper.meta,
         time_set_keys=list(time_set_ranges.keys()),
     )
-    
-    
+
+
 def read_metadata(
     result_directory: Path,
     *,
@@ -447,8 +490,11 @@ def read_metadata(
             profiles={},
             trends={},
             time_sets=[],
-            time_sets_unit='',
-            time_steps_boundaries=((profile_index, trend_index), (profile_index, trend_index)),
+            time_sets_unit="",
+            time_steps_boundaries=(
+                (profile_index, trend_index),
+                (profile_index, trend_index),
+            ),
             time_set_info=previous_time_set_info,
             result_directory=result_directory,
             app_version_info={},
@@ -461,13 +507,19 @@ def read_metadata(
     if len(result_files) == 0:
         return get_empty_result()
 
-    expected_number_of_base_ts = get_number_of_base_time_steps_from(previous_time_set_info)
-    if (expected_number_of_base_ts > 0) and (len(result_files) != expected_number_of_base_ts):
+    expected_number_of_base_ts = get_number_of_base_time_steps_from(
+        previous_time_set_info
+    )
+    if (expected_number_of_base_ts > 0) and (
+        len(result_files) != expected_number_of_base_ts
+    ):
         raise ResultsNeedFullReloadError(
-            f'Different number of result files: {len(result_files)} but expecting {expected_number_of_base_ts}'
+            f"Different number of result files: {len(result_files)} but expecting {expected_number_of_base_ts}"
         )
 
-    global_profiles_metadata, global_trends_metadata = read_global_metadata(result_files)
+    global_profiles_metadata, global_trends_metadata = read_global_metadata(
+        result_files
+    )
 
     def normalize_time_step_index(n, total_size, *, default):
         if n is None:
@@ -478,7 +530,9 @@ def read_metadata(
 
     profiles_time_set_info = read_time_set_info(result_files, PROFILES_GROUP_NAME)
     time_set_info_item = list(profiles_time_set_info.values())[-1]
-    total_profiles_time_set_size = time_set_info_item.global_start + time_set_info_item.size
+    total_profiles_time_set_size = (
+        time_set_info_item.global_start + time_set_info_item.size
+    )
     initial_profiles_time_step_index = normalize_time_step_index(
         initial_profiles_time_step_index, total_profiles_time_set_size, default=0
     )
@@ -492,23 +546,27 @@ def read_metadata(
 
     trends_time_set_info = read_time_set_info(result_files, TRENDS_GROUP_NAME)
     time_set_info_item = list(trends_time_set_info.values())[-1]
-    total_trends_time_set_size = time_set_info_item.global_start + time_set_info_item.size
+    total_trends_time_set_size = (
+        time_set_info_item.global_start + time_set_info_item.size
+    )
     initial_trends_time_step_index = normalize_time_step_index(
         initial_trends_time_step_index, total_trends_time_set_size, default=0
     )
     assert initial_trends_time_step_index is not None
     final_trends_time_step_index = normalize_time_step_index(
-        final_trends_time_step_index, total_trends_time_set_size, default=total_trends_time_set_size
+        final_trends_time_step_index,
+        total_trends_time_set_size,
+        default=total_trends_time_set_size,
     )
     assert final_trends_time_step_index is not None
 
     def check_time_set_info_for_truncation(old, new):
         if set(old) - set(new):
-            raise ResultsNeedFullReloadError('Time set truncated')
+            raise ResultsNeedFullReloadError("Time set truncated")
         for base_ts, new_value in new.items():
             old_value = old.get(base_ts)
             if old_value and (old_value.uuid != new_value.uuid):
-                raise ResultsNeedFullReloadError('Time set truncated')
+                raise ResultsNeedFullReloadError("Time set truncated")
 
     check_time_set_info_for_truncation(
         previous_time_set_info.get(PROFILES_GROUP_NAME, {}), profiles_time_set_info
@@ -520,26 +578,28 @@ def read_metadata(
     if (final_profiles_time_step_index == initial_profiles_time_step_index) and (
         final_trends_time_step_index == initial_trends_time_step_index
     ):
-        return get_empty_result(initial_profiles_time_step_index, initial_trends_time_step_index)
+        return get_empty_result(
+            initial_profiles_time_step_index, initial_trends_time_step_index
+        )
 
     if initial_profiles_time_step_index != final_profiles_time_step_index:
         if not (0 <= initial_profiles_time_step_index < total_profiles_time_set_size):
             raise IndexError(
-                f'`initial_trends_time_step_index` ({initial_profiles_time_step_index}) outside of valid range: [0, {total_profiles_time_set_size - 1}]'
+                f"`initial_trends_time_step_index` ({initial_profiles_time_step_index}) outside of valid range: [0, {total_profiles_time_set_size - 1}]"
             )
         if not (0 <= final_profiles_time_step_index <= total_profiles_time_set_size):
             raise IndexError(
-                f'`initial_trends_time_step_index` ({final_profiles_time_step_index}) outside of valid range: [0, {total_profiles_time_set_size}]'
+                f"`initial_trends_time_step_index` ({final_profiles_time_step_index}) outside of valid range: [0, {total_profiles_time_set_size}]"
             )
 
     if initial_trends_time_step_index != final_trends_time_step_index:
         if not (0 <= initial_trends_time_step_index < total_trends_time_set_size):
             raise IndexError(
-                f'`initial_trends_time_step_index` ({initial_trends_time_step_index}) outside of valid range: [0, {total_trends_time_set_size - 1}]'
+                f"`initial_trends_time_step_index` ({initial_trends_time_step_index}) outside of valid range: [0, {total_trends_time_set_size - 1}]"
             )
         if not (0 <= final_trends_time_step_index <= total_trends_time_set_size):
             raise IndexError(
-                f'`initial_trends_time_step_index` ({final_trends_time_step_index}) outside of valid range: [0, {total_trends_time_set_size}]'
+                f"`initial_trends_time_step_index` ({final_trends_time_step_index}) outside of valid range: [0, {total_trends_time_set_size}]"
             )
 
     merged_metadata = _merge_metadata_and_read_global_statistics(
@@ -558,7 +618,7 @@ def read_metadata(
         profiles=merged_metadata.profile_key_to_metadata,
         trends=merged_metadata.trend_key_to_metadata,
         time_sets=merged_metadata.time_set_keys,
-        time_sets_unit='s',
+        time_sets_unit="s",
         time_steps_boundaries=(
             (initial_profiles_time_step_index, initial_trends_time_step_index),
             (final_profiles_time_step_index, final_trends_time_step_index),
@@ -597,7 +657,9 @@ def read_trends_data(
 
     trends_metadata = result_metadata.trends
     result_files = load_result_files(result_metadata.result_directory)
-    trends_dsets = {base_ts: f[TRENDS_GROUP_NAME]['trends'] for base_ts, f in result_files.items()}
+    trends_dsets = {
+        base_ts: f[TRENDS_GROUP_NAME]["trends"] for base_ts, f in result_files.items()
+    }
 
     if output_keys is None:
         output_keys = result_metadata.trends.keys()
@@ -612,7 +674,7 @@ def read_trends_data(
         <= result_metadata.time_steps_boundaries[1][1]
     ):
         raise ValueError(
-            f'Invalid initial_trends_time_step_index ({initial_trends_time_step_index})'
+            f"Invalid initial_trends_time_step_index ({initial_trends_time_step_index})"
         )
 
     if final_trends_time_step_index is None:
@@ -622,12 +684,17 @@ def read_trends_data(
         <= final_trends_time_step_index
         <= result_metadata.time_steps_boundaries[1][1]
     ):
-        raise ValueError(f'Invalid final_trends_time_step_index ({final_trends_time_step_index})')
+        raise ValueError(
+            f"Invalid final_trends_time_step_index ({final_trends_time_step_index})"
+        )
 
     try:
         time_set_info = result_metadata.time_set_info[TRENDS_GROUP_NAME]
     except KeyError:
-        return {trend_key: numpy.empty((0,), dtype=numpy.float64) for trend_key in output_keys}
+        return {
+            trend_key: numpy.empty((0,), dtype=numpy.float64)
+            for trend_key in output_keys
+        }
 
     # Read data from files.
     trends = {}
@@ -636,7 +703,7 @@ def read_trends_data(
         meta = trends_metadata[trend_key]
 
         for base_ts, dset in trends_dsets.items():
-            index = meta['index'].get(base_ts)
+            index = meta["index"].get(base_ts)
             if index is None:
                 continue
 
@@ -684,15 +751,15 @@ def _remap_profile_time_step_index(
             base_ts: profile_time_set_info[base_ts] for base_ts in time_set_key
         }
         raise IndexError(
-            '\n- '.join(
+            "\n- ".join(
                 [
-                    f'Can not locate the profile for time step index {time_step_index}. Time set info {len(effective_time_set_info)}:'
+                    f"Can not locate the profile for time step index {time_step_index}. Time set info {len(effective_time_set_info)}:"
                 ]
                 + [str(item) for item in effective_time_set_info.items()]
             )
         )
-        
-        
+
+
 def _read_profile_arrays(
     result_metadata,
     output_keys,
@@ -700,7 +767,7 @@ def _read_profile_arrays(
     *,
     group_name,
     data_attr,
-    data_id_suffix='',
+    data_id_suffix="",
     slicer,
 ):
     """
@@ -719,7 +786,7 @@ def _read_profile_arrays(
     for profile_key in output_keys:
         meta = profiles_metadata[profile_key]
         result_key, mapped_time_step_index = _remap_profile_time_step_index(
-            profiles_time_set_info, meta['time_set_key'], time_step_index
+            profiles_time_set_info, meta["time_set_key"], time_step_index
         )
         f = result_files[result_key]
         profiles_group = f[group_name]
@@ -734,6 +801,7 @@ def _read_profile_arrays(
         profiles[profile_key] = profiles_group[data_id].__getitem__(index)
 
     return profiles
+
 
 def read_profiles_data(result_metadata, output_keys, time_step_index):
     """
@@ -752,7 +820,7 @@ def read_profiles_data(result_metadata, output_keys, time_step_index):
         output_keys,
         time_step_index,
         group_name=PROFILES_GROUP_NAME,
-        data_attr='data_id',
+        data_attr="data_id",
         slicer=lambda index: (index, slice(None)),
     )
 
@@ -774,7 +842,7 @@ def read_profiles_domain_data(result_metadata, output_keys, time_step_index):
         output_keys,
         time_step_index,
         group_name=META_GROUP_NAME,
-        data_attr='domain_id',
+        data_attr="domain_id",
         slicer=lambda index: slice(None),
     )
 
@@ -797,12 +865,12 @@ def read_profiles_local_statistics(result_metadata, output_keys, time_step_index
         output_keys,
         time_step_index,
         group_name=PROFILES_GROUP_NAME,
-        data_attr='data_id',
+        data_attr="data_id",
         data_id_suffix=PROFILES_STATISTICS_DSET_NAME_SUFFIX,
         slicer=lambda index: (index, slice(None)),
     )
-    
-    
+
+
 def _close_files(files_list):
     """
     :type files_list: List[h5py.File]
@@ -814,7 +882,7 @@ def _close_files(files_list):
 # TODO: arthur: This code is duplicated from ben10, try to find a workaround for it...
 @contextlib.contextmanager
 def cwd(directory):
-    '''
+    """
     Context manager for current directory (uses with_statement)
 
     e.g.:
@@ -826,7 +894,7 @@ def cwd(directory):
 
     :param str directory:
         Target directory to enter
-    '''
+    """
     old_directory = os.getcwd()
     if directory is not None:
         os.chdir(directory)
@@ -834,8 +902,8 @@ def cwd(directory):
         yield directory
     finally:
         os.chdir(old_directory)
-    
-       
+
+
 def load_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     """
     Return a dict with the result files.
@@ -851,23 +919,25 @@ def load_result_files(result_directory: Path) -> Dict[int, h5py.File]:
         try:
             with cwd(filename.parent):
                 try:
-                    return h5py.File(filename.name, 'r', libver='latest', swmr=True)
+                    return h5py.File(filename.name, "r", libver="latest", swmr=True)
                 except OSError as os_error:
                     swmr_message = "Unable to open file (file is not already open for SWMR writing)"
                     if str(os_error) == swmr_message:
-                        return h5py.File(filename.name, 'r', libver='latest', swmr=False)
+                        return h5py.File(
+                            filename.name, "r", libver="latest", swmr=False
+                        )
                     raise
 
         except PermissionError:
             raise PermissionError(
-                f'Could not access folder {filename}.\n'
+                f"Could not access folder {filename}.\n"
                 f'If you are using your local "Downloads" directory, consider changing the project file\n'
-                f'to somewhere else as some services try to synchronize that directory and interfere with\n'
-                f'the simulation.\n'
-                '\n'
+                f"to somewhere else as some services try to synchronize that directory and interfere with\n"
+                f"the simulation.\n"
+                "\n"
                 f'1 - Click in "Save as".\n'
-                f'2 - Select a different path, outside Download folder.\n'
-                f'3 - Run simulation again.\n'
+                f"2 - Select a different path, outside Download folder.\n"
+                f"3 - Run simulation again.\n"
             )
 
     # When a new result file is created its metadata contents are not complete, and the file
@@ -881,25 +951,26 @@ def load_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     # folder before the actual result file is created. After the metadata is writen and the
     # writer enters SWMR mode the `<result_file_name>.creating` is removed to signal readers
     # that is safe to read that file.
-    files = set(result_directory.glob(RESULT_FILE_PREFIX + '*'))
+    files = set(result_directory.glob(RESULT_FILE_PREFIX + "*"))
     result_files = set()
     files_under_creation = set()
     for f in files:
         ext = f.suffix
-        if ext == '.creating':
+        if ext == ".creating":
             # Take note of any file to ignore.
             from os import path
 
             name, _ = path.splitext(f)
             files_under_creation.add(Path(name))
-        elif ext == '':
+        elif ext == "":
             result_files.add(f)
         else:
-            raise ValueError(f'Unknown ext: {ext}')
+            raise ValueError(f"Unknown ext: {ext}")
 
     result_files.difference_update(files_under_creation)  # Ignore incomplete files.
     result_files_sorted = (
-        (int(filename.name[prefix_len:]), open_result_file(filename)) for filename in result_files
+        (int(filename.name[prefix_len:]), open_result_file(filename))
+        for filename in result_files
     )
     result_files_sorted_dict = _Dict(sorted(result_files_sorted, key=lambda x: x[0]))
 
@@ -907,12 +978,17 @@ def load_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     import weakref
 
     weakref.finalize(
-        result_files_sorted_dict, _close_files, files_list=list(result_files_sorted_dict.values())
+        result_files_sorted_dict,
+        _close_files,
+        files_list=list(result_files_sorted_dict.values()),
     )
 
     return result_files_sorted_dict
 
-def _global_index_to_file_based_index(index: int, time_set_start: int, time_set_size: int):
+
+def _global_index_to_file_based_index(
+    index: int, time_set_start: int, time_set_size: int
+):
     """
     Converts a global index into an index suitable to extract the data from a result file.
 
@@ -928,7 +1004,8 @@ def _global_index_to_file_based_index(index: int, time_set_start: int, time_set_
         return time_set_size
     else:
         return index - time_set_start
-    
+
+
 def _read_time_set(dsets, base_ts_list, time_set_info, global_start, global_stop):
     """
     Read a single Time Set (used by `read_time_sets`).
@@ -949,18 +1026,24 @@ def _read_time_set(dsets, base_ts_list, time_set_info, global_start, global_stop
             time_set_info_item = time_set_info[base_ts]
             time_set_start = time_set_info_item.global_start
             time_set_size = time_set_info_item.size
-            start_index = _global_index_to_file_based_index(global_start, time_set_start, time_set_size)
-            stop_index = _global_index_to_file_based_index(global_stop, time_set_start, time_set_size)
+            start_index = _global_index_to_file_based_index(
+                global_start, time_set_start, time_set_size
+            )
+            stop_index = _global_index_to_file_based_index(
+                global_stop, time_set_start, time_set_size
+            )
             result.append(time_set_dset[start_index:stop_index])
 
     return result
 
 
-def _concatenate_values(data_dict: Dict[Any, List[numpy.ndarray]]) -> Dict[Any, numpy.ndarray]:
+def _concatenate_values(
+    data_dict: Dict[Any, List[numpy.ndarray]]
+) -> Dict[Any, numpy.ndarray]:
     """
     Concatenate the values in the given dict.
     """
-    
+
     return {
         key: (
             numpy.empty((0,), dtype=numpy.float64)
@@ -969,7 +1052,8 @@ def _concatenate_values(data_dict: Dict[Any, List[numpy.ndarray]]) -> Dict[Any, 
         )
         for key, data_list in data_dict.items()
     }
-    
+
+
 def read_time_sets(
     result_metadata,
     time_sets_key_list=None,
@@ -1009,25 +1093,28 @@ def read_time_sets(
     dsets_by_source_id = {}
 
     time_step_index_range_to_read = {
-        _PROFILE_ID_ATTR: [initial_profiles_time_step_index, final_profiles_time_step_index],
+        _PROFILE_ID_ATTR: [
+            initial_profiles_time_step_index,
+            final_profiles_time_step_index,
+        ],
         _TREND_ID_ATTR: [initial_trends_time_step_index, final_trends_time_step_index],
     }
     if initial_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][0] = result_metadata.time_steps_boundaries[
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][
             0
-        ][0]
+        ] = result_metadata.time_steps_boundaries[0][0]
     if final_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][1] = result_metadata.time_steps_boundaries[
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][
             1
-        ][0]
+        ] = result_metadata.time_steps_boundaries[1][0]
     if initial_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][0] = result_metadata.time_steps_boundaries[0][
-            1
-        ]
+        time_step_index_range_to_read[_TREND_ID_ATTR][
+            0
+        ] = result_metadata.time_steps_boundaries[0][1]
     if final_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][1] = result_metadata.time_steps_boundaries[1][
+        time_step_index_range_to_read[_TREND_ID_ATTR][
             1
-        ]
+        ] = result_metadata.time_steps_boundaries[1][1]
 
     cache = {}
     for time_set_key in time_sets_key_list:
@@ -1045,14 +1132,18 @@ def read_time_sets(
             dsets = dsets_by_source_id[source_id]
 
             cache[time_set_key] = _read_time_set(
-                dsets, base_ts_list, time_set_info, global_start, global_stop,
+                dsets,
+                base_ts_list,
+                time_set_info,
+                global_start,
+                global_stop,
             )
 
     return _concatenate_values(cache)
 
 
 def get_time_set_and_trend_from_trend_id(trend_id, results_metadata):
-    time_set_key = ("trend_id", results_metadata.trends[trend_id]['time_set_key'])
+    time_set_key = ("trend_id", results_metadata.trends[trend_id]["time_set_key"])
     time_set_unit = results_metadata.time_sets_unit
     time_set_values = read_time_sets(results_metadata, [time_set_key])[time_set_key]
     trend_values = read_trends_data(results_metadata, [trend_id])[trend_id]
@@ -1061,6 +1152,8 @@ def get_time_set_and_trend_from_trend_id(trend_id, results_metadata):
 
 
 def get_profile_from_profile_id(profile_id, results_metadata, timestep_id):
-    profile_values = read_profiles_data(results_metadata, [profile_id], timestep_id)[profile_id]
+    profile_values = read_profiles_data(results_metadata, [profile_id], timestep_id)[
+        profile_id
+    ]
     profile_unit = results_metadata.profiles[profile_id]["unit"]
     return Array(profile_values, profile_unit)

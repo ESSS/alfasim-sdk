@@ -46,12 +46,12 @@ The dict key which identifies the required version of alfasim-sdk for a given pl
 
 # TODO: arthur: Document these constants
 PROFILES_GROUP_NAME = "profiles"
-TRENDS_GROUP_NAME = 'trends'
-TIME_SET_DSET_NAME = 'time_set'
-META_GROUP_NAME = 'meta'
-PROFILES_STATISTICS_DSET_NAME_SUFFIX = '_statistics'
-RESULTS_FOLDER_NAME = 'results'
-RESULT_FILE_PREFIX = 'results_'
+TRENDS_GROUP_NAME = "trends"
+TIME_SET_DSET_NAME = "time_set"
+META_GROUP_NAME = "meta"
+PROFILES_STATISTICS_DSET_NAME_SUFFIX = "_statistics"
+RESULTS_FOLDER_NAME = "results"
+RESULT_FILE_PREFIX = "results_"
 
 
 class HydrodynamicModelType(Enum):
