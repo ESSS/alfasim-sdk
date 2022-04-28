@@ -220,6 +220,9 @@ from alfasim_sdk._internal.constants import DEFAULT_TEMPERATURE_IN_K
 from alfasim_sdk._internal.constants import DrainageRateMode
 from alfasim_sdk._internal.constants import DROPLET_FIELD
 from alfasim_sdk._internal.constants import EmulsionModelType
+from alfasim_sdk._internal.constants import EmulsionRelativeViscosityModelType
+from alfasim_sdk._internal.constants import EmulsionDropletSizeModelType
+from alfasim_sdk._internal.constants import EmulsionInversionPointModelType
 from alfasim_sdk._internal.constants import EnergyModel
 from alfasim_sdk._internal.constants import EnergyModelPrimaryVariable
 from alfasim_sdk._internal.constants import EquationOfStateType
@@ -363,6 +366,9 @@ __all__ = [
     "DrainageRateMode",
     "EXTRAS_REQUIRED_VERSION_KEY",
     "EmulsionModelType",
+    "EmulsionRelativeViscosityModelType",
+    "EmulsionDropletSizeModelType",
+    "EmulsionInversionPointModelType",
     "EnergyModel",
     "EnergyModelPrimaryVariable",
     "Enum",

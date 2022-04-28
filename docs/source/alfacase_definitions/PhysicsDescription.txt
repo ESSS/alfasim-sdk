@@ -14,6 +14,10 @@
             restart_filepath: \ :class:`Optional <typing.Optional>`\[Path] = None
             keep_former_results: bool = False
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  = EmulsionModelType.ModelDefault
+            enable_emulsion_model: bool = False
+            emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  = EmulsionRelativeViscosityModelType.Default
+            emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.Default
+            emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  = EmulsionInversionPointModelType.Default
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
 
@@ -30,5 +34,9 @@
             restart_filepath: string  # optional
             keep_former_results: boolean  # optional
             emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  # optional
+            enable_emulsion_model: boolean  # optional
+            emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  # optional
+            emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  # optional
+            emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
