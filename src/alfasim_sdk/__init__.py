@@ -311,6 +311,8 @@ from alfasim_sdk._internal.results_api import TimeSetInfoItem
 from alfasim_sdk._internal.results_api import read_global_metadata
 from alfasim_sdk._internal.results_api import BaseTimeStepIndexToMetaList
 from alfasim_sdk._internal.results_api import cwd
+from alfasim_sdk._internal.results_api import get_time_set_and_trend_from_trend_id
+from alfasim_sdk._internal.results_api import get_profile_from_profile_id
 
 # Plugins: Layouts imports
 from alfasim_sdk._internal.layout import tab
