@@ -283,6 +283,15 @@ from alfasim_sdk._internal.constants import CorrelationsOilViscosity
 from alfasim_sdk._internal.constants import CorrelationsGasViscosity
 from alfasim_sdk._internal.constants import CorrelationsSurfaceTension
 
+# TODO: arthur: reorder this
+from alfasim_sdk._internal.constants import PROFILES_GROUP_NAME
+from alfasim_sdk._internal.constants import TRENDS_GROUP_NAME
+from alfasim_sdk._internal.constants import TIME_SET_DSET_NAME
+from alfasim_sdk._internal.constants import META_GROUP_NAME
+from alfasim_sdk._internal.constants import PROFILES_STATISTICS_DSET_NAME_SUFFIX
+from alfasim_sdk._internal.constants import RESULTS_FOLDER_NAME
+from alfasim_sdk._internal.constants import RESULT_FILE_PREFIX
+
 # Plugins: Layouts imports
 from alfasim_sdk._internal.layout import tab
 from alfasim_sdk._internal.layout import tabs
