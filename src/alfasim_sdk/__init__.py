@@ -292,6 +292,26 @@ from alfasim_sdk._internal.constants import PROFILES_STATISTICS_DSET_NAME_SUFFIX
 from alfasim_sdk._internal.constants import RESULTS_FOLDER_NAME
 from alfasim_sdk._internal.constants import RESULT_FILE_PREFIX
 
+
+# SDK: Results API imports
+from alfasim_sdk._internal.results_api import ALFASimResultMetadata
+from alfasim_sdk._internal.results_api import load_result_files
+from alfasim_sdk._internal.results_api import read_metadata
+from alfasim_sdk._internal.results_api import read_time_set_info
+from alfasim_sdk._internal.results_api import read_profiles_data
+from alfasim_sdk._internal.results_api import read_profiles_domain_data
+from alfasim_sdk._internal.results_api import read_profiles_local_statistics
+from alfasim_sdk._internal.results_api import read_trends_data
+from alfasim_sdk._internal.results_api import read_time_sets
+from alfasim_sdk._internal.results_api import ResultsNeedFullReloadError
+from alfasim_sdk._internal.results_api import map_output_key_to_time_set_key
+from alfasim_sdk._internal.results_api import map_base_time_set_to_time_set_keys
+from alfasim_sdk._internal.results_api import get_number_of_base_time_steps_from
+from alfasim_sdk._internal.results_api import TimeSetInfoItem
+from alfasim_sdk._internal.results_api import read_global_metadata
+from alfasim_sdk._internal.results_api import BaseTimeStepIndexToMetaList
+from alfasim_sdk._internal.results_api import cwd
+
 # Plugins: Layouts imports
 from alfasim_sdk._internal.layout import tab
 from alfasim_sdk._internal.layout import tabs
