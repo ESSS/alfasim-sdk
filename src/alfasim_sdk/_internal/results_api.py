@@ -1152,12 +1152,16 @@ def get_time_set_and_trend_from_trend_id(trend_id, results_metadata):
 
 
 def get_profile_from_profile_id(profile_id, results_metadata, timestep_id):
-    profile_domain_values = read_profiles_domain_data(results_metadata, [profile_id], timestep_id)[profile_id]
-    profile_domain_unit = results_metadata.profiles[profile_id]['domain_unit']
-    
+    profile_domain_values = read_profiles_domain_data(
+        results_metadata, [profile_id], timestep_id
+    )[profile_id]
+    profile_domain_unit = results_metadata.profiles[profile_id]["domain_unit"]
+
     profile_values = read_profiles_data(results_metadata, [profile_id], timestep_id)[
         profile_id
     ]
     profile_unit = results_metadata.profiles[profile_id]["unit"]
-    
-    return Array(profile_domain_values, profile_domain_unit), Array(profile_values, profile_unit)
+
+    return Array(profile_domain_values, profile_domain_unit), Array(
+        profile_values, profile_unit
+    )
