@@ -383,9 +383,9 @@ physics_description_schema = Map(
         Optional("keep_former_results"): Bool(),
         Optional("emulsion_model"): Enum(['no_model', 'model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012', 'brinkman1952_and_yeh1964', 'from_plugin']),
         Optional("enable_emulsion_model"): Bool(),
-        Optional("emulsion_relative_viscosity_model"): Enum(['default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b']),
-        Optional("emulsion_droplet_size_model"): Enum(['default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
-        Optional("emulsion_inversion_point_model"): Enum(['default', 'brinkman1952_and_yeh1964']),
+        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b']),
+        Optional("emulsion_droplet_size_model"): Enum(['model_default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
+        Optional("emulsion_inversion_point_model"): Enum(['model_default', 'brinkman1952_and_yeh1964']),
         Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
     }
@@ -1097,5 +1097,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: b3e13b474ee13cb5ac5d8d659271ba80)
+# [[[end]]] (checksum: 3b479c2b7cce3c19a3c1e0e2a6e970a6)
 # fmt: on

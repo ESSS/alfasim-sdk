@@ -109,7 +109,7 @@ class EmulsionModelType(Enum):
 
 
 class EmulsionRelativeViscosityModelType(Enum):
-    Default = "default"
+    ModelDefault = "model_default"
     Taylor1932 = "taylor1932"
     Brinkman1952 = "brinkman1952"
     Mooney1951a = "mooney1951a"
@@ -117,7 +117,7 @@ class EmulsionRelativeViscosityModelType(Enum):
 
 
 class EmulsionDropletSizeModelType(Enum):
-    Default = "default"
+    ModelDefault = "model_default"
     Hinze1955 = "hinze1955"
     Sleicher1962 = "sleicher1962"
     Brauner2001 = "brauner2001"
@@ -125,7 +125,7 @@ class EmulsionDropletSizeModelType(Enum):
 
 
 class EmulsionInversionPointModelType(Enum):
-    Default = "default"
+    ModelDefault = "model_default"
     Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
 
 
