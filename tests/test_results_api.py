@@ -16,6 +16,9 @@ def test_read_results(datadir, num_regression):
 
     results_metadata = read_metadata(datadir / RESULTS_FOLDER_NAME)
 
+    # TODO: arthur: We need a better way to identify the ids from the .alfacase
+    # file. Since the goal of the first version of the API is for AVEVA to handle
+    # some cases, maybe we can find a workaround.
     trend_ids = [key for key in results_metadata.trends.keys() if curve_name in key]
     profile_ids = [key for key in results_metadata.profiles.keys() if curve_name in key]
 
