@@ -2641,13 +2641,10 @@ class PhysicsDescription:
         default=None, validator=optional(instance_of(Path))
     )
     keep_former_results: bool = attr.ib(default=False, validator=instance_of(bool))
-    emulsion_model = attrib_enum(default=constants.EmulsionModelType.ModelDefault)
     enable_emulsion_model: bool = attr.ib(default=False, validator=instance_of(bool))
     emulsion_relative_viscosity_model = attrib_enum(default=constants.EmulsionRelativeViscosityModelType.ModelDefault)
     emulsion_droplet_size_model = attrib_enum(default=constants.EmulsionDropletSizeModelType.ModelDefault)
     emulsion_inversion_point_model = attrib_enum(default=constants.EmulsionInversionPointModelType.ModelDefault)
-
-    # TODO: think about the plugin handling
     emulsion_model_plugin_id: str = attr.ib(default="", validator=instance_of(str))
 
     flash_model = attrib_enum(default=constants.FlashModel.HydrocarbonAndWater)

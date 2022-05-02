@@ -10,8 +10,9 @@
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import (Bool, Enum, Float, Int, Map, MapPattern,  # noreorder
-                        Optional, Seq, Str)
+from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
+
+
 
 bip_description_schema = Map(
     {
@@ -380,7 +381,6 @@ physics_description_schema = Map(
         Optional("initial_condition_strategy"): Enum(['constant', 'steady_state', 'restart']),
         Optional("restart_filepath"): Str(),
         Optional("keep_former_results"): Bool(),
-        Optional("emulsion_model"): Enum(['no_model', 'model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012', 'brinkman1952_and_yeh1964', 'from_plugin']),
         Optional("enable_emulsion_model"): Bool(),
         Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'from_plugin']),
         Optional("emulsion_droplet_size_model"): Enum(['model_default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
@@ -1096,5 +1096,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 2a1d1d704a1e9ad2916c5c8456de1c5d)
+# [[[end]]] (checksum: 0e4abefb2a2b68a81975078e75d1fa80)
 # fmt: on

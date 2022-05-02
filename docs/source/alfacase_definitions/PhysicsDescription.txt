@@ -13,7 +13,6 @@
             initial_condition_strategy: \ :class:`InitialConditionStrategyType <alfasim_sdk._internal.constants.InitialConditionStrategyType>`\  = InitialConditionStrategyType.Constant
             restart_filepath: \ :class:`Optional <typing.Optional>`\[Path] = None
             keep_former_results: bool = False
-            emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  = EmulsionModelType.ModelDefault
             enable_emulsion_model: bool = False
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  = EmulsionRelativeViscosityModelType.ModelDefault
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.ModelDefault
@@ -33,7 +32,6 @@
             initial_condition_strategy: \ :class:`InitialConditionStrategyType <alfasim_sdk._internal.constants.InitialConditionStrategyType>`\  # optional
             restart_filepath: string  # optional
             keep_former_results: boolean  # optional
-            emulsion_model: \ :class:`EmulsionModelType <alfasim_sdk._internal.constants.EmulsionModelType>`\  # optional
             enable_emulsion_model: boolean  # optional
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  # optional
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  # optional
