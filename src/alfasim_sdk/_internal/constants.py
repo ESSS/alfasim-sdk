@@ -114,6 +114,7 @@ class EmulsionRelativeViscosityModelType(Enum):
     Brinkman1952 = "brinkman1952"
     Mooney1951a = "mooney1951a"
     Mooney1951b = "mooney1951b"
+    FromPlugin = "from_plugin"
 
 
 class EmulsionDropletSizeModelType(Enum):
@@ -126,6 +127,7 @@ class EmulsionDropletSizeModelType(Enum):
 
 class EmulsionInversionPointModelType(Enum):
     ModelDefault = "model_default"
+    BraunerUllmann2002 = "brauner_and_ullmann_2002"
     Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
 
 
