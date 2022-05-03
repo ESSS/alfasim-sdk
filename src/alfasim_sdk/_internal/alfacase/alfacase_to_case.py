@@ -1902,7 +1902,7 @@ def load_physics_description(
         'restart_filepath': load_path,
         'keep_former_results': load_value,
         'emulsion_model': get_enum_loader(enum_class=constants.EmulsionModelType),
-        'enable_emulsion_model': load_value,
+        'emulsion_model_enabled': load_value,
         'emulsion_relative_viscosity_model': get_enum_loader(enum_class=constants.EmulsionRelativeViscosityModelType),
         'emulsion_droplet_size_model': get_enum_loader(enum_class=constants.EmulsionDropletSizeModelType),
         'emulsion_inversion_point_model': get_enum_loader(enum_class=constants.EmulsionInversionPointModelType),

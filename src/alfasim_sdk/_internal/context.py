@@ -142,8 +142,7 @@ class PhysicsOptionsInfo:
 
     The following option can be accessed:
 
-    Emulsion Model: Informs which emulsion model the application is currently using.
-    For more information about all options available check :py:class:`~alfasim_sdk._internal.constants.EmulsionModelType`
+    Emulsion Model: Informs the relative viscosity, droplet size, and inversion point emulsion models
 
     Solids Model: Informs the current solid model being used by the application
     For more information about all options available check :py:class:`~alfasim_sdk._internal.constants.SolidsModelType`
@@ -377,7 +376,7 @@ class Context:
             PhysicsOptionsInfo( [...] )
 
             >>> ctx.get_physics_options().emulsion_model.value
-            'EmulsionModelType.brinkman1952'
+            EmulsionModelInfo( [ ... ] )
 
             >>> ctx.get_physics_options().hydrodynamic_model
             HydrodynamicModelInfo( [ ... ] )
