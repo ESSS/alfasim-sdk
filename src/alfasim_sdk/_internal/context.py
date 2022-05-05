@@ -1,13 +1,20 @@
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 import attr
-from attr.validators import deep_iterable, in_, instance_of, optional
+from attr.validators import deep_iterable
+from attr.validators import in_
+from attr.validators import instance_of
+from attr.validators import optional
 from barril.units import Scalar
 
-from alfasim_sdk._internal.constants import (
-    EmulsionDropletSizeModelType, EmulsionInversionPointModelType,
-    EmulsionRelativeViscosityModelType, HydrodynamicModelType, SolidsModelType)
-from alfasim_sdk._internal.validators import list_of_strings, non_empty_str
+from alfasim_sdk._internal.constants import EmulsionDropletSizeModelType
+from alfasim_sdk._internal.constants import EmulsionInversionPointModelType
+from alfasim_sdk._internal.constants import EmulsionRelativeViscosityModelType
+from alfasim_sdk._internal.constants import HydrodynamicModelType
+from alfasim_sdk._internal.constants import SolidsModelType
+from alfasim_sdk._internal.validators import list_of_strings
+from alfasim_sdk._internal.validators import non_empty_str
 
 
 @attr.s(frozen=True)
@@ -123,6 +130,7 @@ class EmulsionModelInfo:
     EmulsionModelInfo provides information about whether the emulsion model is enabled and the models used for relative
     viscosity, droplet size, and inversion point.
     """
+
     enabled = attr.attrib(type=bool, validator=instance_of(bool))
     relative_viscosity_model: EmulsionRelativeViscosityModelType = attr.attrib(
         validator=in_(EmulsionRelativeViscosityModelType)
