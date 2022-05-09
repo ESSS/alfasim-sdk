@@ -34,28 +34,35 @@ History
 * Examples on how to update previous .alfacase files with emulsion model:
 
 	- Relative viscosity model:
-		- Before::
+
+    * Before::
 
 			emulsion_model: taylor1932
 
-		- After::
+		* After::
 
 			emulsion_model_enabled: True
 			emulsion_relative_viscosity_model: taylor1932
 
 	- Droplet size model:
+
 		- Before::
+
 			emulsion_model: hinze1955
 
 		- After::
+
 			emulsion_model_enabled: True
 			emulsion_droplet_size_model: hinze1955
 
 	- Inversion point model:
+
 		- Before::
+
 			emulsion_model: brinkman1952_and_yeh1964
 
 		- After::
+
 			emulsion_model_enabled: True
 			emulsion_inversion_point_model: brinkman1952_and_yeh1964
 
