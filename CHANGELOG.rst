@@ -42,7 +42,7 @@ History
 			emulsion_model_enabled: True
 			emulsion_relative_viscosity_model: taylor1932
 
-	- Droplet size model::
+	- Droplet size model:
 		- Before::
 			emulsion_model: hinze1955
 
@@ -50,7 +50,7 @@ History
 			emulsion_model_enabled: True
 			emulsion_droplet_size_model: hinze1955
 
-	- Inversion point model
+	- Inversion point model:
 		- Before::
 			emulsion_model: brinkman1952_and_yeh1964
 
