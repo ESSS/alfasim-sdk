@@ -2,8 +2,7 @@
 History
 =======
 
-
-0.13.0 (unreleased)
+0.13.0 (2022-04-19)
 ===================
 
 * Add black-oil properties to PVT Correlations case description ```PvtModelCorrelationDescription```

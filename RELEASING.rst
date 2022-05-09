@@ -10,4 +10,4 @@ Any other required changes related to the release should also be included in the
 
 When all changes are ready the branch should be tagged ``v<release-number>`` and merged.
 
-After released it is advisable to update https://github.com/ESSS/alfasim-sdk/blob/master/src/alfasim_sdk/_internal/version.py with the next release version (increase minor version, for example ``0.6.0`` to ``0.7.0``) and ``HISTORY.rst`` to add a section to next unreleased version.
+After released it is advisable to update https://github.com/ESSS/alfasim-sdk/blob/master/src/alfasim_sdk/_internal/version.py with the next release version (increase minor version, for example ``0.6.0`` to ``0.7.0``) and ``CHANGELOG.rst`` to add a section to next unreleased version.
