@@ -29,6 +29,33 @@ History
 
 * **Breaking Change**:  Change signature of hook ``update_internal_deposition_layer``. Now, instead of the deposition thickness, it is returned the phase index of phase being deposited and the thickness variation rate.
 * **Breaking Change**:  Change signature of hook ``calculate_relative_emulsion_viscosity`` and function ``get_relative_emulsion_viscosity``. Indices of continuous and dispersed fields were removed.
+* **Breaking Change**: Change in ``PhysicsDescription``: split emulsion model into relative viscosity, droplet size, and inversion point models and a flag to activate the emulsion models. 
+
+* Examples on how to update previous .alfacase files with emulsion model:
+	- Relative viscosity model::
+		- Before::			
+			emulsion_model: taylor1932
+			
+		- After::
+			emulsion_model_enabled: True
+			emulsion_relative_viscosity_model: taylor1932
+	
+	- Droplet size model::
+		- Before::			
+			emulsion_model: hinze1955
+			
+		- After::
+			emulsion_model_enabled: True
+			emulsion_droplet_size_model: hinze1955
+			
+	- Inversion point model
+		- Before::			
+			emulsion_model: brinkman1952_and_yeh1964
+			
+		- After::
+			emulsion_model_enabled: True
+			emulsion_inversion_point_model: brinkman1952_and_yeh1964
+
 * Add ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
 * Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
 * Add ``flow_pattern_model`` and ``regime_capturing_mesh_treshold`` attributes to ``PipeDescription``.
