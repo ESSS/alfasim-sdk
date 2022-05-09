@@ -37,34 +37,34 @@ History
 
     * Before::
 
-      emulsion_model: taylor1932
+        emulsion_model: taylor1932
 
     * After::
 
-      emulsion_model_enabled: True
-      emulsion_relative_viscosity_model: taylor1932
+        emulsion_model_enabled: True
+        emulsion_relative_viscosity_model: taylor1932
 
   - Droplet size model:
 
     - Before::
 
-      emulsion_model: hinze1955
+        emulsion_model: hinze1955
 
     - After::
 
-      emulsion_model_enabled: True
-      emulsion_droplet_size_model: hinze1955
+        emulsion_model_enabled: True
+        emulsion_droplet_size_model: hinze1955
 
   - Inversion point model:
 
     - Before::
 
-      emulsion_model: brinkman1952_and_yeh1964
+        emulsion_model: brinkman1952_and_yeh1964
 
     - After::
 
-      emulsion_model_enabled: True
-      emulsion_inversion_point_model: brinkman1952_and_yeh1964
+        emulsion_model_enabled: True
+        emulsion_inversion_point_model: brinkman1952_and_yeh1964
 
 * Add ``ControllerTrendDescription``, a new type of trend available in ``TrendsOutputDescription``.
 * Add method ``get_deposition_thickness`` to retrieve the current thickness of a phase deposited on pipe wall.
