@@ -32,6 +32,7 @@ History
 * **Breaking Change**: Change in ``PhysicsDescription``: split emulsion model into relative viscosity, droplet size, and inversion point models and a flag to activate the emulsion models.
 
 * Examples on how to update previous .alfacase files with emulsion model:
+
 	- Relative viscosity model:
 		- Before::
 
