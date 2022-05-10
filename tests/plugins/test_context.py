@@ -3,10 +3,13 @@ import re
 import pytest
 from barril.units import Scalar
 
-from alfasim_sdk._internal.constants import EmulsionModelType
+from alfasim_sdk._internal.constants import EmulsionDropletSizeModelType
+from alfasim_sdk._internal.constants import EmulsionInversionPointModelType
+from alfasim_sdk._internal.constants import EmulsionRelativeViscosityModelType
 from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import SolidsModelType
 from alfasim_sdk._internal.context import EdgeInfo
+from alfasim_sdk._internal.context import EmulsionModelInfo
 from alfasim_sdk._internal.context import HydrodynamicModelInfo
 from alfasim_sdk._internal.context import NodeInfo
 from alfasim_sdk._internal.context import PhysicsOptionsInfo
@@ -122,7 +125,12 @@ def test_nodes_and_edges_info(class_with_info):
 
 def test_physics_option():
     assert PhysicsOptionsInfo(
-        emulsion_model=EmulsionModelType.Boxall2012,
+        emulsion_model=EmulsionModelInfo(
+            enabled=True,
+            relative_viscosity_model=EmulsionRelativeViscosityModelType.Mooney1951a,
+            droplet_size_model=EmulsionDropletSizeModelType.Boxall2012,
+            inversion_point_model=EmulsionInversionPointModelType.BraunerUllmann2002,
+        ),
         solids_model=SolidsModelType.NoModel,
         hydrodynamic_model=HydrodynamicModelInfo(
             selected_base_type=HydrodynamicModelType.ThreeLayersGasOilWater,

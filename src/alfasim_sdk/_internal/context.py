@@ -8,7 +8,9 @@ from attr.validators import instance_of
 from attr.validators import optional
 from barril.units import Scalar
 
-from alfasim_sdk._internal.constants import EmulsionModelType
+from alfasim_sdk._internal.constants import EmulsionDropletSizeModelType
+from alfasim_sdk._internal.constants import EmulsionInversionPointModelType
+from alfasim_sdk._internal.constants import EmulsionRelativeViscosityModelType
 from alfasim_sdk._internal.constants import HydrodynamicModelType
 from alfasim_sdk._internal.constants import SolidsModelType
 from alfasim_sdk._internal.validators import list_of_strings
@@ -123,14 +125,32 @@ class HydrodynamicModelInfo:
 
 
 @attr.s(frozen=True)
+class EmulsionModelInfo:
+    """
+    EmulsionModelInfo provides information about whether the emulsion model is enabled and the models used for relative
+    viscosity, droplet size, and inversion point.
+    """
+
+    enabled = attr.attrib(type=bool, validator=instance_of(bool))
+    relative_viscosity_model: EmulsionRelativeViscosityModelType = attr.attrib(
+        validator=in_(EmulsionRelativeViscosityModelType)
+    )
+    droplet_size_model: EmulsionDropletSizeModelType = attr.attrib(
+        validator=in_(EmulsionDropletSizeModelType)
+    )
+    inversion_point_model: EmulsionInversionPointModelType = attr.attrib(
+        validator=in_(EmulsionInversionPointModelType)
+    )
+
+
+@attr.s(frozen=True)
 class PhysicsOptionsInfo:
     """
     ``PhysicsOptionsInfo`` provides information about the physics options available at ``ALFAsim``.
 
     The following option can be accessed:
 
-    Emulsion Model: Informs which emulsion model the application is currently using.
-    For more information about all options available check :py:class:`~alfasim_sdk._internal.constants.EmulsionModelType`
+    Emulsion Model: Informs the relative viscosity, droplet size, and inversion point emulsion models
 
     Solids Model: Informs the current solid model being used by the application
     For more information about all options available check :py:class:`~alfasim_sdk._internal.constants.SolidsModelType`
@@ -139,7 +159,9 @@ class PhysicsOptionsInfo:
     the application is currently using.
     """
 
-    emulsion_model: EmulsionModelType = attr.attrib(validator=in_(EmulsionModelType))
+    emulsion_model: EmulsionModelInfo = attr.attrib(
+        validator=instance_of(EmulsionModelInfo)
+    )
     solids_model: SolidsModelType = attr.attrib(validator=in_(SolidsModelType))
     hydrodynamic_model: HydrodynamicModelInfo = attr.attrib(
         validator=instance_of(HydrodynamicModelInfo)
@@ -362,7 +384,7 @@ class Context:
             PhysicsOptionsInfo( [...] )
 
             >>> ctx.get_physics_options().emulsion_model.value
-            'EmulsionModelType.brinkman1952'
+            EmulsionModelInfo( [ ... ] )
 
             >>> ctx.get_physics_options().hydrodynamic_model
             HydrodynamicModelInfo( [ ... ] )

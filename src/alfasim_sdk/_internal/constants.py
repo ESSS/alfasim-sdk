@@ -108,6 +108,29 @@ class EmulsionModelType(Enum):
     FromPlugin = "from_plugin"
 
 
+class EmulsionRelativeViscosityModelType(Enum):
+    ModelDefault = "model_default"
+    Taylor1932 = "taylor1932"
+    Brinkman1952 = "brinkman1952"
+    Mooney1951a = "mooney1951a"
+    Mooney1951b = "mooney1951b"
+    FromPlugin = "from_plugin"
+
+
+class EmulsionDropletSizeModelType(Enum):
+    ModelDefault = "model_default"
+    Hinze1955 = "hinze1955"
+    Sleicher1962 = "sleicher1962"
+    Brauner2001 = "brauner2001"
+    Boxall2012 = "boxall2012"
+
+
+class EmulsionInversionPointModelType(Enum):
+    ModelDefault = "model_default"
+    BraunerUllmann2002 = "brauner_and_ullmann_2002"
+    Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
+
+
 class SolidsModelType(Enum):
     """
     Informs which solid model should be used:
