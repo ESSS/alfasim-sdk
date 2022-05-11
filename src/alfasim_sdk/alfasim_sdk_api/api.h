@@ -908,6 +908,8 @@ DLL_EXPORT int get_liq_liq_shear_force_per_volume_input_variable(
     @param[in] mu_disp Dispersed Field Viscosity [Pa.s].
     @param[in] mu_cont Continuous Field Viscosity [Pa.s].
     @param[in] alpha_disp_in_layer Dispersed Field Volume Fraction in the layer (emulsion) [m3 of dispersed field /m3 of layer].
+    @param[in] T Fluid temperature [K].
+    @param[in] water_in_oil True when water is dispersed in oil, otherwise it is a dispersion of oil in water.
     @return An #error_code value.
 */
 DLL_EXPORT int get_relative_emulsion_viscosity(
@@ -915,7 +917,9 @@ DLL_EXPORT int get_relative_emulsion_viscosity(
     double* out,
     double mu_disp,
     double mu_cont,
-    double alpha_disp_in_layer
+    double alpha_disp_in_layer,
+    double T,
+    bool water_in_oil
 );
 
 #endif
