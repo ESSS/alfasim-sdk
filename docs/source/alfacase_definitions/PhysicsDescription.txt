@@ -15,6 +15,10 @@
             keep_former_results: bool = False
             emulsion_model_enabled: bool = True
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  = EmulsionRelativeViscosityModelType.ModelDefault
+            emulsion_pal_rhodes_phi_rel_100: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.765, '-', 'dimensionless')
+            emulsion_woelflin_a: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(4.2, '-', 'dimensionless')
+            emulsion_woelflin_b: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(2.5, '-', 'dimensionless')
+            emulsion_table_based_rel_visc_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(m3/m3, -)[(0.0, 1.0)]
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.ModelDefault
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  = EmulsionInversionPointModelType.ModelDefault
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
@@ -34,6 +38,22 @@
             keep_former_results: boolean  # optional
             emulsion_model_enabled: boolean  # optional
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  # optional
+            emulsion_pal_rhodes_phi_rel_100:  # optional
+                value: number
+                unit: string
+            emulsion_woelflin_a:  # optional
+                value: number
+                unit: string
+            emulsion_woelflin_b:  # optional
+                value: number
+                unit: string
+            emulsion_table_based_rel_visc_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  # optional
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional

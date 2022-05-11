@@ -2645,6 +2645,12 @@ class PhysicsDescription:
     emulsion_relative_viscosity_model = attrib_enum(
         default=constants.EmulsionRelativeViscosityModelType.ModelDefault
     )
+    emulsion_pal_rhodes_phi_rel_100 = attrib_scalar(default=Scalar("dimensionless", 0.765, "-"))
+    emulsion_woelflin_a = attrib_scalar(default=Scalar("dimensionless", 4.2, "-"))
+    emulsion_woelflin_b = attrib_scalar(default=Scalar("dimensionless", 2.5, "-"))
+    emulsion_table_based_rel_visc_curve = attrib_curve(
+        default=Curve(Array("volume per volume", [0.], "m3/m3"), Array("dimensionless", [1.], "-"))
+    )
     emulsion_droplet_size_model = attrib_enum(
         default=constants.EmulsionDropletSizeModelType.ModelDefault
     )
