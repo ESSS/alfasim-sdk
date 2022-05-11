@@ -1785,6 +1785,8 @@ def calculate_relative_emulsion_viscosity(
     mu_disp: "double",
     mu_cont: "double",
     alpha_disp_in_layer: "double",
+    T: "double",
+    water_in_oil: "bool",
 ) -> "int":
     """
     **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont, double alpha_disp_in_layer)``
