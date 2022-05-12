@@ -2,6 +2,7 @@ cogapp
 coverage
 invoke
 more-itertools
+pandas
 pytest
 pytest-cov
 pytest-mock
