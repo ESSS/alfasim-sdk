@@ -129,6 +129,7 @@ class EmulsionInversionPointModelType(Enum):
     ModelDefault = "model_default"
     BraunerUllmann2002 = "brauner_and_ullmann_2002"
     Brinkman1952AndYeh1964 = "brinkman1952_and_yeh1964"
+    Constant = "constant"
 
 
 class SolidsModelType(Enum):

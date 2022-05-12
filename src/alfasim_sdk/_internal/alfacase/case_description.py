@@ -2651,12 +2651,19 @@ class PhysicsDescription:
     emulsion_inversion_point_model = attrib_enum(
         default=constants.EmulsionInversionPointModelType.ModelDefault
     )
+    emulsion_inversion_water_cut = attrib_scalar(default=Scalar("volume per volume", 0.4, "m3/m3"))
     emulsion_model_plugin_id: str = attr.ib(default="", validator=instance_of(str))
 
     flash_model = attrib_enum(default=constants.FlashModel.HydrocarbonAndWater)
     correlations_package = attrib_enum(
         default=constants.CorrelationPackageType.Classical
     )
+
+    @emulsion_inversion_water_cut.validator
+    def _validate_inversion_point_water_cut(self, attribute, value):
+        assert (
+            isinstance(value, Scalar) and value.GetCategory() == "volume per volume" and 0. <= value.GetValue('m3/m3') <= 1.
+        ), "Invalid inversion point water-cut"
 
 
 @attr.s()
