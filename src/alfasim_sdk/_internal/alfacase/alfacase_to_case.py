@@ -322,7 +322,7 @@ def get_dict_of_arrays_loader(
     )
 
 
-def load_curve(key: str, alfacase_content: DescriptionDocument, category: str) -> Curve:
+def load_curve(key: str, alfacase_content: DescriptionDocument, category: str, domain_category: str="time") -> Curve:
     """
     Create a barril.curve.curve.Curve instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -330,13 +330,17 @@ def load_curve(key: str, alfacase_content: DescriptionDocument, category: str) -
     curve_in_alfacase = alfacase_content[key]
     return Curve(
         load_array("image", curve_in_alfacase, category),
-        load_array("domain", curve_in_alfacase, "time"),
+        load_array("domain", curve_in_alfacase, domain_category),
     )
 
 
 @lru_cache(maxsize=None)
 def get_curve_loader(
-    *, category: Optional[str] = None, from_unit: Optional[str] = None
+    *,
+    category: Optional[str]=None,
+    from_unit: Optional[str]=None,
+    domain_category: Optional[str]=None,
+    from_domain_unit: Optional[str]=None,
 ) -> Callable:
     """
     Return a load_curve function pre-populated with the category
@@ -344,8 +348,15 @@ def get_curve_loader(
     If ``from_unit`` is provided, the category parameter will be filled with
     the default category for the given unit.
     """
+    if domain_category is not None or from_domain_unit is not None:
+        return partial(
+            load_curve,
+            category=_obtain_category_for_scalar(category, from_unit),
+            domain_category=_obtain_category_for_scalar(domain_category, from_domain_unit),
+        )
     return partial(
-        load_curve, category=_obtain_category_for_scalar(category, from_unit)
+            load_curve,
+            category=_obtain_category_for_scalar(category, from_unit),
     )
 
 
@@ -1904,6 +1915,7 @@ def load_physics_description(
         'emulsion_model': get_enum_loader(enum_class=constants.EmulsionModelType),
         'emulsion_model_enabled': load_value,
         'emulsion_relative_viscosity_model': get_enum_loader(enum_class=constants.EmulsionRelativeViscosityModelType),
+        'emulsion_relative_viscosity_tuning_factor': get_curve_loader(category='dimensionless', domain_category='volume per volume'),
         'emulsion_droplet_size_model': get_enum_loader(enum_class=constants.EmulsionDropletSizeModelType),
         'emulsion_inversion_point_model': get_enum_loader(enum_class=constants.EmulsionInversionPointModelType),
         'emulsion_model_plugin_id': load_value,

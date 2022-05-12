@@ -2645,6 +2645,11 @@ class PhysicsDescription:
     emulsion_relative_viscosity_model = attrib_enum(
         default=constants.EmulsionRelativeViscosityModelType.ModelDefault
     )
+
+    emulsion_relative_viscosity_tuning_factor = attrib_curve(
+        default=Curve(Array("volume per volume", [0.], "m3/m3"), Array("dimensionless", [1.], "-"))
+    )
+
     emulsion_droplet_size_model = attrib_enum(
         default=constants.EmulsionDropletSizeModelType.ModelDefault
     )
