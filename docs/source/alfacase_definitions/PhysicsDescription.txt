@@ -21,6 +21,7 @@
             emulsion_table_based_rel_visc_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(m3/m3, -)[(0.0, 1.0)]
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.ModelDefault
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  = EmulsionInversionPointModelType.ModelDefault
+            emulsion_inversion_water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.4, 'm3/m3', 'volume per volume')
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
 
@@ -56,5 +57,8 @@
                     unit: string
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  # optional
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  # optional
+            emulsion_inversion_water_cut:  # optional
+                value: number
+                unit: string
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
