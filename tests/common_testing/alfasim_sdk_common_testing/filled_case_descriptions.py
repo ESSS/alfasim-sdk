@@ -630,7 +630,9 @@ PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     correlations_package=constants.CorrelationPackageType.Alfasim,
     emulsion_model_enabled=True,
     emulsion_relative_viscosity_model=constants.EmulsionRelativeViscosityModelType.Brinkman1952,
-    emulsion_relative_viscosity_tuning_factor=Curve(image=Array([1., 1.5, 2., 1.], '-'), domain=Array([0., 0.4, 0.6, 1.], '-')),
+    emulsion_relative_viscosity_tuning_factor=Curve(
+        image=Array([1.0, 1.5, 2.0, 1.0], "-"), domain=Array([0.0, 0.4, 0.6, 1.0], "-")
+    ),
     emulsion_droplet_size_model=constants.EmulsionDropletSizeModelType.Brauner2001,
     emulsion_inversion_point_model=constants.EmulsionInversionPointModelType.Brinkman1952AndYeh1964,
     flash_model=constants.FlashModel.HydrocarbonOnly,

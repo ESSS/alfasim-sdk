@@ -322,7 +322,12 @@ def get_dict_of_arrays_loader(
     )
 
 
-def load_curve(key: str, alfacase_content: DescriptionDocument, category: str, domain_category: str="time") -> Curve:
+def load_curve(
+    key: str,
+    alfacase_content: DescriptionDocument,
+    category: str,
+    domain_category: str = "time",
+) -> Curve:
     """
     Create a barril.curve.curve.Curve instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -337,10 +342,10 @@ def load_curve(key: str, alfacase_content: DescriptionDocument, category: str, d
 @lru_cache(maxsize=None)
 def get_curve_loader(
     *,
-    category: Optional[str]=None,
-    from_unit: Optional[str]=None,
-    domain_category: Optional[str]=None,
-    from_domain_unit: Optional[str]=None,
+    category: Optional[str] = None,
+    from_unit: Optional[str] = None,
+    domain_category: Optional[str] = None,
+    from_domain_unit: Optional[str] = None,
 ) -> Callable:
     """
     Return a load_curve function pre-populated with the category
@@ -352,11 +357,13 @@ def get_curve_loader(
         return partial(
             load_curve,
             category=_obtain_category_for_scalar(category, from_unit),
-            domain_category=_obtain_category_for_scalar(domain_category, from_domain_unit),
+            domain_category=_obtain_category_for_scalar(
+                domain_category, from_domain_unit
+            ),
         )
     return partial(
-            load_curve,
-            category=_obtain_category_for_scalar(category, from_unit),
+        load_curve,
+        category=_obtain_category_for_scalar(category, from_unit),
     )
 
 

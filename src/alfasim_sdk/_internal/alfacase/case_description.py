@@ -2647,7 +2647,10 @@ class PhysicsDescription:
     )
 
     emulsion_relative_viscosity_tuning_factor = attrib_curve(
-        default=Curve(Array("dimensionless", [1.], "-"), Array("volume per volume", [0.], "m3/m3"))
+        default=Curve(
+            Array("dimensionless", [1.0], "-"),
+            Array("volume per volume", [0.0], "m3/m3"),
+        )
     )
 
     emulsion_droplet_size_model = attrib_enum(
