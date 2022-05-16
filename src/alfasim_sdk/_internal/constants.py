@@ -355,6 +355,7 @@ class MultiInputType(Enum):
 class PumpType(Enum):
     ConstantPressure = "constant_pressure"
     TableInterpolation = "table_interpolation"
+    ElectricSubmersiblePump = "electric_submersible_pump"
 
 
 class ValveOpeningType(Enum):

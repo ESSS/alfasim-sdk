@@ -603,15 +603,40 @@ class PumpEquipmentDescription:
     """
 
     position = attrib_scalar(category="length")
-    type = attrib_enum(default=constants.PumpType.ConstantPressure)
-    pressure_boost = attrib_scalar(default=Scalar(1.0e5, "Pa"))
+    flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
     thermal_efficiency = attrib_scalar(default=Scalar(100.0, "%"))
+
+    type = attrib_enum(default=constants.PumpType.ConstantPressure)
+
+    # Constant Pressure Boost Pump
+    pressure_boost = attrib_scalar(category="pressure", default=Scalar(1.0e5, "Pa"))
+
+    # Advanced (Table Interpolation) Pump
     table = attrib_instance(TablePumpDescription)
     speed_curve = attrib_instance(SpeedCurveDescription)
     speed_curve_interpolation_type = attrib_enum(
         default=constants.InterpolationType.Constant
     )
-    flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
+
+    # Electric Submersible Pump
+    esp_table = attrib_instance(TablePumpDescription)
+    # [[[cog
+    # cog_out_multi_input("esp_speed", "frequency", 0.0, "Hz")
+    # ]]]
+    # fmt: off
+    esp_speed_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    esp_speed = attrib_scalar(
+        default=Scalar('frequency', 0.0, 'Hz')
+    )
+    esp_speed_curve = attrib_curve(
+        default=Curve(Array('frequency', [], 'Hz'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 9a65fa0162cfc5854766d454c38be17e)
+    esp_number_of_stages: int = attr.ib(default=1, validator=instance_of(int))
+    esp_reference_density = attrib_scalar(
+        category="density", default=Scalar(0.0, "kg/m3")
+    )
 
 
 @attr.s(frozen=True, slots=True)

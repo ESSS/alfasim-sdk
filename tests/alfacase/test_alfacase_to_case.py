@@ -399,7 +399,6 @@ ALFACASE_TEST_CONFIG_MAP = {
     "PumpEquipmentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PUMP_DESCRIPTION,
         schema=schema.pump_equipment_description_schema,
-        is_dict=True,
     ),
     "TracersDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.TRACERS_DESCRIPTION,
