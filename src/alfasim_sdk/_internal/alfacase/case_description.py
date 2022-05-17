@@ -2645,6 +2645,14 @@ class PhysicsDescription:
     emulsion_relative_viscosity_model = attrib_enum(
         default=constants.EmulsionRelativeViscosityModelType.ModelDefault
     )
+
+    emulsion_relative_viscosity_tuning_factor = attrib_curve(
+        default=Curve(
+            image=Array("dimensionless", [1.0], "-"),  # tuning factor
+            domain=Array("volume per volume", [0.0], "m3/m3"),  # water-cut
+        )
+    )
+
     emulsion_droplet_size_model = attrib_enum(
         default=constants.EmulsionDropletSizeModelType.ModelDefault
     )
@@ -2668,6 +2676,21 @@ class PhysicsDescription:
             and value.GetCategory() == "volume per volume"
             and 0.0 <= value.GetValue("m3/m3") <= 1.0
         ), "Invalid inversion point water-cut"
+
+    @emulsion_relative_viscosity_tuning_factor.validator
+    def _validate_emulsion_relative_viscosity_tuning_factor(self, attribute, value):
+        assert isinstance(value, Curve), "Invalid tuning factor curve"
+        domain = value.GetDomain()
+        assert domain.GetCategory() == "volume per volume", "Invalid water-cut category"
+        domain_values = np.asarray(domain.GetValues("m3/m3"))
+        assert (
+            np.min(domain_values) >= 0.0 and np.max(domain_values) <= 1.0
+        ), "Invlid water-cut values"
+        image = value.GetImage()
+        assert (
+            image.GetCategory() == "dimensionless"
+            and np.min(image.GetValues("-")) >= 1.0e-5
+        ), "Tuning factor cannot be lower than 1e-5"
 
 
 @attr.s()

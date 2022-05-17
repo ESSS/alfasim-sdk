@@ -383,6 +383,12 @@ physics_description_schema = Map(
         Optional("keep_former_results"): Bool(),
         Optional("emulsion_model_enabled"): Bool(),
         Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'from_plugin']),
+        Optional("emulsion_relative_viscosity_tuning_factor"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
         Optional("emulsion_droplet_size_model"): Enum(['model_default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
         Optional("emulsion_inversion_point_model"): Enum(['model_default', 'brauner_and_ullmann_2002', 'brinkman1952_and_yeh1964', 'constant']),
         Optional("emulsion_inversion_water_cut"): Map({"value": Float(), "unit": Str()}),
@@ -1097,5 +1103,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 404f01738554c30a4b02fc4a0daf9e7c)
+# [[[end]]] (checksum: 890908f4d703c94a0ead1cd310571777)
 # fmt: on

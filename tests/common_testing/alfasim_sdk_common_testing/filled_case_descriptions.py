@@ -630,6 +630,10 @@ PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     correlations_package=constants.CorrelationPackageType.Alfasim,
     emulsion_model_enabled=True,
     emulsion_relative_viscosity_model=constants.EmulsionRelativeViscosityModelType.Brinkman1952,
+    emulsion_relative_viscosity_tuning_factor=Curve(
+        image=Array([1.0, 1.5, 2.0, 1.0], "-"),
+        domain=Array([0.0, 0.4, 0.6, 1.0], "m3/m3"),
+    ),
     emulsion_droplet_size_model=constants.EmulsionDropletSizeModelType.Brauner2001,
     emulsion_inversion_point_model=constants.EmulsionInversionPointModelType.Brinkman1952AndYeh1964,
     flash_model=constants.FlashModel.HydrocarbonOnly,
@@ -922,6 +926,23 @@ def ensure_descriptions_are_equal(
                 obtained_values, expected_values
             ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
             continue  # pragma no cover [bug on coverage.py
+
+        is_curve = isinstance(expected_value, Curve)
+        if is_curve:
+            obtained_curve = obtained_description_dict[key]
+            domain_unit = expected_value.GetDomain().GetUnit()
+            expected_domain_values = expected_value.GetDomain().GetValues(domain_unit)
+            obtained_domain_values = obtained_curve.GetDomain().GetValues(domain_unit)
+            assert np.allclose(
+                expected_domain_values, obtained_domain_values
+            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            image_unit = expected_value.GetImage().GetUnit()
+            expected_image_values = expected_value.GetImage().GetValues(image_unit)
+            obtained_image_values = obtained_curve.GetImage().GetValues(image_unit)
+            assert np.allclose(
+                expected_image_values, obtained_image_values
+            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
         # Skip the check when materials or walls only has defaults values
         if key in ("materials", "walls") and first(expected_value, None) is None:
