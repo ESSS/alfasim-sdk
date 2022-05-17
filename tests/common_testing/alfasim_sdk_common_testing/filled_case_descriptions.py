@@ -631,7 +631,8 @@ PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     emulsion_model_enabled=True,
     emulsion_relative_viscosity_model=constants.EmulsionRelativeViscosityModelType.Brinkman1952,
     emulsion_relative_viscosity_tuning_factor=Curve(
-        image=Array([1.0, 1.5, 2.0, 1.0], "-"), domain=Array([0.0, 0.4, 0.6, 1.0], "m3/m3")
+        image=Array([1.0, 1.5, 2.0, 1.0], "-"),
+        domain=Array([0.0, 0.4, 0.6, 1.0], "m3/m3"),
     ),
     emulsion_droplet_size_model=constants.EmulsionDropletSizeModelType.Brauner2001,
     emulsion_inversion_point_model=constants.EmulsionInversionPointModelType.Brinkman1952AndYeh1964,
@@ -941,7 +942,7 @@ def ensure_descriptions_are_equal(
             assert np.allclose(
                 expected_image_values, obtained_image_values
             ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
-            continue # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
+            continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
         # Skip the check when materials or walls only has defaults values
         if key in ("materials", "walls") and first(expected_value, None) is None:

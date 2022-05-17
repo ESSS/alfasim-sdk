@@ -361,8 +361,9 @@ def get_curve_loader(
                 domain_category, from_domain_unit
             ),
         )
-    assert category is not None or from_unit is not None, "At least the category or the unit must be provided in " \
-                                                          "get_curve_loader"
+    assert category is not None or from_unit is not None, (
+        "At least the category or the unit must be provided in " "get_curve_loader"
+    )
     return partial(
         load_curve,
         category=_obtain_category_for_scalar(category, from_unit),
