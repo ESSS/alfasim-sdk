@@ -44,12 +44,12 @@ History
 
 * Add new emulsion relative viscosity models:
 
-    - ``pal_rhodes1989``;
-    - ``ronningsen1995``;
-    - ``volumetric_weight``;
-    - ``woelflin_1942``;
-    - ``barnea_mizrahi1976``;
-    - ``table_based``;
+  - ``pal_rhodes1989``;
+  - ``ronningsen1995``;
+  - ``volumetric_weight``;
+  - ``woelflin_1942``;
+  - ``barnea_mizrahi1976``;
+  - ``table_based``;
 
 * Add emulsion constant inversion point model;
 
