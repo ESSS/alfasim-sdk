@@ -50,7 +50,7 @@ History
     - ``woelflin_1942``;
     - ``barnea_mizrahi1976``;
     - ``table_based``;
-	
+
 * Add emulsion constant inversion point model;
 
 * Add emulsion relative viscosity tuning factor;
