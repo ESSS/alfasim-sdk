@@ -1,4 +1,3 @@
-from itertools import chain
 from numbers import Number
 from pathlib import Path
 from typing import Dict
@@ -2910,6 +2909,22 @@ class CaseDescription:
                 f"Restart file '{restart_file}' is not a valid file"
             )
 
+    def _get_all_fluids(self) -> List[str]:
+        """
+        Returns a list of fluids names for all pvt models in the CaseDescription.
+        """
+
+        # Update this tuple when a new PVT Model is added.
+        known_pvt_models = ("compositional", "combined", "correlations", "tables")
+        all_fluids = [
+            fluid
+            for known_pvt_attr in known_pvt_models
+            for pvt_model in getattr(self.pvt_models, known_pvt_attr).values()
+            for fluid in getattr(pvt_model, "fluids", {}).keys()
+        ]
+
+        return all_fluids
+
     def _check_fluid_references(self, *, reset_invalid_reference: bool = False):
         """
         Checks if all referenced fluids have a definition in at least one of the PVTs
@@ -2920,11 +2935,8 @@ class CaseDescription:
         from itertools import chain
 
         elements_with_invalid_fluid = []
-        fluids_available = set(
-            fluid
-            for compositional_model in self.pvt_models.compositional.values()
-            for fluid in compositional_model.fluids.keys()
-        )
+
+        fluids_available = set(self._get_all_fluids())
 
         def _handle_invalid_fluid(element, element_name):
             if element.fluid and element.fluid not in fluids_available:
@@ -3002,15 +3014,7 @@ class CaseDescription:
         all_pvt_names += list(self.pvt_models.compositional.keys())
         all_pvt_names += list(self.pvt_models.combined.keys())
 
-        pvt_models_with_fluids = chain(
-            self.pvt_models.compositional.values(),
-            self.pvt_models.combined.values(),
-        )
-        all_fluids = [
-            fluid
-            for pvt_model in pvt_models_with_fluids
-            for fluid in pvt_model.fluids.keys()
-        ]
+        all_fluids = self._get_all_fluids()
 
         duplicate_names["Nodes"] = get_duplicate_keys(Counter(all_node_names))
         duplicate_names["Pipes"] = get_duplicate_keys(Counter(all_pipes_names))
