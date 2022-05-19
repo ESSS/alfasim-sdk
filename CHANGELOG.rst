@@ -5,7 +5,7 @@ History
 0.14.0 (unreleased)
 ===================
 
-* Add Electric Submersible Pump (ESP) input for ``PumpEquipmentDescription``. The new inputs are: 
+* Add Electric Submersible Pump (ESP) input for ``PumpEquipmentDescription``. The new inputs are:
 
   - ``esp_table``: table created through ``TablePumpDescription``
   - ``esp_speed_input_type``: type of speed input ``Constant`` or ``Transient``
