@@ -2890,15 +2890,15 @@ class CaseDescription:
         """
         Returns a list of fluids names for all pvt models in the CaseDescription.
         """
-        
+
         # Update this tuple when a new PVT Model is added.
-        known_pvt_models = ('compositional', 'combined', 'correlations', 'tables') 
+        known_pvt_models = ("compositional", "combined", "correlations", "tables")
         all_fluids = [
             fluid
             for known_pvt_attr in known_pvt_models
             for pvt_model in getattr(self.pvt_models, known_pvt_attr).values()
             for fluid in getattr(pvt_model, "fluids", {}).keys()
-        ]   
+        ]
 
         return all_fluids
 
