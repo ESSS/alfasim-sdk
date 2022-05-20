@@ -51,6 +51,20 @@ History
         emulsion_model_enabled: True
         emulsion_inversion_point_model: brinkman1952_and_yeh1964
 
+* **Breaking Change**: change signature of hook ``calculate_relative_emulsion_viscosity``. This hook is also receiving the fluid temperature and a flag indicating whether the dispersion is water in oil or oil in water;
+
+* Add new emulsion relative viscosity models:
+
+  - ``pal_rhodes1989``;
+  - ``ronningsen1995``;
+  - ``volumetric_weight``;
+  - ``woelflin_1942``;
+  - ``barnea_mizrahi1976``;
+  - ``table_based``;
+
+* Add emulsion constant inversion point model;
+
+* Add emulsion relative viscosity tuning factor;
 
 0.13.0 (2022-04-19)
 ===================

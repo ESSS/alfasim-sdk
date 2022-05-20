@@ -114,6 +114,12 @@ class EmulsionRelativeViscosityModelType(Enum):
     Brinkman1952 = "brinkman1952"
     Mooney1951a = "mooney1951a"
     Mooney1951b = "mooney1951b"
+    PalRhodes1989 = "pal_rhodes1989"
+    Ronningsen1995 = "ronningsen1995"
+    VolumetricWeight = "volumetric_weight"
+    Woelflin1942 = "woelflin_1942"
+    BarneaMizrahi1976 = "barnea_mizrahi1976"
+    TableBased = "table_based"
     FromPlugin = "from_plugin"
 
 

@@ -382,7 +382,16 @@ physics_description_schema = Map(
         Optional("restart_filepath"): Str(),
         Optional("keep_former_results"): Bool(),
         Optional("emulsion_model_enabled"): Bool(),
-        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'from_plugin']),
+        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based', 'from_plugin']),
+        Optional("emulsion_pal_rhodes_phi_rel_100"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_woelflin_a"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_woelflin_b"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_table_based_rel_visc_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
         Optional("emulsion_relative_viscosity_tuning_factor"): Map(
             {
                 "image": Map({"values": Seq(Float()), "unit": Str()}),
@@ -1114,5 +1123,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: d29339ac713abc642330cf5e7fe100b7)
+# [[[end]]] (checksum: f1c874c32714ece81b49496d4dc106a0)
 # fmt: on
