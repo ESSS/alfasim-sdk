@@ -382,7 +382,7 @@ physics_description_schema = Map(
         Optional("restart_filepath"): Str(),
         Optional("keep_former_results"): Bool(),
         Optional("emulsion_model_enabled"): Bool(),
-        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'from_plugin', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based']),
+        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based', 'from_plugin']),
         Optional("emulsion_pal_rhodes_phi_rel_100"): Map({"value": Float(), "unit": Str()}),
         Optional("emulsion_woelflin_a"): Map({"value": Float(), "unit": Str()}),
         Optional("emulsion_woelflin_b"): Map({"value": Float(), "unit": Str()}),
@@ -1112,5 +1112,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 33a59c90d11bcb722e862ee6d79ec8b4)
+# [[[end]]] (checksum: 611bc720f6611065ffc9b2c5303f5ba4)
 # fmt: on
