@@ -1789,8 +1789,7 @@ def calculate_relative_emulsion_viscosity(
     water_in_oil: "bool",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont,
-        double alpha_disp_in_layer, double T, bool water_in_oil)``
+    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont, double alpha_disp_in_layer, double T, bool water_in_oil)``
 
     Internal `hook` to calculate the relative emulsion viscosity of an oil-water dispersion (emulsion)
 
