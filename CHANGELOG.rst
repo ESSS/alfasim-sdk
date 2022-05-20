@@ -5,6 +5,15 @@ History
 0.14.0 (unreleased)
 ===================
 
+* Add Electric Submersible Pump (ESP) input for ``PumpEquipmentDescription``. The new inputs are:
+
+  - ``esp_table``: table created through ``TablePumpDescription``
+  - ``esp_speed_input_type``: type of speed input ``Constant`` or ``Transient``
+  - ``esp_speed``: constant speed value
+  - ``esp_speed_curve``: curve defining time vs speed values
+  - ``esp_number_of_stages``: number of stages for ESP
+  - ``esp_reference_density``: rated density used to defined the ``esp_table``
+
 * **Breaking Change**: Change in ``PhysicsDescription``: split emulsion model into relative viscosity, droplet size, and inversion point models and a flag to activate the emulsion models.
 
 * Examples on how to update previous .alfacase files with emulsion model:
@@ -46,7 +55,7 @@ History
 0.13.0 (2022-04-19)
 ===================
 
-* Add black-oil properties to PVT Correlations case description ```PvtModelCorrelationDescription```
+* Add black-oil properties to PVT Correlations case description ``PvtModelCorrelationDescription``
 
 * **Breaking Change**: Change in ``PvtModelsDescription`` renamed experimental compositional models holder property from ``compositions`` to ``compositional``;
 
@@ -79,7 +88,7 @@ History
 0.12.0 (2022-01-18)
 ===================
 
-* **Breaking Change**: Change in ``AnnulusDescription`` to support different types of annulus equipment. Now ``AnnulusDescription``` has an attribute ``AnnulusEquipmentDescription``, which holds a dict that can contain multiple different equipment types, for which the current available options are:
+* **Breaking Change**: Change in ``AnnulusDescription`` to support different types of annulus equipment. Now ``AnnulusDescription`` has an attribute ``AnnulusEquipmentDescription``, which holds a dict that can contain multiple different equipment types, for which the current available options are:
 
   - ``LeakEquipmentDescription``;
   - ``GasLiftValveEquipmentDescription``;
@@ -186,7 +195,7 @@ History
 * Internal release only.
 
 
-0.6.0 (2020-10-29
+0.6.0 (2020-10-29)
 =================
 
 * Invalid release due to packaging error.

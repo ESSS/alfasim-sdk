@@ -908,13 +908,24 @@ profile_description_schema = Map(
 pump_equipment_description_schema = Map(
     {
         "position": Map({"value": Float(), "unit": Str()}),
-        Optional("type"): Enum(['constant_pressure', 'table_interpolation']),
-        Optional("pressure_boost"): Map({"value": Float(), "unit": Str()}),
+        Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("thermal_efficiency"): Map({"value": Float(), "unit": Str()}),
+        Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump']),
+        Optional("pressure_boost"): Map({"value": Float(), "unit": Str()}),
         Optional("table"): table_pump_description_schema,
         Optional("speed_curve"): speed_curve_description_schema,
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
-        Optional("flow_direction"): Enum(['forward', 'backward']),
+        Optional("esp_table"): table_pump_description_schema,
+        Optional("esp_speed_input_type"): Enum(['constant', 'curve']),
+        Optional("esp_speed"): Map({"value": Float(), "unit": Str()}),
+        Optional("esp_speed_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("esp_number_of_stages"): Int(),
+        Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
     }
 )
 pvt_model_combined_description_schema = Map(
@@ -1103,5 +1114,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 890908f4d703c94a0ead1cd310571777)
+# [[[end]]] (checksum: d29339ac713abc642330cf5e7fe100b7)
 # fmt: on

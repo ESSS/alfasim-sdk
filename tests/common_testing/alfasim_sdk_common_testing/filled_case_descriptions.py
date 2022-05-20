@@ -485,6 +485,12 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     table=TABLE_PUMP_DESCRIPTION,
     speed_curve=SPEED_CURVE_DESCRIPTION,
     speed_curve_interpolation_type=constants.InterpolationType.Linear,
+    esp_table=TABLE_PUMP_DESCRIPTION,
+    esp_speed_input_type=constants.MultiInputType.Curve,
+    esp_speed=Scalar(60.0, "Hz"),
+    esp_speed_curve=Curve(Array([0.0, 60.0], "Hz"), Array([0.0, 100.0], "s")),
+    esp_number_of_stages=2,
+    esp_reference_density=Scalar(1000.0, "kg/m3"),
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),
