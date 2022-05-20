@@ -1374,3 +1374,68 @@ def test_case_description_duplicate_names_between_elements(default_well):
 
     with pytest.raises(InvalidReferenceError, match=re.escape(expected_msg)):
         case.ensure_unique_names()
+
+
+def test_check_fluid_references(default_well: case_description.WallDescription) -> None:
+    """
+    Test _check_fluid_references isn't yielding errors for a correct CaseDescription.
+    """
+
+    known_pvt_properties = set(
+        attr.fields_dict(case_description.PvtModelsDescription).keys()
+    )
+    # Be sure to update the 'known_pvt_models' in CaseDescription._get_all_fluids
+    # if this assert breaks because a new PVT Model was added.
+    assert known_pvt_properties == {
+        "combined",
+        "compositional",
+        "correlations",
+        "default_model",
+        "table_parameters",
+        "tables",
+    }
+
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="Default PVT",
+            correlations={
+                "Default PVT": case_description.PvtModelCorrelationDescription()
+            },
+            combined={
+                "Test PVT Combined": case_description.PvtModelCombinedDescription(
+                    fluids={
+                        "Test Fluid Combined": case_description.CombinedFluidDescription(
+                            "Default PVT"
+                        )
+                    }
+                ),
+            },
+            compositional={
+                "Test PVT Compositional": case_description.PvtModelCompositionalDescription(
+                    fluids={
+                        "Test Fluid Compositional": case_description.CompositionalFluidDescription()
+                    }
+                ),
+            },
+        )
+    )
+
+    pvt_models_and_fluids = [
+        ("Test PVT Combined", "Test Fluid Combined"),
+        ("Test PVT Compositional", "Test Fluid Compositional"),
+    ]
+    for pvt_model, fluid in pvt_models_and_fluids:
+        well = attr.evolve(
+            default_well,
+            pvt_model=pvt_model,
+            initial_conditions=case_description.InitialConditionsDescription(
+                fluid=fluid
+            ),
+        )
+
+        case = attr.evolve(
+            case,
+            wells=[well],
+        )
+
+        case.ensure_valid_references()
