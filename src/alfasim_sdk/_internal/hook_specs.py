@@ -1789,11 +1789,10 @@ def calculate_relative_emulsion_viscosity(
     water_in_oil: "bool",
 ) -> "int":
     """
-    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont, double alpha_disp_in_layer)``
+    **c++ signature** : ``HOOK_RELATIVE_EMULSION_VISCOSITY(void* ctx, double* mu_r, double mu_disp, double mu_cont,
+        double alpha_disp_in_layer, double T, bool water_in_oil)``
 
-    Internal `hook` to calculate the relative emulsion viscosity in the Emulsion Model.
-    This `hook` will be used in the emulsion model to calculate the apparent viscosity of the emulsion
-    (Continuous field + dispersed field = layer).
+    Internal `hook` to calculate the relative emulsion viscosity of an oil-water dispersion (emulsion)
 
     The relative emulsion viscosity is defined by:
 
@@ -1812,7 +1811,8 @@ def calculate_relative_emulsion_viscosity(
 
     The output variable ``mu_r`` is the relative emulsion viscosity, ``mu_disp`` is the dispersed field
     viscosity, ``mu_cont`` is the continuous field viscosity and ``alpha_disp_in_layer`` is the volume
-    fraction of dispersed field in the layer.
+    fraction of dispersed field in the layer (dispersed field plus continuous field), T is the fluid temperature,
+    and water_in_oil is true when water is the dispersed phase and false otherwise.
 
     This `hook` allows the implementation of the relative emulsion viscosity correlation. Once the plugin
     installed it is important to be selected in the emulsion model configuration inside the Physics data
@@ -1823,6 +1823,8 @@ def calculate_relative_emulsion_viscosity(
     :param mu_disp: Dispersed field viscosity
     :param mu_cont: Continuous field viscosity
     :param alpha_disp_in_layer: Volume fraction of dispersed field in layer.
+    :param T: Fluid temperature
+    :param water_in_oil: True when water is the dispersed phase
 
     :returns: Return OK if successful or anything different if failed
 
@@ -1832,7 +1834,7 @@ def calculate_relative_emulsion_viscosity(
         :linenos:
         :emphasize-lines: 1
 
-        HOOK_RELATIVE_EMULSION_VISCOSITY(ctx, mu_r, mu_disp, mu_cont, alpha_disp_in_layer)
+        HOOK_RELATIVE_EMULSION_VISCOSITY(ctx, mu_r, mu_disp, mu_cont, alpha_disp_in_layer, T, water_in_oil)
         {
             // Einstein (1906) relative viscosity model
             mu_r = 1.0 + 2.5 * alpha_disp_in_layer;
