@@ -1724,33 +1724,6 @@ def _generate_description(
     return update_multi_input_flags(document, item_description)
 
 
-def load_pump_equipment_description(
-    document: DescriptionDocument,
-) -> Dict[str, case_description.PumpEquipmentDescription]:
-    alfacase_to_case_description = {
-        "name": load_value,
-        "position": get_scalar_loader(from_unit="m"),
-        "type": get_enum_loader(enum_class=constants.PumpType),
-        "pressure_boost": get_scalar_loader(from_unit="Pa"),
-        "thermal_efficiency": get_scalar_loader(from_unit="-"),
-        "table": load_table_pump_description,
-        "speed_curve": load_speed_curve_description,
-        "speed_curve_interpolation_type": get_enum_loader(
-            enum_class=constants.InterpolationType
-        ),
-        "flow_direction": get_enum_loader(enum_class=constants.FlowDirection),
-    }
-
-    return {
-        key.data: _generate_description(
-            DescriptionDocument(value, document.file_path),
-            alfacase_to_case_description,
-            case_description.PumpEquipmentDescription,
-        )
-        for key, value in document.content.items()
-    }
-
-
 def load_valve_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.ValveEquipmentDescription]:
