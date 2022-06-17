@@ -273,6 +273,8 @@ and ``profiles``.
           curve_names:
             - oil mass flow rate
 
+      automatic_trend_frequency: true
+
       trend_frequency:
         value: 0.1
         unit: s
@@ -282,6 +284,8 @@ and ``profiles``.
           location: main
           curve_names:
             - pressure
+
+      automatic_profile_frequency: true
 
       profile_frequency:
         value: 0.1
@@ -332,6 +336,8 @@ and imported by the application.
           curve_names:
             - oil mass flow rate
 
+      automatic_trend_frequency: true
+
       trend_frequency:
         value: 0.1
         unit: s
@@ -341,6 +347,8 @@ and imported by the application.
           location: main
           curve_names:
             - pressure
+
+      automatic_profile_frequency: true
 
       profile_frequency:
         value: 0.1
