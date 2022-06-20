@@ -66,6 +66,8 @@ History
 
 * Add emulsion relative viscosity tuning factor;
 
+* Fix ``automatic_profile_frequency`` and ``automatic_trend_frequency`` parameters being ignored in ``convert_alfacase_to_description``;
+
 0.13.0 (2022-04-19)
 ===================
 
