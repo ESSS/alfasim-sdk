@@ -441,8 +441,10 @@ WALL_LAYER_DESCRIPTION = case_description.WallLayerDescription(
 )
 CASE_OUTPUT_DESCRIPTION = case_description.CaseOutputDescription(
     trends=TRENDS_OUTPUT_DESCRIPTION,
+    automatic_trend_frequency=True,
     trend_frequency=Scalar(0.1, "s"),
     profiles=[PROFILE_OUTPUT_DESCRIPTION],
+    automatic_profile_frequency=True,
     profile_frequency=Scalar(0.1, "s"),
 )
 CASING_DESCRIPTION = case_description.CasingDescription(

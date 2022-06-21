@@ -281,6 +281,7 @@ and ``profiles``.
                     )
                 ]
             ),
+            automatic_trend_frequency=True,
             trend_frequency=Scalar(0.1, "s"),
             profiles=[
                 ProfileOutputDescription(
@@ -289,6 +290,7 @@ and ``profiles``.
                     location=OutputAttachmentLocation.Main,
                 )
             ],
+            automatic_profile_frequency=True,
             profile_frequency=Scalar(0.1, "s"),
         ),
     )
@@ -392,6 +394,7 @@ Description with a project configuration and being converted to a ``.alfacase`` 
                     )
                 ]
             ),
+            automatic_trend_frequency=True,
             trend_frequency=Scalar(0.1, "s"),
             profiles=[
                 ProfileOutputDescription(
@@ -400,6 +403,7 @@ Description with a project configuration and being converted to a ``.alfacase`` 
                     location=OutputAttachmentLocation.Main,
                 )
             ],
+            automatic_profile_frequency=True,
             profile_frequency=Scalar(0.1, "s"),
         ),
     )
