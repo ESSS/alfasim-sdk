@@ -547,7 +547,7 @@ class SpeedCurveDescription:
     """
 
     time = attrib_array(Array([0], "s"))
-    speed = attrib_array(Array([500], "rpm"))
+    speed = attrib_array(Array([500], "rpm"), category="angle per time")
 
 
 # fmt: off
@@ -561,7 +561,7 @@ class TablePumpDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
-    speeds = attrib_array(Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'))
+    speeds = attrib_array(Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'), category="angle per time")
     void_fractions = attrib_array(Array(([0.0] * 6 + [0.1] * 6) * 3, '-'))
     flow_rates = attrib_array(Array([0.0, 0.05, 0.1, 0.15, 0.2, 0.3] * 6, 'm3/s'))
 
@@ -620,18 +620,18 @@ class PumpEquipmentDescription:
     # Electric Submersible Pump
     esp_table = attrib_instance(TablePumpDescription)
     # [[[cog
-    # cog_out_multi_input("esp_speed", "frequency", 0.0, "Hz")
+    # cog_out_multi_input("esp_speed", "angle per time", 0.0, "Hz")
     # ]]]
     # fmt: off
     esp_speed_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     esp_speed = attrib_scalar(
-        default=Scalar('frequency', 0.0, 'Hz')
+        default=Scalar('angle per time', 0.0, 'Hz')
     )
     esp_speed_curve = attrib_curve(
-        default=Curve(Array('frequency', [], 'Hz'), Array('time', [], 's'))
+        default=Curve(Array('angle per time', [], 'Hz'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 9a65fa0162cfc5854766d454c38be17e)
+    # [[[end]]] (checksum: 98758dbdb3bf1e7031cc05bfad6bb714)
     esp_number_of_stages: int = attr.ib(default=1, validator=instance_of(int))
     esp_reference_density = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
@@ -651,7 +651,7 @@ class CompressorPressureTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    speed_entries = attrib_array(Array([0], "rpm"))
+    speed_entries = attrib_array(Array([0], "rpm"), category="angle per time")
     corrected_mass_flow_rate_entries = attrib_array(Array([0], "kg/s"))
     pressure_ratio_table = attrib_array(Array([1.0], "-"))
     isentropic_efficiency_table = attrib_array(Array([1.0], "-"))
@@ -697,7 +697,9 @@ class CompressorEquipmentDescription:
     speed_curve = attrib_instance(SpeedCurveDescription)
     reference_pressure = attrib_scalar(default=Scalar(1.0, "bar"))
     reference_temperature = attrib_scalar(default=Scalar(25, "degC"))
-    constant_speed = attrib_scalar(default=Scalar(500, "rpm"))
+    constant_speed = attrib_scalar(
+        default=Scalar(500, "rpm"), category="angle per time"
+    )
     compressor_type = attrib_enum(default=constants.CompressorSpeedType.SpeedCurve)
     speed_curve_interpolation_type = attrib_enum(
         default=constants.InterpolationType.Constant

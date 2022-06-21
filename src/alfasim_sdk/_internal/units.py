@@ -158,3 +158,11 @@ def register_units() -> None:
         valid_units=std_volume_units,
     )
     # NOTE: "gas volume flow rate" and "gas volume" are also required, but they are already registered
+
+    angle_per_time_units = ["Hz", "rpm", "rad/s"]
+    db.AddCategory(
+        "angle per time",
+        quantity_type="frequency",
+        valid_units=angle_per_time_units,
+        override=True,
+    )

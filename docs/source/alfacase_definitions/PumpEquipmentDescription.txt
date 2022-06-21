@@ -15,7 +15,7 @@
             speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
             esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             esp_speed_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            esp_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Hz', 'frequency')
+            esp_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Hz', 'angle per time')
             esp_speed_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Hz, s)[]
             esp_number_of_stages: int = 1
             esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
