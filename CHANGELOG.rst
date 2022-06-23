@@ -66,6 +66,8 @@ History
 
 * Add emulsion relative viscosity tuning factor;
 
+* **Breaking Change**: Available units for category ``angle per time`` have been restricted to ``Hz``, ``rpm`` and ``rad/s`` only;
+
 0.13.0 (2022-04-19)
 ===================
 
