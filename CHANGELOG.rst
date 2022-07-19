@@ -2,7 +2,7 @@
 History
 =======
 
-0.14.0 (unreleased)
+0.14.0 (2022-07-19)
 ===================
 
 * Add Electric Submersible Pump (ESP) input for ``PumpEquipmentDescription``. The new inputs are:
