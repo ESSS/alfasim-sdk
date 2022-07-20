@@ -68,6 +68,8 @@ History
 
 * Fix ``automatic_profile_frequency`` and ``automatic_trend_frequency`` parameters being ignored in ``convert_alfacase_to_description``;
 
+* **Breaking Change**: Available units for category ``angle per time`` have been restricted to ``Hz``, ``rpm`` and ``rad/s`` only;
+
 0.13.0 (2022-04-19)
 ===================
 
