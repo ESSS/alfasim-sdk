@@ -441,8 +441,10 @@ WALL_LAYER_DESCRIPTION = case_description.WallLayerDescription(
 )
 CASE_OUTPUT_DESCRIPTION = case_description.CaseOutputDescription(
     trends=TRENDS_OUTPUT_DESCRIPTION,
+    automatic_trend_frequency=True,
     trend_frequency=Scalar(0.1, "s"),
     profiles=[PROFILE_OUTPUT_DESCRIPTION],
+    automatic_profile_frequency=True,
     profile_frequency=Scalar(0.1, "s"),
 )
 CASING_DESCRIPTION = case_description.CasingDescription(
@@ -487,8 +489,10 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     speed_curve_interpolation_type=constants.InterpolationType.Linear,
     esp_table=TABLE_PUMP_DESCRIPTION,
     esp_speed_input_type=constants.MultiInputType.Curve,
-    esp_speed=Scalar(60.0, "Hz"),
-    esp_speed_curve=Curve(Array([0.0, 60.0], "Hz"), Array([0.0, 100.0], "s")),
+    esp_speed=Scalar(60.0, "Hz", "angle per time"),
+    esp_speed_curve=Curve(
+        Array([0.0, 60.0], "Hz", "angle per time"), Array([0.0, 100.0], "s")
+    ),
     esp_number_of_stages=2,
     esp_reference_density=Scalar(1000.0, "kg/m3"),
 )

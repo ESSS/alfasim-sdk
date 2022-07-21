@@ -1592,8 +1592,10 @@ def load_case_output_description(
 ) -> case_description.CaseOutputDescription:
     alfacase_to_case_description = {
         "profiles": load_profile_output_description,
+        "automatic_profile_frequency": load_value,
         "profile_frequency": get_scalar_loader(from_unit="s"),
         "trends": load_trends_output_description,
+        "automatic_trend_frequency": load_value,
         "trend_frequency": get_scalar_loader(from_unit="s"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
