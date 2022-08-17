@@ -2243,7 +2243,7 @@ class PvtModelTableParametersDescription:
     number_of_phases: int = attr.ib(default=2, validator=instance_of(int))
     warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
 
-    table_type = attrib_enum(default=constants.PVTTableType.PT)
+    table_type: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
     def __attrs_post_init__(self):
         """
