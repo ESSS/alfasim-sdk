@@ -61,7 +61,7 @@ def test_altable_has_flow_style_for_numpy_array(tmp_path):
           unit: '-'
         number_of_phases: 2
         warn_when_outside: True
-        table_type: PT
+        table_type: pvt_model_table
     """
     )
 
