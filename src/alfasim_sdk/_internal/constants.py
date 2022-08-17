@@ -233,8 +233,10 @@ class PVTTableType(Enum):
     - PT: pressure and temperature as primary variables
     - PH: pressure and enthalpy as primary variables
     """
-    PT = 'pvt_model_table'
-    PH = 'pvt_model_ph_table'
+
+    PT = "pvt_model_table"
+    PH = "pvt_model_ph_table"
+
 
 class MaterialType(Enum):
     Solid = "solid"
