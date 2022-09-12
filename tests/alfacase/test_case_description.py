@@ -868,24 +868,59 @@ def test_numpy_array_validator():
 
 def test_pvt_model_table_parameters_description_create_constant():
     import numpy as np
+    from pytest import approx
 
     pressure_values = np.linspace(0.5, 1e10, 4)
     temperature_values = np.linspace(250, 500, 30)
     t, p = np.meshgrid(temperature_values, pressure_values)
-    r = 286.9  # Air individual gas constant [J/kg K]
+    r = 286.9  # Air individual gas constant [J/kg.K]
 
     # Check constant_gas_density_model
     rho_g_ref = 42.0
-    expected_value = rho_g_ref + 0 * p
+    gas_density_expected_values = rho_g_ref + 0 * p.flatten()
 
     pvt = case_description.PvtModelTableParametersDescription.create_constant(
         ideal_gas=False, rho_g_ref=rho_g_ref
     )
-    np.array_equal(pvt.table_variables[0], expected_value.flatten())
+    # Check gas_density_derivative_respect_pressure
+    gas_density_derivative_expected_values = 1 / (r * t.flatten())
+
+    assert pvt.table_variables[0] == approx(gas_density_expected_values)
+    assert pvt.table_variables[1] == approx(gas_density_derivative_expected_values)
+
+
+def test_pvt_model_table_parameters_description_create_constant_ph_table():
+    import numpy as np
+    from pytest import approx
+
+    pressure_values = np.linspace(0.5, 1e10, 4)
+    enthalpy_values = np.linspace(2617360.0, 2869860, 30)
+    h, p = np.meshgrid(enthalpy_values, pressure_values)
+    r = 286.9  # Air individual gas constant [J/kg.K]
+
+    # Check constant_gas_density_model
+    rho_g_ref = 42.0
+    gas_density_expected_values = rho_g_ref + 0 * p.flatten()
+
+    cp_g_ref = 1010.0
+    h_l_ref = 104.86e3
+
+    pvt = case_description.PvtModelTableParametersDescription.create_constant_ph_table(
+        ideal_gas=False, rho_g_ref=rho_g_ref, cp_g_ref=cp_g_ref, h_l_ref=h_l_ref, has_water=True
+    )
+
+    t = pvt.table_variables[-1] # [K]
 
     # Check gas_density_derivative_respect_pressure
-    expected_value = 1 / (r * t)
-    np.array_equal(pvt.table_variables[1], expected_value.flatten())
+    gas_density_derivative_expected_values = 1 / (r * t.flatten())
+
+    h_lg = 2.260e6
+    temperature_expected_values =  (h.flatten() - h_lg - h_l_ref)/cp_g_ref
+
+    assert pvt.table_variables[0] == approx(gas_density_expected_values)
+    assert pvt.table_variables[1] == approx(gas_density_derivative_expected_values)
+    # The temperature must be at list last position
+    assert pvt.table_variables[-1] == approx(temperature_expected_values)
 
 
 def test_get_value_and_unit_from_length_and_elevation_description_and_xand_ydescription():
