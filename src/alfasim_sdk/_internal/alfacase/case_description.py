@@ -2244,7 +2244,7 @@ class PvtModelTableParametersDescription:
     warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
 
     table_type: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
+        default=constants.PVTTableType.PT.value, validator=optional(instance_of(str))
     )
 
     def __attrs_post_init__(self):
@@ -2489,6 +2489,223 @@ class PvtModelTableParametersDescription:
             water_cut=Scalar(0, "-"),
             total_water_fraction=Scalar(0, "-"),
             number_of_phases=3 if has_water else 2,
+        )
+
+    @staticmethod
+    def create_constant_ph_table(
+        rho_g_ref=1.0,
+        rho_l_ref=1000.0,
+        rho_w_ref=1000.0,
+        rho_s_ref=2500.0,
+        mu_g_ref=5e-6,
+        mu_l_ref=5e-2,
+        mu_w_ref=5e-2,
+        s_ref=7.197e-2,
+        ideal_gas=True,
+        cp_g_ref=1010.0,
+        cp_l_ref=4181.3,
+        cp_w_ref=4181.3,
+        h_l_ref=104.86e3,
+        k_g_ref=2.4e-2,
+        k_l_ref=5.91e-1,
+        k_w_ref=5.91e-1,
+        s_gw_ref=7.197e-2,
+        s_lw_ref=7.197e-2,
+        has_water=False,
+    ):
+        """
+        Returns parameters that can be used to create a very simple constant and isothermal PVT
+        table.
+        Used by PvtTable to build it's default table if no parameter is passed.
+        """
+        r = 286.9  # Air individual gas constant [J/kg K]
+
+        def temperature(p, h):
+            h_lg = 2.260e6
+            return (h - h_lg - h_l_ref) / cp_g_ref
+
+        def ideal_gas_density_model(p, t):
+            """
+            :param p: pressure in Pa
+            :param t: temperature in K
+            """
+            return p / (r * t)
+
+        def constant_gas_density_model(p, t):
+            return rho_g_ref + 0 * p
+
+        def gas_density_derivative_respect_pressure(p, t):
+            return 1 / (r * t)
+
+        def gas_density_derivative_respect_temperature(p, t):
+            return -p / (r * t**2)
+
+        def constant_density_model(p, t):
+            return rho_l_ref + 0 * p
+
+        def oil_density_derivative_respect_pressure(p, t):
+            return 0 * p
+
+        def oil_density_derivative_respect_temperature(p, t):
+            return 0 * p
+
+        def oil_viscosity_model(p, t):
+            return mu_l_ref + p * 0
+
+        def water_constant_density_model(p, t):
+            return rho_w_ref + 0 * p
+
+        def water_density_derivative_respect_pressure(p, t):
+            return 0 * p
+
+        def water_density_derivative_respect_temperature(p, t):
+            return 0 * p
+
+        def water_viscosity_model(p, t):
+            return mu_w_ref + p * 0
+
+        def gas_viscosity_model(p, t):
+            return mu_g_ref + p * 0
+
+        def surface_tension_model(p, t):
+            return s_ref + p * 0
+
+        def gas_mass_fraction_model(p, t):
+            return 0 * p
+
+        def water_mass_fraction_model(p, t):
+            return 0 * p
+
+        def oil_specific_heat_model(p, t):
+            return cp_l_ref + p * 0
+
+        def water_specific_heat_model(p, t):
+            return cp_w_ref + p * 0
+
+        def gas_specific_heat_model(p, t):
+            return cp_g_ref + p * 0
+
+        def oil_specific_enthalpy_model(p, t):
+            return cp_l_ref * t + p / rho_l_ref
+
+        def water_specific_enthalpy_model(p, t):
+            return cp_w_ref * t + p / rho_w_ref
+
+        def gas_specific_enthalpy_model(p, t):
+            h_lg = 2.260e6
+            return cp_g_ref * t + h_lg + h_l_ref
+
+        def oil_thermal_conductivity_model(p, t):
+            return k_l_ref + p * 0
+
+        def water_thermal_conductivity_model(p, t):
+            return k_w_ref + p * 0
+
+        def gas_thermal_conductivity_model(p, t):
+            return k_g_ref + p * 0
+
+        def gas_water_surface_tension_model(p, t):
+            return s_gw_ref + p * 0
+
+        def oil_water_surface_tension_model(p, t):
+            return s_lw_ref + p * 0
+
+        pressure_values = np.linspace(0.5, 1e10, 4)  # Pa (1e-5 to 1e5 in bar)
+        enthalpy_values = np.linspace(2617360.0, 2869860, 30)
+
+        temperature_values = temperature(pressure_values, enthalpy_values)
+
+        gas_density_model = (
+            ideal_gas_density_model if ideal_gas else constant_gas_density_model
+        )
+
+        t, p = np.meshgrid(temperature_values, pressure_values)
+        h, p = np.meshgrid(enthalpy_values, pressure_values)
+
+        data = [
+            gas_density_model(p, t).flatten(),
+            gas_density_derivative_respect_pressure(p, t).flatten(),
+            gas_density_derivative_respect_temperature(p, t).flatten(),
+            constant_density_model(p, t).flatten(),
+            oil_density_derivative_respect_pressure(p, t).flatten(),
+            oil_density_derivative_respect_temperature(p, t).flatten(),
+            gas_viscosity_model(p, t).flatten(),
+            oil_viscosity_model(p, t).flatten(),
+            surface_tension_model(p, t).flatten(),
+            gas_mass_fraction_model(p, t).flatten(),
+            gas_specific_heat_model(p, t).flatten(),
+            oil_specific_heat_model(p, t).flatten(),
+            gas_specific_enthalpy_model(p, t).flatten(),
+            oil_specific_enthalpy_model(p, t).flatten(),
+            gas_thermal_conductivity_model(p, t).flatten(),
+            oil_thermal_conductivity_model(p, t).flatten(),
+        ]
+
+        names = [
+            "gas density",
+            "gas density derivative pressure",
+            "gas density derivative temperature",
+            "oil density",
+            "oil density derivative pressure",
+            "oil density derivative temperature",
+            "gas viscosity",
+            "oil viscosity",
+            "gas-oil surface tension",
+            "gas mass fraction",
+            "gas specific heat",
+            "oil specific heat",
+            "gas specific enthalpy",
+            "oil specific enthalpy",
+            "gas thermal conductivity",
+            "oil thermal conductivity",
+        ]
+
+        if has_water:
+            data += [
+                water_constant_density_model(p, t).flatten(),
+                water_density_derivative_respect_pressure(p, t).flatten(),
+                water_density_derivative_respect_temperature(p, t).flatten(),
+                water_viscosity_model(p, t).flatten(),
+                water_mass_fraction_model(p, t).flatten(),
+                water_specific_heat_model(p, t).flatten(),
+                water_specific_enthalpy_model(p, t).flatten(),
+                water_thermal_conductivity_model(p, t).flatten(),
+                gas_water_surface_tension_model(p, t).flatten(),
+                oil_water_surface_tension_model(p, t).flatten(),
+            ]
+
+            names += [
+                "water density",
+                "water density derivative pressure",
+                "water density derivative temperature",
+                "water viscosity",
+                "water mass fraction",
+                "water specific heat",
+                "water specific enthalpy",
+                "water thermal conductivity",
+                "gas_water_surface_tension",
+                "oil_water_surface_tension",
+            ]
+
+        data.append(temperature(p, h).flatten())
+        names.append("temperature")
+
+        return PvtModelTableParametersDescription(
+            pressure_values=pressure_values,
+            temperature_values=enthalpy_values,
+            table_variables=data,
+            variable_names=names,
+            pressure_std=Scalar(1e5, "Pa"),
+            temperature_std=Scalar(15, "degC"),
+            gas_density_std=Scalar(rho_g_ref, "kg/m3"),
+            oil_density_std=Scalar(rho_l_ref, "kg/m3"),
+            water_density_std=Scalar(rho_w_ref, "kg/m3"),
+            gas_oil_ratio=Scalar(0, "sm3/sm3"),
+            gas_liquid_ratio=Scalar(0, "sm3/sm3"),
+            water_cut=Scalar(0, "-"),
+            total_water_fraction=Scalar(0, "-"),
+            number_of_phases=3 if has_water else 2,
+            table_type=constants.PVTTableType.PH.value,
         )
 
     @staticmethod

@@ -11,6 +11,9 @@ from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_constant_initial_temperatures_description,
 )
 from .common_testing.alfasim_sdk_common_testing.case_builders import (
+    build_constant_pvt_table,
+)
+from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_linear_initial_pressure_description,
 )
 from .common_testing.alfasim_sdk_common_testing.case_builders import (
@@ -121,4 +124,15 @@ def test_build_compressor_pressure_table_description_invalid(
             corrected_mass_flow_rate_entries=Array([1, 2, 3], "kg/s"),
             pressure_ratio_table=Array(pressure_ratios, "-"),
             isentropic_efficiency_table=Array(isentropic_efficiencies, "-"),
+        )
+
+
+def test_build_constant_pvt_table():
+    import numpy as np
+
+    for energy_model_primary_variable in constants.EnergyModelPrimaryVariable:
+        table_description = build_constant_pvt_table(energy_model_primary_variable)
+
+        assert np.array_equal(
+            table_description.pressure_values, np.linspace(0.5, 1e10, 4)
         )

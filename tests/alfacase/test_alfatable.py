@@ -8,7 +8,7 @@ from alfasim_sdk import generate_alfatable_file
 from alfasim_sdk import PvtModelTableParametersDescription
 
 
-def test_altable_has_flow_style_for_numpy_array(tmp_path):
+def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
     description = PvtModelTableParametersDescription(
         pressure_values=np.array([1, 2, 3]),
         temperature_values=np.array([4, 5, 6]),
@@ -61,6 +61,7 @@ def test_altable_has_flow_style_for_numpy_array(tmp_path):
           unit: '-'
         number_of_phases: 2
         warn_when_outside: True
+        table_type: pvt_model_table
     """
     )
 
