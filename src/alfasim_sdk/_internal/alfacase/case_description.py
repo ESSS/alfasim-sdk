@@ -2522,7 +2522,7 @@ class PvtModelTableParametersDescription:
 
         def temperature(p, h):
             h_lg = 2.260e6
-            return (h - h_lg - h_l_ref)/cp_g_ref
+            return (h - h_lg - h_l_ref) / cp_g_ref
 
         def ideal_gas_density_model(p, t):
             """
@@ -2538,7 +2538,7 @@ class PvtModelTableParametersDescription:
             return 1 / (r * t)
 
         def gas_density_derivative_respect_temperature(p, t):
-            return -p / (r * t ** 2)
+            return -p / (r * t**2)
 
         def constant_density_model(p, t):
             return rho_l_ref + 0 * p
@@ -2705,7 +2705,7 @@ class PvtModelTableParametersDescription:
             water_cut=Scalar(0, "-"),
             total_water_fraction=Scalar(0, "-"),
             number_of_phases=3 if has_water else 2,
-            table_type=constants.PVTTableType.PH.value
+            table_type=constants.PVTTableType.PH.value,
         )
 
     @staticmethod

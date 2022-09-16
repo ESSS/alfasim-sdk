@@ -906,16 +906,20 @@ def test_pvt_model_table_parameters_description_create_constant_ph_table():
     h_l_ref = 104.86e3
 
     pvt = case_description.PvtModelTableParametersDescription.create_constant_ph_table(
-        ideal_gas=False, rho_g_ref=rho_g_ref, cp_g_ref=cp_g_ref, h_l_ref=h_l_ref, has_water=True
+        ideal_gas=False,
+        rho_g_ref=rho_g_ref,
+        cp_g_ref=cp_g_ref,
+        h_l_ref=h_l_ref,
+        has_water=True,
     )
 
-    t = pvt.table_variables[-1] # [K]
+    t = pvt.table_variables[-1]  # [K]
 
     # Check gas_density_derivative_respect_pressure
     gas_density_derivative_expected_values = 1 / (r * t.flatten())
 
     h_lg = 2.260e6
-    temperature_expected_values =  (h.flatten() - h_lg - h_l_ref)/cp_g_ref
+    temperature_expected_values = (h.flatten() - h_lg - h_l_ref) / cp_g_ref
 
     assert pvt.table_variables[0] == approx(gas_density_expected_values)
     assert pvt.table_variables[1] == approx(gas_density_derivative_expected_values)

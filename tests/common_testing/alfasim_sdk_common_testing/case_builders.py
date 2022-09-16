@@ -4,6 +4,7 @@ from barril.units import Scalar
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 
+
 def build_simple_segment():
     """
     Return an instance of PipeSegmentsDescription with a pre-populated value.
@@ -148,10 +149,17 @@ def build_compressor_pressure_table_description(
     )
 
 
-def build_constant_pvt_table(energy_model_primary_variable: constants.EnergyModelPrimaryVariable):
-    if energy_model_primary_variable == constants.EnergyModelPrimaryVariable.Temperature:
+def build_constant_pvt_table(
+    energy_model_primary_variable: constants.EnergyModelPrimaryVariable,
+):
+    if (
+        energy_model_primary_variable
+        == constants.EnergyModelPrimaryVariable.Temperature
+    ):
         return case_description.PvtModelTableParametersDescription.create_constant()
     elif energy_model_primary_variable == constants.EnergyModelPrimaryVariable.Enthalpy:
-        return case_description.PvtModelTableParametersDescription.create_constant_ph_table()
-    else: # pragma no cover
+        return (
+            case_description.PvtModelTableParametersDescription.create_constant_ph_table()
+        )
+    else:  # pragma no cover
         assert False, f"{energy_model_primary_variable} not supported."
