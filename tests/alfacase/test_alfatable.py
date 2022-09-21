@@ -61,11 +61,10 @@ def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
           unit: '-'
         number_of_phases: 2
         warn_when_outside: True
-        table_type: pvt_model_table
     """
     )
 
-
+# TODO: ASIM-4887: test the export of a PH table alfacase file
 def test_alfacase_file_export(tmp_path):
     """
     Check that GenerateAlfacaseFile creates a alfatable file with the content from PvtModelsDescription.table_parameters
@@ -82,7 +81,7 @@ def test_alfacase_file_export(tmp_path):
 
     case_description = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
-            table_parameters=pvt_model_table_parameter
+            pt_table_parameters=pvt_model_table_parameter
         )
     )
 

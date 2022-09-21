@@ -291,7 +291,7 @@ def default_case(tmp_path) -> case_description.CaseDescription:
             tables={"PVT1": f"{tab_file}"},
             correlations={"PVT2": case_description.PvtModelCorrelationDescription()},
             compositional={"PVT3": case_description.PvtModelCompositionalDescription()},
-            table_parameters={
+            pt_table_parameters={
                 "PVT4": case_description.PvtModelTableParametersDescription.create_empty()
             },
         )
@@ -1430,7 +1430,8 @@ def test_check_fluid_references(default_well: case_description.WallDescription) 
         "compositional",
         "correlations",
         "default_model",
-        "table_parameters",
+        "pt_table_parameters",
+        "ph_table_parameters",
         "tables",
     }
 

@@ -127,12 +127,18 @@ def test_build_compressor_pressure_table_description_invalid(
         )
 
 
-def test_build_constant_pvt_table():
-    import numpy as np
+@pytest.mark.parametrize(
+    "energy_model_primary_variable, table_name",
+    [
+        (constants.EnergyModelPrimaryVariable.Temperature,
+         'constant pt table',
+         ),
+        (constants.EnergyModelPrimaryVariable.Enthalpy,
+         'constant ph table'),
+    ]
+)
+def test_build_constant_pvt_table(energy_model_primary_variable, table_name):
 
-    for energy_model_primary_variable in constants.EnergyModelPrimaryVariable:
-        table_description = build_constant_pvt_table(energy_model_primary_variable)
+    pvt_model_description = build_constant_pvt_table(energy_model_primary_variable)
 
-        assert np.array_equal(
-            table_description.pressure_values, np.linspace(0.5, 1e10, 4)
-        )
+    assert pvt_model_description.default_model == table_name
