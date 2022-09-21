@@ -226,18 +226,6 @@ class PVTCompositionalViscosityModel(Enum):
     LohrenzBrayClark = "lohrenz_bray_clark"
 
 
-class PVTTableType(Enum):
-    """
-    Informs what type of PVT table to build
-
-    - PT: pressure and temperature as primary variables
-    - PH: pressure and enthalpy as primary variables
-    """
-
-    PT = "pvt_model_table"
-    PH = "pvt_model_ph_table"
-
-
 class MaterialType(Enum):
     Solid = "solid"
     Fluid = "fluid"

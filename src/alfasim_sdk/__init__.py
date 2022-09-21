@@ -134,6 +134,9 @@ from alfasim_sdk._internal.alfacase.case_description import (
     PvtModelTableParametersDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
+    PhPvtModelTableParametersDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
     ReferencedPressureContainerDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -265,7 +268,6 @@ from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
-from alfasim_sdk._internal.constants import PVTTableType
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
 from alfasim_sdk._internal.constants import SimulationRegimeType
@@ -440,7 +442,6 @@ __all__ = [
     "OutputAttachmentLocation",
     "OverallPipeTrendDescription",
     "PVTCompositionalViscosityModel",
-    "PVTTableType",
     "PackerDescription",
     "PhysicsDescription",
     "PigEquipmentDescription",
@@ -462,6 +463,7 @@ __all__ = [
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
     "PvtModelTableParametersDescription",
+    "PhPvtModelTableParametersDescription",
     "PvtModelsDescription",
     "Quantity",
     "Reference",
