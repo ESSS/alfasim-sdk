@@ -2243,10 +2243,6 @@ class PvtModelTableParametersDescription:
     number_of_phases: int = attr.ib(default=2, validator=instance_of(int))
     warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
 
-    table_type: Optional[str] = attr.ib(
-        default=constants.PVTTableType.PT.value, validator=optional(instance_of(str))
-    )
-
     def __attrs_post_init__(self):
         """
         Fix standard properties that have not been set in .TAB files.
@@ -2492,7 +2488,136 @@ class PvtModelTableParametersDescription:
         )
 
     @staticmethod
-    def create_constant_ph_table(
+    def create_empty():
+        """
+        Creates a dummy (empty) PVT Table parameters with no valid data.
+        """
+        return PvtModelTableParametersDescription(
+            pressure_values=np.array([0.0]),
+            temperature_values=np.array([0.0]),
+            table_variables=[],
+            variable_names=[],
+            number_of_phases=-1,
+        )
+
+    def __eq__(self, other):
+        """
+        Need to re-implement the equality operator because ndarrays don't support equality, so the attr's generated
+        __eq__ function does not work.
+        """
+        if type(self) is not type(other):
+            return False
+
+        if len(self.table_variables) != len(other.table_variables):
+            return False
+
+        for array1, array2 in zip(self.table_variables, other.table_variables):
+            if not np.array_equal(array1, array2):
+                return False
+
+        return (
+            (self.pressure_values == other.pressure_values).all()
+            and (self.temperature_values == other.temperature_values).all()
+            and self.variable_names == other.variable_names
+            and self.pressure_std == other.pressure_std
+            and self.temperature_std == other.temperature_std
+            and self.number_of_phases == other.number_of_phases
+        )
+
+
+@attr.s(slots=True, eq=False)
+class PhPvtModelTableParametersDescription:
+    """
+    :ivar pressure_values:
+        Array like of sorted pressure values (m number of entries). [Pa]
+
+    :ivar enthalpy_values:
+        Array like of sorted enthalpy values (n number of entries). [J/Kg]
+
+    :ivar table_variables:
+        List of array like values for each property such as densities, specific heats,
+        enthalpies, etc.
+
+    :ivar variable_names:
+        List of property names
+
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    """
+
+    pressure_values: Numpy1DArray = attr.ib(
+        validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
+    )
+    enthalpy_values: Numpy1DArray = attr.ib(
+        validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
+    )
+    table_variables: List[Numpy1DArray] = attr.ib(
+        validator=numpy_array_validator(dimension=1, is_list=True),
+        repr=collapse_array_repr,
+    )
+    variable_names: List[str] = attr.ib(validator=list_of_strings)
+
+    pressure_std = attrib_scalar(default=Scalar(1, "bar"), is_optional=True)
+    temperature_std = attrib_scalar(default=Scalar(15, "degC"), is_optional=True)
+
+    gas_density_std = attrib_scalar(default=Scalar(1, "kg/m3"), is_optional=True)
+    oil_density_std = attrib_scalar(default=Scalar(800, "kg/m3"), is_optional=True)
+    water_density_std = attrib_scalar(default=Scalar(1000, "kg/m3"), is_optional=True)
+
+    gas_oil_ratio = attrib_scalar(default=Scalar(0, "sm3/sm3"), is_optional=True)  # GOR
+    gas_liquid_ratio = attrib_scalar(
+        default=Scalar(0, "sm3/sm3"), is_optional=True
+    )  # GLR
+    water_cut = attrib_scalar(default=Scalar(0, "-"), is_optional=True)  # WC
+    total_water_fraction = attrib_scalar(default=Scalar(0, "-"), is_optional=True)
+
+    label: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    number_of_phases: int = attr.ib(default=2, validator=instance_of(int))
+    warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
+
+    def __attrs_post_init__(self):
+        """
+        Fix standard properties that have not been set in .TAB files.
+
+        Some pvt tables do not set water related properties if it is a two-phase
+        table.
+
+        PVT Sim always set water related properties to np.nan.
+        Multiflash sometimes does not write the water related keyword.
+
+        """
+        if self.pressure_std is None:
+            self.pressure_std = Scalar(np.nan, "bar")
+        if self.temperature_std is None:
+            self.temperature_std = Scalar(np.nan, "degC")
+        if self.gas_density_std is None:
+            self.gas_density_std = Scalar(np.nan, "kg/m3")
+        if self.oil_density_std is None:
+            self.oil_density_std = Scalar(np.nan, "kg/m3")
+        if self.water_density_std is None:
+            self.water_density_std = Scalar(np.nan, "kg/m3")
+        if self.gas_oil_ratio is None:
+            self.gas_oil_ratio = Scalar(np.nan, "sm3/sm3")
+        if self.gas_liquid_ratio is None:
+            self.gas_liquid_ratio = Scalar(np.nan, "sm3/sm3")
+        if self.water_cut is None:
+            self.water_cut = Scalar(np.nan, "-")
+        if self.total_water_fraction is None:
+            self.total_water_fraction = Scalar(np.nan, "-")
+
+    @property
+    def pressure_unit(self):
+        return "Pa"
+
+    @property
+    def enthalpy_unit(self):
+        return "J/kg"
+
+    @staticmethod
+    def create_constant(
         rho_g_ref=1.0,
         rho_l_ref=1000.0,
         rho_w_ref=1000.0,
@@ -2690,9 +2815,9 @@ class PvtModelTableParametersDescription:
         data.append(temperature(p, h).flatten())
         names.append("temperature")
 
-        return PvtModelTableParametersDescription(
+        return PhPvtModelTableParametersDescription(
             pressure_values=pressure_values,
-            temperature_values=enthalpy_values,
+            enthalpy_values=enthalpy_values,
             table_variables=data,
             variable_names=names,
             pressure_std=Scalar(1e5, "Pa"),
@@ -2705,17 +2830,16 @@ class PvtModelTableParametersDescription:
             water_cut=Scalar(0, "-"),
             total_water_fraction=Scalar(0, "-"),
             number_of_phases=3 if has_water else 2,
-            table_type=constants.PVTTableType.PH.value,
         )
 
     @staticmethod
     def create_empty():
         """
-        Creates a dummy (empty) PVT Table parameters with no valid data.
+        Creates a dummy (empty) PH PVT Table parameters with no valid data.
         """
-        return PvtModelTableParametersDescription(
+        return PhPvtModelTableParametersDescription(
             pressure_values=np.array([0.0]),
-            temperature_values=np.array([0.0]),
+            enthalpy_values=np.array([0.0]),
             table_variables=[],
             variable_names=[],
             number_of_phases=-1,
@@ -2738,7 +2862,7 @@ class PvtModelTableParametersDescription:
 
         return (
             (self.pressure_values == other.pressure_values).all()
-            and (self.temperature_values == other.temperature_values).all()
+            and (self.enthalpy_values == other.enthalpy_values).all()
             and self.variable_names == other.variable_names
             and self.pressure_std == other.pressure_std
             and self.temperature_std == other.temperature_std
@@ -2782,7 +2906,7 @@ class PvtModelsDescription:
 
             >>> Path("./my_file.tab|MyPvtModel")
 
-    :ivar table_parameters:
+    :ivar pt_table_parameters:
         *INTERNAL USE ONLY*
 
         This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
@@ -2792,6 +2916,15 @@ class PvtModelsDescription:
         where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
         the PVT is trough the PvtModelTableParametersDescription.
 
+    :ivar ph_table_parameters:
+        *INTERNAL USE ONLY*
+
+        This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
+        of a PVT originated from a (.tab / .alfatable) file.
+
+        Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
+        where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
+        the PVT is trough the PhPvtModelTableParametersDescription.
 
     .. include:: /alfacase_definitions/PvtModelsDescription.txt
 
@@ -2829,7 +2962,8 @@ class PvtModelsDescription:
     correlations = attrib_dict_of(PvtModelCorrelationDescription)
     compositional = attrib_dict_of(PvtModelCompositionalDescription)
     combined = attrib_dict_of(PvtModelCombinedDescription)
-    table_parameters = attrib_dict_of(PvtModelTableParametersDescription)
+    pt_table_parameters = attrib_dict_of(PvtModelTableParametersDescription)
+    ph_table_parameters = attrib_dict_of(PhPvtModelTableParametersDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(
@@ -3038,7 +3172,8 @@ class CaseDescription:
                 self.pvt_models.correlations.keys(),
                 self.pvt_models.compositional.keys(),
                 self.pvt_models.combined.keys(),
-                self.pvt_models.table_parameters.keys(),
+                self.pvt_models.pt_table_parameters.keys(),
+                self.pvt_models.ph_table_parameters.keys(),
             )
         )
         if (
@@ -3173,7 +3308,7 @@ class CaseDescription:
         """
 
         # Update this tuple when a new PVT Model is added.
-        known_pvt_models = ("compositional", "combined", "correlations", "tables")
+        known_pvt_models = ("compositional", "combined", "correlations", "pt_table_parameters", "ph_table_parameters", "tables")
         all_fluids = [
             fluid
             for known_pvt_attr in known_pvt_models
