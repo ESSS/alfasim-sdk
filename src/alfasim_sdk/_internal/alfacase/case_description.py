@@ -2920,7 +2920,8 @@ class PvtModelsDescription:
         *INTERNAL USE ONLY*
 
         This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
-        of a PVT originated from a (.tab / .alfatable) file.
+        of a PVT originating from a (.tab / .alfatable) file. Also, it holds values from a Pressure-Enthalpy PVT table,
+        in which temperature is one of the output/state variables.
 
         Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
         where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate

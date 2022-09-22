@@ -905,7 +905,7 @@ def test_pvt_model_table_parameters_description_create_constant_ph_table():
     cp_g_ref = 1010.0
     h_l_ref = 104.86e3
 
-    pvt = case_description.PvtModelTableParametersDescription.create_constant_ph_table(
+    pvt = case_description.PhPvtModelTableParametersDescription.create_constant(
         ideal_gas=False,
         rho_g_ref=rho_g_ref,
         cp_g_ref=cp_g_ref,
