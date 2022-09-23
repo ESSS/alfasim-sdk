@@ -3309,7 +3309,7 @@ class CaseDescription:
         """
 
         # Update this tuple when a new PVT Model is added.
-        known_pvt_models = ("compositional", "combined", "correlations", "pt_table_parameters", "ph_table_parameters", "tables")
+        known_pvt_models = ("compositional", "combined", "correlations", "tables")
         all_fluids = [
             fluid
             for known_pvt_attr in known_pvt_models
