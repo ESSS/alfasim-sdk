@@ -951,9 +951,21 @@ def test_pvt_model_table_parameters_description_create_constant_ph_table():
 
     assert pvt.table_variables[0] == approx(gas_density_expected_values)
     assert pvt.table_variables[1] == approx(gas_density_derivative_expected_values)
-    # The temperature must be at list last position
+    # Temperature must be at last position
     assert pvt.table_variables[-1] == approx(temperature_expected_values)
 
+def test_pvt_model_table_parameters_description_create_ph_table_with_dummy_dict():
+    """
+    Ensure that the dummy dict can create a dummy PH table
+    """
+    import numpy as np
+
+    dummy_dict = case_description.PvtModelPhTableParametersDescription.dummy_parameters_dict()
+
+    ph_table_description = case_description.PvtModelPhTableParametersDescription(**dummy_dict)
+
+    assert ph_table_description.enthalpy_values == np.array([0.0])
+    assert ph_table_description.variable_names == []
 
 def test_get_value_and_unit_from_length_and_elevation_description_and_xand_ydescription():
     """
