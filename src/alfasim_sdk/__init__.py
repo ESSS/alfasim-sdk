@@ -131,10 +131,10 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import PvtModelsDescription
 from alfasim_sdk._internal.alfacase.case_description import (
-    PvtModelTableParametersDescription,
+    PvtModelPtTableParametersDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
-    PhPvtModelTableParametersDescription,
+    PvtModelPhTableParametersDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
     ReferencedPressureContainerDescription,
@@ -462,8 +462,8 @@ __all__ = [
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
-    "PvtModelTableParametersDescription",
-    "PhPvtModelTableParametersDescription",
+    "PvtModelPtTableParametersDescription",
+    "PvtModelPhTableParametersDescription",
     "PvtModelsDescription",
     "Quantity",
     "Reference",

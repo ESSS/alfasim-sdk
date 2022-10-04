@@ -2191,7 +2191,7 @@ class PvtModelCombinedDescription:
 
 
 @attr.s(slots=True, eq=False)
-class PvtModelTableParametersDescription:
+class PvtModelPtTableParametersDescription:
     """
     :ivar pressure_values:
         Array like of sorted pressure values (m number of entries). [Pa]
@@ -2470,7 +2470,7 @@ class PvtModelTableParametersDescription:
                 "oil_water_surface_tension",
             ]
 
-        return PvtModelTableParametersDescription(
+        return PvtModelPtTableParametersDescription(
             pressure_values=pressure_values,
             temperature_values=temperature_values,
             table_variables=data,
@@ -2492,7 +2492,7 @@ class PvtModelTableParametersDescription:
         """
         Creates a dummy (empty) PVT Table parameters with no valid data.
         """
-        return PvtModelTableParametersDescription(
+        return PvtModelPtTableParametersDescription(
             pressure_values=np.array([0.0]),
             temperature_values=np.array([0.0]),
             table_variables=[],
@@ -2526,7 +2526,7 @@ class PvtModelTableParametersDescription:
 
 
 @attr.s(slots=True, eq=False)
-class PhPvtModelTableParametersDescription:
+class PvtModelPhTableParametersDescription:
     """
     :ivar pressure_values:
         Array like of sorted pressure values (m number of entries). [Pa]
@@ -2815,7 +2815,7 @@ class PhPvtModelTableParametersDescription:
         data.append(temperature(p, h).flatten())
         names.append("temperature")
 
-        return PhPvtModelTableParametersDescription(
+        return PvtModelPhTableParametersDescription(
             pressure_values=pressure_values,
             enthalpy_values=enthalpy_values,
             table_variables=data,
@@ -2837,7 +2837,7 @@ class PhPvtModelTableParametersDescription:
         """
         Creates a dummy (empty) PH PVT Table parameters with no valid data.
         """
-        return PhPvtModelTableParametersDescription(
+        return PvtModelPhTableParametersDescription(
             pressure_values=np.array([0.0]),
             enthalpy_values=np.array([0.0]),
             table_variables=[],
@@ -2914,7 +2914,7 @@ class PvtModelsDescription:
 
         Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
         where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
-        the PVT is trough the PvtModelTableParametersDescription.
+        the PVT is trough the PvtModelPtTableParametersDescription.
 
     :ivar ph_table_parameters:
         *INTERNAL USE ONLY*
@@ -2925,7 +2925,7 @@ class PvtModelsDescription:
 
         Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
         where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
-        the PVT is trough the PhPvtModelTableParametersDescription.
+        the PVT is trough the PvtModelPhTableParametersDescription.
 
     .. include:: /alfacase_definitions/PvtModelsDescription.txt
 
@@ -2963,8 +2963,8 @@ class PvtModelsDescription:
     correlations = attrib_dict_of(PvtModelCorrelationDescription)
     compositional = attrib_dict_of(PvtModelCompositionalDescription)
     combined = attrib_dict_of(PvtModelCombinedDescription)
-    pt_table_parameters = attrib_dict_of(PvtModelTableParametersDescription)
-    ph_table_parameters = attrib_dict_of(PhPvtModelTableParametersDescription)
+    pt_table_parameters = attrib_dict_of(PvtModelPtTableParametersDescription)
+    ph_table_parameters = attrib_dict_of(PvtModelPhTableParametersDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(

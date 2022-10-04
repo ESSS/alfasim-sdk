@@ -50,8 +50,8 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import to_curve
 # implement some tests for the both
 @pytest.fixture(
     params=(
-        case_description.PvtModelTableParametersDescription,
-        case_description.PhPvtModelTableParametersDescription
+        case_description.PvtModelPtTableParametersDescription,
+        case_description.PvtModelPhTableParametersDescription
     ),
     ids=(
         "pt_table_description", "ph_table_description"
@@ -304,10 +304,10 @@ def default_case(tmp_path) -> case_description.CaseDescription:
             correlations={"PVT2": case_description.PvtModelCorrelationDescription()},
             compositional={"PVT3": case_description.PvtModelCompositionalDescription()},
             pt_table_parameters={
-                "PVT4": case_description.PvtModelTableParametersDescription.create_empty()
+                "PVT4": case_description.PvtModelPtTableParametersDescription.create_empty()
             },
             ph_table_parameters={
-                "PVT5": case_description.PhPvtModelTableParametersDescription.create_empty()
+                "PVT5": case_description.PvtModelPhTableParametersDescription.create_empty()
             },
         )
     )
@@ -814,7 +814,7 @@ def test_pvt_model_table_parameters_description_equal(table_parameters_descripti
 def test_pvt_model_table_parameters_description_post_init(table_parameters_description):
     """
     Check that standard properties that have not been informed (None) is converted to np.nan
-    for more details about this, check the docstring from  PvtModelTableParametersDescription.__attrs_post_init__
+    for more details about this, check the docstring from  PvtModelPtTableParametersDescription.__attrs_post_init__
     """
     import numpy as np
 
@@ -848,7 +848,7 @@ def test_pvt_model_table_parameters_description_post_init(table_parameters_descr
     # The following check are only for coverage purpose
     assert table_params.pressure_unit == "Pa"
 
-    if table_parameters_description == case_description.PvtModelTableParametersDescription:
+    if table_parameters_description == case_description.PvtModelPtTableParametersDescription:
         assert table_params.temperature_unit == "K"
     else:
         assert table_params.enthalpy_unit == "J/kg"
@@ -907,7 +907,7 @@ def test_pvt_model_table_parameters_description_create_constant():
     rho_g_ref = 42.0
     gas_density_expected_values = rho_g_ref + 0 * p.flatten()
 
-    pvt = case_description.PvtModelTableParametersDescription.create_constant(
+    pvt = case_description.PvtModelPtTableParametersDescription.create_constant(
         ideal_gas=False, rho_g_ref=rho_g_ref
     )
     # Check gas_density_derivative_respect_pressure
@@ -933,7 +933,7 @@ def test_pvt_model_table_parameters_description_create_constant_ph_table():
     cp_g_ref = 1010.0
     h_l_ref = 104.86e3
 
-    pvt = case_description.PhPvtModelTableParametersDescription.create_constant(
+    pvt = case_description.PvtModelPhTableParametersDescription.create_constant(
         ideal_gas=False,
         rho_g_ref=rho_g_ref,
         cp_g_ref=cp_g_ref,
@@ -1151,7 +1151,7 @@ def test_material_description_as_dict():
 
 def test_pvt_model_table_parameters_description_equality(table_parameters_description):
     """
-    Ensure that the custom PvtModelTableParametersDescription equality functions works properly
+    Ensure that the custom PvtModelPtTableParametersDescription equality functions works properly
     since it was customized to suport ndarrays.
     """
     assert (
