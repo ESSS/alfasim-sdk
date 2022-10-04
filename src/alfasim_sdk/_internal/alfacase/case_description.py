@@ -2845,6 +2845,18 @@ class PvtModelPhTableParametersDescription:
             number_of_phases=-1,
         )
 
+    @staticmethod
+    def dummy_parameters_dict():
+        """
+        Creates a dummy PH PVT Table parameters dict to set in the Memento.
+        """
+        return {
+            'pressure_values': np.array([0.0]),
+            'enthalpy_values': np.array([0.0]),
+            'table_variables': [],
+            'variable_names': [],
+        }
+
     def __eq__(self, other):
         """
         Need to re-implement the equality operator because ndarrays don't support equality, so the attr's generated
