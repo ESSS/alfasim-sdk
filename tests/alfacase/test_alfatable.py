@@ -5,11 +5,11 @@ import numpy as np
 from alfasim_sdk import convert_alfacase_to_description
 from alfasim_sdk import generate_alfacase_file
 from alfasim_sdk import generate_alfatable_file
-from alfasim_sdk import PvtModelTableParametersDescription
+from alfasim_sdk import PvtModelPtTableParametersDescription
 
 
 def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
-    description = PvtModelTableParametersDescription(
+    description = PvtModelPtTableParametersDescription(
         pressure_values=np.array([1, 2, 3]),
         temperature_values=np.array([4, 5, 6]),
         table_variables=[
@@ -61,11 +61,11 @@ def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
           unit: '-'
         number_of_phases: 2
         warn_when_outside: True
-        table_type: pvt_model_table
     """
     )
 
 
+# TODO: ASIM-4980: test the export of a PH table alfacase file
 def test_alfacase_file_export(tmp_path):
     """
     Check that GenerateAlfacaseFile creates a alfatable file with the content from PvtModelsDescription.table_parameters
@@ -76,13 +76,13 @@ def test_alfacase_file_export(tmp_path):
     alfatable_file = tmp_path / "mycase.fluid_a_1.alfatable"
 
     pvt_model_table_parameter = {
-        "FLUID-A 1": PvtModelTableParametersDescription.create_constant()
+        "FLUID-A 1": PvtModelPtTableParametersDescription.create_constant()
     }
     from alfasim_sdk._internal.alfacase import case_description
 
     case_description = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
-            table_parameters=pvt_model_table_parameter
+            pt_table_parameters=pvt_model_table_parameter
         )
     )
 
@@ -99,7 +99,7 @@ def test_alfacase_file_load(tmp_path):
 
     alfacase_file = tmp_path / "mycase.alfacase"
     pvt_table_parameters_description = (
-        case_description.PvtModelTableParametersDescription.create_constant()
+        case_description.PvtModelPtTableParametersDescription.create_constant()
     )
     alfatable_file = generate_alfatable_file(
         alfacase_file=alfacase_file,

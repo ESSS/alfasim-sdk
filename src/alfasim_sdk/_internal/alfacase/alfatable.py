@@ -29,7 +29,7 @@ def generate_alfatable_file(
 
 def load_pvt_model_table_parameters_description_from_alfatable(
     file_path: Path,
-) -> case_description.PvtModelTableParametersDescription:
+) -> case_description.PvtModelPtTableParametersDescription:
     """
     Load the content from the alfatable in the given file_path. The validation is turned off due to performance issues.
     """
@@ -64,6 +64,6 @@ def load_pvt_model_table_parameters_description_from_alfatable(
         key: Scalar(get_category_for(unit), content[key]["value"], content[key]["unit"])
         for key, unit in key_and_unit.items()
     }
-    return case_description.PvtModelTableParametersDescription(
+    return case_description.PvtModelPtTableParametersDescription(
         **table_parameter_keys_and_values, **table_parameter_keys_and_scalars
     )

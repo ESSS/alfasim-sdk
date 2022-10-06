@@ -26,14 +26,15 @@ def _generate_alfatable_file_for_pvt_models_description(
     """
     from alfasim_sdk import generate_alfatable_file
 
-    for pvt_name, pvt_table_description in pvt_models.table_parameters.items():
+    # TODO: ASIM-4980: generate alfatable files for ph table
+    for pvt_name, pvt_table_description in pvt_models.pt_table_parameters.items():
         alfatable_file = generate_alfatable_file(
             alfacase_file=alfacase_file,
             alfatable_filename=pvt_name,
             description=pvt_table_description,
         )
         pvt_models.tables[pvt_name] = alfatable_file.name
-    pvt_models.table_parameters.clear()
+    pvt_models.pt_table_parameters.clear()
 
 
 def convert_description_to_alfacase(

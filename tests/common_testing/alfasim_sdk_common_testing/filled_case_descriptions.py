@@ -79,8 +79,15 @@ PVT_MODEL_COMBINED_DEFINITION = case_description.PvtModelCombinedDescription(
     reference_pvt_model="acme",
     fluids={"combined_fluid_1": COMBINED_FLUID_DESCRIPTION},
 )
-PVT_MODEL_TABLE_PARAMETERS = (
-    case_description.PvtModelTableParametersDescription.create_constant(has_water=True)
+PVT_MODEL_PT_TABLE_PARAMETERS = (
+    case_description.PvtModelPtTableParametersDescription.create_constant(
+        has_water=True
+    )
+)
+PVT_MODEL_PH_TABLE_PARAMETERS = (
+    case_description.PvtModelPhTableParametersDescription.create_constant(
+        has_water=True
+    )
 )
 PVT_MODELS_DEFINITION = case_description.PvtModelsDescription(
     default_model="acme",
