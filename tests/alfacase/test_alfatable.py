@@ -64,6 +64,7 @@ def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
     """
     )
 
+
 # TODO: ASIM-4980: test the export of a PH table alfacase file
 def test_alfacase_file_export(tmp_path):
     """

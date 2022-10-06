@@ -51,14 +51,13 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import to_curve
 @pytest.fixture(
     params=(
         case_description.PvtModelPtTableParametersDescription,
-        case_description.PvtModelPhTableParametersDescription
+        case_description.PvtModelPhTableParametersDescription,
     ),
-    ids=(
-        "pt_table_description", "ph_table_description"
-    )
+    ids=("pt_table_description", "ph_table_description"),
 )
 def table_parameters_description(request):
     return request.param
+
 
 def test_physics_description_path_validator(tmp_path):
     """
@@ -780,22 +779,22 @@ def test_pvt_model_table_parameters_description_equal(table_parameters_descripti
     import numpy as np
 
     table_params_1 = table_parameters_description(
-        np.array([0.0]), # pressure values
-        np.array([0.0]), # temperature or enthalpy values
+        np.array([0.0]),  # pressure values
+        np.array([0.0]),  # temperature or enthalpy values
         table_variables=[],
         variable_names=[],
         number_of_phases=-1,
     )
     table_params_2 = table_parameters_description(
-        np.array([0.0]), # pressure values
-        np.array([0.0]), # temperature or enthalpy values
+        np.array([0.0]),  # pressure values
+        np.array([0.0]),  # temperature or enthalpy values
         table_variables=[np.array([1, 2])],
         variable_names=[],
         number_of_phases=-1,
     )
     table_params_3 = table_parameters_description(
-        np.array([0.0]), # pressure values
-        np.array([0.0]), # temperature or enthalpy values
+        np.array([0.0]),  # pressure values
+        np.array([0.0]),  # temperature or enthalpy values
         table_variables=[np.array([2, 3])],
         variable_names=[],
         number_of_phases=-1,
@@ -820,8 +819,8 @@ def test_pvt_model_table_parameters_description_post_init(table_parameters_descr
 
     table_params = table_parameters_description(
         # Required params
-        np.ndarray([1]), # pressure values
-        np.ndarray([1]), # temperature or enthalpy values
+        np.ndarray([1]),  # pressure values
+        np.ndarray([1]),  # temperature or enthalpy values
         table_variables=[np.ndarray([1])],
         variable_names=["str"],
         # Optional params
@@ -848,7 +847,10 @@ def test_pvt_model_table_parameters_description_post_init(table_parameters_descr
     # The following check are only for coverage purpose
     assert table_params.pressure_unit == "Pa"
 
-    if table_parameters_description == case_description.PvtModelPtTableParametersDescription:
+    if (
+        table_parameters_description
+        == case_description.PvtModelPtTableParametersDescription
+    ):
         assert table_params.temperature_unit == "K"
     else:
         assert table_params.enthalpy_unit == "J/kg"
@@ -954,18 +956,24 @@ def test_pvt_model_table_parameters_description_create_constant_ph_table():
     # Temperature must be at last position
     assert pvt.table_variables[-1] == approx(temperature_expected_values)
 
+
 def test_pvt_model_table_parameters_description_create_ph_table_with_dummy_dict():
     """
     Ensure that the dummy dict can create a dummy PH table
     """
     import numpy as np
 
-    dummy_dict = case_description.PvtModelPhTableParametersDescription.dummy_parameters_dict()
+    dummy_dict = (
+        case_description.PvtModelPhTableParametersDescription.dummy_parameters_dict()
+    )
 
-    ph_table_description = case_description.PvtModelPhTableParametersDescription(**dummy_dict)
+    ph_table_description = case_description.PvtModelPhTableParametersDescription(
+        **dummy_dict
+    )
 
     assert ph_table_description.enthalpy_values == np.array([0.0])
     assert ph_table_description.variable_names == []
+
 
 def test_get_value_and_unit_from_length_and_elevation_description_and_xand_ydescription():
     """

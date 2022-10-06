@@ -157,16 +157,16 @@ def build_constant_pvt_table(
         == constants.EnergyModelPrimaryVariable.Temperature
     ):
         return case_description.PvtModelsDescription(
-            default_model='constant pt table',
+            default_model="constant pt table",
             pt_table_parameters={
-                'constant pt table': case_description.PvtModelPtTableParametersDescription.create_constant()
+                "constant pt table": case_description.PvtModelPtTableParametersDescription.create_constant()
             },
         )
     elif energy_model_primary_variable == constants.EnergyModelPrimaryVariable.Enthalpy:
         return case_description.PvtModelsDescription(
-            default_model='constant ph table',
+            default_model="constant ph table",
             ph_table_parameters={
-                'constant ph table': case_description.PvtModelPhTableParametersDescription.create_constant()
+                "constant ph table": case_description.PvtModelPhTableParametersDescription.create_constant()
             },
         )
     else:  # pragma no cover

@@ -2851,10 +2851,10 @@ class PvtModelPhTableParametersDescription:
         Creates a dummy PH PVT Table parameters dict to set in the Memento.
         """
         return {
-            'pressure_values': np.array([0.0]),
-            'enthalpy_values': np.array([0.0]),
-            'table_variables': [],
-            'variable_names': [],
+            "pressure_values": np.array([0.0]),
+            "enthalpy_values": np.array([0.0]),
+            "table_variables": [],
+            "variable_names": [],
         }
 
     def __eq__(self, other):
