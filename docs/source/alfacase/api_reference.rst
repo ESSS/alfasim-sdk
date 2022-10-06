@@ -57,7 +57,9 @@ PVTs
 
 .. autoclass:: alfasim_sdk.PvtModelCorrelationDescription()
 
-.. autoclass:: alfasim_sdk.PvtModelTableParametersDescription()
+.. autoclass:: alfasim_sdk.PvtModelPtTableParametersDescription()
+
+.. autoclass:: alfasim_sdk.PvtModelPhTableParametersDescription()
 
 
 PVT Combined
