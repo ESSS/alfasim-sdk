@@ -179,6 +179,17 @@ def convert_dict_to_valid_alfacase_format(
             )
             continue
 
+        if isinstance(value, list) and all(isinstance(item, dict) for item in value):
+            converted_dict[key] = [
+                convert_dict_to_valid_alfacase_format(
+                    item,
+                    enable_flow_style_on_numpy=enable_flow_style_on_numpy,
+                    remove_redundant_input_type_data=remove_redundant_input_type_data,
+                )
+                for item in value
+            ]
+            continue
+
         converted_dict[key] = _convert_value_to_valid_alfacase_format(
             value, enable_flow_style_on_numpy
         )

@@ -274,6 +274,7 @@ def attrib_curve(
     default: Union[CurveLike, AttrNothingType] = attr.NOTHING,
     is_optional: bool = False,
     category: Optional[str] = None,
+    domain_category: Optional[str] = None,
 ) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with a converter to Curve accepting also tuple(image, domain).
@@ -287,21 +288,38 @@ def attrib_curve(
     :param category:
         Category of the curve image array.
 
+    :param domain_category:
+        Category of the curve domain array.
+
     """
     if isinstance(default, Curve):
         if category is None:
             category = default.image.category
         elif category != default.image.category:
             raise ValueError("`default` image's category and `category` must match")
+        if domain_category is None:
+            domain_category = default.domain.category
+        elif domain_category != default.domain.category:
+            raise ValueError(
+                "`default` domain's category and `domain_category` must match"
+            )
 
     else:
         if category is None:
             raise ValueError(
                 "If `default` is not a curve then `category` is required to be not `None`"
             )
+        if domain_category is None:
+            raise ValueError(
+                "If `default` is not a curve then `domain_category` is required to be not `None`"
+            )
 
     is_optional = is_optional or (default is None)
-    metadata = {"type": "curve", "category": category}
+    metadata = {
+        "type": "curve",
+        "category": category,
+        "domain_category": domain_category,
+    }
     return attr.ib(
         default=default,
         converter=partial(to_curve, is_optional=is_optional),
@@ -494,4 +512,10 @@ class InvalidReferenceError(DescriptionError):
 class InvalidYamlDataError(DescriptionError):
     """
     Error raised when some data in the YAML file is not properly configured.
+    """
+
+
+class InvalidPluginDataError(DescriptionError):
+    """
+    Error raised when some plugin input data is not in the expected format.
     """

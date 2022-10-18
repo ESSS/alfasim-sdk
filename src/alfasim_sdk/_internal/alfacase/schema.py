@@ -3,14 +3,14 @@
 # import cog
 # from alfasim_sdk import CaseDescription
 # from alfasim_sdk._internal.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
-# cog.out("from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
+# cog.out("from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
 # cog.out("\n\n")
 # cog.out("\n\n")
 # list_of_classes_that_needs_schema = get_all_classes_that_needs_schema(CaseDescription)
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
+from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
 
 
 
@@ -463,6 +463,13 @@ pipe_segments_description_schema = Map(
         "diameters": Map({"values": Seq(Float()), "unit": Str()}),
         "roughnesses": Map({"values": Seq(Float()), "unit": Str()}),
         Optional("wall_names"): Seq(Str()),
+    }
+)
+plugin_description_schema = Map(
+    {
+        Optional("name"): Str(),
+        Optional("gui_models"): MapPattern(Str(), Any()),
+        Optional("is_enabled"): Bool(),
     }
 )
 pressure_container_description_schema = Map(
@@ -1112,6 +1119,7 @@ case_description_schema = Map(
         Optional("physics"): physics_description_schema,
         Optional("time_options"): time_options_description_schema,
         Optional("numerical_options"): numerical_options_description_schema,
+        Optional("plugins"): Seq(plugin_description_schema),
         Optional("ipr_models"): ipr_models_description_schema,
         Optional("pvt_models"): pvt_models_description_schema,
         Optional("tracers"): tracers_description_schema,
@@ -1123,5 +1131,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: f1c874c32714ece81b49496d4dc106a0)
+# [[[end]]] (checksum: eac23547bd8d2e6f64f91874b0880161)
 # fmt: on

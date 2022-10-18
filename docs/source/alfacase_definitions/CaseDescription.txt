@@ -9,6 +9,7 @@
             physics: \ :class:`PhysicsDescription <PhysicsDescription>`\  = PhysicsDescription()
             time_options: \ :class:`TimeOptionsDescription <TimeOptionsDescription>`\  = TimeOptionsDescription()
             numerical_options: \ :class:`NumericalOptionsDescription <NumericalOptionsDescription>`\  = NumericalOptionsDescription()
+            plugins: \ :class:`List <typing.List>`\[\ :class:`PluginDescription <PluginDescription>`\] = []
             ipr_models: \ :class:`IPRModelsDescription <IPRModelsDescription>`\  = IPRModelsDescription()
             pvt_models: \ :class:`PvtModelsDescription <PvtModelsDescription>`\  = PvtModelsDescription()
             tracers: \ :class:`TracersDescription <TracersDescription>`\  = TracersDescription()
@@ -27,6 +28,8 @@
             physics: \ :class:`physics_description_schema <PhysicsDescription>`\  # optional
             time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>`\  # optional
             numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>`\  # optional
+            plugins:  # optional
+                - \ :class:`plugin_description_schema <PluginDescription>`
             ipr_models: \ :class:`ipr_models_description_schema <IPRModelsDescription>`\  # optional
             pvt_models: \ :class:`pvt_models_description_schema <PvtModelsDescription>`\  # optional
             tracers: \ :class:`tracers_description_schema <TracersDescription>`\  # optional
