@@ -849,7 +849,7 @@ class FileContent(BaseField):
     :ivar path:          Return a `Path object`_ of the file.
     :ivar content:       The content from the file in binary format.
     :ivar size:          The size of the file in bytes.
-    :ivar modified_data: Return a `Datetime object`_, with the last time the file was modified
+    :ivar modified_date: Return a `Datetime object`_, with the last time the file was modified
 
     >>> ctx.get_model("MyModel").file_content_field.path
     WindowsPath('C:/ol-wax-1.wax')
@@ -860,7 +860,7 @@ class FileContent(BaseField):
     >>> ctx.get_model("MyModel").file_content_field.size
     90379
 
-    >>> ctx.get_model("MyModel").file_content_field.modified_data
+    >>> ctx.get_model("MyModel").file_content_field.modified_date
     datetime.datetime(2019, 5, 10, 14, 22, 11, 50795)
 
     .. _Path object: https://docs.python.org/3/library/pathlib.html#pure-paths

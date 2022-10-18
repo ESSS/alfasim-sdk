@@ -259,3 +259,18 @@ Tables
 .. autoclass:: alfasim_sdk.TablePumpDescription()
 
 .. autoclass:: alfasim_sdk.CvTableDescription()
+
+
+Plugins
+-------
+
+Plugin support in :program:`ALFAcase` is experimental and subject to change.
+
+.. autoclass:: alfasim_sdk.PluginDescription()
+
+
+Results
+-------
+
+.. autoclass:: alfasim_sdk.result_reader.Results
+.. autoclass:: alfasim_sdk.result_reader.ALFASimResultMetadata

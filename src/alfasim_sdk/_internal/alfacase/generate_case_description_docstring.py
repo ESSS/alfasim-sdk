@@ -347,6 +347,8 @@ def dict_formatted_for_schema(value: Any) -> str:
         lines += scalar_formatted_for_schema(argument, number_of_indent=2)
     elif is_array(argument):
         lines += array_formatted_for_schema(argument, number_of_indent=2)
+    elif argument is Any:
+        lines += "Any"
     else:
         lines += argument.__name__
     return lines

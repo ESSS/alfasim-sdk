@@ -449,6 +449,7 @@ def test_get_cases_class():
         "PigEquipmentDescription",
         "PipeDescription",
         "PipeSegmentsDescription",
+        "PluginDescription",
         "PressureContainerDescription",
         "PressureNodePropertiesDescription",
         "ProfileDescription",
