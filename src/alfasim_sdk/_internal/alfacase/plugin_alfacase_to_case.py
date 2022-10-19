@@ -49,7 +49,7 @@ def get_unused_filename(alfacase_folder: Path, path: Path) -> Path:
     Return a not used file name inside ``alfacase_folder``.
     """
     # The original file does not need to actually exist (`path.stem` could be empty).
-    stem = path.stem or '(unnamed)'
+    stem = path.stem or "(unnamed)"
     fullpath = alfacase_folder / f"{stem}{path.suffix}"
     for i in itertools.count(2):
         if fullpath.exists():
