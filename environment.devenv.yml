@@ -5,6 +5,7 @@ dependencies:
   - click
   - attrs >= 19.1.0
   - barril
+  - h5py
 
 environment:
   PYTHONPATH:

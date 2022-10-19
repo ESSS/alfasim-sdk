@@ -7,6 +7,46 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.monkeypatch import MonkeyPatch
 
+from alfasim_sdk.result_reader.reader import Results
+
+
+pytest_plugins = [
+    "alfasim_sdk.testing.fixtures",
+]
+
+
+@pytest.fixture()
+def results(datadir: Path, request: FixtureRequest) -> Results:
+    """
+    Result are composed by 3 files.
+    The first 2 are contiguous results.
+    The last 2 ones overlap, the last causes the previous tu be truncated.
+    """
+    repo_root = request.session.fspath
+    sample_results_data_folder = repo_root / "sample_alfasim_result/project.data"
+    test_data_folder = datadir / "project.data"
+    assert not test_data_folder.exists()
+    shutil.copytree(sample_results_data_folder, test_data_folder)
+    assert test_data_folder.is_dir()
+    return Results(test_data_folder)
+
+
+@pytest.fixture()
+def creating_results(results: Results) -> List[Path]:
+    """
+    This fixture will affect ``results`` where all the result files are in
+    the "creating" state. The list of files returned can be removed to
+    indicate the result files are "ready".
+    """
+    results_folder = results.results_folder
+    creating_results_files = sorted(
+        p.with_suffix(".creating") for p in results_folder.iterdir()
+    )
+    assert len(creating_results_files) == 3
+    for p in creating_results_files:
+        p.touch()
+    return creating_results_files
+
 
 @pytest.fixture()
 def abx_plugin_source(datadir: Path) -> Path:
