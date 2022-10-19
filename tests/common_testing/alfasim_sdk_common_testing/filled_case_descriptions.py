@@ -390,6 +390,7 @@ TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
     void_fractions=Array("volume fraction", [0.0] * 4 + [0.1] * 4, "-"),
     flow_rates=Array([1.0] * 4 + [0.05] * 4, "m3/s"),
     pressure_boosts=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "bar"),
+    heads=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "m") * 1.0e5 / (9.8 * 1000.0),
 )
 SURGE_VOLUME_OPTIONS_DESCRIPTION = case_description.SurgeVolumeOptionsDescription(
     time_mode=constants.SurgeVolumeTimeMode.UserDefined,

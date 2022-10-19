@@ -1404,6 +1404,7 @@ def load_table_pump_description(
         "void_fractions": get_array_loader(category="volume fraction"),
         "flow_rates": get_array_loader(category="volume flow rate"),
         "pressure_boosts": get_array_loader(from_unit="bar"),
+        "heads": get_array_loader(from_unit="m"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.TablePumpDescription(**case_values)

@@ -1,39 +1,24 @@
 from numbers import Number
 from pathlib import Path
-from typing import Dict
-from typing import Iterator
-from typing import List
-from typing import Optional
-from typing import Set
-from typing import Tuple
-from typing import Union
+from typing import Dict, Iterator, List, Optional, Set, Tuple, Union
 
 import attr
 import numpy as np
-from attr.validators import in_
-from attr.validators import instance_of
-from attr.validators import optional
+from attr.validators import in_, instance_of, optional
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from .case_description_attributes import attrib_array
-from .case_description_attributes import attrib_curve
-from .case_description_attributes import attrib_dict_of
-from .case_description_attributes import attrib_enum
-from .case_description_attributes import attrib_instance
-from .case_description_attributes import attrib_instance_list
-from .case_description_attributes import attrib_scalar
-from .case_description_attributes import collapse_array_repr
-from .case_description_attributes import dict_of
-from .case_description_attributes import dict_of_array
-from .case_description_attributes import dict_with_scalar
-from .case_description_attributes import InvalidReferenceError
-from .case_description_attributes import list_of_strings
-from .case_description_attributes import Numpy1DArray
-from .case_description_attributes import numpy_array_validator
-from .case_description_attributes import PhaseName
 from alfasim_sdk._internal import constants
+
+from .case_description_attributes import (InvalidReferenceError, Numpy1DArray,
+                                          PhaseName, attrib_array,
+                                          attrib_curve, attrib_dict_of,
+                                          attrib_enum, attrib_instance,
+                                          attrib_instance_list, attrib_scalar,
+                                          collapse_array_repr, dict_of,
+                                          dict_of_array, dict_with_scalar,
+                                          list_of_strings,
+                                          numpy_array_validator)
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -575,16 +560,52 @@ class TablePumpDescription:
         )
     )
 
+    # H [m] = P [Pa] * Q [m^3/s] / rho_ref [kg/m^3] / g [m/s^2]
+    # rho_ref = 1000.0 [kg/m^3]
+    # g = 9.81 [m/s^2]
+    heads = attrib_array(Array(
+        [0.0] * 12
+        + [
+            12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
+            14.0, 12.0, 10.0, 8.0, 5.5, 0.0, 13.5, 11.2, 9.5, 7.6, 5.2, 0.0,
+        ],
+        'm',
+    ) * 1.0e5 / (1000.0 * 9.81)
+                         )
+
+    # Efficiencies empirically defined.
+    # Note that efficiencies are degraded for 0.1 void fraction.
+    # efficiencies = attrib_array(Array(
+    #     [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+    #     [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+    #     [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180],
+    #     '%',
+    #      )
+    #       )
+    #
+    # # BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
+    # powers = attrib_array(Array(
+    #     [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
+    #     [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
+    #     134615.38, 0.00] +
+    #     [192857.14, 192857.14, 195652.17, 200000.00, 190384.62, 0.00, 200000.00, 200000.00, 206521.74, 211111.11,
+    #     200000.00, 0.00],
+    #     'W',
+    #     )
+    #                          )
+
+
     def __attrs_post_init__(self):
         expected_length = len(self.speeds)
         all_fields = list(attr.fields_dict(self.__class__).keys())
         if any(len(getattr(self, field)) != expected_length for field in all_fields):
             msg = (
-                f"speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:\n"
+                f"speeds, void_fractions, flow_rates, pressure_boosts and heads must have the same size, got:\n"
                 f"    - {len(self.speeds)} items for speeds\n"
                 f"    - {len(self.void_fractions)} items for void_fractions\n"
                 f"    - {len(self.flow_rates)} items for flow_rates\n"
                 f"    - {len(self.pressure_boosts)} items for pressure_boosts\n"
+                f"    - {len(self.heads)} items for heads\n"
             )
             raise ValueError(msg)
 
