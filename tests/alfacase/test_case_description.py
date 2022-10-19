@@ -187,7 +187,7 @@ def test_instance_attribute():
 def test_curve_attributes_converter():
     @attr.s
     class Foo:
-        x = attrib_curve(category="length")
+        x = attrib_curve(category="length", domain_category="time")
 
     expected_msg = "Expected pair (image_array, domain_array) or Curve, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
@@ -1097,22 +1097,44 @@ def test_attrib_category_miss_match(attrib_creator: Callable, default: Any) -> N
     assert isinstance(attrib_creator(default, category="length"), _CountingAttr)
 
 
+def test_attrib_curve_domain_category_miss_match() -> None:
+    default = Curve(Array([1, 2, 3], "m"), Array([0, 1.1, 2.2], "s"))
+    with pytest.raises(ValueError, match="category and `domain_category` must match"):
+        attrib_curve(default, domain_category="length")
+
+    assert isinstance(attrib_curve(default), _CountingAttr)
+    assert isinstance(attrib_curve(default, domain_category="time"), _CountingAttr)
+
+
 @pytest.mark.parametrize(
     "attrib_creator, default",
     [
         (attrib_scalar, (1, "m")),
         (attrib_array, ([1, 2, 3], "m")),
-        (attrib_curve, (Array([1, 2, 3], "m"), Array([0, 1.1, 2.2], "s"))),
     ],
 )
 def test_attrib_category_required(attrib_creator, default):
+    assert isinstance(attrib_creator(default, category="length"), _CountingAttr)
+
     with pytest.raises(
         ValueError,
         match=r"If `default` is not an? \S+ then `category` is required to be not `None`",
     ):
         attrib_creator(default)
 
-    assert isinstance(attrib_creator(default, category="length"), _CountingAttr)
+
+@pytest.mark.parametrize("none_arg", ["category", "domain_category"])
+def test_curve_attrib_category_and_domain_required(none_arg):
+    category_args = dict(category="length", domain_category="time")
+    non_curve_default = (Array([1, 2, 3], "m"), Array([0, 1.1, 2.2], "s"))
+    assert isinstance(attrib_curve(non_curve_default, **category_args), _CountingAttr)
+
+    category_args[none_arg] = None
+    expected_msg = (
+        f"If `default` is not a curve then `{none_arg}` is required to be not `None`"
+    )
+    with pytest.raises(ValueError, match=expected_msg):
+        attrib_curve(non_curve_default, **category_args)
 
 
 def test_generate_multi_input():

@@ -1,0 +1,79 @@
+2022-08-26 15:09:29,986  run_simulation.py          404 INFO     Reading study
+2022-08-26 15:09:30,395  utils.py                   145 INFO     Note: NumExpr detected 16 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-08-26 15:09:30,395  utils.py                   157 INFO     NumExpr defaulting to 8 threads.
+2022-08-26 15:09:31,405  license.py                 137 INFO     Acquiring licenses for C:\Users\prusse\Desktop\alfasim 22.3.0 alpha.1\t\b.data:None
+2022-08-26 15:09:32,161  license.py                 149 INFO     Licenses for C:\Users\prusse\Desktop\alfasim 22.3.0 alpha.1\t\b.data:None acquired
+2022-08-26 15:09:32,164  initialization.py           20 INFO     Initializing libraries
+2022-08-26 15:09:32,222  initialization.py           31 INFO         Initializing PETSc
+2022-08-26 15:09:32,222  initialization.py           41 INFO         Configuring MKL
+2022-08-26 15:09:32,222  initialization.py           44 INFO         Configuring numpy
+2022-08-26 15:09:32,222  initialization.py           49 INFO         Clearing floating point errors
+2022-08-26 15:09:32,223  run_simulation.py          473 INFO     Creating simulation state
+2022-08-26 15:09:32,329  network_creation.py        279 INFO     Initial conditions was set using the restart file
+2022-08-26 15:09:32,331  check_range.py              24 WARNING  Using bubble point pressure Standing correlation outside defined range ([100.0, 258.0]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,331  check_range.py              24 WARNING  Using solution gas oil ratio Standing correlation outside defined range ([100.0, 258.0]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,332  check_range.py              24 WARNING  Using solution gas oil ratio Standing correlation outside defined range ([20.0, 1425.0]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (scf/stb)
+2022-08-26 15:09:32,332  check_range.py              24 WARNING  Using Bo Standing correlation outside defined range ([100, 258]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,333  check_range.py              24 WARNING  Using Bo Standing correlation outside defined range ([20, 1425]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (ft3/bbl)
+2022-08-26 15:09:32,333  check_range.py              24 WARNING  Using oil viscosity (Egbogah) correlation outside defined range ([20, 2070]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (scf/stb)
+2022-08-26 15:09:32,334  check_range.py              24 WARNING  Using oil viscosity (Beggs & Robinson) correlation outside defined range ([70, 295]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,405  check_range.py              24 WARNING  Using bubble point pressure Standing correlation outside defined range ([100.0, 258.0]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,406  check_range.py              24 WARNING  Using solution gas oil ratio Standing correlation outside defined range ([100.0, 258.0]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,407  check_range.py              24 WARNING  Using solution gas oil ratio Standing correlation outside defined range ([20.0, 1425.0]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (scf/stb)
+2022-08-26 15:09:32,407  check_range.py              24 WARNING  Using Bo Standing correlation outside defined range ([100, 258]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,407  check_range.py              24 WARNING  Using Bo Standing correlation outside defined range ([20, 1425]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (ft3/bbl)
+2022-08-26 15:09:32,408  check_range.py              24 WARNING  Using oil viscosity (Egbogah) correlation outside defined range ([20, 2070]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (scf/stb)
+2022-08-26 15:09:32,408  check_range.py              24 WARNING  Using oil viscosity (Beggs & Robinson) correlation outside defined range ([70, 295]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,481  check_range.py              24 WARNING  Using bubble point pressure Standing correlation outside defined range ([100.0, 258.0]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,482  check_range.py              24 WARNING  Using solution gas oil ratio Standing correlation outside defined range ([100.0, 258.0]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,482  check_range.py              24 WARNING  Using solution gas oil ratio Standing correlation outside defined range ([20.0, 1425.0]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (scf/stb)
+2022-08-26 15:09:32,483  check_range.py              24 WARNING  Using Bo Standing correlation outside defined range ([100, 258]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,483  check_range.py              24 WARNING  Using Bo Standing correlation outside defined range ([20, 1425]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (ft3/bbl)
+2022-08-26 15:09:32,484  check_range.py              24 WARNING  Using oil viscosity (Egbogah) correlation outside defined range ([20, 2070]):
+[  5.452731732572973   5.425179743003781   5.397766970283399 ...
+ 843.8112574970305   843.8112574970305   843.8112574970305  ] (scf/stb)
+2022-08-26 15:09:32,484  check_range.py              24 WARNING  Using oil viscosity (Beggs & Robinson) correlation outside defined range ([70, 295]):
+[ 59.99999999999991  61.99999999999991  64.               ...
+ 253.99999999999991 256.               257.9999999999999 ] (degF)
+2022-08-26 15:09:32,564  run_simulation.py          491 INFO     Creating output definition
+2022-08-26 15:09:32,564  run_simulation.py          504 INFO     Running simulation
+2022-08-26 15:09:35,171  time_stepper.py            306 INFO     Simulation finished: status=FINISHED, simulated time=14401.0s, elapsed time (process)=6.516000000177883s
+2022-08-26 15:09:35,175  main.py                    202 INFO     Exiting simulation process
