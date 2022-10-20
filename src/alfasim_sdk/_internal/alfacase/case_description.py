@@ -575,24 +575,24 @@ class TablePumpDescription:
 
     # Efficiencies empirically defined.
     # Note that efficiencies are degraded for 0.1 void fraction.
-    # efficiencies = attrib_array(Array(
-    #     [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
-    #     [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
-    #     [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180],
-    #     '%',
-    #      )
-    #       )
-    #
-    # # BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
-    # powers = attrib_array(Array(
-    #     [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
-    #     [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
-    #     134615.38, 0.00] +
-    #     [192857.14, 192857.14, 195652.17, 200000.00, 190384.62, 0.00, 200000.00, 200000.00, 206521.74, 211111.11,
-    #     200000.00, 0.00],
-    #     'W',
-    #     )
-    #                          )
+    efficiencies = attrib_array(Array(
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180],
+        '%',
+         )
+          )
+
+    # BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
+    powers = attrib_array(Array(
+        [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
+        [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
+        134615.38, 0.00] +
+        [192857.14, 192857.14, 195652.17, 200000.00, 190384.62, 0.00, 200000.00, 200000.00, 206521.74, 211111.11,
+        200000.00, 0.00],
+        'W',
+        )
+                             )
 
 
     def __attrs_post_init__(self):
@@ -600,12 +600,16 @@ class TablePumpDescription:
         all_fields = list(attr.fields_dict(self.__class__).keys())
         if any(len(getattr(self, field)) != expected_length for field in all_fields):
             msg = (
-                f"speeds, void_fractions, flow_rates, pressure_boosts and heads must have the same size, got:\n"
+                f"speeds, void_fractions, flow_rates, pressure_boosts, heads, efficiencies and powers must have the "
+                f"same size, got:\n "
                 f"    - {len(self.speeds)} items for speeds\n"
                 f"    - {len(self.void_fractions)} items for void_fractions\n"
                 f"    - {len(self.flow_rates)} items for flow_rates\n"
                 f"    - {len(self.pressure_boosts)} items for pressure_boosts\n"
                 f"    - {len(self.heads)} items for heads\n"
+                f"    - {len(self.efficiencies)} items for efficiencies\n"
+                f"    - {len(self.powers)} items for powers\n"
+
             )
             raise ValueError(msg)
 
