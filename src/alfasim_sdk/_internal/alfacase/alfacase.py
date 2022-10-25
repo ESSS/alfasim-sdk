@@ -11,9 +11,17 @@ def generate_alfacase_file(
 
     PvtModels that are of mode constants.PVT_MODEL_TABLE will be dumped into a separate file (.alfatable).
     """
+    from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
+        dump_file_contents_and_update_plugins,
+    )
+
     _generate_alfatable_file_for_pvt_models_description(
         alfacase_description.pvt_models, alfacase_file
     )
+    alfacase_description = dump_file_contents_and_update_plugins(
+        alfacase_description, alfacase_file
+    )
+
     alfacase_file_content = convert_description_to_alfacase(alfacase_description)
     alfacase_file.write_text(alfacase_file_content, encoding="utf-8")
 
@@ -73,8 +81,9 @@ def convert_description_to_alfacase(
     from strictyaml import YAML
     from .case_to_alfacase import convert_dict_to_valid_alfacase_format
 
+    alfacase_description_dict = attr.asdict(alfacase_description, recurse=False)
     case_description_dict = convert_dict_to_valid_alfacase_format(
-        attr.asdict(alfacase_description, recurse=False),
+        alfacase_description_dict,
         enable_flow_style_on_numpy=enable_flow_style_on_numpy,
         remove_redundant_input_type_data=remove_redundant_input_type_data,
     )

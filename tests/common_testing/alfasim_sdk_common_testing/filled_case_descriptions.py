@@ -888,6 +888,13 @@ NODE_CONTROLLER_DESCRIPTION = case_description.NodeDescription(
 )
 
 
+PLUGIN_DESCRIPTION = case_description.PluginDescription(
+    name="user_plugin",
+    is_enabled=False,
+    gui_models={},
+)
+
+
 def ensure_descriptions_are_equal(
     expected_case_description_dict,
     obtained_description_dict,

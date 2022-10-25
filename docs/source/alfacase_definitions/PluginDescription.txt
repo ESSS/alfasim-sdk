@@ -1,0 +1,19 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class PluginDescription
+            name: \ :class:`Optional <typing.Optional>`\[str] = None
+            gui_models: \ :class:`Dict <typing.Dict>`\[str, Any] = {}
+            is_enabled: bool = True
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            name: string  # optional
+            gui_models:  # optional
+                string: Any
+            is_enabled: boolean  # optional

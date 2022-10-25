@@ -480,6 +480,14 @@ pipe_segments_description_schema = Map(
     }
 )
 
+plugin_description_schema = Map(
+    {
+        Optional("name"): Str(),
+        Optional("gui_models"): MapPattern(Str(), Any()),
+        Optional("is_enabled"): Bool(),
+    }
+)
+
 pressure_container_description_schema = Map(
     {
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -1183,6 +1191,7 @@ case_description_schema = Map(
         Optional("physics"): physics_description_schema,
         Optional("time_options"): time_options_description_schema,
         Optional("numerical_options"): numerical_options_description_schema,
+        Optional("plugins"): Seq(plugin_description_schema),
         Optional("ipr_models"): ipr_models_description_schema,
         Optional("pvt_models"): pvt_models_description_schema,
         Optional("tracers"): tracers_description_schema,

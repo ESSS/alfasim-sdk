@@ -1,5 +1,8 @@
+from contextlib import suppress
+from datetime import datetime
 from numbers import Number
 from pathlib import Path
+from typing import Any
 from typing import Dict
 from typing import Iterator
 from typing import List
@@ -56,9 +59,22 @@ from alfasim_sdk._internal import constants
 
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
+    """
+    :ivar name:
+        The plugin id.
+
+    :ivar gui_models:
+        The plugin input format depends on the specific plugin implementation.
+
+    :ivar is_enabled:
+        A flag indicating if this plugin is enabled.
+
+    .. include:: /alfacase_definitions/PluginDescription.txt
+    """
+
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    gui_models = attr.ib(default=attr.Factory(dict))
-    additional_variables = attr.ib(default=None)
+    gui_models: Dict[str, Any] = attr.ib(default=attr.Factory(dict))
+    is_enabled: bool = attr.ib(default=True)
 
 
 @attr.s(frozen=True, slots=True)
@@ -80,6 +96,50 @@ class PluginMultipleReference:
 @attr.s(frozen=True, slots=True)
 class PluginTableContainer:
     columns = attr.ib(default=attr.Factory(dict))
+
+
+@attr.s(frozen=True, slots=True)
+class PluginFileContent:
+    path = attr.ib(validator=instance_of(Path))
+    content = attr.ib(validator=instance_of(bytes))
+    size = attr.ib(validator=instance_of(int))
+    modified_date = attr.ib(validator=instance_of(datetime))
+    is_valid = attr.ib(validator=instance_of(bool))
+
+    @classmethod
+    def from_path(
+        cls, file_path: Path, root: Optional[Path] = None
+    ) -> "PluginFileContent":
+        """
+        Helper method for creation of ``FileContent`` from a ``Path`` object
+        or a ``str`` with the absolute path.
+
+        If ``root`` is not ``None`` the ``path`` attribute of the returned
+        object will be relative to this folder if possible, ``file_path`` is
+        used as is otherwise.
+        """
+        file_path = Path(file_path)
+        rel_file_path = file_path
+        if root is not None:
+            with suppress(ValueError):
+                rel_file_path = file_path.relative_to(root)
+
+        if file_path.is_file():
+            return cls(
+                path=rel_file_path,
+                content=file_path.read_bytes(),
+                size=file_path.stat().st_size,
+                modified_date=datetime.fromtimestamp(file_path.stat().st_mtime),
+                is_valid=True,
+            )
+        else:
+            return cls(
+                path=rel_file_path,
+                content=b"",
+                size=0,
+                modified_date=datetime.now(),
+                is_valid=False,
+            )
 
 
 @attr.s(frozen=True, slots=True)

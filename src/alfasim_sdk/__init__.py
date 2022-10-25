@@ -111,6 +111,7 @@ from alfasim_sdk._internal.alfacase.case_description import PhysicsDescription
 from alfasim_sdk._internal.alfacase.case_description import PigEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeSegmentsDescription
+from alfasim_sdk._internal.alfacase.case_description import PluginDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     PressureContainerDescription,
 )
@@ -452,6 +453,7 @@ __all__ = [
     "PipeSegmentsDescription",
     "PipeThermalModelType",
     "PipeThermalPositionInput",
+    "PluginDescription",
     "PositionalPipeTrendDescription",
     "PressureContainerDescription",
     "PressureNodePropertiesDescription",
