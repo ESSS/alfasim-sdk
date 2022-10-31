@@ -104,7 +104,7 @@ ENV/
 
 # VSCode
 /.vscode/
-
+.history
 
 **/build
 **/_build
