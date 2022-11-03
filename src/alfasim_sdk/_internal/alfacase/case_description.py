@@ -13,21 +13,30 @@ from typing import Union
 
 import attr
 import numpy as np
-from attr.validators import in_, instance_of, optional
+from attr.validators import in_
+from attr.validators import instance_of
+from attr.validators import optional
 from barril.curve.curve import Curve
-from barril.units import Array, Scalar
+from barril.units import Array
+from barril.units import Scalar
 
+from .case_description_attributes import attrib_array
+from .case_description_attributes import attrib_curve
+from .case_description_attributes import attrib_dict_of
+from .case_description_attributes import attrib_enum
+from .case_description_attributes import attrib_instance
+from .case_description_attributes import attrib_instance_list
+from .case_description_attributes import attrib_scalar
+from .case_description_attributes import collapse_array_repr
+from .case_description_attributes import dict_of
+from .case_description_attributes import dict_of_array
+from .case_description_attributes import dict_with_scalar
+from .case_description_attributes import InvalidReferenceError
+from .case_description_attributes import list_of_strings
+from .case_description_attributes import Numpy1DArray
+from .case_description_attributes import numpy_array_validator
+from .case_description_attributes import PhaseName
 from alfasim_sdk._internal import constants
-
-from .case_description_attributes import (InvalidReferenceError, Numpy1DArray,
-                                          PhaseName, attrib_array,
-                                          attrib_curve, attrib_dict_of,
-                                          attrib_enum, attrib_instance,
-                                          attrib_instance_list, attrib_scalar,
-                                          collapse_array_repr, dict_of,
-                                          dict_of_array, dict_with_scalar,
-                                          list_of_strings,
-                                          numpy_array_validator)
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
