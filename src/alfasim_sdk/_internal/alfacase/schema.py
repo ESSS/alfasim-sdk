@@ -716,6 +716,9 @@ table_pump_description_schema = Map(
         Optional("void_fractions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("flow_rates"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("pressure_boosts"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("heads"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("efficiencies"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("powers"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 temperatures_container_description_schema = Map(
@@ -1131,5 +1134,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: eac23547bd8d2e6f64f91874b0880161)
+# [[[end]]] (checksum: 0d1c4f2308285b6cae0f4472304733f4)
 # fmt: on

@@ -614,6 +614,32 @@ class SpeedCurveDescription:
 @attr.s(frozen=True, slots=True, kw_only=True)
 class TablePumpDescription:
     """
+
+    :ivar speeds:
+        Pump rotational speed values
+
+    :ivar void_fractions:
+        Pump void fraction values
+
+    :ivar flow_rates:
+        Pump flow rate values
+
+    :ivar pressure_boosts:
+        Pump pressure boost values
+
+    :ivar heads:
+        Pump head values. Using SI units,
+        H [m] = P [Pa] * Q [m^3/s] / rho_ref [kg/m^3] / g [m/s^2]
+        rho_ref = 1000.0 [kg/m^3]
+        g = 9.81 [m/s^2]
+
+    :ivar efficiencies:
+        Pump efficiency values
+
+    :ivar powers:
+        Pump power values. There a relation between other pump variables and power. In SI units:
+        BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
+
     .. include:: /alfacase_definitions/TablePumpDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
@@ -635,16 +661,51 @@ class TablePumpDescription:
         )
     )
 
+
+    heads = attrib_array(Array(
+        [0.0] * 12
+        + [
+            12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
+            14.0, 12.0, 10.0, 8.0, 5.5, 0.0, 13.5, 11.2, 9.5, 7.6, 5.2, 0.0,
+        ],
+        'm',
+    ) * 1.0e5 / (1000.0 * 9.81)
+                         )
+
+    efficiencies = attrib_array(Array(
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180],
+        '%',
+         )
+          )
+
+
+    powers = attrib_array(Array(
+        [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
+        [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
+        134615.38, 0.00] +
+        [192857.14, 192857.14, 195652.17, 200000.00, 190384.62, 0.00, 200000.00, 200000.00, 206521.74, 211111.11,
+        200000.00, 0.00],
+        'W',
+        )
+                             )
+
+
     def __attrs_post_init__(self):
         expected_length = len(self.speeds)
         all_fields = list(attr.fields_dict(self.__class__).keys())
         if any(len(getattr(self, field)) != expected_length for field in all_fields):
             msg = (
-                f"speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:\n"
+                f"speeds, void_fractions, flow_rates, pressure_boosts, heads, efficiencies and powers must have the "
+                f"same size, got:\n"
                 f"    - {len(self.speeds)} items for speeds\n"
                 f"    - {len(self.void_fractions)} items for void_fractions\n"
                 f"    - {len(self.flow_rates)} items for flow_rates\n"
                 f"    - {len(self.pressure_boosts)} items for pressure_boosts\n"
+                f"    - {len(self.heads)} items for heads\n"
+                f"    - {len(self.efficiencies)} items for efficiencies\n"
+                f"    - {len(self.powers)} items for powers\n"
             )
             raise ValueError(msg)
 

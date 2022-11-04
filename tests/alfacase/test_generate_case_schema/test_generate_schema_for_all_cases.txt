@@ -746,6 +746,9 @@ table_pump_description_schema = Map(
         Optional("void_fractions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("flow_rates"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("pressure_boosts"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("heads"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("efficiencies"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("powers"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 
