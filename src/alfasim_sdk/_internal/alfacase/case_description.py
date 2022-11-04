@@ -605,6 +605,32 @@ class SpeedCurveDescription:
 @attr.s(frozen=True, slots=True, kw_only=True)
 class TablePumpDescription:
     """
+
+    :ivar speeds:
+        Pump rotational speed values
+
+    :ivar void_fractions:
+        Pump void fraction values
+
+    :ivar flow_rates:
+        Pump flow rate values
+
+    :ivar pressure_boosts:
+        Pump pressure boost values
+
+    :ivar heads:
+        Pump head values. Using SI units,
+        H [m] = P [Pa] * Q [m^3/s] / rho_ref [kg/m^3] / g [m/s^2]
+        rho_ref = 1000.0 [kg/m^3]
+        g = 9.81 [m/s^2]
+
+    :ivar efficiencies:
+        Pump efficiency values
+
+    :ivar powers:
+        Pump power values. There a relation between other pump variables and power. In SI units:
+        BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
+
     .. include:: /alfacase_definitions/TablePumpDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
@@ -626,9 +652,7 @@ class TablePumpDescription:
         )
     )
 
-    # H [m] = P [Pa] * Q [m^3/s] / rho_ref [kg/m^3] / g [m/s^2]
-    # rho_ref = 1000.0 [kg/m^3]
-    # g = 9.81 [m/s^2]
+
     heads = attrib_array(Array(
         [0.0] * 12
         + [
@@ -639,8 +663,6 @@ class TablePumpDescription:
     ) * 1.0e5 / (1000.0 * 9.81)
                          )
 
-    # Efficiencies empirically defined.
-    # Note that efficiencies are degraded for 0.1 void fraction.
     efficiencies = attrib_array(Array(
         [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
         [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
@@ -649,7 +671,7 @@ class TablePumpDescription:
          )
           )
 
-    # BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
+
     powers = attrib_array(Array(
         [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
         [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
@@ -667,7 +689,7 @@ class TablePumpDescription:
         if any(len(getattr(self, field)) != expected_length for field in all_fields):
             msg = (
                 f"speeds, void_fractions, flow_rates, pressure_boosts, heads, efficiencies and powers must have the "
-                f"same size, got:\n "
+                f"same size, got:\n"
                 f"    - {len(self.speeds)} items for speeds\n"
                 f"    - {len(self.void_fractions)} items for void_fractions\n"
                 f"    - {len(self.flow_rates)} items for flow_rates\n"
@@ -675,7 +697,6 @@ class TablePumpDescription:
                 f"    - {len(self.heads)} items for heads\n"
                 f"    - {len(self.efficiencies)} items for efficiencies\n"
                 f"    - {len(self.powers)} items for powers\n"
-
             )
             raise ValueError(msg)
 

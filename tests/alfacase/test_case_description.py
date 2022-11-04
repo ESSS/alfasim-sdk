@@ -90,11 +90,14 @@ def test_cv_table_description():
 def test_table_pump_description_length():
     expected_msg = dedent(
         """\
-    speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:
+    speeds, void_fractions, flow_rates, pressure_boosts, heads, efficiencies and powers must have the same size, got:
         - 2 items for speeds
         - 2 items for void_fractions
         - 2 items for flow_rates
         - 1 items for pressure_boosts
+        - 1 items for heads
+        - 1 items for efficiencies
+        - 1 items for powers
     """
     )
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
@@ -103,6 +106,9 @@ def test_table_pump_description_length():
             void_fractions=Array([1, 2], "-"),
             flow_rates=Array([1, 2], "m3/s"),
             pressure_boosts=Array([1], "bar"),
+            heads=Array([1], "m"),
+            efficiencies=Array([1], "%"),
+            powers=Array([1], "W"),
         )
 
     # Check if the defaults values works well
