@@ -1,0 +1,10 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+*               text=auto
+
+# Linux shell scripts
+*.sh            eol=lf
+
+# Windows shell scripts
+*.bat           eol=crlf
+*.cmd           eol=crlf
+*.ps1           eol=crlf

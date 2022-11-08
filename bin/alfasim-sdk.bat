@@ -1,0 +1,2 @@
+@echo off
+python -c "import alfasim_sdk, sys;sys.argv[0] = 'alfasim-sdk';sys.exit(alfasim_sdk.console_main())" %*
