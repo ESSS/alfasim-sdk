@@ -19,7 +19,7 @@
             esp_speed_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Hz, s)[]
             esp_number_of_stages: int = 1
             esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
-            esp_viscosity_model: int = 1
+            esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  = PumpViscosityModel.NoModel
 
 .. tab:: Schema
 
@@ -55,4 +55,4 @@
             esp_reference_density:  # optional
                 value: number
                 unit: string
-            esp_viscosity_model: number  # optional
+            esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  # optional

@@ -945,7 +945,7 @@ pump_equipment_description_schema = Map(
         ),
         Optional("esp_number_of_stages"): Int(),
         Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
-        Optional("esp_viscosity_model"): Int(),
+        Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
     }
 )
 pvt_model_combined_description_schema = Map(
@@ -1135,5 +1135,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 672eda885838c20b8163bbd9321603cb)
+# [[[end]]] (checksum: 52573dd5a677a2b894836415f5330fa6)
 # fmt: on

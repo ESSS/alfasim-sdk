@@ -759,7 +759,6 @@ class PumpEquipmentDescription:
         category="density", default=Scalar(0.0, "kg/m3")
     )
 
-    # esp_viscosity_model: int = attr.ib(default=1, validator=instance_of(int))
     esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
 
 
