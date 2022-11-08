@@ -762,7 +762,6 @@ class PumpEquipmentDescription:
     esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
 
 
-
 @attr.s(frozen=True, slots=True)
 class CompressorPressureTableDescription:
     """

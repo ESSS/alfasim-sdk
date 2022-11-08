@@ -395,9 +395,11 @@ class CompressorSpeedType(Enum):
     SpeedCurve = "speed_curve"
     ConstantSpeed = "constant_speed"
 
+
 class PumpViscosityModel(Enum):
     NoModel = "no_model"
     AnsiHi2010 = "ansihi_2010"
+
 
 class OutputAttachmentLocation(Enum):
     """
