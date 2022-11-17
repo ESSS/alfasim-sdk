@@ -363,14 +363,17 @@ class PumpType(Enum):
     TableInterpolation = "table_interpolation"
     ElectricSubmersiblePump = "electric_submersible_pump"
 
+
 class EspParameters(Enum):
     """
     Defines if a esp is imported from catalog or defined by user.
         - ``UserDefined``: The user will define the esp table values.
         - ``Catalog``: The esp table values will be populated by the data imported from the catalog.
     """
+
     UserDefined = "user_defined"
     Catalog = "catalog"
+
 
 class ValveOpeningType(Enum):
     ConstantOpening = "constant_opening"
