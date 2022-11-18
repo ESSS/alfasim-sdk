@@ -231,6 +231,7 @@ from alfasim_sdk._internal.constants import EnergyModel
 from alfasim_sdk._internal.constants import EnergyModelPrimaryVariable
 from alfasim_sdk._internal.constants import EquationOfStateType
 from alfasim_sdk._internal.constants import EquipmentAttachmentLocation
+from alfasim_sdk._internal.constants import EspParameters
 from alfasim_sdk._internal.constants import EvaluationStrategyType
 from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 from alfasim_sdk._internal.constants import FlashModel
@@ -254,7 +255,6 @@ from alfasim_sdk._internal.constants import MassInflowSplitType
 from alfasim_sdk._internal.constants import MassSourceType
 from alfasim_sdk._internal.constants import MaterialType
 from alfasim_sdk._internal.constants import MultiInputType
-from alfasim_sdk._internal.constants import EspParameters
 from alfasim_sdk._internal.constants import NodeCellType
 from alfasim_sdk._internal.constants import NonlinearSolverType
 from alfasim_sdk._internal.constants import OIL_FIELD
@@ -269,6 +269,7 @@ from alfasim_sdk._internal.constants import (
 from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
+from alfasim_sdk._internal.constants import PumpViscosityModel
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
@@ -463,6 +464,7 @@ __all__ = [
     "ProfileOutputDescription",
     "PumpEquipmentDescription",
     "PumpType",
+    "PumpViscosityModel",
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",

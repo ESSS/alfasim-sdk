@@ -374,7 +374,6 @@ class EspParameters(Enum):
     UserDefined = "user_defined"
     Catalog = "catalog"
 
-
 class ValveOpeningType(Enum):
     ConstantOpening = "constant_opening"
     TableInterpolation = "table_interpolation"
@@ -385,6 +384,14 @@ class ValveType(Enum):
     ChokeValveWithFlowCoefficient = "choke_valve_with_flow_coefficient"
     CheckValve = "check_valve"
 
+class PumpViscosityModel(Enum):
+    """
+    Defines a viscosity model correction to Esp.
+        - ``NoModel``: Viscosity model correction is disabled.
+        - ``AnsiHi2010``: Applies the viscosity correction ANSI HI 2010.
+    """
+    NoModel = "no_model"
+    AnsiHi2010 = "ansihi_2010"
 
 class LeakModel(Enum):
     Orifice = "orifice"
