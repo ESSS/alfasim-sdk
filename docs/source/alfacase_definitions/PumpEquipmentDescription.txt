@@ -19,6 +19,7 @@
             esp_speed_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Hz, s)[]
             esp_number_of_stages: int = 1
             esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
+            user_defined_esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
 
 .. tab:: Schema
 
@@ -54,3 +55,4 @@
             esp_reference_density:  # optional
                 value: number
                 unit: string
+            user_defined_esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional

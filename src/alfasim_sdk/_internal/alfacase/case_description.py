@@ -757,6 +757,7 @@ class PumpEquipmentDescription:
     esp_reference_density = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
     )
+    user_defined_esp_table = attrib_instance(TablePumpDescription)
 
 
 @attr.s(frozen=True, slots=True)
