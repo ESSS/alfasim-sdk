@@ -20,6 +20,7 @@
             esp_number_of_stages: int = 1
             esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
             user_defined_esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
+            esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  = EspParameters.UserDefined
 
 .. tab:: Schema
 
@@ -56,3 +57,4 @@
                 value: number
                 unit: string
             user_defined_esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
+            esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  # optional

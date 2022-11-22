@@ -2,15 +2,14 @@ from pathlib import Path
 
 import numpy as np
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from . import case_builders
-from . import get_acme_tab_file_path
 from alfasim_sdk import LeakLocation
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
+
+from . import case_builders, get_acme_tab_file_path
 
 BIP_DESCRIPTION = case_description.BipDescription(
     component_1="C1", component_2="C2", value=0.5
@@ -505,6 +504,8 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     ),
     esp_number_of_stages=2,
     esp_reference_density=Scalar(1000.0, "kg/m3"),
+    user_defined_esp_table=TABLE_PUMP_DESCRIPTION,
+    esp_parameters=constants.EspParameters.Catalog,
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),

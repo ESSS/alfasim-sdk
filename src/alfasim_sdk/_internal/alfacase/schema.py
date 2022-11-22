@@ -10,9 +10,8 @@
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
-
-
+from strictyaml import (Any, Bool, Enum, Float, Int, Map,  # noreorder
+                        MapPattern, Optional, Seq, Str)
 
 bip_description_schema = Map(
     {
@@ -946,6 +945,7 @@ pump_equipment_description_schema = Map(
         Optional("esp_number_of_stages"): Int(),
         Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
         Optional("user_defined_esp_table"): table_pump_description_schema,
+        Optional("esp_parameters"): Enum(['user_defined', 'catalog']),
     }
 )
 pvt_model_combined_description_schema = Map(
@@ -1135,5 +1135,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 429f7a4f74f7f82d4c4005913de3e23f)
+# [[[end]]] (checksum: c50d2142cad3955565aa153440c142fd)
 # fmt: on
