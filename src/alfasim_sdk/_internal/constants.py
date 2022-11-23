@@ -413,6 +413,7 @@ class PumpViscosityModel(Enum):
         - ``NoModel``: Viscosity model correction is disabled.
         - ``AnsiHi2010``: Applies the ANSI-HI(2010) viscosity correction.
     """
+
     NoModel = "no_model"
     AnsiHi2010 = "ansihi_2010"
 
