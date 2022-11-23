@@ -408,6 +408,11 @@ class CompressorSpeedType(Enum):
 
 
 class PumpViscosityModel(Enum):
+    """
+    Defines a viscosity model correction to ESP
+        - ``NoModel``: Viscosity model correction is disabled.
+        - ``AnsiHi2010``: Applies the ANSI-HI(2010) viscosity correction.
+    """
     NoModel = "no_model"
     AnsiHi2010 = "ansihi_2010"
 
