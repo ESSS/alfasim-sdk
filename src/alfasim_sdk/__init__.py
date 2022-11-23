@@ -290,6 +290,8 @@ from alfasim_sdk._internal.constants import WellIndexPhaseType
 from alfasim_sdk._internal.constants import CorrelationsOilViscosity
 from alfasim_sdk._internal.constants import CorrelationsGasViscosity
 from alfasim_sdk._internal.constants import CorrelationsSurfaceTension
+from alfasim_sdk._internal.constants import PumpViscosityModel
+
 
 # Plugins: Layouts imports
 from alfasim_sdk._internal.layout import tab
@@ -462,6 +464,7 @@ __all__ = [
     "ProfileDescription",
     "ProfileOutputDescription",
     "PumpEquipmentDescription",
+    "PumpViscosityModel",
     "PumpType",
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",

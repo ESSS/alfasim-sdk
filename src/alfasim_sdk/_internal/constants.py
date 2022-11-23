@@ -407,6 +407,17 @@ class CompressorSpeedType(Enum):
     ConstantSpeed = "constant_speed"
 
 
+class PumpViscosityModel(Enum):
+    """
+    Defines a viscosity model correction to ESP
+        - ``NoModel``: Viscosity model correction is disabled.
+        - ``AnsiHi2010``: Applies the ANSI-HI(2010) viscosity correction.
+    """
+
+    NoModel = "no_model"
+    AnsiHi2010 = "ansihi_2010"
+
+
 class OutputAttachmentLocation(Enum):
     """
     Output Attachment Location will tell the location in which this attachment's data should be retrieved from.

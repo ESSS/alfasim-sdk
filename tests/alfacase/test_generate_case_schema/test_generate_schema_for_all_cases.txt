@@ -999,6 +999,7 @@ pump_equipment_description_schema = Map(
         ),
         Optional("esp_number_of_stages"): Int(),
         Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
+        Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
     }
 )
 
