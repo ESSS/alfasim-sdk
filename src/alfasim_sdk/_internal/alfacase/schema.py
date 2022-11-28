@@ -10,8 +10,9 @@
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import (Any, Bool, Enum, Float, Int, Map,  # noreorder
-                        MapPattern, Optional, Seq, Str)
+from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
+
+
 
 bip_description_schema = Map(
     {
