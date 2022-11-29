@@ -1001,6 +1001,7 @@ pump_equipment_description_schema = Map(
         Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
         Optional("user_defined_esp_table"): table_pump_description_schema,
         Optional("esp_parameters"): Enum(['user_defined', 'catalog']),
+        Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
     }
 )
 

@@ -692,6 +692,7 @@ class TablePumpDescription:
                              )
 
 
+
     def __attrs_post_init__(self):
         expected_length = len(self.speeds)
         all_fields = list(attr.fields_dict(self.__class__).keys())
@@ -759,6 +760,8 @@ class PumpEquipmentDescription:
     )
     user_defined_esp_table = attrib_instance(TablePumpDescription)
     esp_parameters = attrib_enum(default=constants.EspParameters.UserDefined)
+
+    esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
 
 
 @attr.s(frozen=True, slots=True)

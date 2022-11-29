@@ -386,6 +386,17 @@ class ValveType(Enum):
     CheckValve = "check_valve"
 
 
+class PumpViscosityModel(Enum):
+    """
+    Defines a viscosity model correction to Esp.
+        - ``NoModel``: Viscosity model correction is disabled.
+        - ``AnsiHi2010``: Applies the viscosity correction ANSI HI 2010.
+    """
+
+    NoModel = "no_model"
+    AnsiHi2010 = "ansihi_2010"
+
+
 class LeakModel(Enum):
     Orifice = "orifice"
     FlowCoefficient = "flow_coefficient"
@@ -405,6 +416,17 @@ class GasLiftValveOpeningType(Enum):
 class CompressorSpeedType(Enum):
     SpeedCurve = "speed_curve"
     ConstantSpeed = "constant_speed"
+
+
+class PumpViscosityModel(Enum):
+    """
+    Defines a viscosity model correction to ESP
+        - ``NoModel``: Viscosity model correction is disabled.
+        - ``AnsiHi2010``: Applies the ANSI-HI(2010) viscosity correction.
+    """
+
+    NoModel = "no_model"
+    AnsiHi2010 = "ansihi_2010"
 
 
 class OutputAttachmentLocation(Enum):
