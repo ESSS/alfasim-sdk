@@ -57,7 +57,7 @@ jobs:
   deploy:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'ESSS/alfasim-sdk'
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     needs: test
 
