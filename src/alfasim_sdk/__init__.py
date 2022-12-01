@@ -218,8 +218,11 @@ from alfasim_sdk._internal.alfacase.alfatable import (
 from alfasim_sdk._internal.constants import BUBBLE_FIELD
 from alfasim_sdk._internal.constants import CompressorSpeedType
 from alfasim_sdk._internal.constants import ControllerType
+from alfasim_sdk._internal.constants import CorrelationsGasViscosity
+from alfasim_sdk._internal.constants import CorrelationsOilViscosity
 from alfasim_sdk._internal.constants import CorrelationPackage
 from alfasim_sdk._internal.constants import CorrelationPackageType
+from alfasim_sdk._internal.constants import CorrelationsSurfaceTension
 from alfasim_sdk._internal.constants import DEFAULT_TEMPERATURE_IN_K
 from alfasim_sdk._internal.constants import DrainageRateMode
 from alfasim_sdk._internal.constants import DROPLET_FIELD
@@ -269,6 +272,7 @@ from alfasim_sdk._internal.constants import (
 from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
+from alfasim_sdk._internal.constants import PumpViscosityModel
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
@@ -287,10 +291,6 @@ from alfasim_sdk._internal.constants import WATER_LAYER
 from alfasim_sdk._internal.constants import WATER_PHASE
 from alfasim_sdk._internal.constants import WellConnectionPort
 from alfasim_sdk._internal.constants import WellIndexPhaseType
-from alfasim_sdk._internal.constants import CorrelationsOilViscosity
-from alfasim_sdk._internal.constants import CorrelationsGasViscosity
-from alfasim_sdk._internal.constants import CorrelationsSurfaceTension
-from alfasim_sdk._internal.constants import PumpViscosityModel
 
 
 # Plugins: Layouts imports
