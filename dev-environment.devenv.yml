@@ -21,6 +21,5 @@ dependencies:
   - sphinx-click
   - toposort
   - tox
-  - typing_inspect
   - pip:
     - "-r docs/requirements.txt"

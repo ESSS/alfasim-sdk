@@ -2,10 +2,12 @@ name: alfasim-sdk
 
 
 dependencies:
-  - click
   - attrs >= 19.1.0
   - barril
+  - boltons
+  - click
   - h5py
+  - typing_inspect
 
 environment:
   PATH:
