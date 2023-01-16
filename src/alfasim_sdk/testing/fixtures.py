@@ -120,17 +120,19 @@ class AlfasimRunnerFixture:
         self.alfacase_data_folder.mkdir()
         self.alfacase_file.write_text(alfacase, encoding="utf-8")
 
-        self._run_simulator(
-            self.get_runner()
-            + [
-                "--run-simulation",
-                f"--alfacase-file={str(self.alfacase_file)}",
-                f"--number-of-threads={number_of_threads}",
-            ],
-            cwd=project_folder,
-        )
+        try:
+            self._run_simulator(
+                self.get_runner()
+                + [
+                    "--run-simulation",
+                    f"--alfacase-file={str(self.alfacase_file)}",
+                    f"--number-of-threads={number_of_threads}",
+                ],
+                cwd=project_folder,
+            )
+        finally:
+            self._results = Results(self.alfacase_data_folder)
 
-        self._results = Results(self.alfacase_data_folder)
         return self.results
 
     def get_runner(self) -> List[str]:
@@ -141,13 +143,12 @@ class AlfasimRunnerFixture:
         )
         return runner_from_env.split(" ")
 
-    def _run_simulator(self, command: List[str], cwd: Path) -> None:
+    def _run_simulator(self, command: List[str], cwd: Path) -> int:
         current_env = os.environ.copy()
         current_env["ALFASIM_PID_FILE_SECRET"] = f"testing-{uuid.uuid4()}"
 
         assert cwd.is_dir() and os.access(str(cwd), os.W_OK)
-        proc = subprocess.Popen(command, cwd=str(cwd), env=current_env)
-        proc.communicate()
+        subprocess.run(command, cwd=str(cwd), env=current_env, check=True)
 
 
 @pytest.fixture()

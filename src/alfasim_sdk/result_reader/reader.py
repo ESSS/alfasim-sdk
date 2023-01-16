@@ -1,4 +1,6 @@
+import json
 from pathlib import Path
+from typing import Any
 from typing import Dict
 from typing import Sequence
 from typing import Tuple
@@ -50,6 +52,11 @@ class Results:
     @property
     def status(self) -> Path:
         return self.data_folder / "status/status.json"
+
+    @property
+    def status_dict(self) -> Dict[str, Any]:
+        status_str = self.status.read_text()
+        return json.loads(status_str)
 
     @property
     def log(self) -> Path:
