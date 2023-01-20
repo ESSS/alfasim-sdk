@@ -242,6 +242,8 @@ from alfasim_sdk._internal.constants import FlowDirection
 from alfasim_sdk._internal.constants import FlowPatternModel
 from alfasim_sdk._internal.constants import FLUID_GAS
 from alfasim_sdk._internal.constants import FLUID_OIL
+from alfasim_sdk._internal.constants import FLUID_DROPLET
+from alfasim_sdk._internal.constants import FLUID_BUBBLE
 from alfasim_sdk._internal.constants import FLUID_PHASE_NAMES
 from alfasim_sdk._internal.constants import FLUID_WATER
 from alfasim_sdk._internal.constants import GAS_FIELD
@@ -389,6 +391,8 @@ __all__ = [
     "EvaluationStrategyType",
     "FLUID_GAS",
     "FLUID_OIL",
+    'FLUID_BUBBLE',
+    'FLUID_DROPLET',
     "FLUID_PHASE_NAMES",
     "FLUID_WATER",
     "FileContent",
