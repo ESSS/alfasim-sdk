@@ -66,7 +66,10 @@ class AlfasimRunnerFixture:
         self.check_not_run()
         self.check_base_case_is_not_loaded()
 
-        self._case = convert_alfacase_to_description(Path(*parts))
+        if len(parts) == 1 and isinstance(parts[0], CaseDescription):
+            self._case = parts[0]
+        else:
+            self._case = convert_alfacase_to_description(Path(*parts))
 
     def add_plugin_folder(self, *parts: Union[str, Path]) -> None:
         """
