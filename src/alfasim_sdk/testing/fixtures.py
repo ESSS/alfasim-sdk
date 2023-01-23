@@ -4,6 +4,7 @@ import tempfile
 import textwrap
 import uuid
 from pathlib import Path
+from typing import Iterator
 from typing import List
 from typing import Optional
 from typing import Union
@@ -49,22 +50,31 @@ class AlfasimRunnerFixture:
     def results(self) -> Results:
         return self._results
 
-    def check_not_run(self) -> bool:
+    def check_not_run(self) -> None:
         assert self._results is None, "Simulation already run"
 
-    def check_base_case_is_loaded(self) -> bool:
+    def check_base_case_is_loaded(self) -> None:
         assert self._case is not None, "Base case is not loaded"
 
-    def check_base_case_is_not_loaded(self) -> bool:
+    def check_base_case_is_not_loaded(self) -> None:
         assert self._case is None, "Base case already loaded"
 
     def load_base(self, *parts: Union[str, Path]) -> None:
+        """
+        Define the base case from an alfacase file.
+        """
         self.check_not_run()
         self.check_base_case_is_not_loaded()
 
         self._case = convert_alfacase_to_description(Path(*parts))
 
     def add_plugin_folder(self, *parts: Union[str, Path]) -> None:
+        """
+        Define where the plugin files are installed.
+
+        Alternatively one could just define the `ALFASIM_PLUGINS_DIR`
+        environment variable.
+        """
         self.check_not_run()
 
         folder = Path(*parts).absolute()
@@ -75,6 +85,9 @@ class AlfasimRunnerFixture:
         self.monkeypatch.setenv("ALFASIM_PLUGINS_DIR", plugins_dir)
 
     def add_plugin(self, plugin_conf: Union[str]) -> None:
+        """
+        Add the given plugin configuration to the case to be run.
+        """
         self.check_not_run()
         self.check_base_case_is_loaded()
 
@@ -111,6 +124,14 @@ class AlfasimRunnerFixture:
         )
 
     def run(self, *, number_of_threads: int = -1) -> Results:
+        """
+        Run a simulation using the configured case and return a `Results`
+        object to access the simulation result and log files.
+
+        :param number_of_threads:
+            The number of thread used to run the simulation (`-1` indicates
+            to use one thread per virtual core, `0` disable parallelism).
+        """
         self.check_not_run()
         self.check_base_case_is_loaded()
 
@@ -136,6 +157,11 @@ class AlfasimRunnerFixture:
         return self.results
 
     def get_runner(self) -> List[str]:
+        """
+        Obtain the command line to run the simulation.
+
+        Read the `ALFASIM_RUNNER` environment variable.
+        """
         runner_from_env = os.environ.get("ALFASIM_RUNNER")
         assert runner_from_env is not None, (
             "Can not locate the simulator."
@@ -143,7 +169,7 @@ class AlfasimRunnerFixture:
         )
         return runner_from_env.split(" ")
 
-    def _run_simulator(self, command: List[str], cwd: Path) -> int:
+    def _run_simulator(self, command: List[str], cwd: Path) -> None:
         current_env = os.environ.copy()
         current_env["ALFASIM_PID_FILE_SECRET"] = f"testing-{uuid.uuid4()}"
 
@@ -155,5 +181,5 @@ class AlfasimRunnerFixture:
 def alfasim_runner(
     datadir: Path,
     monkeypatch: MonkeyPatch,
-) -> AlfasimRunnerFixture:
+) -> Iterator[AlfasimRunnerFixture]:
     yield AlfasimRunnerFixture(datadir, monkeypatch)
