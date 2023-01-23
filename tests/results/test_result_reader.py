@@ -3,7 +3,12 @@ import json
 import numpy
 import pytest
 from barril.curve.curve import Curve
+from barril.units import Scalar
 
+from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
+from alfasim_sdk.result_reader.reader import OverallTrendMetadata
+from alfasim_sdk.result_reader.reader import PositionalTrendMetadata
+from alfasim_sdk.result_reader.reader import ProfileMetadata
 from alfasim_sdk.result_reader.reader import Results
 
 
@@ -28,8 +33,8 @@ def test_fail_to_get_curves(results: Results) -> None:
 
 def test_profiles(results: Results) -> None:
     assert results.list_profiles() == [
-        "pressure@Conexão 1(timesteps=14)",
-        "total mass flow rate@Conexão 1(timesteps=14)",
+        ProfileMetadata("pressure", "Conexão 1", 14),
+        ProfileMetadata("total mass flow rate", "Conexão 1", 14),
     ]
     pressure_initial_1 = results.get_profile_curve("pressure", "Conexão 1", 0)
     pressure_initial_2 = results.get_profile_curve("pressure", "Conexão 1", -14)
@@ -68,7 +73,7 @@ def test_profiles(results: Results) -> None:
 
 
 def test_global_trends(results: Results) -> None:
-    assert results.list_global_trends() == ["timestep"]
+    assert list(map(str, results.list_global_trends())) == ["timestep"]
     timestep = results.get_global_trend_curve("timestep")
     assert isinstance(timestep, Curve)
     assert len(timestep.domain) == 62
@@ -78,7 +83,7 @@ def test_global_trends(results: Results) -> None:
 
 def test_list_overall_trends(results: Results) -> None:
     assert results.list_overall_trends() == [
-        "pipe total liquid volume@Conexão 1",
+        OverallTrendMetadata("pipe total liquid volume", "Conexão 1"),
     ]
     pipe_total_liquid_volume = results.get_overall_trend_curve(
         "pipe total liquid volume",
@@ -92,8 +97,8 @@ def test_list_overall_trends(results: Results) -> None:
 
 def test_list_positional_trends(results: Results) -> None:
     assert results.list_positional_trends() == [
-        "mixture temperature@Conexão 1(300.0 [m])",
-        "pressure@Conexão 1(300.0 [m])",
+        PositionalTrendMetadata("mixture temperature", "Conexão 1", Scalar(300.0, "m")),
+        PositionalTrendMetadata("pressure", "Conexão 1", Scalar(300.0, "m")),
     ]
     mixture_temperature = results.get_positional_trend_curve(
         "mixture temperature",
@@ -115,3 +120,17 @@ def test_logs(results: Results) -> None:
     status = json.loads(results.status.read_text())
     assert status["state"] == "FINISHED"
     assert status["progress"] == 1.0
+
+
+def test_metadata_string():
+    profile = ProfileMetadata("property", "element", 7)
+    assert str(profile) == "property@element(timesteps=7)"
+
+    trend = PositionalTrendMetadata("property", "element", Scalar(13, "m"))
+    assert str(trend) == "property@element(13 [m])"
+
+    overall_trend = OverallTrendMetadata("property", "element")
+    assert str(overall_trend) == "property@element"
+
+    global_trend = GlobalTrendMetadata("property")
+    assert str(global_trend) == "property"

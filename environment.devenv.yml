@@ -2,12 +2,17 @@ name: alfasim-sdk
 
 
 dependencies:
-  - click
   - attrs >= 19.1.0
   - barril
+  - boltons
+  - click
   - h5py
+  - typing_inspect
 
 environment:
+  PATH:
+    - {{ os.path.join(root, 'bin') }}
+
   PYTHONPATH:
-    - {{ os.path.join(root) }}/src
-    - {{ os.path.join(root) }}/tests/common_testing
+    - {{ os.path.join(root, 'src') }}
+    - {{ os.path.join(root, 'tests', 'common_testing') }}
