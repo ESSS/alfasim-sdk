@@ -273,6 +273,7 @@ from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
 from alfasim_sdk._internal.constants import PumpViscosityModel
+from alfasim_sdk._internal.constants import PumpThermalEfficiencyModel
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
@@ -466,6 +467,7 @@ __all__ = [
     "PumpEquipmentDescription",
     "PumpType",
     "PumpViscosityModel",
+    "PumpThermalEfficiencyModel",
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",

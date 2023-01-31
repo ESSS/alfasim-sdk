@@ -417,6 +417,16 @@ class PumpViscosityModel(Enum):
     NoModel = "no_model"
     AnsiHi2010 = "ansihi_2010"
 
+class PumpThermalEfficiencyModel(Enum):
+    """
+    Defines the ESP thermal efficiency model
+        - ``Constant``: An user-defined constant value is used to define to transform the ESP mechanical energy to heat.
+        - ``PumpEfficiencyCurve``: The ESP efficiency curve is used to transform the ESP mechanical energy to heat.
+    """
+
+    Constant = "constant"
+    PumpEfficiencyCurve = "pump_eff_curve"
+
 
 class OutputAttachmentLocation(Enum):
     """

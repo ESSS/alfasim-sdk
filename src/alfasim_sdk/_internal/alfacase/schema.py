@@ -948,6 +948,7 @@ pump_equipment_description_schema = Map(
         Optional("user_defined_esp_table"): table_pump_description_schema,
         Optional("esp_parameters"): Enum(['user_defined', 'catalog']),
         Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
+        Optional("thermal_efficiency_model"): Enum(['constant', 'pump_eff_curve']),
     }
 )
 pvt_model_combined_description_schema = Map(
@@ -1137,5 +1138,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 0d753a1f12456330d1b618c87f14778c)
+# [[[end]]] (checksum: 83d2dee0128792904f387b5c7d478742)
 # fmt: on
