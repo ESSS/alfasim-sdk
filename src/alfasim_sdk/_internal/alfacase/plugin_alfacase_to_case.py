@@ -382,7 +382,7 @@ def load_model(alfacase_content: DescriptionDocument, class_: Type) -> Dict[str,
 
     child_model_type = alfasim_metadata["model"]
     if child_model_type is not None:
-        children = alfacase_content.content["_children_list"]
+        children = alfacase_content.content.get("_children_list", [])
         result["_children_list"] = [
             load_model(DescriptionDocument(v, alfacase_path), class_=child_model_type)
             for v in children
@@ -397,6 +397,7 @@ def load_gui_models(
     result = {}
     for model in data_structure:
         name = model.__name__
-        result[name] = load_model(alfacase_content[name], class_=model)
+        if name in alfacase_content.content:
+            result[name] = load_model(alfacase_content[name], class_=model)
 
     return result

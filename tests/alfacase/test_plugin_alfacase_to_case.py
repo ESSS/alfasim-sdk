@@ -49,7 +49,6 @@ def test_load_plugin_data_structure(abx_plugin):
 
 def test_load_plugin_multiple_containers(datadir, abx_plugin):
     alfacase = datadir / "test.alfacase"
-
     alfacase.write_text(
         textwrap.dedent(
             """\
@@ -86,6 +85,54 @@ def test_load_plugin_multiple_containers(datadir, abx_plugin):
                         {"asd": "xxx"},
                     ],
                 },
+            },
+        ),
+    ]
+
+
+def test_load_plugin_missing_top_level_models(datadir: Path, abx_plugin: None) -> None:
+    alfacase = datadir / "test.alfacase"
+    alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abx
+                gui_models: {}
+            """
+        )
+    )
+    case = convert_alfacase_to_description(alfacase)
+    assert case.plugins == [
+        PluginDescription(
+            name="abx",
+            is_enabled=True,
+            gui_models={},
+        ),
+    ]
+
+
+def test_load_plugin_empty_top_containers(datadir: Path, abx_plugin: None) -> None:
+    alfacase = datadir / "test.alfacase"
+    alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abx
+                gui_models:
+                    # strictyaml requires adjacent mappings to have the same internal indent.
+                    AContainer: {}
+                    BContainer: {_children_list: []}
+            """
+        )
+    )
+    case = convert_alfacase_to_description(alfacase)
+    assert case.plugins == [
+        PluginDescription(
+            name="abx",
+            is_enabled=True,
+            gui_models={
+                "AContainer": {"_children_list": []},
+                "BContainer": {"_children_list": []},
             },
         ),
     ]
