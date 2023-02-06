@@ -46,6 +46,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 from alfasim_sdk._internal.alfacase.case_description_attributes import to_array
 from alfasim_sdk._internal.alfacase.case_description_attributes import to_curve
 
+
 # Note: the table parameters descriptions have the same methods, so it could
 # implement some tests for the both
 @pytest.fixture(
