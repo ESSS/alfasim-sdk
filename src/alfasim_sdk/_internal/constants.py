@@ -417,6 +417,7 @@ class PumpViscosityModel(Enum):
     NoModel = "no_model"
     AnsiHi2010 = "ansihi_2010"
 
+
 class PumpThermalEfficiencyModel(Enum):
     """
     Defines the ESP thermal efficiency model
