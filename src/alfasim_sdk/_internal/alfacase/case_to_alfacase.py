@@ -148,7 +148,6 @@ def convert_dict_to_valid_alfacase_format(
             transient_fields[key] = value
 
         if is_attrs(value):
-
             to_dict = partial(attr.asdict, recurse=False)
 
             if isinstance(value, list):

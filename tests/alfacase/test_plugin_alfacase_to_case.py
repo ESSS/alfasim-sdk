@@ -2,6 +2,7 @@ import os
 import textwrap
 from datetime import datetime
 from pathlib import Path
+from typing import Callable
 from typing import List
 from unittest.mock import ANY
 
@@ -49,7 +50,6 @@ def test_load_plugin_data_structure(abx_plugin):
 
 def test_load_plugin_multiple_containers(datadir, abx_plugin):
     alfacase = datadir / "test.alfacase"
-
     alfacase.write_text(
         textwrap.dedent(
             """\
@@ -91,8 +91,100 @@ def test_load_plugin_multiple_containers(datadir, abx_plugin):
     ]
 
 
+def test_load_plugin_with_missing_top_level_models(
+    datadir: Path, abx_plugin: None
+) -> None:
+    """
+    Plugins can declare models to represent user input, they will be represented by `data_model`s (like a struct
+    to hold data) or `container_model`s (like `data_model` it can hold data but also it can have any number of
+    children `data_model`s) in the `gui_models` entry:
+
+    ```yaml
+    gui_models:
+    -   name: abx
+        AContainer:  # top level.
+            _children_list:
+                - {}  # not top level.
+        BContainer:  # top level.
+            _children_list:
+                - {}  # not top level.
+                - {}  # not top level.
+    ```
+
+    This tests if an alfacase missing those top level models (`data_model` or `container_model`) can be loaded.
+    """
+    alfacase = datadir / "test.alfacase"
+    alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abx
+                gui_models: {}
+            """
+        )
+    )
+    case = convert_alfacase_to_description(alfacase)
+    assert case.plugins == [
+        PluginDescription(
+            name="abx",
+            is_enabled=True,
+            gui_models={},
+        ),
+    ]
+
+
+def test_load_plugin_empty_top_containers(datadir: Path, abx_plugin: None) -> None:
+    """
+    See `test_load_plugin_missing_top_level_models` first paragraph.
+
+    This tests if empty containers (or ones missing the `_children_list` entry) can be properly loaded.
+    """
+    alfacase = datadir / "test.alfacase"
+    alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abx
+                gui_models:
+                    # strictyaml requires adjacent mappings to have the same internal indent.
+                    AContainer: {}
+                    BContainer: {_children_list: []}
+            """
+        )
+    )
+    case = convert_alfacase_to_description(alfacase)
+    assert case.plugins == [
+        PluginDescription(
+            name="abx",
+            is_enabled=True,
+            gui_models={
+                "AContainer": {"_children_list": []},
+                "BContainer": {"_children_list": []},
+            },
+        ),
+    ]
+
+
 @pytest.fixture(name="prepare_foobar_plugin")
-def prepare_foobar_plugin_(monkeypatch, datadir):
+def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[List[str]], None]:
+    """
+    Create a fake plugin and "install"s it.
+
+    The fake plugin is named "foobar". As data model it contains a `data_model` of type Bar (no attributes) and
+    a `container_model` of type FooContainer (no attributes but containing item of the type Foo, this items contain
+    the attributes listed when calling):
+
+    ```python
+    def test_example(datadir, prepare_foobar_plugin):
+        prepare_foobar_plugin(
+            [
+                "a_string_attr = alfasim_sdk.String(value='default string value', caption='a gui caption')",
+                "a_bool_attr = alfasim_sdk.Boolean(value=False, caption='to_be or not to_be')",
+            ],
+        )
+    ```
+    """
+
     def prepare_foobar_plugin_impl(data_model_fields: List[str]) -> None:
         plugin_root = datadir / "test_plugins"
         monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(plugin_root))

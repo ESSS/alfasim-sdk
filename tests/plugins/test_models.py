@@ -108,3 +108,22 @@ def test_attribute_order():
 
     expected_order = ["boolean", "data_reference", "enum", "string", "quantity"]
     assert [attr.name for attr in Model.__attrs_attrs__] == expected_order
+
+
+def test_check_model_in_container_model():
+    from alfasim_sdk._internal.models import container_model, data_model
+    from alfasim_sdk._internal.types import String
+
+    @data_model(caption="The child")
+    class Child:
+        name = String(value="A child", caption="Name")
+
+    @container_model(caption="The parent", model=Child)
+    class Parent:
+        name = String(value="A parent", caption="Name")
+
+    with pytest.raises(TypeError):
+
+        @container_model(caption="The grand parent", model=Parent)
+        class GrandParent:  # pragma: no cover (`container_model` is expected to raise)
+            name = String(value="A grand parent", caption="Name")
