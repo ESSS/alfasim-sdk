@@ -70,3 +70,29 @@ def test_alfasim_runner_add_plugin(
     results = alfasim_runner.run()
     assert alfasim_runner.alfacase_file.is_file()
     assert len(results.list_profiles()) == 2
+
+
+def test_alfasim_runner_from_case_description(
+    alfasim_runner: AlfasimRunnerFixture,
+    fake_alfasim: None,
+    empty_alfacase: Path,
+    abx_plugin_source: Path,
+) -> None:
+    from alfasim_sdk import convert_alfacase_to_description
+
+    case_description = convert_alfacase_to_description(Path(empty_alfacase))
+    alfasim_runner.load_base(case_description)
+    alfasim_runner.add_plugin_folder(abx_plugin_source)
+
+    alfasim_runner.add_plugin(
+        textwrap.dedent(
+            """\
+            name: abx
+            """
+        )
+    )
+
+    assert not alfasim_runner.alfacase_file.is_file()
+    results = alfasim_runner.run()
+    assert alfasim_runner.alfacase_file.is_file()
+    assert len(results.list_profiles()) == 2
