@@ -59,7 +59,11 @@ class AlfasimRunnerFixture:
     def check_base_case_is_not_loaded(self) -> None:
         assert self._case is None, "Base case already loaded"
 
-    def load_base(self, *parts: Union[str, Path], case_description: Optional[CaseDescription] = None) -> None:
+    def load_base(
+        self,
+        *parts: Union[str, Path],
+        case_description: Optional[CaseDescription] = None,
+    ) -> None:
         """
         Define the base case from an alfacase file or a CaseDescription.
         """
