@@ -55,7 +55,7 @@ def test_alfasim_runner_add_plugin(
     empty_alfacase: Path,
     abx_plugin_source: Path,
 ) -> None:
-    alfasim_runner.load_base(empty_alfacase)
+    alfasim_runner.load_base_from_alfacase(empty_alfacase)
     alfasim_runner.add_plugin_folder(abx_plugin_source)
 
     alfasim_runner.add_plugin(
@@ -81,7 +81,7 @@ def test_alfasim_runner_from_case_description(
     from alfasim_sdk import convert_alfacase_to_description
 
     case_description = convert_alfacase_to_description(Path(empty_alfacase))
-    alfasim_runner.load_base(case_description=case_description)
+    alfasim_runner.load_base_from_case_description(case_description)
     alfasim_runner.add_plugin_folder(abx_plugin_source)
 
     alfasim_runner.add_plugin(

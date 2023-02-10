@@ -59,21 +59,23 @@ class AlfasimRunnerFixture:
     def check_base_case_is_not_loaded(self) -> None:
         assert self._case is None, "Base case already loaded"
 
-    def load_base(
-        self,
-        *parts: Union[str, Path],
-        case_description: Optional[CaseDescription] = None,
-    ) -> None:
-        """
-        Define the base case from an alfacase file or a CaseDescription.
-        """
+    def check_can_load_base(self) -> None:
         self.check_not_run()
         self.check_base_case_is_not_loaded()
 
-        if case_description is not None:
-            self._case = case_description
-        else:
-            self._case = convert_alfacase_to_description(Path(*parts))
+    def load_base_from_alfacase(self, *parts: Union[str, Path]) -> None:
+        """
+        Define the base case from an alfacase file.
+        """
+        self.check_can_load_base()
+        self._case = convert_alfacase_to_description(Path(*parts))
+
+    def load_base_from_case_description(self, case_description: CaseDescription) -> None:
+        """
+        Define the base case from a CaseDescription.
+        """
+        self.check_can_load_base()
+        self._case = case_description
 
     def add_plugin_folder(self, *parts: Union[str, Path]) -> None:
         """
