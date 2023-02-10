@@ -70,7 +70,9 @@ class AlfasimRunnerFixture:
         self.check_can_load_base()
         self._case = convert_alfacase_to_description(Path(*parts))
 
-    def load_base_from_case_description(self, case_description: CaseDescription) -> None:
+    def load_base_from_case_description(
+        self, case_description: CaseDescription
+    ) -> None:
         """
         Define the base case from a CaseDescription.
         """
