@@ -33,12 +33,13 @@ def load_pvt_model_table_parameters_description_from_alfatable(
     """
     Load the content from the alfatable in the given file_path. The validation is turned off due to performance issues.
     """
-    from ruamel import yaml as ruamelyaml
+    from ruamel.yaml.main import YAML
     from barril.units import Scalar
     import numpy as np
 
-    content = ruamelyaml.safe_load(Path(file_path).read_text(encoding="UTF-8"))
-
+    yaml = YAML(typ="safe", pure=True)
+    content = yaml.load(Path(file_path))
+    
     table_parameter_keys_and_values = {
         "pressure_values": np.array(content["pressure_values"]),
         "temperature_values": np.array(content["temperature_values"]),
