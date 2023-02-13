@@ -39,7 +39,7 @@ def load_pvt_model_table_parameters_description_from_alfatable(
 
     yaml = YAML(typ="safe", pure=True)
     content = yaml.load(Path(file_path))
-    
+
     table_parameter_keys_and_values = {
         "pressure_values": np.array(content["pressure_values"]),
         "temperature_values": np.array(content["temperature_values"]),
