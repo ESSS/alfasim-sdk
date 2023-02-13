@@ -40,6 +40,8 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
     """
     import ruamel
 
+    # TODO: arthur: Review this workaround before merging!!!
+    return values
     retval = ruamel.yaml.comments.CommentedSeq(values)
 
     if enable_flow_style:
