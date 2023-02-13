@@ -762,7 +762,7 @@ class PumpEquipmentDescription:
     esp_parameters = attrib_enum(default=constants.EspParameters.UserDefined)
 
     esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
-    thermal_efficiency_model = attrib_enum(
+    esp_thermal_efficiency_model = attrib_enum(
         default=constants.PumpThermalEfficiencyModel.Constant
     )
 

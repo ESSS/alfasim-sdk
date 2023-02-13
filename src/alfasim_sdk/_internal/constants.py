@@ -426,7 +426,7 @@ class PumpThermalEfficiencyModel(Enum):
     """
 
     Constant = "constant"
-    PumpEfficiencyCurve = "pump_eff_curve"
+    PumpEfficiencyCurve = "efficiency_curve_based"
 
 
 class OutputAttachmentLocation(Enum):
