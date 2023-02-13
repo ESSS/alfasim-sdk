@@ -2,10 +2,26 @@
 History
 =======
 
-0.16.0 (unreleased)
+0.17.0 (UNRELEASED)
 ===================
 
 *
+
+
+0.16.0 (2023-02-09)
+===================
+
+* Added support to export and import configuration data from plugins.
+
+* Added a fixture ``alfasim_runner`` (add to pytest relevant configuration ``alfasim_sdk.testing.fixtures`` to use it) to allow plugin authors to run their plugin against an installed version of ALFAsim in a test environment.
+
+* Added a helper to read ALFAsim simulation results (``alfasim_sdk.result_reader.reader.Results``).
+
+* Added ``heads```, ``efficiencies``, and ``powers`` attributes to ``TablePumpDescription``.
+
+* Added ``esp_viscosity_model`` attribute to ``PumpEquipmentDescription``.
+
+* Added ``user_defined_esp_table`` and ``esp_parameters`` attributes to ``PumpEquipmentDescription``. Now, an ESP can be created as ``eps_parameters`` = [``user_defined`` or ``catalog``].  When it's created as ``user_defined``, the pump table is read from a ``user_defined_esp_table``. Otherwise, is read from a ``esp_table``.
 
 
 0.15.0 (2022-11-29)

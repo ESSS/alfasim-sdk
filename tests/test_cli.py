@@ -2,6 +2,7 @@ import os
 
 from click.testing import CliRunner
 
+from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
 from alfasim_sdk._internal.cli import console_main
 
 
@@ -61,7 +62,8 @@ def test_command_package(tmp_path, mocker):
     assert result.output == ""
     assert result.exit_code == 0
     os_type = "win" if os.sys.platform == "win32" else "linux"
-    package_filename = f"acme-1.0.0-{os_type}64.hmplugin"
+    curr_sdk_version = get_current_version()
+    package_filename = f"acme-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin"
     assert (plugin_dir / package_filename).is_file()
 
 
