@@ -22,6 +22,7 @@
             user_defined_esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  = EspParameters.UserDefined
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  = PumpViscosityModel.NoModel
+            esp_thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  = PumpThermalEfficiencyModel.Constant
 
 .. tab:: Schema
 
@@ -60,3 +61,4 @@
             user_defined_esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
             esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  # optional
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  # optional
+            esp_thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  # optional

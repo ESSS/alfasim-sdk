@@ -5,7 +5,7 @@ History
 0.17.0 (UNRELEASED)
 ===================
 
-*
+* Added ``esp_thermal_efficiency_model`` attribute to ``PumpEquipmentDescription``.
 
 
 0.16.0 (2023-02-09)
