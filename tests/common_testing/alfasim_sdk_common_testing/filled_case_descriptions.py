@@ -493,7 +493,8 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     position=Scalar(350.0, "m"),
     flow_direction=constants.FlowDirection.Forward,
     pressure_boost=Scalar(1e5, "Pa"),
-    thermal_efficiency=Scalar(1.0, "-"),
+    thermal_efficiency=Scalar(100,'%'),
+    thermal_efficiency_model=constants.PumpThermalEfficiencyModel.Constant,
     table=TABLE_PUMP_DESCRIPTION,
     speed_curve=SPEED_CURVE_DESCRIPTION,
     speed_curve_interpolation_type=constants.InterpolationType.Linear,
@@ -507,6 +508,7 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     esp_reference_density=Scalar(1000.0, "kg/m3"),
     user_defined_esp_table=TABLE_PUMP_DESCRIPTION,
     esp_parameters=constants.EspParameters.Catalog,
+    density_correction_enabled=False
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),

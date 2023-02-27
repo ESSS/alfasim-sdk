@@ -8,6 +8,7 @@
             position: \ :class:`Scalar <barril.units.Scalar>`
             flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  = FlowDirection.Forward
             thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
+            thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  = PumpThermalEfficiencyModel.Constant
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  = PumpType.ConstantPressure
             pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
             table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
@@ -22,7 +23,7 @@
             user_defined_esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  = EspParameters.UserDefined
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  = PumpViscosityModel.NoModel
-            esp_thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  = PumpThermalEfficiencyModel.Constant
+            density_correction_enabled: bool = False
 
 .. tab:: Schema
 
@@ -35,6 +36,7 @@
             thermal_efficiency:  # optional
                 value: number
                 unit: string
+            thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  # optional
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  # optional
             pressure_boost:  # optional
                 value: number
@@ -61,4 +63,4 @@
             user_defined_esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
             esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  # optional
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  # optional
-            esp_thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  # optional
+            density_correction_enabled: boolean  # optional
