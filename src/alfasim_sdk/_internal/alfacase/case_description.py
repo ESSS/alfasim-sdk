@@ -726,7 +726,9 @@ class PumpEquipmentDescription:
     position = attrib_scalar(category="length")
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
     thermal_efficiency = attrib_scalar(default=Scalar(100.0, "%"))
-    thermal_efficiency_model = attrib_enum(default=constants.PumpThermalEfficiencyModel.Constant)
+    thermal_efficiency_model = attrib_enum(
+        default=constants.PumpThermalEfficiencyModel.Constant
+    )
 
     type = attrib_enum(default=constants.PumpType.ConstantPressure)
 
