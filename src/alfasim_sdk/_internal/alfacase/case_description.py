@@ -726,6 +726,9 @@ class PumpEquipmentDescription:
     position = attrib_scalar(category="length")
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
     thermal_efficiency = attrib_scalar(default=Scalar(100.0, "%"))
+    thermal_efficiency_model = attrib_enum(
+        default=constants.PumpThermalEfficiencyModel.Constant
+    )
 
     type = attrib_enum(default=constants.PumpType.ConstantPressure)
 
@@ -762,8 +765,8 @@ class PumpEquipmentDescription:
     esp_parameters = attrib_enum(default=constants.EspParameters.UserDefined)
 
     esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
-    esp_thermal_efficiency_model = attrib_enum(
-        default=constants.PumpThermalEfficiencyModel.Constant
+    density_correction_enabled: bool = attr.ib(
+        default=False, validator=instance_of(bool)
     )
 
 

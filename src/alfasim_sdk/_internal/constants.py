@@ -420,7 +420,7 @@ class PumpViscosityModel(Enum):
 
 class PumpThermalEfficiencyModel(Enum):
     """
-    Defines the ESP thermal efficiency model
+    Defines the pump thermal efficiency model
         - ``Constant``: An user-defined constant value is used to define to transform the ESP mechanical energy to heat.
         - ``PumpEfficiencyCurve``: The ESP efficiency curve is used to transform the ESP mechanical energy to heat.
     """
