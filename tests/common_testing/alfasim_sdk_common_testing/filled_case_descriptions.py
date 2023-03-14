@@ -643,6 +643,12 @@ TIME_OPTIONS_DESCRIPTION = case_description.TimeOptionsDescription(
     minimum_time_for_steady_state_stop=Scalar(7, "s"),
 )
 
+EMULSION_MODEL_CURVE_DESCRIPTION = case_description.EmulsionModelCurveDescription(
+    image=Array([1.0, 1.5, 2.0, 1.0], "-"),
+    domain=Array([0.0, 0.4, 0.6, 1.0], "m3/m3"),
+
+)
+
 PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     hydrodynamic_model=constants.HydrodynamicModelType.ThreeLayersNineFieldsGasOilWater,
     simulation_regime=constants.SimulationRegimeType.SteadyState,
@@ -654,10 +660,7 @@ PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     correlations_package=constants.CorrelationPackageType.Alfasim,
     emulsion_model_enabled=True,
     emulsion_relative_viscosity_model=constants.EmulsionRelativeViscosityModelType.Brinkman1952,
-    emulsion_relative_viscosity_tuning_factor=Curve(
-        image=Array([1.0, 1.5, 2.0, 1.0], "-"),
-        domain=Array([0.0, 0.4, 0.6, 1.0], "m3/m3"),
-    ),
+    emulsion_relative_viscosity_tuning_factor=EMULSION_MODEL_CURVE_DESCRIPTION,
     emulsion_droplet_size_model=constants.EmulsionDropletSizeModelType.Brauner2001,
     emulsion_inversion_point_model=constants.EmulsionInversionPointModelType.Brinkman1952AndYeh1964,
     flash_model=constants.FlashModel.HydrocarbonOnly,

@@ -609,6 +609,17 @@ class SpeedCurveDescription:
     time = attrib_array(Array([0], "s"))
     speed = attrib_array(Array([500], "rpm"), category="angle per time")
 
+@attr.s(frozen=True, slots=True, kw_only=True)
+class EmulsionModelCurveDescription:
+    """
+    ivar: domain:
+
+    ivar: image:
+
+    """
+    domain = attrib_array(Array([0.0], "m3/m3"), category="volume per volume")
+    image = attrib_array(Array([1.0], '-'), category="dimensionless")
+
 
 # fmt: off
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -3176,19 +3187,8 @@ class PhysicsDescription:
     )
     emulsion_woelflin_a = attrib_scalar(default=Scalar("dimensionless", 4.2, "-"))
     emulsion_woelflin_b = attrib_scalar(default=Scalar("dimensionless", 2.5, "-"))
-    emulsion_table_based_rel_visc_curve = attrib_curve(
-        default=Curve(
-            image=Array("dimensionless", [1.0], "-"),
-            domain=Array("volume per volume", [0.0], "m3/m3"),
-        )
-    )
-
-    emulsion_relative_viscosity_tuning_factor = attrib_curve(
-        default=Curve(
-            image=Array("dimensionless", [1.0], "-"),  # tuning factor
-            domain=Array("volume per volume", [0.0], "m3/m3"),  # water-cut
-        )
-    )
+    emulsion_table_based_rel_visc_curve = attrib_instance(EmulsionModelCurveDescription)
+    emulsion_relative_viscosity_tuning_factor = attrib_instance(EmulsionModelCurveDescription)
 
     emulsion_droplet_size_model = attrib_enum(
         default=constants.EmulsionDropletSizeModelType.ModelDefault
@@ -3216,16 +3216,15 @@ class PhysicsDescription:
 
     @emulsion_relative_viscosity_tuning_factor.validator
     def _validate_emulsion_relative_viscosity_tuning_factor(self, attribute, value):
-        domain = value.GetDomain()
-        assert domain.GetCategory() == "volume per volume", "Invalid water-cut category"
-        domain_values = np.asarray(domain.GetValues("m3/m3"))
+        assert value.domain.category == "volume per volume", "Invalid water-cut category"
+        domain_values = np.asarray(value.domain.GetValues("m3/m3"))
         assert (
             np.min(domain_values) >= 0.0 and np.max(domain_values) <= 1.0
         ), "Invalid water-cut values"
-        image = value.GetImage()
+
         assert (
-            image.GetCategory() == "dimensionless"
-            and np.min(image.GetValues("-")) >= 1.0e-5
+            value.image.category == "dimensionless"
+            and np.min(value.image.GetValues('-'))>= 1.0e-5
         ), "Tuning factor cannot be lower than 1e-5"
 
 

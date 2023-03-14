@@ -489,6 +489,7 @@ def test_get_cases_class():
         "WallLayerDescription",
         "WellDescription",
         "XAndYDescription",
+        "EmulsionModelCurveDescription",
     }
     assert (
         obtained == expected

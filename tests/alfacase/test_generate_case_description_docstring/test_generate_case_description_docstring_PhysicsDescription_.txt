@@ -18,8 +18,8 @@
             emulsion_pal_rhodes_phi_rel_100: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.765, '-', 'dimensionless')
             emulsion_woelflin_a: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(4.2, '-', 'dimensionless')
             emulsion_woelflin_b: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(2.5, '-', 'dimensionless')
-            emulsion_table_based_rel_visc_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, m3/m3)[(1.0, 0.0)]
-            emulsion_relative_viscosity_tuning_factor: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, m3/m3)[(1.0, 0.0)]
+            emulsion_table_based_rel_visc_curve: \ :class:`EmulsionModelCurveDescription <EmulsionModelCurveDescription>`\  = EmulsionModelCurveDescription()
+            emulsion_relative_viscosity_tuning_factor: \ :class:`EmulsionModelCurveDescription <EmulsionModelCurveDescription>`\  = EmulsionModelCurveDescription()
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.ModelDefault
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  = EmulsionInversionPointModelType.ModelDefault
             emulsion_inversion_water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.4, 'm3/m3', 'volume per volume')
@@ -49,20 +49,8 @@
             emulsion_woelflin_b:  # optional
                 value: number
                 unit: string
-            emulsion_table_based_rel_visc_curve:  # optional
-                image:
-                    values: [number]
-                    unit: string
-                domain:
-                    values: [number]
-                    unit: string
-            emulsion_relative_viscosity_tuning_factor:  # optional
-                image:
-                    values: [number]
-                    unit: string
-                domain:
-                    values: [number]
-                    unit: string
+            emulsion_table_based_rel_visc_curve: \ :class:`emulsion_model_curve_description_schema <EmulsionModelCurveDescription>`\  # optional
+            emulsion_relative_viscosity_tuning_factor: \ :class:`emulsion_model_curve_description_schema <EmulsionModelCurveDescription>`\  # optional
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  # optional
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  # optional
             emulsion_inversion_water_cut:  # optional
