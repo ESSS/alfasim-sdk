@@ -646,7 +646,6 @@ TIME_OPTIONS_DESCRIPTION = case_description.TimeOptionsDescription(
 EMULSION_MODEL_CURVE_DESCRIPTION = case_description.EmulsionModelCurveDescription(
     image=Array([1.0, 1.5, 2.0, 1.0], "-"),
     domain=Array([0.0, 0.4, 0.6, 1.0], "m3/m3"),
-
 )
 
 PHYSICS_DESCRIPTION = case_description.PhysicsDescription(

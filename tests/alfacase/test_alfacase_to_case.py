@@ -143,7 +143,7 @@ ALFACASE_TEST_CONFIG_MAP = {
     "EmulsionModelCurveDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.EMULSION_MODEL_CURVE_DESCRIPTION,
         schema=schema.emulsion_model_curve_description_schema,
-        is_sequence=False
+        is_sequence=False,
     ),
     "BipDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.BIP_DESCRIPTION,
