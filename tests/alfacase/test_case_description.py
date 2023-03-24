@@ -1088,6 +1088,13 @@ def test_to_curve():
     assert to_curve(curve) is curve
 
 
+    image = Array("length", [], "m")
+    domain = Array("time", [], "s")
+    curve = Curve(image, domain)
+    fixed_curve = to_curve(curve)
+    assert fixed_curve.image.GetValues() == [1.0]
+
+
 @pytest.mark.parametrize(
     "attrib_creator, default",
     [
