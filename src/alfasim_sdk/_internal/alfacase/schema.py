@@ -929,6 +929,7 @@ pump_equipment_description_schema = Map(
         "position": Map({"value": Float(), "unit": Str()}),
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("thermal_efficiency"): Map({"value": Float(), "unit": Str()}),
+        Optional("thermal_efficiency_model"): Enum(['constant', 'efficiency_curve_based']),
         Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump']),
         Optional("pressure_boost"): Map({"value": Float(), "unit": Str()}),
         Optional("table"): table_pump_description_schema,
@@ -948,7 +949,7 @@ pump_equipment_description_schema = Map(
         Optional("user_defined_esp_table"): table_pump_description_schema,
         Optional("esp_parameters"): Enum(['user_defined', 'catalog']),
         Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
-        Optional("esp_thermal_efficiency_model"): Enum(['constant', 'efficiency_curve_based']),
+        Optional("density_correction_enabled"): Bool(),
     }
 )
 pvt_model_combined_description_schema = Map(
@@ -1138,5 +1139,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 8b67e9ac297349d77166d88cadcf4cae)
+# [[[end]]] (checksum: faa375d759990e5ea0a82a2782fd826d)
 # fmt: on
