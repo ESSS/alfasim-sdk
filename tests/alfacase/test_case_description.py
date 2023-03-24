@@ -1087,7 +1087,6 @@ def test_to_curve():
 
     assert to_curve(curve) is curve
 
-
     image = Array("length", [], "m")
     domain = Array("time", [], "s")
     curve = Curve(image, domain)
