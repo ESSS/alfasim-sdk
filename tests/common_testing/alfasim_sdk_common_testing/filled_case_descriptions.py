@@ -506,9 +506,10 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     ),
     esp_number_of_stages=2,
     esp_reference_density=Scalar(1000.0, "kg/m3"),
-    user_defined_esp_table=TABLE_PUMP_DESCRIPTION,
-    esp_parameters=constants.EspParameters.Catalog,
     density_correction_enabled=False,
+    esp_manufacturer="",
+    esp_model="",
+
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),

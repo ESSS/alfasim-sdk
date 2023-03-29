@@ -7,6 +7,10 @@ History
 
 * Added ``esp_thermal_efficiency_model`` attribute to ``PumpEquipmentDescription``.
 
+* Added ``esp_manufacturer`` and ``esp_model`` attributes to ``PumpEquipmentDescription``.
+
+* Removed ``user_defined_esp_table`` and ``esp_parameters`` from ``PumpEquipmentDescription``.
+
 
 0.16.0 (2023-02-09)
 ===================
