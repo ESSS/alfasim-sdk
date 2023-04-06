@@ -509,7 +509,6 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     density_correction_enabled=False,
     esp_manufacturer="",
     esp_model="",
-
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),

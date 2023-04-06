@@ -761,12 +761,8 @@ class PumpEquipmentDescription:
     esp_reference_density = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
     )
-    esp_manufacturer: str = attr.ib(
-        default="", validator=optional(instance_of(str))
-    )
-    esp_model: str = attr.ib(
-        default="", validator=optional(instance_of(str))
-    )
+    esp_manufacturer: str = attr.ib(default="", validator=optional(instance_of(str)))
+    esp_model: str = attr.ib(default="", validator=optional(instance_of(str)))
     esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
     density_correction_enabled: bool = attr.ib(
         default=False, validator=instance_of(bool)
