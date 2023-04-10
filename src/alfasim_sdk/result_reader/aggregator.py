@@ -19,6 +19,7 @@ from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import (
     PROFILES_STATISTICS_DSET_NAME_SUFFIX,
 )
+from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_LOCKING_MODE
 from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_PREFIX
 from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
 from alfasim_sdk.result_reader.aggregator_constants import TRENDS_GROUP_NAME
@@ -186,13 +187,25 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
         try:
             os.chdir(directory)
             try:
-                return h5py.File(filename.name, "r", libver="latest", swmr=True)
+                return h5py.File(
+                    filename.name,
+                    "r",
+                    libver="latest",
+                    swmr=True,
+                    locking=RESULT_FILE_LOCKING_MODE,
+                )
             except OSError as os_error:
                 swmr_message = (
                     "Unable to open file (file is not already open for SWMR writing)"
                 )
                 if str(os_error) == swmr_message:
-                    return h5py.File(filename.name, "r", libver="latest", swmr=False)
+                    return h5py.File(
+                        filename.name,
+                        "r",
+                        libver="latest",
+                        swmr=False,
+                        locking=RESULT_FILE_LOCKING_MODE,
+                    )
                 raise
 
         except PermissionError:
