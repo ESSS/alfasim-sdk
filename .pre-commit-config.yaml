@@ -8,7 +8,7 @@ exclude: |
         ^tests/alfacase/test_generate_list_of_units/
     )
 default_language_version:
-    python: python3.7
+    python: python3.10
 repos:
 -   repo: https://github.com/asottile/reorder_python_imports
     rev: v3.9.0
