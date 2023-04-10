@@ -1,3 +1,4 @@
+import functools
 import os
 from collections import namedtuple
 from contextlib import contextmanager
@@ -179,6 +180,10 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     Note that once the container dict is collected the files originally returned are closed.
     """
 
+    h5py_file = h5py.File
+    if h5py.version.version_tuple[:2] >= (3, 5):
+        h5py_file = functools.partial(h5py.File, locking=RESULT_FILE_LOCKING_MODE)
+
     def open_result_file(filename: Path) -> h5py.File:
         # The lib h5py will fail to open the file for some exotic paths,
         # but will work if the cwd are such paths.
@@ -187,25 +192,13 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
         try:
             os.chdir(directory)
             try:
-                return h5py.File(
-                    filename.name,
-                    "r",
-                    libver="latest",
-                    swmr=True,
-                    locking=RESULT_FILE_LOCKING_MODE,
-                )
+                return h5py_file(filename.name, "r", libver="latest", swmr=True)
             except OSError as os_error:
                 swmr_message = (
                     "Unable to open file (file is not already open for SWMR writing)"
                 )
                 if str(os_error) == swmr_message:
-                    return h5py.File(
-                        filename.name,
-                        "r",
-                        libver="latest",
-                        swmr=False,
-                        locking=RESULT_FILE_LOCKING_MODE,
-                    )
+                    return h5py_file(filename.name, "r", libver="latest", swmr=False)
                 raise
 
         except PermissionError:
