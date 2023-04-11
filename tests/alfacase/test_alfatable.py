@@ -9,7 +9,9 @@ from alfasim_sdk import generate_alfatable_file
 from alfasim_sdk import PvtModelPtTableParametersDescription
 
 
-@pytest.mark.xfail(reason='TODO: EDEN-2592: the workaround in case_to_alfacase.format_list breaks this test')
+@pytest.mark.xfail(
+    reason="TODO: EDEN-2592: the workaround in case_to_alfacase.format_list breaks this test"
+)
 def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
     description = PvtModelPtTableParametersDescription(
         pressure_values=np.array([1, 2, 3]),
