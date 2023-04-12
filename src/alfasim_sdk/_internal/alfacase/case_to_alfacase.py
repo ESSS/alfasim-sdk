@@ -51,6 +51,7 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
         comments = strictyaml.ruamel.comments
     else:
         import ruamel
+
         comments = ruamel.yaml.comments
 
     retval = comments.CommentedSeq(values)
