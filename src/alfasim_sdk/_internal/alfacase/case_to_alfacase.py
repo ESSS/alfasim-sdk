@@ -44,15 +44,16 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
     # making it unable to work with the "non-vendored" ruamel version.
     # The strictyaml version obtained with pip to run test on github
     # uses a non vendored version of ruamel.
-    # By now we use by defaul here the vendored ruamel with a fallback
+    # By now we use by default here the vendored ruamel with a fallback
     # to the original ruamel.
     # When updating alfasim's strictyaml we probably should review this hack.
     if hasattr(strictyaml, "ruamel"):
-        ruamel = strictyaml.ruamel
+        comments = strictyaml.ruamel.comments
     else:
         import ruamel
+        comments = ruamel.yaml.comments
 
-    retval = ruamel.yaml.comments.CommentedSeq(values)
+    retval = comments.CommentedSeq(values)
 
     if enable_flow_style:
         retval.fa.set_flow_style()
