@@ -2,6 +2,21 @@
 History
 =======
 
+0.14.3 (2023-04-26)
+===================
+
+* Hot fix release, loosing pin requirements for `barril`.
+
+0.14.2 (2023-04-26)
+===================
+
+* Problem during deploy.
+
+0.14.1 (2023-04-26)
+===================
+
+* Problem during deploy.
+
 0.14.0 (2022-07-19)
 ===================
 
