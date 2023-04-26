@@ -111,6 +111,7 @@ from alfasim_sdk._internal.alfacase.case_description import PhysicsDescription
 from alfasim_sdk._internal.alfacase.case_description import PigEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeDescription
 from alfasim_sdk._internal.alfacase.case_description import PipeSegmentsDescription
+from alfasim_sdk._internal.alfacase.case_description import PluginDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     PressureContainerDescription,
 )
@@ -131,7 +132,10 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import PvtModelsDescription
 from alfasim_sdk._internal.alfacase.case_description import (
-    PvtModelTableParametersDescription,
+    PvtModelPtTableParametersDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
+    PvtModelPhTableParametersDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
     ReferencedPressureContainerDescription,
@@ -214,8 +218,11 @@ from alfasim_sdk._internal.alfacase.alfatable import (
 from alfasim_sdk._internal.constants import BUBBLE_FIELD
 from alfasim_sdk._internal.constants import CompressorSpeedType
 from alfasim_sdk._internal.constants import ControllerType
+from alfasim_sdk._internal.constants import CorrelationsGasViscosity
+from alfasim_sdk._internal.constants import CorrelationsOilViscosity
 from alfasim_sdk._internal.constants import CorrelationPackage
 from alfasim_sdk._internal.constants import CorrelationPackageType
+from alfasim_sdk._internal.constants import CorrelationsSurfaceTension
 from alfasim_sdk._internal.constants import DEFAULT_TEMPERATURE_IN_K
 from alfasim_sdk._internal.constants import DrainageRateMode
 from alfasim_sdk._internal.constants import DROPLET_FIELD
@@ -227,6 +234,7 @@ from alfasim_sdk._internal.constants import EnergyModel
 from alfasim_sdk._internal.constants import EnergyModelPrimaryVariable
 from alfasim_sdk._internal.constants import EquationOfStateType
 from alfasim_sdk._internal.constants import EquipmentAttachmentLocation
+from alfasim_sdk._internal.constants import EspParameters
 from alfasim_sdk._internal.constants import EvaluationStrategyType
 from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 from alfasim_sdk._internal.constants import FlashModel
@@ -264,6 +272,8 @@ from alfasim_sdk._internal.constants import (
 from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
+from alfasim_sdk._internal.constants import PumpViscosityModel
+from alfasim_sdk._internal.constants import PumpThermalEfficiencyModel
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
@@ -282,9 +292,7 @@ from alfasim_sdk._internal.constants import WATER_LAYER
 from alfasim_sdk._internal.constants import WATER_PHASE
 from alfasim_sdk._internal.constants import WellConnectionPort
 from alfasim_sdk._internal.constants import WellIndexPhaseType
-from alfasim_sdk._internal.constants import CorrelationsOilViscosity
-from alfasim_sdk._internal.constants import CorrelationsGasViscosity
-from alfasim_sdk._internal.constants import CorrelationsSurfaceTension
+
 
 # Plugins: Layouts imports
 from alfasim_sdk._internal.layout import tab
@@ -427,6 +435,7 @@ __all__ = [
     "MaterialDescription",
     "MaterialType",
     "MultiInputType",
+    "EspParameters",
     "MultipleReference",
     "NodeCellType",
     "NodeDescription",
@@ -449,6 +458,7 @@ __all__ = [
     "PipeSegmentsDescription",
     "PipeThermalModelType",
     "PipeThermalPositionInput",
+    "PluginDescription",
     "PositionalPipeTrendDescription",
     "PressureContainerDescription",
     "PressureNodePropertiesDescription",
@@ -456,10 +466,13 @@ __all__ = [
     "ProfileOutputDescription",
     "PumpEquipmentDescription",
     "PumpType",
+    "PumpViscosityModel",
+    "PumpThermalEfficiencyModel",
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
-    "PvtModelTableParametersDescription",
+    "PvtModelPtTableParametersDescription",
+    "PvtModelPhTableParametersDescription",
     "PvtModelsDescription",
     "Quantity",
     "Reference",

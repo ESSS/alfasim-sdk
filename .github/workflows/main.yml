@@ -39,6 +39,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: true
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -55,7 +57,7 @@ jobs:
   deploy:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && github.repository == 'ESSS/alfasim-sdk'
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     needs: test
 
@@ -77,3 +79,18 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.pypi_token }}
+
+  sonarcloud:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

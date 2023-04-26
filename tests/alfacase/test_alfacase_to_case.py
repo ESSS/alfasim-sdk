@@ -250,6 +250,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.PIPE_WALL_DESCRIPTION,
         schema=schema.pipe_segments_description_schema,
     ),
+    "PluginDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.PLUGIN_DESCRIPTION,
+        schema=schema.plugin_description_schema,
+    ),
     "ProfileOutputDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PROFILE_OUTPUT_DESCRIPTION,
         schema=schema.profile_output_description_schema,

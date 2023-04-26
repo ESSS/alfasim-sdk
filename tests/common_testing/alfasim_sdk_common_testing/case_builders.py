@@ -89,6 +89,29 @@ def build_linear_initial_temperatures_description(
     )
 
 
+def build_linear_initial_pressure_description(
+    from_pressure,
+    to_pressure,
+    unit,
+    final_position,
+    position_unit,
+    start_position=0.0,
+):
+    return case_description.InitialPressuresDescription(
+        position_input_type=constants.TableInputType.length,
+        table_length=case_description.PressureContainerDescription(
+            positions=Array(
+                [
+                    Scalar(start_position, position_unit).GetValue("m"),
+                    Scalar(final_position, position_unit).GetValue("m"),
+                ],
+                "m",
+            ),
+            pressures=Array([from_pressure, to_pressure], unit),
+        ),
+    )
+
+
 def build_compressor_pressure_table_description(
     speed_entries,
     corrected_mass_flow_rate_entries,
@@ -124,3 +147,27 @@ def build_compressor_pressure_table_description(
         pressure_ratio_table=pressure_ratio_table,
         isentropic_efficiency_table=isentropic_efficiency_table,
     )
+
+
+def build_constant_pvt_table(
+    energy_model_primary_variable: constants.EnergyModelPrimaryVariable,
+):
+    if (
+        energy_model_primary_variable
+        == constants.EnergyModelPrimaryVariable.Temperature
+    ):
+        return case_description.PvtModelsDescription(
+            default_model="constant pt table",
+            pt_table_parameters={
+                "constant pt table": case_description.PvtModelPtTableParametersDescription.create_constant()
+            },
+        )
+    elif energy_model_primary_variable == constants.EnergyModelPrimaryVariable.Enthalpy:
+        return case_description.PvtModelsDescription(
+            default_model="constant ph table",
+            ph_table_parameters={
+                "constant ph table": case_description.PvtModelPhTableParametersDescription.create_constant()
+            },
+        )
+    else:  # pragma no cover
+        assert False, f"{energy_model_primary_variable} not supported."

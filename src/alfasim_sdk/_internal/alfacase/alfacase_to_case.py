@@ -353,18 +353,12 @@ def get_curve_loader(
     If ``from_unit`` is provided, the category parameter will be filled with
     the default category for the given unit.
     """
+    args = dict(category=_obtain_category_for_scalar(category, from_unit))
     if domain_category is not None or from_domain_unit is not None:
-        return partial(
-            load_curve,
-            category=_obtain_category_for_scalar(category, from_unit),
-            domain_category=_obtain_category_for_scalar(
-                domain_category, from_domain_unit
-            ),
+        args["domain_category"] = _obtain_category_for_scalar(
+            domain_category, from_domain_unit
         )
-    return partial(
-        load_curve,
-        category=_obtain_category_for_scalar(category, from_unit),
-    )
+    return partial(load_curve, **args)
 
 
 def load_dict_of_curves(
@@ -1404,6 +1398,9 @@ def load_table_pump_description(
         "void_fractions": get_array_loader(category="volume fraction"),
         "flow_rates": get_array_loader(category="volume flow rate"),
         "pressure_boosts": get_array_loader(from_unit="bar"),
+        "heads": get_array_loader(from_unit="m"),
+        "efficiencies": get_array_loader(from_unit="%"),
+        "powers": get_array_loader(from_unit="W"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.TablePumpDescription(**case_values)
@@ -1885,33 +1882,11 @@ def load_well_description(
 def load_physics_description(
     document: DescriptionDocument,
 ) -> case_description.PhysicsDescription:
-    # fmt: off
-    alfacase_to_case_description = {
-        'hydrodynamic_model': get_enum_loader(enum_class=constants.HydrodynamicModelType),
-        'simulation_regime': get_enum_loader(enum_class=constants.SimulationRegimeType),
-        'energy_model': get_enum_loader(enum_class=constants.EnergyModel),
-        'solids_model': get_enum_loader(enum_class=constants.SolidsModelType),
-        'initial_condition_strategy': get_enum_loader(enum_class=constants.InitialConditionStrategyType),
-        'restart_filepath': load_path,
-        'keep_former_results': load_value,
-        'emulsion_model': get_enum_loader(enum_class=constants.EmulsionModelType),
-        'emulsion_model_enabled': load_value,
-        'emulsion_relative_viscosity_model': get_enum_loader(enum_class=constants.EmulsionRelativeViscosityModelType),
-        'emulsion_pal_rhodes_phi_rel_100': get_scalar_loader(category='dimensionless'),
-        'emulsion_woelflin_a': get_scalar_loader(category='dimensionless'),
-        'emulsion_woelflin_b': get_scalar_loader(category='dimensionless'),
-        'emulsion_table_based_rel_visc_curve': get_curve_loader(category='dimensionless', domain_category='volume per volume'),
-        'emulsion_relative_viscosity_tuning_factor': get_curve_loader(category='dimensionless', domain_category='volume per volume'),
-        'emulsion_droplet_size_model': get_enum_loader(enum_class=constants.EmulsionDropletSizeModelType),
-        'emulsion_inversion_point_model': get_enum_loader(enum_class=constants.EmulsionInversionPointModelType),
-        'emulsion_model_plugin_id': load_value,
-        'flash_model': get_enum_loader(enum_class=constants.FlashModel),
-        'correlations_package': get_enum_loader(enum_class=constants.CorrelationPackageType),
-    }
-    # fmt: on
-    case_values = to_case_values(document, alfacase_to_case_description)
-    item_description = case_description.PhysicsDescription(**case_values)
-    return update_multi_input_flags(document, item_description)
+    return load_instance(
+        document,
+        case_description.PhysicsDescription,
+        explicit_loaders=dict(restart_filepath=load_path),
+    )
 
 
 # fmt: off
@@ -1995,6 +1970,10 @@ def load_tracers_description(
 def load_case_description(
     document: DescriptionDocument,
 ) -> case_description.CaseDescription:
+    from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
+        load_list_of_plugin,
+    )
+
     # fmt: off
     alfacase_to_case_description = {
         'physics': load_physics_description,
@@ -2004,6 +1983,7 @@ def load_case_description(
         'max_cfl_value': load_value,
         'friction_factor_evaluation_strategy': get_enum_loader(enum_class=constants.EvaluationStrategyType),
         'name': load_value,
+        'plugins': load_list_of_plugin,
         'positions': load_value,
         'tracers': load_tracers_description,
         'ipr_models': load_ipr_models_description,

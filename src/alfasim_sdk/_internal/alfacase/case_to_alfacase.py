@@ -38,9 +38,23 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
     For more details check:
     https://stackoverflow.com/questions/63364894/how-to-dump-only-lists-with-flow-style-with-pyyaml-or-ruamel-yaml
     """
-    import ruamel
+    import strictyaml
 
-    retval = ruamel.yaml.comments.CommentedSeq(values)
+    # The strictyaml version used by alfasim has ruamel vendored
+    # making it unable to work with the "non-vendored" ruamel version.
+    # The strictyaml version obtained with pip to run test on github
+    # uses a non vendored version of ruamel.
+    # By now we use by default here the vendored ruamel with a fallback
+    # to the original ruamel.
+    # When updating alfasim's strictyaml we probably should review this hack.
+    if hasattr(strictyaml, "ruamel"):
+        comments = strictyaml.ruamel.comments
+    else:
+        import ruamel
+
+        comments = ruamel.yaml.comments
+
+    retval = comments.CommentedSeq(values)
 
     if enable_flow_style:
         retval.fa.set_flow_style()
@@ -148,7 +162,6 @@ def convert_dict_to_valid_alfacase_format(
             transient_fields[key] = value
 
         if is_attrs(value):
-
             to_dict = partial(attr.asdict, recurse=False)
 
             if isinstance(value, list):
@@ -177,6 +190,17 @@ def convert_dict_to_valid_alfacase_format(
                 enable_flow_style_on_numpy=enable_flow_style_on_numpy,
                 remove_redundant_input_type_data=remove_redundant_input_type_data,
             )
+            continue
+
+        if isinstance(value, list) and all(isinstance(item, dict) for item in value):
+            converted_dict[key] = [
+                convert_dict_to_valid_alfacase_format(
+                    item,
+                    enable_flow_style_on_numpy=enable_flow_style_on_numpy,
+                    remove_redundant_input_type_data=remove_redundant_input_type_data,
+                )
+                for item in value
+            ]
             continue
 
         converted_dict[key] = _convert_value_to_valid_alfacase_format(

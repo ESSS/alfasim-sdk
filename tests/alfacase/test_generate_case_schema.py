@@ -334,7 +334,6 @@ class TestGenerateStrictYaml:
 
 
 def test_generate_strict_yaml_schema_for_class():
-
     schema = generate_alfacase_schema(CompressorEquipmentDescription)
     compressor_expected_schema = dedent(
         """\
@@ -449,6 +448,7 @@ def test_get_cases_class():
         "PigEquipmentDescription",
         "PipeDescription",
         "PipeSegmentsDescription",
+        "PluginDescription",
         "PressureContainerDescription",
         "PressureNodePropertiesDescription",
         "ProfileDescription",

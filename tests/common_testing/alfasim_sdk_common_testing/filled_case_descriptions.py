@@ -79,8 +79,15 @@ PVT_MODEL_COMBINED_DEFINITION = case_description.PvtModelCombinedDescription(
     reference_pvt_model="acme",
     fluids={"combined_fluid_1": COMBINED_FLUID_DESCRIPTION},
 )
-PVT_MODEL_TABLE_PARAMETERS = (
-    case_description.PvtModelTableParametersDescription.create_constant(has_water=True)
+PVT_MODEL_PT_TABLE_PARAMETERS = (
+    case_description.PvtModelPtTableParametersDescription.create_constant(
+        has_water=True
+    )
+)
+PVT_MODEL_PH_TABLE_PARAMETERS = (
+    case_description.PvtModelPhTableParametersDescription.create_constant(
+        has_water=True
+    )
 )
 PVT_MODELS_DEFINITION = case_description.PvtModelsDescription(
     default_model="acme",
@@ -383,6 +390,9 @@ TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
     void_fractions=Array("volume fraction", [0.0] * 4 + [0.1] * 4, "-"),
     flow_rates=Array([1.0] * 4 + [0.05] * 4, "m3/s"),
     pressure_boosts=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "bar"),
+    heads=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "m") * 1.0e5 / (9.8 * 1000.0),
+    efficiencies=Array([0.01, 0.2, 0.4, 0.2, 0.009, 0.18, 0.36, 0.18], "%"),
+    powers=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "W"),
 )
 SURGE_VOLUME_OPTIONS_DESCRIPTION = case_description.SurgeVolumeOptionsDescription(
     time_mode=constants.SurgeVolumeTimeMode.UserDefined,
@@ -483,7 +493,8 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     position=Scalar(350.0, "m"),
     flow_direction=constants.FlowDirection.Forward,
     pressure_boost=Scalar(1e5, "Pa"),
-    thermal_efficiency=Scalar(1.0, "-"),
+    thermal_efficiency=Scalar(100, "%"),
+    thermal_efficiency_model=constants.PumpThermalEfficiencyModel.Constant,
     table=TABLE_PUMP_DESCRIPTION,
     speed_curve=SPEED_CURVE_DESCRIPTION,
     speed_curve_interpolation_type=constants.InterpolationType.Linear,
@@ -495,6 +506,9 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     ),
     esp_number_of_stages=2,
     esp_reference_density=Scalar(1000.0, "kg/m3"),
+    user_defined_esp_table=TABLE_PUMP_DESCRIPTION,
+    esp_parameters=constants.EspParameters.Catalog,
+    density_correction_enabled=False,
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),
@@ -878,6 +892,13 @@ NODE_CONTROLLER_DESCRIPTION = case_description.NodeDescription(
     name="controller_node",
     node_type=constants.NodeCellType.Controller,
     controller_properties=CONTROLLER_NODE_PROPERTIES_DESCRIPTION,
+)
+
+
+PLUGIN_DESCRIPTION = case_description.PluginDescription(
+    name="user_plugin",
+    is_enabled=False,
+    gui_models={},
 )
 
 

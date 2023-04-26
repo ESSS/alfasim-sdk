@@ -231,6 +231,9 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
         if predicate_function(type_):
             return handle_function(type_, indent=indent)
 
+    if type_ is typing.Any:
+        return "Any()"
+
     raise RuntimeError(
         f"Alfacase Schema does not know how to handle {type_}.\n"
         f"Perhaps you forgot to add the type hint to attribute named '{key}'?"
@@ -269,8 +272,8 @@ def _get_attr_name(key: str, value: attr.ib) -> str:
 #   For now, Plugins inputs (GUI) will not be able to be customizable by YAML
 
 IGNORED_PROPERTIES = (
-    "plugins",
-    "table_parameters",
+    "pt_table_parameters",
+    "ph_table_parameters",
     "emulsion_model_plugin_id",
 )
 

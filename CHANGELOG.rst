@@ -2,6 +2,36 @@
 History
 =======
 
+0.17.0 (UNRELEASED)
+===================
+
+* Added ``esp_thermal_efficiency_model`` attribute to ``PumpEquipmentDescription``.
+
+* Disable internal hdf file locks.
+
+
+0.16.0 (2023-02-09)
+===================
+
+* Added support to export and import configuration data from plugins.
+
+* Added a fixture ``alfasim_runner`` (add to pytest relevant configuration ``alfasim_sdk.testing.fixtures`` to use it) to allow plugin authors to run their plugin against an installed version of ALFAsim in a test environment.
+
+* Added a helper to read ALFAsim simulation results (``alfasim_sdk.result_reader.reader.Results``).
+
+* Added ``heads```, ``efficiencies``, and ``powers`` attributes to ``TablePumpDescription``.
+
+* Added ``esp_viscosity_model`` attribute to ``PumpEquipmentDescription``.
+
+* Added ``user_defined_esp_table`` and ``esp_parameters`` attributes to ``PumpEquipmentDescription``. Now, an ESP can be created as ``eps_parameters`` = [``user_defined`` or ``catalog``].  When it's created as ``user_defined``, the pump table is read from a ``user_defined_esp_table``. Otherwise, is read from a ``esp_table``.
+
+
+0.15.0 (2022-11-29)
+===================
+
+* **Breaking Change**: Available units for category ``angle per time`` have been restricted to ``Hz``, ``rpm`` and ``rad/s`` only;
+
+
 0.14.3 (2023-04-26)
 ===================
 
@@ -82,6 +112,7 @@ History
 * Add emulsion relative viscosity tuning factor;
 
 * Fix ``automatic_profile_frequency`` and ``automatic_trend_frequency`` parameters being ignored in ``convert_alfacase_to_description``;
+
 
 0.13.0 (2022-04-19)
 ===================

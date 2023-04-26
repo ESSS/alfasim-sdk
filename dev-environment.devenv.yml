@@ -9,6 +9,7 @@ dependencies:
   - doxygen
   - graphviz
   - invoke
+  - pandas
   - pip
   - pre-commit
   - pytest
@@ -20,6 +21,5 @@ dependencies:
   - sphinx-click
   - toposort
   - tox
-  - typing_inspect
   - pip:
     - "-r docs/requirements.txt"

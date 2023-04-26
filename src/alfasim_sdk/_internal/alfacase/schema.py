@@ -3,14 +3,14 @@
 # import cog
 # from alfasim_sdk import CaseDescription
 # from alfasim_sdk._internal.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
-# cog.out("from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
+# cog.out("from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
 # cog.out("\n\n")
 # cog.out("\n\n")
 # list_of_classes_that_needs_schema = get_all_classes_that_needs_schema(CaseDescription)
 # for class_ in list_of_classes_that_needs_schema:
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
-from strictyaml import Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
+from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
 
 
 
@@ -465,6 +465,13 @@ pipe_segments_description_schema = Map(
         Optional("wall_names"): Seq(Str()),
     }
 )
+plugin_description_schema = Map(
+    {
+        Optional("name"): Str(),
+        Optional("gui_models"): MapPattern(Str(), Any()),
+        Optional("is_enabled"): Bool(),
+    }
+)
 pressure_container_description_schema = Map(
     {
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -709,6 +716,9 @@ table_pump_description_schema = Map(
         Optional("void_fractions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("flow_rates"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("pressure_boosts"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("heads"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("efficiencies"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("powers"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 temperatures_container_description_schema = Map(
@@ -919,6 +929,7 @@ pump_equipment_description_schema = Map(
         "position": Map({"value": Float(), "unit": Str()}),
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("thermal_efficiency"): Map({"value": Float(), "unit": Str()}),
+        Optional("thermal_efficiency_model"): Enum(['constant', 'efficiency_curve_based']),
         Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump']),
         Optional("pressure_boost"): Map({"value": Float(), "unit": Str()}),
         Optional("table"): table_pump_description_schema,
@@ -935,6 +946,10 @@ pump_equipment_description_schema = Map(
         ),
         Optional("esp_number_of_stages"): Int(),
         Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
+        Optional("user_defined_esp_table"): table_pump_description_schema,
+        Optional("esp_parameters"): Enum(['user_defined', 'catalog']),
+        Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
+        Optional("density_correction_enabled"): Bool(),
     }
 )
 pvt_model_combined_description_schema = Map(
@@ -1112,6 +1127,7 @@ case_description_schema = Map(
         Optional("physics"): physics_description_schema,
         Optional("time_options"): time_options_description_schema,
         Optional("numerical_options"): numerical_options_description_schema,
+        Optional("plugins"): Seq(plugin_description_schema),
         Optional("ipr_models"): ipr_models_description_schema,
         Optional("pvt_models"): pvt_models_description_schema,
         Optional("tracers"): tracers_description_schema,
@@ -1123,5 +1139,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: f1c874c32714ece81b49496d4dc106a0)
+# [[[end]]] (checksum: faa375d759990e5ea0a82a2782fd826d)
 # fmt: on

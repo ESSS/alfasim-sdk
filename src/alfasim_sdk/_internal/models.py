@@ -5,7 +5,9 @@ from typing import Optional
 from alfasim_sdk._internal.alfasim_sdk_utils import get_attr_class
 
 
-def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callable:
+def container_model(
+    *, model: type, caption: str, icon: Optional[str] = None
+) -> Callable:
     """
     ``container_model`` is an object that keeps together many different properties defined by the plugin and allows developers
     to build user interfaces in a declarative way similar to :func:`data_model`.
@@ -89,6 +91,15 @@ def container_model(*, model: type, caption: str, icon: Optional[str]) -> Callab
         :scale: 80%
 
     """
+    is_model_data_model = (
+        hasattr(model, "__attrs_attrs__")
+        and hasattr(model, "_alfasim_metadata")
+        and model._alfasim_metadata["model"] is None
+    )
+    if not is_model_data_model:
+        raise TypeError(
+            "The `model` argument must be a class decorated with `data_model`"
+        )
 
     def apply(class_):
         @functools.wraps(class_)

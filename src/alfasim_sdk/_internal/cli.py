@@ -173,14 +173,20 @@ def package_only(ctx, plugin_dir, package_name, dst):
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
     from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
     from alfasim_sdk._internal.alfasim_sdk_utils import (
+        get_current_version,
         get_extras_default_required_version,
     )
 
+    package_name_suffix = f"sdk-{get_current_version()}"
     extras_defaults = {
         EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
     }
     hm.generate_plugin_package(
-        package_name, plugin_dir, dst, extras_defaults=extras_defaults
+        package_name,
+        plugin_dir,
+        dst,
+        extras_defaults=extras_defaults,
+        package_name_suffix=package_name_suffix,
     )
 
 

@@ -1,5 +1,8 @@
+from contextlib import suppress
+from datetime import datetime
 from numbers import Number
 from pathlib import Path
+from typing import Any
 from typing import Dict
 from typing import Iterator
 from typing import List
@@ -56,9 +59,22 @@ from alfasim_sdk._internal import constants
 
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
+    """
+    :ivar name:
+        The plugin id.
+
+    :ivar gui_models:
+        The plugin input format depends on the specific plugin implementation.
+
+    :ivar is_enabled:
+        A flag indicating if this plugin is enabled.
+
+    .. include:: /alfacase_definitions/PluginDescription.txt
+    """
+
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    gui_models = attr.ib(default=attr.Factory(dict))
-    additional_variables = attr.ib(default=None)
+    gui_models: Dict[str, Any] = attr.ib(default=attr.Factory(dict))
+    is_enabled: bool = attr.ib(default=True)
 
 
 @attr.s(frozen=True, slots=True)
@@ -80,6 +96,50 @@ class PluginMultipleReference:
 @attr.s(frozen=True, slots=True)
 class PluginTableContainer:
     columns = attr.ib(default=attr.Factory(dict))
+
+
+@attr.s(frozen=True, slots=True)
+class PluginFileContent:
+    path = attr.ib(validator=instance_of(Path))
+    content = attr.ib(validator=instance_of(bytes))
+    size = attr.ib(validator=instance_of(int))
+    modified_date = attr.ib(validator=instance_of(datetime))
+    is_valid = attr.ib(validator=instance_of(bool))
+
+    @classmethod
+    def from_path(
+        cls, file_path: Path, root: Optional[Path] = None
+    ) -> "PluginFileContent":
+        """
+        Helper method for creation of ``FileContent`` from a ``Path`` object
+        or a ``str`` with the absolute path.
+
+        If ``root`` is not ``None`` the ``path`` attribute of the returned
+        object will be relative to this folder if possible, ``file_path`` is
+        used as is otherwise.
+        """
+        file_path = Path(file_path)
+        rel_file_path = file_path
+        if root is not None:
+            with suppress(ValueError):
+                rel_file_path = file_path.relative_to(root)
+
+        if file_path.is_file():
+            return cls(
+                path=rel_file_path,
+                content=file_path.read_bytes(),
+                size=file_path.stat().st_size,
+                modified_date=datetime.fromtimestamp(file_path.stat().st_mtime),
+                is_valid=True,
+            )
+        else:
+            return cls(
+                path=rel_file_path,
+                content=b"",
+                size=0,
+                modified_date=datetime.now(),
+                is_valid=False,
+            )
 
 
 @attr.s(frozen=True, slots=True)
@@ -554,6 +614,32 @@ class SpeedCurveDescription:
 @attr.s(frozen=True, slots=True, kw_only=True)
 class TablePumpDescription:
     """
+
+    :ivar speeds:
+        Pump rotational speed values
+
+    :ivar void_fractions:
+        Pump void fraction values
+
+    :ivar flow_rates:
+        Pump flow rate values
+
+    :ivar pressure_boosts:
+        Pump pressure boost values
+
+    :ivar heads:
+        Pump head values. Using SI units,
+        H [m] = P [Pa] * Q [m^3/s] / rho_ref [kg/m^3] / g [m/s^2]
+        rho_ref = 1000.0 [kg/m^3]
+        g = 9.81 [m/s^2]
+
+    :ivar efficiencies:
+        Pump efficiency values
+
+    :ivar powers:
+        Pump power values. There a relation between other pump variables and power. In SI units:
+        BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
+
     .. include:: /alfacase_definitions/TablePumpDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
@@ -575,16 +661,52 @@ class TablePumpDescription:
         )
     )
 
+
+    heads = attrib_array(Array(
+        [0.0] * 12
+        + [
+            12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
+            14.0, 12.0, 10.0, 8.0, 5.5, 0.0, 13.5, 11.2, 9.5, 7.6, 5.2, 0.0,
+        ],
+        'm',
+    ) * 1.0e5 / (1000.0 * 9.81)
+                         )
+
+    efficiencies = attrib_array(Array(
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
+        [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180],
+        '%',
+         )
+          )
+
+
+    powers = attrib_array(Array(
+        [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
+        [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
+        134615.38, 0.00] +
+        [192857.14, 192857.14, 195652.17, 200000.00, 190384.62, 0.00, 200000.00, 200000.00, 206521.74, 211111.11,
+        200000.00, 0.00],
+        'W',
+        )
+                             )
+
+
+
     def __attrs_post_init__(self):
         expected_length = len(self.speeds)
         all_fields = list(attr.fields_dict(self.__class__).keys())
         if any(len(getattr(self, field)) != expected_length for field in all_fields):
             msg = (
-                f"speeds, void_fractions, flow_rates and pressure_boosts must have the same size, got:\n"
+                f"speeds, void_fractions, flow_rates, pressure_boosts, heads, efficiencies and powers must have the "
+                f"same size, got:\n"
                 f"    - {len(self.speeds)} items for speeds\n"
                 f"    - {len(self.void_fractions)} items for void_fractions\n"
                 f"    - {len(self.flow_rates)} items for flow_rates\n"
                 f"    - {len(self.pressure_boosts)} items for pressure_boosts\n"
+                f"    - {len(self.heads)} items for heads\n"
+                f"    - {len(self.efficiencies)} items for efficiencies\n"
+                f"    - {len(self.powers)} items for powers\n"
             )
             raise ValueError(msg)
 
@@ -604,6 +726,9 @@ class PumpEquipmentDescription:
     position = attrib_scalar(category="length")
     flow_direction = attrib_enum(default=constants.FlowDirection.Forward)
     thermal_efficiency = attrib_scalar(default=Scalar(100.0, "%"))
+    thermal_efficiency_model = attrib_enum(
+        default=constants.PumpThermalEfficiencyModel.Constant
+    )
 
     type = attrib_enum(default=constants.PumpType.ConstantPressure)
 
@@ -635,6 +760,13 @@ class PumpEquipmentDescription:
     esp_number_of_stages: int = attr.ib(default=1, validator=instance_of(int))
     esp_reference_density = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
+    )
+    user_defined_esp_table = attrib_instance(TablePumpDescription)
+    esp_parameters = attrib_enum(default=constants.EspParameters.UserDefined)
+
+    esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
+    density_correction_enabled: bool = attr.ib(
+        default=False, validator=instance_of(bool)
     )
 
 
@@ -2191,7 +2323,7 @@ class PvtModelCombinedDescription:
 
 
 @attr.s(slots=True, eq=False)
-class PvtModelTableParametersDescription:
+class PvtModelPtTableParametersDescription:
     """
     :ivar pressure_values:
         Array like of sorted pressure values (m number of entries). [Pa]
@@ -2470,7 +2602,7 @@ class PvtModelTableParametersDescription:
                 "oil_water_surface_tension",
             ]
 
-        return PvtModelTableParametersDescription(
+        return PvtModelPtTableParametersDescription(
             pressure_values=pressure_values,
             temperature_values=temperature_values,
             table_variables=data,
@@ -2492,7 +2624,7 @@ class PvtModelTableParametersDescription:
         """
         Creates a dummy (empty) PVT Table parameters with no valid data.
         """
-        return PvtModelTableParametersDescription(
+        return PvtModelPtTableParametersDescription(
             pressure_values=np.array([0.0]),
             temperature_values=np.array([0.0]),
             table_variables=[],
@@ -2518,6 +2650,363 @@ class PvtModelTableParametersDescription:
         return (
             (self.pressure_values == other.pressure_values).all()
             and (self.temperature_values == other.temperature_values).all()
+            and self.variable_names == other.variable_names
+            and self.pressure_std == other.pressure_std
+            and self.temperature_std == other.temperature_std
+            and self.number_of_phases == other.number_of_phases
+        )
+
+
+@attr.s(slots=True, eq=False)
+class PvtModelPhTableParametersDescription:
+    """
+    :ivar pressure_values:
+        Array like of sorted pressure values (m number of entries). [Pa]
+
+    :ivar enthalpy_values:
+        Array like of sorted enthalpy values (n number of entries). [J/Kg]
+
+    :ivar table_variables:
+        List of array like values for each property such as densities, specific heats,
+        enthalpies, etc.
+
+    :ivar variable_names:
+        List of property names
+
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    """
+
+    pressure_values: Numpy1DArray = attr.ib(
+        validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
+    )
+    enthalpy_values: Numpy1DArray = attr.ib(
+        validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
+    )
+    table_variables: List[Numpy1DArray] = attr.ib(
+        validator=numpy_array_validator(dimension=1, is_list=True),
+        repr=collapse_array_repr,
+    )
+    variable_names: List[str] = attr.ib(validator=list_of_strings)
+
+    pressure_std = attrib_scalar(default=Scalar(1, "bar"), is_optional=True)
+    temperature_std = attrib_scalar(default=Scalar(15, "degC"), is_optional=True)
+
+    gas_density_std = attrib_scalar(default=Scalar(1, "kg/m3"), is_optional=True)
+    oil_density_std = attrib_scalar(default=Scalar(800, "kg/m3"), is_optional=True)
+    water_density_std = attrib_scalar(default=Scalar(1000, "kg/m3"), is_optional=True)
+
+    gas_oil_ratio = attrib_scalar(default=Scalar(0, "sm3/sm3"), is_optional=True)  # GOR
+    gas_liquid_ratio = attrib_scalar(
+        default=Scalar(0, "sm3/sm3"), is_optional=True
+    )  # GLR
+    water_cut = attrib_scalar(default=Scalar(0, "-"), is_optional=True)  # WC
+    total_water_fraction = attrib_scalar(default=Scalar(0, "-"), is_optional=True)
+
+    label: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    number_of_phases: int = attr.ib(default=2, validator=instance_of(int))
+    warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
+
+    def __attrs_post_init__(self):
+        """
+        Fix standard properties that have not been set in .TAB files.
+
+        Some pvt tables do not set water related properties if it is a two-phase
+        table.
+
+        PVT Sim always set water related properties to np.nan.
+        Multiflash sometimes does not write the water related keyword.
+
+        """
+        if self.pressure_std is None:
+            self.pressure_std = Scalar(np.nan, "bar")
+        if self.temperature_std is None:
+            self.temperature_std = Scalar(np.nan, "degC")
+        if self.gas_density_std is None:
+            self.gas_density_std = Scalar(np.nan, "kg/m3")
+        if self.oil_density_std is None:
+            self.oil_density_std = Scalar(np.nan, "kg/m3")
+        if self.water_density_std is None:
+            self.water_density_std = Scalar(np.nan, "kg/m3")
+        if self.gas_oil_ratio is None:
+            self.gas_oil_ratio = Scalar(np.nan, "sm3/sm3")
+        if self.gas_liquid_ratio is None:
+            self.gas_liquid_ratio = Scalar(np.nan, "sm3/sm3")
+        if self.water_cut is None:
+            self.water_cut = Scalar(np.nan, "-")
+        if self.total_water_fraction is None:
+            self.total_water_fraction = Scalar(np.nan, "-")
+
+    @property
+    def pressure_unit(self):
+        return "Pa"
+
+    @property
+    def enthalpy_unit(self):
+        return "J/kg"
+
+    @staticmethod
+    def create_constant(
+        rho_g_ref=1.0,
+        rho_l_ref=1000.0,
+        rho_w_ref=1000.0,
+        rho_s_ref=2500.0,
+        mu_g_ref=5e-6,
+        mu_l_ref=5e-2,
+        mu_w_ref=5e-2,
+        s_ref=7.197e-2,
+        ideal_gas=True,
+        cp_g_ref=1010.0,
+        cp_l_ref=4181.3,
+        cp_w_ref=4181.3,
+        h_l_ref=104.86e3,
+        k_g_ref=2.4e-2,
+        k_l_ref=5.91e-1,
+        k_w_ref=5.91e-1,
+        s_gw_ref=7.197e-2,
+        s_lw_ref=7.197e-2,
+        has_water=False,
+    ):
+        """
+        Returns parameters that can be used to create a very simple constant and isothermal PVT
+        table.
+        Used by PvtTable to build it's default table if no parameter is passed.
+        """
+        r = 286.9  # Air individual gas constant [J/kg K]
+
+        def temperature(p, h):
+            h_lg = 2.260e6
+            return (h - h_lg - h_l_ref) / cp_g_ref
+
+        def ideal_gas_density_model(p, t):
+            """
+            :param p: pressure in Pa
+            :param t: temperature in K
+            """
+            return p / (r * t)
+
+        def constant_gas_density_model(p, t):
+            return rho_g_ref + 0 * p
+
+        def gas_density_derivative_respect_pressure(p, t):
+            return 1 / (r * t)
+
+        def gas_density_derivative_respect_temperature(p, t):
+            return -p / (r * t**2)
+
+        def constant_density_model(p, t):
+            return rho_l_ref + 0 * p
+
+        def oil_density_derivative_respect_pressure(p, t):
+            return 0 * p
+
+        def oil_density_derivative_respect_temperature(p, t):
+            return 0 * p
+
+        def oil_viscosity_model(p, t):
+            return mu_l_ref + p * 0
+
+        def water_constant_density_model(p, t):
+            return rho_w_ref + 0 * p
+
+        def water_density_derivative_respect_pressure(p, t):
+            return 0 * p
+
+        def water_density_derivative_respect_temperature(p, t):
+            return 0 * p
+
+        def water_viscosity_model(p, t):
+            return mu_w_ref + p * 0
+
+        def gas_viscosity_model(p, t):
+            return mu_g_ref + p * 0
+
+        def surface_tension_model(p, t):
+            return s_ref + p * 0
+
+        def gas_mass_fraction_model(p, t):
+            return 0 * p
+
+        def water_mass_fraction_model(p, t):
+            return 0 * p
+
+        def oil_specific_heat_model(p, t):
+            return cp_l_ref + p * 0
+
+        def water_specific_heat_model(p, t):
+            return cp_w_ref + p * 0
+
+        def gas_specific_heat_model(p, t):
+            return cp_g_ref + p * 0
+
+        def oil_specific_enthalpy_model(p, t):
+            return cp_l_ref * t + p / rho_l_ref
+
+        def water_specific_enthalpy_model(p, t):
+            return cp_w_ref * t + p / rho_w_ref
+
+        def gas_specific_enthalpy_model(p, t):
+            h_lg = 2.260e6
+            return cp_g_ref * t + h_lg + h_l_ref
+
+        def oil_thermal_conductivity_model(p, t):
+            return k_l_ref + p * 0
+
+        def water_thermal_conductivity_model(p, t):
+            return k_w_ref + p * 0
+
+        def gas_thermal_conductivity_model(p, t):
+            return k_g_ref + p * 0
+
+        def gas_water_surface_tension_model(p, t):
+            return s_gw_ref + p * 0
+
+        def oil_water_surface_tension_model(p, t):
+            return s_lw_ref + p * 0
+
+        pressure_values = np.linspace(0.5, 1e10, 4)  # Pa (1e-5 to 1e5 in bar)
+        enthalpy_values = np.linspace(2617360.0, 2869860, 30)
+
+        temperature_values = temperature(pressure_values, enthalpy_values)
+
+        gas_density_model = (
+            ideal_gas_density_model if ideal_gas else constant_gas_density_model
+        )
+
+        t, p = np.meshgrid(temperature_values, pressure_values)
+        h, p = np.meshgrid(enthalpy_values, pressure_values)
+
+        data = [
+            gas_density_model(p, t).flatten(),
+            gas_density_derivative_respect_pressure(p, t).flatten(),
+            gas_density_derivative_respect_temperature(p, t).flatten(),
+            constant_density_model(p, t).flatten(),
+            oil_density_derivative_respect_pressure(p, t).flatten(),
+            oil_density_derivative_respect_temperature(p, t).flatten(),
+            gas_viscosity_model(p, t).flatten(),
+            oil_viscosity_model(p, t).flatten(),
+            surface_tension_model(p, t).flatten(),
+            gas_mass_fraction_model(p, t).flatten(),
+            gas_specific_heat_model(p, t).flatten(),
+            oil_specific_heat_model(p, t).flatten(),
+            gas_specific_enthalpy_model(p, t).flatten(),
+            oil_specific_enthalpy_model(p, t).flatten(),
+            gas_thermal_conductivity_model(p, t).flatten(),
+            oil_thermal_conductivity_model(p, t).flatten(),
+        ]
+
+        names = [
+            "gas density",
+            "gas density derivative pressure",
+            "gas density derivative temperature",
+            "oil density",
+            "oil density derivative pressure",
+            "oil density derivative temperature",
+            "gas viscosity",
+            "oil viscosity",
+            "gas-oil surface tension",
+            "gas mass fraction",
+            "gas specific heat",
+            "oil specific heat",
+            "gas specific enthalpy",
+            "oil specific enthalpy",
+            "gas thermal conductivity",
+            "oil thermal conductivity",
+        ]
+
+        if has_water:
+            data += [
+                water_constant_density_model(p, t).flatten(),
+                water_density_derivative_respect_pressure(p, t).flatten(),
+                water_density_derivative_respect_temperature(p, t).flatten(),
+                water_viscosity_model(p, t).flatten(),
+                water_mass_fraction_model(p, t).flatten(),
+                water_specific_heat_model(p, t).flatten(),
+                water_specific_enthalpy_model(p, t).flatten(),
+                water_thermal_conductivity_model(p, t).flatten(),
+                gas_water_surface_tension_model(p, t).flatten(),
+                oil_water_surface_tension_model(p, t).flatten(),
+            ]
+
+            names += [
+                "water density",
+                "water density derivative pressure",
+                "water density derivative temperature",
+                "water viscosity",
+                "water mass fraction",
+                "water specific heat",
+                "water specific enthalpy",
+                "water thermal conductivity",
+                "gas_water_surface_tension",
+                "oil_water_surface_tension",
+            ]
+
+        data.append(temperature(p, h).flatten())
+        names.append("temperature")
+
+        return PvtModelPhTableParametersDescription(
+            pressure_values=pressure_values,
+            enthalpy_values=enthalpy_values,
+            table_variables=data,
+            variable_names=names,
+            pressure_std=Scalar(1e5, "Pa"),
+            temperature_std=Scalar(15, "degC"),
+            gas_density_std=Scalar(rho_g_ref, "kg/m3"),
+            oil_density_std=Scalar(rho_l_ref, "kg/m3"),
+            water_density_std=Scalar(rho_w_ref, "kg/m3"),
+            gas_oil_ratio=Scalar(0, "sm3/sm3"),
+            gas_liquid_ratio=Scalar(0, "sm3/sm3"),
+            water_cut=Scalar(0, "-"),
+            total_water_fraction=Scalar(0, "-"),
+            number_of_phases=3 if has_water else 2,
+        )
+
+    @staticmethod
+    def create_empty():
+        """
+        Creates a dummy (empty) PH PVT Table parameters with no valid data.
+        """
+        return PvtModelPhTableParametersDescription(
+            pressure_values=np.array([0.0]),
+            enthalpy_values=np.array([0.0]),
+            table_variables=[],
+            variable_names=[],
+            number_of_phases=-1,
+        )
+
+    @staticmethod
+    def dummy_parameters_dict():
+        """
+        Creates a dummy PH PVT Table parameters dict to set in the Memento.
+        """
+        return {
+            "pressure_values": np.array([0.0]),
+            "enthalpy_values": np.array([0.0]),
+            "table_variables": [],
+            "variable_names": [],
+        }
+
+    def __eq__(self, other):
+        """
+        Need to re-implement the equality operator because ndarrays don't support equality, so the attr's generated
+        __eq__ function does not work.
+        """
+        if type(self) is not type(other):
+            return False
+
+        if len(self.table_variables) != len(other.table_variables):
+            return False
+
+        for array1, array2 in zip(self.table_variables, other.table_variables):
+            if not np.array_equal(array1, array2):
+                return False
+
+        return (
+            (self.pressure_values == other.pressure_values).all()
+            and (self.enthalpy_values == other.enthalpy_values).all()
             and self.variable_names == other.variable_names
             and self.pressure_std == other.pressure_std
             and self.temperature_std == other.temperature_std
@@ -2561,7 +3050,7 @@ class PvtModelsDescription:
 
             >>> Path("./my_file.tab|MyPvtModel")
 
-    :ivar table_parameters:
+    :ivar pt_table_parameters:
         *INTERNAL USE ONLY*
 
         This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
@@ -2569,8 +3058,18 @@ class PvtModelsDescription:
 
         Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
         where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
-        the PVT is trough the PvtModelTableParametersDescription.
+        the PVT is trough the PvtModelPtTableParametersDescription.
 
+    :ivar ph_table_parameters:
+        *INTERNAL USE ONLY*
+
+        This attribute is populated when exporting a Study to a CaseDescription, and it holds a model representation
+        of a PVT originating from a (.tab / .alfatable) file. Also, it holds values from a Pressure-Enthalpy PVT table,
+        in which temperature is one of the output/state variables.
+
+        Their usage is directly related to the export of a CaseDescription to a `.alfacase`/`.alfatable` file,
+        where the original PVT file cannot be guaranteed to exist therefore the only reproducible way to recreate
+        the PVT is trough the PvtModelPhTableParametersDescription.
 
     .. include:: /alfacase_definitions/PvtModelsDescription.txt
 
@@ -2608,7 +3107,8 @@ class PvtModelsDescription:
     correlations = attrib_dict_of(PvtModelCorrelationDescription)
     compositional = attrib_dict_of(PvtModelCompositionalDescription)
     combined = attrib_dict_of(PvtModelCombinedDescription)
-    table_parameters = attrib_dict_of(PvtModelTableParametersDescription)
+    pt_table_parameters = attrib_dict_of(PvtModelPtTableParametersDescription)
+    ph_table_parameters = attrib_dict_of(PvtModelPhTableParametersDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(
@@ -2817,7 +3317,8 @@ class CaseDescription:
                 self.pvt_models.correlations.keys(),
                 self.pvt_models.compositional.keys(),
                 self.pvt_models.combined.keys(),
-                self.pvt_models.table_parameters.keys(),
+                self.pvt_models.pt_table_parameters.keys(),
+                self.pvt_models.ph_table_parameters.keys(),
             )
         )
         if (
