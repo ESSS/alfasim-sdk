@@ -8,6 +8,7 @@
     :"m3/bar.d": cubic meter per day per bar
     :"m3/bar.h": cubic meter per hour per bar
     :"m3/bar.min": cubic meter per minute per bar
+    :"m3/d/kgf/cm2": cubic meter per day per kilogram-force per square centimeter
     :"m3/kPa.d": cubic meter per day per kilopascal
     :"m3/kPa.h": (cubic metres per hour) per kilopascal
     :"m3/Pa.s": cubic metres/second pascal
