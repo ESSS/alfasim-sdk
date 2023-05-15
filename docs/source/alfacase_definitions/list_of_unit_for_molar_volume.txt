@@ -3,7 +3,7 @@
 
     :"dm3/kmol": cubic decimetres/kilogram mole
     :"dm3/mol(kg)": cubic decimetres/kilogram mole
-    :"ft3/lbmole": cubic feet/mole (pound mass)
+    :"ft3/lbmol": cubic feet/mole (pound mass)
     :"ft3/mol(lbm)": cubic feet/mole (pound mass)
     :"L/kmol": litres/mole (kilogram)
     :"L/mol": litres/mole (gram)
