@@ -767,6 +767,20 @@ velocities_container_description_schema = Map(
         Optional("velocities"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
     }
 )
+vogel_ipr_description_schema = Map(
+    {
+        Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
+        Optional("min_pressure_difference"): Map({"value": Float(), "unit": Str()}),
+        Optional("well_max_flow_rate_input_type"): Enum(['constant', 'curve']),
+        Optional("well_max_flow_rate"): Map({"value": Float(), "unit": Str()}),
+        Optional("well_max_flow_rate_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+    }
+)
 volume_fractions_container_description_schema = Map(
     {
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -1015,6 +1029,7 @@ equipment_description_schema = Map(
 ipr_models_description_schema = Map(
     {
         Optional("linear_models"): MapPattern(Str(), linear_ipr_description_schema),
+        Optional("vogel_models"): MapPattern(Str(), vogel_ipr_description_schema),
         Optional("table_models"): MapPattern(Str(), table_ipr_description_schema),
     }
 )
@@ -1139,5 +1154,5 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: faa375d759990e5ea0a82a2782fd826d)
+# [[[end]]] (checksum: 64b3d3403934d2a902130d6e2f482027)
 # fmt: on

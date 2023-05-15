@@ -94,6 +94,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import LightComponentDescription
 from alfasim_sdk._internal.alfacase.case_description import LinearIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import VogelIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     MassSourceEquipmentDescription,
 )
@@ -427,6 +428,7 @@ __all__ = [
     "LengthAndElevationDescription",
     "LightComponentDescription",
     "LinearIPRDescription",
+    "VogelIPRDescription",
     "Location",
     "MassInflowSplitType",
     "MassSourceEquipmentDescription",

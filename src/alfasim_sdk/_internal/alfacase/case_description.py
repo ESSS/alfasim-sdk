@@ -1118,6 +1118,30 @@ class LinearIPRDescription(CommonIPR):
     # fmt: on
     # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
 
+@attr.s(frozen=True, slots=True)
+class VogelIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/VogelIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_time.txt
+    """
+
+    min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
+
+    # [[[cog
+    # cog_out_multi_input("well_max_flow_rate", "standard volume per time", 0.0, "sm3/d")
+    # ]]]
+    # fmt: off
+    well_max_flow_rate_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    well_max_flow_rate = attrib_scalar(
+        default=Scalar('standard volume per time', 0.0, 'sm3/d')
+    )
+    well_max_flow_rate_curve = attrib_curve(
+        default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 4ee41640313c621ba9ca79950aa9b4ed)
 
 @attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
@@ -1134,6 +1158,9 @@ class IPRModelsDescription:
     :ivar linear_models:
         A dictionary with the name of the IPR and the instance of the IPR Model.
 
+    :ivar vogel_models:
+        A dictionary with the name of the IPR and the instance of the IPR Model.
+
     :ivar table_models:
 
     .. include:: /alfacase_definitions/IPRModelsDescription.txt
@@ -1141,6 +1168,9 @@ class IPRModelsDescription:
 
     linear_models: Dict[str, LinearIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(LinearIPRDescription)
+    )
+    vogel_models: Dict[str, VogelIPRDescription] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(VogelIPRDescription)
     )
     table_models: Dict[str, TableIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(TableIPRDescription)
