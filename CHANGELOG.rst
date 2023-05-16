@@ -5,6 +5,8 @@ History
 0.17.0 (UNRELEASED)
 ===================
 
+* Disable internal hdf file locks.
+
 * Added ``esp_thermal_efficiency_model`` attribute to ``PumpEquipmentDescription``.
 
 * Added ``esp_manufacturer`` and ``esp_model`` attributes to ``PumpEquipmentDescription``.
