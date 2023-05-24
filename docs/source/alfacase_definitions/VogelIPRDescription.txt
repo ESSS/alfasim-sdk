@@ -8,7 +8,7 @@
             well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  = WellIndexPhaseType.Oil
             min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
             well_max_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            well_max_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'sm3/d', 'standard volume per time')
+            well_max_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'sm3/d', 'standard volume per time')
             well_max_flow_rate_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/d, s)[]
 
 .. tab:: Schema

@@ -467,6 +467,7 @@ def test_get_cases_class():
         "SeparatorNodePropertiesDescription",
         "SpeedCurveDescription",
         "SurgeVolumeOptionsDescription",
+        "VogelIPRDescription",
         "TableIPRDescription",
         "TablePumpDescription",
         "TemperaturesContainerDescription",

@@ -1130,18 +1130,18 @@ class VogelIPRDescription(CommonIPR):
     min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
 
     # [[[cog
-    # cog_out_multi_input("well_max_flow_rate", "standard volume per time", 0.0, "sm3/d")
+    # cog_out_multi_input("well_max_flow_rate", "standard volume per time", 1.0, "sm3/d")
     # ]]]
     # fmt: off
     well_max_flow_rate_input_type = attrib_enum(default=constants.MultiInputType.Constant)
     well_max_flow_rate = attrib_scalar(
-        default=Scalar('standard volume per time', 0.0, 'sm3/d')
+        default=Scalar('standard volume per time', 1.0, 'sm3/d')
     )
     well_max_flow_rate_curve = attrib_curve(
         default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 4ee41640313c621ba9ca79950aa9b4ed)
+    # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7) 
 
 @attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
