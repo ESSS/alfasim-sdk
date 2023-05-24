@@ -960,8 +960,8 @@ pump_equipment_description_schema = Map(
         ),
         Optional("esp_number_of_stages"): Int(),
         Optional("esp_reference_density"): Map({"value": Float(), "unit": Str()}),
-        Optional("user_defined_esp_table"): table_pump_description_schema,
-        Optional("esp_parameters"): Enum(['user_defined', 'catalog']),
+        Optional("esp_manufacturer"): Str(),
+        Optional("esp_model"): Str(),
         Optional("esp_viscosity_model"): Enum(['no_model', 'ansihi_2010']),
         Optional("density_correction_enabled"): Bool(),
     }
@@ -1155,3 +1155,4 @@ case_description_schema = Map(
     }
 )
 # [[[end]]] (checksum: 64b3d3403934d2a902130d6e2f482027) 
+# fmt: on

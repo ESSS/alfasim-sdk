@@ -235,7 +235,6 @@ from alfasim_sdk._internal.constants import EnergyModel
 from alfasim_sdk._internal.constants import EnergyModelPrimaryVariable
 from alfasim_sdk._internal.constants import EquationOfStateType
 from alfasim_sdk._internal.constants import EquipmentAttachmentLocation
-from alfasim_sdk._internal.constants import EspParameters
 from alfasim_sdk._internal.constants import EvaluationStrategyType
 from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 from alfasim_sdk._internal.constants import FlashModel
@@ -436,7 +435,6 @@ __all__ = [
     "MaterialDescription",
     "MaterialType",
     "MultiInputType",
-    "EspParameters",
     "MultipleReference",
     "NodeCellType",
     "NodeDescription",
