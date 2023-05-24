@@ -1117,6 +1117,7 @@ class LinearIPRDescription(CommonIPR):
     # fmt: on
     # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
 
+
 @attr.s(frozen=True, slots=True)
 class VogelIPRDescription(CommonIPR):
     """
@@ -1140,7 +1141,8 @@ class VogelIPRDescription(CommonIPR):
         default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7) 
+    # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7)
+
 
 @attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
