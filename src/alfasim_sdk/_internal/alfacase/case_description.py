@@ -761,9 +761,8 @@ class PumpEquipmentDescription:
     esp_reference_density = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
     )
-    user_defined_esp_table = attrib_instance(TablePumpDescription)
-    esp_parameters = attrib_enum(default=constants.EspParameters.UserDefined)
-
+    esp_manufacturer: str = attr.ib(default="", validator=optional(instance_of(str)))
+    esp_model: str = attr.ib(default="", validator=optional(instance_of(str)))
     esp_viscosity_model = attrib_enum(default=constants.PumpViscosityModel.NoModel)
     density_correction_enabled: bool = attr.ib(
         default=False, validator=instance_of(bool)
@@ -1118,6 +1117,7 @@ class LinearIPRDescription(CommonIPR):
     # fmt: on
     # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
 
+
 @attr.s(frozen=True, slots=True)
 class VogelIPRDescription(CommonIPR):
     """
@@ -1141,7 +1141,8 @@ class VogelIPRDescription(CommonIPR):
         default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7) 
+    # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7)
+
 
 @attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
