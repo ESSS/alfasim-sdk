@@ -1295,6 +1295,7 @@ def load_linear_ipr_description(
         for key, value in document.content.items()
     }
 
+
 def load_vogel_ipr_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.VogelIPRDescription]:
