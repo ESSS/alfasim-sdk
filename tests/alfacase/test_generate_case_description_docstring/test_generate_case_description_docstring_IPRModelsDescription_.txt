@@ -6,6 +6,7 @@
 
         class IPRModelsDescription
             linear_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LinearIPRDescription <LinearIPRDescription>`\] = {}
+            vogel_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`VogelIPRDescription <VogelIPRDescription>`\] = {}
             table_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`TableIPRDescription <TableIPRDescription>`\] = {}
 
 .. tab:: Schema
@@ -14,5 +15,7 @@
 
             linear_models:  # optional
                 string: \ :class:`linear_ipr_description_schema <LinearIPRDescription>`
+            vogel_models:  # optional
+                string: \ :class:`vogel_ipr_description_schema <VogelIPRDescription>`
             table_models:  # optional
                 string: \ :class:`table_ipr_description_schema <TableIPRDescription>`
