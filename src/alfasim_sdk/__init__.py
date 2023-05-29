@@ -94,6 +94,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import LightComponentDescription
 from alfasim_sdk._internal.alfacase.case_description import LinearIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import VogelIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     MassSourceEquipmentDescription,
 )
@@ -516,6 +517,7 @@ __all__ = [
     "ValveType",
     "VelocitiesContainerDescription",
     "Visibility",
+    "VogelIPRDescription",
     "VolumeFractionsContainerDescription",
     "WATER_DROPLET_IN_OIL_FIELD",
     "WATER_FIELD",

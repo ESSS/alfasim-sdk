@@ -93,6 +93,8 @@ IPR
 
 .. autoclass:: alfasim_sdk.LinearIPRDescription()
 
+.. autoclass:: alfasim_sdk.VogelIPRDescription()
+
 .. autoclass:: alfasim_sdk.TableIPRDescription()
 
 .. autoclass:: alfasim_sdk.IPRCurveDescription()
