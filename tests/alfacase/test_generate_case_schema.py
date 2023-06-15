@@ -483,6 +483,7 @@ def test_get_cases_class():
         "GlobalTrendDescription",
         "OverallPipeTrendDescription",
         "TubingDescription",
+        "FetkovichIPRDescription",
         "ValveEquipmentDescription",
         "VelocitiesContainerDescription",
         "VolumeFractionsContainerDescription",

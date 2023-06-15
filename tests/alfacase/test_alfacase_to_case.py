@@ -274,6 +274,11 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.vogel_ipr_description_schema,
         is_dict=True,
     ),
+    "FetkovichIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.FETKOVICH_IPR_DESCRIPTION,
+        schema=schema.fetkovich_ipr_description_schema,
+        is_dict=True,
+    ),
     "IPRCurveDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.IPR_CURVE_DESCRIPTION,
         schema=schema.ipr_curve_description_schema,
