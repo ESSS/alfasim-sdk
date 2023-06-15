@@ -359,6 +359,13 @@ VOGEL_IPR_DESCRIPTION = case_description.VogelIPRDescription(
     well_max_flow_rate=Scalar(1.0, "sm3/d"),
     well_max_flow_rate_curve=Curve(Array([1.0, 1.0], "sm3/d"), Array([0, 1], "s")),
 )
+FETKOVICH_IPR_DESCRIPTION = case_description.FetkovichIPRDescription(
+    well_index_phase=constants.WellIndexPhaseType.Oil,
+    min_pressure_difference=Scalar(1.0e-6, "bar"),
+    bubble_point_pressure=Scalar(1.0e-6, "bar"),
+    well_index=Scalar(1.0e-6, "m3/Pa.s"),
+    well_index_curve=Curve(Array([1.0e-6, 0.9e-6], "m3/Pa.s"), Array([0, 1], "h")),
+)
 IPR_CURVE_DESCRIPTION = case_description.IPRCurveDescription(
     pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "Pa"),
     flow_rate=Array([0.0, 0.87, 2.07, 2.305], "MMscf/d"),
@@ -370,6 +377,7 @@ IPR_MODELS_DESCRIPTION = case_description.IPRModelsDescription(
     linear_models={"Linear IPR 1": LINEAR_IPR_DESCRIPTION},
     table_models={"Table IPR 1": TABLE_IPR_DESCRIPTION},
     vogel_models={"Vogel IPR 1": VOGEL_IPR_DESCRIPTION},
+    fetkovich_models={"Fetkovich IPR 1": FETKOVICH_IPR_DESCRIPTION},
 )
 RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescription(
     start=Scalar(50.0, "m"),
