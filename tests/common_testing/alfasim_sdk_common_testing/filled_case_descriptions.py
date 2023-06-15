@@ -355,9 +355,9 @@ LINEAR_IPR_DESCRIPTION = case_description.LinearIPRDescription(
 )
 VOGEL_IPR_DESCRIPTION = case_description.VogelIPRDescription(
     well_index_phase=constants.WellIndexPhaseType.Oil,
-    min_pressure_difference=Scalar(0.0, "bar"),
-    well_max_flow_rate=Scalar(1.0, "sm3/d"),
-    well_max_flow_rate_curve=Curve(Array([1.0, 1.0], "sm3/d"), Array([0, 1], "s")),
+    min_pressure_difference=Scalar(1.0e-6, "bar"),
+    well_max_flow_rate=Scalar(1.0e-6, "sm3/d"),
+    well_max_flow_rate_curve=Curve(Array([1.0e-6, 0.9e-6], "sm3/d"), Array([0, 1], "s")),
 )
 FETKOVICH_IPR_DESCRIPTION = case_description.FetkovichIPRDescription(
     well_index_phase=constants.WellIndexPhaseType.Oil,
