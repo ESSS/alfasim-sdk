@@ -1143,6 +1143,7 @@ class VogelIPRDescription(CommonIPR):
     # fmt: on
     # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7)
 
+
 @attr.s(frozen=True, slots=True)
 class FetkovichIPRDescription(CommonIPR):
     """
@@ -1167,7 +1168,7 @@ class FetkovichIPRDescription(CommonIPR):
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4) 
+    # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
 
 
 @attr.s(frozen=True, slots=True)

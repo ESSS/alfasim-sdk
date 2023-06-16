@@ -1305,7 +1305,9 @@ def load_vogel_ipr_description(
 def load_fetkovich_ipr_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.FetkovichIPRDescription]:
-    return load_dict_of_instance(document, class_=case_description.FetkovichIPRDescription)
+    return load_dict_of_instance(
+        document, class_=case_description.FetkovichIPRDescription
+    )
 
 
 def load_ipr_curve_description(
