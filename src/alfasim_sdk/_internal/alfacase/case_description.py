@@ -1145,6 +1145,33 @@ class VogelIPRDescription(CommonIPR):
 
 
 @attr.s(frozen=True, slots=True)
+class FetkovichIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/FetkovichIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_productivity_index.txt
+    """
+
+    min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
+    bubble_point_pressure = attrib_scalar(default=Scalar(0.0, "Pa"))
+
+    # [[[cog
+    # cog_out_multi_input("well_index", "productivity index", 24.0, "m3/bar.d")
+    # ]]]
+    # fmt: off
+    well_index_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    well_index = attrib_scalar(
+        default=Scalar('productivity index', 24.0, 'm3/bar.d')
+    )
+    well_index_curve = attrib_curve(
+        default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
+
+
+@attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/TableIPRDescription.txt
@@ -1162,6 +1189,9 @@ class IPRModelsDescription:
     :ivar vogel_models:
         A dictionary with the name of the IPR and the instance of the IPR Model.
 
+    :ivar fetkovich_models:
+        A dictionary with the name of the IPR and the instance of the IPR Model.
+
     :ivar table_models:
 
     .. include:: /alfacase_definitions/IPRModelsDescription.txt
@@ -1172,6 +1202,9 @@ class IPRModelsDescription:
     )
     vogel_models: Dict[str, VogelIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(VogelIPRDescription)
+    )
+    fetkovich_models: Dict[str, FetkovichIPRDescription] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(FetkovichIPRDescription)
     )
     table_models: Dict[str, TableIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(TableIPRDescription)
