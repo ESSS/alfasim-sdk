@@ -96,6 +96,7 @@ from alfasim_sdk._internal.alfacase.case_description import LightComponentDescri
 from alfasim_sdk._internal.alfacase.case_description import LinearIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import VogelIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import FetkovichIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import ForchheimerIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     MassSourceEquipmentDescription,
 )
@@ -293,6 +294,7 @@ from alfasim_sdk._internal.constants import WATER_LAYER
 from alfasim_sdk._internal.constants import WATER_PHASE
 from alfasim_sdk._internal.constants import WellConnectionPort
 from alfasim_sdk._internal.constants import WellIndexPhaseType
+from alfasim_sdk._internal.constants import ForchheimerCoefficientsOption
 
 
 # Plugins: Layouts imports
@@ -397,6 +399,8 @@ __all__ = [
     "FlashModel",
     "FlowDirection",
     "FlowPatternModel",
+    "ForchheimerIPRDescription",
+    "ForchheimerCoefficientsOption",
     "CompositionalFluidDescription",
     "CombinedFluidDescription",
     "FormationDescription",

@@ -8,6 +8,7 @@
             linear_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LinearIPRDescription <LinearIPRDescription>`\] = {}
             vogel_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`VogelIPRDescription <VogelIPRDescription>`\] = {}
             fetkovich_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`FetkovichIPRDescription <FetkovichIPRDescription>`\] = {}
+            forchheimer_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`ForchheimerIPRDescription <ForchheimerIPRDescription>`\] = {}
             table_models: \ :class:`Dict <typing.Dict>`\[str, \ :class:`TableIPRDescription <TableIPRDescription>`\] = {}
 
 .. tab:: Schema
@@ -20,5 +21,7 @@
                 string: \ :class:`vogel_ipr_description_schema <VogelIPRDescription>`
             fetkovich_models:  # optional
                 string: \ :class:`fetkovich_ipr_description_schema <FetkovichIPRDescription>`
+            forchheimer_models:  # optional
+                string: \ :class:`forchheimer_ipr_description_schema <ForchheimerIPRDescription>`
             table_models:  # optional
                 string: \ :class:`table_ipr_description_schema <TableIPRDescription>`

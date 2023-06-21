@@ -97,6 +97,8 @@ IPR
 
 .. autoclass:: alfasim_sdk.FetkovichIPRDescription()
 
+.. autoclass:: alfasim_sdk.ForchheimerIPRDescription()
+
 .. autoclass:: alfasim_sdk.TableIPRDescription()
 
 .. autoclass:: alfasim_sdk.IPRCurveDescription()

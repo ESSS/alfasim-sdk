@@ -118,6 +118,22 @@ fetkovich_ipr_description_schema = Map(
         ),
     }
 )
+forchheimer_ipr_description_schema = Map(
+    {
+        Optional("calculate_coeff_option"): Enum(['reservoir_parameters', 'flow_coefficients']),
+        Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
+        Optional("min_pressure_difference"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_viscosity"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_z_factor"): Map({"value": Float(), "unit": Str()}),
+        Optional("reservoir_permeability"): Map({"value": Float(), "unit": Str()}),
+        Optional("drainage_radius"): Map({"value": Float(), "unit": Str()}),
+        Optional("well_radius"): Map({"value": Float(), "unit": Str()}),
+        Optional("well_skin_factor"): Map({"value": Float(), "unit": Str()}),
+        Optional("non_darcy_parameter"): Map({"value": Float(), "unit": Str()}),
+        Optional("B_coeff"): Map({"value": Float(), "unit": Str()}),
+        Optional("C_coeff"): Map({"value": Float(), "unit": Str()}),
+    }
+)
 formation_layer_description_schema = Map(
     {
         "name": Str(),
@@ -1046,6 +1062,7 @@ ipr_models_description_schema = Map(
         Optional("linear_models"): MapPattern(Str(), linear_ipr_description_schema),
         Optional("vogel_models"): MapPattern(Str(), vogel_ipr_description_schema),
         Optional("fetkovich_models"): MapPattern(Str(), fetkovich_ipr_description_schema),
+        Optional("forchheimer_models"): MapPattern(Str(), forchheimer_ipr_description_schema),
         Optional("table_models"): MapPattern(Str(), table_ipr_description_schema),
     }
 )
@@ -1170,4 +1187,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 888ee3acf56438a8bb847ae87afa139a)
+# [[[end]]] (checksum: 03e5182a9b30c3759affd8fd4852c587)

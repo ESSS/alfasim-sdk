@@ -47,6 +47,8 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
         "force",
         "force per velocity",
         "force per velocity squared",
+        "forchheimer linear productivity index",
+        "forchheimer quadratic productivity index",
         "heat transfer coefficient",
         "length",
         "mass",
@@ -56,6 +58,8 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
         "molar thermodynamic energy",
         "molar volume",
         "mole per mole",
+        "nonDarcy flow coefficient",
+        "permeability rock",
         "power",
         "pressure",
         "productivity index",
@@ -86,7 +90,7 @@ def generate_list_of_units(category: str) -> str:
         f".. admonition:: Available units for category '{category}'",
         "    :class: dropdown",
         "",
-        *sorted(body, key=str.casefold),
+        *sorted(body, key=lambda x: (x.casefold(), x.swapcase())),
         "",
     ]
     return "\n".join(lines)

@@ -419,6 +419,7 @@ def test_get_cases_class():
         "EnvironmentDescription",
         "EnvironmentPropertyDescription",
         "EquipmentDescription",
+        "ForchheimerIPRDescription",
         "FormationDescription",
         "FormationLayerDescription",
         "GasLiftValveEquipmentDescription",
