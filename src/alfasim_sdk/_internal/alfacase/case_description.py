@@ -1186,7 +1186,9 @@ class ForchheimerIPRDescription(CommonIPR):
     .. include:: /alfacase_definitions/list_of_unit_for_nonDarcy_flow_coefficient.txt
     """
 
-    calculate_coeff_option = attrib_enum(default=constants.ForchheimerCoefficientsOption.ReservoirParameters)
+    calculate_coeff_option = attrib_enum(
+        default=constants.ForchheimerCoefficientsOption.ReservoirParameters
+    )
     well_index_phase = attrib_enum(default=constants.WellIndexPhaseType.Gas)
     min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
     gas_viscosity = attrib_scalar(default=Scalar("dynamic viscosity", 0.0, "Pa.s"))
@@ -1202,10 +1204,10 @@ class ForchheimerIPRDescription(CommonIPR):
     )
 
     B_coeff = attrib_scalar(
-        default=Scalar('forchheimer linear productivity index', 0.0, 'Pa2.s/scm')
+        default=Scalar("forchheimer linear productivity index", 0.0, "Pa2.s/scm")
     )
     C_coeff = attrib_scalar(
-        default=Scalar('forchheimer quadratic productivity index', 0.0, 'Pa2.s2/scm2')
+        default=Scalar("forchheimer quadratic productivity index", 0.0, "Pa2.s2/scm2")
     )
 
 
@@ -1228,7 +1230,7 @@ class IPRModelsDescription:
         A dictionary with the name of the IPR and the instance of the IPR Model.
 
     :ivar fetkovich_models:
-	   A dictionary with the name of the IPR and the instance of the IPR Model.
+           A dictionary with the name of the IPR and the instance of the IPR Model.
 
     :ivar forchheimer_models:
         A dictionary with the name of the IPR and the instance of the IPR Model.

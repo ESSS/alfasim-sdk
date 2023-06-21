@@ -536,5 +536,6 @@ class ForchheimerCoefficientsOption(Enum):
     """
     Option for the Forchheimer IPR coefficients definition.
     """
+
     ReservoirParameters = "reservoir_parameters"
     FlowCoefficients = "flow_coefficients"

@@ -1313,7 +1313,9 @@ def load_fetkovich_ipr_description(
 def load_forchheimer_ipr_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.ForchheimerIPRDescription]:
-    return load_dict_of_instance(document, class_=case_description.ForchheimerIPRDescription)
+    return load_dict_of_instance(
+        document, class_=case_description.ForchheimerIPRDescription
+    )
 
 
 def load_ipr_curve_description(

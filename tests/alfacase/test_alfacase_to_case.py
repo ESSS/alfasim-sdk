@@ -277,7 +277,7 @@ ALFACASE_TEST_CONFIG_MAP = {
     "FetkovichIPRDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.FETKOVICH_IPR_DESCRIPTION,
         schema=schema.fetkovich_ipr_description_schema,
-	   is_dict=True,
+        is_dict=True,
     ),
     "ForchheimerIPRDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.FORCHHEIMER_IPR_DESCRIPTION,
