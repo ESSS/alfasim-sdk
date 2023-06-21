@@ -90,7 +90,7 @@ def generate_list_of_units(category: str) -> str:
         f".. admonition:: Available units for category '{category}'",
         "    :class: dropdown",
         "",
-        *sorted(body, key=str.casefold),
+        *sorted(body, key=lambda x: (x.casefold(), x.swapcase())),
         "",
     ]
     return "\n".join(lines)
