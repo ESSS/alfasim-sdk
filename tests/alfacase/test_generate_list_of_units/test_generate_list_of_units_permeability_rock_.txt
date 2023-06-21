@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'permeability rock'
+    :class: dropdown
+
+    :"D": darcy
+    :"m2": square metres
+    :"mD": millidarcy
