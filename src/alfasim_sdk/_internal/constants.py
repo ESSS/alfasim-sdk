@@ -530,3 +530,11 @@ class CorrelationsGasViscosity(Enum):
 
 class CorrelationsSurfaceTension(Enum):
     BakerSwerdloff = "Baker Swerdloff"
+
+
+class ForchheimerCoefficientsOption(Enum):
+    """
+    Option for the Forchheimer IPR coefficients definition.
+    """
+    ReservoirParameters = "reservoir_parameters"
+    FlowCoefficients = "flow_coefficients"

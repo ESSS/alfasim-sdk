@@ -1172,6 +1172,44 @@ class FetkovichIPRDescription(CommonIPR):
 
 
 @attr.s(frozen=True, slots=True)
+class ForchheimerIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/ForchheimerIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_forchheimer_linear_productivity_index.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_forchheimer_quadratic_productivity_index.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dynamic_viscosity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_permeability_rock.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_nonDarcy_flow_coefficient.txt
+    """
+
+    calculate_coeff_option = attrib_enum(default=constants.ForchheimerCoefficientsOption.ReservoirParameters)
+    well_index_phase = attrib_enum(default=constants.WellIndexPhaseType.Gas)
+    min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
+    gas_viscosity = attrib_scalar(default=Scalar("dynamic viscosity", 0.0, "Pa.s"))
+    gas_z_factor = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
+    reservoir_permeability = attrib_scalar(
+        default=Scalar("permeability rock", 0.0, "m2")
+    )
+    drainage_radius = attrib_scalar(default=Scalar("length", 0.0, "m"))
+    well_radius = attrib_scalar(default=Scalar("length", 0.0, "m"))
+    well_skin_factor = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
+    non_darcy_parameter = attrib_scalar(
+        default=Scalar("nonDarcy flow coefficient", 0.0, "Pa.s/m6")
+    )
+
+    B_coeff = attrib_scalar(
+        default=Scalar('forchheimer linear productivity index', 0.0, 'Pa2.s/scm')
+    )
+    C_coeff = attrib_scalar(
+        default=Scalar('forchheimer quadratic productivity index', 0.0, 'Pa2.s2/scm2')
+    )
+
+
+@attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/TableIPRDescription.txt
@@ -1190,6 +1228,9 @@ class IPRModelsDescription:
         A dictionary with the name of the IPR and the instance of the IPR Model.
 
     :ivar fetkovich_models:
+	   A dictionary with the name of the IPR and the instance of the IPR Model.
+
+    :ivar forchheimer_models:
         A dictionary with the name of the IPR and the instance of the IPR Model.
 
     :ivar table_models:
@@ -1205,6 +1246,9 @@ class IPRModelsDescription:
     )
     fetkovich_models: Dict[str, FetkovichIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(FetkovichIPRDescription)
+    )
+    forchheimer_models: Dict[str, ForchheimerIPRDescription] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(ForchheimerIPRDescription)
     )
     table_models: Dict[str, TableIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(TableIPRDescription)

@@ -368,6 +368,18 @@ FETKOVICH_IPR_DESCRIPTION = case_description.FetkovichIPRDescription(
     well_index=Scalar(1.0e-6, "m3/Pa.s"),
     well_index_curve=Curve(Array([1.0e-6, 0.9e-6], "m3/Pa.s"), Array([0, 1], "h")),
 )
+FORCHHEIMER_IPR_DESCRIPTION = case_description.ForchheimerIPRDescription(
+    well_index_phase=constants.WellIndexPhaseType.Gas,
+    min_pressure_difference=Scalar(1.0e-6, "bar"),
+    calculate_coeff_option=constants.ForchheimerCoefficientsOption.ReservoirParameters,
+    gas_viscosity=Scalar("dynamic viscosity", 1.0e-6, "Pa.s"),
+    gas_z_factor=Scalar("dimensionless", 1.0e-6, "-"),
+    reservoir_permeability=Scalar("permeability rock", 1.0e-6, "m2"),
+    drainage_radius=Scalar("length", 1.0e-6, "m"),
+    well_radius=Scalar("length", 1.0e-6, "m"),
+    well_skin_factor=Scalar("dimensionless", 1.0e-6, "-"),
+    non_darcy_parameter=Scalar("nonDarcy flow coefficient", 1.0e-6, "Pa.s/m6"),
+)
 IPR_CURVE_DESCRIPTION = case_description.IPRCurveDescription(
     pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "Pa"),
     flow_rate=Array([0.0, 0.87, 2.07, 2.305], "MMscf/d"),
@@ -380,6 +392,7 @@ IPR_MODELS_DESCRIPTION = case_description.IPRModelsDescription(
     table_models={"Table IPR 1": TABLE_IPR_DESCRIPTION},
     vogel_models={"Vogel IPR 1": VOGEL_IPR_DESCRIPTION},
     fetkovich_models={"Fetkovich IPR 1": FETKOVICH_IPR_DESCRIPTION},
+    forchheimer_models={"Forchheimer IPR 1": FORCHHEIMER_IPR_DESCRIPTION},
 )
 RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescription(
     start=Scalar(50.0, "m"),
