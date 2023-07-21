@@ -192,11 +192,6 @@ def to_curve(
         )
         return Curve(image, domain)
     elif isinstance(value, Curve):
-        if value.GetLength() == 0:
-            return Curve(
-                image=Array([1.0], value.GetImage().unit),
-                domain=Array([1.0], value.GetDomain().unit),
-            )
         return value
 
     message = prepare_error_message(
