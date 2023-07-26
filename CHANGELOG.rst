@@ -13,6 +13,7 @@ History
 
 * Removed ``user_defined_esp_table`` and ``esp_parameters`` from ``PumpEquipmentDescription``.
 
+* ``pyinvoke`` is now used to manage plugins tasks.
 
 0.16.0 (2023-02-09)
 ===================
