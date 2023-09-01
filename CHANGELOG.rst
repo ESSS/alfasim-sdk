@@ -2,7 +2,7 @@
 History
 =======
 
-0.17.0 (UNRELEASED)
+0.17.0 (2023-09-01)
 ===================
 
 * Disable internal hdf file locks.
