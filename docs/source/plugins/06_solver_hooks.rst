@@ -5,7 +5,7 @@ Solver Hooks
 
 The present section describes all solver `Hooks` available on |alfasim| plugin infrastructure.
 Solver `Hooks` are |alfasim|'s pre-defined functions that allows the plugin developer to modify/extend |alfasim|'s Solver.
-As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``template`` option
+As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``new`` option
 on |sdk|'s CLI a new file named ``plugin.c`` will be available to implement those `hooks`.
 
 .. Note::

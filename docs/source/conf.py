@@ -50,6 +50,7 @@ extensions = [
     "breathe",
     "sphinx.ext.autodoc",
     "sphinx_click.ext",
+    "sphinxinvoke.ext",
     "sphinx.ext.graphviz",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
@@ -68,7 +69,7 @@ rst_prolog = """
 .. |alfasim| replace:: :program:`ALFAsim`
 .. |sdk| replace:: :program:`ALFAsim-SDK`
 
-.. |template-command| replace:: :ref:`Template Command <alfasim_sdk_cli_template_section>`
+.. |new-command| replace:: :ref:`New Command <alfasim_sdk_cli_new_section>`
 .. |gui_hook| replace:: :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
 .. |container| replace:: :py:func:`~alfasim_sdk.container_model`
 .. |model| replace:: :py:func:`~alfasim_sdk.data_model`

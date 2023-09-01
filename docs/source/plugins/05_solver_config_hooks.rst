@@ -7,7 +7,7 @@ The solver configuration hooks allow plugins to configure internal settings from
 To add a configuration hook it is necessary to implement the given `hook` in a python file that is already available
 on your plugin project folder.
 
-As an example, if a plugin was created using ``alfasim-sdk template`` command and named as ``myplugin`` the necessary file to
+As an example, if a plugin was created using ``alfasim-sdk new`` command and named as ``myplugin`` the necessary file to
 be customized would be located on: :menuselection:`myplugin --> src --> python --> myplugin.py`
 
 .. contents::
