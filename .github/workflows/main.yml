@@ -83,6 +83,11 @@ jobs:
         user: __token__
         password: ${{ secrets.pypi_token }}
 
+    - name: GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/*
+
   sonarcloud:
 
     runs-on: ubuntu-latest
