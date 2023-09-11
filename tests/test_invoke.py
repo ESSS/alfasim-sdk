@@ -7,6 +7,7 @@ from typing import List
 from zipfile import ZipFile
 
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 from ruamel.yaml import YAML
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
@@ -45,8 +46,8 @@ def new_plugin_dir(tmp_path: Path) -> Path:
     return plugin_dir
 
 
-def test_compile_task(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_compile_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     subprocess.run(
         [f"{invoke_cmd}", "compile"],
@@ -59,8 +60,8 @@ def test_compile_task(new_plugin_dir: Path):
     assert lib_file.is_file()
 
 
-def test_compile_clean_task(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_compile_clean_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     build_dir_old = new_plugin_dir / "build"
     build_dir_old.mkdir(exist_ok=True, parents=True)
@@ -83,9 +84,8 @@ def test_compile_clean_task(new_plugin_dir: Path):
     assert lib_file.is_file()
 
 
-def test_compile_task_cmake_extra_args(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
-    print(new_plugin_dir)
+def test_compile_task_cmake_extra_args(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     cmake_extra_args = "-DMY_VARIABLE=TEST -DMY_OTHER_VARIABLE=TEST"
 
@@ -99,8 +99,8 @@ def test_compile_task_cmake_extra_args(new_plugin_dir: Path):
     assert message_chunk in result.stdout.decode("utf-8")
 
 
-def test_package_task(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_package_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     package_dir_old = new_plugin_dir / "package"
     package_dir_old.mkdir(exist_ok=True, parents=True)
@@ -120,8 +120,8 @@ def test_package_task(new_plugin_dir: Path):
     assert package_filename.is_file()
 
 
-def test_update_task(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_update_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
     plugin_src_folder = new_plugin_dir / "src"
     plugin_hook_spec_h_path = plugin_src_folder / "hook_specs.h"
 
@@ -139,25 +139,64 @@ def test_update_task(new_plugin_dir: Path):
     assert plugin_hook_spec_h_path.read_text(encoding="utf-8") != ""
 
 
-def test_remove_plugin_from_user_folder(new_plugin_dir: Path, tmp_path: Path):
-    os.chdir(new_plugin_dir)
-    user_folder_env_var = "USERPROFILE" if sys.platform == "win32" else "HOME"
-    os.environ[user_folder_env_var] = str(tmp_path)
-    install_dir = Path("~/.alfasim_plugins").expanduser()
+def test_uninstall_plugin(
+    new_plugin_dir: Path, tmp_path: Path, monkeypatch: MonkeyPatch
+):
+    monkeypatch.chdir(new_plugin_dir)
+    install_dir = tmp_path / ".alfasim_plugins"
     plugin_dir = install_dir / plugin_id
     plugin_dir.mkdir(parents=True, exist_ok=True)
     assert plugin_dir.is_dir()
 
-    subprocess.run([f"{invoke_cmd}", "remove-plugin-from-user-folder"], env=os.environ)
+    subprocess.run(
+        [f"{invoke_cmd}", "uninstall-plugin", "--install-dir", f"{install_dir}"]
+    )
     assert not plugin_dir.is_dir()
 
 
-def get_plugin_installed_files(plugin_dir: Path) -> List[Path]:
+def test_uninstall_plugin_user_folder(
+    new_plugin_dir: Path, tmp_path: Path, monkeypatch: MonkeyPatch
+):
+    monkeypatch.chdir(new_plugin_dir)
+    user_folder_env_var = "USERPROFILE" if sys.platform == "win32" else "HOME"
+    env = {**os.environ, user_folder_env_var: str(tmp_path)}
+    install_dir = tmp_path / ".alfasim_plugins"
+    plugin_dir = install_dir / plugin_id
+    plugin_dir.mkdir(parents=True, exist_ok=True)
+    assert plugin_dir.is_dir()
+
+    subprocess.run(
+        [f"{invoke_cmd}", "uninstall-plugin"],
+        env=env,
+    )
+    assert not plugin_dir.is_dir()
+
+
+def test_uninstall_plugin_invalid_dir(
+    new_plugin_dir: Path, tmp_path: Path, monkeypatch: MonkeyPatch
+):
+    monkeypatch.chdir(new_plugin_dir)
+    install_dir = tmp_path / "invalid"
+    install_dir.touch()  # Creating as file to produce an error
+
+    result = subprocess.run(
+        [f"{invoke_cmd}", "uninstall-plugin", "--install-dir", f"{install_dir}"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+
+    error_message_chunk = "is not a valid installation directory"
+    assert error_message_chunk in result.stdout.decode("utf-8")
+
+
+def get_plugin_installed_files(
+    plugin_dir: Path, monkeypatch: MonkeyPatch
+) -> List[Path]:
     """
     Get the files that are installed in the user folder when the user calls
     invoke install-plugin-to-user-folder
     """
-    os.chdir(plugin_dir)
+    monkeypatch.chdir(plugin_dir)
     assets_dir = plugin_dir / "assets"
     artifacts_dir = plugin_dir / "artifacts"
     lib_name = f"{plugin_id}.dll" if sys.platform == "win32" else f"lib{plugin_id}.so"
@@ -170,13 +209,13 @@ def get_plugin_installed_files(plugin_dir: Path) -> List[Path]:
     return expected_files
 
 
-def create_fake_hmplugin(plugin_dir: Path) -> Path:
-    os.chdir(plugin_dir)
+def create_fake_hmplugin(plugin_dir: Path, monkeypatch: MonkeyPatch) -> Path:
+    monkeypatch.chdir(plugin_dir)
     assets_dir = plugin_dir / "assets"
     assert assets_dir.is_dir()
     artifacts_dir = plugin_dir / "artifacts"
     artifacts_dir.mkdir()
-    fake_files = get_plugin_installed_files(plugin_dir)
+    fake_files = get_plugin_installed_files(plugin_dir, monkeypatch)
 
     os_type = "win" if os.sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
@@ -192,18 +231,17 @@ def create_fake_hmplugin(plugin_dir: Path) -> Path:
     return hmplugin_filename
 
 
-def test_install_plugin_to_user_folder(new_plugin_dir: Path, tmp_path: Path):
-    fake_hmplugin = create_fake_hmplugin(new_plugin_dir)
+def test_install_plugin(new_plugin_dir: Path, tmp_path: Path, monkeypatch: MonkeyPatch):
+    fake_hmplugin = create_fake_hmplugin(new_plugin_dir, monkeypatch)
     assert fake_hmplugin.is_file()
-    fake_hmplugin_files = get_plugin_installed_files(new_plugin_dir)
+    fake_hmplugin_files = get_plugin_installed_files(new_plugin_dir, monkeypatch)
+    install_dir = tmp_path / ".alfasim_plugins"
 
-    user_folder_env_var = "USERPROFILE" if sys.platform == "win32" else "HOME"
-    os.environ[user_folder_env_var] = str(tmp_path)
+    subprocess.run(
+        [f"{invoke_cmd}", "install-plugin", "--install-dir", f"{install_dir}"]
+    )
 
-    subprocess.run([f"{invoke_cmd}", "install-plugin-to-user-folder"], env=os.environ)
-
-    install_dir = Path("~/.alfasim_plugins").expanduser()
-    os.chdir(install_dir)
+    monkeypatch.chdir(install_dir)
     for file in fake_hmplugin_files:
         relative_path = Path(
             plugin_id + "/" + file.parent.stem + "/" + file.stem + file.suffix
@@ -211,11 +249,32 @@ def test_install_plugin_to_user_folder(new_plugin_dir: Path, tmp_path: Path):
         assert relative_path.is_file()
 
 
-def test_install_plugin_to_user_folder_missing_plugin(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_install_plugin_user_folder(
+    new_plugin_dir: Path, tmp_path: Path, monkeypatch: MonkeyPatch
+):
+    fake_hmplugin = create_fake_hmplugin(new_plugin_dir, monkeypatch)
+    assert fake_hmplugin.is_file()
+    fake_hmplugin_files = get_plugin_installed_files(new_plugin_dir, monkeypatch)
+
+    user_folder_env_var = "USERPROFILE" if sys.platform == "win32" else "HOME"
+    env = {**os.environ, user_folder_env_var: str(tmp_path)}
+    install_dir = tmp_path / ".alfasim_plugins"
+
+    subprocess.run([f"{invoke_cmd}", "install-plugin"], env=env)
+
+    monkeypatch.chdir(install_dir)
+    for file in fake_hmplugin_files:
+        relative_path = Path(
+            plugin_id + "/" + file.parent.stem + "/" + file.stem + file.suffix
+        )
+        assert relative_path.is_file()
+
+
+def test_install_plugin_missing_plugin(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     result = subprocess.run(
-        [f"{invoke_cmd}", "install-plugin-to-user-folder"],
+        [f"{invoke_cmd}", "install-plugin"],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
@@ -225,13 +284,13 @@ def test_install_plugin_to_user_folder_missing_plugin(new_plugin_dir: Path):
     assert error_message_chunk in result.stdout.decode("utf-8")
 
 
-def test_install_plugin_to_user_folder_invalid_file(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_install_plugin_invalid_file(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     invalid_file = new_plugin_dir / "invalid.hmplugin"
     invalid_file.mkdir()  # Creating as a dir to force the error to happen
     result = subprocess.run(
-        [f"{invoke_cmd}", "install-plugin-to-user-folder"],
+        [f"{invoke_cmd}", "install-plugin"],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
@@ -241,12 +300,12 @@ def test_install_plugin_to_user_folder_invalid_file(new_plugin_dir: Path):
     assert error_message_chunk in result.stdout.decode("utf-8")
 
 
-def test_reinstall_plugin_user_folder(new_plugin_dir: Path, tmp_path: Path):
-    fake_hmplugin_files = get_plugin_installed_files(new_plugin_dir)
-    os.chdir(new_plugin_dir)
-    user_folder_env_var = "USERPROFILE" if sys.platform == "win32" else "HOME"
-    os.environ[user_folder_env_var] = str(tmp_path)
-    install_dir = Path("~/.alfasim_plugins").expanduser()
+def test_reinstall_plugin(
+    new_plugin_dir: Path, tmp_path: Path, monkeypatch: MonkeyPatch
+):
+    fake_hmplugin_files = get_plugin_installed_files(new_plugin_dir, monkeypatch)
+    monkeypatch.chdir(new_plugin_dir)
+    install_dir = tmp_path / ".alfasim_plugins"
     plugin_dir = install_dir / plugin_id
     plugin_dir.mkdir(parents=True, exist_ok=True)
     assert plugin_dir.is_dir()
@@ -254,14 +313,15 @@ def test_reinstall_plugin_user_folder(new_plugin_dir: Path, tmp_path: Path):
     subprocess.run(
         [
             f"{invoke_cmd}",
-            "reinstall-plugin-to-user-folder",
+            "reinstall-plugin",
             "--package-name",
             f"{plugin_id}",
+            "--install-dir",
+            f"{install_dir}",
         ],
-        env=os.environ,
     )
 
-    os.chdir(install_dir)
+    monkeypatch.chdir(install_dir)
     for file in fake_hmplugin_files:
         relative_path = Path(
             plugin_id + "/" + file.parent.stem + "/" + file.stem + file.suffix
@@ -269,8 +329,8 @@ def test_reinstall_plugin_user_folder(new_plugin_dir: Path, tmp_path: Path):
         assert relative_path.is_file()
 
 
-def test_clean_task(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_clean_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
     build_folder = new_plugin_dir / "build"
     build_folder.mkdir(parents=True, exist_ok=True)
     assert build_folder.is_dir()
@@ -297,8 +357,8 @@ def test_clean_task(new_plugin_dir: Path):
 @pytest.mark.skipif(
     sys.platform != "win32", reason="msvc task is only available on windows"
 )
-def test_msvc_task(new_plugin_dir: Path):
-    os.chdir(new_plugin_dir)
+def test_msvc_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     artifacts_dir = new_plugin_dir / "artifacts"
     artifacts_dir.mkdir(exist_ok=True)
@@ -321,8 +381,8 @@ def test_msvc_task(new_plugin_dir: Path):
 @pytest.mark.skipif(
     sys.platform != "linux", reason="this test should be only run on linux"
 )
-def test_msvc_linux(new_plugin_dir):
-    os.chdir(new_plugin_dir)
+def test_msvc_linux(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(new_plugin_dir)
 
     result = subprocess.run(
         [f"{invoke_cmd}", "msvc"],
