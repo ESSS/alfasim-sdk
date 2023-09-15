@@ -100,7 +100,7 @@ rst_prolog = """
 
 """
 
-language = None
+language = "en"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "breathe/*"]
 
 # -- Options for HTML output -------------------------------------------------
@@ -110,7 +110,6 @@ html_logo = "_static/images/logo-alfasim.svg"
 
 html_theme_options = {
     "github_url": "https://github.com/esss/alfasim-sdk",
-    "google_analytics_id": "UA-149094345-1",
 }
 html_static_path = ["_static"]
 html_css_files = [
