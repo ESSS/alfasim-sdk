@@ -252,8 +252,17 @@ def update(ctx):
 
 
 @task()
-def install_plugin_to_user_folder(ctx):
-    """Install a specific plugin to $HOME/.alfasim_plugins"""
+def install_plugin(ctx, install_dir=None):
+    """
+    Install a plugin to ``install_dir`` folder.
+
+    If absent, the ``install_dir`` will be assumed to be ``$HOME/.alfasim_plugins`` on linux
+    or ``USERPROFILE\.alfasim_plugins`` on windows.
+
+    Note: remember to always set ``ALFASIM_PLUGINS_DIR` to ``install_dir`` if you are using
+    a different path than the default.
+
+    """
     from pathlib import Path
 
     # Set to the plugin root, where the tasks.py is located in the plugin structure
@@ -278,7 +287,11 @@ def install_plugin_to_user_folder(ctx):
         )
         raise Exit(code=1)
 
-    install_dir = Path("~/.alfasim_plugins").expanduser()
+    if install_dir is None:
+        install_dir = Path("~/.alfasim_plugins").expanduser()
+    else:
+        install_dir = Path(install_dir)
+    install_dir.mkdir(exist_ok=True, parents=True)
 
     # Unpacking hmplugin file
     print_message(
@@ -297,14 +310,23 @@ def install_plugin_to_user_folder(ctx):
 
 
 @task()
-def remove_plugin_from_user_folder(ctx):
-    """Remove plugin from $HOME/.alfasim_plugins folder."""
+def uninstall_plugin(ctx, install_dir=None):
+    """
+    Remove plugin from install folder.
+
+    If absent, the ``install_dir`` will be assumed to be ``$HOME/.alfasim_plugins`` on linux
+    or ``USERPROFILE\.alfasim_plugins`` on windows.
+    """
 
     # Set to the plugin root, where the tasks.py is located in the plugin structure
     plugin_folder = Path(ctx.config._project_prefix)
     plugin_id = plugin_folder.name
 
-    install_dir = Path("~/.alfasim_plugins").expanduser()
+    if install_dir is None:
+        install_dir = Path("~/.alfasim_plugins").expanduser()
+    else:
+        install_dir = Path(install_dir)
+    assert install_dir.is_dir(), f"{install_dir} is not a valid installation directory"
 
     print_message(
         f"Removing installed plugin(s) from {install_dir}",
@@ -326,18 +348,21 @@ def remove_plugin_from_user_folder(ctx):
 
 
 @task()
-def reinstall_plugin_to_user_folder(ctx, package_name):
+def reinstall_plugin(ctx, package_name, install_dir=None):
     """
-    Remove, package and install an specified plugin to $HOME/.alfasim_plugins
+    Remove, package and install an specified plugin to install_dir
+
+    If absent, the ``install_dir`` will be assumed to be ``$HOME/.alfasim_plugins`` on linux
+    or ``USERPROFILE\.alfasim_plugins`` on windows.
 
     It does the following steps:
         1) Remove the specified plugin from $HOME/.alfasim_plugins
         2) Compile the specified plugin and generate package
         3) Install the specified plugin to $HOME/.alfasim_plugins
     """
-    remove_plugin_from_user_folder(ctx)
+    uninstall_plugin(ctx, install_dir=install_dir)
     package(ctx, package_name=package_name)
-    install_plugin_to_user_folder(ctx)
+    install_plugin(ctx, install_dir=install_dir)
 
 
 @task
