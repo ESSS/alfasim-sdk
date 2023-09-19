@@ -11,7 +11,7 @@ default_language_version:
     python: python3.10
 repos:
 -   repo: https://github.com/asottile/reorder-python-imports
-    rev: v3.10.0
+    rev: v3.11.0
     hooks:
     -   id: reorder-python-imports
         args:
