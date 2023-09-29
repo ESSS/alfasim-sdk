@@ -5,7 +5,7 @@ Plugin by Example
 =================
 
 
-In this section, we will continue to customize the template plugin created from the previous section,
+In this section, we will continue to customize the plugin created from the previous section,
 this plugin will calculate the liquid velocity to the power of a given exponent provided by the user from the user interface.
 
 The following equation describes the plugin:

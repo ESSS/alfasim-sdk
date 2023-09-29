@@ -1,0 +1,6 @@
+.. admonition:: Available units for category 'nonDarcy flow coefficient'
+    :class: dropdown
+
+    :"Pa.s/m6": pascal second /cubic metre squared
+    :"psi2.d2/cp.ft6": (psi days/cubic foot)squared/centipoise
+    :"psi2.d2/cP.ft6": (psi days/cubic foot)squared/centipoise

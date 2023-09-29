@@ -4,6 +4,7 @@ import tempfile
 import textwrap
 import uuid
 from pathlib import Path
+from subprocess import CalledProcessError
 from typing import Iterator
 from typing import List
 from typing import Optional
@@ -162,6 +163,25 @@ class AlfasimRunnerFixture:
                 ],
                 cwd=project_folder,
             )
+        except CalledProcessError as error:
+
+            def list_log(log_file):
+                try:
+                    contents = log_file.read_text()
+                except (
+                    Exception
+                ) as e:  # pragma: no cover (usually the files can be read)
+                    contents = f"<ERROR READING FILE: {str(e)}>"
+
+                name = log_file.name
+                header_len = 4 + len(name) + 4
+                return f'{"=" * header_len}\n=== {log_file.name} ===\n{"=" * header_len}\n{contents}'
+
+            results = Results(self.alfacase_data_folder)
+            log_calc = results.log_calc
+            log = results.log
+            msg = "\n".join([list_log(log_calc), list_log(log)])
+            raise RuntimeError(msg) from error
         finally:
             self._results = Results(self.alfacase_data_folder)
 
