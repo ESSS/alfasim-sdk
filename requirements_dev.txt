@@ -1,4 +1,5 @@
 cogapp
+colorama
 coverage
 invoke
 more-itertools
@@ -7,4 +8,5 @@ pytest
 pytest-cov
 pytest-mock
 pytest-regressions
+ruamel.yaml
 toposort

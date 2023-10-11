@@ -2,6 +2,23 @@
 History
 =======
 
+0.18.0 (UNRELEASED)
+===================
+
+0.17.0 (2023-09-01)
+===================
+
+* Disable internal hdf file locks.
+
+* Added ``esp_thermal_efficiency_model`` attribute to ``PumpEquipmentDescription``.
+
+* Added ``esp_manufacturer`` and ``esp_model`` attributes to ``PumpEquipmentDescription``.
+
+* Removed ``user_defined_esp_table`` and ``esp_parameters`` from ``PumpEquipmentDescription``.
+
+* ``pyinvoke`` is now used to manage plugins tasks.
+
+
 0.16.3 (2023-10-11)
 ===================
 
@@ -28,6 +45,21 @@ History
 
 * **Breaking Change**: Available units for category ``angle per time`` have been restricted to ``Hz``, ``rpm`` and ``rad/s`` only;
 
+
+0.14.3 (2023-04-26)
+===================
+
+* Hot fix release, loosing pin requirements for `barril`.
+
+0.14.2 (2023-04-26)
+===================
+
+* Problem during deploy.
+
+0.14.1 (2023-04-26)
+===================
+
+* Problem during deploy.
 
 0.14.0 (2022-07-19)
 ===================

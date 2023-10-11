@@ -1,0 +1,36 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class FetkovichIPRDescription
+            well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  = WellIndexPhaseType.Oil
+            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
+            bubble_point_pressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
+            well_index_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
+            well_index: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(24.0, 'm3/bar.d', 'productivity index')
+            well_index_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(m3/bar.d, s)[]
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  # optional
+            min_pressure_difference:  # optional
+                value: number
+                unit: string
+            bubble_point_pressure:  # optional
+                value: number
+                unit: string
+            well_index_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
+            well_index:  # optional
+                value: number
+                unit: string
+            well_index_curve:  # optional
+                image:
+                    values: [number]
+                    unit: string
+                domain:
+                    values: [number]
+                    unit: string

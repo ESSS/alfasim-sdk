@@ -8,6 +8,7 @@
             position: \ :class:`Scalar <barril.units.Scalar>`
             flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  = FlowDirection.Forward
             thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
+            thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  = PumpThermalEfficiencyModel.Constant
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  = PumpType.ConstantPressure
             pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
             table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
@@ -19,9 +20,10 @@
             esp_speed_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Hz, s)[]
             esp_number_of_stages: int = 1
             esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
-            user_defined_esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
-            esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  = EspParameters.UserDefined
+            esp_manufacturer: str = ''
+            esp_model: str = ''
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  = PumpViscosityModel.NoModel
+            density_correction_enabled: bool = False
 
 .. tab:: Schema
 
@@ -34,6 +36,7 @@
             thermal_efficiency:  # optional
                 value: number
                 unit: string
+            thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  # optional
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  # optional
             pressure_boost:  # optional
                 value: number
@@ -57,6 +60,7 @@
             esp_reference_density:  # optional
                 value: number
                 unit: string
-            user_defined_esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
-            esp_parameters: \ :class:`EspParameters <alfasim_sdk._internal.constants.EspParameters>`\  # optional
+            esp_manufacturer: string  # optional
+            esp_model: string  # optional
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  # optional
+            density_correction_enabled: boolean  # optional

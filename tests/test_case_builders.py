@@ -138,7 +138,6 @@ def test_build_compressor_pressure_table_description_invalid(
     ],
 )
 def test_build_constant_pvt_table(energy_model_primary_variable, table_name):
-
     pvt_model_description = build_constant_pvt_table(energy_model_primary_variable)
 
     assert pvt_model_description.default_model == table_name

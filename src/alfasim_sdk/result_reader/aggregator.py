@@ -1,3 +1,4 @@
+import functools
 import os
 from collections import namedtuple
 from contextlib import contextmanager
@@ -19,6 +20,7 @@ from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import (
     PROFILES_STATISTICS_DSET_NAME_SUFFIX,
 )
+from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_LOCKING_MODE
 from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_PREFIX
 from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
 from alfasim_sdk.result_reader.aggregator_constants import TRENDS_GROUP_NAME
@@ -178,6 +180,10 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     Note that once the container dict is collected the files originally returned are closed.
     """
 
+    h5py_file = h5py.File
+    if h5py.version.version_tuple[:2] >= (3, 5):
+        h5py_file = functools.partial(h5py.File, locking=RESULT_FILE_LOCKING_MODE)
+
     def open_result_file(filename: Path) -> h5py.File:
         # The lib h5py will fail to open the file for some exotic paths,
         # but will work if the cwd are such paths.
@@ -186,13 +192,13 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
         try:
             os.chdir(directory)
             try:
-                return h5py.File(filename.name, "r", libver="latest", swmr=True)
+                return h5py_file(filename.name, "r", libver="latest", swmr=True)
             except OSError as os_error:
                 swmr_message = (
                     "Unable to open file (file is not already open for SWMR writing)"
                 )
                 if str(os_error) == swmr_message:
-                    return h5py.File(filename.name, "r", libver="latest", swmr=False)
+                    return h5py_file(filename.name, "r", libver="latest", swmr=False)
                 raise
 
         except PermissionError:

@@ -269,6 +269,21 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.linear_ipr_description_schema,
         is_dict=True,
     ),
+    "VogelIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.VOGEL_IPR_DESCRIPTION,
+        schema=schema.vogel_ipr_description_schema,
+        is_dict=True,
+    ),
+    "FetkovichIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.FETKOVICH_IPR_DESCRIPTION,
+        schema=schema.fetkovich_ipr_description_schema,
+        is_dict=True,
+    ),
+    "ForchheimerIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.FORCHHEIMER_IPR_DESCRIPTION,
+        schema=schema.forchheimer_ipr_description_schema,
+        is_dict=True,
+    ),
     "IPRCurveDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.IPR_CURVE_DESCRIPTION,
         schema=schema.ipr_curve_description_schema,

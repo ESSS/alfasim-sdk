@@ -4,6 +4,7 @@ import tempfile
 import textwrap
 import uuid
 from pathlib import Path
+from subprocess import CalledProcessError
 from typing import Iterator
 from typing import List
 from typing import Optional
@@ -59,14 +60,25 @@ class AlfasimRunnerFixture:
     def check_base_case_is_not_loaded(self) -> None:
         assert self._case is None, "Base case already loaded"
 
-    def load_base(self, *parts: Union[str, Path]) -> None:
-        """
-        Define the base case from an alfacase file.
-        """
+    def check_can_load_base(self) -> None:
         self.check_not_run()
         self.check_base_case_is_not_loaded()
 
+    def load_base_from_alfacase(self, *parts: Union[str, Path]) -> None:
+        """
+        Define the base case from an alfacase file.
+        """
+        self.check_can_load_base()
         self._case = convert_alfacase_to_description(Path(*parts))
+
+    def load_base_from_case_description(
+        self, case_description: CaseDescription
+    ) -> None:
+        """
+        Define the base case from a CaseDescription.
+        """
+        self.check_can_load_base()
+        self._case = case_description
 
     def add_plugin_folder(self, *parts: Union[str, Path]) -> None:
         """
@@ -151,6 +163,25 @@ class AlfasimRunnerFixture:
                 ],
                 cwd=project_folder,
             )
+        except CalledProcessError as error:
+
+            def list_log(log_file):
+                try:
+                    contents = log_file.read_text()
+                except (
+                    Exception
+                ) as e:  # pragma: no cover (usually the files can be read)
+                    contents = f"<ERROR READING FILE: {str(e)}>"
+
+                name = log_file.name
+                header_len = 4 + len(name) + 4
+                return f'{"=" * header_len}\n=== {log_file.name} ===\n{"=" * header_len}\n{contents}'
+
+            results = Results(self.alfacase_data_folder)
+            log_calc = results.log_calc
+            log = results.log
+            msg = "\n".join([list_log(log_calc), list_log(log)])
+            raise RuntimeError(msg) from error
         finally:
             self._results = Results(self.alfacase_data_folder)
 

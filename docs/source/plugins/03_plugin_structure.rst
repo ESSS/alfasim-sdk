@@ -4,48 +4,41 @@ Plugins Structure
 =================
 
 As mentioned in :ref:`quick-start-section`, the |sdk| package has some utilities to help in the process to create
-a new plugin project and to create a plugin file.
+a plugin file.
 
-At any moment, it is possible to invoke the ``help`` command to list all commands available.
-
-.. code-block:: bash
-
-   >>> alfasim-sdk --help
-
-
-You can also learn about the available options of each command invoking the :guilabel:`--help` option for each command:
+First, to create the plugin use :program:`new`:
 
 .. code-block:: bash
 
-   >>> alfasim-sdk template --help
-   >>> alfasim-sdk package --help
-   >>> alfasim-sdk compile --help
-   >>> alfasim-sdk update --help
+   >>> alfasim-sdk new --help
 
-.. _alfasim_sdk_cli_template_section:
+.. _alfasim_sdk_cli_new_section:
 
-.. click:: alfasim_sdk._internal.cli:template
-    :prog: alfasim-sdk template
+.. click:: alfasim_sdk._internal.cli:new
+    :prog: alfasim-sdk new
     :show-nested:
 
+Pyinvoke tasks
+--------------
 
-.. _alfasim_sdk_cli_package_section:
+Except for creating the plugin structure, all other activities that you might want to perform, you will use ``pyinvoke`` tasks.
 
-.. click:: alfasim_sdk._internal.cli:package
-    :prog: alfasim-sdk package
-    :show-nested:
+Below there is detailed list on what they are meant to do. However, in general, the tasks that you will use the most are ``compile``,
+``package`` and ``update``.
 
+.. invoke::
+   :module: alfasim_sdk.default_tasks
+   :prog: invoke
 
-.. click:: alfasim_sdk._internal.cli:package_only
-    :prog: alfasim-sdk package_only
-    :show-nested:
+You can check their implementations `here <https://github.com/ESSS/alfasim-sdk/blob/master/src/alfasim_sdk/default_tasks.py>`_
+and you can also overwrite them by just defining a function with the same name of the default task with the ``@task`` decorator.
 
-.. click:: alfasim_sdk._internal.cli:_compile
-    :prog: alfasim-sdk compile
-    :show-nested:
+For instance, if you want to overwrite the ``clean`` task, define the following inside your ``tasks.py`` in the root of your plugin.
 
-.. _alfasim_sdk_cli_update_section:
+.. code-block:: python
 
-.. click:: alfasim_sdk._internal.cli:update
-    :prog: alfasim-sdk update
-    :show-nested:
+    from invoke import task
+
+    @task
+    def clean():
+        print("Overwriting the clean task")

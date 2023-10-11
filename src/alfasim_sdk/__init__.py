@@ -94,6 +94,9 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import LightComponentDescription
 from alfasim_sdk._internal.alfacase.case_description import LinearIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import VogelIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import FetkovichIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import ForchheimerIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     MassSourceEquipmentDescription,
 )
@@ -234,7 +237,6 @@ from alfasim_sdk._internal.constants import EnergyModel
 from alfasim_sdk._internal.constants import EnergyModelPrimaryVariable
 from alfasim_sdk._internal.constants import EquationOfStateType
 from alfasim_sdk._internal.constants import EquipmentAttachmentLocation
-from alfasim_sdk._internal.constants import EspParameters
 from alfasim_sdk._internal.constants import EvaluationStrategyType
 from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 from alfasim_sdk._internal.constants import FlashModel
@@ -273,6 +275,7 @@ from alfasim_sdk._internal.constants import PipeThermalModelType
 from alfasim_sdk._internal.constants import PipeThermalPositionInput
 from alfasim_sdk._internal.constants import PumpType
 from alfasim_sdk._internal.constants import PumpViscosityModel
+from alfasim_sdk._internal.constants import PumpThermalEfficiencyModel
 from alfasim_sdk._internal.constants import PVTCompositionalViscosityModel
 from alfasim_sdk._internal.constants import SeparatorGeometryType
 from alfasim_sdk._internal.constants import SimulationModeType
@@ -291,6 +294,7 @@ from alfasim_sdk._internal.constants import WATER_LAYER
 from alfasim_sdk._internal.constants import WATER_PHASE
 from alfasim_sdk._internal.constants import WellConnectionPort
 from alfasim_sdk._internal.constants import WellIndexPhaseType
+from alfasim_sdk._internal.constants import ForchheimerCoefficientsOption
 
 
 # Plugins: Layouts imports
@@ -395,6 +399,8 @@ __all__ = [
     "FlashModel",
     "FlowDirection",
     "FlowPatternModel",
+    "ForchheimerIPRDescription",
+    "ForchheimerCoefficientsOption",
     "CompositionalFluidDescription",
     "CombinedFluidDescription",
     "FormationDescription",
@@ -434,7 +440,6 @@ __all__ = [
     "MaterialDescription",
     "MaterialType",
     "MultiInputType",
-    "EspParameters",
     "MultipleReference",
     "NodeCellType",
     "NodeDescription",
@@ -466,6 +471,7 @@ __all__ = [
     "PumpEquipmentDescription",
     "PumpType",
     "PumpViscosityModel",
+    "PumpThermalEfficiencyModel",
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
@@ -511,11 +517,13 @@ __all__ = [
     "Type",
     "UpdateLayer",
     "UpdatePhase",
+    "FetkovichIPRDescription",
     "ValveEquipmentDescription",
     "ValveOpeningType",
     "ValveType",
     "VelocitiesContainerDescription",
     "Visibility",
+    "VogelIPRDescription",
     "VolumeFractionsContainerDescription",
     "WATER_DROPLET_IN_OIL_FIELD",
     "WATER_FIELD",

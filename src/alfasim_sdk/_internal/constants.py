@@ -364,17 +364,6 @@ class PumpType(Enum):
     ElectricSubmersiblePump = "electric_submersible_pump"
 
 
-class EspParameters(Enum):
-    """
-    Defines if a esp is imported from catalog or defined by user.
-        - ``UserDefined``: The user will define the esp table values.
-        - ``Catalog``: The esp table values will be populated by the data imported from the catalog.
-    """
-
-    UserDefined = "user_defined"
-    Catalog = "catalog"
-
-
 class ValveOpeningType(Enum):
     ConstantOpening = "constant_opening"
     TableInterpolation = "table_interpolation"
@@ -416,6 +405,17 @@ class PumpViscosityModel(Enum):
 
     NoModel = "no_model"
     AnsiHi2010 = "ansihi_2010"
+
+
+class PumpThermalEfficiencyModel(Enum):
+    """
+    Defines the pump thermal efficiency model
+        - ``Constant``: An user-defined constant value is used to define to transform the ESP mechanical energy to heat.
+        - ``PumpEfficiencyCurve``: The ESP efficiency curve is used to transform the ESP mechanical energy to heat.
+    """
+
+    Constant = "constant"
+    PumpEfficiencyCurve = "efficiency_curve_based"
 
 
 class OutputAttachmentLocation(Enum):
@@ -530,3 +530,12 @@ class CorrelationsGasViscosity(Enum):
 
 class CorrelationsSurfaceTension(Enum):
     BakerSwerdloff = "Baker Swerdloff"
+
+
+class ForchheimerCoefficientsOption(Enum):
+    """
+    Option for the Forchheimer IPR coefficients definition.
+    """
+
+    ReservoirParameters = "reservoir_parameters"
+    FlowCoefficients = "flow_coefficients"

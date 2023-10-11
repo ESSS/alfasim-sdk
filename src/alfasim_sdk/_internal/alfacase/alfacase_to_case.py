@@ -1296,6 +1296,28 @@ def load_linear_ipr_description(
     }
 
 
+def load_vogel_ipr_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.VogelIPRDescription]:
+    return load_dict_of_instance(document, class_=case_description.VogelIPRDescription)
+
+
+def load_fetkovich_ipr_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.FetkovichIPRDescription]:
+    return load_dict_of_instance(
+        document, class_=case_description.FetkovichIPRDescription
+    )
+
+
+def load_forchheimer_ipr_description(
+    document: DescriptionDocument,
+) -> Dict[str, case_description.ForchheimerIPRDescription]:
+    return load_dict_of_instance(
+        document, class_=case_description.ForchheimerIPRDescription
+    )
+
+
 def load_ipr_curve_description(
     document: DescriptionDocument,
 ) -> case_description.IPRCurveDescription:
@@ -1335,6 +1357,9 @@ def load_ipr_models_description(
     alfacase_to_case_description = {
         "linear_models": load_linear_ipr_description,
         "table_models": load_table_ipr_description,
+        "vogel_models": load_vogel_ipr_description,
+        "fetkovich_models": load_fetkovich_ipr_description,
+        "forchheimer_models": load_forchheimer_ipr_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.IPRModelsDescription(**case_values)

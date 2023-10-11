@@ -353,6 +353,33 @@ LINEAR_IPR_DESCRIPTION = case_description.LinearIPRDescription(
     well_index=Scalar(1.0e-6, "m3/Pa.s"),
     well_index_curve=Curve(Array([1.0e-6, 0.9e-6], "m3/Pa.s"), Array([0, 1], "h")),
 )
+VOGEL_IPR_DESCRIPTION = case_description.VogelIPRDescription(
+    well_index_phase=constants.WellIndexPhaseType.Oil,
+    min_pressure_difference=Scalar(1.0e-6, "bar"),
+    well_max_flow_rate=Scalar(1.0e-6, "sm3/d"),
+    well_max_flow_rate_curve=Curve(
+        Array([1.0e-6, 0.9e-6], "sm3/d"), Array([0, 1], "s")
+    ),
+)
+FETKOVICH_IPR_DESCRIPTION = case_description.FetkovichIPRDescription(
+    well_index_phase=constants.WellIndexPhaseType.Oil,
+    min_pressure_difference=Scalar(1.0e-6, "bar"),
+    bubble_point_pressure=Scalar(1.0e-6, "bar"),
+    well_index=Scalar(1.0e-6, "m3/Pa.s"),
+    well_index_curve=Curve(Array([1.0e-6, 0.9e-6], "m3/Pa.s"), Array([0, 1], "h")),
+)
+FORCHHEIMER_IPR_DESCRIPTION = case_description.ForchheimerIPRDescription(
+    well_index_phase=constants.WellIndexPhaseType.Gas,
+    min_pressure_difference=Scalar(1.0e-6, "bar"),
+    calculate_coeff_option=constants.ForchheimerCoefficientsOption.ReservoirParameters,
+    gas_viscosity=Scalar("dynamic viscosity", 1.0e-6, "Pa.s"),
+    gas_z_factor=Scalar("dimensionless", 1.0e-6, "-"),
+    reservoir_permeability=Scalar("permeability rock", 1.0e-6, "m2"),
+    drainage_radius=Scalar("length", 1.0e-6, "m"),
+    well_radius=Scalar("length", 1.0e-6, "m"),
+    well_skin_factor=Scalar("dimensionless", 1.0e-6, "-"),
+    non_darcy_parameter=Scalar("nonDarcy flow coefficient", 1.0e-6, "Pa.s/m6"),
+)
 IPR_CURVE_DESCRIPTION = case_description.IPRCurveDescription(
     pressure_difference=Array([0.0, 43.41, 62.19, 85.00], "Pa"),
     flow_rate=Array([0.0, 0.87, 2.07, 2.305], "MMscf/d"),
@@ -363,6 +390,9 @@ TABLE_IPR_DESCRIPTION = case_description.TableIPRDescription(
 IPR_MODELS_DESCRIPTION = case_description.IPRModelsDescription(
     linear_models={"Linear IPR 1": LINEAR_IPR_DESCRIPTION},
     table_models={"Table IPR 1": TABLE_IPR_DESCRIPTION},
+    vogel_models={"Vogel IPR 1": VOGEL_IPR_DESCRIPTION},
+    fetkovich_models={"Fetkovich IPR 1": FETKOVICH_IPR_DESCRIPTION},
+    forchheimer_models={"Forchheimer IPR 1": FORCHHEIMER_IPR_DESCRIPTION},
 )
 RESERVOIR_INFLOW_DESCRIPTION = case_description.ReservoirInflowEquipmentDescription(
     start=Scalar(50.0, "m"),
@@ -493,7 +523,8 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     position=Scalar(350.0, "m"),
     flow_direction=constants.FlowDirection.Forward,
     pressure_boost=Scalar(1e5, "Pa"),
-    thermal_efficiency=Scalar(1.0, "-"),
+    thermal_efficiency=Scalar(100, "%"),
+    thermal_efficiency_model=constants.PumpThermalEfficiencyModel.Constant,
     table=TABLE_PUMP_DESCRIPTION,
     speed_curve=SPEED_CURVE_DESCRIPTION,
     speed_curve_interpolation_type=constants.InterpolationType.Linear,
@@ -505,8 +536,9 @@ PUMP_DESCRIPTION = case_description.PumpEquipmentDescription(
     ),
     esp_number_of_stages=2,
     esp_reference_density=Scalar(1000.0, "kg/m3"),
-    user_defined_esp_table=TABLE_PUMP_DESCRIPTION,
-    esp_parameters=constants.EspParameters.Catalog,
+    density_correction_enabled=False,
+    esp_manufacturer="",
+    esp_model="",
 )
 VALVE_DESCRIPTION = case_description.ValveEquipmentDescription(
     position=Scalar(100.0, "m"),
