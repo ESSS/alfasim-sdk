@@ -18,6 +18,12 @@ History
 
 * ``pyinvoke`` is now used to manage plugins tasks.
 
+
+0.16.3 (2023-10-11)
+===================
+
+* Loose pinned requirements for ``barril``.
+
 0.16.0 (2023-02-09)
 ===================
 
