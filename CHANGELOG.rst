@@ -2,7 +2,7 @@
 History
 =======
 
-0.16.2 (2023-10-11)
+0.16.3 (2023-10-11)
 ===================
 
 * Loose pinned requirements for ``barril``.

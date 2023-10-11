@@ -2,5 +2,5 @@
     :class: dropdown
 
     :"kmol/kmol": kilogram moles/kilogram moles
-    :"lbmole/lbmole": pound mass mol/pound mass mol
+    :"lbmol/lbmol": pound mass mol/pound mass mol
     :"mol/mol": moles/moles
