@@ -7,6 +7,7 @@ dependencies:
   - boltons
   - click
   - h5py
+  - ruamel.yaml
   - typing_inspect
 
 environment:
