@@ -2,8 +2,11 @@
 History
 =======
 
-0.18.0 (UNRELEASED)
+0.18.0 (2023-10-13)
 ===================
+
+* Remove pins for ``strictyaml`` and no longer require ``ruamel.yaml``.
+
 
 0.17.0 (2023-09-01)
 ===================

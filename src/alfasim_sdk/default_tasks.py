@@ -11,7 +11,7 @@ from colorama import Style
 from hookman.hookman_generator import HookManGenerator
 from invoke import Exit
 from invoke import task
-from ruamel.yaml import YAML
+from strictyaml.ruamel import YAML
 
 
 def print_message(
