@@ -29,8 +29,7 @@ def new_plugin_dir(tmp_path: Path) -> Path:
             f"--author-name={plugin_id.upper()}",
             f"--dst={tmp_path}",
         ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
 
     assert result.stdout.decode("utf-8") == ""
@@ -129,8 +128,7 @@ def test_update_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     assert plugin_hook_spec_h_path.stat().st_size == 0
     result = subprocess.run(
         [f"{invoke_cmd}", "update"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
     assert result.stdout.decode("utf-8") == ""
     assert result.stderr.decode("utf-8") == ""
