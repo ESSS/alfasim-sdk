@@ -2,8 +2,13 @@
 History
 =======
 
-0.18.0 (UNRELEASED)
+0.18.0 (2023-10-13)
 ===================
+
+* Added support for Python 3.10.
+* Dropped support for EOL Python 3.6 and 3.7.
+* Remove pins for ``strictyaml`` and no longer require ``ruamel.yaml``.
+
 
 0.17.0 (2023-09-01)
 ===================

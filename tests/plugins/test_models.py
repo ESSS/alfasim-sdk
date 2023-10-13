@@ -74,7 +74,7 @@ def test_invalid_attribute():
         class ModelPrivateAttribute:  # pylint: disable=unused-variable
             _invalid_attribute = ValidType(caption="invalid")
 
-    class Invalid(object):
+    class Invalid:
         pass
 
     error_msg = (

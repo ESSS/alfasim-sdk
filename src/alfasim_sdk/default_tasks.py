@@ -11,7 +11,7 @@ from colorama import Style
 from hookman.hookman_generator import HookManGenerator
 from invoke import Exit
 from invoke import task
-from ruamel.yaml import YAML
+from strictyaml.ruamel import YAML
 
 
 def print_message(
@@ -253,7 +253,7 @@ def update(ctx):
 
 @task()
 def install_plugin(ctx, install_dir=None):
-    """
+    r"""
     Install a plugin to ``install_dir`` folder.
 
     If absent, the ``install_dir`` will be assumed to be ``$HOME/.alfasim_plugins`` on linux
@@ -311,7 +311,7 @@ def install_plugin(ctx, install_dir=None):
 
 @task()
 def uninstall_plugin(ctx, install_dir=None):
-    """
+    r"""
     Remove plugin from install folder.
 
     If absent, the ``install_dir`` will be assumed to be ``$HOME/.alfasim_plugins`` on linux
@@ -349,7 +349,7 @@ def uninstall_plugin(ctx, install_dir=None):
 
 @task()
 def reinstall_plugin(ctx, package_name, install_dir=None):
-    """
+    r"""
     Remove, package and install an specified plugin to install_dir
 
     If absent, the ``install_dir`` will be assumed to be ``$HOME/.alfasim_plugins`` on linux
