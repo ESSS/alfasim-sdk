@@ -346,7 +346,7 @@ def attrib_instance_list(type_: type) -> attr._make._CountingAttr:
     Create a new attr attribute with validator for the given type_
     All attributes created are expected to be List of the given type_
 
-    :param validator_type:
+    :param type_:
         Inform which type(s) the List should validate.
         When not defined the param type_ will be used the type to be validated.
 

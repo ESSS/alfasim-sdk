@@ -8,7 +8,6 @@ from zipfile import ZipFile
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
-from ruamel.yaml import YAML
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
 
@@ -30,8 +29,7 @@ def new_plugin_dir(tmp_path: Path) -> Path:
             f"--author-name={plugin_id.upper()}",
             f"--dst={tmp_path}",
         ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
 
     assert result.stdout.decode("utf-8") == ""
@@ -130,8 +128,7 @@ def test_update_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     assert plugin_hook_spec_h_path.stat().st_size == 0
     result = subprocess.run(
         [f"{invoke_cmd}", "update"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
     assert result.stdout.decode("utf-8") == ""
     assert result.stderr.decode("utf-8") == ""
@@ -358,6 +355,8 @@ def test_clean_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     sys.platform != "win32", reason="msvc task is only available on windows"
 )
 def test_msvc_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
+    from strictyaml.ruamel import YAML
+
     monkeypatch.chdir(new_plugin_dir)
 
     artifacts_dir = new_plugin_dir / "artifacts"

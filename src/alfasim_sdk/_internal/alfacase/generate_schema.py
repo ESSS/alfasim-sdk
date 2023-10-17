@@ -72,7 +72,7 @@ def str_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_attrs(type_: type) -> bool:
-    return any((hasattr(i, "__attrs_attrs__") for i in flatten([type_])))
+    return any(hasattr(i, "__attrs_attrs__") for i in flatten([type_]))
 
 
 def attrs_to_alfacase_schema(type_: type, indent: int) -> str:

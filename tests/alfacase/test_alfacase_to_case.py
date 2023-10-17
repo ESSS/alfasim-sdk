@@ -8,8 +8,8 @@ import pytest
 import strictyaml
 from barril.units import Array
 from barril.units import Scalar
-from ruamel.yaml.comments import CommentedMap
 from strictyaml import YAML
+from strictyaml.ruamel.comments import CommentedMap
 
 from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
 from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path

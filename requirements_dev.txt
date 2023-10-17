@@ -8,5 +8,4 @@ pytest
 pytest-cov
 pytest-mock
 pytest-regressions
-ruamel.yaml
 toposort

@@ -1,9 +1,17 @@
-=======
-History
-=======
+=========
+CHANGELOG
+=========
 
-0.18.0 (UNRELEASED)
+0.19.0 (UNRELEASED)
 ===================
+
+0.18.0 (2023-10-13)
+===================
+
+* Added support for Python 3.10.
+* Dropped support for EOL Python 3.6 and 3.7.
+* Remove pins for ``strictyaml`` and no longer require ``ruamel.yaml``.
+
 
 0.17.0 (2023-09-01)
 ===================
@@ -17,6 +25,12 @@ History
 * Removed ``user_defined_esp_table`` and ``esp_parameters`` from ``PumpEquipmentDescription``.
 
 * ``pyinvoke`` is now used to manage plugins tasks.
+
+
+0.16.3 (2023-10-11)
+===================
+
+* Loose pinned requirements for ``barril``.
 
 0.16.0 (2023-02-09)
 ===================
