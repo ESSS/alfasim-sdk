@@ -3,4 +3,4 @@
 
     :"g/mol": g/mol
     :"kg/mol": kg/mol
-    :"lb/lbmole": lb/lbmole
+    :"lb/lbmol": lb/lbmol

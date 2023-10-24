@@ -50,6 +50,7 @@ extensions = [
     "breathe",
     "sphinx.ext.autodoc",
     "sphinx_click.ext",
+    "sphinxinvoke.ext",
     "sphinx.ext.graphviz",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
@@ -68,7 +69,7 @@ rst_prolog = """
 .. |alfasim| replace:: :program:`ALFAsim`
 .. |sdk| replace:: :program:`ALFAsim-SDK`
 
-.. |template-command| replace:: :ref:`Template Command <alfasim_sdk_cli_template_section>`
+.. |new-command| replace:: :ref:`New Command <alfasim_sdk_cli_new_section>`
 .. |gui_hook| replace:: :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
 .. |container| replace:: :py:func:`~alfasim_sdk.container_model`
 .. |model| replace:: :py:func:`~alfasim_sdk.data_model`
@@ -99,7 +100,7 @@ rst_prolog = """
 
 """
 
-language = None
+language = "en"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "breathe/*"]
 
 # -- Options for HTML output -------------------------------------------------
@@ -109,7 +110,6 @@ html_logo = "_static/images/logo-alfasim.svg"
 
 html_theme_options = {
     "github_url": "https://github.com/esss/alfasim-sdk",
-    "google_analytics_id": "UA-149094345-1",
 }
 html_static_path = ["_static"]
 html_css_files = [

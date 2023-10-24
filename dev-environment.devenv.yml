@@ -5,6 +5,7 @@ includes:
 
 dependencies:
   - breathe
+  - cmake
   - cogapp
   - doxygen
   - graphviz

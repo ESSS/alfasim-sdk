@@ -8,8 +8,8 @@ import pytest
 import strictyaml
 from barril.units import Array
 from barril.units import Scalar
-from ruamel.yaml.comments import CommentedMap
 from strictyaml import YAML
+from strictyaml.ruamel.comments import CommentedMap
 
 from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
 from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
@@ -267,6 +267,21 @@ ALFACASE_TEST_CONFIG_MAP = {
     "LinearIPRDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.LINEAR_IPR_DESCRIPTION,
         schema=schema.linear_ipr_description_schema,
+        is_dict=True,
+    ),
+    "VogelIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.VOGEL_IPR_DESCRIPTION,
+        schema=schema.vogel_ipr_description_schema,
+        is_dict=True,
+    ),
+    "FetkovichIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.FETKOVICH_IPR_DESCRIPTION,
+        schema=schema.fetkovich_ipr_description_schema,
+        is_dict=True,
+    ),
+    "ForchheimerIPRDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.FORCHHEIMER_IPR_DESCRIPTION,
+        schema=schema.forchheimer_ipr_description_schema,
         is_dict=True,
     ),
     "IPRCurveDescription": AlfacaseTestConfig(

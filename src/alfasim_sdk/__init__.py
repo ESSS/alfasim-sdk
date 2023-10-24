@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Top-level package for alfasim-sdk."""
 import pluggy
 
@@ -94,6 +93,9 @@ from alfasim_sdk._internal.alfacase.case_description import (
 )
 from alfasim_sdk._internal.alfacase.case_description import LightComponentDescription
 from alfasim_sdk._internal.alfacase.case_description import LinearIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import VogelIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import FetkovichIPRDescription
+from alfasim_sdk._internal.alfacase.case_description import ForchheimerIPRDescription
 from alfasim_sdk._internal.alfacase.case_description import (
     MassSourceEquipmentDescription,
 )
@@ -291,6 +293,7 @@ from alfasim_sdk._internal.constants import WATER_LAYER
 from alfasim_sdk._internal.constants import WATER_PHASE
 from alfasim_sdk._internal.constants import WellConnectionPort
 from alfasim_sdk._internal.constants import WellIndexPhaseType
+from alfasim_sdk._internal.constants import ForchheimerCoefficientsOption
 
 
 # Plugins: Layouts imports
@@ -395,6 +398,8 @@ __all__ = [
     "FlashModel",
     "FlowDirection",
     "FlowPatternModel",
+    "ForchheimerIPRDescription",
+    "ForchheimerCoefficientsOption",
     "CompositionalFluidDescription",
     "CombinedFluidDescription",
     "FormationDescription",
@@ -511,11 +516,13 @@ __all__ = [
     "Type",
     "UpdateLayer",
     "UpdatePhase",
+    "FetkovichIPRDescription",
     "ValveEquipmentDescription",
     "ValveOpeningType",
     "ValveType",
     "VelocitiesContainerDescription",
     "Visibility",
+    "VogelIPRDescription",
     "VolumeFractionsContainerDescription",
     "WATER_DROPLET_IN_OIL_FIELD",
     "WATER_FIELD",

@@ -1,0 +1,8 @@
+.. admonition:: Available units for category 'forchheimer linear productivity index'
+    :class: dropdown
+
+    :"bar2.d/scm": square bar day per standard cubic metres
+    :"Pa2.d/scm": square pascal day per standard cubic metres
+    :"Pa2.s/scm": square pascal second/standard cubic metres
+    :"psi2.d/Mscf": square psi day per thousand standard cubic feet
+    :"psi2.d/scf": square psi day per standard cubic feet

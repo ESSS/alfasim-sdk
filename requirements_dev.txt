@@ -1,4 +1,5 @@
 cogapp
+colorama
 coverage
 invoke
 more-itertools

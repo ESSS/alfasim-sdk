@@ -1,9 +1,9 @@
-sphinx==4.0.2
-breathe==4.30.0
+sphinx
+breathe
 sphinx-click
+sphinx-invoke
 pydata-sphinx-theme
 sphinx-inline-tabs
 sphinx-copybutton
 sphinx_togglebutton
-# Pin docutils because of circular include warnings (see #193)
-docutils==0.16
+colorama

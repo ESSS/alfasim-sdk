@@ -1119,6 +1119,99 @@ class LinearIPRDescription(CommonIPR):
 
 
 @attr.s(frozen=True, slots=True)
+class VogelIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/VogelIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_time.txt
+    """
+
+    min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
+
+    # [[[cog
+    # cog_out_multi_input("well_max_flow_rate", "standard volume per time", 1.0, "sm3/d")
+    # ]]]
+    # fmt: off
+    well_max_flow_rate_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    well_max_flow_rate = attrib_scalar(
+        default=Scalar('standard volume per time', 1.0, 'sm3/d')
+    )
+    well_max_flow_rate_curve = attrib_curve(
+        default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 9934660f6467a25e11bfbe4c95f8faa7)
+
+
+@attr.s(frozen=True, slots=True)
+class FetkovichIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/FetkovichIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_productivity_index.txt
+    """
+
+    min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
+    bubble_point_pressure = attrib_scalar(default=Scalar(0.0, "Pa"))
+
+    # [[[cog
+    # cog_out_multi_input("well_index", "productivity index", 24.0, "m3/bar.d")
+    # ]]]
+    # fmt: off
+    well_index_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+    well_index = attrib_scalar(
+        default=Scalar('productivity index', 24.0, 'm3/bar.d')
+    )
+    well_index_curve = attrib_curve(
+        default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 433953e29d06e22612c935acdbd70db4)
+
+
+@attr.s(frozen=True, slots=True)
+class ForchheimerIPRDescription(CommonIPR):
+    """
+    .. include:: /alfacase_definitions/ForchheimerIPRDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_forchheimer_linear_productivity_index.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_forchheimer_quadratic_productivity_index.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dynamic_viscosity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_permeability_rock.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_nonDarcy_flow_coefficient.txt
+    """
+
+    calculate_coeff_option = attrib_enum(
+        default=constants.ForchheimerCoefficientsOption.ReservoirParameters
+    )
+    well_index_phase = attrib_enum(default=constants.WellIndexPhaseType.Gas)
+    min_pressure_difference = attrib_scalar(default=Scalar(0.0, "Pa"))
+    gas_viscosity = attrib_scalar(default=Scalar("dynamic viscosity", 0.0, "Pa.s"))
+    gas_z_factor = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
+    reservoir_permeability = attrib_scalar(
+        default=Scalar("permeability rock", 0.0, "m2")
+    )
+    drainage_radius = attrib_scalar(default=Scalar("length", 0.0, "m"))
+    well_radius = attrib_scalar(default=Scalar("length", 0.0, "m"))
+    well_skin_factor = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
+    non_darcy_parameter = attrib_scalar(
+        default=Scalar("nonDarcy flow coefficient", 0.0, "Pa.s/m6")
+    )
+
+    B_coeff = attrib_scalar(
+        default=Scalar("forchheimer linear productivity index", 0.0, "Pa2.s/scm")
+    )
+    C_coeff = attrib_scalar(
+        default=Scalar("forchheimer quadratic productivity index", 0.0, "Pa2.s2/scm2")
+    )
+
+
+@attr.s(frozen=True, slots=True)
 class TableIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/TableIPRDescription.txt
@@ -1133,6 +1226,15 @@ class IPRModelsDescription:
     :ivar linear_models:
         A dictionary with the name of the IPR and the instance of the IPR Model.
 
+    :ivar vogel_models:
+        A dictionary with the name of the IPR and the instance of the IPR Model.
+
+    :ivar fetkovich_models:
+           A dictionary with the name of the IPR and the instance of the IPR Model.
+
+    :ivar forchheimer_models:
+        A dictionary with the name of the IPR and the instance of the IPR Model.
+
     :ivar table_models:
 
     .. include:: /alfacase_definitions/IPRModelsDescription.txt
@@ -1140,6 +1242,15 @@ class IPRModelsDescription:
 
     linear_models: Dict[str, LinearIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(LinearIPRDescription)
+    )
+    vogel_models: Dict[str, VogelIPRDescription] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(VogelIPRDescription)
+    )
+    fetkovich_models: Dict[str, FetkovichIPRDescription] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(FetkovichIPRDescription)
+    )
+    forchheimer_models: Dict[str, ForchheimerIPRDescription] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of(ForchheimerIPRDescription)
     )
     table_models: Dict[str, TableIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(TableIPRDescription)
@@ -3204,28 +3315,6 @@ class PhysicsDescription:
     correlations_package = attrib_enum(
         default=constants.CorrelationPackageType.Classical
     )
-
-    @emulsion_inversion_water_cut.validator
-    def _validate_inversion_point_water_cut(self, attribute, value):
-        assert (
-            isinstance(value, Scalar)
-            and value.GetCategory() == "volume per volume"
-            and 0.0 <= value.GetValue("m3/m3") <= 1.0
-        ), "Invalid inversion point water-cut"
-
-    @emulsion_relative_viscosity_tuning_factor.validator
-    def _validate_emulsion_relative_viscosity_tuning_factor(self, attribute, value):
-        domain = value.GetDomain()
-        assert domain.GetCategory() == "volume per volume", "Invalid water-cut category"
-        domain_values = np.asarray(domain.GetValues("m3/m3"))
-        assert (
-            np.min(domain_values) >= 0.0 and np.max(domain_values) <= 1.0
-        ), "Invalid water-cut values"
-        image = value.GetImage()
-        assert (
-            image.GetCategory() == "dimensionless"
-            and np.min(image.GetValues("-")) >= 1.0e-5
-        ), "Tuning factor cannot be lower than 1e-5"
 
 
 @attr.s()

@@ -38,9 +38,9 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
     For more details check:
     https://stackoverflow.com/questions/63364894/how-to-dump-only-lists-with-flow-style-with-pyyaml-or-ruamel-yaml
     """
-    import ruamel
+    from strictyaml.ruamel import comments
 
-    retval = ruamel.yaml.comments.CommentedSeq(values)
+    retval = comments.CommentedSeq(values)
 
     if enable_flow_style:
         retval.fa.set_flow_style()
@@ -82,7 +82,7 @@ def _convert_value_to_valid_alfacase_format(
         )
 
     if isinstance(value, list) and all(
-        (isinstance(item, np.ndarray) and item.ndim == 1 for item in value)
+        isinstance(item, np.ndarray) and item.ndim == 1 for item in value
     ):
         return [
             format_list(
@@ -92,7 +92,7 @@ def _convert_value_to_valid_alfacase_format(
             for np_array in value
         ]
 
-    if isinstance(value, list) and all((isinstance(item, Array) for item in value)):
+    if isinstance(value, list) and all(isinstance(item, Array) for item in value):
         return [
             {"values": [str(i) for i in item.values], "unit": item.unit}
             for item in value
