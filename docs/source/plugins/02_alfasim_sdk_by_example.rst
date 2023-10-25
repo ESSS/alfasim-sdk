@@ -130,7 +130,7 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
         ]
 
 
-The image below illustrates the application with the output from the snippet above. To access that window, first select the desired structure 
+The image below illustrates the application with the output from the snippet above. To access that window, first select the desired structure
 then go to Output Options at the left side tree and add/edit a trend.
 
 .. image:: /_static/images/plugin_example/secondary_variable_trend_output.png
