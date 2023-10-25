@@ -108,7 +108,7 @@ def test_table_pump_description_length():
             flow_rates=Array([1, 2], "m3/s"),
             pressure_boosts=Array([1], "bar"),
             heads=Array([1], "m"),
-            efficiencies=Array([1], "%"),
+            efficiencies=Array([1], "-"),
             powers=Array([1], "W"),
         )
 
