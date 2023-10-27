@@ -3,6 +3,7 @@ import json
 import numpy
 import pytest
 from barril.curve.curve import Curve
+from barril.units import Array
 from barril.units import Scalar
 
 from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
@@ -70,6 +71,11 @@ def test_profiles(results: Results) -> None:
         pressure_final_1.image.GetValues(),
         pressure_final_2.image.GetValues(),
     )
+
+    time_set = results.get_profile_time_set("pressure", "Conexão 1")
+    assert isinstance(time_set, Array)
+    assert time_set.GetUnit() == "s"
+    assert len(time_set) == 14
 
 
 def test_global_trends(results: Results) -> None:

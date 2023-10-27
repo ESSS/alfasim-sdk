@@ -144,6 +144,18 @@ class Results:
             ),
         )
 
+    def _read_profile_time_set(self, profile_key: str) -> Array:
+        """
+        Create a profile's timeset from the results.
+        """
+        metadata = self.metadata
+        profile_metadata = metadata.profiles[profile_key]
+        profile_time_set_key = profile_metadata["time_set_key"]
+        time_set_key = ("profile_id", profile_time_set_key)
+        time_sets = read_time_sets(metadata, [time_set_key])
+        time_set = time_sets[time_set_key]
+        return Array(values=time_set, unit=metadata.time_sets_unit, category="time")
+
     def get_positional_trend_curve(
         self,
         property_name: str,
@@ -170,7 +182,10 @@ class Results:
                     return self._read_trend(trend_key)
 
         msg = [
-            f"Can not locate '{property_name}' trend for element '{element_name}' at position '{position_m}'.\nFound positional trends:",
+            (
+                f"Can not locate '{property_name}' trend for element '{element_name}'"
+                f" at position '{position_m}'.\nFound positional trends:"
+            ),
             *map(str, self.list_positional_trends()),
         ]
         raise RuntimeError("\n- ".join(msg))
@@ -189,7 +204,10 @@ class Results:
                 return self._read_trend(trend_key)
 
         msg = [
-            f"Can not locate overall '{property_name}' trend for element '{element_name}'.\nFound overall trends:",
+            (
+                f"Can not locate overall '{property_name}' trend for element"
+                f" '{element_name}'.\nFound overall trends:"
+            ),
             *map(str, self.list_overall_trends()),
         ]
         raise RuntimeError("\n- ".join(msg))
@@ -254,24 +272,42 @@ class Results:
             if (trend_metadata["network_element_name"] is None)
         ]
 
-    def get_profile_curve(
-        self, property_name: str, element_name: str, index: int
-    ) -> Curve:
+    def _get_profile_key(self, property_name: str, element_name: str) -> str:
         """
-        Return a profile curve at a given time step index.
+        Return the profile key (used to access the profile data in low level) for the
+        given property and element.
         """
         metadata = self.metadata
         for profile_key, profile_metadata in metadata.profiles.items():
             if (profile_metadata["property_id"] == property_name) and (
                 profile_metadata["network_element_name"] == element_name
             ):
-                return self._read_profile(profile_key, index)
+                return profile_key
 
         msg = [
-            f"Can not locate '{property_name}' profile for element '{element_name}'.\nFound profiles:",
+            (
+                f"Can not locate '{property_name}' profile for element '{element_name}'."
+                f"\nFound profiles:"
+            ),
             *map(str, self.list_profiles()),
         ]
         raise RuntimeError("\n- ".join(msg))
+
+    def get_profile_curve(
+        self, property_name: str, element_name: str, index: int
+    ) -> Curve:
+        """
+        Return a profile curve at a given time step index.
+        """
+        profile_key = self._get_profile_key(property_name, element_name)
+        return self._read_profile(profile_key, index)
+
+    def get_profile_time_set(self, property_name: str, element_name: str) -> Array:
+        """
+        Return the timeset for a given profile.
+        """
+        profile_key = self._get_profile_key(property_name, element_name)
+        return self._read_profile_time_set(profile_key)
 
     def list_profiles(self) -> Sequence[ProfileMetadata]:
         """
