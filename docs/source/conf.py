@@ -9,7 +9,7 @@ on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 if on_rtd:
     subprocess.run("cd ..; doxygen alfasim_sdk_api.cfg", shell=True)
 
-breathe_projects = {"alfasim_sdk_api": "../alfasim_sdk_api/xml"}
+breathe_projects = {"alfasim_sdk_api": Path("../alfasim_sdk_api/xml")}
 
 # -- Breathe Configs  -------------------------------------------------------
 
