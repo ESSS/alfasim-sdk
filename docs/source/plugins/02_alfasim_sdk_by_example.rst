@@ -157,6 +157,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 
 
 .. code-block:: cpp
+    
     ALFAsimSDK_API alfasim_sdk_api;
 
     struct MyPluginModel {
