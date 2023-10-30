@@ -110,7 +110,6 @@ html_logo = "_static/images/logo-alfasim.svg"
 
 html_theme_options = {
     "github_url": "https://github.com/esss/alfasim-sdk",
-    "navigation_with_keys": True,
 }
 html_static_path = ["_static"]
 html_css_files = [
