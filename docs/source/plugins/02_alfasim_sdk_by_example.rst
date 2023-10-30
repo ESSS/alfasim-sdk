@@ -130,7 +130,8 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
         ]
 
 
-The image below illustrates the application with the output from the snippet above.
+The image below illustrates the application with the output from the snippet above. To access that window, first select the desired structure
+then go to Output Options at the left side tree and add/edit a trend.
 
 .. image:: /_static/images/plugin_example/secondary_variable_trend_output.png
 
@@ -296,6 +297,6 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
 
 
 The image below illustrates the output from the solver, when running the plugin created in this section with the given
-network.
+network.That information can be seen by selecting the desired structure and opening the Trend plot window.
 
 .. image:: /_static/images/plugin_example/output_graph.png
