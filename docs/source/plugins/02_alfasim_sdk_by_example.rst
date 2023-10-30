@@ -6,21 +6,21 @@ Plugin by Example
 
 
 In this section, we will continue to customize the plugin created from the previous section,
-this plugin will calculate the liquid velocity to the power of a given exponent provided by the user from the user interface.
+this plugin will calculate the oil velocity to the power of a given exponent provided by the user from the user interface.
 
 The following equation describes the plugin:
 
 .. math::
 
-    var = U_{\text{liq}}^{n}
+    var = U_{\text{oil}}^{n}
 
 .. rubric:: Where
 
-.. |a| replace:: :math:`U_{\text{liq}}`
+.. |a| replace:: :math:`U_{\text{oil}}`
 .. |b| replace:: :math:`n`
 .. |c| replace:: :math:`var`
 
-:|a|: Liquid Velocity
+:|a|: Oil Velocity
 :|b|: Exponent, input from user interface
 :|c|: Plugin calculated value, that will be shown on the output.
 
@@ -30,7 +30,7 @@ For this, we will need to:
 #. Add a secondary variable, to keep track of the value.
 #. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>`.
 #. Save the input data on a plugin internal data.
-#. Get the liquid velocity from the solver, during run-time.
+#. Get the oil velocity from the solver, during run-time.
 #. Export the value into the created/registered plugin secondary variable.
 
 
@@ -97,7 +97,7 @@ some of these configurations are:
 - Creation of new phases/fields/layers.
 - Update of default phases and layers from the application.
 
-For this example, a new |s_variable| will be created, to track the liquid velocity to the power of a custom value provided from the user.
+For this example, a new |s_variable| will be created, to track the oil velocity to the power of a custom value provided from the user.
 
 
 A *Secondary Variable* is a variable that can be calculated along the `Network`. Also, if configured as external, this
@@ -119,8 +119,8 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
 
         return [
             SecondaryVariable(
-                name='U_liq_n',
-                caption='Powered Liquid Velocity',
+                name='U_oil_n',
+                caption='Powered Oil Velocity',
                 unit='-',
                 visibility=Visibility.Output,
                 location=Location.Center,
@@ -130,7 +130,8 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
         ]
 
 
-The image below illustrates the application with the output from the snippet above.
+The image below illustrates the application with the output from the snippet above. To access that window, first select the desired structure
+then go to Output Options at the left side tree and add/edit a trend.
 
 .. image:: /_static/images/plugin_example/secondary_variable_trend_output.png
 
@@ -144,7 +145,7 @@ Hooks for Solver
 make use of the :ref:`ALFAsim-SDK C/C++ API <sdk_api>` in order to fetch information from the application.
 
 At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared from
-:file:`myplugin.py` file and retrieve the ``Liquid Velocity`` from the |alfasim|'s Solver.
+:file:`myplugin.py` file and retrieve the ``Oil Velocity`` from the |alfasim|'s Solver.
 
 First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk._internal.hook_specs.initialize>` and
 the :py:func:`HOOK_FINALIZE <alfasim_sdk._internal.hook_specs.finalize>`
@@ -156,6 +157,10 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 
 
 .. code-block:: cpp
+
+    #include "hook_specs.h"
+    #include <alfasim_sdk_api/alfasim_sdk.h>
+    #include <iostream>
 
     ALFAsimSDK_API alfasim_sdk_api;
 
@@ -204,10 +209,10 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 
         auto errcode = -1;
         auto number_of_threads = -1;
-        errcode = alfasim.get_number_of_threads(ctx, &number_of_threads);
-        for (int thread_id = 0; thread_id < n_threads; ++thread_id) {
+        errcode = alfasim_sdk_api.get_number_of_threads(ctx, &number_of_threads);
+        for (int thread_id = 0; thread_id < number_of_threads; ++thread_id) {
             MyPluginModel* model = nullptr;
-            errcode = alfasim.get_plugin_data(ctx, (void**) (&model), get_plugin_id(), thread_id);
+            errcode = alfasim_sdk_api.get_plugin_data(ctx, (void**) (&model), get_plugin_id(), thread_id);
             delete model;
         }
         alfasim_sdk_close(&alfasim_sdk_api);
@@ -217,7 +222,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
 
 Then, since the plugin wants to calculate its own secondary variable, the
 :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>` must be implemented.
-As can be seen in the example below, to retrieve the velocity of the continuous liquid field
+As can be seen in the example below, to retrieve the velocity of the continuous oil field
 it is necessary to use the :cpp:func:`get_simulation_array` API function.
 
 
@@ -227,31 +232,31 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
     {
         int errcode = -1;
 
-        // Get Liquid Field ID
-        int liquid_field_id = -1;
+        // Get Oil Field ID
+        int oil_field_id = -1;
         errcode = alfasim_sdk_api.get_field_id(
             ctx,
-            &liquid_field_id,
-            "liquid"
+            &oil_field_id,
+            "oil"
         )
         if (errcode != 0) {
-            std::cout << "get_field_id error = " << errcode << "\n";
+            std::cout << "get_oil_id error = " << errcode << "\n";
             return errcode;
         }
 
-        // Get Liquid Field Velocity
+        // Get Oil Field Velocity
         int n_faces = -1;
-        double* U_liq = nullptr;
+        double* U_oil = nullptr;
         errcode = alfasim_sdk_api.get_simulation_array(
             ctx,
-            &U_liq,
+            &U_oil,
             (char*) "U",
             VariableScope {
                 GridScope::CENTER,
                 MultiFieldDescriptionScope::FIELD,
                 TimestepScope::CURRENT
             },
-            liquid_field_id,
+            oil_field_id,
             &n_faces);
         if (errcode != 0) {
             std::cout << "get_simulation_array error = " << errcode << "\n";
@@ -274,11 +279,11 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
 
         // Get Plugin Secondary Variable
         int size = -1;
-        double* U_liq_n_ptr = nullptr;
+        double* U_oil_n_ptr = nullptr;
         errcode = alfasim_sdk_api.get_plugin_variable(
             ctx,
-            (void**) &U_liq_n_ptr,
-            "U_liq_n",
+            (void**) &U_oil_n_ptr,
+            "U_oil_n",
             0, // Global Scope
             TimestepScope::CURRENT,
             &size);
@@ -286,9 +291,9 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
             std::cout << "get_plugin_variable error = " << errcode << "\n";
             return errcode;
         }
-        // Calculating the 'U_liq' to power of 'n'
+        // Calculating the 'U_oil' to power of 'n'
         for (int i = 0; i < size; ++i) {
-            U_liq_n_ptr[i] = std::pow(U_liq[i], n);
+            U_oil_n_ptr[i] = std::pow(U_oil[i], n);
         };
 
         return OK;
@@ -296,6 +301,6 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
 
 
 The image below illustrates the output from the solver, when running the plugin created in this section with the given
-network.
+network. That information can be seen by selecting the desired structure and opening the Trend plot window.
 
 .. image:: /_static/images/plugin_example/output_graph.png
