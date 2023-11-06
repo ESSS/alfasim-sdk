@@ -63,6 +63,7 @@ def get_msvc_cmake_generator(msvc_compiler: str) -> str:
 # =============================================================
 @task(
     help={
+        "cmake_extra_args": "Extra arguments that will be passed to cmake",
         "debug": "Compile in debug mode",
         "clean": "Remove previous build directory",
     }
@@ -171,11 +172,11 @@ def _get_hook_specs_file_path() -> Path:
 
 @task(
     help={
-        "package-name": "Name of the package.",
+        "package-name": "Name of the package. If empty, the package-name will be assumed to be the pluginid",
         "dst": "A path to where the output package should be created.",
     }
 )
-def package_only(ctx, package_name, dst=os.getcwd()):
+def package_only(ctx, package_name="", dst=os.getcwd()):
     """
     Generate a `<package_name>.hmplugin` file with all the content from the directory
     assets and artifacts.
@@ -195,6 +196,9 @@ def package_only(ctx, package_name, dst=os.getcwd()):
         get_extras_default_required_version,
     )
 
+    plugin_id = str(plugin_dir.name)
+    if not package_name:
+        package_name = plugin_id
     package_name_suffix = f"sdk-{get_current_version()}"
     extras_defaults = {
         EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
@@ -210,23 +214,26 @@ def package_only(ctx, package_name, dst=os.getcwd()):
 
 @task(
     help={
-        "package-name": "Name of the package.",
+        "package-name": "Name of the package. If empty, the package-name will be assumed to be the plugin_id",
         "dst": "A path to where the output package should be created.",
+        "debug": "Compile in debug mode",
+        "clean": "Remove previous build directory",
+        "cmake_extra_args": "Extra arguments that will be passed to cmake",
     }
 )
-def package(ctx, package_name, dst=os.getcwd()):
+def package(
+    ctx, package_name="", dst=os.getcwd(), debug=False, clean=False, cmake_extra_args=""
+):
     """
     Create a new `<package-name>.hmplugin` file containing all the necessary files.
 
     This command will first call `invoke compile` command to generate the shared library, and after that, the plugin
     package will be generated with all the content available from the directory assets and artifacts.
 
-    By default, the `package` command will assume that the plugin project is the current directory and the generated file
-    will be placed also in the current directory.
-
-    In order to change that, it's possible to use the options `plugin-dir` and `dst`
+    The `package` command will assume that the plugin project is the directory that
+    contains the ``tasks.py`` file and the generated file will be placed also in the current directory.
     """
-    compile(ctx)
+    compile(ctx, debug=debug, clean=clean, cmake_extra_args=cmake_extra_args)
     package_only(ctx, package_name=package_name, dst=dst)
 
 
