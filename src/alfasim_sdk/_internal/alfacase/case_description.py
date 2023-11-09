@@ -2688,8 +2688,12 @@ class PvtModelPtTableParametersDescription:
         if has_water:
             data += [
                 water_constant_density_model(p, t).flatten(),
-                water_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
-                water_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
+                water_density_derivative_respect_pressure_const_temperature(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_temperature_const_pressure(
+                    p, t
+                ).flatten(),
                 water_viscosity_model(p, t).flatten(),
                 water_mass_fraction_model(p, t).flatten(),
                 water_specific_heat_model(p, t).flatten(),
@@ -2906,13 +2910,13 @@ class PvtModelPhTableParametersDescription:
 
         def gas_density_derivative_respect_temperature_const_pressure(p, t):
             return -p / (r * t**2)
-        
+
         def gas_density_derivative_respect_pressure_const_enthalpy(p, t):
             return 1 / (r * t)
-        
+
         def gas_density_derivative_respect_enthalpy_const_pressure(p, h):
             h_lg = 2.260e6
-            return - p * cp_g_ref / (r * (h - h_lg - h_l_ref)**2)
+            return -p * cp_g_ref / (r * (h - h_lg - h_l_ref) ** 2)
 
         def constant_density_model(p, t):
             return rho_l_ref + 0 * p
@@ -2922,10 +2926,10 @@ class PvtModelPhTableParametersDescription:
 
         def oil_density_derivative_respect_temperature_const_pressure(p, t):
             return 0 * p
-        
+
         def oil_density_derivative_respect_pressure_const_enthalpy(p, t):
             return 0 * p
-        
+
         def oil_density_derivative_respect_enthalpy_const_pressure(p, h):
             return 0 * p
 
@@ -2940,7 +2944,7 @@ class PvtModelPhTableParametersDescription:
 
         def water_density_derivative_respect_temperature_const_pressure(p, t):
             return 0 * p
-        
+
         def water_density_derivative_respect_pressure_const_enthalpy(p, t):
             return 0 * p
 
@@ -3057,10 +3061,18 @@ class PvtModelPhTableParametersDescription:
         if has_water:
             data += [
                 water_constant_density_model(p, t).flatten(),
-                water_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
-                water_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
-                water_density_derivative_respect_pressure_const_enthalpy(p, t).flatten(),
-                water_density_derivative_respect_enthalpy_const_pressure(p, h).flatten(),
+                water_density_derivative_respect_pressure_const_temperature(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_temperature_const_pressure(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_pressure_const_enthalpy(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_enthalpy_const_pressure(
+                    p, h
+                ).flatten(),
                 water_viscosity_model(p, t).flatten(),
                 water_mass_fraction_model(p, t).flatten(),
                 water_specific_heat_model(p, t).flatten(),
