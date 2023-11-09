@@ -2562,19 +2562,19 @@ class PvtModelPtTableParametersDescription:
         def constant_gas_density_model(p, t):
             return rho_g_ref + 0 * p
 
-        def gas_density_derivative_respect_pressure(p, t):
+        def gas_density_derivative_respect_pressure_const_temperature(p, t):
             return 1 / (r * t)
 
-        def gas_density_derivative_respect_temperature(p, t):
+        def gas_density_derivative_respect_temperature_const_pressure(p, t):
             return -p / (r * t**2)
 
         def constant_density_model(p, t):
             return rho_l_ref + 0 * p
 
-        def oil_density_derivative_respect_pressure(p, t):
+        def oil_density_derivative_respect_pressure_const_temperature(p, t):
             return 0 * p
 
-        def oil_density_derivative_respect_temperature(p, t):
+        def oil_density_derivative_respect_temperature_const_pressure(p, t):
             return 0 * p
 
         def oil_viscosity_model(p, t):
@@ -2583,10 +2583,10 @@ class PvtModelPtTableParametersDescription:
         def water_constant_density_model(p, t):
             return rho_w_ref + 0 * p
 
-        def water_density_derivative_respect_pressure(p, t):
+        def water_density_derivative_respect_pressure_const_temperature(p, t):
             return 0 * p
 
-        def water_density_derivative_respect_temperature(p, t):
+        def water_density_derivative_respect_temperature_const_pressure(p, t):
             return 0 * p
 
         def water_viscosity_model(p, t):
@@ -2649,11 +2649,11 @@ class PvtModelPtTableParametersDescription:
 
         data = [
             gas_density_model(p, t).flatten(),
-            gas_density_derivative_respect_pressure(p, t).flatten(),
-            gas_density_derivative_respect_temperature(p, t).flatten(),
+            gas_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
+            gas_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
             constant_density_model(p, t).flatten(),
-            oil_density_derivative_respect_pressure(p, t).flatten(),
-            oil_density_derivative_respect_temperature(p, t).flatten(),
+            oil_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
+            oil_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
             gas_viscosity_model(p, t).flatten(),
             oil_viscosity_model(p, t).flatten(),
             surface_tension_model(p, t).flatten(),
@@ -2668,11 +2668,11 @@ class PvtModelPtTableParametersDescription:
 
         names = [
             "gas density",
-            "gas density derivative pressure",
-            "gas density derivative temperature",
+            "gas density derivative pressure, constant temperature",
+            "gas density derivative temperature, constant pressure",
             "oil density",
-            "oil density derivative pressure",
-            "oil density derivative temperature",
+            "oil density derivative pressure, constant temperature",
+            "oil density derivative temperature, constant pressure",
             "gas viscosity",
             "oil viscosity",
             "gas-oil surface tension",
@@ -2688,8 +2688,12 @@ class PvtModelPtTableParametersDescription:
         if has_water:
             data += [
                 water_constant_density_model(p, t).flatten(),
-                water_density_derivative_respect_pressure(p, t).flatten(),
-                water_density_derivative_respect_temperature(p, t).flatten(),
+                water_density_derivative_respect_pressure_const_temperature(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_temperature_const_pressure(
+                    p, t
+                ).flatten(),
                 water_viscosity_model(p, t).flatten(),
                 water_mass_fraction_model(p, t).flatten(),
                 water_specific_heat_model(p, t).flatten(),
@@ -2701,8 +2705,8 @@ class PvtModelPtTableParametersDescription:
 
             names += [
                 "water density",
-                "water density derivative pressure",
-                "water density derivative temperature",
+                "water density derivative pressure, constant temperature",
+                "water density derivative temperature, constant pressure",
                 "water viscosity",
                 "water mass fraction",
                 "water specific heat",
@@ -2901,19 +2905,32 @@ class PvtModelPhTableParametersDescription:
         def constant_gas_density_model(p, t):
             return rho_g_ref + 0 * p
 
-        def gas_density_derivative_respect_pressure(p, t):
+        def gas_density_derivative_respect_pressure_const_temperature(p, t):
             return 1 / (r * t)
 
-        def gas_density_derivative_respect_temperature(p, t):
+        def gas_density_derivative_respect_temperature_const_pressure(p, t):
             return -p / (r * t**2)
+
+        def gas_density_derivative_respect_pressure_const_enthalpy(p, t):
+            return 1 / (r * t)
+
+        def gas_density_derivative_respect_enthalpy_const_pressure(p, h):
+            h_lg = 2.260e6
+            return -p * cp_g_ref / (r * (h - h_lg - h_l_ref) ** 2)
 
         def constant_density_model(p, t):
             return rho_l_ref + 0 * p
 
-        def oil_density_derivative_respect_pressure(p, t):
+        def oil_density_derivative_respect_pressure_const_temperature(p, t):
             return 0 * p
 
-        def oil_density_derivative_respect_temperature(p, t):
+        def oil_density_derivative_respect_temperature_const_pressure(p, t):
+            return 0 * p
+
+        def oil_density_derivative_respect_pressure_const_enthalpy(p, t):
+            return 0 * p
+
+        def oil_density_derivative_respect_enthalpy_const_pressure(p, h):
             return 0 * p
 
         def oil_viscosity_model(p, t):
@@ -2922,10 +2939,16 @@ class PvtModelPhTableParametersDescription:
         def water_constant_density_model(p, t):
             return rho_w_ref + 0 * p
 
-        def water_density_derivative_respect_pressure(p, t):
+        def water_density_derivative_respect_pressure_const_temperature(p, t):
             return 0 * p
 
-        def water_density_derivative_respect_temperature(p, t):
+        def water_density_derivative_respect_temperature_const_pressure(p, t):
+            return 0 * p
+
+        def water_density_derivative_respect_pressure_const_enthalpy(p, t):
+            return 0 * p
+
+        def water_density_derivative_respect_enthalpy_const_pressure(p, h):
             return 0 * p
 
         def water_viscosity_model(p, t):
@@ -2991,11 +3014,15 @@ class PvtModelPhTableParametersDescription:
 
         data = [
             gas_density_model(p, t).flatten(),
-            gas_density_derivative_respect_pressure(p, t).flatten(),
-            gas_density_derivative_respect_temperature(p, t).flatten(),
+            gas_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
+            gas_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
+            gas_density_derivative_respect_pressure_const_enthalpy(p, t).flatten(),
+            gas_density_derivative_respect_enthalpy_const_pressure(p, h).flatten(),
             constant_density_model(p, t).flatten(),
-            oil_density_derivative_respect_pressure(p, t).flatten(),
-            oil_density_derivative_respect_temperature(p, t).flatten(),
+            oil_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
+            oil_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
+            oil_density_derivative_respect_pressure_const_enthalpy(p, t).flatten(),
+            oil_density_derivative_respect_enthalpy_const_pressure(p, h).flatten(),
             gas_viscosity_model(p, t).flatten(),
             oil_viscosity_model(p, t).flatten(),
             surface_tension_model(p, t).flatten(),
@@ -3010,11 +3037,15 @@ class PvtModelPhTableParametersDescription:
 
         names = [
             "gas density",
-            "gas density derivative pressure",
-            "gas density derivative temperature",
+            "gas density derivative pressure, constant temperature",
+            "gas density derivative temperature, constant pressure",
+            "gas density derivative pressure, constant enthalpy",
+            "gas density derivative enthalpy, constant pressure",
             "oil density",
-            "oil density derivative pressure",
-            "oil density derivative temperature",
+            "oil density derivative pressure, constant temperature",
+            "oil density derivative temperature, constant pressure",
+            "oil density derivative pressure, constant enthalpy",
+            "oil density derivative enthalpy, constant pressure",
             "gas viscosity",
             "oil viscosity",
             "gas-oil surface tension",
@@ -3030,8 +3061,18 @@ class PvtModelPhTableParametersDescription:
         if has_water:
             data += [
                 water_constant_density_model(p, t).flatten(),
-                water_density_derivative_respect_pressure(p, t).flatten(),
-                water_density_derivative_respect_temperature(p, t).flatten(),
+                water_density_derivative_respect_pressure_const_temperature(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_temperature_const_pressure(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_pressure_const_enthalpy(
+                    p, t
+                ).flatten(),
+                water_density_derivative_respect_enthalpy_const_pressure(
+                    p, h
+                ).flatten(),
                 water_viscosity_model(p, t).flatten(),
                 water_mass_fraction_model(p, t).flatten(),
                 water_specific_heat_model(p, t).flatten(),
@@ -3043,8 +3084,10 @@ class PvtModelPhTableParametersDescription:
 
             names += [
                 "water density",
-                "water density derivative pressure",
-                "water density derivative temperature",
+                "water density derivative pressure, constant temperature",
+                "water density derivative temperature, constant pressure",
+                "water density derivative pressure, constant enthalpy",
+                "water density derivative enthalpy, constant pressure",
                 "water viscosity",
                 "water mass fraction",
                 "water specific heat",
