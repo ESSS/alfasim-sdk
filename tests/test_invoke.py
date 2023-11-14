@@ -118,6 +118,28 @@ def test_package_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     assert package_filename.is_file()
 
 
+def test_package_task_empty_package_name(
+    new_plugin_dir: Path, monkeypatch: MonkeyPatch
+):
+    monkeypatch.chdir(new_plugin_dir)
+
+    package_dir_old = new_plugin_dir / "package"
+    package_dir_old.mkdir(exist_ok=True, parents=True)
+    subprocess.run(
+        [
+            f"{invoke_cmd}",
+            "package",
+        ],
+    )
+
+    from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
+
+    os_type = "win" if os.sys.platform == "win32" else "linux"
+    curr_sdk_version = get_current_version()
+    package_filename = Path(f"acme-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin")
+    assert package_filename.is_file()
+
+
 def test_update_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     monkeypatch.chdir(new_plugin_dir)
     plugin_src_folder = new_plugin_dir / "src"

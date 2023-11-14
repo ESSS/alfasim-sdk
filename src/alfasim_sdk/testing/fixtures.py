@@ -16,7 +16,7 @@ from _pytest.compat import assert_never
 from _pytest.monkeypatch import MonkeyPatch
 
 from alfasim_sdk import convert_alfacase_to_description
-from alfasim_sdk import convert_description_to_alfacase
+from alfasim_sdk import generate_alfacase_file
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 from alfasim_sdk._internal.alfacase.case_description import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
@@ -147,11 +147,8 @@ class AlfasimRunnerFixture:
         self.check_not_run()
         self.check_base_case_is_loaded()
 
-        alfacase = convert_description_to_alfacase(self._case)
-        project_folder = self.project_folder
-
         self.alfacase_data_folder.mkdir()
-        self.alfacase_file.write_text(alfacase, encoding="utf-8")
+        generate_alfacase_file(self._case, self.alfacase_file)
 
         try:
             self._run_simulator(
@@ -161,7 +158,7 @@ class AlfasimRunnerFixture:
                     f"--alfacase-file={str(self.alfacase_file)}",
                     f"--number-of-threads={number_of_threads}",
                 ],
-                cwd=project_folder,
+                cwd=self.project_folder,
             )
         except CalledProcessError as error:
 
