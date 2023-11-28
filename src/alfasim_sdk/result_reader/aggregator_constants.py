@@ -1,5 +1,7 @@
 TRENDS_GROUP_NAME = "trends"
 TRENDS_META_ATTR_NAME = "trends"
+GLOBAL_SENSITIVITY_ANALYSIS_META_ATTR_NAME = "global_sensitivity_analysis"
+GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME = "global_sensitivity_analysis"
 
 TIME_SET_DSET_NAME = "time_set"
 
