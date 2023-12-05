@@ -647,8 +647,8 @@ class TablePumpDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
-    speeds = attrib_array(Array([0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'), category="angle per time")
-    void_fractions = attrib_array(Array(([0.0] * 6 + [0.1] * 6) * 3, '-'))
+    speeds = attrib_array(Array("angle per time", [0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'))
+    void_fractions = attrib_array(Array("volume fraction", ([0.0] * 6 + [0.1] * 6) * 3, '-'))
     flow_rates = attrib_array(Array([0.0, 0.05, 0.1, 0.15, 0.2, 0.3] * 6, 'm3/s'))
 
     pressure_boosts = attrib_array(Array(
