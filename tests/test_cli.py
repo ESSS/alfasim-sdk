@@ -27,8 +27,8 @@ def test_command_new(tmp_path):
     assert result.exit_code == 0
 
     plugin_dir = tmp_path / "acme"
-    assets_dir = plugin_dir / "assets"
-    compile_file = plugin_dir / "tasks.py"
     assert plugin_dir.is_dir()
-    assert assets_dir.is_dir()
-    assert compile_file.is_file()
+    assert (plugin_dir / "assets").is_dir()
+    assert (plugin_dir / "tasks.py").is_file()
+    importable_package = plugin_dir / "src/python/alfasim_sdk_plugins/acme"
+    assert (importable_package / "__init__.py").is_file()
