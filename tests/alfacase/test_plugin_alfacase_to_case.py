@@ -2,13 +2,16 @@ import os
 import textwrap
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 from typing import Callable
 from typing import List
 from unittest.mock import ANY
 
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 from barril.units import Array
 from barril.units import Scalar
+from pytest_mock import MockerFixture
 
 from alfasim_sdk import convert_alfacase_to_description
 from alfasim_sdk import PluginDescription
@@ -43,9 +46,80 @@ def test_get_plugin_module_candidates(monkeypatch):
     ]
 
 
-def test_load_plugin_data_structure(abx_plugin):
-    models = load_plugin_data_structure("abx")
-    assert [m.__name__ for m in models] == ["AContainer", "BContainer"]
+class TestLoadPluginDataStructure:
+    def test_without_importable_python(self, abx_plugin: None) -> None:
+        models = load_plugin_data_structure("abx")
+        assert [m.__name__ for m in models] == ["AContainer", "BContainer"]
+
+        with pytest.raises(ModuleNotFoundError):
+            import alfasim_sdk_plugins.abx  # noqa
+
+    def test_with_importable_python(self, importable_plugin: None) -> None:
+        with pytest.raises(ModuleNotFoundError):
+            import alfasim_sdk_plugins.importable  # noqa
+
+        models = load_plugin_data_structure("importable")
+        assert [m.__name__ for m in models] == ["Foo"]
+
+        import alfasim_sdk_plugins.importable  # noqa
+        from alfasim_sdk_plugins.importable import buz  # noqa
+
+        assert buz.BUZ == "fiz buz!"
+
+    def test_keep_namespace_tidy(
+        self,
+        importable_plugin: None,
+        importable_plugin_source: Path,
+        datadir: Path,
+        monkeypatch: MonkeyPatch,
+        mocker: MockerFixture,
+    ) -> None:
+        import alfasim_sdk_plugins
+        from alfasim_sdk._internal.alfacase import plugin_alfacase_to_case
+
+        # Create an invalid "importable" plugin.
+        plugin_root = datadir / "test_invalid_plugins"
+        plugin_file = plugin_root / "importable/artifacts/importable.py"
+        plugin_file.parent.mkdir(parents=True)
+        plugin_file.touch()
+        invalid_namespace = plugin_file.parent / "alfasim_sdk_plugins"
+        (invalid_namespace / "importable").mkdir(parents=True)
+        monkeypatch.setenv(
+            "ALFASIM_PLUGINS_DIR", str(plugin_root), prepend=os.path.pathsep
+        )
+
+        # Prepare to check if the namespace is being updated while trying to load the plugin.
+        valid_namespace = (
+            importable_plugin_source / "importable/artifacts/alfasim_sdk_plugins"
+        )
+        good_namespace = str(valid_namespace.absolute())
+        bad_namespace = str(invalid_namespace.absolute())
+        expected_namespace_state = iter(
+            [
+                {"with": bad_namespace, "without": good_namespace},
+                {"with": good_namespace, "without": bad_namespace},
+            ]
+        )
+        original_import_module = plugin_alfacase_to_case.import_module
+
+        def mock_import_module(*args: Any, **kwargs: Any) -> Any:
+            expected = next(expected_namespace_state)
+            assert expected["with"] in alfasim_sdk_plugins.__path__, "AAA"
+            assert expected["without"] not in alfasim_sdk_plugins.__path__, "BBB"
+            return original_import_module(*args, **kwargs)
+
+        mocker.patch.object(
+            plugin_alfacase_to_case, "import_module", new=mock_import_module
+        )
+
+        load_plugin_data_structure("importable")
+
+        assert bad_namespace not in alfasim_sdk_plugins.__path__
+        assert good_namespace in alfasim_sdk_plugins.__path__
+
+        # Check if `mock import module` has exhausted the expected values.
+        with pytest.raises(StopIteration):
+            next(expected_namespace_state)
 
 
 def test_load_plugin_multiple_containers(datadir, abx_plugin):

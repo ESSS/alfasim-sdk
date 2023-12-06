@@ -185,7 +185,7 @@ def import_module(path: Path) -> ModuleType:
     import importlib
 
     assert path.is_file()
-    spec = importlib.util.spec_from_file_location("", path)
+    spec = importlib.util.spec_from_file_location(path.stem, path)
     assert spec is not None
     assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -197,13 +197,30 @@ def load_plugin_data_structure(plugin_id: str) -> Optional[List[Type]]:
     """
     Obtain the models for a given plugin.
     """
+    import alfasim_sdk_plugins
+
     for candidate in get_plugin_module_candidates(plugin_id):
         if candidate.is_file():
+            # Update the "alfasim_sdk_plugins" namespace.
+            namespace_package_str = None
+            remove_namespace_package = False
+            namespace_package = candidate.parent / "alfasim_sdk_plugins"
+            if namespace_package.is_dir():
+                namespace_package_str = str(namespace_package.absolute())
+                if namespace_package_str not in alfasim_sdk_plugins.__path__:
+                    alfasim_sdk_plugins.__path__.append(namespace_package_str)
+                    remove_namespace_package = True
+
             module = import_module(candidate)
             if hasattr(module, "alfasim_get_data_model_type"):
                 models = module.alfasim_get_data_model_type()
                 if all(hasattr(m, "_alfasim_metadata") for m in models):
                     return models
+
+            # Cleanup "alfasim_sdk_plugins" namespace.
+            # When a valid plugin is found leave the namespace package unchanged.
+            if remove_namespace_package:
+                alfasim_sdk_plugins.__path__.remove(namespace_package_str)
 
     else:
         return None

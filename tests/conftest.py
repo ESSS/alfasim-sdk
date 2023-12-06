@@ -1,3 +1,4 @@
+import os.path
 import shutil
 import textwrap
 from pathlib import Path
@@ -95,5 +96,80 @@ def abx_plugin_source(datadir: Path) -> Path:
 
 
 @pytest.fixture()
-def abx_plugin(abx_plugin_source: Path, monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(abx_plugin_source))
+def importable_plugin_source(datadir: Path) -> Path:
+    """
+    Create a fake plugin input model configuration.
+
+    The input models consist of two top level containers "AContainer"
+    and "BContainer" and the container children properties are:
+
+    - asd (string);
+    - qwe (string);
+
+    The child model is called "X", that is the reason of the very
+    creative name "abx" plugin.
+    """
+    plugin_root = datadir / "test_plugins"
+    plugin_file = plugin_root / "importable/artifacts/importable.py"
+    plugin_file.parent.mkdir(parents=True)
+    plugin_file.write_text(
+        textwrap.dedent(
+            """\
+            import alfasim_sdk
+            from alfasim_sdk_plugins.importable.models import Foo
+
+            @alfasim_sdk.hookimpl
+            def alfasim_get_data_model_type():
+                return [Foo]
+            """
+        )
+    )
+    namespace = plugin_file.parent / "alfasim_sdk_plugins"
+    models_file = namespace / "importable/models.py"
+    models_file.parent.mkdir(parents=True, exist_ok=True)
+    models_file.write_text(
+        textwrap.dedent(
+            """\
+            import alfasim_sdk
+
+            @alfasim_sdk.data_model(icon="", caption="The Foo")
+            class Foo:
+                bar = alfasim_sdk.String(value="some default bar", caption="Bar")
+            """
+        )
+    )
+    buz_file = namespace / "importable/buz.py"
+    buz_file.parent.mkdir(parents=True, exist_ok=True)
+    buz_file.write_text("BUZ = 'fiz buz!'\n")
+    return plugin_root
+
+
+@pytest.fixture()
+def clear_alfasim_plugins_dir(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.delenv("ALFASIM_PLUGINS_DIR", raising=False)
+
+
+@pytest.fixture()
+def abx_plugin(
+    clear_alfasim_plugins_dir: None,
+    abx_plugin_source: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(
+        "ALFASIM_PLUGINS_DIR",
+        str(abx_plugin_source),
+        prepend=os.path.pathsep,
+    )
+
+
+@pytest.fixture()
+def importable_plugin(
+    clear_alfasim_plugins_dir: None,
+    importable_plugin_source: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(
+        "ALFASIM_PLUGINS_DIR",
+        str(importable_plugin_source),
+        prepend=os.path.pathsep,
+    )
