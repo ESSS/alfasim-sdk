@@ -68,22 +68,28 @@ def new(dst, caption, plugin_id, author_name, author_email):
 
     .. code-block:: bash
 
-        \---myplugin
-        |   CMakeLists.txt
-        |   tasks.py
-        |
-        +---assets
-        |       plugin.yaml
-        |       README.md
-        |
-        \---src
+        <dest>
+        \---<plugin_id>
             |   CMakeLists.txt
-            |   hook_specs.h
-            |   myplugin.cpp
+            |   tasks.py
             |
-            \---python
-                    myplugin.py
+            +---assets
+            |       plugin.yaml
+            |       README.md
+            |
+            \---src
+                |   CMakeLists.txt
+                |   hook_specs.h
+                |   <plugin_id>.cpp
+                |
+                \---python
+                    |   <plugin_id>.py
+                    |
+                    \---alfasim_sdk_plugins
+                        \---<plugin_id>
+                                __init__.py
 
+    Any python code placed in ``alfasim_sdk_plugins/<plugin_id>`` is importable by using ``import alfasim_sdk_plugins.<plugin_id>.<my_extra_module>``.
     """
     dst = Path(dst)
     hook_specs_file_path = _get_hook_specs_file_path()
@@ -112,7 +118,11 @@ def new(dst, caption, plugin_id, author_name, author_email):
     source_folder = dst / plugin_id / "src"
     python_folder = source_folder / "python"
     python_folder.mkdir()
-    Path(python_folder / f"{plugin_id}.py").touch()
+    (python_folder / f"{plugin_id}.py").touch()
+
+    importable_module = python_folder / "alfasim_sdk_plugins" / plugin_id
+    importable_module.mkdir(parents=True)
+    (importable_module / "__init__.py").touch()
 
     # remove compile.py created by hookman
     compile_file = dst / plugin_id / "compile.py"
