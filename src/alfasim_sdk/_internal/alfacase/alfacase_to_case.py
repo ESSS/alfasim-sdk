@@ -1930,6 +1930,7 @@ def load_numerical_options_description(document: DescriptionDocument) -> case_de
         'caching_rtol': load_value,
         'caching_atol': load_value,
         'always_repeat_timestep': load_value,
+        'enable_fast_compositional': load_value
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.NumericalOptionsDescription(**case_values)

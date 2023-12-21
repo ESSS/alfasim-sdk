@@ -18,6 +18,7 @@
             caching_rtol: float = 0.01
             caching_atol: float = 0.0001
             always_repeat_timestep: bool = False
+            enable_fast_compositional: bool = True
 
 .. tab:: Schema
 
@@ -36,3 +37,4 @@
             caching_rtol: number  # optional
             caching_atol: number  # optional
             always_repeat_timestep: boolean  # optional
+            enable_fast_compositional: boolean  # optional

@@ -707,6 +707,7 @@ NUMERICAL_OPTIONS_DESCRIPTION = case_description.NumericalOptionsDescription(
     caching_rtol=3e-3,
     caching_atol=4e-4,
     always_repeat_timestep=False,
+    enable_fast_compositional=True,
 )
 TRACER_MODEL_CONSTANT_COEFFICIENTS_DESCRIPTION = (
     case_description.TracerModelConstantCoefficientsDescription(

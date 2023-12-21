@@ -6,6 +6,7 @@ CHANGELOG
 ===================
 
 * Added support for user plugins have multiple python source files, the "user plugin entry point" logic is unchanged, but extra python code could be placed in `alfasim_sdk_plugins.<plugins_id>` and be imported at runtime;
+* Added ``enable_fast_compositional`` attribute to ``NumericalOptionsDescription``.
 
 
 0.18.0 (2023-10-13)

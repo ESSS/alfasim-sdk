@@ -377,6 +377,7 @@ numerical_options_description_schema = Map(
         Optional("caching_rtol"): Float(),
         Optional("caching_atol"): Float(),
         Optional("always_repeat_timestep"): Bool(),
+        Optional("enable_fast_compositional"): Bool(),
     }
 )
 open_hole_description_schema = Map(
@@ -1187,4 +1188,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 03e5182a9b30c3759affd8fd4852c587)
+# [[[end]]] (checksum: 1e7e310e1ec3e70295e333ccdf55e26e)
