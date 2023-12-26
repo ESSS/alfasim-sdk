@@ -1,3 +1,4 @@
+catch2
 cogapp
 colorama
 coverage
