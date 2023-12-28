@@ -387,6 +387,7 @@ numerical_options_description_schema = Map(
         Optional("caching_rtol"): Float(),
         Optional("caching_atol"): Float(),
         Optional("always_repeat_timestep"): Bool(),
+        Optional("enable_fast_compositional"): Bool(),
     }
 )
 
