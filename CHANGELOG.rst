@@ -5,7 +5,7 @@ CHANGELOG
 0.20.0 (UNRELEASED)
 ===================
 
-0.19.0 (UNRELEASED)
+0.19.0 (2024-01-02)
 ===================
 
 * Added support for user plugins have multiple python source files, the "user plugin entry point" logic is unchanged, but extra python code could be placed in `alfasim_sdk_plugins.<plugins_id>` and be imported at runtime;
