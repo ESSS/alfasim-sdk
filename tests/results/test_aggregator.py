@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import List
 
 import attr
+import numpy
 import pytest
 from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
-from alfasim_sdk.result_reader.aggregator import concatenate_metadata
+from alfasim_sdk.result_reader.aggregator import concatenate_metadata, read_global_sensitivity_analysis_meta_data, \
+read_global_sensitivity_coefficients, read_global_sensitivity_analysis_time_set
 from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_local_statistics
@@ -291,3 +293,69 @@ def test_read_time_sets(
 ) -> None:
     time_sets = read_time_sets(results.metadata)
     num_regression.check({str(k): v for k, v in time_sets.items()})
+
+def test_read_empty_uq_metadata(datadir: Path) -> None:
+    fake_uq_dir = datadir / "fake_uq_dir"
+
+    uq_metadata = read_global_sensitivity_analysis_meta_data(result_directory=fake_uq_dir)
+    assert uq_metadata.gsa_items == {}
+    assert Path(uq_metadata.result_directory) == fake_uq_dir
+
+    fake_uq_dir.mkdir(parents=True)
+    uq_metadata = read_global_sensitivity_analysis_meta_data(result_directory=fake_uq_dir)
+    assert uq_metadata.gsa_items == {}
+
+def test_read_uq_metadata(global_sa_results_dir: Path) -> None:
+    uq_metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
+    global_gsa_meta_data = uq_metadata.gsa_items
+    meta_var_1 = global_gsa_meta_data["temperature::parametric_var_1@trend_id_1"]
+    assert meta_var_1.qoi_index == 0
+    assert meta_var_1.qoi_data_index == 0
+    assert meta_var_1.position == 100.0
+    assert meta_var_1.parametric_var_name == "A"
+
+    meta_var_2 = global_gsa_meta_data["temperature::parametric_var_2@trend_id_1"]
+    assert meta_var_2.qoi_index == 0
+    assert meta_var_2.qoi_data_index == 1
+    assert meta_var_2.position == 100.0
+    assert meta_var_2.parametric_var_name == "B"
+
+def test_read_uq_timeset(global_sa_results_dir: Path) -> None:
+    time_set = read_global_sensitivity_analysis_time_set(
+        result_directory=global_sa_results_dir
+    )
+    assert numpy.all(time_set == [0, 1, 2, 3, 4, 5, 6, 7])
+
+
+def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> None:
+    metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
+    data = read_global_sensitivity_coefficients(
+        coefficients_key="temperature::parametric_var_1@trend_id_1", metadata=metadata,
+    )
+    assert numpy.all(
+        data
+        == (11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7)
+    )
+
+    data = read_global_sensitivity_coefficients(
+        coefficients_key="temperature::parametric_var_2@trend_id_1",metadata=metadata
+    )
+    assert numpy.all(
+        data
+        == (12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7)
+    )
+
+
+def test_read_incomplete_uq_metadata(global_sa_results_dir: Path) -> None:
+    """
+    When a .creating result file exists in the results folder,
+    the metadata is incomplete, so they will be not read.
+    """
+    creating_file = global_sa_results_dir / 'uq_result.creating'
+    creating_file.touch()
+    gsa_time_set = read_global_sensitivity_analysis_time_set(global_sa_results_dir)
+    assert gsa_time_set is None
+    gsa_meta_data = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
+    assert gsa_meta_data.gsa_items == {}
+    coefficients = read_global_sensitivity_coefficients(coefficients_key="temperature::parametric_var_1@trend_id_1",metadata=gsa_meta_data)
+    assert coefficients is None
