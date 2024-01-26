@@ -152,7 +152,8 @@ def test_update_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
         [f"{invoke_cmd}", "update"],
         capture_output=True,
     )
-    assert result.stdout.decode("utf-8") == ""
+    success_message_chunk = "Successfully updated alfasim-sdk's files"
+    assert success_message_chunk in result.stdout.decode("utf-8")
     assert result.stderr.decode("utf-8") == ""
     assert plugin_hook_spec_h_path.stat().st_size > 0
     assert plugin_hook_spec_h_path.read_text(encoding="utf-8") != ""
