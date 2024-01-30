@@ -31,7 +31,7 @@ Below there is detailed list on what they are meant to do. However, in general, 
    :prog: invoke
 
 You can check their implementations `here <https://github.com/ESSS/alfasim-sdk/blob/master/src/alfasim_sdk/default_tasks.py>`_
-and you can also overwrite them by just defining a function with the same name of the default task with the ``@task`` decorator.
+and you can also overwrite them by just defining a function with the same name of the default task with the ``@sdk_task`` decorator.
 
 For instance, if you want to overwrite the ``clean`` task, define the following inside your ``tasks.py`` in the root of your plugin.
 
@@ -39,6 +39,6 @@ For instance, if you want to overwrite the ``clean`` task, define the following 
 
     from invoke import task
 
-    @task
+    @sdk_task
     def clean():
         print("Overwriting the clean task")
