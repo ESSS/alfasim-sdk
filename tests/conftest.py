@@ -9,9 +9,12 @@ import h5py
 import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.monkeypatch import MonkeyPatch
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME, \
-    TIME_SET_DSET_NAME
 
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
+from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
+from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
 from alfasim_sdk.result_reader.reader import Results
 
 
@@ -178,6 +181,7 @@ def importable_plugin(
         prepend=os.path.pathsep,
     )
 
+
 @pytest.fixture()
 def global_sa_results_dir(datadir: Path) -> Path:
     """
@@ -188,17 +192,19 @@ def global_sa_results_dir(datadir: Path) -> Path:
 
     result_dir = datadir / "fake_uq_dir"
     result_dir.mkdir(parents=True)
-    time_set = np.array([0,1,2,3,4,5,6,7])
+    time_set = np.array([0, 1, 2, 3, 4, 5, 6, 7])
     global_sensitivity_analysis = np.array(
         [
-            [[qoi + var + tl for tl in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)] for var in [1, 2]]
+            [
+                [qoi + var + tl for tl in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)]
+                for var in [1, 2]
+            ]
             for qoi in [10]
-        ])
+        ]
+    )
     file_name = result_dir / "uq_result"
 
-    file = h5py.File(
-        file_name, 'x', libver='latest', locking=False
-    )
+    file = h5py.File(file_name, "x", libver="latest", locking=False)
     meta_group = file.create_group(META_GROUP_NAME, track_order=True)
     global_sensitivity_analysis_group = file.create_group(
         GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME, track_order=True
@@ -214,16 +220,42 @@ def global_sa_results_dir(datadir: Path) -> Path:
     )
 
     fake_meta = {
-        'temperature::parametric_var_1@trend_id_1': {"property_id": "temperature","trend_id":"trend_id_1", "category":"dimensionless","parametric_var_id":"parametric_var_id_1", "parametric_var_name":"A","network_element_name":"Conexao 1","position":100.0,"position_unit":"m","unit":"-", "qoi_index": 0, "qoi_data_index": 0},
-        'temperature::parametric_var_2@trend_id_1': {"property_id": "temperature","trend_id":"trend_id_1", "category":"dimensionless","parametric_var_id":"parametric_var_id_2","parametric_var_name":"B","network_element_name":"Conexao 1","position":100.0,"position_unit":"m","unit":"-", "qoi_index": 0, "qoi_data_index": 1},
+        "temperature::parametric_var_1@trend_id_1": {
+            "property_id": "temperature",
+            "trend_id": "trend_id_1",
+            "category": "dimensionless",
+            "parametric_var_id": "parametric_var_id_1",
+            "parametric_var_name": "A",
+            "network_element_name": "Conexao 1",
+            "position": 100.0,
+            "position_unit": "m",
+            "unit": "-",
+            "qoi_index": 0,
+            "qoi_data_index": 0,
+        },
+        "temperature::parametric_var_2@trend_id_1": {
+            "property_id": "temperature",
+            "trend_id": "trend_id_1",
+            "category": "dimensionless",
+            "parametric_var_id": "parametric_var_id_2",
+            "parametric_var_name": "B",
+            "network_element_name": "Conexao 1",
+            "position": 100.0,
+            "position_unit": "m",
+            "unit": "-",
+            "qoi_index": 0,
+            "qoi_data_index": 1,
+        },
     }
 
-    meta_group.attrs['global_sensitivity_analysis'] = json.dumps(fake_meta)
+    meta_group.attrs["global_sensitivity_analysis"] = json.dumps(fake_meta)
     time_set_dset = global_sensitivity_analysis_group[TIME_SET_DSET_NAME]
     new_time_set_shape = time_set.shape
     time_set_dset.resize(new_time_set_shape)
     time_set_dset[:] = time_set
-    gsa_data_set = global_sensitivity_analysis_group[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
+    gsa_data_set = global_sensitivity_analysis_group[
+        GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+    ]
     gsa_data_set[:] = global_sensitivity_analysis
     file.close()
     return result_dir

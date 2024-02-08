@@ -4,10 +4,11 @@ import os
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 from typing import Callable
 from typing import DefaultDict
 from typing import Dict
+from typing import Iterator
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -16,7 +17,11 @@ import attr
 import h5py
 import numpy
 import numpy as np
+from typing_extensions import Self
 
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import (
@@ -26,8 +31,6 @@ from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_LOCKING_M
 from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_PREFIX
 from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
 from alfasim_sdk.result_reader.aggregator_constants import TRENDS_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
-from typing_extensions import Self
 
 OutputKeyType = str
 """\
@@ -88,6 +91,7 @@ class ResultsNeedFullReloadError(RuntimeError):
     "restart file" and the option "keep old results" is selected.
     """
 
+
 @attr.s(slots=True, hash=False)
 class GlobalSensitivityAnalysisMetadata:
     """
@@ -123,43 +127,54 @@ class GlobalSensitivityAnalysisMetadata:
         :ivar qoi_data_index:
             The data index of a quantity of interest.
         """
+
         property_id: str = attr.ib(validator=attr.validators.instance_of(str))
         trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
         category: str = attr.ib(validator=attr.validators.instance_of(str))
         parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
         parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
         network_element_name: Optional[str] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(str)))
-        position: Optional[float] = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(float)))
-        position_unit: Optional[str] = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(str)))
+            validator=attr.validators.optional(attr.validators.instance_of(str))
+        )
+        position: Optional[float] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(float))
+        )
+        position_unit: Optional[str] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(str))
+        )
         unit: str = attr.ib(validator=attr.validators.instance_of(str))
-        qoi_index: Optional[int] = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(int)))
-        qoi_data_index: Optional[int] = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(int)))
+        qoi_index: Optional[int] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(int))
+        )
+        qoi_data_index: Optional[int] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(int))
+        )
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
             return cls(
-                property_id=data['property_id'],
-                trend_id=data['trend_id'],
-                category=data['category'],
-                parametric_var_id=data['parametric_var_id'],
-                parametric_var_name=data['parametric_var_name'],
-                network_element_name=data['network_element_name'],
-                position=data['position'],
-                position_unit=data['position_unit'],
-                unit=data['unit'],
-                qoi_index=data['qoi_index'],
-                qoi_data_index=data['qoi_data_index']
+                property_id=data["property_id"],
+                trend_id=data["trend_id"],
+                category=data["category"],
+                parametric_var_id=data["parametric_var_id"],
+                parametric_var_name=data["parametric_var_name"],
+                network_element_name=data["network_element_name"],
+                position=data["position"],
+                position_unit=data["position_unit"],
+                unit=data["unit"],
+                qoi_index=data["qoi_index"],
+                qoi_data_index=data["qoi_data_index"],
             )
+
     gsa_items: Dict[str, GSAItem] = attr.ib(validator=attr.validators.instance_of(Dict))
     result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
 
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
         return GlobalSensitivityAnalysisMetadata(
-            gsa_items={},
-            result_directory=result_directory
+            gsa_items={}, result_directory=result_directory
         )
+
     @classmethod
     def get_metadata_from_dir(cls, result_directory: Path) -> Self:
         """
@@ -168,21 +183,28 @@ class GlobalSensitivityAnalysisMetadata:
         :param result_directory:
             The directory result.
         """
-        def map_data(gsa_metadata: Dict) -> Dict[str, GlobalSensitivityAnalysisMetadata.GSAItem]:
+
+        def map_data(
+            gsa_metadata: Dict,
+        ) -> Dict[str, GlobalSensitivityAnalysisMetadata.GSAItem]:
             return {
                 key: GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
                 for key, data in gsa_metadata.items()
             }
 
-        with open_global_sensitivity_analysis_result_file(result_directory=result_directory) as result_file:
+        with open_global_sensitivity_analysis_result_file(
+            result_directory=result_directory
+        ) as result_file:
             if not result_file:
                 return cls.empty(result_directory=result_directory)
 
-            loaded_metadata = json.loads(result_file[META_GROUP_NAME].attrs["global_sensitivity_analysis"])
-            return cls(
-                gsa_items=map_data(loaded_metadata),
-                result_directory=result_directory
+            loaded_metadata = json.loads(
+                result_file[META_GROUP_NAME].attrs["global_sensitivity_analysis"]
             )
+            return cls(
+                gsa_items=map_data(loaded_metadata), result_directory=result_directory
+            )
+
 
 @attr.s(slots=True, hash=False)
 class ALFASimResultMetadata:
@@ -317,8 +339,8 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
         for f in result_files_sorted_dict.values():
             f.close()
 
-def _open_result_file(filename: Path) -> h5py.File:
 
+def _open_result_file(filename: Path) -> h5py.File:
     h5py_file = h5py.File
     if h5py.version.version_tuple[:2] >= (3, 5):
         h5py_file = functools.partial(h5py.File, locking=RESULT_FILE_LOCKING_MODE)
@@ -352,6 +374,7 @@ def _open_result_file(filename: Path) -> h5py.File:
         )
     finally:
         os.chdir(old_directory)
+
 
 def _get_number_of_base_time_steps_from_time_set_info(
     time_set_info_source_dict: Dict,
@@ -1532,8 +1555,11 @@ def concatenate_metadata(
         app_version_info=app_version_info,
     )
 
+
 @contextmanager
-def open_global_sensitivity_analysis_result_file(result_directory: Path) -> Iterator[Optional[h5py.File]]:
+def open_global_sensitivity_analysis_result_file(
+    result_directory: Path,
+) -> Iterator[Optional[h5py.File]]:
     """
     Open a global sensitivity analysis result file.
     :param result_directory:
@@ -1550,21 +1576,33 @@ def open_global_sensitivity_analysis_result_file(result_directory: Path) -> Iter
             yield file
     else:
         yield None
-def read_global_sensitivity_analysis_meta_data(result_directory: Path) -> Optional[GlobalSensitivityAnalysisMetadata]:
+
+
+def read_global_sensitivity_analysis_meta_data(
+    result_directory: Path,
+) -> Optional[GlobalSensitivityAnalysisMetadata]:
     """
     Read the global sensitivity analysis metadata persisted in a result file.
     """
 
-    return GlobalSensitivityAnalysisMetadata.get_metadata_from_dir(result_directory=result_directory)
+    return GlobalSensitivityAnalysisMetadata.get_metadata_from_dir(
+        result_directory=result_directory
+    )
 
-def read_global_sensitivity_analysis_time_set(result_directory: Path) -> Optional[numpy.array]:
+
+def read_global_sensitivity_analysis_time_set(
+    result_directory: Path,
+) -> Optional[numpy.array]:
     """
     Get the time set for sensitivity analysis results.
     """
-    with open_global_sensitivity_analysis_result_file(result_directory=result_directory) as result_file:
+    with open_global_sensitivity_analysis_result_file(
+        result_directory=result_directory
+    ) as result_file:
         if not result_file:
             return
-        return result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]['time_set'][:]
+        return result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]["time_set"][:]
+
 
 def read_global_sensitivity_coefficients(
     coefficients_key: str,
@@ -1577,7 +1615,9 @@ def read_global_sensitivity_coefficients(
     if not metadata.gsa_items:
         return None
     meta = metadata.gsa_items[coefficients_key]
-    with open_global_sensitivity_analysis_result_file(metadata.result_directory) as result_file:
+    with open_global_sensitivity_analysis_result_file(
+        metadata.result_directory
+    ) as result_file:
         gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
         coefficients_dset = gsa_group["global_sensitivity_analysis"]
         return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
