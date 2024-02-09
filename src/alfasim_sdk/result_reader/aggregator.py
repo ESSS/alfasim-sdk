@@ -1,4 +1,5 @@
 import functools
+import json
 import os
 from collections import namedtuple
 from contextlib import contextmanager
@@ -7,6 +8,7 @@ from typing import Any
 from typing import Callable
 from typing import DefaultDict
 from typing import Dict
+from typing import Iterator
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -14,7 +16,12 @@ from typing import Tuple
 import attr
 import h5py
 import numpy
+import numpy as np
+from typing_extensions import Self
 
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import (
@@ -83,6 +90,120 @@ class ResultsNeedFullReloadError(RuntimeError):
     The result is truncated when the simulation has been started using a
     "restart file" and the option "keep old results" is selected.
     """
+
+
+@attr.s(slots=True, hash=False)
+class GlobalSensitivityAnalysisMetadata:
+    """
+    A class that hold the global sensitivity analysis metadata.
+    """
+
+    @attr.s(slots=True, hash=False)
+    class GSAItem:
+        """
+        A class that hold each global sensitivity analysis
+        metadata information.
+        :ivar property_id:
+            The property name (holdup, total mass flow rate).
+        :ivar trend_id:
+            The id associated a specific trend.
+        :ivar category:
+            The property category. For global sensitivity analysis
+            this always be dimensionless.
+        :ivar parametric_var_id:
+            The id associated a parametric variable.
+        :ivar parametric_var_name:
+            The name associated a parametric variable.
+        :ivar network_element_name:
+            The name of network where this data is associated.
+        :ivar position:
+            The element position in a pipe.
+        :ivar position_unit:
+            The position unit (m, Km, cm).
+        :ivar unit:
+            The unit of a dimensionless property (-, %)
+        :ivar qoi_index:
+            The index of a quantity of interest in the results file.
+        :ivar qoi_data_index:
+            The data index of a quantity of interest.
+        """
+
+        property_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        category: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
+        network_element_name: Optional[str] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(str))
+        )
+        position: Optional[float] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(float))
+        )
+        position_unit: Optional[str] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(str))
+        )
+        unit: str = attr.ib(validator=attr.validators.instance_of(str))
+        qoi_index: Optional[int] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(int))
+        )
+        qoi_data_index: Optional[int] = attr.ib(
+            validator=attr.validators.optional(attr.validators.instance_of(int))
+        )
+
+        @classmethod
+        def from_dict(cls, data: Dict[str, Any]) -> Self:
+            return cls(
+                property_id=data["property_id"],
+                trend_id=data["trend_id"],
+                category=data["category"],
+                parametric_var_id=data["parametric_var_id"],
+                parametric_var_name=data["parametric_var_name"],
+                network_element_name=data["network_element_name"],
+                position=data["position"],
+                position_unit=data["position_unit"],
+                unit=data["unit"],
+                qoi_index=data["qoi_index"],
+                qoi_data_index=data["qoi_data_index"],
+            )
+
+    gsa_items: Dict[str, GSAItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+
+    @classmethod
+    def empty(cls, result_directory: Path) -> Self:
+        return GlobalSensitivityAnalysisMetadata(
+            gsa_items={}, result_directory=result_directory
+        )
+
+    @classmethod
+    def get_metadata_from_dir(cls, result_directory: Path) -> Self:
+        """
+        Return the metadata info from result directory.
+        If the directory does not exist/is invalid, return an empty metadata.
+        :param result_directory:
+            The directory result.
+        """
+
+        def map_data(
+            gsa_metadata: Dict,
+        ) -> Dict[str, GlobalSensitivityAnalysisMetadata.GSAItem]:
+            return {
+                key: GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
+                for key, data in gsa_metadata.items()
+            }
+
+        with open_global_sensitivity_analysis_result_file(
+            result_directory=result_directory
+        ) as result_file:
+            if not result_file:
+                return cls.empty(result_directory=result_directory)
+
+            loaded_metadata = json.loads(
+                result_file[META_GROUP_NAME].attrs["global_sensitivity_analysis"]
+            )
+            return cls(
+                gsa_items=map_data(loaded_metadata), result_directory=result_directory
+            )
 
 
 @attr.s(slots=True, hash=False)
@@ -179,42 +300,6 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
 
     Note that once the container dict is collected the files originally returned are closed.
     """
-
-    h5py_file = h5py.File
-    if h5py.version.version_tuple[:2] >= (3, 5):
-        h5py_file = functools.partial(h5py.File, locking=RESULT_FILE_LOCKING_MODE)
-
-    def open_result_file(filename: Path) -> h5py.File:
-        # The lib h5py will fail to open the file for some exotic paths,
-        # but will work if the cwd are such paths.
-        directory = filename.parent
-        old_directory = os.getcwd()
-        try:
-            os.chdir(directory)
-            try:
-                return h5py_file(filename.name, "r", libver="latest", swmr=True)
-            except OSError as os_error:
-                swmr_message = (
-                    "Unable to open file (file is not already open for SWMR writing)"
-                )
-                if str(os_error) == swmr_message:
-                    return h5py_file(filename.name, "r", libver="latest", swmr=False)
-                raise
-
-        except PermissionError:
-            raise PermissionError(
-                f"Could not access folder {filename}.\n"
-                f'If you are using your local "Downloads" directory, consider changing the project file\n'
-                f"to somewhere else as some services try to synchronize that directory and interfere with\n"
-                f"the simulation.\n"
-                "\n"
-                f'1 - Click in "Save as".\n'
-                f"2 - Select a different path, outside Download folder.\n"
-                f"3 - Run simulation again.\n"
-            )
-        finally:
-            os.chdir(old_directory)
-
     # When a new result file is created its metadata contents are not complete, and the file
     # has not been put into SWMR mode yet (SWMR mode does not allow new groups, attributes,
     # and/or data sets to be created).
@@ -243,7 +328,7 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     prefix_len = len(RESULT_FILE_PREFIX)
     result_files.difference_update(files_under_creation)  # Ignore incomplete files.
     result_files_sorted = (
-        (int(filename.name[prefix_len:]), open_result_file(filename))
+        (int(filename.name[prefix_len:]), _open_result_file(filename))
         for filename in result_files
     )
     result_files_sorted_dict = dict(sorted(result_files_sorted, key=lambda x: x[0]))
@@ -253,6 +338,42 @@ def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
     finally:
         for f in result_files_sorted_dict.values():
             f.close()
+
+
+def _open_result_file(filename: Path) -> h5py.File:
+    h5py_file = h5py.File
+    if h5py.version.version_tuple[:2] >= (3, 5):
+        h5py_file = functools.partial(h5py.File, locking=RESULT_FILE_LOCKING_MODE)
+
+    # The lib h5py will fail to open the file for some exotic paths,
+    # but will work if the cwd are such paths.
+    directory = filename.parent
+    old_directory = os.getcwd()
+    try:
+        os.chdir(directory)
+        try:
+            return h5py_file(filename.name, "r", libver="latest", swmr=True)
+        except OSError as os_error:
+            swmr_message = (
+                "Unable to open file (file is not already open for SWMR writing)"
+            )
+            if str(os_error) == swmr_message:
+                return h5py_file(filename.name, "r", libver="latest", swmr=False)
+            raise
+
+    except PermissionError:
+        raise PermissionError(
+            f"Could not access folder {filename}.\n"
+            f'If you are using your local "Downloads" directory, consider changing the project file\n'
+            f"to somewhere else as some services try to synchronize that directory and interfere with\n"
+            f"the simulation.\n"
+            "\n"
+            f'1 - Click in "Save as".\n'
+            f"2 - Select a different path, outside Download folder.\n"
+            f"3 - Run simulation again.\n"
+        )
+    finally:
+        os.chdir(old_directory)
 
 
 def _get_number_of_base_time_steps_from_time_set_info(
@@ -1433,3 +1554,70 @@ def concatenate_metadata(
         result_directory=r_a.result_directory,
         app_version_info=app_version_info,
     )
+
+
+@contextmanager
+def open_global_sensitivity_analysis_result_file(
+    result_directory: Path,
+) -> Iterator[Optional[h5py.File]]:
+    """
+    Open a global sensitivity analysis result file.
+    :param result_directory:
+        The path to result directory.
+    """
+    filename = result_directory / "uq_result"
+    ignored_file = result_directory / "uq_result.creating"
+
+    if not filename.is_file():
+        yield None
+    # Avoid to read result files with incomplete metadata.
+    elif not ignored_file.is_file():
+        with _open_result_file(filename) as file:
+            yield file
+    else:
+        yield None
+
+
+def read_global_sensitivity_analysis_meta_data(
+    result_directory: Path,
+) -> Optional[GlobalSensitivityAnalysisMetadata]:
+    """
+    Read the global sensitivity analysis metadata persisted in a result file.
+    """
+
+    return GlobalSensitivityAnalysisMetadata.get_metadata_from_dir(
+        result_directory=result_directory
+    )
+
+
+def read_global_sensitivity_analysis_time_set(
+    result_directory: Path,
+) -> Optional[numpy.array]:
+    """
+    Get the time set for sensitivity analysis results.
+    """
+    with open_global_sensitivity_analysis_result_file(
+        result_directory=result_directory
+    ) as result_file:
+        if not result_file:
+            return
+        return result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]["time_set"][:]
+
+
+def read_global_sensitivity_coefficients(
+    coefficients_key: str,
+    metadata: GlobalSensitivityAnalysisMetadata,
+) -> Optional[np.ndarray]:
+    """
+    Read the global sensitivity analysis coefficients results.
+    """
+    # The metadata is empty.
+    if not metadata.gsa_items:
+        return None
+    meta = metadata.gsa_items[coefficients_key]
+    with open_global_sensitivity_analysis_result_file(
+        metadata.result_directory
+    ) as result_file:
+        gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
+        coefficients_dset = gsa_group["global_sensitivity_analysis"]
+        return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
