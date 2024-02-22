@@ -211,7 +211,7 @@ class GlobalSensitivityAnalysisMetadata:
 class HistoryMatchingMetadata:
     """
     Holder for the History Matching results metadata.
-    
+
     :ivar hm_items:
         Map of the data id and its associated metadata.
     :ivar result_directory:
@@ -230,10 +230,11 @@ class HistoryMatchingMetadata:
         :ivar data_index:
             The index of the data in the result datasets.
         """
+
         parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
         parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
         data_index: int = attr.ib(validator=attr.validators.instance_of(int))
-        
+
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
             """
@@ -242,9 +243,9 @@ class HistoryMatchingMetadata:
             :raises: KeyError if some expected key is not present in the given data dict.
             """
             return cls(
-                data_index=data['data_index'],
-                parametric_var_name=data['parametric_var_name'],
-                parametric_var_id=data['parametric_var_id'],
+                data_index=data["data_index"],
+                parametric_var_name=data["parametric_var_name"],
+                parametric_var_id=data["parametric_var_id"],
             )
 
     hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
@@ -253,12 +254,12 @@ class HistoryMatchingMetadata:
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
         return cls(hm_items={}, result_directory=result_directory)
-    
+
     @classmethod
     def from_result_directory(cls, result_directory: Path) -> Self:
         """
         Read History Matching results metadata from result directory/file.
-        
+
         If the directory does not exist/is invalid, return an empty metadata.
         """
 
@@ -268,14 +269,18 @@ class HistoryMatchingMetadata:
                 for key, data in hm_metadata.items()
             }
 
-        with open_history_matching_result_file(result_directory=result_directory) as result_file:
+        with open_history_matching_result_file(
+            result_directory=result_directory
+        ) as result_file:
             if not result_file:
                 return cls.empty(result_directory=result_directory)
 
             loaded_metadata = json.loads(
                 result_file[META_GROUP_NAME].attrs[HISTORY_MATCHING_GROUP_NAME]
             )
-            return cls(hm_items=map_data(loaded_metadata), result_directory=result_directory)
+            return cls(
+                hm_items=map_data(loaded_metadata), result_directory=result_directory
+            )
 
 
 @attr.s(slots=True, hash=False)
@@ -1696,14 +1701,16 @@ def read_global_sensitivity_coefficients(
 
 
 @contextmanager
-def open_history_matching_result_file(result_directory: Path) -> Iterator[Optional[h5py.File]]:
+def open_history_matching_result_file(
+    result_directory: Path,
+) -> Iterator[Optional[h5py.File]]:
     """
     Open a History Matching result file.
-    
+
     :param result_directory:
         The UQ main result directory.
     """
-    hm_results_path = result_directory.joinpath('history_matching/results')
+    hm_results_path = result_directory.joinpath("history_matching/results")
     with _open_uq_result_file(hm_results_path) as file:
         yield file
 
@@ -1712,12 +1719,12 @@ def open_history_matching_result_file(result_directory: Path) -> Iterator[Option
 def _open_uq_result_file(result_directory: Path) -> Iterator[Optional[h5py.File]]:
     """
     Open a Uncertainty Quantification Analysis result file when it exists and is not being created.
-    
+
     :param result_directory:
         The result directory for the given analysis.
     """
-    filename = result_directory / 'result'
-    ignored_file = result_directory / 'result.creating'
+    filename = result_directory / "result"
+    ignored_file = result_directory / "result.creating"
 
     if not filename.is_file():
         yield None
