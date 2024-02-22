@@ -22,6 +22,7 @@ from typing_extensions import Self
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
+from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import (
@@ -204,6 +205,77 @@ class GlobalSensitivityAnalysisMetadata:
             return cls(
                 gsa_items=map_data(loaded_metadata), result_directory=result_directory
             )
+
+
+@attr.s(slots=True, hash=False)
+class HistoryMatchingMetadata:
+    """
+    Holder for the History Matching results metadata.
+    
+    :ivar hm_items:
+        Map of the data id and its associated metadata.
+    :ivar result_directory:
+        The directory in which the result is saved.
+    """
+
+    @attr.s(slots=True, hash=False)
+    class HMItem:
+        """
+        Metadata associated with each item of the HM results.
+
+        :ivar parametric_var_name:
+            The name of the associated parametric var.
+        :ivar parametric_var_id:
+            The id of the associated parametric var.
+        :ivar data_index:
+            The index of the data in the result datasets.
+        """
+        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        data_index: int = attr.ib(validator=attr.validators.instance_of(int))
+        
+        @classmethod
+        def from_dict(cls, data: Dict[str, Any]) -> Self:
+            """
+            Parse a dict into a HM item.
+
+            :raises: KeyError if some expected key is not present in the given data dict.
+            """
+            return cls(
+                data_index=data['data_index'],
+                parametric_var_name=data['parametric_var_name'],
+                parametric_var_id=data['parametric_var_id'],
+            )
+
+    hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+
+    @classmethod
+    def empty(cls, result_directory: Path) -> Self:
+        return cls(hm_items={}, result_directory=result_directory)
+    
+    @classmethod
+    def from_result_directory(cls, result_directory: Path) -> Self:
+        """
+        Read History Matching results metadata from result directory/file.
+        
+        If the directory does not exist/is invalid, return an empty metadata.
+        """
+
+        def map_data(hm_metadata: Dict) -> Dict[str, HistoryMatchingMetadata.HMItem]:
+            return {
+                key: HistoryMatchingMetadata.HMItem.from_dict(data)
+                for key, data in hm_metadata.items()
+            }
+
+        with open_history_matching_result_file(result_directory=result_directory) as result_file:
+            if not result_file:
+                return cls.empty(result_directory=result_directory)
+
+            loaded_metadata = json.loads(
+                result_file[META_GROUP_NAME].attrs[HISTORY_MATCHING_GROUP_NAME]
+            )
+            return cls(hm_items=map_data(loaded_metadata), result_directory=result_directory)
 
 
 @attr.s(slots=True, hash=False)
@@ -1621,3 +1693,37 @@ def read_global_sensitivity_coefficients(
         gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
         coefficients_dset = gsa_group["global_sensitivity_analysis"]
         return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+
+
+@contextmanager
+def open_history_matching_result_file(result_directory: Path) -> Iterator[Optional[h5py.File]]:
+    """
+    Open a History Matching result file.
+    
+    :param result_directory:
+        The UQ main result directory.
+    """
+    hm_results_path = result_directory.joinpath('history_matching/results')
+    with _open_uq_result_file(hm_results_path) as file:
+        yield file
+
+
+@contextmanager
+def _open_uq_result_file(result_directory: Path) -> Iterator[Optional[h5py.File]]:
+    """
+    Open a Uncertainty Quantification Analysis result file when it exists and is not being created.
+    
+    :param result_directory:
+        The result directory for the given analysis.
+    """
+    filename = result_directory / 'result'
+    ignored_file = result_directory / 'result.creating'
+
+    if not filename.is_file():
+        yield None
+    # Avoid to read result files with incomplete metadata.
+    elif not ignored_file.is_file():
+        with _open_result_file(filename) as file:
+            yield file
+    else:
+        yield None
