@@ -2,6 +2,7 @@ import itertools
 import re
 from pathlib import Path
 from typing import List
+from typing import Literal
 
 import attr
 import numpy
@@ -10,6 +11,7 @@ from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
 from alfasim_sdk.result_reader.aggregator import concatenate_metadata
+from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
 from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_meta_data,
@@ -18,6 +20,8 @@ from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_time_set,
 )
 from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
+from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
+from alfasim_sdk.result_reader.aggregator import read_history_matching_result
 from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_local_statistics
 from alfasim_sdk.result_reader.aggregator import read_time_sets
@@ -301,7 +305,7 @@ def test_read_time_sets(
     num_regression.check({str(k): v for k, v in time_sets.items()})
 
 
-def test_read_empty_uq_metadata(datadir: Path) -> None:
+def test_read_empty_gsa_metadata(datadir: Path) -> None:
     fake_uq_dir = datadir / "fake_uq_dir"
 
     uq_metadata = read_global_sensitivity_analysis_meta_data(
@@ -317,7 +321,7 @@ def test_read_empty_uq_metadata(datadir: Path) -> None:
     assert uq_metadata.gsa_items == {}
 
 
-def test_read_uq_metadata(global_sa_results_dir: Path) -> None:
+def test_read_gsa_metadata(global_sa_results_dir: Path) -> None:
     uq_metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     global_gsa_meta_data = uq_metadata.gsa_items
     meta_var_1 = global_gsa_meta_data["temperature::parametric_var_1@trend_id_1"]
@@ -333,7 +337,7 @@ def test_read_uq_metadata(global_sa_results_dir: Path) -> None:
     assert meta_var_2.parametric_var_name == "B"
 
 
-def test_read_uq_timeset(global_sa_results_dir: Path) -> None:
+def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
     time_set = read_global_sensitivity_analysis_time_set(
         result_directory=global_sa_results_dir
     )
@@ -354,7 +358,7 @@ def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> Non
     assert numpy.all(data == (12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7))
 
 
-def test_read_incomplete_uq_metadata(global_sa_results_dir: Path) -> None:
+def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
     """
     When a .creating result file exists in the results folder,
     the metadata is incomplete, so they will be not read.
@@ -370,3 +374,108 @@ def test_read_incomplete_uq_metadata(global_sa_results_dir: Path) -> None:
         metadata=gsa_meta_data,
     )
     assert coefficients is None
+
+
+def test_read_history_matching_result_metadata(
+    hm_probabilistic_results_dir: Path,
+) -> None:
+    """
+    Check reading the HM metadata from a probabilistic result file, which should be enough to
+    evaluate the deterministic metadata too as they are handled exactly the same.
+    """
+    hm_results_dir = hm_probabilistic_results_dir
+
+    # Existent and completed result file, metadata should be filled.
+    metadata = read_history_matching_metadata(hm_results_dir)
+
+    assert metadata.result_directory == hm_results_dir
+    items_meta = metadata.hm_items
+
+    expected_meta1 = HistoryMatchingMetadata.HMItem(
+        parametric_var_id="parametric_var_1",
+        parametric_var_name="mg",
+        min_value=0.0,
+        max_value=1.0,
+        data_index=0,
+    )
+
+    expected_meta2 = HistoryMatchingMetadata.HMItem(
+        parametric_var_id="parametric_var_2",
+        parametric_var_name="mo",
+        min_value=2.5,
+        max_value=7.5,
+        data_index=1,
+    )
+
+    assert items_meta["parametric_var_1"] == expected_meta1
+    assert items_meta["parametric_var_2"] == expected_meta2
+
+    # Result file still being created, metadata should be empty.
+    creating_file = hm_results_dir / "result.creating"
+    creating_file.touch()
+
+    metadata = read_history_matching_metadata(hm_results_dir)
+    assert metadata.result_directory == hm_results_dir
+    assert metadata.hm_items == {}
+
+    creating_file.unlink()
+
+    # Non-existent result directory, metadata should be empty.
+    unexistent_result_dir = Path("foo/bar")
+    metadata = read_history_matching_metadata(unexistent_result_dir)
+    assert metadata.result_directory == unexistent_result_dir
+    assert metadata.hm_items == {}
+
+
+@pytest.mark.parametrize("hm_type", ("probabilistic", "deterministic"))
+def test_read_history_matching_result_data(
+    hm_probabilistic_results_dir: Path,
+    hm_deterministic_results_dir: Path,
+    hm_type: Literal["probabilistic", "deterministic"],
+) -> None:
+    """
+    Check reading the result of both HM type analysis. Both results are available simultaneously by
+    the means of the fixtures, but only one is used at a time.
+    """
+    # Setup.
+    if hm_type == "probabilistic":
+        expected_results = ([0.1, 0.22, 1.0, 0.8, 0.55], [3.0, 6.0, 5.1, 4.7, 6.3])
+        results_dir = hm_probabilistic_results_dir
+    else:
+        assert hm_type == "deterministic"
+        expected_results = (0.1, 3.2)
+        results_dir = hm_deterministic_results_dir
+
+    metadata = read_history_matching_metadata(results_dir)
+
+    # Read the result of a single parametric var entry.
+    result = read_history_matching_result(
+        metadata, hm_type=hm_type, hm_result_key="parametric_var_1"
+    )
+    assert len(result) == 1
+    assert result["parametric_var_1"] == pytest.approx(expected_results[0])
+
+    # Read the result of all entries.
+    result = read_history_matching_result(metadata, hm_type=hm_type)
+    assert len(result) == 2
+    assert result["parametric_var_1"] == pytest.approx(expected_results[0])
+    assert result["parametric_var_2"] == pytest.approx(expected_results[1])
+
+    # Unexistent result key, result should be empty.
+    result = read_history_matching_result(
+        metadata, hm_type=hm_type, hm_result_key="foo"
+    )
+    assert result == {}
+
+    # Result still being created, result should be empty.
+    creating_file = results_dir / "result.creating"
+    creating_file.touch()
+
+    result = read_history_matching_result(metadata, hm_type=hm_type)
+    assert result == {}
+
+    creating_file.unlink()
+
+    # Receiving an invalid History Matching type should raise.
+    with pytest.raises(ValueError, match="type `foobar` not supported"):
+        read_history_matching_result(metadata, "foobar")  # type: ignore
