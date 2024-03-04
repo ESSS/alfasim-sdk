@@ -10,8 +10,10 @@ from typing import DefaultDict
 from typing import Dict
 from typing import Iterator
 from typing import List
+from typing import Literal
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import attr
 import h5py
@@ -21,6 +23,13 @@ from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
+from alfasim_sdk.result_reader.aggregator_constants import (
+    HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
+)
+from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
+from alfasim_sdk.result_reader.aggregator_constants import (
+    HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
 )
 from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
@@ -69,6 +78,10 @@ A map of base time steps to the metadata contained in the respective result file
 All the metadata will represents the same kind of output (profiles/trends).
 """
 
+HistoryMatchingResultKeyType = str
+"""\
+A HM result key is simply the id of the parametric var associated with that particular result.
+"""
 
 TimeSetInfoItem = namedtuple("TimeSetInfoItem", "global_start size uuid")
 TimeSetInfo = Dict[int, TimeSetInfoItem]
@@ -192,8 +205,8 @@ class GlobalSensitivityAnalysisMetadata:
                 for key, data in gsa_metadata.items()
             }
 
-        with open_global_sensitivity_analysis_result_file(
-            result_directory=result_directory
+        with open_result_file(
+            result_directory, result_filename="uq_result"
         ) as result_file:
             if not result_file:
                 return cls.empty(result_directory=result_directory)
@@ -203,6 +216,106 @@ class GlobalSensitivityAnalysisMetadata:
             )
             return cls(
                 gsa_items=map_data(loaded_metadata), result_directory=result_directory
+            )
+
+
+@attr.s(slots=True, hash=False)
+class HistoryMatchingMetadata:
+    """
+    Holder for the History Matching results metadata.
+
+    :ivar hm_items:
+        Map of the data id and its associated metadata.
+    :ivar objective_functions:
+        Map of observed curve id to a dict of Quantity of Interest data, populated with keys
+        'trend_id' and 'property_id'. This represents the setup for this HM analysis.
+    :ivar result_directory:
+        The directory in which the result is saved.
+    """
+
+    @attr.s(slots=True, hash=False)
+    class HMItem:
+        """
+        Metadata associated with each item of the HM results.
+
+        :ivar parametric_var_id:
+            The id of the associated parametric var.
+        :ivar parametric_var_name:
+            The name of the associated parametric var.
+        :ivar min_value:
+            Lower limit of the specified range for the parametric var.
+        :ivar max_value:
+            Upper limit of the specified range for the parametric var.
+        :ivar data_index:
+            The index of the data in the result datasets.
+        """
+
+        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
+        min_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        max_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        data_index: int = attr.ib(validator=attr.validators.instance_of(int))
+
+        @classmethod
+        def from_dict(cls, data: Dict[str, Any]) -> Self:
+            """
+            Parse a dict into a HM item.
+
+            :raises: KeyError if some expected key is not present in the given data dict.
+            """
+            return cls(
+                parametric_var_name=data["parametric_var_name"],
+                parametric_var_id=data["parametric_var_id"],
+                min_value=data["min_value"],
+                max_value=data["max_value"],
+                data_index=data["data_index"],
+            )
+
+    hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    objective_functions: Dict[str, Dict[str, str]] = attr.ib(
+        validator=attr.validators.instance_of(Dict)
+    )
+    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+
+    @classmethod
+    def empty(cls, result_directory: Path) -> Self:
+        return cls(
+            hm_items={}, objective_functions={}, result_directory=result_directory
+        )
+
+    @classmethod
+    def from_result_directory(cls, result_directory: Path) -> Self:
+        """
+        Read History Matching results metadata from result directory/file.
+
+        If result file is not ready or doesn't exist, return an empty metadata.
+        """
+
+        def map_data(hm_metadata: Dict) -> Dict[str, HistoryMatchingMetadata.HMItem]:
+            return {
+                key: HistoryMatchingMetadata.HMItem.from_dict(data)
+                for key, data in hm_metadata.items()
+            }
+
+        with open_result_file(result_directory) as result_file:
+            if not result_file:
+                return cls.empty(result_directory=result_directory)
+
+            loaded_metadata = json.loads(
+                result_file[META_GROUP_NAME].attrs[HISTORY_MATCHING_GROUP_NAME]
+            )
+
+            if len(loaded_metadata) == 0:
+                return cls.empty(result_directory=result_directory)
+
+            objective_functions = list(loaded_metadata.values())[0][
+                "objective_functions"
+            ]
+
+            return cls(
+                hm_items=map_data(loaded_metadata),
+                objective_functions=objective_functions,
+                result_directory=result_directory,
             )
 
 
@@ -1556,28 +1669,6 @@ def concatenate_metadata(
     )
 
 
-@contextmanager
-def open_global_sensitivity_analysis_result_file(
-    result_directory: Path,
-) -> Iterator[Optional[h5py.File]]:
-    """
-    Open a global sensitivity analysis result file.
-    :param result_directory:
-        The path to result directory.
-    """
-    filename = result_directory / "uq_result"
-    ignored_file = result_directory / "uq_result.creating"
-
-    if not filename.is_file():
-        yield None
-    # Avoid to read result files with incomplete metadata.
-    elif not ignored_file.is_file():
-        with _open_result_file(filename) as file:
-            yield file
-    else:
-        yield None
-
-
 def read_global_sensitivity_analysis_meta_data(
     result_directory: Path,
 ) -> Optional[GlobalSensitivityAnalysisMetadata]:
@@ -1596,9 +1687,7 @@ def read_global_sensitivity_analysis_time_set(
     """
     Get the time set for sensitivity analysis results.
     """
-    with open_global_sensitivity_analysis_result_file(
-        result_directory=result_directory
-    ) as result_file:
+    with open_result_file(result_directory, result_filename="uq_result") as result_file:
         if not result_file:
             return
         return result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]["time_set"][:]
@@ -1615,9 +1704,87 @@ def read_global_sensitivity_coefficients(
     if not metadata.gsa_items:
         return None
     meta = metadata.gsa_items[coefficients_key]
-    with open_global_sensitivity_analysis_result_file(
-        metadata.result_directory
+    with open_result_file(
+        metadata.result_directory, result_filename="uq_result"
     ) as result_file:
         gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
         coefficients_dset = gsa_group["global_sensitivity_analysis"]
         return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+
+
+def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMetadata:
+    """
+    :param result_directory:
+        The directory to lookup for the History Matching result file.
+    """
+    return HistoryMatchingMetadata.from_result_directory(result_directory)
+
+
+def read_history_matching_result(
+    metadata: HistoryMatchingMetadata,
+    hm_type: Literal["deterministic", "probabilistic"],
+    hm_result_key: Optional[HistoryMatchingResultKeyType] = None,
+) -> Dict[HistoryMatchingResultKeyType, Union[np.ndarray, float]]:
+    """
+    :param metadata:
+        History Matching result metadata.
+    :param hm_type:
+        The type of HM analysis. Can be 'deterministic' or 'probabilistic'.
+    :param hm_result_key:
+        The id of the parametric vars to collect the result. Defaults to None, in which case the
+        result of all keys found in the metadata will be returned.
+    :return:
+        A dict mapping the HM result key (the parametric var id) to its corresponding result, which
+        could be an array with N values (N being the sampling size) for the probabilistic or a single
+        float for the deterministic.
+    """
+    if hm_type not in ("deterministic", "probabilistic"):
+        raise ValueError(f"history matching of type `{hm_type}` not supported")
+
+    if hm_type == "deterministic":
+        dataset_key = HISTORY_MATCHING_DETERMINISTIC_DSET_NAME
+    else:
+        assert hm_type == "probabilistic"
+        dataset_key = HISTORY_MATCHING_PROBABILISTIC_DSET_NAME
+
+    with open_result_file(metadata.result_directory) as result_file:
+        if not result_file:
+            return {}
+
+        result = result_file[HISTORY_MATCHING_GROUP_NAME][dataset_key]
+
+        result_map = {}
+        if hm_result_key is None:
+            for key, meta in metadata.hm_items.items():
+                result_map[key] = result[meta.data_index]
+        else:
+            meta = metadata.hm_items.get(hm_result_key)
+            if meta is not None:
+                result_map[hm_result_key] = result[meta.data_index]
+
+        return result_map
+
+
+@contextmanager
+def open_result_file(
+    result_directory: Path, result_filename: str = "result"
+) -> Iterator[Optional[h5py.File]]:
+    """
+    :param result_directory:
+        The directory to lookup for the result file.
+    :param result_filename:
+        The filename.
+    :return:
+        The result HDF file, or None if it doesn't exist or is still being created.
+    """
+    filepath = result_directory / result_filename
+    creating_file = result_directory / f"{result_filename}.creating"
+
+    if not filepath.is_file():
+        yield None
+    # Do not open incomplete file.
+    elif creating_file.is_file():
+        yield None
+    else:
+        with _open_result_file(filepath) as file:
+            yield file
