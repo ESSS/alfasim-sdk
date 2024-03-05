@@ -177,6 +177,64 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
     substituted by ``field_idx`` and it would be performed to each `field`.
     """
 
+def update_plugins_secondary_variables_time_explicit(ctx: "void*") -> "int":
+    """
+    **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT(void* ctx)``
+
+    Internal simulator hook to update plugin's secondary variables time explicit.
+    This is called only once at the end of ALFAsim's update internal secondary variables workflow.
+
+    :param ctx: ALFAsim's plugins context
+    :returns: Return OK if successful or anything different if failed
+
+    Example of usage:
+
+    .. code-block:: c++
+        :linenos:
+        :emphasize-lines: 1
+
+        HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT(ctx)
+        {
+            int errcode = -1;
+            int size_U = -1;
+            int size_E = -1;
+            int liq_id = -1;
+            errcode = alfasim_sdk_api.get_field_id(
+                ctx, &oil_id, "oil");
+            double* vel;
+            VariableScope Fields_OnFaces = {
+                GridScope::FACE,
+                MultiFieldDescriptionScope::FIELD,
+                TimestepScope::CURRENT
+            }
+            errcode = alfasim_sdk_api.get_simulation_array(
+                ctx, &vel, (char*) "U", Fields_OnFaces, liq_id, &size_U);
+            double* kinetic_energy;
+            char* name = "kinetic_energy_of_oil";
+            int global_idx = 0;
+            errcode = alfasim_sdk_api.get_plugin_variable(
+                ctx,
+                (void**) (&kinetic_energy),
+                name,
+                global_idx,
+                TimestepScope::CURRENT,
+                &size_E);
+            if (size_U != size_E){
+                return OUT_OF_BOUNDS;
+            }
+            for (int i =0; i < size_U; ++i){
+                kinetic_energy[i] = vel[i] * vel[i] / 2.;
+            }
+            return OK;
+        }
+
+    In the example above the variable ``kinetic_energy_of_oil`` was registered as a global variable, but its value is
+    obtained for `oil field` and only at the end of the time steps' linear solver (explicit approach). If this
+    variable would be calculated to all fields then the ``global_idx`` would be substituted by ``field_idx`` and it
+    would be performed to each `field`.
+    """
+
+
 
 def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
     """
@@ -1985,6 +2043,7 @@ specs = HookSpecs(
         finalize,
         # Update secondary variables registered by plugin
         update_plugins_secondary_variables_on_first_timestep,
+        update_plugins_secondary_variables_time_explicit,
         update_plugins_secondary_variables,
         update_plugins_secondary_variables_on_tracer_solver,
         # Calculate source terms
