@@ -1722,7 +1722,7 @@ def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMet
 def read_history_matching_result(
     metadata: HistoryMatchingMetadata,
     hm_type: Literal["deterministic", "probabilistic"],
-    hm_result_key: HistoryMatchingResultKeyType | None = None,
+    hm_result_key: Optional[HistoryMatchingResultKeyType] = None,
 ) -> Dict[HistoryMatchingResultKeyType, np.ndarray | float]:
     """
     :param metadata:
