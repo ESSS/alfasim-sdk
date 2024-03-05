@@ -3,6 +3,10 @@ TRENDS_META_ATTR_NAME = "trends"
 GLOBAL_SENSITIVITY_ANALYSIS_META_ATTR_NAME = "global_sensitivity_analysis"
 GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME = "global_sensitivity_analysis"
 
+HISTORY_MATCHING_GROUP_NAME = "history_matching"
+HISTORY_MATCHING_DETERMINISTIC_DSET_NAME = "deterministic_values"
+HISTORY_MATCHING_PROBABILISTIC_DSET_NAME = "probabilistic_distributions"
+
 TIME_SET_DSET_NAME = "time_set"
 
 META_GROUP_NAME = "meta"
