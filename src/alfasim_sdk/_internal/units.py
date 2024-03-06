@@ -116,6 +116,7 @@ def register_units() -> None:
     velocity_units.remove("mm/min")
     velocity_units.remove("in/d")
     velocity_units.remove("in/h")
+    velocity_units.append("mm/a")
     db.AddCategory(
         "velocity", quantity_type="velocity", valid_units=velocity_units, override=True
     )
