@@ -95,6 +95,8 @@ variable update once at the end of the timestep by using :py:func:`HOOK_UPDATE_P
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep
 
+.. autofunction:: alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_time_explicit
+
 The |alfasim|'s Solver is divided in two *non-linear solvers* solvers that will solve different group of equations. The first one is
 the `hydrodynamic solver` which solves the Mass Conservation of fields, Momentum Conservation of layers and Energy Conservation
 equations all together for all elements in the network. The second one is the `Tracer Solver` which solves the Mass Conservation
