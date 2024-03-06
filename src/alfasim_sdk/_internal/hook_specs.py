@@ -177,6 +177,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
     substituted by ``field_idx`` and it would be performed to each `field`.
     """
 
+
 def update_plugins_secondary_variables_time_explicit(ctx: "void*") -> "int":
     """
     **c++ signature** : ``HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT(void* ctx)``
@@ -233,7 +234,6 @@ def update_plugins_secondary_variables_time_explicit(ctx: "void*") -> "int":
     variable would be calculated to all fields then the ``global_idx`` would be substituted by ``field_idx`` and it
     would be performed to each `field`.
     """
-
 
 
 def update_plugins_secondary_variables_on_first_timestep(ctx: "void*") -> "int":
