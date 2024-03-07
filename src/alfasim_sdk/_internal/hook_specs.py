@@ -142,7 +142,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
             int errcode = -1;
             int size_U = -1;
             int size_E = -1;
-            int liq_id = -1;
+            int oil_id = -1;
             errcode = alfasim_sdk_api.get_field_id(
                 ctx, &oil_id, "oil");
             double* vel;
@@ -152,7 +152,7 @@ def update_plugins_secondary_variables(ctx: "void*") -> "int":
                 TimestepScope::CURRENT
             }
             errcode = alfasim_sdk_api.get_simulation_array(
-                ctx, &vel, (char*) "U", Fields_OnFaces, liq_id, &size_U);
+                ctx, &vel, (char*) "U", Fields_OnFaces, oil_id, &size_U);
             double* kinetic_energy;
             char* name = "kinetic_energy_of_oil";
             int global_idx = 0;
