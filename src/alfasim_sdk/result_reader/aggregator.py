@@ -1777,13 +1777,13 @@ def open_result_file(
         The result HDF file, or None if it doesn't exist or is still being created.
     """
     filepath = result_directory / result_filename
-    ignored_file = result_directory / f"{result_filename}.creating"
+    creating_file = result_directory / f"{result_filename}.creating"
 
     if not filepath.is_file():
         yield None
-    # Avoid to read result files with incomplete metadata.
-    elif not ignored_file.is_file():
+    # Do not open incomplete file.
+    elif creating_file.is_file():
+        yield None
+    else:
         with _open_result_file(filepath) as file:
             yield file
-    else:
-        yield None

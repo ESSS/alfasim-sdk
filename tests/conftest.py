@@ -280,53 +280,51 @@ def _create_and_populate_hm_result_file(
     result_dir.mkdir(parents=True, exist_ok=True)
     result_filepath = result_dir / "result"
 
-    file = h5py.File(result_filepath, "x", libver="latest", locking=False)
-    meta_group = file.create_group(META_GROUP_NAME, track_order=True)
-    data_group = file.create_group(HISTORY_MATCHING_GROUP_NAME, track_order=True)
+    with h5py.File(result_filepath, "x", libver="latest", locking=False) as file:
+        meta_group = file.create_group(META_GROUP_NAME, track_order=True)
+        data_group = file.create_group(HISTORY_MATCHING_GROUP_NAME, track_order=True)
 
-    dataset = data_group.create_dataset(
-        dataset_key,
-        shape=result.shape,
-        dtype=np.float64,
-        maxshape=tuple(None for _ in result.shape),
-    )
+        dataset = data_group.create_dataset(
+            dataset_key,
+            shape=result.shape,
+            dtype=np.float64,
+            maxshape=tuple(None for _ in result.shape),
+        )
 
-    objective_functions = {
-        "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
-        "observed_curve_2": {"trend_id": "trend_2", "property_id": "pressure"},
-    }
+        objective_functions = {
+            "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
+            "observed_curve_2": {"trend_id": "trend_2", "property_id": "pressure"},
+        }
 
-    fake_meta = {
-        "parametric_var_1": {
-            "parametric_var_id": "parametric_var_1",
-            "parametric_var_name": "mg",
-            "min_value": limits[0][0],
-            "max_value": limits[0][1],
-            "objective_functions": objective_functions,
-            "data_index": 0,
-        },
-        "parametric_var_2": {
-            "parametric_var_id": "parametric_var_2",
-            "parametric_var_name": "mo",
-            "min_value": limits[1][0],
-            "max_value": limits[1][1],
-            "objective_functions": objective_functions,
-            "data_index": 1,
-        },
-    }
+        fake_meta = {
+            "parametric_var_1": {
+                "parametric_var_id": "parametric_var_1",
+                "parametric_var_name": "mg",
+                "min_value": limits[0][0],
+                "max_value": limits[0][1],
+                "objective_functions": objective_functions,
+                "data_index": 0,
+            },
+            "parametric_var_2": {
+                "parametric_var_id": "parametric_var_2",
+                "parametric_var_name": "mo",
+                "min_value": limits[1][0],
+                "max_value": limits[1][1],
+                "objective_functions": objective_functions,
+                "data_index": 1,
+            },
+        }
 
-    meta_group.attrs[HISTORY_MATCHING_GROUP_NAME] = json.dumps(fake_meta)
-    dataset[:] = result
+        meta_group.attrs[HISTORY_MATCHING_GROUP_NAME] = json.dumps(fake_meta)
+        dataset[:] = result
 
-    file.swmr_mode = True
-    file.close()
+        file.swmr_mode = True
 
 
 @pytest.fixture()
 def hm_probabilistic_results_dir(datadir: Path) -> Path:
     """
-    Crete a History Matching result folder with a populated result file for each type of analysis
-    (probabilistic and deterministic).
+    Create a History Matching Probabilistic result folder with a populated HDF5 file.
     """
     import numpy as np
 
@@ -349,8 +347,7 @@ def hm_probabilistic_results_dir(datadir: Path) -> Path:
 @pytest.fixture()
 def hm_deterministic_results_dir(datadir: Path) -> Path:
     """
-    Crete a History Matching result folder with a populated result file for each type of analysis
-    (probabilistic and deterministic).
+    Create a History Matching Deterministic result folder with a populated HDF5 file.
     """
     import numpy as np
 
