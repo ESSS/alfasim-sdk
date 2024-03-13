@@ -13,4 +13,5 @@
     :"m/h": metres/hour
     :"m/min": meter per minute
     :"m/s": metres/second
+    :"mm/a": millimetres/year
     :"mm/s": millimetres/second
