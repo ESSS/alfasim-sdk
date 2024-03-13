@@ -13,6 +13,7 @@ from typing import List
 from typing import Literal
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 import attr
 import h5py
@@ -1723,7 +1724,7 @@ def read_history_matching_result(
     metadata: HistoryMatchingMetadata,
     hm_type: Literal["deterministic", "probabilistic"],
     hm_result_key: Optional[HistoryMatchingResultKeyType] = None,
-) -> Dict[HistoryMatchingResultKeyType, np.ndarray | float]:
+) -> Dict[HistoryMatchingResultKeyType, Union[np.ndarray, float]]:
     """
     :param metadata:
         History Matching result metadata.
