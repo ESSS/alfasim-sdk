@@ -83,8 +83,7 @@ is called, but if it is running the `first time step`
 :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep>`
 is called before. It is necessary because usually during the `first time step` some initialization tasks are needed. Then,
 if the plugin needs to initialize with some value that is different from the initial ``nan`` value, this hook is the place to do that.
-For situations where computations inside hooks are extremely heavy, there is also the possibility to only do the secondary
-variable update once at the end of the timestep by using :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_time_explicit>`
+Another possibility is to update secondary variables explicitly on timestep. For that :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_time_explicit>` can be used and it will be called once at the end of the timestep. This hook is important in situations where the secondary variable doesn't affect the solution or when secondary variable computations are extremely heavy, in which computational time would be prohibited.
 
 .. note::
     Different from plugin internal data, the secondary variables registered by plugins are allocated, deallocated and
