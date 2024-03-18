@@ -1293,21 +1293,21 @@ def _read_time_sets(
         _TREND_ID_ATTR: [initial_trends_time_step_index, final_trends_time_step_index],
     }
     if initial_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][0]
+        )
     if final_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][0]
+        )
     if initial_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][1]
+        )
     if final_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][1]
+        )
 
     cache = {}
     for time_set_key in time_sets_key_list:
