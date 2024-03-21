@@ -1,4 +1,5 @@
 """Top-level package for alfasim-sdk."""
+
 import pluggy
 
 from alfasim_sdk._internal import version
