@@ -367,7 +367,7 @@ def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
     When a .creating result file exists in the results folder,
     the metadata is incomplete, so they will be not read.
     """
-    creating_file = global_sa_results_dir / "uq_result.creating"
+    creating_file = global_sa_results_dir / "result.creating"
     creating_file.touch()
     gsa_time_set = read_global_sensitivity_analysis_time_set(global_sa_results_dir)
     assert gsa_time_set is None
