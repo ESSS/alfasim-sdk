@@ -206,7 +206,7 @@ class GlobalSensitivityAnalysisMetadata:
             }
 
         with open_result_file(
-            result_directory, result_filename="uq_result"
+            result_directory, result_filename="result"
         ) as result_file:
             if not result_file:
                 return cls.empty(result_directory=result_directory)
@@ -1687,7 +1687,7 @@ def read_global_sensitivity_analysis_time_set(
     """
     Get the time set for sensitivity analysis results.
     """
-    with open_result_file(result_directory, result_filename="uq_result") as result_file:
+    with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
             return
         return result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]["time_set"][:]
@@ -1705,7 +1705,7 @@ def read_global_sensitivity_coefficients(
         return None
     meta = metadata.gsa_items[coefficients_key]
     with open_result_file(
-        metadata.result_directory, result_filename="uq_result"
+        metadata.result_directory, result_filename="result"
     ) as result_file:
         gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
         coefficients_dset = gsa_group["global_sensitivity_analysis"]
