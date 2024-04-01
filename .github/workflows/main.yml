@@ -9,8 +9,6 @@ on:
       - v*
 
   pull_request:
-  schedule:
-  - cron: "0 2 * * *"
 
 jobs:
   test:
