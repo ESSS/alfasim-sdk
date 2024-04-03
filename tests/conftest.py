@@ -212,7 +212,7 @@ def global_sa_results_dir(datadir: Path) -> Path:
             for qoi in [10]
         ]
     )
-    file_name = result_dir / "uq_result"
+    file_name = result_dir / "result"
 
     file = h5py.File(file_name, "x", libver="latest", locking=False)
     meta_group = file.create_group(META_GROUP_NAME, track_order=True)
