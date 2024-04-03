@@ -2,8 +2,10 @@
 CHANGELOG
 =========
 
-0.20.0 (UNRELEASED)
+0.20.0 (2024-04-03)
 ===================
+
+* Version bump to synchronize with ALFAsim (no relevant changes).
 
 0.19.0 (2024-01-02)
 ===================
