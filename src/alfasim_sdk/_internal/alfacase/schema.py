@@ -1182,6 +1182,7 @@ case_description_schema = Map(
     {
         Optional("name"): Str(),
         Optional("alfasim_version_info"): alfasim_version_info_schema,
+        Optional("comment"): Str(),
         Optional("physics"): physics_description_schema,
         Optional("time_options"): time_options_description_schema,
         Optional("numerical_options"): numerical_options_description_schema,
@@ -1197,4 +1198,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: ae776811fe0be7f058fb48481c278053)
+# [[[end]]] (checksum: c3e9dda5b6b211c66aef5f5b6f7ab550)
