@@ -5,8 +5,8 @@
     .. parsed-literal::
 
         class ProfileDescription
-            x_and_y: \ :class:`Optional <typing.Optional>`\[XAndYDescription] = None
-            length_and_elevation: \ :class:`Optional <typing.Optional>`\[LengthAndElevationDescription] = None
+            x_and_y: \ :class:`Optional <typing.Optional>`\[\ :class:`XAndYDescription <XAndYDescription>`\] = None
+            length_and_elevation: \ :class:`Optional <typing.Optional>`\[\ :class:`LengthAndElevationDescription <LengthAndElevationDescription>`\] = None
 
 .. tab:: Schema
 

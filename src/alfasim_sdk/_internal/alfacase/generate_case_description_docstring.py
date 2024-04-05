@@ -289,6 +289,8 @@ def union_formatted(value: Any) -> str:
 
     if isinstance(ref_value, enum.EnumMeta):
         name = enum_formatted(ref_value)
+    elif is_attrs(ref_value):
+        name = attrs_formatted(ref_value)
     elif is_array(ref_value):
         name = _get_array_reference()
     elif is_list(ref_value):

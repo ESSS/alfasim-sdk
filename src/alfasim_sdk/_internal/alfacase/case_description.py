@@ -3407,6 +3407,29 @@ class NumericalOptionsDescription:
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
 
 
+@attr.s(frozen=True)
+class AlfasimVersionInfo:
+    """
+    Information about the ALFAsim release used to generate the alfacase file.
+
+    Used for informational purposes only.
+
+    .. include:: /alfacase_definitions/AlfasimVersionInfo.txt
+    """
+
+    #: Platform alfasim was running.
+    platform: str = attr.ib()
+
+    #: Release version.
+    version: str = attr.ib()
+
+    #: Internal revision hash.
+    revision: str = attr.ib()
+
+    #: Release date in 'YYYY-MM-DD h:m:s' format.
+    date: str = attr.ib()
+
+
 @attr.s()
 class CaseDescription:
     """
@@ -3414,6 +3437,8 @@ class CaseDescription:
     """
 
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    alfasim_version_info = attrib_instance(AlfasimVersionInfo, is_optional=True)
+    comment: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
     physics = attrib_instance(PhysicsDescription)
     time_options = attrib_instance(TimeOptionsDescription)
     numerical_options = attrib_instance(NumericalOptionsDescription)

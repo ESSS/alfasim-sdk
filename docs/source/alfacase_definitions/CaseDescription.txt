@@ -6,6 +6,7 @@
 
         class CaseDescription
             name: \ :class:`Optional <typing.Optional>`\[str] = None
+            alfasim_version_info: \ :class:`Optional <typing.Optional>`\[\ :class:`AlfasimVersionInfo <AlfasimVersionInfo>`\] = None
             physics: \ :class:`PhysicsDescription <PhysicsDescription>`\  = PhysicsDescription()
             time_options: \ :class:`TimeOptionsDescription <TimeOptionsDescription>`\  = TimeOptionsDescription()
             numerical_options: \ :class:`NumericalOptionsDescription <NumericalOptionsDescription>`\  = NumericalOptionsDescription()
@@ -25,6 +26,7 @@
     .. parsed-literal::
 
             name: string  # optional
+            alfasim_version_info: \ :class:`alfasim_version_info_schema <AlfasimVersionInfo>`\  # optional
             physics: \ :class:`physics_description_schema <PhysicsDescription>`\  # optional
             time_options: \ :class:`time_options_description_schema <TimeOptionsDescription>`\  # optional
             numerical_options: \ :class:`numerical_options_description_schema <NumericalOptionsDescription>`\  # optional
