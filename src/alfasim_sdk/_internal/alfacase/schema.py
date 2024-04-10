@@ -14,6 +14,14 @@ from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str
 
 
 
+alfasim_version_info_schema = Map(
+    {
+        "platform": Str(),
+        "version": Str(),
+        "revision": Str(),
+        "date": Str(),
+    }
+)
 bip_description_schema = Map(
     {
         "component_1": Str(),
@@ -1173,6 +1181,8 @@ well_description_schema = Map(
 case_description_schema = Map(
     {
         Optional("name"): Str(),
+        Optional("alfasim_version_info"): alfasim_version_info_schema,
+        Optional("comment"): Str(),
         Optional("physics"): physics_description_schema,
         Optional("time_options"): time_options_description_schema,
         Optional("numerical_options"): numerical_options_description_schema,
@@ -1188,4 +1198,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 1e7e310e1ec3e70295e333ccdf55e26e)
+# [[[end]]] (checksum: c3e9dda5b6b211c66aef5f5b6f7ab550)

@@ -1,0 +1,20 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class AlfasimVersionInfo
+            platform: str
+            version: str
+            revision: str
+            date: str
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            platform: string
+            version: string
+            revision: string
+            date: string

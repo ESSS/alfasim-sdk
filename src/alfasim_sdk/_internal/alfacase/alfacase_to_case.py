@@ -2009,6 +2009,7 @@ def load_case_description(
         'max_cfl_value': load_value,
         'friction_factor_evaluation_strategy': get_enum_loader(enum_class=constants.EvaluationStrategyType),
         'name': load_value,
+        'comment': load_value,
         'plugins': load_list_of_plugin,
         'positions': load_value,
         'tracers': load_tracers_description,

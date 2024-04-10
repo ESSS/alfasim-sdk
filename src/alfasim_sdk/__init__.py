@@ -33,6 +33,7 @@ from alfasim_sdk._internal.cli import console_main
 # ALFACase: Descriptions
 from alfasim_sdk._internal.alfacase.case_description import AnnulusDescription
 from alfasim_sdk._internal.alfacase.case_description import BipDescription
+from alfasim_sdk._internal.alfacase.case_description import AlfasimVersionInfo
 from alfasim_sdk._internal.alfacase.case_description import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description import CaseOutputDescription
 from alfasim_sdk._internal.alfacase.case_description import CasingDescription
@@ -352,6 +353,7 @@ __all__ = [
     "BaseField",
     "BipDescription",
     "Boolean",
+    "AlfasimVersionInfo",
     "CaseDescription",
     "CaseOutputDescription",
     "CasingDescription",
