@@ -466,6 +466,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.pvt_models_description_schema,
         is_dict=True,
     ),
+    "AlfasimVersionInfo": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.ALFASIM_VERSION_INFO,
+        schema=schema.alfasim_version_info_schema,
+    ),
     "CaseDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.CASE,
         schema=schema.case_description_schema,

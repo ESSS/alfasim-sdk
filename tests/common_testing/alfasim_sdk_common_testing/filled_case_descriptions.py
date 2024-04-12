@@ -725,6 +725,13 @@ TRACERS_DESCRIPTION = case_description.TracersDescription(
     }
 )
 
+ALFASIM_VERSION_INFO = case_description.AlfasimVersionInfo(
+    platform="linux64",
+    version="2024.1",
+    revision="0123456789abcdef",
+    date="2024-04-02 12:00",
+)
+
 CASE = case_description.CaseDescription(
     name="divergent_pipes",
     time_options=TIME_OPTIONS_DESCRIPTION,

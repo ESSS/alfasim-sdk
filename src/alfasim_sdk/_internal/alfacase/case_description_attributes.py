@@ -328,14 +328,23 @@ def attrib_curve(
     )
 
 
-def attrib_instance(type_: type) -> attr._make._CountingAttr:
+def attrib_instance(type_: type, is_optional: bool = False) -> attr._make._CountingAttr:
     """
     Create a new attr attribute with validator for the given type_
     """
+    validator = instance_of(type_)
     metadata = {"type": "instance", "class_": type_}
+
+    if is_optional:
+        default = None
+        validator = optional(validator)
+        type_ = Optional[type_]
+    else:
+        default = attr.Factory(type_)
+
     return attr.ib(
-        default=attr.Factory(type_),
-        validator=instance_of(type_),
+        default=default,
+        validator=validator,
         type=type_,
         metadata=metadata,
     )

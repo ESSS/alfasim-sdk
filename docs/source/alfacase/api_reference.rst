@@ -12,6 +12,8 @@ Case
 
 .. autoclass:: alfasim_sdk.CaseDescription()
 
+.. autoclass:: alfasim_sdk.AlfasimVersionInfo()
+
 .. _alfacase-reference-options-section:
 
 Options

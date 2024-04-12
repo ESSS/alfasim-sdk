@@ -403,6 +403,7 @@ def test_get_cases_class():
         "AnnulusDescription",
         "AnnulusEquipmentDescription",
         "BipDescription",
+        "AlfasimVersionInfo",
         "CaseDescription",
         "CaseOutputDescription",
         "CasingDescription",
