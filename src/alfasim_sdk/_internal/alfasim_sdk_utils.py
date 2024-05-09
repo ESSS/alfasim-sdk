@@ -99,7 +99,5 @@ def get_extras_default_required_version() -> str:
         greater or equal current version and lesser than next major release.
     """
     parts = get_current_version().split(".")
-    current_major = parts[0]
     current_minor = ".".join(parts[:2])
-    next_major = int(current_major) + 1
-    return f">={current_minor}, <{next_major}"
+    return f">={current_minor}"
