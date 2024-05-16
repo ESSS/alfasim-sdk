@@ -1207,6 +1207,9 @@ def load_node_description(
         "mass_source_properties": load_mass_source_node_properties_description,
         "internal_properties": load_internal_node_properties_description,
         "separator_properties": load_separator_node_properties_description,
+        "controller_properties": get_instance_loader(
+            class_=case_description.ControllerNodePropertiesDescription
+        ),
     }
 
     def generate_node_description(
