@@ -1733,7 +1733,7 @@ def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMet
 
 def read_history_matching_result(
     metadata: HistoryMatchingMetadata,
-    hm_type: Literal["deterministic", "probabilistic"],
+    hm_type: Literal["HM-deterministic", "HM-probabilistic"],
     hm_result_key: Optional[HistoryMatchingResultKeyType] = None,
 ) -> Dict[HistoryMatchingResultKeyType, Union[np.ndarray, float]]:
     """
@@ -1749,13 +1749,13 @@ def read_history_matching_result(
         could be an array with N values (N being the sampling size) for the probabilistic or a single
         float for the deterministic.
     """
-    if hm_type not in ("deterministic", "probabilistic"):
+    if hm_type not in ("HM-deterministic", "HM-probabilistic"):
         raise ValueError(f"history matching of type `{hm_type}` not supported")
 
-    if hm_type == "deterministic":
+    if hm_type == "HM-deterministic":
         dataset_key = HISTORY_MATCHING_DETERMINISTIC_DSET_NAME
     else:
-        assert hm_type == "probabilistic"
+        assert hm_type == "HM-probabilistic"
         dataset_key = HISTORY_MATCHING_PROBABILISTIC_DSET_NAME
 
     with open_result_file(metadata.result_directory) as result_file:
