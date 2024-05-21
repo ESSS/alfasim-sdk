@@ -635,9 +635,12 @@ PIPE_DESCRIPTION = case_description.PipeDescription(
 FORMATION_LAYER_DESCRIPTION = case_description.FormationLayerDescription(
     name="f", start=Scalar(1, "m"), material="Carbon Steel"
 )
+FORMATION_LAYER_DESCRIPTION_1 = case_description.FormationLayerDescription(
+    name="f (1)", start=Scalar(1, "m"), material="Carbon Steel"
+)
 FORMATION_DESCRIPTION = case_description.FormationDescription(
     reference_y_coordinate=Scalar(1, "m"),
-    layers=[FORMATION_LAYER_DESCRIPTION, FORMATION_LAYER_DESCRIPTION],
+    layers=[FORMATION_LAYER_DESCRIPTION, FORMATION_LAYER_DESCRIPTION_1],
 )
 
 LENGTH_AND_ELEVATION_DESCRIPTION = case_description.LengthAndElevationDescription(
@@ -898,7 +901,7 @@ PIG_DESCRIPTION = case_description.PigEquipmentDescription(
 CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerInputSignalPropertiesDescription(
         target_variable="pressure",
-        input_trend_name="observed_by_controller",
+        input_trend_name="Output Options > TrendOutDefinition",
         unit="bar",
     )
 )
@@ -907,7 +910,7 @@ CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerOutputSignalPropertiesDescription(
         controlled_property="opening",
         unit="%",
-        network_element_name="valve_1",
+        network_element_name="VALVE",
         min_value=0.0,
         max_value=1.0,
         max_rate_of_change=1.0,

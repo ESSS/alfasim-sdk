@@ -394,7 +394,11 @@ def test_read_history_matching_result_metadata(
     metadata = read_history_matching_metadata(hm_results_dir)
 
     assert metadata.result_directory == hm_results_dir
-    items_meta = metadata.hm_items
+    assert metadata.objective_functions == {
+        "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
+        "observed_curve_2": {"trend_id": "trend_2", "property_id": "pressure"},
+    }
+    assert metadata.parametric_vars == {"mg": 0.5, "mo": 4.0}
 
     expected_meta1 = HistoryMatchingMetadata.HMItem(
         parametric_var_id="parametric_var_1",
@@ -412,6 +416,7 @@ def test_read_history_matching_result_metadata(
         data_index=1,
     )
 
+    items_meta = metadata.hm_items
     assert items_meta["parametric_var_1"] == expected_meta1
     assert items_meta["parametric_var_2"] == expected_meta2
 

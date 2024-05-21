@@ -229,6 +229,9 @@ class HistoryMatchingMetadata:
     :ivar objective_functions:
         Map of observed curve id to a dict of Quantity of Interest data, populated with keys
         'trend_id' and 'property_id'. This represents the setup for this HM analysis.
+    :ivar parametric_vars:
+        Map of parametric vars to the values that represents the analysis, with all existent vars.
+        Values are either the optimal values (deterministic) or the base values (probabilistic).
     :ivar result_directory:
         The directory in which the result is saved.
     """
@@ -275,12 +278,18 @@ class HistoryMatchingMetadata:
     objective_functions: Dict[str, Dict[str, str]] = attr.ib(
         validator=attr.validators.instance_of(Dict)
     )
+    parametric_vars: Dict[str, float] = attr.ib(
+        validator=attr.validators.instance_of(Dict)
+    )
     result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
 
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
         return cls(
-            hm_items={}, objective_functions={}, result_directory=result_directory
+            hm_items={},
+            objective_functions={},
+            parametric_vars={},
+            result_directory=result_directory,
         )
 
     @classmethod
@@ -308,13 +317,15 @@ class HistoryMatchingMetadata:
             if len(loaded_metadata) == 0:
                 return cls.empty(result_directory=result_directory)
 
-            objective_functions = list(loaded_metadata.values())[0][
-                "objective_functions"
-            ]
+            some_item_metadata = list(loaded_metadata.values())[0]
+
+            objective_functions = some_item_metadata["objective_functions"]
+            parametric_vars = some_item_metadata["parametric_vars"]
 
             return cls(
                 hm_items=map_data(loaded_metadata),
                 objective_functions=objective_functions,
+                parametric_vars=parametric_vars,
                 result_directory=result_directory,
             )
 
