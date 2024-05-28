@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-2024.1 (UNRELEASED)
+2024.1 (2024-05-27)
 ===================
 
 * Changed version scheme to match the one used in ALFAsim.
