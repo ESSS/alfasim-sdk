@@ -4,11 +4,9 @@ import pytest
 @pytest.mark.parametrize(
     "version, expected",
     [
-        ("0.1.0", ">=0.1"),
-        ("1.0.0", ">=1.0"),
-        ("1.1.1", ">=1.1"),
-        ("2.0.1", ">=2.0"),
-        ("2.0.2", ">=2.0"),
+        ("0.1.0", ">=0.1.0"),
+        ("2024.1", ">=2024.1"),
+        ("2024.1.dev", ">=2024.1.dev"),
     ],
 )
 def test_get_extras_default_required_version(mocker, version, expected):

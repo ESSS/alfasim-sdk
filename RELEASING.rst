@@ -10,4 +10,4 @@ Any other required changes related to the release should also be included in the
 
 When all changes are ready the branch should be tagged ``v<release-number>`` and merged.
 
-After released, update `version.py <src/alfasim_sdk/_internal/version.py>`__ with the next release version planned for ALFAsim and add a new *unreleased* section to the ``CHANGELOG.rst``. Note that this version number appears on ALFAsim's About window, so should be done **before** the next ALFAsim planned release.
+After released, update `version.py <src/alfasim_sdk/_internal/version.py>`__ with the next release version planned for ALFAsim (adding the suffix `.dev`) and add a new *unreleased* section to the ``CHANGELOG.rst``. Note that this version number appears on ALFAsim's About window, so should be done **before** the next ALFAsim planned release.

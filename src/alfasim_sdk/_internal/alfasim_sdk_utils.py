@@ -94,10 +94,7 @@ def get_current_version() -> str:
 
 def get_extras_default_required_version() -> str:
     """
-    :return:
-        Returns a string with default alfasim-sdk version requirement for plugins. Default is
-        greater or equal current version and lesser than next major release.
+    Returns a string with default alfasim-sdk version requirement for plugins.
+    Default is greater or equal to current alfasim-sdk version.
     """
-    parts = get_current_version().split(".")
-    current_minor = ".".join(parts[:2])
-    return f">={current_minor}"
+    return f">={get_current_version()}"
