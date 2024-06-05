@@ -392,7 +392,9 @@ def test_msvc_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     assert spec_file.is_file()
     assert spec_file.stat().st_size > 0
 
-    subprocess.run([f"{invoke_cmd}", "msvc"])
+    extra_args = "--cmake-extra-args=-DTEST=ON"
+
+    subprocess.run([f"{invoke_cmd}", "msvc", extra_args])
 
     msvc_dir = new_plugin_dir / "msvc"
     sln_file = msvc_dir / (plugin_id + ".sln")

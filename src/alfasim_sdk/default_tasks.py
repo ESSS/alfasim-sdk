@@ -436,7 +436,7 @@ def clean(ctx):
 
 
 @sdk_task
-def msvc(ctx):
+def msvc(ctx, cmake_extra_args=""):
     """Create a MSVC solution file for the plugin."""
     if sys.platform != "win32":
         print_message(
@@ -457,7 +457,7 @@ def msvc(ctx):
 
     spec_file = plugin_folder / f"{plugin_id}.spec.yml"
     yaml = YAML(typ="safe")
-    specs = yaml.load(spec_file)
+    specs = yaml.load(spec_file.read_text())
     build_generator = get_msvc_cmake_generator(specs["msvc_compiler"])
     print_message(f"Build generator: {build_generator}", color=Fore.YELLOW, bright=True)
 
@@ -475,16 +475,22 @@ def msvc(ctx):
 
     sdk_include_dir = alfasim_sdk.get_alfasim_sdk_api_path()
 
-    subprocess.check_call(
-        [
-            "cmake",
-            f"-DSDK_INCLUDE_DIR={sdk_include_dir}",
-            f"-B{str(msvc_dir)}",
-            f"-H{plugin_folder}",
-            "-G",
-            build_generator,
-        ]
-    )
+    binary_directory_path = f"-B{str(msvc_dir)}"
+    home_directory_path = f"-H{plugin_folder}"
+    sdk_include_arg = f"-DSDK_INCLUDE_DIR={sdk_include_dir}"
+    cmake_args = [
+        sdk_include_arg,
+        binary_directory_path,
+        home_directory_path,
+        "-G",
+        build_generator,
+    ]
+
+    if cmake_extra_args:
+        cmake_args += cmake_extra_args.split(sep=" ")
+
+    cmake_cmd = shutil.which("cmake")
+    subprocess.check_call([f"{cmake_cmd}"] + cmake_args)
 
 
 def _remove_hmplugin_files(plugin_folder):
