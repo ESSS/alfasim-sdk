@@ -209,7 +209,7 @@ def _get_hook_specs_file_path() -> Path:
         "dst": "A path to where the output package should be created.",
     }
 )
-def package_only(ctx, package_name="", dst=os.getcwd()):
+def package_only(ctx, package_name="", dst=""):
     """
     Generate a `<package_name>.hmplugin` file with all the content from the directory
     assets and artifacts.
@@ -220,7 +220,12 @@ def package_only(ctx, package_name="", dst=os.getcwd()):
 
     # Set to the plugin root, where the tasks.py is located in the plugin structure
     plugin_dir = Path(ctx.config._project_prefix)
-    dst = Path(dst)
+
+    if dst:
+        dst = Path(dst)
+    else:
+        dst = plugin_dir
+
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
     from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
@@ -255,7 +260,7 @@ def package_only(ctx, package_name="", dst=os.getcwd()):
     }
 )
 def package(
-    ctx, package_name="", dst=os.getcwd(), debug=False, clean=False, cmake_extra_args=""
+    ctx, package_name="", dst="", debug=False, clean=False, cmake_extra_args=""
 ):
     """
     Create a new `<package-name>.hmplugin` file containing all the necessary files.
