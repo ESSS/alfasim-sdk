@@ -451,7 +451,7 @@ def test_read_history_matching_result_metadata(
     assert metadata.hm_items == {}
 
 
-@pytest.mark.parametrize("hm_type", ("probabilistic", "deterministic"))
+@pytest.mark.parametrize("hm_type", ("HM-probabilistic", "HM-deterministic"))
 def test_read_history_matching_result_data(
     hm_probabilistic_results_dir: Path,
     hm_deterministic_results_dir: Path,
@@ -462,11 +462,11 @@ def test_read_history_matching_result_data(
     the means of the fixtures, but only one is used at a time.
     """
     # Setup.
-    if hm_type == "probabilistic":
+    if hm_type == "HM-probabilistic":
         expected_results = ([0.1, 0.22, 1.0, 0.8, 0.55], [3.0, 6.0, 5.1, 4.7, 6.3])
         results_dir = hm_probabilistic_results_dir
     else:
-        assert hm_type == "deterministic"
+        assert hm_type == "HM-deterministic"
         expected_results = (0.1, 3.2)
         results_dir = hm_deterministic_results_dir
 
