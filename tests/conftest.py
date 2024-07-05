@@ -4,8 +4,6 @@ import shutil
 import textwrap
 from pathlib import Path
 from typing import List
-from typing import Sequence
-from typing import Tuple
 
 import h5py
 import numpy as np
@@ -275,7 +273,6 @@ def _create_and_populate_hm_result_file(
     result_dir: Path,
     result: np.ndarray,
     dataset_key: str,
-    limits: Sequence[Tuple[float, float]],
 ) -> None:
     result_dir.mkdir(parents=True, exist_ok=True)
     result_filepath = result_dir / "result"
@@ -295,22 +292,25 @@ def _create_and_populate_hm_result_file(
             "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
             "observed_curve_2": {"trend_id": "trend_2", "property_id": "pressure"},
         }
+        parametric_vars = {"mg": 0.5, "mo": 4.0}
 
         fake_meta = {
             "parametric_var_1": {
                 "parametric_var_id": "parametric_var_1",
                 "parametric_var_name": "mg",
-                "min_value": limits[0][0],
-                "max_value": limits[0][1],
+                "min_value": 0.0,
+                "max_value": 1.0,
                 "objective_functions": objective_functions,
+                "parametric_vars": parametric_vars,
                 "data_index": 0,
             },
             "parametric_var_2": {
                 "parametric_var_id": "parametric_var_2",
                 "parametric_var_name": "mo",
-                "min_value": limits[1][0],
-                "max_value": limits[1][1],
+                "min_value": 2.5,
+                "max_value": 7.5,
                 "objective_functions": objective_functions,
+                "parametric_vars": parametric_vars,
                 "data_index": 1,
             },
         }
@@ -332,13 +332,11 @@ def hm_probabilistic_results_dir(datadir: Path) -> Path:
     probabilistic_result = np.array(
         [[0.1, 0.22, 1.0, 0.8, 0.55], [3.0, 6.0, 5.1, 4.7, 6.3]]
     )
-    limits = [(0.0, 1.0), (2.5, 7.5)]
 
     _create_and_populate_hm_result_file(
         result_dir=result_dir,
         result=probabilistic_result,
         dataset_key=HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
-        limits=limits,
     )
 
     return result_dir
@@ -353,13 +351,11 @@ def hm_deterministic_results_dir(datadir: Path) -> Path:
 
     result_dir = datadir / "main-HM-deterministic"
     deterministic_result = np.array([0.1, 3.2])
-    limits = [(0.0, 1.0), (2.5, 7.5)]
 
     _create_and_populate_hm_result_file(
         result_dir=result_dir,
         result=deterministic_result,
         dataset_key=HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
-        limits=limits,
     )
 
     return result_dir

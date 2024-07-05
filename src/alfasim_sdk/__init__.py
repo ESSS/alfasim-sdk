@@ -302,6 +302,9 @@ from alfasim_sdk._internal.layout import tab
 from alfasim_sdk._internal.layout import tabs
 from alfasim_sdk._internal.layout import group
 
+# Plugins: Context
+from alfasim_sdk._internal.context import Context
+
 # Plugins: Models imports
 from alfasim_sdk._internal.models import container_model
 from alfasim_sdk._internal.models import data_model
@@ -362,6 +365,7 @@ __all__ = [
     "CompressorEquipmentDescription",
     "CompressorPressureTableDescription",
     "CompressorSpeedType",
+    "Context",
     "ControllerInputSignalPropertiesDescription",
     "ControllerNodePropertiesDescription",
     "ControllerOutputSignalPropertiesDescription",
