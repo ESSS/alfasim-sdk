@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="eb0d8492-4d1f-4fd2-8f45-05e697c214b2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/alfasim_sdk/result_reader/aggregator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/alfasim_sdk/result_reader/aggregator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/alfasim_sdk/result_reader/aggregator_constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/alfasim_sdk/result_reader/aggregator_constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/results/test_aggregator.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/results/test_aggregator.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../alfasim" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2ipnnYVekrctGk0xfVGBApYkI8m" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.pytest for test_aggregator.test_read_history_matching_result_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_aggregator.test_read_uncertainty_propagation_results.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_generator_source.testGlobalSensitivityAnalysisGenerator.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_generator_source.testUncertaintyPropagationGeneratorSource.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_global_sensitivity_analysis_editor.testGlobalSensitivityAnalysisPlot.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_jobs_getter.testGetUncertaintyPropagationJob.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_main_window.testCreatePlotViewPlain.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_main_window.testReOpenProjectWithSAEditorOpened.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_uncertainty_analyses_editor.testPropagationSmoke.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_uncertainty_analyses_editor.testQuantificationBasics.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_uncertainty_propagation.test_uncertainty_propagation.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_aggregator.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_alfasim_result.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_generator_source.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_global_sensitivity_analysis_editor.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_jobs_getter.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_main_window.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_uncertainty_analyses_editor.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_uncertainty_propagation.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.generator_source.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/users/gustavopb/Projects/alfasim-sdk&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Python tests.pytest for test_main_window.testReOpenProjectWithSAEditorOpened">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="alfasim-sdk" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="$PROJECT_DIR$/../../w/workspace_3/envs/alfasim_gui-py310" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <module name="alfasim" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="LIBGL_ALWAYS_SOFTWARE" value="1" />
+        <env name="QT_QUICK_BACKEND" value="software" />
+        <env name="QTWEBENGINE_CHROMIUM_FLAGS" value="&quot;--disable-gpu --no-sandbox&quot;" />
+      </envs>
+      <option name="SDK_HOME" value="python3.10" />
+      <option name="SDK_NAME" value="$PROJECT_DIR$/../../w/workspace_3/envs/alfasim_gui-py310" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_main_window.testCreatePlotViewPlain" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="alfasim" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="LIBGL_ALWAYS_SOFTWARE" value="1" />
+        <env name="QT_QUICK_BACKEND" value="software" />
+        <env name="QTWEBENGINE_CHROMIUM_FLAGS" value="&quot;--disable-gpu --no-sandbox&quot;" />
+      </envs>
+      <option name="SDK_HOME" value="python3.10" />
+      <option name="SDK_NAME" value="$PROJECT_DIR$/../../w/workspace_3/envs/alfasim_gui-py310" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../alfasim/alfasim_gui/source/python/alfasim_gui/plugins/_tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_main_window.testCreatePlotViewPlain&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_main_window.testReOpenProjectWithSAEditorOpened" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="alfasim" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="LIBGL_ALWAYS_SOFTWARE" value="1" />
+        <env name="QT_QUICK_BACKEND" value="software" />
+        <env name="QTWEBENGINE_CHROMIUM_FLAGS" value="&quot;--disable-gpu --no-sandbox&quot;" />
+        <env name="GALLIUM_DRIVER" value="llvmpipe" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../alfasim/alfasim_gui/source/python/alfasim_gui/plugins/_tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_main_window.testReOpenProjectWithSAEditorOpened&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python tests.pytest for test_main_window.testCreatePlotViewPlain" />
+      <item itemvalue="Python tests.pytest for test_main_window.testReOpenProjectWithSAEditorOpened" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest for test_main_window.testReOpenProjectWithSAEditorOpened" />
+        <item itemvalue="Python tests.pytest for test_main_window.testCreatePlotViewPlain" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="eb0d8492-4d1f-4fd2-8f45-05e697c214b2" name="Changes" comment="" />
+      <created>1720196553831</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1720196553831</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../alfasim/alfasim_core/source/python/alfasim_core/communication/app_facade.py</url>
+          <line>508</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../alfasim/alfasim_core/source/python/alfasim_core/curves/generator_source.py</url>
+          <line>125</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../alfasim/alfasim_core/source/python/alfasim_core/curves/generators.py</url>
+          <line>225</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/../etk/coilib50io/source/python/coilib50io/reader/reader.py</url>
+          <line>125</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

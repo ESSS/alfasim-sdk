@@ -16,7 +16,9 @@ from alfasim_sdk.result_reader.aggregator import (
     HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
-    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME, UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME, UNCERTAINTY_PROPAGATION_GROUP_NAME,
+    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS, UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
+    UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
@@ -272,6 +274,76 @@ def global_sa_results_dir(datadir: Path) -> Path:
     file.close()
     return result_dir
 
+@pytest.fixture()
+def up_results_dir(datadir: Path) -> Path:
+    """
+    Crete a uncertainty propagation analyses result folder
+    with a result file.
+    """
+
+    import numpy as np
+
+    result_dir = datadir / "fake_dir"
+    result_dir.mkdir(parents=True)
+    time_set = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+    realization_outputs = np.array(
+        [
+            [
+                [i + (qoi_index*10) + tl for tl in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)]
+                for qoi_index, trend_property in enumerate([('trend_id_1','temperature'), ('trend_id_1','absolute_pressure')])
+            ]
+            for i in range(5)
+        ]
+    )
+    file_name = result_dir / "result"
+    with h5py.File(file_name, "x", libver="latest", locking=False) as file:
+        meta_group = file.create_group(META_GROUP_NAME, track_order=True)
+        uncertainty_propagation_group = file.create_group(
+            UNCERTAINTY_PROPAGATION_GROUP_NAME, track_order=True
+        )
+        fake_meta = {
+            "temperature@trend_id_1": {
+                "property_id": "temperature",
+                "trend_id": "trend_id_1",
+                "category": "temperature",
+                "network_element_name": "Conexao 1",
+                "position": 100.0,
+                "position_unit": "m",
+                "unit": "K",
+                "samples": 5,
+                "sample_indexes": [[0,0], [0,1], [0,2],[0,3],[0,4]],
+                "result_index": 0,
+            },
+            "absolute_pressure@trend_id_1": {
+                "property_id": "absolute_pressure",
+                "trend_id": "trend_id_1",
+                "category": "pressure",
+                "network_element_name": "Conexao 1",
+                "position": 100.0,
+                "position_unit": "m",
+                "unit": "bar",
+                "samples": 5,
+                "sample_indexes": [[1, 0],[1, 1], [1, 2], [1, 3],[1,4]],
+                "result_index": 1,
+            },
+        }
+        meta_group.attrs[UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME] = json.dumps(fake_meta)
+        time_set_dset = uncertainty_propagation_group.create_dataset(name=TIME_SET_DSET_NAME, shape=time_set.shape)
+        time_set_dset[:] = time_set
+
+        realization_outputs_dset = uncertainty_propagation_group.create_dataset(name=UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS, shape=realization_outputs.shape, maxshape=(None, None, None))
+        realization_outputs = realization_outputs
+        realization_outputs_dset[:] = realization_outputs
+
+        mean_results_array = np.mean(realization_outputs, axis=0)
+        mean_results = uncertainty_propagation_group.create_dataset(name=UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT, shape=mean_results_array.shape, maxshape=(None, None))
+        mean_results[:] = mean_results_array
+
+        std_results_array = np.std(realization_outputs, axis=0)
+        std_results = uncertainty_propagation_group.create_dataset(name=UNCERTAINTY_PROPAGATION_DSET_STD_RESULT, shape=std_results_array.shape, maxshape=(None, None))
+        std_results[:] = std_results_array
+        file.swmr_mode = True
+    return result_dir
 
 def _create_and_populate_hm_result_file(
     result_dir: Path,

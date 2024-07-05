@@ -6,7 +6,7 @@ import os
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
+from typing import Any, Type, TypeVar
 from typing import Callable
 from typing import DefaultDict
 from typing import Dict
@@ -24,7 +24,9 @@ import numpy as np
 from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator_constants import (
-    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME, UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
+    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS, UNCERTAINTY_PROPAGATION_GROUP_NAME,
+    UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT, UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
@@ -109,6 +111,100 @@ class ResultsNeedFullReloadError(RuntimeError):
     "restart file" and the option "keep old results" is selected.
     """
 
+@attr.s(slots=True, hash=False)
+class BaseUQMetaData:
+    """
+    Base class for UQ metadata analysis.
+
+    :ivar property_id:
+        The property name (holdup, total mass flow rate).
+    :ivar trend_id:
+        The id associated a specific trend.
+    :ivar category:
+        The property category. For global sensitivity analysis
+        this always be dimensionless.
+    :ivar network_element_name:
+        The name of network where this data is associated.
+    :ivar position:
+        The element position in a pipe.
+    :ivar position_unit:
+        The position unit (m, Km, cm).
+    :ivar unit:
+        The unit of a dimensionless property (-, %)
+    """
+    property_id: str = attr.ib(validator=attr.validators.instance_of(str))
+    trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
+    category: str = attr.ib(validator=attr.validators.instance_of(str))
+    network_element_name: Optional[str] = attr.ib(
+        validator=attr.validators.optional(attr.validators.instance_of(str))
+    )
+    position: Optional[float] = attr.ib(
+        validator=attr.validators.optional(attr.validators.instance_of(float))
+    )
+    position_unit: Optional[str] = attr.ib(
+        validator=attr.validators.optional(attr.validators.instance_of(str))
+    )
+    unit: str = attr.ib(validator=attr.validators.instance_of(str))
+
+
+@attr.s(slots=True, hash=False)
+class UncertaintyPropagationAnalysesMetaData:
+    """
+    A class that hold the uncertainty propagation analyses metadata.
+    """
+
+    @attr.s(slots=True, hash=False)
+    class UPItem(BaseUQMetaData):
+        """
+        A class that hold each uncertainty propagation analyses metadata.
+
+        :ivar samples:
+            The total samples generate to construct the result.
+        :ivar result_index:
+            The index to access the mean and std result.
+        :ivar sample_indexes:
+            The indexes to access each sample of an item.
+        """
+        samples: int = attr.ib(validator=attr.validators.instance_of(int))
+        result_index: int = attr.ib(validator=attr.validators.instance_of(int))
+        sample_indexes: List[List[int]] = attr.ib(validator=attr.validators.instance_of(List))
+
+        @classmethod
+        def from_dict(cls, data: Dict[str, Any]) -> Self:
+            return cls(
+                property_id=data["property_id"],
+                trend_id=data["trend_id"],
+                category=data["category"],
+                network_element_name=data["network_element_name"],
+                position=data["position"],
+                position_unit=data["position_unit"],
+                unit=data["unit"],
+                samples=data["samples"],
+                result_index=data['result_index'],
+                sample_indexes=data['sample_indexes']
+            )
+
+    items: Dict[str, UPItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+
+    @classmethod
+    def empty(cls, result_directory: Path) -> Self:
+        return UncertaintyPropagationAnalysesMetaData(
+            items={}, result_directory=result_directory
+        )
+
+    @classmethod
+    def get_metadata_from_dir(cls, result_directory: Path) -> Self:
+
+        def map_data(
+            up_metadata: Dict,
+        ) -> Dict[str, UncertaintyPropagationAnalysesMetaData.UPItem]:
+            return {
+                key: UncertaintyPropagationAnalysesMetaData.UPItem.from_dict(data)
+                for key, data in up_metadata.items()
+            }
+
+        return read_results_file(result_directory=result_directory, metadata_class=cls, meta_data_attrs=UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME, map_data=map_data)
 
 @attr.s(slots=True, hash=False)
 class GlobalSensitivityAnalysisMetadata:
@@ -117,50 +213,21 @@ class GlobalSensitivityAnalysisMetadata:
     """
 
     @attr.s(slots=True, hash=False)
-    class GSAItem:
+    class GSAItem(BaseUQMetaData):
         """
         A class that hold each global sensitivity analysis
         metadata information.
-        :ivar property_id:
-            The property name (holdup, total mass flow rate).
-        :ivar trend_id:
-            The id associated a specific trend.
-        :ivar category:
-            The property category. For global sensitivity analysis
-            this always be dimensionless.
         :ivar parametric_var_id:
             The id associated a parametric variable.
         :ivar parametric_var_name:
             The name associated a parametric variable.
-        :ivar network_element_name:
-            The name of network where this data is associated.
-        :ivar position:
-            The element position in a pipe.
-        :ivar position_unit:
-            The position unit (m, Km, cm).
-        :ivar unit:
-            The unit of a dimensionless property (-, %)
         :ivar qoi_index:
             The index of a quantity of interest in the results file.
         :ivar qoi_data_index:
             The data index of a quantity of interest.
         """
-
-        property_id: str = attr.ib(validator=attr.validators.instance_of(str))
-        trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
-        category: str = attr.ib(validator=attr.validators.instance_of(str))
         parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
         parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
-        network_element_name: Optional[str] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(str))
-        )
-        position: Optional[float] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(float))
-        )
-        position_unit: Optional[str] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(str))
-        )
-        unit: str = attr.ib(validator=attr.validators.instance_of(str))
         qoi_index: Optional[int] = attr.ib(
             validator=attr.validators.optional(attr.validators.instance_of(int))
         )
@@ -184,13 +251,13 @@ class GlobalSensitivityAnalysisMetadata:
                 qoi_data_index=data["qoi_data_index"],
             )
 
-    gsa_items: Dict[str, GSAItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    items: Dict[str, GSAItem] = attr.ib(validator=attr.validators.instance_of(Dict))
     result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
 
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
         return GlobalSensitivityAnalysisMetadata(
-            gsa_items={}, result_directory=result_directory
+            items={}, result_directory=result_directory
         )
 
     @classmethod
@@ -209,20 +276,41 @@ class GlobalSensitivityAnalysisMetadata:
                 key: GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
                 for key, data in gsa_metadata.items()
             }
+        return read_results_file(result_directory=result_directory,metadata_class=cls, map_data=map_data,meta_data_attrs=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME)
 
-        with open_result_file(
-            result_directory, result_filename="result"
-        ) as result_file:
-            if not result_file:
-                return cls.empty(result_directory=result_directory)
+UQMetadataClass = Union[GlobalSensitivityAnalysisMetadata,UncertaintyPropagationAnalysesMetaData]
 
-            loaded_metadata = json.loads(
-                result_file[META_GROUP_NAME].attrs["global_sensitivity_analysis"]
-            )
-            return cls(
-                gsa_items=map_data(loaded_metadata), result_directory=result_directory
-            )
+@attr.s(frozen=True)
+class UPResult:
+    """
+    Holder for each uncertainty propagation result.
+    """
+    category: str = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(str)))
+    unit: str = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(str)))
+    realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
+    std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
+    mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
 
+
+MetadataClassType = TypeVar("MetadataClassType", bound=UQMetadataClass)
+def read_results_file(
+    result_directory: Path,
+    metadata_class: Type[MetadataClassType],
+    map_data: Callable,
+    meta_data_attrs: str) -> MetadataClassType:
+
+    with open_result_file(
+        result_directory, result_filename="result"
+    ) as result_file:
+        if not result_file:
+            return metadata_class.empty(result_directory=result_directory)
+
+        loaded_metadata = json.loads(
+            result_file[META_GROUP_NAME].attrs[meta_data_attrs]
+        )
+        return metadata_class(
+            items=map_data(loaded_metadata), result_directory=result_directory
+        )
 
 @attr.define(slots=True, hash=True)
 class HistoricDataCurveMetadata:
@@ -1725,17 +1813,64 @@ def read_global_sensitivity_analysis_meta_data(
         result_directory=result_directory
     )
 
-
-def read_global_sensitivity_analysis_time_set(
+def read_uncertainty_propagation_analyses_meta_data(
     result_directory: Path,
+)-> Optional[UncertaintyPropagationAnalysesMetaData]:
+    """
+    Read the uncertainty propagation analyses metadata persisted in a result file.
+    """
+
+    return UncertaintyPropagationAnalysesMetaData.get_metadata_from_dir(
+        result_directory=result_directory
+    )
+
+
+def read_uncertainty_propagation_results(metadata: UncertaintyPropagationAnalysesMetaData, results_key: str) -> Optional[UPResult]:
+    """
+    Get the uncertainty propagation results.
+
+    :param metadata:
+        The uncertainty propagation metadata previously read.
+
+    :param results_key:
+        The result key as follows: <property_id@trend_id>
+    """
+    meta = metadata.items.get(results_key)
+    if not meta:
+        return None
+
+    with open_result_file(metadata.result_directory) as file:
+        up_group = file[UNCERTAINTY_PROPAGATION_GROUP_NAME]
+        realization_output_samples = up_group[UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS]
+
+        realization_outputs = [realization_output_samples[sample_index][qoi_index] for qoi_index, sample_index in meta.sample_indexes]
+        mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][meta.result_index]
+        std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][meta.result_index]
+        return UPResult(
+            realization_output=realization_outputs,
+            mean_result=mean_result,
+            std_result=std_result,
+            category=meta.category,
+            unit=meta.unit
+        )
+
+def read_uq_time_set(
+    result_directory: Path,
+    group_name: str
 ) -> Optional[numpy.array]:
     """
-    Get the time set for sensitivity analysis results.
+    Get the time set for uq-based analysis results (Global Sensitivity Analysis or Uncertainty Propagation).
+
+    :param result_directory:
+        The directory which contains the uncertainty propagation results.
+
+    :param group_name:
+        The result group name.
     """
     with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
             return
-        return result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]["time_set"][:]
+        return result_file[group_name]["time_set"][:]
 
 
 def read_global_sensitivity_coefficients(
@@ -1746,9 +1881,9 @@ def read_global_sensitivity_coefficients(
     Read the global sensitivity analysis coefficients results.
     """
     # The metadata is empty.
-    if not metadata.gsa_items:
+    if not metadata.items:
         return None
-    meta = metadata.gsa_items[coefficients_key]
+    meta = metadata.items[coefficients_key]
     with open_result_file(
         metadata.result_directory, result_filename="result"
     ) as result_file:
