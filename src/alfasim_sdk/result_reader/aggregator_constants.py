@@ -7,6 +7,14 @@ HISTORY_MATCHING_GROUP_NAME = "history_matching"
 HISTORY_MATCHING_DETERMINISTIC_DSET_NAME = "history_matching_deterministic"
 HISTORY_MATCHING_PROBABILISTIC_DSET_NAME = "history_matching_probabilistic"
 
+UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME = "uncertainty_propagation_meta"
+UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS = (
+    "uncertainty_propagation_realization_outputs"
+)
+UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT = "uncertainty_propagation_mean_results"
+UNCERTAINTY_PROPAGATION_DSET_STD_RESULT = "uncertainty_propagation_std_results"
+UNCERTAINTY_PROPAGATION = "uncertainty_propagation"
+
 TIME_SET_DSET_NAME = "time_set"
 
 META_GROUP_NAME = "meta"
