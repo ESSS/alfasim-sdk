@@ -13,6 +13,7 @@ from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
 from alfasim_sdk.result_reader.aggregator import concatenate_metadata
+from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
 from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
 from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
@@ -22,6 +23,9 @@ from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_time_set,
 )
 from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
+from alfasim_sdk.result_reader.aggregator import (
+    read_history_matching_historic_data_curves,
+)
 from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
 from alfasim_sdk.result_reader.aggregator import read_history_matching_result
 from alfasim_sdk.result_reader.aggregator import read_metadata
@@ -399,6 +403,22 @@ def test_read_history_matching_result_metadata(
         "observed_curve_2": {"trend_id": "trend_2", "property_id": "pressure"},
     }
     assert metadata.parametric_vars == {"mg": 0.5, "mo": 4.0}
+    assert metadata.historic_data_curve_infos == [
+        HistoricDataCurveMetadata(
+            curve_id="observed_curve_1",
+            curve_name="curve 1",
+            domain_unit="s",
+            image_unit="m3/m3",
+            image_category="volume fraction",
+        ),
+        HistoricDataCurveMetadata(
+            curve_id="observed_curve_2",
+            curve_name="curve 2",
+            domain_unit="s",
+            image_unit="Pa",
+            image_category="pressure",
+        ),
+    ]
 
     expected_meta1 = HistoryMatchingMetadata.HMItem(
         parametric_var_id="parametric_var_1",
@@ -455,7 +475,7 @@ def test_read_history_matching_result_metadata(
 def test_read_history_matching_result_data(
     hm_probabilistic_results_dir: Path,
     hm_deterministic_results_dir: Path,
-    hm_type: Literal["probabilistic", "deterministic"],
+    hm_type: Literal["HM-probabilistic", "HM-deterministic"],
 ) -> None:
     """
     Check reading the result of both HM type analysis. Both results are available simultaneously by
@@ -503,3 +523,40 @@ def test_read_history_matching_result_data(
     # Receiving an invalid History Matching type should raise.
     with pytest.raises(ValueError, match="type `foobar` not supported"):
         read_history_matching_result(metadata, "foobar")  # type: ignore
+
+
+def test_read_history_matching_historic_data_curves(
+    hm_probabilistic_results_dir: Path,
+    hm_deterministic_results_dir: Path,
+) -> None:
+    """
+    Check reading the historic data curves from the result file of both HM type analysis.
+    """
+    result_directories = (hm_probabilistic_results_dir, hm_deterministic_results_dir)
+    for result_dir in result_directories:
+        metadata = read_history_matching_metadata(result_dir)
+        curves = read_history_matching_historic_data_curves(metadata)
+        assert len(curves) == 2
+        assert curves["observed_curve_1"] == pytest.approx(
+            numpy.array([[0.1, 0.5, 0.9], [1.1, 2.2, 3.3]])
+        )
+        assert curves["observed_curve_2"] == pytest.approx(
+            numpy.array([[1.0, 5.0, 9.0, 3.1], [1.2, 2.3, 3.4, 4.5]])
+        )
+
+    # For completeness, check result when passing some invalid directory.
+    meta = HistoryMatchingMetadata.empty(result_directory=Path("foo"))
+    assert read_history_matching_historic_data_curves(meta) == {}
+
+
+def test_read_history_matching_historic_data_curves_backward_compatibility(
+    hm_results_dir_without_historic_data: Path,
+) -> None:
+    """
+    Check reading the historic data curves from an old result file which doesn't have historic data
+    curves data in it (pre ASIM-5713).
+    """
+    result_dir = hm_results_dir_without_historic_data
+    metadata = read_history_matching_metadata(result_dir)
+    curves = read_history_matching_historic_data_curves(metadata)
+    assert curves == {}

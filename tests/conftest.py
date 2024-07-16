@@ -3,6 +3,7 @@ import os.path
 import shutil
 import textwrap
 from pathlib import Path
+from typing import Dict
 from typing import List
 
 import h5py
@@ -11,6 +12,9 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 from _pytest.monkeypatch import MonkeyPatch
 
+from alfasim_sdk.result_reader.aggregator import (
+    HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
@@ -272,21 +276,17 @@ def global_sa_results_dir(datadir: Path) -> Path:
 def _create_and_populate_hm_result_file(
     result_dir: Path,
     result: np.ndarray,
-    dataset_key: str,
+    result_dataset_key: str,
+    historic_data_curves: Dict[str, np.ndarray],
 ) -> None:
     result_dir.mkdir(parents=True, exist_ok=True)
     result_filepath = result_dir / "result"
 
     with h5py.File(result_filepath, "x", libver="latest", locking=False) as file:
         meta_group = file.create_group(META_GROUP_NAME, track_order=True)
-        data_group = file.create_group(HISTORY_MATCHING_GROUP_NAME, track_order=True)
+        result_group = file.create_group(HISTORY_MATCHING_GROUP_NAME, track_order=True)
 
-        dataset = data_group.create_dataset(
-            dataset_key,
-            shape=result.shape,
-            dtype=np.float64,
-            maxshape=tuple(None for _ in result.shape),
-        )
+        result_group.create_dataset(result_dataset_key, data=result)
 
         objective_functions = {
             "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
@@ -314,9 +314,34 @@ def _create_and_populate_hm_result_file(
                 "data_index": 1,
             },
         }
+        if historic_data_curves:
+            historic_curves_group = file.create_group(
+                HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME
+            )
+            for curve_id, curve in historic_data_curves.items():
+                historic_curves_group.create_dataset(curve_id, data=curve)
+
+            historic_curves_meta = [
+                {
+                    "curve_id": "observed_curve_1",
+                    "curve_name": "curve 1",
+                    "domain_unit": "s",
+                    "image_unit": "m3/m3",
+                    "image_category": "volume fraction",
+                },
+                {
+                    "curve_id": "observed_curve_2",
+                    "curve_name": "curve 2",
+                    "domain_unit": "s",
+                    "image_unit": "Pa",
+                    "image_category": "pressure",
+                },
+            ]
+            meta_entries = list(fake_meta.values())
+            for entry in meta_entries:
+                entry["historic_data_curves_info"] = historic_curves_meta
 
         meta_group.attrs[HISTORY_MATCHING_GROUP_NAME] = json.dumps(fake_meta)
-        dataset[:] = result
 
         file.swmr_mode = True
 
@@ -332,11 +357,16 @@ def hm_probabilistic_results_dir(datadir: Path) -> Path:
     probabilistic_result = np.array(
         [[0.1, 0.22, 1.0, 0.8, 0.55], [3.0, 6.0, 5.1, 4.7, 6.3]]
     )
+    historic_data_curves = {
+        "observed_curve_1": np.array([[0.1, 0.5, 0.9], [1.1, 2.2, 3.3]]),
+        "observed_curve_2": np.array([[1.0, 5.0, 9.0, 3.1], [1.2, 2.3, 3.4, 4.5]]),
+    }
 
     _create_and_populate_hm_result_file(
         result_dir=result_dir,
         result=probabilistic_result,
-        dataset_key=HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
+        result_dataset_key=HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
+        historic_data_curves=historic_data_curves,
     )
 
     return result_dir
@@ -351,11 +381,37 @@ def hm_deterministic_results_dir(datadir: Path) -> Path:
 
     result_dir = datadir / "main-HM-deterministic"
     deterministic_result = np.array([0.1, 3.2])
+    historic_data_curves = {
+        "observed_curve_1": np.array([[0.1, 0.5, 0.9], [1.1, 2.2, 3.3]]),
+        "observed_curve_2": np.array([[1.0, 5.0, 9.0, 3.1], [1.2, 2.3, 3.4, 4.5]]),
+    }
 
     _create_and_populate_hm_result_file(
         result_dir=result_dir,
         result=deterministic_result,
-        dataset_key=HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
+        result_dataset_key=HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
+        historic_data_curves=historic_data_curves,
+    )
+
+    return result_dir
+
+
+@pytest.fixture()
+def hm_results_dir_without_historic_data(datadir: Path) -> Path:
+    """
+    Create a History Matching Deterministic result folder with a populated HDF5 file in the old
+    format, i.e. without historic data curves.
+    """
+    import numpy as np
+
+    result_dir = datadir / "main-HM-deterministic"
+    deterministic_result = np.array([0.1, 3.2])
+
+    _create_and_populate_hm_result_file(
+        result_dir=result_dir,
+        result=deterministic_result,
+        result_dataset_key=HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
+        historic_data_curves={},
     )
 
     return result_dir

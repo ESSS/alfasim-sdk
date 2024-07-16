@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import functools
 import json
 import os
@@ -28,6 +30,9 @@ from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
 )
 from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
+from alfasim_sdk.result_reader.aggregator_constants import (
+    HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
 )
@@ -219,44 +224,71 @@ class GlobalSensitivityAnalysisMetadata:
             )
 
 
+@attr.define(slots=True, hash=True)
+class HistoricDataCurveMetadata:
+    """
+    Metadata of the historic data curves used in the History Matching analysis.
+    """
+
+    curve_id: str
+    curve_name: str
+    domain_unit: str
+    image_unit: str
+    image_category: str
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> Self:
+        return cls(
+            curve_id=data["curve_id"],
+            curve_name=data["curve_name"],
+            domain_unit=data["domain_unit"],
+            image_unit=data["image_unit"],
+            image_category=data["image_category"],
+        )
+
+
 @attr.s(slots=True, hash=False)
 class HistoryMatchingMetadata:
     """
     Holder for the History Matching results metadata.
-
-    :ivar hm_items:
-        Map of the data id and its associated metadata.
-    :ivar objective_functions:
-        Map of observed curve id to a dict of Quantity of Interest data, populated with keys
-        'trend_id' and 'property_id'. This represents the setup for this HM analysis.
-    :ivar parametric_vars:
-        Map of parametric vars to the values that represents the analysis, with all existent vars.
-        Values are either the optimal values (deterministic) or the base values (probabilistic).
-    :ivar result_directory:
-        The directory in which the result is saved.
     """
+
+    #: Map of the data id and its associated metadata.
+    hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    #: Map of observed curve id to a dict of Quantity of Interest data, populated with keys
+    #: 'trend_id' and 'property_id'. This represents the setup for this HM analysis.
+    objective_functions: Dict[str, Dict[str, str]] = attr.ib(
+        validator=attr.validators.instance_of(Dict)
+    )
+    #: Map of parametric vars to the values that represents the analysis, with all existent vars.
+    #: Values are either the optimal values (deterministic) or the base values (probabilistic).
+    parametric_vars: Dict[str, float] = attr.ib(
+        validator=attr.validators.instance_of(Dict)
+    )
+    #: The directory in which the result is saved.
+    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    #: Metadata of the historic curves present in the results. Optional as this was introduced
+    #: later (ASIM-5713).
+    historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = attr.ib(
+        validator=attr.validators.optional(attr.validators.instance_of(list)),
+        default=None,
+    )
 
     @attr.s(slots=True, hash=False)
     class HMItem:
         """
         Metadata associated with each item of the HM results.
-
-        :ivar parametric_var_id:
-            The id of the associated parametric var.
-        :ivar parametric_var_name:
-            The name of the associated parametric var.
-        :ivar min_value:
-            Lower limit of the specified range for the parametric var.
-        :ivar max_value:
-            Upper limit of the specified range for the parametric var.
-        :ivar data_index:
-            The index of the data in the result datasets.
         """
 
+        #: The id of the associated parametric var.
         parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        #: The name of the associated parametric var.
         parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
+        #: Lower limit of the specified range for the parametric var.
         min_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        #: Upper limit of the specified range for the parametric var.
         max_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        #: The index of the data in the result datasets.
         data_index: int = attr.ib(validator=attr.validators.instance_of(int))
 
         @classmethod
@@ -273,15 +305,6 @@ class HistoryMatchingMetadata:
                 max_value=data["max_value"],
                 data_index=data["data_index"],
             )
-
-    hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
-    objective_functions: Dict[str, Dict[str, str]] = attr.ib(
-        validator=attr.validators.instance_of(Dict)
-    )
-    parametric_vars: Dict[str, float] = attr.ib(
-        validator=attr.validators.instance_of(Dict)
-    )
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
 
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
@@ -300,11 +323,18 @@ class HistoryMatchingMetadata:
         If result file is not ready or doesn't exist, return an empty metadata.
         """
 
-        def map_data(hm_metadata: Dict) -> Dict[str, HistoryMatchingMetadata.HMItem]:
+        def map_meta_items(
+            hm_metadata: Dict,
+        ) -> Dict[str, HistoryMatchingMetadata.HMItem]:
             return {
                 key: HistoryMatchingMetadata.HMItem.from_dict(data)
                 for key, data in hm_metadata.items()
             }
+
+        def map_historic_data_infos(
+            infos: List[Dict[str, Any]]
+        ) -> List[HistoricDataCurveMetadata]:
+            return [HistoricDataCurveMetadata.from_dict(info) for info in infos]
 
         with open_result_file(result_directory) as result_file:
             if not result_file:
@@ -321,10 +351,14 @@ class HistoryMatchingMetadata:
 
             objective_functions = some_item_metadata["objective_functions"]
             parametric_vars = some_item_metadata["parametric_vars"]
+            historic_curve_infos = some_item_metadata.get("historic_data_curves_info")
+            if historic_curve_infos is not None:
+                historic_curve_infos = map_historic_data_infos(historic_curve_infos)
 
             return cls(
-                hm_items=map_data(loaded_metadata),
+                hm_items=map_meta_items(loaded_metadata),
                 objective_functions=objective_functions,
+                historic_data_curve_infos=historic_curve_infos,
                 parametric_vars=parametric_vars,
                 result_directory=result_directory,
             )
@@ -1774,6 +1808,30 @@ def read_history_matching_result(
                 result_map[hm_result_key] = result[meta.data_index]
 
         return result_map
+
+
+def read_history_matching_historic_data_curves(
+    metadata: HistoryMatchingMetadata,
+) -> Dict[str, np.ndarray]:
+    """
+    :return:
+        Map of historic data curve id to the actual curve, represented as an array of points in the
+        form [[y1, y2, ..., yn], [x1, x1, ..., xn]].
+    """
+    with open_result_file(metadata.result_directory) as result_file:
+        if not result_file:
+            return {}
+
+        result = result_file.get(HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME)
+
+        if result is None:
+            # Old result files may not have this data group.
+            return {}
+
+        return {
+            info.curve_id: result[info.curve_id][:]
+            for info in metadata.historic_data_curve_infos
+        }
 
 
 @contextmanager
