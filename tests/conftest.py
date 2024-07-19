@@ -31,7 +31,7 @@ from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
-    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS,
+    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
@@ -355,7 +355,7 @@ def up_results_dir(datadir: Path) -> Path:
         time_set_dset[:] = time_set
 
         realization_outputs_dset = uncertainty_propagation_group.create_dataset(
-            name=UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS,
+            name=UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS,
             shape=realization_outputs.shape,
             maxshape=(None, None, None),
         )
