@@ -5,7 +5,7 @@ CHANGELOG
 2024.2 (unreleased)
 ===================
 
-*
+* Added support to read historic data curves directly from the results of History Matching analyses.
 
 
 2024.1 (2024-05-27)

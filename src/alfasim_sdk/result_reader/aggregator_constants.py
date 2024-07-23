@@ -4,6 +4,7 @@ GLOBAL_SENSITIVITY_ANALYSIS_META_ATTR_NAME = "global_sensitivity_analysis"
 GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME = "global_sensitivity_analysis"
 
 HISTORY_MATCHING_GROUP_NAME = "history_matching"
+HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME = "history_matching_historic_data"
 HISTORY_MATCHING_DETERMINISTIC_DSET_NAME = "history_matching_deterministic"
 HISTORY_MATCHING_PROBABILISTIC_DSET_NAME = "history_matching_probabilistic"
 
