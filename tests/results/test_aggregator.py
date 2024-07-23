@@ -12,16 +12,12 @@ import pytest
 from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
+from alfasim_sdk.result_reader.aggregator import concatenate_metadata
 from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
-from alfasim_sdk.result_reader.aggregator import concatenate_metadata, read_uncertainty_propagation_analyses_meta_data, \
-    read_uncertainty_propagation_results
 from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
 from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_meta_data,
-)
-from alfasim_sdk.result_reader.aggregator import (
-    read_uq_time_set,
 )
 from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
 from alfasim_sdk.result_reader.aggregator import (
@@ -33,10 +29,19 @@ from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_local_statistics
 from alfasim_sdk.result_reader.aggregator import read_time_sets
 from alfasim_sdk.result_reader.aggregator import read_trends_data
+from alfasim_sdk.result_reader.aggregator import (
+    read_uncertainty_propagation_analyses_meta_data,
+)
+from alfasim_sdk.result_reader.aggregator import read_uncertainty_propagation_results
+from alfasim_sdk.result_reader.aggregator import (
+    read_uq_time_set,
+)
 from alfasim_sdk.result_reader.aggregator import ResultsNeedFullReloadError
 from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME, \
-    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
+from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 from alfasim_sdk.result_reader.reader import Results
@@ -350,7 +355,7 @@ def test_read_gsa_metadata(global_sa_results_dir: Path) -> None:
 def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
     time_set = read_uq_time_set(
         result_directory=global_sa_results_dir,
-        group_name=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+        group_name=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
     )
     assert numpy.all(time_set == [0, 1, 2, 3, 4, 5, 6, 7])
 
@@ -376,7 +381,9 @@ def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
     """
     creating_file = global_sa_results_dir / "result.creating"
     creating_file.touch()
-    gsa_time_set = read_uq_time_set(global_sa_results_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME)
+    gsa_time_set = read_uq_time_set(
+        global_sa_results_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+    )
     assert gsa_time_set is None
     gsa_meta_data = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     assert gsa_meta_data.items == {}
@@ -564,35 +571,62 @@ def test_read_history_matching_historic_data_curves_backward_compatibility(
     curves = read_history_matching_historic_data_curves(metadata)
     assert curves == {}
 
-def test_read_uncertainty_propagation_results(datadir: Path, up_results_dir: Path, num_regression: NumericRegressionFixture) -> None:
 
-    empty_metadata = read_uncertainty_propagation_analyses_meta_data(result_directory=datadir)
+def test_read_uncertainty_propagation_results(
+    datadir: Path, up_results_dir: Path, num_regression: NumericRegressionFixture
+) -> None:
+    empty_metadata = read_uncertainty_propagation_analyses_meta_data(
+        result_directory=datadir
+    )
     assert empty_metadata.items == {}
-    result = read_uncertainty_propagation_results(metadata=empty_metadata,results_key='absolute_pressure@trend_id_1')
+    result = read_uncertainty_propagation_results(
+        metadata=empty_metadata, results_key="absolute_pressure@trend_id_1"
+    )
     assert result is None
 
-    metadata = read_uncertainty_propagation_analyses_meta_data(result_directory=up_results_dir)
-    assert list(metadata.items.keys()) == ['temperature@trend_id_1', 'absolute_pressure@trend_id_1']
+    metadata = read_uncertainty_propagation_analyses_meta_data(
+        result_directory=up_results_dir
+    )
+    assert list(metadata.items.keys()) == [
+        "temperature@trend_id_1",
+        "absolute_pressure@trend_id_1",
+    ]
 
-    assert metadata.items['temperature@trend_id_1'].result_index == 0
-    assert metadata.items['temperature@trend_id_1'].sample_indexes == [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]
+    assert metadata.items["temperature@trend_id_1"].result_index == 0
+    assert metadata.items["temperature@trend_id_1"].sample_indexes == [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [0, 4],
+    ]
 
-    assert metadata.items['absolute_pressure@trend_id_1'].result_index == 1
-    assert metadata.items['absolute_pressure@trend_id_1'].sample_indexes == [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4]]
+    assert metadata.items["absolute_pressure@trend_id_1"].result_index == 1
+    assert metadata.items["absolute_pressure@trend_id_1"].sample_indexes == [
+        [1, 0],
+        [1, 1],
+        [1, 2],
+        [1, 3],
+        [1, 4],
+    ]
 
-    result = read_uncertainty_propagation_results(metadata=metadata,results_key='temperature@trend_id_1')
-    dict_1 =  {
-            "sample_0": result.realization_output[0],
-            "sample_1": result.realization_output[-1],
-            "mean_result": result.mean_result,
-            "std_result": result.std_result
-        }
+    result = read_uncertainty_propagation_results(
+        metadata=metadata, results_key="temperature@trend_id_1"
+    )
+    dict_1 = {
+        "sample_0": result.realization_output[0],
+        "sample_1": result.realization_output[-1],
+        "mean_result": result.mean_result,
+        "std_result": result.std_result,
+    }
     num_regression.check(dict_1, basename="temperature@trend_id_1")
-    result = read_uncertainty_propagation_results(metadata=metadata,results_key='absolute_pressure@trend_id_1')
+    result = read_uncertainty_propagation_results(
+        metadata=metadata, results_key="absolute_pressure@trend_id_1"
+    )
     dict_2 = {
-            "sample_0": result.realization_output[0],
-            "sample_1": result.realization_output[-1],
-            "mean_result": result.mean_result,
-            "std_result": result.std_result
+        "sample_0": result.realization_output[0],
+        "sample_1": result.realization_output[-1],
+        "mean_result": result.mean_result,
+        "std_result": result.std_result,
     }
     num_regression.check(dict_2, basename="absolute_pressure@trend_id_1")

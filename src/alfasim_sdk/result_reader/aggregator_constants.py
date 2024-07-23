@@ -14,7 +14,7 @@ UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS = (
 )
 UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT = "uncertainty_propagation_mean_results"
 UNCERTAINTY_PROPAGATION_DSET_STD_RESULT = "uncertainty_propagation_std_results"
-UNCERTAINTY_PROPAGATION_GROUP_NAME = 'uncertainty_propagation'
+UNCERTAINTY_PROPAGATION_GROUP_NAME = "uncertainty_propagation"
 
 TIME_SET_DSET_NAME = "time_set"
 

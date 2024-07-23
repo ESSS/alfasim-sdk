@@ -6,7 +6,7 @@ import os
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Type, TypeVar
+from typing import Any
 from typing import Callable
 from typing import DefaultDict
 from typing import Dict
@@ -15,6 +15,8 @@ from typing import List
 from typing import Literal
 from typing import Optional
 from typing import Tuple
+from typing import Type
+from typing import TypeVar
 from typing import Union
 
 import attr
@@ -24,9 +26,7 @@ import numpy as np
 from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator_constants import (
-    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME, UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
-    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS, UNCERTAINTY_PROPAGATION_GROUP_NAME,
-    UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT, UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
@@ -47,6 +47,21 @@ from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_LOCKING_M
 from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_PREFIX
 from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
 from alfasim_sdk.result_reader.aggregator_constants import TRENDS_GROUP_NAME
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
+)
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS,
+)
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
+)
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
+)
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_GROUP_NAME,
+)
 
 OutputKeyType = str
 """\
@@ -111,6 +126,7 @@ class ResultsNeedFullReloadError(RuntimeError):
     "restart file" and the option "keep old results" is selected.
     """
 
+
 @attr.s(slots=True, hash=False)
 class BaseUQMetaData:
     """
@@ -132,6 +148,7 @@ class BaseUQMetaData:
     :ivar unit:
         The unit of a dimensionless property (-, %)
     """
+
     property_id: str = attr.ib(validator=attr.validators.instance_of(str))
     trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
     category: str = attr.ib(validator=attr.validators.instance_of(str))
@@ -165,9 +182,12 @@ class UncertaintyPropagationAnalysesMetaData:
         :ivar sample_indexes:
             The indexes to access each sample of an item.
         """
+
         samples: int = attr.ib(validator=attr.validators.instance_of(int))
         result_index: int = attr.ib(validator=attr.validators.instance_of(int))
-        sample_indexes: List[List[int]] = attr.ib(validator=attr.validators.instance_of(List))
+        sample_indexes: List[List[int]] = attr.ib(
+            validator=attr.validators.instance_of(List)
+        )
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -180,8 +200,8 @@ class UncertaintyPropagationAnalysesMetaData:
                 position_unit=data["position_unit"],
                 unit=data["unit"],
                 samples=data["samples"],
-                result_index=data['result_index'],
-                sample_indexes=data['sample_indexes']
+                result_index=data["result_index"],
+                sample_indexes=data["sample_indexes"],
             )
 
     items: Dict[str, UPItem] = attr.ib(validator=attr.validators.instance_of(Dict))
@@ -195,7 +215,6 @@ class UncertaintyPropagationAnalysesMetaData:
 
     @classmethod
     def get_metadata_from_dir(cls, result_directory: Path) -> Self:
-
         def map_data(
             up_metadata: Dict,
         ) -> Dict[str, UncertaintyPropagationAnalysesMetaData.UPItem]:
@@ -204,7 +223,13 @@ class UncertaintyPropagationAnalysesMetaData:
                 for key, data in up_metadata.items()
             }
 
-        return read_results_file(result_directory=result_directory, metadata_class=cls, meta_data_attrs=UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME, map_data=map_data)
+        return read_results_file(
+            result_directory=result_directory,
+            metadata_class=cls,
+            meta_data_attrs=UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
+            map_data=map_data,
+        )
+
 
 @attr.s(slots=True, hash=False)
 class GlobalSensitivityAnalysisMetadata:
@@ -226,6 +251,7 @@ class GlobalSensitivityAnalysisMetadata:
         :ivar qoi_data_index:
             The data index of a quantity of interest.
         """
+
         parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
         parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
         qoi_index: Optional[int] = attr.ib(
@@ -276,32 +302,47 @@ class GlobalSensitivityAnalysisMetadata:
                 key: GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
                 for key, data in gsa_metadata.items()
             }
-        return read_results_file(result_directory=result_directory,metadata_class=cls, map_data=map_data,meta_data_attrs=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME)
 
-UQMetadataClass = Union[GlobalSensitivityAnalysisMetadata,UncertaintyPropagationAnalysesMetaData]
+        return read_results_file(
+            result_directory=result_directory,
+            metadata_class=cls,
+            map_data=map_data,
+            meta_data_attrs=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+        )
+
+
+UQMetadataClass = Union[
+    GlobalSensitivityAnalysisMetadata, UncertaintyPropagationAnalysesMetaData
+]
+
 
 @attr.s(frozen=True)
 class UPResult:
     """
     Holder for each uncertainty propagation result.
     """
-    category: str = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(str)))
-    unit: str = attr.ib(validator=attr.validators.optional(attr.validators.instance_of(str)))
+
+    category: str = attr.ib(
+        validator=attr.validators.optional(attr.validators.instance_of(str))
+    )
+    unit: str = attr.ib(
+        validator=attr.validators.optional(attr.validators.instance_of(str))
+    )
     realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
     std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
     mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
 
 
 MetadataClassType = TypeVar("MetadataClassType", bound=UQMetadataClass)
+
+
 def read_results_file(
     result_directory: Path,
     metadata_class: Type[MetadataClassType],
     map_data: Callable,
-    meta_data_attrs: str) -> MetadataClassType:
-
-    with open_result_file(
-        result_directory, result_filename="result"
-    ) as result_file:
+    meta_data_attrs: str,
+) -> MetadataClassType:
+    with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
             return metadata_class.empty(result_directory=result_directory)
 
@@ -311,6 +352,7 @@ def read_results_file(
         return metadata_class(
             items=map_data(loaded_metadata), result_directory=result_directory
         )
+
 
 @attr.define(slots=True, hash=True)
 class HistoricDataCurveMetadata:
@@ -1813,9 +1855,10 @@ def read_global_sensitivity_analysis_meta_data(
         result_directory=result_directory
     )
 
+
 def read_uncertainty_propagation_analyses_meta_data(
     result_directory: Path,
-)-> Optional[UncertaintyPropagationAnalysesMetaData]:
+) -> Optional[UncertaintyPropagationAnalysesMetaData]:
     """
     Read the uncertainty propagation analyses metadata persisted in a result file.
     """
@@ -1825,7 +1868,9 @@ def read_uncertainty_propagation_analyses_meta_data(
     )
 
 
-def read_uncertainty_propagation_results(metadata: UncertaintyPropagationAnalysesMetaData, results_key: str) -> Optional[UPResult]:
+def read_uncertainty_propagation_results(
+    metadata: UncertaintyPropagationAnalysesMetaData, results_key: str
+) -> Optional[UPResult]:
     """
     Get the uncertainty propagation results.
 
@@ -1841,23 +1886,30 @@ def read_uncertainty_propagation_results(metadata: UncertaintyPropagationAnalyse
 
     with open_result_file(metadata.result_directory) as file:
         up_group = file[UNCERTAINTY_PROPAGATION_GROUP_NAME]
-        realization_output_samples = up_group[UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS]
+        realization_output_samples = up_group[
+            UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS
+        ]
 
-        realization_outputs = [realization_output_samples[sample_index][qoi_index] for qoi_index, sample_index in meta.sample_indexes]
-        mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][meta.result_index]
-        std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][meta.result_index]
+        realization_outputs = [
+            realization_output_samples[sample_index][qoi_index]
+            for qoi_index, sample_index in meta.sample_indexes
+        ]
+        mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][
+            meta.result_index
+        ]
+        std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][
+            meta.result_index
+        ]
         return UPResult(
             realization_output=realization_outputs,
             mean_result=mean_result,
             std_result=std_result,
             category=meta.category,
-            unit=meta.unit
+            unit=meta.unit,
         )
 
-def read_uq_time_set(
-    result_directory: Path,
-    group_name: str
-) -> Optional[numpy.array]:
+
+def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.array]:
     """
     Get the time set for uq-based analysis results (Global Sensitivity Analysis or Uncertainty Propagation).
 
