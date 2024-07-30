@@ -51,7 +51,7 @@ from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
-    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS,
+    UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS,
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
@@ -1887,7 +1887,7 @@ def read_uncertainty_propagation_results(
     with open_result_file(metadata.result_directory) as file:
         up_group = file[UNCERTAINTY_PROPAGATION_GROUP_NAME]
         realization_output_samples = up_group[
-            UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUS
+            UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS
         ]
 
         realization_outputs = [
