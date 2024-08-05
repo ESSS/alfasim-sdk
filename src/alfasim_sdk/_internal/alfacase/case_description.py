@@ -3294,11 +3294,11 @@ class TracersDescription:
     .. include:: /alfacase_definitions/TracersDescription.txt
     """
 
-    constant_coefficients: Dict[
-        str, TracerModelConstantCoefficientsDescription
-    ] = attr.ib(
-        default=attr.Factory(dict),
-        validator=dict_of(TracerModelConstantCoefficientsDescription),
+    constant_coefficients: Dict[str, TracerModelConstantCoefficientsDescription] = (
+        attr.ib(
+            default=attr.Factory(dict),
+            validator=dict_of(TracerModelConstantCoefficientsDescription),
+        )
     )
 
 
