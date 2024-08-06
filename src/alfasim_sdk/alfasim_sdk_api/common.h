@@ -107,6 +107,8 @@ struct VariableScope
     It holds the possible returning error code when trying to open ALFAsim-SDK API.
 */
 enum sdk_load_error_code {
+    SDK_FAILED_TO_LOAD_FUNCTION=-4, /*!< Some function from SDK dll could not be loaded.*/
+    SDK_FAILED_TO_LOAD_DLL=-3, /*!< SDK dll could not be loaded.*/
     SDK_DLL_PATH_TOO_LONG=-2, /*!< Path to SDK dll too long (Windows limitation).*/
     SDK_ALREADY_OPEN_ERROR=-1, /*!< SDK dll already Opened.*/
     SDK_OK=0 /*!< Everything was fine.*/
