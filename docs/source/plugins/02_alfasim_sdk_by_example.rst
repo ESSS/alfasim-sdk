@@ -161,6 +161,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
     #include "hook_specs.h"
     #include <alfasim_sdk_api/alfasim_sdk.h>
     #include <iostream>
+    #include <cmath>
 
     ALFAsimSDK_API alfasim_sdk_api;
 
@@ -238,7 +239,7 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
             ctx,
             &oil_field_id,
             "oil"
-        )
+        );
         if (errcode != 0) {
             std::cout << "get_oil_id error = " << errcode << "\n";
             return errcode;
