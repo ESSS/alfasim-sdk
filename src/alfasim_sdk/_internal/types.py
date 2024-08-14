@@ -603,7 +603,7 @@ class Quantity(BaseField):
     the current value and unit.
     Check out the `Scalar documentation from Barril`_ for more details about the usage.
 
-    .. code-block:: bash
+    .. code-block:: python
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
