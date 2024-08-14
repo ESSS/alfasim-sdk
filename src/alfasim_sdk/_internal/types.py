@@ -669,7 +669,7 @@ class Table(BaseField):
 
         @data_model(icon="", caption="My Model")
         class MyModel:
-            Table(
+            table_field=Table(
                 rows=[
                     TableColumn(
                         id="temperature",
@@ -720,7 +720,7 @@ class Table(BaseField):
 
         @data_model(icon="", caption="My Model")
         class MyModel:
-            Table(
+            table_field=Table(
                 rows=[
                     TableColumn(
                         id='temperature',
