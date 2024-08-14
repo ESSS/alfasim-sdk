@@ -268,7 +268,7 @@ class Enum(BaseField):
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             enum_field = Enum(
-                values=["Option 1, Option 2"],
+                values=["Option 1" , "Option 2"],
                 initial="Option 1",
                 caption="Enum Field",
             )
