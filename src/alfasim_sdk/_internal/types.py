@@ -106,7 +106,7 @@ class BaseField:
 
     .. rubric:: **Enable Expression**:
 
-    Accepts a python function that controls either the component will be enabled, or disabled.
+    Accepts a python function that controls whether the component will be enabled.
     The python function will receive two arguments, an instance of itself (to check local values) and an instance of
     :class:`~alfasim_sdk._internal.context.Context` to retrieve information about the application.
 
@@ -151,7 +151,7 @@ class BaseField:
 
     .. rubric:: **Visible Expression**:
 
-    Accepts a python function that controls either the component will be visible, or not.
+    Accepts a python function that controls whether the component will be visible.
     The python function will receive two arguments, an instance of itself (to check local values) and an instance of
     :func:`~alfasim_sdk._internal.context.Context` to retrieve information about the application.
 
@@ -210,7 +210,7 @@ class String(BaseField):
     """
     The String field represents an input that allows the user to enter and edit a single line of plain text.
 
-    The String field have all options available from :class:`BaseField`, plus the following ones
+    The String field has all options available from :class:`BaseField`, plus the following ones
 
     :ivar value: property to hold the value informed by the user.
 
@@ -234,7 +234,7 @@ class String(BaseField):
 
     .. rubric:: **Accessing String Field from Context**:
 
-    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the String field will return the currently text as ``str``.
+    When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the String field will return the current text as ``str``.
 
     .. code-block:: python
 
@@ -252,10 +252,10 @@ class String(BaseField):
 @attr.s(kw_only=True)
 class Enum(BaseField):
     """
-    The Enum field provides list of options to the user, showing  only the select item but providing a way to display
+    The Enum field provides list of options to the user, showing  only the selected item but providing a way to display
     a list of all options through a combo-box.
 
-    The Enum field have all options available from :class:`~BaseField`, besides the listed the ones listed above:
+    The Enum field has all options available from :class:`~BaseField`, besides the ones listed below:
 
     :ivar values: A list of strings with the available options.
     :ivar initial: Indicates which one of the options should be selected per default.
@@ -268,7 +268,7 @@ class Enum(BaseField):
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             enum_field = Enum(
-                values=["Option 1, Option 2"],
+                values=["Option 1", "Option 2"],
                 initial="Option 1",
                 caption="Enum Field",
             )
@@ -427,7 +427,7 @@ class Reference(BaseReference):
     When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the Reference field will return the currently selected option
     object instance.
 
-    With the instance, you can access all attributes from the object normally. Check the example below.
+    With the instance, you can access all attributes of the object normally. Check the example below.
 
     .. code-block:: bash
 
@@ -563,19 +563,19 @@ class MultipleReference(BaseReference):
 @attr.s(kw_only=True, frozen=True)
 class Quantity(BaseField):
     """
-    The Quantity field provides a way to the user provide a scalar value into the application.
+    The Quantity field provides a way for the user to input a scalar value into the application.
 
-    The Quantity field have all options available from :class:`~BaseField`, besides the listed the ones listed above:
+    The Quantity field have all options available from :class:`~BaseField`, besides the ones listed below:
     :ivar values:  A number value.
     :ivar unit:    Unit for the given scalar.
 
     All scalar values are created using the `Barril library`_
 
-    Checkout the Barril documentation, `to see all available units <https://barril.readthedocs.io/en/latest/units.html>`_
+    Check out the Barril documentation, `to see all available units <https://barril.readthedocs.io/en/latest/units.html>`_
 
     .. note::
 
-        If you want to check the input value, is recommended to include a status monitor in your plugin
+        If you want to check the input value, it is recommended to include a status monitor in your plugin
         to make sure that the provided value is valid.
 
         For more details about status monitor check :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_status`
@@ -603,7 +603,7 @@ class Quantity(BaseField):
     the current value and unit.
     Check out the `Scalar documentation from Barril`_ for more details about the usage.
 
-    .. code-block:: bash
+    .. code-block:: python
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
@@ -669,7 +669,7 @@ class Table(BaseField):
 
         @data_model(icon="", caption="My Model")
         class MyModel:
-            Table(
+            table_field=Table(
                 rows=[
                     TableColumn(
                         id="temperature",
@@ -703,7 +703,7 @@ class Table(BaseField):
 
     .. image:: /_static/images/api/table_field_example_3.png
 
-    By the end, it's possible for the user select to which unit the values must be converted and which columns.
+    At the end, the user can select which units the values should be converted to and which columns.
 
     .. rubric:: **Accessing Table Field from Plugin**:
 
@@ -720,7 +720,7 @@ class Table(BaseField):
 
         @data_model(icon="", caption="My Model")
         class MyModel:
-            Table(
+            table_field=Table(
                 rows=[
                     TableColumn(
                         id='temperature',
@@ -768,7 +768,7 @@ class Boolean(BaseField):
     """
     The Boolean field provides a checkbox to select/deselect a property.
 
-    The Boolean fields have all options available from :class:`~BaseField`, besides the listed the ones listed above:
+    The Boolean fields have all options available from :class:`~BaseField`, besides the ones listed below:
     :ivar value:  A boolean informing the initial state from the Field
 
     .. rubric:: Example myplugin.py
@@ -842,7 +842,7 @@ class FileContent(BaseField):
     .. rubric:: **Accessing Quantity Field from Context**:
 
     When accessed from the :class:`~alfasim_sdk._internal.context.Context`, the FileContent field will return a FileContent object,
-    a Model that represent a file from the filesystem.
+    a Model that represents a file from the filesystem.
 
     Class FileContent
 
@@ -871,7 +871,7 @@ class FileContent(BaseField):
 @attr.s(kw_only=True, frozen=True)
 class AddField:
     """
-    Allows the plugin to add new fields to Hydrodynamic model.
+    Allow the plugin to add new fields to Hydrodynamic model.
 
     An added field **must** be associated to a phase (Using :class:`AddPhase` or :class:`UpdatePhase`)
     and added to a layer (Using :class:`AddLayer` or :class:`UpdateLayer`)
@@ -889,7 +889,7 @@ class AddField:
 @attr.s(kw_only=True, frozen=True)
 class AddLayer:
     """
-    Allows the plugin to add new layers to Hydrodynamic model.
+    Allow the plugin to add new layers to Hydrodynamic model.
 
     :ivar name: Name of the new layer.
 
@@ -909,7 +909,7 @@ class AddLayer:
 @attr.s(kw_only=True, frozen=True)
 class UpdateLayer:
     """
-    Allows the plugin to update existing layer of the Hydrodynamic model.
+    Allow the plugin to update existing layer of the Hydrodynamic model.
 
     List of possible layers names (see :ref:`api-constants-section` for details):
      - ``GAS_LAYER``
@@ -931,7 +931,7 @@ class UpdateLayer:
 @attr.s(kw_only=True, frozen=True)
 class AddPhase:
     """
-    Allows the plugin to add new phases to Hydrodynamic model.
+    Allow the plugin to add new phases to Hydrodynamic model.
 
     :ivar name: Name of the new phase.
     :ivar fields: List of fields names associated to the added phase. It is important to know how to calculate
@@ -954,7 +954,7 @@ class AddPhase:
 @attr.s(kw_only=True, frozen=True)
 class UpdatePhase:
     """
-    Allows the plugin update existing phases of the Hydrodynamic model.
+    Allow the plugin to update existing phases of the Hydrodynamic model.
 
     List of possible phase names (see :ref:`api-constants-section` for details):
      - ``GAS_PHASE``
