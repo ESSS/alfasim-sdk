@@ -813,6 +813,51 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
 );
 
 /*!
+    Gets the wall names and wall properties for a given control volume. The wall names will be given
+    as an array of char pointers and the properties by an array data pointer. This method also provide the
+    size of the given arrays.
+
+    IMPORTANT:
+    The given wall can be a fluid or solid, be aware of this when you start to use the properties.
+    List of fluid properties:
+    - Volumetric Thermal Expansion
+    - Dynamic Viscosity
+
+    List of `prop_name`:
+    - `"layer_thickness"`: Wall Layer Thickness [m]
+    - `"rho"`: Wall Density [kg/m3]
+    - `"cp"`: Wall Specific Heat Capacity [J/kg.K]
+    - `"volumetric_thermal_expansion"`: Wall Volumetric Thermal Expansion [1/K]
+    - `"cP"`: Wall dynamic viscosity [cP]
+    - `"k"` : Wall Thermal Conductivity [W/m.degC]
+    - `"layer_is_fluid"`: Informs if the wall is a fluid [1 - is fluid; 0 - is not fluid]
+
+    Example of usage:
+
+                                                 [prop_wall_4]
+         [prop_wall_3]                           [prop_wall_3]
+         [prop_wall_2]       [prop_wall_2]       [prop_wall_2]
+         [prop_wall_1]       [prop_wall_1]       [prop_wall_1]
+         [prop_wall_0]       [prop_wall_0]       [prop_wall_0]
+               |                   |                   |
+    ---[control_volume_1]--[control_volume_2]--[control_volume_3]-->  (Pipe)
+
+    ~~~~~{.cpp}
+    errcode = get_wall_properties(
+        ctx, &wall_names, &prop_values, "layer_thickness", control_volume_id, &size_wall);
+    ~~~~~
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] wall_names Wall names values array.
+    @param[out] prop_values Wall properties values array.
+    @param[in] prop_name String with the property name. See the list of possible values above.
+    @param[in] control_volume Control volume id.
+    @param[out] size Size of the `wall_names` and `prop_values` array of values.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_wall_properties(void* ctx, char*** wall_names, void** prop_values, const char* prop_name, int control_volume, int* size);
+
+/*!
     Gets the current input data for liquid effective viscosity calculation. Any available variable by
     this function is considered for a control volume, which means that there are variables with one
     value and there are variables with two values related to the liquid-liquid system (OIL and WATER).

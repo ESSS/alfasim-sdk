@@ -101,6 +101,7 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_simulation_tracer_array = (get_simulation_tracer_array_func)GetProcAddress(api->handle, "get_simulation_tracer_array");
     api->get_simulation_quantity = (get_simulation_quantity_func)GetProcAddress(api->handle, "get_simulation_quantity");
     api->get_wall_interfaces_temperature = (get_wall_interfaces_temperature_func)GetProcAddress(api->handle, "get_wall_interfaces_temperature");
+    api->get_wall_properties = (get_wall_properties_func)GetProcAddress(api->handle, "get_wall_properties");
     api->get_flow_pattern = (get_flow_pattern_func)GetProcAddress(api->handle, "get_flow_pattern");
     api->get_liqliq_flow_pattern = (get_flow_pattern_func)GetProcAddress(api->handle, "get_liqliq_flow_pattern");
     api->get_deposition_thickness = (get_deposition_thickness_func)GetProcAddress(api->handle, "get_deposition_thickness");
