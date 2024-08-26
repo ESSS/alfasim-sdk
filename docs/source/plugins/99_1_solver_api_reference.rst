@@ -149,6 +149,14 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_simulation_quantity
 
+.. doxygenfunction:: get_wall_properties
+
+.. warning::
+    Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
+    The plugin must **NEVER** change the contents returned by this function.
+
+.. doxygenfunction:: get_wall_material_type
+
 .. doxygenfunction:: get_tracer_id
 
 .. doxygenfunction:: get_tracer_name_size
