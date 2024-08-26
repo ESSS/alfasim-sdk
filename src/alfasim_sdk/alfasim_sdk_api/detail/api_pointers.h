@@ -175,7 +175,7 @@ struct ALFAsimSDK_API {
 
     get_wall_properties_func get_wall_properties;
     get_wall_material_names_func get_wall_material_names;
-    get_wall_material_type_layer_func get_wall_material_type;
+    get_wall_material_type_func get_wall_material_type;
 
     get_input_variable_func get_ucm_friction_factor_input_variable;
     get_ucm_fluid_geometrical_properties_func get_ucm_fluid_geometrical_properties;
