@@ -850,7 +850,7 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
     @param[out] prop_values Properties in each layer of the wall array.
     @param[in] prop_name String with the property name. See the list of possible values above.
     @param[in] control_volume_id Control volume id.
-    @param[out] size Size of the `wall_names` and `prop_values` array of values.
+    @param[out] size Size of the `prop_values` array.
     @return An #error_code value.
 */
 DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* prop_name, int control_volume_id, int* size);
