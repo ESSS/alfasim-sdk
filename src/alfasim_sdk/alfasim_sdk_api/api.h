@@ -878,10 +878,10 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] material_names_in_wall Names of the material presented in the wall.
     @param[in] control_volume_id Control volume id.
-    @param[out] size Size of the `wall_names` and `prop_values` array of values.
+    @param[out] size Size of the `material_names_in_wall` array.
     @return An #error_code value.
 */
-DLL_EXPORT int get_wall_material_names(void* ctx, char*** wall_names, int control_volume_id, int* size);
+DLL_EXPORT int get_wall_material_names(void* ctx, char*** material_names_in_wall, int control_volume_id, int* size);
 
 /*!
     Gets the information if the each layer in the wall is fluid or not for a given control volume.
