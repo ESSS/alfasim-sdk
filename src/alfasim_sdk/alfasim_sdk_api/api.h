@@ -863,7 +863,7 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
     Example of usage:
 
     ~~~~~{.cpp}
-    
+
             |
             |
     [control_volume_1]->[material_name_0; material_name_1; material_name_2]
