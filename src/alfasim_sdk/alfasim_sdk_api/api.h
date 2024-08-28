@@ -833,13 +833,18 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
 
     Example of usage:
 
-                                                 [prop_wall_4]
-         [prop_wall_3]                           [prop_wall_3]
-         [prop_wall_2]       [prop_wall_2]       [prop_wall_2]
-         [prop_wall_1]       [prop_wall_1]       [prop_wall_1]
-         [prop_wall_0]       [prop_wall_0]       [prop_wall_0]
-               |                   |                   |
-    ---[control_volume_1]--[control_volume_2]--[control_volume_3]-->  (Pipe)
+            |
+            |
+    [control_volume_1]->[prop_wall_0; prop_wall_1; prop_wall_2]
+            |
+            |
+    [control_volume_2]->[prop_wall_0; prop_wall_1]
+            |
+            |
+    [control_volume_3]->[prop_wall_0; prop_wall_1; prop_wall_2; prop_wall_3]
+            |
+            |
+         (pipe)
 
     ~~~~~{.cpp}
     errcode = get_wall_properties(
