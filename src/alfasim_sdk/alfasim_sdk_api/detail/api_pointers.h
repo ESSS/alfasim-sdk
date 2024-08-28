@@ -74,6 +74,25 @@ using get_wall_interfaces_temperature_func = int (*)(
     enum TimestepScope ts_scope,
     int* size
     );
+using get_wall_properties_func = int (*) (
+    void* ctx,
+    double** prop_values,
+    const char* prop_name,
+    int control_volume_id,
+    int* size
+    );
+using get_wall_material_names_func = int (*) (
+    void* ctx,
+    char*** wall_names,
+    int control_volume_id,
+    int* size
+    );
+using get_wall_material_type_func = int (*) (
+    void* ctx,
+    int** wall_material_type,
+    int control_volume_id,
+    int* size
+    );
 using get_flow_pattern_func = int (*)(
     void* ctx,
     int** out,
@@ -153,6 +172,10 @@ struct ALFAsimSDK_API {
     get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
 
     get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
+
+    get_wall_properties_func get_wall_properties;
+    get_wall_material_names_func get_wall_material_names;
+    get_wall_material_type_func get_wall_material_type;
 
     get_input_variable_func get_ucm_friction_factor_input_variable;
     get_ucm_fluid_geometrical_properties_func get_ucm_fluid_geometrical_properties;
