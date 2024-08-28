@@ -834,6 +834,9 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
     Example of usage:
 
     ~~~~~{.cpp}
+      [teste]
+            |
+    --[control_volume_1]--[control_volume_2]--[control_volume_3]--> (pipe)
 
             |
             |
