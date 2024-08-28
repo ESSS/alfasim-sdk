@@ -863,17 +863,13 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
     Example of usage:
 
     ~~~~~{.cpp}
-    
-            |
+
             |
     [control_volume_1]->[material_name_0; material_name_1; material_name_2]
             |
-            |
     [control_volume_2]->[material_name_0; material_name_1]
             |
-            |
     [control_volume_3]->[material_name_0; material_name_1; material_name_2; material_name_3]
-            |
             |
            \ /(pipe)
 
@@ -898,15 +894,11 @@ DLL_EXPORT int get_wall_material_names(void* ctx, char*** material_names_in_wall
     Example of usage:
 
             |
-            |
     [control_volume_1]->[is_fluid_check_0; is_fluid_check_1; is_fluid_check_2]
-            |
             |
     [control_volume_2]->[is_fluid_check_0; is_fluid_check_1]
             |
-            |
     [control_volume_3]->[is_fluid_check_0; is_fluid_check_1; is_fluid_check_2; is_fluid_check_3]
-            |
             |
            \ /(pipe)
 
