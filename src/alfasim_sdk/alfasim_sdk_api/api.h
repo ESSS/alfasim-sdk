@@ -833,6 +833,8 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
 
     Example of usage:
 
+    ~~~~~{.cpp}
+
             |
             |
     [control_volume_1]->[prop_wall_0; prop_wall_1; prop_wall_2]
@@ -846,7 +848,6 @@ DLL_EXPORT int get_liq_liq_flow_pattern_input_variable(
             |
          (pipe)
 
-    ~~~~~{.cpp}
     errcode = get_wall_properties(
         ctx, &prop_values, "layer_thickness", control_volume_id, &size_wall);
     ~~~~~
