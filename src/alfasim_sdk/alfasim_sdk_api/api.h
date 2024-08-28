@@ -892,20 +892,15 @@ DLL_EXPORT int get_wall_material_names(void* ctx, char*** material_names_in_wall
 
     Example of usage:
 
-            |
+          (pipe)
             |
     [control_volume_1]->[is_fluid_check_0; is_fluid_check_1; is_fluid_check_2]
             |
-            |
-            |
     [control_volume_2]->[is_fluid_check_0; is_fluid_check_1]
-            |
-            |
             |
     [control_volume_3]->[is_fluid_check_0; is_fluid_check_1; is_fluid_check_2; is_fluid_check_3]
             |
-            |
-            \/ (pipe)
+
 
     errcode = get_wall_material_type(
         ctx, &wall_material, control_volume_id, &size_wall);
