@@ -89,7 +89,7 @@ using get_wall_material_names_func = int (*) (
     );
 using get_wall_material_type_func = int (*) (
     void* ctx,
-    int** wall_material,
+    int** wall_material_type,
     int control_volume_id,
     int* size
     );
