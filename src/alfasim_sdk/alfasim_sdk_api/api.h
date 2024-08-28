@@ -903,12 +903,12 @@ DLL_EXPORT int get_wall_material_names(void* ctx, char*** material_names_in_wall
     ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] wall_material Informs if the wall layer material type [1 - is fluid; 0 - is not fluid]
+    @param[out] wall_material_type Informs if the wall layer material type [1 - is fluid; 0 - is not fluid]
     @param[in] control_volume Control volume id.
-    @param[out] size Size of the `wall_names` and `prop_values` array of values.
+    @param[out] size Size of the `wall_material_type` array.
     @return An #error_code value.
 */
-DLL_EXPORT int get_wall_material_type(void* ctx, int** wall_material, int control_volume_id, int* size);
+DLL_EXPORT int get_wall_material_type(void* ctx, int** wall_material_type, int control_volume_id, int* size);
 
 /*!
     Gets the current input data for liquid effective viscosity calculation. Any available variable by
