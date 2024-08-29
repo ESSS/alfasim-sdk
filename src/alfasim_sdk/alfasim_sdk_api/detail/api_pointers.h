@@ -82,6 +82,8 @@ using get_flow_pattern_func = int (*)(
     int* size
     );
 using get_deposition_thickness_func = int (*)(void* ctx, double** out, int phase_id, enum TimestepScope ts_scope, int* size);
+using set_warning_message_func = int (*)(const char* warning_message);
+using set_information_message_func = int (*)(const char* information_message);
 using get_tracer_id_func = int (*)(void* ctx, int* tracer_id, void* reference);
 using get_tracer_name_size_func = int (*)(void* ctx, int* tracer_name_size, void* reference);
 using get_tracer_name_func = int (*)(void* ctx, char* tracer_name, void* reference, int size);
@@ -145,6 +147,9 @@ struct ALFAsimSDK_API {
     get_flow_pattern_func get_liqliq_flow_pattern;
 
     get_deposition_thickness_func get_deposition_thickness;
+
+    set_warning_message_func set_warning_message;
+    set_information_message_func set_information_message;
 
     get_tracer_id_func get_tracer_id;
     get_tracer_name_size_func get_tracer_name_size;
