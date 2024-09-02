@@ -163,11 +163,6 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_flow_pattern
 
-.. doxygenfunction:: log_warning_message
-
-.. doxygenfunction:: log_information_message
-
-
 
 Unit Cell Model (UCM) helpers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,6 +186,13 @@ Liquid-Liquid Mechanistic Model helpers
 .. doxygenfunction:: get_relative_emulsion_viscosity
 
 .. _var_name_parsing:
+
+Solver Logging
+~~~~~~~~~~~~~~
+
+.. doxygenfunction:: log_warning_message
+
+.. doxygenfunction:: log_information_message
 
 Variable Name Parsing
 ~~~~~~~~~~~~~~~~~~~~~
