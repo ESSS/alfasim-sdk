@@ -621,7 +621,7 @@ DLL_EXPORT int get_deposition_thickness(
 );
 
 /*!
-    Sets a warning message at the solver logger.
+    Logs a warning message at the solver logger.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[in] plugin_id ALFAsim's plugins id
@@ -631,7 +631,7 @@ DLL_EXPORT int get_deposition_thickness(
 DLL_EXPORT int log_warning_message(void* ctx, const char* plugin_id, const char* warning_message);
 
 /*!
-    Sets an information message at the solver logger.
+    Logs an information message at the solver logger.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[in] plugin_id ALFAsim's plugins id
