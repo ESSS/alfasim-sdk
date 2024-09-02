@@ -627,7 +627,7 @@ DLL_EXPORT int get_deposition_thickness(
     @param[in] warning_message Warning Message.
     @return An #error_code value.
 */
-DLL_EXPORT int set_warning_message(const char* warning_message);
+DLL_EXPORT int log_warning_message(const char* warning_message);
 
 /*!
     Sets an information message at the solver logger.
@@ -636,7 +636,7 @@ DLL_EXPORT int set_warning_message(const char* warning_message);
     @param[in] info_message Information Message.
     @return An #error_code value.
 */
-DLL_EXPORT int set_information_message(const char* info_message);
+DLL_EXPORT int log_information_message(const char* info_message);
 
 /*!
     Retrieves the tracer ID given a tracer reference. A tracer reference may be obtained from the

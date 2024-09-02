@@ -80,8 +80,8 @@ inline int alfasim_sdk_open(ALFAsimSDK_API* api)
     api->get_flow_pattern = (get_flow_pattern_func)dlsym(api->handle, "get_flow_pattern");
     api->get_liqliq_flow_pattern = (get_flow_pattern_func)dlsym(api->handle, "get_liqliq_flow_pattern");
     api->get_deposition_thickness = (get_deposition_thickness_func)dlsym(api->handle, "get_deposition_thickness");
-    api->set_warning_message = (set_warning_message_func)dlsym(api->handle, "set_warning_message");
-    api->set_information_message = (set_information_message_func)dlsym(api->handle, "set_information_message");
+    api->log_warning_message = (log_warning_message_func)dlsym(api->handle, "log_warning_message");
+    api->log_information_message = (log_information_message_func)dlsym(api->handle, "log_information_message");
     api->get_plugin_input_data_table_quantity = (get_plugin_input_data_table_quantity_func)dlsym(api->handle, "get_plugin_input_data_table_quantity");
     api->get_tracer_id = (get_tracer_id_func)dlsym(api->handle, "get_tracer_id");
     api->get_tracer_name_size = (get_tracer_name_size_func)dlsym(api->handle, "get_tracer_name_size");

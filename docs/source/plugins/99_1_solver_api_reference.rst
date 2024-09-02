@@ -163,9 +163,9 @@ ALFAsim's Solver Data
 
 .. doxygenfunction:: get_flow_pattern
 
-.. doxygenfunction:: set_warning_message
+.. doxygenfunction:: log_warning_message
 
-.. doxygenfunction:: set_information_message
+.. doxygenfunction:: log_information_message
 
 
 
