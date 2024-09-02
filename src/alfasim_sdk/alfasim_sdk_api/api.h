@@ -624,19 +624,21 @@ DLL_EXPORT int get_deposition_thickness(
     Sets a warning message at the solver logger.
 
     @param[in] ctx ALFAsim's plugins context.
+    @param[in] plugin_id ALFAsim's plugins id
     @param[in] warning_message Warning Message.
     @return An #error_code value.
 */
-DLL_EXPORT int log_warning_message(const char* warning_message);
+DLL_EXPORT int log_warning_message(void* ctx, const char* plugin_id, const char* warning_message);
 
 /*!
     Sets an information message at the solver logger.
 
     @param[in] ctx ALFAsim's plugins context.
+    @param[in] plugin_id ALFAsim's plugins id
     @param[in] info_message Information Message.
     @return An #error_code value.
 */
-DLL_EXPORT int log_information_message(const char* info_message);
+DLL_EXPORT int log_information_message(void* ctx, const char* plugin_id, const char* info_message);
 
 /*!
     Retrieves the tracer ID given a tracer reference. A tracer reference may be obtained from the
