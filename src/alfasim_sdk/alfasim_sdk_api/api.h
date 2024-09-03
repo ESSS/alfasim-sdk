@@ -622,6 +622,7 @@ DLL_EXPORT int get_deposition_thickness(
 
 /*!
     Logs a warning message at the solver logger.
+    Information will be logged as follow: "Warning: {warning_message}"
 
     @param[in] ctx ALFAsim's plugins context.
     @param[in] plugin_id ALFAsim's plugins id
