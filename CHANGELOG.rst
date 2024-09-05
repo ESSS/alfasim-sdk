@@ -6,6 +6,7 @@ CHANGELOG
 ===================
 
 * Added support to read historic data curves directly from the results of History Matching analyses.
+* Added support for warning and information logging.
 
 
 2024.1 (2024-05-27)

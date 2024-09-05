@@ -195,6 +195,13 @@ Liquid-Liquid Mechanistic Model helpers
 
 .. _var_name_parsing:
 
+Solver Logging
+~~~~~~~~~~~~~~
+
+.. doxygenfunction:: log_warning_message
+
+.. doxygenfunction:: log_information_message
+
 Variable Name Parsing
 ~~~~~~~~~~~~~~~~~~~~~
 
