@@ -463,7 +463,7 @@ DLL_EXPORT int get_state_variable_array(
     - `"D"`: Pipe Inner Diameter [m]
     - `"A"`: Cross-sectional Area in each control volume [m2]
     - `"theta"`: Inclination of each control volume [rad]
-    - `"ks"`: Pipe roughness. Only available for FACE GridScope  [m]
+    - `"ks"`: Pipe roughness [m]
     - `"dx"`: Control Volume Length along the Pipe Axis [m]
     - `"dv"`: Volume of the control volume [m3]
     - `"D_eff"`: Effective Pipe Inner Diameter, considering the internal deposit layers [m]
