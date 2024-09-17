@@ -81,6 +81,13 @@ using get_wall_properties_func = int (*) (
     int control_volume_id,
     int* size
     );
+using set_wall_properties_func = int (*) (
+    void* ctx,
+    double prop_value,
+    const char* prop_name,
+    int control_volume_id,
+    int layer_id
+    );
 using get_wall_material_names_func = int (*) (
     void* ctx,
     char*** wall_names,
@@ -179,6 +186,7 @@ struct ALFAsimSDK_API {
     get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
 
     get_wall_properties_func get_wall_properties;
+    set_wall_properties_func set_wall_properties;
     get_wall_material_names_func get_wall_material_names;
     get_wall_material_type_func get_wall_material_type;
 
