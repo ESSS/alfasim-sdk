@@ -906,14 +906,14 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
     ~~~~~{.cpp}
     double new_rho = 800;
     int control_volume_id = control_volume_1;
-    int layer_id = prop_wall_1; 
+    int layer_id = prop_wall_1;
 
     errcode = set_wall_properties(
         ctx, new_rho, "rho", control_volume_id, layer_id);
     ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[in] prop_value Property value that will be set 
+    @param[in] prop_value Property value that will be set
     @param[in] prop_name String with the property name. See the list of possible values above.
     @param[in] control_volume_id Control volume id.
     @param[in] layer_id Layer id.
