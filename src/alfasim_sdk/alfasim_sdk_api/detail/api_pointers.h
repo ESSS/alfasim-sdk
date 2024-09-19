@@ -83,8 +83,8 @@ using get_wall_properties_func = int (*) (
     );
 using set_wall_properties_func = int (*) (
     void* ctx,
-    double prop_value,
     const char* prop_name,
+    double prop_value,
     int control_volume_id,
     int layer_id
     );
