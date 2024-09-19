@@ -2,7 +2,13 @@
 CHANGELOG
 =========
 
-2024.2 (unreleased)
+1.0.0 (UNRELEASED)
+================
+
+* We have decided internally to revert the versioning schema back to SemVer, starting at ``1.0.0``, in order to improve better backward and forward compatibility support for plugins.
+
+
+2024.2 (2024-09-10)
 ===================
 
 * Added support to read historic data curves directly from the results of History Matching analyses.
