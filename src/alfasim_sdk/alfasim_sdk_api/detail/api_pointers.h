@@ -81,11 +81,11 @@ using get_wall_properties_func = int (*) (
     int control_volume_id,
     int* size
     );
-using get_wall_material_names_func = int (*) (
+using get_wall_material_name_func = int (*) (
     void* ctx,
-    char*** wall_names,
+    char** wall_name,
     int control_volume_id,
-    int* size
+    int layer_id
     );
 using get_wall_material_type_func = int (*) (
     void* ctx,
@@ -179,7 +179,7 @@ struct ALFAsimSDK_API {
     get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
 
     get_wall_properties_func get_wall_properties;
-    get_wall_material_names_func get_wall_material_names;
+    get_wall_material_name_func get_wall_material_name;
     get_wall_material_type_func get_wall_material_type;
 
     get_input_variable_func get_ucm_friction_factor_input_variable;
