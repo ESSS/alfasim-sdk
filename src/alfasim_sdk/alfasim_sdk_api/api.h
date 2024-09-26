@@ -922,34 +922,38 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
 DLL_EXPORT int set_wall_properties(void* ctx, const char* prop_name, double prop_value, int control_volume_id, int layer_id);
 
 /*!
-    Gets the names of the materials presented in each layer of the wall for a given control volume.
-    The names will be given as an array of char pointers.
+    Gets the name of the material for a given control volume and layer.
+    The names will be given as char pointer.
+
 
     Example of usage:
 
     ~~~~~{.cpp}
 
-                                               [material_name_4]
-      [material_name_3]                        [material_name_3]
-      [material_name_2]   [material_name_2]    [material_name_2]
-      [material_name_1]   [material_name_1]    [material_name_1]
-      [material_name_0]   [material_name_0]    [material_name_0]
-              |                   |                   |
-    --[control_volume_1]--[control_volume_2]--[control_volume_3]-->  (Pipe)
+                                                           [material_name_4_cv_3]
+    [material_name_3_cv_1]                                 [material_name_3_cv_3]
+    [material_name_2_cv_1]      [material_name_2_cv_2]     [material_name_2_cv_3]
+    [material_name_1_cv_1]      [material_name_1_cv_2]     [material_name_1_cv_3]
+    [material_name_0_cv_1]      [material_name_0_cv_2]     [material_name_0_cv_3]
+              |                           |                          |
+    --[control_volume_1]----------[control_volume_2]---------[control_volume_3]--------->  (Pipe)
     ~~~~~
 
     ~~~~~{.cpp}
-    errcode = get_wall_material_names(
-        ctx, &material_names_in_wall, control_volume_id, &size_wall);
+    int layer_id = 1
+    int control_volume = control_volume_2
+
+    errcode = get_wall_material_name(
+        ctx, &material_name, control_volume_id, layer_id);
     ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] material_names_in_wall Names of the material presented in the wall.
+    @param[out] material_name Name of the material presented in the wall.
     @param[in] control_volume_id Control volume id.
-    @param[out] size Size of the `material_names_in_wall` array.
+    @param[in] layer_id Layer id.
     @return An #error_code value.
 */
-DLL_EXPORT int get_wall_material_names(void* ctx, char*** material_names_in_wall, int control_volume_id, int* size);
+DLL_EXPORT int get_wall_material_name(void* ctx, char** material_name, int control_volume_id, int layer_id);
 
 /*!
     Gets the information if the each layer in the wall is fluid or not for a given control volume.
