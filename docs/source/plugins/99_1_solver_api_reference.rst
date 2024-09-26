@@ -155,6 +155,8 @@ ALFAsim's Solver Data
     Changing the contents retrieved by this function (`out` array) has **UNDEFINED BEHAVIOR**.
     The plugin must **NEVER** change the contents returned by this function.
 
+.. doxygenfunction:: set_wall_properties
+
 .. doxygenfunction:: get_wall_material_type
 
 .. doxygenfunction:: get_tracer_id

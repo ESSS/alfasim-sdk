@@ -881,8 +881,50 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
 
 
 /*!
+    Sets a property value in a given control value and layer.
+
+    List of `prop_name`:
+    - `"rho"`: Wall Density [kg/m3]
+    - `"cp"`: Wall Specific Heat Capacity [J/kg.K]
+    - `"volumetric_thermal_expansion"`: Wall Volumetric Thermal Expansion [1/K]
+    - `"mu"`: Wall dynamic viscosity [Pa.s]
+    - `"k"` : Wall Thermal Conductivity [W/m.degC]
+
+    Example of usage:
+
+    ~~~~~{.cpp}
+
+                                                [prop_wall_4]
+        [prop_wall_3]                           [prop_wall_3]
+        [prop_wall_2]       [prop_wall_2]       [prop_wall_2]
+        [prop_wall_1]       [prop_wall_1]       [prop_wall_1]
+        [prop_wall_0]       [prop_wall_0]       [prop_wall_0]
+              |                   |                   |
+    --[control_volume_1]--[control_volume_2]--[control_volume_3]-->  (Pipe)
+    ~~~~~
+
+    ~~~~~{.cpp}
+    double new_rho = 800;
+    int control_volume_id = control_volume_1;
+    int layer_id = prop_wall_1;
+
+    errcode = set_wall_properties(
+        ctx, "rho", new_rho, control_volume_id, layer_id);
+    ~~~~~
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[in] prop_name String with the property name. See the list of possible values above.
+    @param[in] prop_value Property value that will be set.
+    @param[in] control_volume_id Control volume id.
+    @param[in] layer_id Layer id.
+    @return An #error_code value.
+*/
+DLL_EXPORT int set_wall_properties(void* ctx, const char* prop_name, double prop_value, int control_volume_id, int layer_id);
+
+/*!
     Gets the name of the material for a given control volume and layer.
     The names will be given as char pointer.
+
 
     Example of usage:
 
