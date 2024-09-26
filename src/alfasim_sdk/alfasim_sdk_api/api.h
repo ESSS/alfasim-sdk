@@ -906,7 +906,7 @@ DLL_EXPORT int get_wall_properties(void* ctx, double** prop_values, const char* 
     ~~~~~
 
     @param[in] ctx ALFAsim's plugins context.
-    @param[out] material_name Names of the material presented in the wall.
+    @param[out] material_name Name of the material presented in the wall.
     @param[in] control_volume_id Control volume id.
     @param[in] layer_id Layer id.
     @return An #error_code value.
