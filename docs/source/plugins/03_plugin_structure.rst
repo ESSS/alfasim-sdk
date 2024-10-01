@@ -3,7 +3,7 @@
 Plugins Structure
 =================
 
-As mentioned in :ref:`quick-start-section`, the |sdk| package has some utilities to help in the process to create
+As mentioned in :ref:`quick-start-section`, the |sdk| package has some utilities to help in the process of creating
 a plugin file.
 
 First, to create the plugin use :program:`new`:
@@ -21,10 +21,8 @@ First, to create the plugin use :program:`new`:
 Pyinvoke tasks
 --------------
 
-Except for creating the plugin structure, all other activities that you might want to perform, you will use ``pyinvoke`` tasks.
-
-Below there is detailed list on what they are meant to do. However, in general, the tasks that you will use the most are ``compile``,
-``package`` and ``update``.
+Once the plugin structure is created, you can perform all necessary activities using ``pyinvoke`` tasks, with ``compile``, ``package``  and ``update`` beeing the
+most commonly used during plugin development. Below you can find a list of all available along with their descriptions.
 
 .. invoke::
    :module: alfasim_sdk.default_tasks

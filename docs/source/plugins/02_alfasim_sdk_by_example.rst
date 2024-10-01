@@ -5,8 +5,8 @@ Plugin by Example
 =================
 
 
-In this section, we will continue to customize the plugin created from the previous section,
-this plugin will calculate the oil velocity to the power of a given exponent provided by the user from the user interface.
+In this section, we will continue to customize the plugin created from the previous section.
+This plugin will calculate the oil velocity to the power of a given exponent provided by the user from the user interface.
 
 The following equation describes the plugin:
 
@@ -26,11 +26,11 @@ The following equation describes the plugin:
 
 For this, we will need to:
 
-#. Create a simple input, on the user interface.
+#. Create a simple input on the user interface.
 #. Add a secondary variable, to keep track of the value.
 #. Retrieve the input data on the :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>`.
 #. Save the input data on a plugin internal data.
-#. Get the oil velocity from the solver, during run-time.
+#. Get the oil velocity from the solver during run-time.
 #. Export the value into the created/registered plugin secondary variable.
 
 
@@ -54,7 +54,7 @@ the locations where a custom model can be inserted using the hook |gui_hook|.
 For this example we will use a :py:func:`~alfasim_sdk.data_model` entry over the Tree,
 using a :py:class:`~alfasim_sdk.Quantity` field to get exponent value from the user.
 
-The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located on :file:`myplugin/src/python` folder.
+The hook |gui_hook| needs to be implemented in the :file:`myplugin.py`, found in :file:`myplugin/src/python` folder.
 
 .. rubric:: Implementation of :file:`myplugin.py`
 
@@ -74,7 +74,7 @@ The hook |gui_hook| needs to be implemented on the :file:`myplugin.py`, located 
 
 
 Notice that only models that are returned by the hook :py:func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_data_model_type`
-will be included on the user interface of |alfasim|.
+will be included in the user interface of |alfasim|.
 
 The image below illustrates the application with the output from the snippet above.
 
@@ -90,18 +90,18 @@ And for more detail about the available models, check the section :ref:`api-mode
 Solver Configuration
 --------------------
 
-|sdk| provides hooks to customize the settings of the application that configures the solver internally,
-some of these configurations are:
+|sdk| provides hooks to customize the settings of the application that configures the solver internally.
+Some of these configurations are:
 
 - Creation/Registration of new secondary variables
 - Creation of new phases/fields/layers.
 - Update of default phases and layers from the application.
 
-For this example, a new |s_variable| will be created, to track the oil velocity to the power of a custom value provided from the user.
+For this example, a new |s_variable| will be created to track the oil velocity to the power of a custom value provided by the user.
 
 
 A *Secondary Variable* is a variable that can be calculated along the `Network`. Also, if configured as external, this
-variable will be set an Output, and will be available within the Trends and Profiles plots.
+variable will be set as an Output, and will be available within the Trends and Profiles plots.
 
 To create these variables, the hook |s_variable_hook| must be implemented in the :file:`myplugin.py` file.
 
@@ -130,7 +130,7 @@ To create these variables, the hook |s_variable_hook| must be implemented in the
         ]
 
 
-The image below illustrates the application with the output from the snippet above. To access that window, first select the desired structure
+The image below illustrates the application with the output from the snippet above. To access the configuration window, first select the desired structure
 then go to Output Options at the left side tree and add/edit a trend.
 
 .. image:: /_static/images/plugin_example/secondary_variable_trend_output.png
@@ -144,14 +144,14 @@ Hooks for Solver
 |sdk| provides hooks that can customize the ``Solver`` behavior, this customization are implemented in C/C++ and can
 make use of the :ref:`ALFAsim-SDK C/C++ API <sdk_api>` in order to fetch information from the application.
 
-At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared from
+At this point, we are going to implement the :ref:`solver_hooks` that updates the secondary variable declared in
 :file:`myplugin.py` file and retrieve the ``Oil Velocity`` from the |alfasim|'s Solver.
 
-First, we need to implement two mandatory hooks, the :py:func:`HOOK_INITIALIZE <alfasim_sdk._internal.hook_specs.initialize>` and
+First, we need to implement two mandatory hooks: the :py:func:`HOOK_INITIALIZE <alfasim_sdk._internal.hook_specs.initialize>` and
 the :py:func:`HOOK_FINALIZE <alfasim_sdk._internal.hook_specs.finalize>`
 
 With them it is possible to initialize any custom data (to store any important information) for internal use. Also it is
-needed to load and unload the |sdk| API, in which will allows the plugin to use the API in any implemented `hook`.
+necessary to load and unload the |sdk| API, allowing the plugin to use the API in any implemented `hook`.
 
 .. rubric::  Implementation of :file:`myplugin.cpp`
 
@@ -221,7 +221,7 @@ needed to load and unload the |sdk| API, in which will allows the plugin to use 
         return OK;
     }
 
-Then, since the plugin wants to calculate its own secondary variable, the
+Then, since the plugin aims to calculate its own secondary variable, the
 :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES <alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>` must be implemented.
 As can be seen in the example below, to retrieve the velocity of the continuous oil field
 it is necessary to use the :cpp:func:`get_simulation_array` API function.
@@ -301,7 +301,7 @@ it is necessary to use the :cpp:func:`get_simulation_array` API function.
     }
 
 
-The image below illustrates the output from the solver, when running the plugin created in this section with the given
+The image below illustrates the output from the solver when running the plugin created in this section with the given
 network. That information can be seen by selecting the desired structure and opening the Trend plot window.
 
 .. image:: /_static/images/plugin_example/output_graph.png

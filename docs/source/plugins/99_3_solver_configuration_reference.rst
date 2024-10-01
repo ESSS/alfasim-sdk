@@ -1,7 +1,7 @@
 Configuration API
 =================
 
-Here is listed the completed API available to implement the :ref:`solver_config_hooks-section`.
+Here is listed the complete API available to implement the :ref:`solver_config_hooks-section`.
 
 .. contents::
     :depth: 3

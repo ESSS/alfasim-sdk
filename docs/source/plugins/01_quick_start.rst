@@ -18,16 +18,15 @@ the official docs <https://www.python.org/downloads/>`_.
 
 .. note::
 
-    It is recommended that you install the |sdk| using the conda package manager. With the commands below, a conda
-    environment would be created with |sdk| installed on it.
+    It is recommended to install the |sdk| using the conda package manager. The following commands will create a conda environment with |sdk| installed.
 
     .. code-block:: bash
 
-        >>> conda env create -n sdk_env
+        >>> conda create -n sdk_env
         >>> conda activate sdk_env
         >>> pip install alfasim-sdk
 
-    Another approach could be adding a ``environment.yml`` to your project and declare the ``alfasim-sdk`` inside the ``pip`` dependencies.
+    Alternatively, an ``environment.yml`` can be added to your project and ``alfasim-sdk`` can be declared at ``pip`` dependencies.
 
     For more details, see `Getting started with conda <https://conda.io/projects/conda/en/latest/user-guide/getting-started.html>`_.
 
@@ -100,16 +99,16 @@ After the execution of the :program:`new` command the generated plugin project w
 The highlights here are for:
 
 :plugin.yaml: File with all information about the plugin that will be used by |alfasim|.
-:myplugin.py: Implementation of the hooks for customization of the UI interface, or the solver configuration hooks.
+:myplugin.py: Implementation of the hooks for customization of the user interface or the solver configuration hooks.
 :myplugin.c:  Implementation of the hooks for customization of solver.
 
-Check out the :ref:`Plugin Structure section <plugin_structure-section>` for more details about how the folder and files are structured, and
-also, check the :ref:`plugin-by-example-section` that shows how to create simple plugins that make use of the `User Interface Hooks` and the `Solver Hooks`.
+Refer to the :ref:`Plugin Structure section <plugin_structure-section>` for more details about how the folder and files are structured.
+The section :ref:`plugin-by-example-section` shows how to create simple plugins that make use of the `User Interface Hooks` and the `Solver Hooks`.
 
 Invoke
 ------
 
-From version 0.17.0 onwards, |sdk| started using `pyinvoke`_ tasks in order facilitate and standardize the plugins development process
+Since version 0.17.0, |sdk| started using `pyinvoke`_ tasks in order facilitate and standardize the plugins development process
 using pre-defined tasks. A standard ``tasks.py`` file is generated automatically by the :program:`new` command, which can be customized by the user if needed.
 
 To list the tasks available, use:
@@ -124,8 +123,8 @@ To list the tasks available, use:
 Creating a package
 ------------------
 
-From the root directory of the plugin, execute the command `invoke package`.
-This command will compile your C/C++ implementation and include the shared libraries inside a `artifacts` directory and
+From the plugin root directory, execute the command `invoke package`.
+This command will compile your C/C++ implementation and include the shared libraries inside an `artifacts` directory and
 the generated plugin on the root directory with the extension `hmplugin`.
 
 .. code-block:: bash
@@ -171,18 +170,18 @@ Installing the plugin
 ---------------------
 
 With :file:`myplugin.hmplugin` file, it is now possible to install it on |alfasim| application.
-From the menu bar select the `Plugin Manager` option, as illustrated in the figure below:
+At the menu bar select the `Plugin Manager` option, as illustrated in the figure below:
 
 .. image:: /_static/images/quick_start/menu_bar.png
 
-In the `Plugin Manager` windows, install :file:`myplugin.hmplugin` file plugin.
+In the `Plugin Manager` window, install :file:`myplugin.hmplugin` file plugin.
 
 .. image:: /_static/images/quick_start/plugin_manager_empty.png
 
-By clicking on the plugin name, it is possible to visualize the content from the :file:`README.md` file.
+By clicking on the plugin name, it is possible to visualize the content of the :file:`README.md` file.
 
 .. image:: /_static/images/quick_start/plugin_manager_with_plugin.png
 
-Restart the application and check the recently installed plugin available over the :guilabel:`Tree`.
+Restart the application and check the recently installed plugin available at the :guilabel:`Tree`.
 
 .. image:: /_static/images/quick_start/tree_with_plugin.png
