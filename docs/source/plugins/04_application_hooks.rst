@@ -7,8 +7,7 @@ The application hooks allow plugins to add custom models or custom checks in the
 To add an application hook it is necessary to implement the given hook in a python file that is
 already available on your plugin project folder.
 
-As an example, if the ``alfasim-sdk new`` command was created with the name ``myplugin``, the necessary file to
-be customized will be located on: :menuselection:`myplugin --> src --> python --> myplugin.py`
+For example, after executing the command ``alfasim-sdk new myplugin``, the file ``myplugin.py``, located at :menuselection:`myplugin --> src --> python` should be customized.
 
 .. contents::
     :depth: 3

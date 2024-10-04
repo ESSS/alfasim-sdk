@@ -3,10 +3,10 @@
 Solver Hooks
 ============
 
-The present section describes all solver `Hooks` available on |alfasim| plugin infrastructure.
-Solver `Hooks` are |alfasim|'s pre-defined functions that allows the plugin developer to modify/extend |alfasim|'s Solver.
-As already informed in :ref:`Quick Start <quick-start-section>` section once created a plugin using ``new`` option
-on |sdk|'s CLI a new file named ``plugin.c`` will be available to implement those `hooks`.
+The present section describes all solver `Hooks` available in |alfasim| plugin infrastructure.
+Solver `Hooks` are |alfasim|'s pre-defined functions that allow plugin developer to modify or extend |alfasim|'s Solver.
+As already informed in :ref:`Quick Start <quick-start-section>` section, once created a plugin using ``new`` option
+in |sdk|'s CLI a new file named ``plugin.cpp`` will be available to implement those `hooks`.
 
 .. Note::
     There is no need to implement all solver `hooks` in the plugin. It depends on which functionality the developer wants
@@ -31,12 +31,11 @@ Initial configuration and plugin internal data
 ----------------------------------------------
 
 In the :ref:`User Interface Hooks <user_interface_hooks-section>` section is explained that the plugins are allowed to
-customize the |alfasim|'s user interface extending it in order to get some input data from the user. Using the solver
+customize the |alfasim|'s user interface extending it in order to get input data from the user. Using the solver
 :py:func:`HOOK_INITIALIZE<alfasim_sdk._internal.hook_specs.initialize>` the developer can obtain the input data from user interface and use it to
 initialize the plugin internal data.
 
-As already mentioned, it is allowed that the plugins have internal data, in which can hold some important information that
-will be used during the simulation, and also by other `hooks`.
+As already mentioned, plugins internal data can hold the information that will be used during the simulation, which will be available for the other `hooks`.
 
 .. warning::
     The plugin internal data will be hold by |alfasim|'s solver, however the plugin has full responsibility to allocate
@@ -72,22 +71,23 @@ Update plugin variables
 
 The `hooks` described in this section are related to plugin secondary variables that were registered in the python config
 file, as already explained in :ref:`solver_customization` section. They are called `secondary variables` because they
-are not obtained from |alfasim|'s Solver, these ones are called primary variables and examples of those variables are `pressure`,
-`temperature`, `volume fractions` and `velocities`.
+are not obtained from |alfasim|'s Solver like the `pressure`, `temperature`, `volume fractions` and `velocities`, called primary variables instead.
 
 Using the following `hooks` the plugin is able to calculate/update those variables in three different moments of the
 simulation step. Two of them are called in the `Hydrodynamic Solver` scope and the last one is called in the
 `Tracers Solver` scope as illustrated on :ref:`hyd_solver` and :ref:`tracer_solver` workflow section. Once the solver obtain results for primary variables, it updates all secondary variables in which
 depend on primary variables. After that, :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables>`
-is called, but if it is running the `first time step`
+is called, but at the `first time step`
 :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_FIRST_TIMESTEP<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_first_timestep>`
-is called before. It is necessary because usually during the `first time step` some initialization tasks are needed. Then,
-if the plugin needs to initialize with some value that is different from the initial ``nan`` value, this hook is the place to do that.
-Another possibility is to update secondary variables explicitly on timestep. For that :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_time_explicit>` can be used and it will be called once at the end of the timestep. This hook is important in situations where the secondary variable doesn't affect the solution or when secondary variable computations are extremely heavy, in which computational time would be prohibited.
+should be called before because usually during the `first time step` some initialization tasks are needed. Then,
+if any plugin variable needs to be initialized with some value different from the initial ``nan`` value, this hook is the place to do that.
+Another possibility is to update secondary variables explicitly on timestep. For that :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_TIME_EXPLICIT<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_time_explicit>`
+can be used and it will be called once at the end of the timestep. This hook is important in situations where the secondary variable doesn't affect the solution or when secondary variable computations are extremely heavy,
+making computational time prohibitive.
 
 .. note::
     Different from plugin internal data, the secondary variables registered by plugins are allocated, deallocated and
-    held by |alfasim|'s Solver. It is necessary because the variables arrays are dependent on `network` with its
+    held by |alfasim|'s Solver. It is necessary because the variables arrays depend on `network` with its
     discretization and on `hydrodynamic model`, which defines the fluid flow's `phases`, `fields` and `layers`.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables
@@ -99,11 +99,11 @@ Another possibility is to update secondary variables explicitly on timestep. For
 The |alfasim|'s Solver is divided in two *non-linear solvers* solvers that will solve different group of equations. The first one is
 the `hydrodynamic solver` which solves the Mass Conservation of fields, Momentum Conservation of layers and Energy Conservation
 equations all together for all elements in the network. The second one is the `Tracer Solver` which solves the Mass Conservation
-Equation for each added tracer. Since the tracers mass conservation is a transport equation it is solved after `hydrodynamic solver`
+Equation for each added tracer. Since the tracers mass conservation is a transport equation, it is solved after `hydrodynamic solver`
 and using its results (such as `velocities`) as input data in the `Tracer Solver`. See the |alfasim|'s Technical Report
 for more information.
 
-To complete the group of `hooks` related to the plugins secondary variables there is the :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_tracer_solver>`.
+The hook :py:func:`HOOK_UPDATE_PLUGINS_SECONDARY_VARIABLES_ON_TRACER_SOLVER<alfasim_sdk._internal.hook_specs.update_plugins_secondary_variables_on_tracer_solver>` completes the group of `hooks` related to the plugins secondary variables.
 This `hook` is used to update plugin's variables that depends on Tracer's mass fractions and has to be updated in the
 `Tracer Solver` scope.
 
@@ -117,7 +117,7 @@ This `hook` is used to update plugin's variables that depends on Tracer's mass f
 Source Terms
 ------------
 
-The `hooks` showed in this section can be considered as the most important. Since they allow the plugin to change the
+The `hooks` showed in this section can be considered as the most important since they allow the plugin to change the
 conservation equations. This is achieved by adding source terms in the residual function of mass, momentum and energy conservation
 equations. Since the equations are in residual form, the negative values of source terms indicate that mass, momentum and
 energy will be consumed. Otherwise, some amount of mass, momentum, and energy will be generated.
@@ -149,7 +149,7 @@ Additional solid phase
 ----------------------
 
 When a new phase is added to the hydrodynamic model using the :py:class:`~alfasim_sdk.AddPhase` type, it is possible
-to set as a `solid phase`. In this case, the particle size of `fields` that are `solid phase` can be calculated by
+to set it as a `solid phase`. In this case, the particle size of `fields` that are `solid phase` can be calculated by
 implementing the following Solver `Hooks`. Otherwise, the particle size will be considered constant and equal to
 :math:`1\times10^{-4}` meters.
 
@@ -161,7 +161,7 @@ Solids Model
 ------------
 
 When a new solid phase is added to the hydrodynamic model using the :class:`~alfasim_sdk.AddPhase` type, it is
-possible simulate a case with solid phase dispersed in fluids. In this kind of simulation a solids model can be
+possible to simulate a case with solid phase dispersed in fluids. In this kind of simulation a solids model can be
 chosen by the user through |alfasim|'s GUI. Those models are able to calculate the slurry viscosity of the layer
 and the slip velocity of the dispersed solid phase. Currently, there are only three solids model available, however
 any plugin can add its own solids model. For that, it is necessary to implement the following hooks.
@@ -174,8 +174,8 @@ Internal deposit layer
 ----------------------
 
 When a new phase is added to the hydrodynamic model using the :py:class:`~alfasim_sdk.AddPhase` type, it is possible
-to consider the deposition inside the pipeline walls. If so, calculate the thickness of the deposited layer on a given
-phase through the usage of :py:func:`~alfasim_sdk._internal.hook_specs.update_internal_deposition_layer`. By default, the layer
+to consider the deposition inside the pipeline walls. In this case, the thickness of the deposited layer on a given
+phase should be calculated through the usage of :py:func:`~alfasim_sdk._internal.hook_specs.update_internal_deposition_layer`. By default, the layer
 thickness will be considered equal to zero meters.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.update_internal_deposition_layer
@@ -190,7 +190,7 @@ flow is in the control volume.
 
 .. note::
     It is important to know that the main input variables needed to compute the friction factor is available in
-    the API function :cpp:func:`get_ucm_friction_factor_input_variable`. Note that, the variables listed in the
+    the API function :cpp:func:`get_ucm_friction_factor_input_variable`. Note that the variables listed in the
     documentation of the cited function are related to one control volume, in which the Unit Cell Model is applied.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs.calculate_ucm_friction_factor_stratified
@@ -205,10 +205,10 @@ Liquid-Liquid Mechanistic Model
 -------------------------------
 
 |alfasim|'s resulting multiphase model is a one-dimensional system of nonlinear equations, which is a result of some
-averaging steps that transforms a local instantaneous three-dimensional model into a one-dimensional multiphase (and
+averaging steps that transform a local instantaneous three-dimensional model into a one-dimensional multiphase (and
 multi-field) model. The derived variables that form the nonlinear differential equations represent average values at
 a given point in time and space. It is clear that in this averaging process there are important phenomena that will
-non longer be naturally captured from the equations and therefore one of the strategies is to incorporate all the
+no longer be naturally captured from the equations and therefore one of the strategies is to incorporate all the
 physics that have been lost in the averaging process in the shear stress term in order to accurately represent the
 physical behavior. Hence the shear stress is one of the most important parameters for characterizing the quality of a
 one-dimensional multiphase model.
@@ -217,9 +217,10 @@ The main goal of the mechanistic model is to calculate the friction pressure dro
 fractions and velocities.  |alfasim| supports two-phase (gas-liquid) and three-phase (gas-oil-water) flows, but for
 three-phase flow it is required a plugin that handles the oil-water system.
 
-.. note ::
-    Note that the two phase (Gas-Liquid) system of Mechanistic Model can be used for both two and three-phase flows,
-    in which is done in case of a liquid-liquid system is not available via plugin.
+.. note::
+    Note that the two-phase (Gas-Liquid) Mechanistic Model can be used for both two and three-phase flows (Fluid FLow Type selected by the user in ALFAsim).
+    When no Liquid-Liquid System is implemented by the plugin, the three-phase flow is adapted to work with the traditional two-phase Mechanistic Model,
+    in which all liquid phases are considered as only one.
 
 In the gas-liquid system the liquid phase is considered as a sum of all liquid phases, and the model take into account
 only the interaction behavior between these two phases (Gas and Liquid). Of course, this kind of approach brings some
@@ -288,7 +289,7 @@ The `hooks` described in this section must be implemented when at least one `use
     |tracer_warn|
 
 These `hooks` can modify the tracer transport equation from the initialization to configuration of boundary conditions.
-The plugin developer has complete freedom to change the equations, however it is important to be aware that it can be
+The plugin developer has full freedom to modify the equations, however it is important to be aware that it can be
 made manipulating the transport equation terms inside the `hooks`. For that, it is important to read the `Tracers`
 Chapter at |alfasim|'s Technical Manual.
 

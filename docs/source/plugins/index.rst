@@ -1,8 +1,8 @@
 Plugins
 =======
 
-The |sdk| help developers to create plugins for |alfasim| application.
-Plugins can extend the |alfasim| capabilities in a lot of ways, from adding a simple input to a custom calculation of solver equations.
+The |sdk| helps developers to create plugins for |alfasim| application.
+Plugins can extend the |alfasim| capabilities in many ways, from adding a simple input to a custom calculation of solver equations.
 
 Some examples of the capabilities that can be extended are:
 

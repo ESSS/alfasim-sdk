@@ -33,8 +33,8 @@ the hook listed below, the plugin can:
  - Add/update layers
 
 .. note::
-    For each new added ``field`` is considered a mass conservation equation and for each new added ``layer`` is considered
-    a momentum conservation and an energy conservation equations, depending on the energy model used at |alfasim|.
+    For each new added ``field``, an additional mass conservation equation is considered. For each new added ``layer``, an additional  momentum  equation is considered.
+    Depending on the energy model used at |alfasim|, an additional energy equation can be considered as well.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_configure_fields
 
@@ -44,7 +44,7 @@ the hook listed below, the plugin can:
 
 
 In order to complement the :py:class<alfasim-sdk.HydrodynamicModelType> customization, it is possible to inform |alfasim| which phases
-(added from plugin or not) will have the state variables calculated by plugin.
+(added by the plugin or not) will have the state variables calculated by plugin.
 
 .. autofunction:: alfasim_sdk._internal.hook_specs_gui.alfasim_get_phase_properties_calculated_from_plugin
 

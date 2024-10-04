@@ -1,7 +1,7 @@
 Application API
 ===============
 
-Here is listed the completed API available to implement the :ref:`user_interface_hooks-section`.
+Here is listed the complete API available to implement the :ref:`user_interface_hooks-section`.
 
 .. contents::
     :depth: 3
@@ -24,9 +24,9 @@ Types
 -----
 
 The ``types`` module supplies UI elements for creating user interfaces with the classic desktop-style, each type
-has a related model.
+related to a model.
 
-Models are the primary elements to create user interfaces on |alfasim|, models can display data, receive user input,
+Models are the primary elements to create user interfaces on |alfasim|. They can display data, receive user input,
 and provide a container for other fields that should be grouped together.
 
 
