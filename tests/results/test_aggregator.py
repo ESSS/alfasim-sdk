@@ -1,6 +1,7 @@
 import itertools
 import json
 import re
+import shutil
 from pathlib import Path
 from typing import List
 from typing import Literal
@@ -9,6 +10,7 @@ import attr
 import h5py
 import numpy
 import pytest
+from pytest import FixtureRequest
 from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
@@ -242,7 +244,7 @@ def test_cant_access_file_exception_handle(
     mocker: MockerFixture, results: Results
 ) -> None:
     mocker.patch("h5py.File", side_effect=PermissionError)
-    with pytest.raises(PermissionError, match="Could not access folder"):
+    with pytest.raises(PermissionError, match="Could not access the file"):
         with open_result_files(results.results_folder):
             assert False, "This should not be reached in this test"  # pragma: no cover
 
@@ -311,6 +313,24 @@ def test_read_trends_data_empty_arrays_when_no_time_set_info(results: Results) -
         f"timestep@{base_id}.item00001",
     }
     assert all([len(trend_data) == 0 for trend_data in trends.values()])
+
+
+def test_fancy_path(datadir: Path, request: FixtureRequest):
+    """
+    Ensure the HDF5 version we are using can work with paths containing non-ascii characters (ASIM-5880).
+
+    The setup is based on `results` fixture (from `conftest.py`).
+    """
+    repo_root = request.session.fspath
+    sample_results_data_folder = repo_root / "sample_alfasim_result/project.data"
+    test_data_folder = datadir / "fânçy_påtȟ.data"
+    shutil.copytree(sample_results_data_folder, test_data_folder)
+    results = Results(test_data_folder)
+    # Try to read the results from the fancy named folder.
+    assert set([p.property_name for p in results.list_profiles()]) == {
+        "pressure",
+        "total mass flow rate",
+    }
 
 
 def test_read_time_sets(

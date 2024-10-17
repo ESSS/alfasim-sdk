@@ -7,6 +7,8 @@ dependencies:
   - boltons
   - click
   - h5py
+  # Supports non-ascii paths (ASIM-5880).
+  - hdf5 >= 1.10
   - typing_inspect
 
 environment:
