@@ -7,6 +7,7 @@ dependencies:
   - boltons
   - click
   - h5py
+  - hdf5 >= 1.10
   - typing_inspect
 
 environment:
