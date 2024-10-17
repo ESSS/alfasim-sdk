@@ -244,7 +244,7 @@ def test_cant_access_file_exception_handle(
     mocker: MockerFixture, results: Results
 ) -> None:
     mocker.patch("h5py.File", side_effect=PermissionError)
-    with pytest.raises(PermissionError, match="Could not access folder"):
+    with pytest.raises(PermissionError, match="Could not access the file"):
         with open_result_files(results.results_folder):
             assert False, "This should not be reached in this test"  # pragma: no cover
 
