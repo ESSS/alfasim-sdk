@@ -633,25 +633,13 @@ def _open_result_file(filename: Path) -> h5py.File:
     if h5py.version.version_tuple[:2] >= (3, 5):
         h5py_file = functools.partial(h5py.File, locking=RESULT_FILE_LOCKING_MODE)
 
-    # The lib h5py will fail to open the file for some exotic paths,
-    # but will work if the cwd are such paths.
-    directory = filename.parent
-    old_directory = os.getcwd()
+    abs_path = str(filename.absolute())
     try:
-        os.chdir(directory)
-        try:
-            return h5py_file(filename.name, "r", libver="latest", swmr=True)
-        except OSError as os_error:
-            swmr_message = (
-                "Unable to open file (file is not already open for SWMR writing)"
-            )
-            if str(os_error) == swmr_message:
-                return h5py_file(filename.name, "r", libver="latest", swmr=False)
-            raise
+        return h5py_file(abs_path, "r", libver="latest", swmr=True)
 
     except PermissionError:
         raise PermissionError(
-            f"Could not access folder {filename}.\n"
+            f"Could not access the file {abs_path}.\n"
             f'If you are using your local "Downloads" directory, consider changing the project file\n'
             f"to somewhere else as some services try to synchronize that directory and interfere with\n"
             f"the simulation.\n"
@@ -660,8 +648,12 @@ def _open_result_file(filename: Path) -> h5py.File:
             f"2 - Select a different path, outside Download folder.\n"
             f"3 - Run simulation again.\n"
         )
-    finally:
-        os.chdir(old_directory)
+
+    except OSError as os_error:
+        swmr_message = "Unable to open file (file is not already open for SWMR writing)"
+        if str(os_error) == swmr_message:
+            return h5py_file(abs_path, "r", libver="latest", swmr=False)
+        raise
 
 
 def _get_number_of_base_time_steps_from_time_set_info(
