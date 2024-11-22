@@ -511,13 +511,18 @@ def test_read_history_matching_result_data(
     Check reading the result of both HM type analysis. Both results are available simultaneously by
     the means of the fixtures, but only one is used at a time.
     """
+    import numpy as np
+
     # Setup.
     if hm_type == "HM-probabilistic":
-        expected_results = ([0.1, 0.22, 1.0, 0.8, 0.55], [3.0, 6.0, 5.1, 4.7, 6.3])
+        expected_results = {
+            "parametric_var_1": np.array([0.1, 0.22, 1.0, 0.8, 0.55]),
+            "parametric_var_2": np.array([3.0, 6.0, 5.1, 4.7, 6.3]),
+        }
         results_dir = hm_probabilistic_results_dir
     else:
         assert hm_type == "HM-deterministic"
-        expected_results = (0.1, 3.2)
+        expected_results = {"parametric_var_1": 0.1, "parametric_var_2": 3.2}
         results_dir = hm_deterministic_results_dir
 
     metadata = read_history_matching_metadata(results_dir)
@@ -527,13 +532,20 @@ def test_read_history_matching_result_data(
         metadata, hm_type=hm_type, hm_result_key="parametric_var_1"
     )
     assert len(result) == 1
-    assert result["parametric_var_1"] == pytest.approx(expected_results[0])
+    assert len(result) == 1
+    assert result["parametric_var_1"] == pytest.approx(
+        expected_results["parametric_var_1"]
+    )
 
     # Read the result of all entries.
     result = read_history_matching_result(metadata, hm_type=hm_type)
     assert len(result) == 2
-    assert result["parametric_var_1"] == pytest.approx(expected_results[0])
-    assert result["parametric_var_2"] == pytest.approx(expected_results[1])
+    assert result["parametric_var_1"] == pytest.approx(
+        expected_results["parametric_var_1"]
+    )
+    assert result["parametric_var_2"] == pytest.approx(
+        expected_results["parametric_var_2"]
+    )
 
     # Unexistent result key, result should be empty.
     result = read_history_matching_result(
