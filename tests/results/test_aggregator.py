@@ -380,21 +380,29 @@ def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
         result_directory=global_sa_results_dir,
         group_name=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
     )
-    assert numpy.all(time_set == [0, 1, 2, 3, 4, 5, 6, 7])
+    assert numpy.all(time_set == [1, 2, 3, 4, 5, 6, 7])
 
 
 def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> None:
     metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     data = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_1@trend_id_1",
+        coefficients_key=[
+            "temperature::parametric_var_1@trend_id_1",
+            "temperature::parametric_var_2@trend_id_1",
+        ],
         metadata=metadata,
     )
-    assert numpy.all(data == (11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7))
-
-    data = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_2@trend_id_1", metadata=metadata
+    numpy.testing.assert_equal(
+        data,
+        {
+            "temperature::parametric_var_1@trend_id_1": numpy.array(
+                [11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7]
+            ),
+            "temperature::parametric_var_2@trend_id_1": numpy.array(
+                [12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7]
+            ),
+        },
     )
-    assert numpy.all(data == (12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7))
 
 
 def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
@@ -414,7 +422,7 @@ def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
         coefficients_key="temperature::parametric_var_1@trend_id_1",
         metadata=gsa_meta_data,
     )
-    assert coefficients is None
+    assert coefficients == {}
 
 
 def test_read_history_matching_result_metadata(

@@ -15,6 +15,7 @@ from typing import Iterator
 from typing import List
 from typing import Literal
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 from typing import Type
 from typing import TypeVar
@@ -1900,22 +1901,26 @@ def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.
 
 
 def read_global_sensitivity_coefficients(
-    coefficients_key: str,
+    coefficients_key: Sequence[str],
     metadata: GlobalSensitivityAnalysisMetadata,
-) -> Optional[np.ndarray]:
+) -> dict[str, np.ndarray]:
     """
     Read the global sensitivity analysis coefficients results.
     """
     # The metadata is empty.
     if not metadata.items:
-        return None
-    meta = metadata.items[coefficients_key]
+        return {}
+
+    result: dict[str, np.ndarray] = {}
     with open_result_file(
         metadata.result_directory, result_filename="result"
     ) as result_file:
-        gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
-        coefficients_dset = gsa_group["global_sensitivity_analysis"]
-        return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+        for key in coefficients_key:
+            meta = metadata.items[key]
+            gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
+            coefficients_dset = gsa_group["global_sensitivity_analysis"]
+            result[key] = coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+    return result
 
 
 def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMetadata:

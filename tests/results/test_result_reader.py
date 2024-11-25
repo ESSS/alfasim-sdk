@@ -1,10 +1,14 @@
 import json
+from pathlib import Path
 
 import numpy
 import pytest
 from barril.curve.curve import Curve
+from barril.units import Array
 from barril.units import Scalar
 
+from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.reader import GlobalSensitivityAnalysisResults
 from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
 from alfasim_sdk.result_reader.reader import OverallTrendMetadata
 from alfasim_sdk.result_reader.reader import PositionalTrendMetadata
@@ -134,3 +138,45 @@ def test_metadata_string():
 
     global_trend = GlobalTrendMetadata("property")
     assert str(global_trend) == "property"
+
+
+def test_global_sensibility_analysis_results_reader(
+    global_sa_results_dir: Path,
+) -> None:
+    # Read curve data and metadata of a valid, pre-existent result.
+    results = GlobalSensitivityAnalysisResults.from_directory(global_sa_results_dir)
+
+    assert results.get_sensibility_curve(
+        "temperature", "trend_id_1", "parametric_var_1"
+    ) == Curve(
+        image=Array("dimensionless", [11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7], "-"),
+        domain=Array("time", [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0], "s"),
+    )
+    assert results.get_sensibility_curve(
+        "temperature", "trend_id_1", "parametric_var_2"
+    ) == Curve(
+        image=Array("dimensionless", [12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7], "-"),
+        domain=Array("time", [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0], "s"),
+    )
+
+    assert results.get_metadata(
+        "temperature", "trend_id_1", "parametric_var_1"
+    ) == GlobalSensitivityAnalysisMetadata.GSAItem(
+        property_id="temperature",
+        trend_id="trend_id_1",
+        category="dimensionless",
+        network_element_name="Conexao 1",
+        position=100.0,
+        position_unit="m",
+        unit="-",
+        parametric_var_id="parametric_var_id_1",
+        parametric_var_name="A",
+        qoi_index=0,
+        qoi_data_index=0,
+    )
+
+    # Now ensure the reader can handle a nonexistent result.
+    results = GlobalSensitivityAnalysisResults.from_directory(Path("foo"))
+    numpy.testing.assert_array_equal(results.timeset, numpy.array([]))
+    assert results.coefficients == {}
+    assert results.metadata.items == {}

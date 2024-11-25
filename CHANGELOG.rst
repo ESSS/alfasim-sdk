@@ -8,6 +8,8 @@ CHANGELOG
 * We have decided internally to revert the versioning schema back to SemVer, starting at ``1.0.0``, in order to improve better backward and forward compatibility support for plugins.
 * Fix bug related to Probabilistic History Matching result reader. The shape of result was wrong.
 * Changed the constructor of result metadata objects in ``alfasim_sdk.result_reader.aggregator`` from ``attr`` to ``dataclasses.dataclass`` to make then more easily integrated into the (de)serialization engine of popular packages such as ``pyserde`` and ``pydantic``.
+* Changed function ``read_global_sensitivity_coefficients`` to accept multiple keys so it can perform bulk reads without having to open the result file every time.
+* Added ``GlobalSensitivityAnalysisResults``, a reader-like object that exposes more high-level methods to facilitate the interaction with the Global Sensitivity Analysis results.
 
 2024.2 (2024-09-10)
 ===================

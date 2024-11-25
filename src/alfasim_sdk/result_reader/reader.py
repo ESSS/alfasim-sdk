@@ -1,20 +1,35 @@
+from __future__ import annotations
+
+import re
 from pathlib import Path
 from typing import Dict
 from typing import Sequence
 from typing import Tuple
 from typing import Union
 
+import attr
+import numpy as np
 from attr import define
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
+from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator import ALFASimResultMetadata
+from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.aggregator import (
+    read_global_sensitivity_analysis_meta_data,
+)
+from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
 from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_data
 from alfasim_sdk.result_reader.aggregator import read_profiles_domain_data
 from alfasim_sdk.result_reader.aggregator import read_time_sets
 from alfasim_sdk.result_reader.aggregator import read_trends_data
+from alfasim_sdk.result_reader.aggregator import read_uq_time_set
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 
 
@@ -295,3 +310,85 @@ class Results:
             get_profile_metadata(profile_metadata)
             for profile_metadata in metadata.profiles.values()
         ]
+
+
+@define(frozen=True)
+class GSAOutputKey:
+    property_name: str
+    element_name: str
+    parametric_var_id: str
+
+    def __str__(self):
+        return f"{self.property_name}::{self.parametric_var_id}@{self.element_name}"
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        r = re.match(r"^(.*)::(.*)@(.*)", raw_output_key)
+        assert r is not None, f"Invalid output key: {raw_output_key}"
+        property_name, parametric_var_id, element_name = r.groups()
+        return GSAOutputKey(property_name, element_name, parametric_var_id)
+
+
+class InvalidResultFileError(Exception):
+    """
+    Raised when the given result file doesn't exist or has no valid data.
+    """
+
+
+@define(frozen=True)
+class GlobalSensitivityAnalysisResults:
+    timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
+    coefficients: dict[GSAOutputKey, np.ndarray] = attr.field(
+        validator=attr.validators.min_len(1)
+    )
+    metadata: GlobalSensitivityAnalysisMetadata = attr.field(
+        validator=lambda _, __, val: attr.validators.min_len(1)(_, __, val.items)
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self:
+        metadata = read_global_sensitivity_analysis_meta_data(result_dir)
+        if not metadata.items:
+            result_file = result_dir / "result"
+            msg_prefix = (
+                "nonexistent" if not result_file.is_file() else "could not read"
+            )
+            raise InvalidResultFileError(f"{msg_prefix} result file: {result_file}")
+
+        all_output_keys = list(metadata.items.keys())
+        coefficients = read_global_sensitivity_coefficients(all_output_keys, metadata)
+        assert len(coefficients) == len(all_output_keys)  # Sanity.
+        return cls(
+            timeset=read_uq_time_set(
+                result_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+            ),
+            coefficients={
+                GSAOutputKey.from_string(output_key): coeff
+                for output_key, coeff in coefficients.items()
+            },
+            metadata=metadata,
+        )
+
+    def get_sensibility_curve(
+        self, property_name: str, element_name: str, parametric_var_id: str
+    ) -> Curve:
+        meta = self.get_metadata(property_name, element_name, parametric_var_id)
+        output_key = GSAOutputKey(
+            property_name=property_name,
+            element_name=element_name,
+            parametric_var_id=parametric_var_id,
+        )
+        coefficients = self.coefficients[output_key]
+        image = Array(meta.category, values=coefficients, unit=meta.unit)
+        domain = Array(self.timeset, "s")
+        return Curve(image=image, domain=domain)
+
+    def get_metadata(
+        self, property_name: str, element_name: str, parametric_var_id: str
+    ) -> GlobalSensitivityAnalysisMetadata.GSAItem:
+        output_key = GSAOutputKey(
+            property_name=property_name,
+            element_name=element_name,
+            parametric_var_id=parametric_var_id,
+        )
+        return self.metadata.items[str(output_key)]
