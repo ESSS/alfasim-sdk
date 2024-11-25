@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import functools
 import json
 import os
@@ -127,7 +128,7 @@ class ResultsNeedFullReloadError(RuntimeError):
     """
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
 class BaseUQMetaData:
     """
     Base class for UQ metadata analysis.
@@ -149,28 +150,22 @@ class BaseUQMetaData:
         The unit of a dimensionless property (-, %)
     """
 
-    property_id: str = attr.ib(validator=attr.validators.instance_of(str))
-    trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
-    category: str = attr.ib(validator=attr.validators.instance_of(str))
-    network_element_name: Optional[str] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    position: Optional[float] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(float))
-    )
-    position_unit: Optional[str] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    unit: str = attr.ib(validator=attr.validators.instance_of(str))
+    property_id: str
+    trend_id: str
+    category: str
+    network_element_name: Optional[str]
+    position: Optional[float]
+    position_unit: Optional[str]
+    unit: str
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
 class UncertaintyPropagationAnalysesMetaData:
     """
     A class that hold the uncertainty propagation analyses metadata.
     """
 
-    @attr.s(slots=True, hash=False)
+    @dataclasses.dataclass(frozen=True)
     class UPItem(BaseUQMetaData):
         """
         A class that hold each uncertainty propagation analyses metadata.
@@ -183,11 +178,9 @@ class UncertaintyPropagationAnalysesMetaData:
             The indexes to access each sample of an item.
         """
 
-        samples: int = attr.ib(validator=attr.validators.instance_of(int))
-        result_index: int = attr.ib(validator=attr.validators.instance_of(int))
-        sample_indexes: List[List[int]] = attr.ib(
-            validator=attr.validators.instance_of(List)
-        )
+        samples: int
+        result_index: int
+        sample_indexes: List[List[int]]
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -204,8 +197,8 @@ class UncertaintyPropagationAnalysesMetaData:
                 sample_indexes=data["sample_indexes"],
             )
 
-    items: Dict[str, UPItem] = attr.ib(validator=attr.validators.instance_of(Dict))
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    items: Dict[str, UPItem]
+    result_directory: Path
 
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
@@ -231,13 +224,13 @@ class UncertaintyPropagationAnalysesMetaData:
         )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
 class GlobalSensitivityAnalysisMetadata:
     """
     A class that hold the global sensitivity analysis metadata.
     """
 
-    @attr.s(slots=True, hash=False)
+    @dataclasses.dataclass(frozen=True)
     class GSAItem(BaseUQMetaData):
         """
         A class that hold each global sensitivity analysis
@@ -252,14 +245,10 @@ class GlobalSensitivityAnalysisMetadata:
             The data index of a quantity of interest.
         """
 
-        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
-        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
-        qoi_index: Optional[int] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(int))
-        )
-        qoi_data_index: Optional[int] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(int))
-        )
+        parametric_var_id: str
+        parametric_var_name: str
+        qoi_index: Optional[int]
+        qoi_data_index: Optional[int]
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -277,8 +266,8 @@ class GlobalSensitivityAnalysisMetadata:
                 qoi_data_index=data["qoi_data_index"],
             )
 
-    items: Dict[str, GSAItem] = attr.ib(validator=attr.validators.instance_of(Dict))
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    items: Dict[str, GSAItem]
+    result_directory: Path
 
     @classmethod
     def empty(cls, result_directory: Path) -> Self:
@@ -354,7 +343,7 @@ def read_results_file(
         )
 
 
-@attr.define(slots=True, hash=True)
+@dataclasses.dataclass(frozen=True)
 class HistoricDataCurveMetadata:
     """
     Metadata of the historic data curves used in the History Matching analysis.
@@ -377,49 +366,42 @@ class HistoricDataCurveMetadata:
         )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
 class HistoryMatchingMetadata:
     """
     Holder for the History Matching results metadata.
     """
 
     #: Map of the data id and its associated metadata.
-    hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    hm_items: Dict[str, HMItem]
     #: Map of observed curve id to a dict of Quantity of Interest data, populated with keys
     #: 'trend_id' and 'property_id'. This represents the setup for this HM analysis.
-    objective_functions: Dict[str, Dict[str, str]] = attr.ib(
-        validator=attr.validators.instance_of(Dict)
-    )
+    objective_functions: Dict[str, Dict[str, str]]
     #: Map of parametric vars to the values that represents the analysis, with all existent vars.
     #: Values are either the optimal values (deterministic) or the base values (probabilistic).
-    parametric_vars: Dict[str, float] = attr.ib(
-        validator=attr.validators.instance_of(Dict)
-    )
+    parametric_vars: Dict[str, float]
     #: The directory in which the result is saved.
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    result_directory: Path
     #: Metadata of the historic curves present in the results. Optional as this was introduced
     #: later (ASIM-5713).
-    historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(list)),
-        default=None,
-    )
+    historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = None
 
-    @attr.s(slots=True, hash=False)
+    @dataclasses.dataclass(frozen=True)
     class HMItem:
         """
         Metadata associated with each item of the HM results.
         """
 
         #: The id of the associated parametric var.
-        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_id: str
         #: The name of the associated parametric var.
-        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_name: str
         #: Lower limit of the specified range for the parametric var.
-        min_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        min_value: float
         #: Upper limit of the specified range for the parametric var.
-        max_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        max_value: float
         #: The index of the data in the result datasets.
-        data_index: int = attr.ib(validator=attr.validators.instance_of(int))
+        data_index: int
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -494,7 +476,7 @@ class HistoryMatchingMetadata:
             )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass
 class ALFASimResultMetadata:
     """
     :ivar profiles:
@@ -525,14 +507,14 @@ class ALFASimResultMetadata:
         Map "base time steps" to the application version used in the simulation.
     """
 
-    profiles = attr.ib(validator=attr.validators.instance_of(dict))
-    trends = attr.ib(validator=attr.validators.instance_of(dict))
-    time_sets = attr.ib(validator=attr.validators.instance_of(list))
-    time_sets_unit = attr.ib(validator=attr.validators.instance_of(str))
-    time_steps_boundaries = attr.ib(validator=attr.validators.instance_of(tuple))
-    time_set_info = attr.ib(validator=attr.validators.instance_of(dict))
-    result_directory = attr.ib(validator=attr.validators.instance_of(Path))
-    app_version_info = attr.ib(validator=attr.validators.instance_of(dict))
+    profiles: dict
+    trends: dict
+    time_sets: list
+    time_sets_unit: str
+    time_steps_boundaries: tuple
+    time_set_info: dict
+    result_directory: Path
+    app_version_info: dict
 
     @property
     def trends_time_steps_boundaries(self) -> Tuple[int, int]:
@@ -559,7 +541,7 @@ class ALFASimResultMetadata:
         )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass
 class _MergedMetadataWithStatistics:
     """
     :ivar app_version_info:
@@ -575,10 +557,10 @@ class _MergedMetadataWithStatistics:
         List of sourced time set keys (tuples of relevant base time sets).
     """
 
-    app_version_info = attr.ib(validator=attr.validators.instance_of(dict))
-    profile_key_to_metadata = attr.ib(validator=attr.validators.instance_of(dict))
-    trend_key_to_metadata = attr.ib(validator=attr.validators.instance_of(dict))
-    time_set_keys = attr.ib(validator=attr.validators.instance_of(list))
+    app_version_info: dict
+    profile_key_to_metadata: dict
+    trend_key_to_metadata: dict
+    time_set_keys: list
 
 
 @contextmanager

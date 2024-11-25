@@ -1,3 +1,4 @@
+import dataclasses
 import itertools
 import json
 import re
@@ -6,7 +7,6 @@ from pathlib import Path
 from typing import List
 from typing import Literal
 
-import attr
 import h5py
 import numpy
 import pytest
@@ -210,7 +210,8 @@ def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
 
 def test_concatenate_metadata_error_conditions_directory(results: Results) -> None:
     md = results.metadata
-    other_md = attr.evolve(md, result_directory=md.result_directory / "other")
+    other_md = dataclasses.replace(md)
+    other_md.result_directory = md.result_directory / "other"
     with pytest.raises(RuntimeError, match="different sources"):
         concatenate_metadata(md, other_md)
 
@@ -303,7 +304,8 @@ def test_read_trends_data_bounds_check(results: Results) -> None:
 
 
 def test_read_trends_data_empty_arrays_when_no_time_set_info(results: Results) -> None:
-    fake_metadata = attr.evolve(results.metadata, time_set_info={})
+    fake_metadata = dataclasses.replace(results.metadata)
+    fake_metadata.time_set_info = {}
     trends = read_trends_data(fake_metadata)
     base_id = "project.study_container.item00001.output_options.trend_out_definition_container"
     assert set(trends.keys()) == {
