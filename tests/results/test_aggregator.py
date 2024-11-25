@@ -15,6 +15,7 @@ from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
 from alfasim_sdk.result_reader.aggregator import concatenate_metadata
+from alfasim_sdk.result_reader.aggregator import GSAOutputKey
 from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
 from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
 from alfasim_sdk.result_reader.aggregator import open_result_files
@@ -348,26 +349,23 @@ def test_read_empty_gsa_metadata(datadir: Path) -> None:
     uq_metadata = read_global_sensitivity_analysis_meta_data(
         result_directory=fake_uq_dir
     )
-    assert uq_metadata.items == {}
-    assert Path(uq_metadata.result_directory) == fake_uq_dir
-
-    fake_uq_dir.mkdir(parents=True)
-    uq_metadata = read_global_sensitivity_analysis_meta_data(
-        result_directory=fake_uq_dir
-    )
-    assert uq_metadata.items == {}
+    assert uq_metadata is None
 
 
 def test_read_gsa_metadata(global_sa_results_dir: Path) -> None:
     uq_metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     global_gsa_meta_data = uq_metadata.items
-    meta_var_1 = global_gsa_meta_data["temperature::parametric_var_1@trend_id_1"]
+    meta_var_1 = global_gsa_meta_data[
+        GSAOutputKey("temperature", "parametric_var_1", "trend_id_1")
+    ]
     assert meta_var_1.qoi_index == 0
     assert meta_var_1.qoi_data_index == 0
     assert meta_var_1.position == 100.0
     assert meta_var_1.parametric_var_name == "A"
 
-    meta_var_2 = global_gsa_meta_data["temperature::parametric_var_2@trend_id_1"]
+    meta_var_2 = global_gsa_meta_data[
+        GSAOutputKey("temperature", "parametric_var_2", "trend_id_1")
+    ]
     assert meta_var_2.qoi_index == 0
     assert meta_var_2.qoi_data_index == 1
     assert meta_var_2.position == 100.0
@@ -379,21 +377,35 @@ def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
         result_directory=global_sa_results_dir,
         group_name=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
     )
-    assert numpy.all(time_set == [0, 1, 2, 3, 4, 5, 6, 7])
+    assert numpy.all(time_set == [1, 2, 3, 4, 5, 6, 7])
 
 
 def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> None:
     metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     data = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_1@trend_id_1",
+        coefficients_key=[
+            GSAOutputKey("temperature", "parametric_var_1", "trend_id_1"),
+            GSAOutputKey("temperature", "parametric_var_2", "trend_id_1"),
+        ],
         metadata=metadata,
     )
-    assert numpy.all(data == (11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7))
-
-    data = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_2@trend_id_1", metadata=metadata
+    numpy.testing.assert_equal(
+        data,
+        {
+            GSAOutputKey("temperature", "parametric_var_1", "trend_id_1"): numpy.array(
+                [11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7]
+            ),
+            GSAOutputKey("temperature", "parametric_var_2", "trend_id_1"): numpy.array(
+                [12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7]
+            ),
+        },
     )
-    assert numpy.all(data == (12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7))
+
+    # Coverage. Check the GSAOutputKey correctly fail to parse bad strings.
+    with pytest.raises(
+        ValueError, match="invalid output key: temperate@param_var_1::trend_id"
+    ):
+        GSAOutputKey.from_string("temperate@param_var_1::trend_id")
 
 
 def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
@@ -408,12 +420,7 @@ def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
     )
     assert gsa_time_set is None
     gsa_meta_data = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
-    assert gsa_meta_data.items == {}
-    coefficients = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_1@trend_id_1",
-        metadata=gsa_meta_data,
-    )
-    assert coefficients is None
+    assert gsa_meta_data is None
 
 
 def test_read_history_matching_result_metadata(

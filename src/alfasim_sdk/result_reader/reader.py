@@ -1,20 +1,35 @@
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Dict
 from typing import Sequence
 from typing import Tuple
 from typing import Union
 
+import attr
+import numpy as np
 from attr import define
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
+from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator import ALFASimResultMetadata
+from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.aggregator import GSAOutputKey
+from alfasim_sdk.result_reader.aggregator import (
+    read_global_sensitivity_analysis_meta_data,
+)
+from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
 from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_data
 from alfasim_sdk.result_reader.aggregator import read_profiles_domain_data
 from alfasim_sdk.result_reader.aggregator import read_time_sets
 from alfasim_sdk.result_reader.aggregator import read_trends_data
+from alfasim_sdk.result_reader.aggregator import read_uq_time_set
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 
 
@@ -295,3 +310,65 @@ class Results:
             get_profile_metadata(profile_metadata)
             for profile_metadata in metadata.profiles.values()
         ]
+
+
+def _non_empty_dict_validator(values_type: type) -> Callable:
+    def validator(inst: Any, attribute: attr.Attribute, value: Any) -> None:
+        attr.validators.min_len(1)(inst, attribute, value)
+        attr.validators.instance_of(dict)(inst, attribute, value)
+        assert isinstance(value, dict)
+
+        some_dict_value = list(value.values())[0]
+        if not isinstance(some_dict_value, values_type):
+            raise ValueError(
+                f"values of dict attribute `{attribute.name}` should be of type {values_type},"
+                f" received: {type(some_dict_value)}"
+            )
+
+    return validator
+
+
+def _non_empty_attr_validator(attr_name: str) -> Callable:
+    def validator(inst: Any, attribute: attr.Attribute, value: Any) -> None:
+        attr.validators.min_len(1)(inst, attribute, getattr(value, attr_name))
+
+    return validator
+
+
+@define(frozen=True)
+class GlobalSensitivityAnalysisResults:
+    timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
+    coefficients: dict[GSAOutputKey, np.ndarray] = attr.field(
+        validator=attr.validators.min_len(1)
+    )
+    metadata: GlobalSensitivityAnalysisMetadata = attr.field(
+        validator=_non_empty_attr_validator("items")
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_global_sensitivity_analysis_meta_data(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            timeset=read_uq_time_set(
+                result_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+            ),
+            coefficients=read_global_sensitivity_coefficients(metadata),
+            metadata=metadata,
+        )
+
+    def get_sensitivity_curve(
+        self, property_name: str, element_name: str, parametric_var_id: str
+    ) -> Curve:
+        output_key = GSAOutputKey(
+            property_name=property_name,
+            element_name=element_name,
+            parametric_var_id=parametric_var_id,
+        )
+        meta = self.metadata.items[output_key]
+        coefficients = self.coefficients[output_key]
+        image = Array(meta.category, values=coefficients, unit=meta.unit)
+        domain = Array(self.timeset, "s")
+        return Curve(image=image, domain=domain)

@@ -4,6 +4,7 @@ import dataclasses
 import functools
 import json
 import os
+import re
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
@@ -15,6 +16,7 @@ from typing import Iterator
 from typing import List
 from typing import Literal
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 from typing import Type
 from typing import TypeVar
@@ -225,6 +227,24 @@ class UncertaintyPropagationAnalysesMetaData:
 
 
 @dataclasses.dataclass(frozen=True)
+class GSAOutputKey:
+    property_name: str
+    parametric_var_id: str
+    element_name: str
+
+    def __str__(self):
+        return f"{self.property_name}::{self.parametric_var_id}@{self.element_name}"
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        r = re.match(r"^(.*)::(.*)@(.*)", raw_output_key)
+        if r is None:
+            raise ValueError(f"invalid output key: {raw_output_key}")
+        property_name, parametric_var_id, element_name = r.groups()
+        return cls(property_name, parametric_var_id, element_name)
+
+
+@dataclasses.dataclass(frozen=True)
 class GlobalSensitivityAnalysisMetadata:
     """
     A class that hold the global sensitivity analysis metadata.
@@ -266,17 +286,11 @@ class GlobalSensitivityAnalysisMetadata:
                 qoi_data_index=data["qoi_data_index"],
             )
 
-    items: Dict[str, GSAItem]
+    items: Dict[GSAOutputKey, GSAItem]
     result_directory: Path
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return GlobalSensitivityAnalysisMetadata(
-            items={}, result_directory=result_directory
-        )
-
-    @classmethod
-    def get_metadata_from_dir(cls, result_directory: Path) -> Self:
+    def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
         """
         Return the metadata info from result directory.
         If the directory does not exist/is invalid, return an empty metadata.
@@ -286,9 +300,11 @@ class GlobalSensitivityAnalysisMetadata:
 
         def map_data(
             gsa_metadata: Dict,
-        ) -> Dict[str, GlobalSensitivityAnalysisMetadata.GSAItem]:
+        ) -> Dict[GSAOutputKey, GlobalSensitivityAnalysisMetadata.GSAItem]:
             return {
-                key: GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
+                GSAOutputKey.from_string(
+                    key
+                ): GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
                 for key, data in gsa_metadata.items()
             }
 
@@ -330,10 +346,10 @@ def read_results_file(
     metadata_class: Type[MetadataClassType],
     map_data: Callable,
     meta_data_attrs: str,
-) -> MetadataClassType:
+) -> MetadataClassType | None:
     with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
-            return metadata_class.empty(result_directory=result_directory)
+            return None
 
         loaded_metadata = json.loads(
             result_file[META_GROUP_NAME].attrs[meta_data_attrs]
@@ -1900,22 +1916,35 @@ def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.
 
 
 def read_global_sensitivity_coefficients(
-    coefficients_key: str,
     metadata: GlobalSensitivityAnalysisMetadata,
-) -> Optional[np.ndarray]:
+    coefficients_key: Sequence[GSAOutputKey] | None = None,
+) -> dict[GSAOutputKey, np.ndarray]:
     """
     Read the global sensitivity analysis coefficients results.
     """
-    # The metadata is empty.
-    if not metadata.items:
-        return None
-    meta = metadata.items[coefficients_key]
     with open_result_file(
         metadata.result_directory, result_filename="result"
     ) as result_file:
-        gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
-        coefficients_dset = gsa_group["global_sensitivity_analysis"]
-        return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+        if result_file is None:
+            return {}
+
+        coefficients_key = (
+            coefficients_key if coefficients_key else list(metadata.items.keys())
+        )
+        items_meta = {
+            r_key: meta
+            for r_key, meta in metadata.items.items()
+            if r_key in coefficients_key
+        }
+
+        result: dict[GSAOutputKey, np.ndarray] = {}
+        for output_key, meta in items_meta.items():
+            meta = metadata.items[output_key]
+            gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
+            coefficients_dset = gsa_group["global_sensitivity_analysis"]
+            result[output_key] = coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+
+    return result
 
 
 def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMetadata:
