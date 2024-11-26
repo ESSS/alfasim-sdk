@@ -463,7 +463,7 @@ def hm_probabilistic_results_dir(datadir: Path) -> Path:
 
     result_dir = datadir / "main-HM-probabilistic"
     probabilistic_result = np.array(
-        [[0.1, 0.22, 1.0, 0.8, 0.55], [3.0, 6.0, 5.1, 4.7, 6.3]]
+        [[0.1, 3.0], [0.22, 6.0], [1.0, 5.1], [0.8, 4.7], [0.55, 6.3]]
     )
     historic_data_curves = {
         "observed_curve_1": np.array([[0.1, 0.5, 0.9], [1.1, 2.2, 3.3]]),

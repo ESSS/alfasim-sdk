@@ -1965,11 +1965,14 @@ def read_history_matching_result(
     if hm_type not in ("HM-deterministic", "HM-probabilistic"):
         raise ValueError(f"history matching of type `{hm_type}` not supported")
 
+    slicer: Callable[[int], Any]
     if hm_type == "HM-deterministic":
         dataset_key = HISTORY_MATCHING_DETERMINISTIC_DSET_NAME
+        slicer = lambda index: index
     else:
         assert hm_type == "HM-probabilistic"
         dataset_key = HISTORY_MATCHING_PROBABILISTIC_DSET_NAME
+        slicer = lambda index: (slice(None), index)
 
     with open_result_file(metadata.result_directory) as result_file:
         if not result_file:
@@ -1980,11 +1983,11 @@ def read_history_matching_result(
         result_map = {}
         if hm_result_key is None:
             for key, meta in metadata.hm_items.items():
-                result_map[key] = result[meta.data_index]
+                result_map[key] = result[slicer(meta.data_index)]
         else:
             meta = metadata.hm_items.get(hm_result_key)
             if meta is not None:
-                result_map[hm_result_key] = result[meta.data_index]
+                result_map[hm_result_key] = result[slicer(meta.data_index)]
 
         return result_map
 
