@@ -10,7 +10,7 @@ CHANGELOG
 * Add the heat transfer mechanism for fluid materials composed by a parcel of radiation and convection.
 * Changed the constructor of result metadata objects in ``alfasim_sdk.result_reader.aggregator`` from ``attr`` to ``dataclasses.dataclass`` to make then more easily integrated into the (de)serialization engine of popular packages such as ``pyserde`` and ``pydantic``.
 * Changed function ``read_global_sensitivity_coefficients`` to accept multiple keys so it can perform bulk reads without having to open the result file every time.
-* Added ``GlobalSensitivityAnalysisResults``, an object to read and interact with Global Sensitivity Analysis results in a more user-friendly way.
+* Added ``GlobalSensitivityAnalysisResults``, ``HistoryMatchingDeterministicResults`` and ``HistoryMatchingProbabilisticResults``, which are objects to read and interact with the Uncertainty Quantification analyses results in a more user-friendly way.
 
 2024.2 (2024-09-10)
 ===================
