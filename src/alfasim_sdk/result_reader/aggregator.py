@@ -103,12 +103,13 @@ A map of base time steps to the metadata contained in the respective result file
 All the metadata will represents the same kind of output (profiles/trends).
 """
 
-HistoryMatchingResultKeyType = str
-"""\
-A HM result key is simply the id of the parametric var associated with that particular result.
-"""
 
-TimeSetInfoItem = namedtuple("TimeSetInfoItem", "global_start size uuid")
+class TimeSetInfoItem(NamedTuple):
+    global_start: TimeStepIndex
+    size: int
+    uuid: str
+
+
 TimeSetInfo = Dict[int, TimeSetInfoItem]
 
 
@@ -383,13 +384,25 @@ class HistoricDataCurveMetadata:
 
 
 @dataclasses.dataclass(frozen=True)
+class HMOutputKey:
+    parametric_var_id: str
+
+    def __str__(self):
+        return self.parametric_var_id
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        return cls(raw_output_key)
+
+
+@dataclasses.dataclass(frozen=True)
 class HistoryMatchingMetadata:
     """
     Holder for the History Matching results metadata.
     """
 
     #: Map of the data id and its associated metadata.
-    hm_items: Dict[str, HMItem]
+    hm_items: Dict[HMOutputKey, HMItem]
     #: Map of observed curve id to a dict of Quantity of Interest data, populated with keys
     #: 'trend_id' and 'property_id'. This represents the setup for this HM analysis.
     objective_functions: Dict[str, Dict[str, str]]
@@ -435,16 +448,7 @@ class HistoryMatchingMetadata:
             )
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return cls(
-            hm_items={},
-            objective_functions={},
-            parametric_vars={},
-            result_directory=result_directory,
-        )
-
-    @classmethod
-    def from_result_directory(cls, result_directory: Path) -> Self:
+    def from_result_directory(cls, result_directory: Path) -> Self | None:
         """
         Read History Matching results metadata from result directory/file.
 
@@ -453,9 +457,11 @@ class HistoryMatchingMetadata:
 
         def map_meta_items(
             hm_metadata: Dict,
-        ) -> Dict[str, HistoryMatchingMetadata.HMItem]:
+        ) -> Dict[HMOutputKey, HistoryMatchingMetadata.HMItem]:
             return {
-                key: HistoryMatchingMetadata.HMItem.from_dict(data)
+                HMOutputKey.from_string(key): HistoryMatchingMetadata.HMItem.from_dict(
+                    data
+                )
                 for key, data in hm_metadata.items()
             }
 
@@ -466,15 +472,12 @@ class HistoryMatchingMetadata:
 
         with open_result_file(result_directory) as result_file:
             if not result_file:
-                return cls.empty(result_directory=result_directory)
+                return None
 
             loaded_metadata = json.loads(
                 result_file[META_GROUP_NAME].attrs[HISTORY_MATCHING_GROUP_NAME]
             )
-
-            if len(loaded_metadata) == 0:
-                return cls.empty(result_directory=result_directory)
-
+            assert len(loaded_metadata) > 0
             some_item_metadata = list(loaded_metadata.values())[0]
 
             objective_functions = some_item_metadata["objective_functions"]
@@ -1947,7 +1950,9 @@ def read_global_sensitivity_coefficients(
     return result
 
 
-def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMetadata:
+def read_history_matching_metadata(
+    result_directory: Path,
+) -> HistoryMatchingMetadata | None:
     """
     :param result_directory:
         The directory to lookup for the History Matching result file.
@@ -1958,8 +1963,8 @@ def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMet
 def read_history_matching_result(
     metadata: HistoryMatchingMetadata,
     hm_type: Literal["HM-deterministic", "HM-probabilistic"],
-    hm_result_key: Optional[HistoryMatchingResultKeyType] = None,
-) -> Dict[HistoryMatchingResultKeyType, Union[np.ndarray, float]]:
+    hm_result_key: Optional[HMOutputKey] = None,
+) -> Dict[HMOutputKey, Union[np.ndarray, float]]:
     """
     :param metadata:
         History Matching result metadata.

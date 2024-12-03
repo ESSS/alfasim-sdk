@@ -1,13 +1,11 @@
 import dataclasses
 import itertools
-import json
 import re
 import shutil
 from pathlib import Path
 from typing import List
 from typing import Literal
 
-import h5py
 import numpy
 import pytest
 from pytest import FixtureRequest
@@ -18,6 +16,7 @@ from alfasim_sdk.result_reader.aggregator import concatenate_metadata
 from alfasim_sdk.result_reader.aggregator import GSAOutputKey
 from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
 from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
+from alfasim_sdk.result_reader.aggregator import HMOutputKey
 from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_meta_data,
@@ -44,8 +43,6 @@ from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 from alfasim_sdk.result_reader.reader import Results
 
@@ -476,38 +473,17 @@ def test_read_history_matching_result_metadata(
     )
 
     items_meta = metadata.hm_items
-    assert items_meta["parametric_var_1"] == expected_meta1
-    assert items_meta["parametric_var_2"] == expected_meta2
+    assert items_meta[HMOutputKey("parametric_var_1")] == expected_meta1
+    assert items_meta[HMOutputKey("parametric_var_2")] == expected_meta2
 
     # Result file still being created, metadata should be empty.
     creating_file = hm_results_dir / "result.creating"
     creating_file.touch()
 
     metadata = read_history_matching_metadata(hm_results_dir)
-    assert metadata.result_directory == hm_results_dir
-    assert metadata.hm_items == {}
+    assert metadata is None
 
     creating_file.unlink()
-
-    # Non-existent result directory, metadata should be empty.
-    unexistent_result_dir = Path("foo/bar")
-    metadata = read_history_matching_metadata(unexistent_result_dir)
-    assert metadata.result_directory == unexistent_result_dir
-    assert metadata.hm_items == {}
-
-    # Not really expected, but existing result file with empty metadata content should also return
-    # an empty metadata.
-    result_path = datadir / "results"
-    result_path.mkdir(parents=True, exist_ok=True)
-    result_filepath = result_path / "result"
-
-    with h5py.File(result_filepath, "x", libver="latest", locking=False) as file:
-        meta_group = file.create_group(META_GROUP_NAME, track_order=True)
-        meta_group.attrs[HISTORY_MATCHING_GROUP_NAME] = json.dumps({})
-
-    metadata = read_history_matching_metadata(result_path)
-    assert metadata.result_directory == result_path
-    assert metadata.hm_items == {}
 
 
 @pytest.mark.parametrize("hm_type", ("HM-probabilistic", "HM-deterministic"))
@@ -525,40 +501,42 @@ def test_read_history_matching_result_data(
     # Setup.
     if hm_type == "HM-probabilistic":
         expected_results = {
-            "parametric_var_1": np.array([0.1, 0.22, 1.0, 0.8, 0.55]),
-            "parametric_var_2": np.array([3.0, 6.0, 5.1, 4.7, 6.3]),
+            HMOutputKey("parametric_var_1"): np.array([0.1, 0.22, 1.0, 0.8, 0.55]),
+            HMOutputKey("parametric_var_2"): np.array([3.0, 6.0, 5.1, 4.7, 6.3]),
         }
         results_dir = hm_probabilistic_results_dir
     else:
         assert hm_type == "HM-deterministic"
-        expected_results = {"parametric_var_1": 0.1, "parametric_var_2": 3.2}
+        expected_results = {
+            HMOutputKey("parametric_var_1"): 0.1,
+            HMOutputKey("parametric_var_2"): 3.2,
+        }
         results_dir = hm_deterministic_results_dir
 
     metadata = read_history_matching_metadata(results_dir)
 
     # Read the result of a single parametric var entry.
     result = read_history_matching_result(
-        metadata, hm_type=hm_type, hm_result_key="parametric_var_1"
+        metadata, hm_type=hm_type, hm_result_key=HMOutputKey("parametric_var_1")
     )
     assert len(result) == 1
-    assert len(result) == 1
-    assert result["parametric_var_1"] == pytest.approx(
-        expected_results["parametric_var_1"]
+    assert result[HMOutputKey("parametric_var_1")] == pytest.approx(
+        expected_results[HMOutputKey("parametric_var_1")]
     )
 
     # Read the result of all entries.
     result = read_history_matching_result(metadata, hm_type=hm_type)
     assert len(result) == 2
-    assert result["parametric_var_1"] == pytest.approx(
-        expected_results["parametric_var_1"]
+    assert result[HMOutputKey("parametric_var_1")] == pytest.approx(
+        expected_results[HMOutputKey("parametric_var_1")]
     )
-    assert result["parametric_var_2"] == pytest.approx(
-        expected_results["parametric_var_2"]
+    assert result[HMOutputKey("parametric_var_2")] == pytest.approx(
+        expected_results[HMOutputKey("parametric_var_2")]
     )
 
-    # Unexistent result key, result should be empty.
+    # Nonexistent result key, result should be empty.
     result = read_history_matching_result(
-        metadata, hm_type=hm_type, hm_result_key="foo"
+        metadata, hm_type=hm_type, hm_result_key=HMOutputKey("foo")
     )
     assert result == {}
 
@@ -596,7 +574,12 @@ def test_read_history_matching_historic_data_curves(
         )
 
     # For completeness, check result when passing some invalid directory.
-    meta = HistoryMatchingMetadata.empty(result_directory=Path("foo"))
+    meta = HistoryMatchingMetadata(
+        hm_items={},
+        objective_functions={},
+        parametric_vars={},
+        result_directory=Path("foo"),
+    )
     assert read_history_matching_historic_data_curves(meta) == {}
 
 
