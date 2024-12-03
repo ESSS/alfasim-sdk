@@ -420,16 +420,7 @@ class HistoryMatchingMetadata:
             )
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return cls(
-            hm_items={},
-            objective_functions={},
-            parametric_vars={},
-            result_directory=result_directory,
-        )
-
-    @classmethod
-    def from_result_directory(cls, result_directory: Path) -> Self:
+    def from_result_directory(cls, result_directory: Path) -> Self | None:
         """
         Read History Matching results metadata from result directory/file.
 
@@ -451,15 +442,12 @@ class HistoryMatchingMetadata:
 
         with open_result_file(result_directory) as result_file:
             if not result_file:
-                return cls.empty(result_directory=result_directory)
+                return None
 
             loaded_metadata = json.loads(
                 result_file[META_GROUP_NAME].attrs[HISTORY_MATCHING_GROUP_NAME]
             )
-
-            if len(loaded_metadata) == 0:
-                return cls.empty(result_directory=result_directory)
-
+            assert len(loaded_metadata) > 0
             some_item_metadata = list(loaded_metadata.values())[0]
 
             objective_functions = some_item_metadata["objective_functions"]
@@ -1923,7 +1911,9 @@ def read_global_sensitivity_coefficients(
     return result
 
 
-def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMetadata:
+def read_history_matching_metadata(
+    result_directory: Path,
+) -> HistoryMatchingMetadata | None:
     """
     :param result_directory:
         The directory to lookup for the History Matching result file.

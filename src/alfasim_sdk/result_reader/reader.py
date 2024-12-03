@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import Sequence
 from typing import Tuple
@@ -17,10 +19,18 @@ from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator import ALFASimResultMetadata
 from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
+from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
+from alfasim_sdk.result_reader.aggregator import HistoryMatchingResultKeyType
 from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_meta_data,
 )
 from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
+from alfasim_sdk.result_reader.aggregator import (
+    read_history_matching_historic_data_curves,
+)
+from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
+from alfasim_sdk.result_reader.aggregator import read_history_matching_result
 from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_data
 from alfasim_sdk.result_reader.aggregator import read_profiles_domain_data
@@ -392,3 +402,85 @@ class GlobalSensitivityAnalysisResults:
             parametric_var_id=parametric_var_id,
         )
         return self.metadata.items[str(output_key)]
+
+
+def _dict_validator(values_type: type) -> Callable:
+    def validator(inst: Any, attribute: attr.Attribute, value: Any) -> None:
+        attr.validators.min_len(1)(inst, attribute, value)
+        attr.validators.instance_of(dict)(inst, attribute, value)
+        assert isinstance(value, dict)
+
+        some_dict_value = list(value.values())[0]
+        if not isinstance(some_dict_value, values_type):
+            raise ValueError(
+                f"values of dict attribute `{attribute.name}` should be of type {values_type},"
+                f" received: {type(some_dict_value)}"
+            )
+
+    return validator
+
+
+@define(frozen=True)
+class _BaseHistoryMatchingResults:
+    historic_data_curves: dict[str, tuple[HistoricDataCurveMetadata, Curve]]
+    metadata: HistoryMatchingMetadata = attr.field(
+        validator=lambda _, __, val: attr.validators.min_len(1)(_, __, val.hm_items)
+    )
+
+
+@define(frozen=True)
+class HistoryMatchingDeterministicResults(_BaseHistoryMatchingResults):
+    deterministic_values: dict[HistoryMatchingResultKeyType, float] = attr.field(
+        validator=_dict_validator(values_type=float)
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self:
+        metadata = read_history_matching_metadata(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            deterministic_values=read_history_matching_result(
+                metadata, "HM-deterministic"
+            ),
+            historic_data_curves=_read_curves_data(metadata),
+            metadata=metadata,
+        )
+
+
+@define(frozen=True)
+class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
+    probabilistic_distributions: dict[
+        HistoryMatchingResultKeyType, np.ndarray
+    ] = attr.field(validator=_dict_validator(values_type=np.ndarray))
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_history_matching_metadata(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            probabilistic_distributions=read_history_matching_result(
+                metadata, "HM-probabilistic"
+            ),
+            historic_data_curves=_read_curves_data(metadata),
+            metadata=metadata,
+        )
+
+
+def _read_curves_data(
+    metadata: HistoryMatchingMetadata,
+) -> dict[str, tuple[HistoricDataCurveMetadata, Curve]]:
+    raw_curves = read_history_matching_historic_data_curves(metadata)
+    curves_info = metadata.historic_data_curve_infos or []
+    curves_info_map = {info.curve_id: info for info in curves_info}
+
+    result: dict[str, tuple[HistoricDataCurveMetadata, Curve]] = {}
+    for curve_id, raw_curve in raw_curves.items():
+        info = curves_info_map[curve_id]
+        image = Array(info.image_category, raw_curve[0], info.image_unit)
+        domain = Array("time", raw_curve[1], info.domain_unit)
+        result[curve_id] = (info, Curve(image, domain))
+    return result

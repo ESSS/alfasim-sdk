@@ -1,13 +1,11 @@
 import dataclasses
 import itertools
-import json
 import re
 import shutil
 from pathlib import Path
 from typing import List
 from typing import Literal
 
-import h5py
 import numpy
 import pytest
 from pytest import FixtureRequest
@@ -43,8 +41,6 @@ from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 from alfasim_sdk.result_reader.reader import Results
 
@@ -486,30 +482,9 @@ def test_read_history_matching_result_metadata(
     creating_file.touch()
 
     metadata = read_history_matching_metadata(hm_results_dir)
-    assert metadata.result_directory == hm_results_dir
-    assert metadata.hm_items == {}
+    assert metadata is None
 
     creating_file.unlink()
-
-    # Non-existent result directory, metadata should be empty.
-    unexistent_result_dir = Path("foo/bar")
-    metadata = read_history_matching_metadata(unexistent_result_dir)
-    assert metadata.result_directory == unexistent_result_dir
-    assert metadata.hm_items == {}
-
-    # Not really expected, but existing result file with empty metadata content should also return
-    # an empty metadata.
-    result_path = datadir / "results"
-    result_path.mkdir(parents=True, exist_ok=True)
-    result_filepath = result_path / "result"
-
-    with h5py.File(result_filepath, "x", libver="latest", locking=False) as file:
-        meta_group = file.create_group(META_GROUP_NAME, track_order=True)
-        meta_group.attrs[HISTORY_MATCHING_GROUP_NAME] = json.dumps({})
-
-    metadata = read_history_matching_metadata(result_path)
-    assert metadata.result_directory == result_path
-    assert metadata.hm_items == {}
 
 
 @pytest.mark.parametrize("hm_type", ("HM-probabilistic", "HM-deterministic"))
@@ -598,7 +573,12 @@ def test_read_history_matching_historic_data_curves(
         )
 
     # For completeness, check result when passing some invalid directory.
-    meta = HistoryMatchingMetadata.empty(result_directory=Path("foo"))
+    meta = HistoryMatchingMetadata(
+        hm_items={},
+        objective_functions={},
+        parametric_vars={},
+        result_directory=Path("foo"),
+    )
     assert read_history_matching_historic_data_curves(meta) == {}
 
 
