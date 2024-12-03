@@ -539,3 +539,14 @@ class ForchheimerCoefficientsOption(Enum):
 
     ReservoirParameters = "reservoir_parameters"
     FlowCoefficients = "flow_coefficients"
+
+class FluidMaterialConvectionCorrelation(Enum):
+    """
+    The heat transfer mechanism for fluid materials composed by a parcel of radiation and
+    convection.
+    """
+
+    HasanKabir1994 = "Hasan and Kabir 1994"
+    HasanKabir2002 = "Hasan and Kabir 2002"
+    FuzongZhou2013 = "Fuzong Zhou 2013"
+    Holman1981 = "Holman 1981"

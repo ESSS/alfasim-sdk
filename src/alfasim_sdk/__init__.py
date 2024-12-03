@@ -295,6 +295,7 @@ from alfasim_sdk._internal.constants import WATER_PHASE
 from alfasim_sdk._internal.constants import WellConnectionPort
 from alfasim_sdk._internal.constants import WellIndexPhaseType
 from alfasim_sdk._internal.constants import ForchheimerCoefficientsOption
+from alfasim_sdk._internal.constants import FluidMaterialConvectionCorrelation
 
 
 # Plugins: Layouts imports
@@ -404,6 +405,7 @@ __all__ = [
     "FlashModel",
     "FlowDirection",
     "FlowPatternModel",
+    "FluidMaterialConvectionCorrelation",
     "ForchheimerIPRDescription",
     "ForchheimerCoefficientsOption",
     "CompositionalFluidDescription",

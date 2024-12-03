@@ -443,6 +443,7 @@ physics_description_schema = Map(
         Optional("emulsion_inversion_water_cut"): Map({"value": Float(), "unit": Str()}),
         Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
+        Optional("fluid_material_convection_correlation"): Enum(['Hasan and Kabir 1994', 'Hasan and Kabir 2002', 'Fuzong Zhou 2013', 'Holman 1981']),
     }
 )
 pig_equipment_description_schema = Map(
@@ -1198,4 +1199,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: c3e9dda5b6b211c66aef5f5b6f7ab550)
+# [[[end]]] (checksum: 491e5442b3beadcbf3ad91c5ca5d52e1)
