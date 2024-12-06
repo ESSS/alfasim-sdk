@@ -3359,7 +3359,10 @@ class PhysicsDescription:
     correlations_package = attrib_enum(
         default=constants.CorrelationPackageType.Classical
     )
-    fluid_material_convection_correlation = attrib_enum(default=constants.FluidMaterialConvectionCorrelation.HasanKabir1994)
+    fluid_material_convection_correlation = attrib_enum(
+        default=constants.FluidMaterialConvectionCorrelation.HasanKabir1994
+    )
+
 
 @attr.s()
 class TimeOptionsDescription:
