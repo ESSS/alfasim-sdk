@@ -38,6 +38,7 @@ from .case_description_attributes import numpy_array_validator
 from .case_description_attributes import PhaseName
 from alfasim_sdk._internal import constants
 
+
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
 #
@@ -3357,6 +3358,9 @@ class PhysicsDescription:
     flash_model = attrib_enum(default=constants.FlashModel.HydrocarbonAndWater)
     correlations_package = attrib_enum(
         default=constants.CorrelationPackageType.Classical
+    )
+    fluid_material_convection_correlation = attrib_enum(
+        default=constants.FluidMaterialConvectionCorrelation.HasanKabir1994
     )
 
 
