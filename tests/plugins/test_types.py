@@ -163,7 +163,7 @@ def test_table_column():
     from alfasim_sdk._internal.types import TableColumn, Quantity
 
     with pytest.raises(
-        TypeError, match="value must be a Quantity, got a <class 'str'>."
+        TypeError, match="value must be a Quantity or a Reference, got a <class 'str'>."
     ):
         TableColumn(id="id", value="")
 

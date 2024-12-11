@@ -1,8 +1,8 @@
 import numbers
 from typing import Callable
-from typing import FrozenSet
 from typing import List
 from typing import Optional
+from typing import Sequence
 from typing import Union
 
 import attr
@@ -16,38 +16,38 @@ from alfasim_sdk._internal.validators import non_empty_str
 from alfasim_sdk._internal.validators import valid_unit
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class ALFAsimType:
     name: str = attrib(default="ALFAsim")
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class TracerType(ALFAsimType):
     _CONTAINER_TYPE = "TracerModelContainer"
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Tab:
     """
     Base class for tab attributes available at ALFAsim.
     """
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Tabs:
     """
     Base class for tabs attributes available at ALFAsim.
     """
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Group:
     """
     Base class for Group attribute available at ALFAsim.
     """
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class BaseField:
     """
     A base field for all types available at ALFAsim.
@@ -205,7 +205,7 @@ class BaseField:
     )
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class String(BaseField):
     """
     The String field represents an input that allows the user to enter and edit a single line of plain text.
@@ -249,7 +249,7 @@ class String(BaseField):
     value: str = attrib(validator=non_empty_str)
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Enum(BaseField):
     """
     The Enum field provides list of options to the user, showing  only the selected item but providing a way to display
@@ -331,7 +331,7 @@ class Enum(BaseField):
                 )
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class BaseReference(BaseField):
     ref_type: type = attrib()
     container_type: Optional[str] = attrib(
@@ -340,7 +340,11 @@ class BaseReference(BaseField):
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
-            self.container_type = self.ref_type._CONTAINER_TYPE
+            if self.container_type is not None:
+                raise TypeError(
+                    "When using a ALFAsimType the container_type field must be None"
+                )
+            object.__setattr__(self, "container_type", self.ref_type._CONTAINER_TYPE)
         else:
             if self.container_type is None:
                 raise TypeError(
@@ -364,7 +368,7 @@ class BaseReference(BaseField):
                 )
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Reference(BaseReference):
     """
     The Reference field provides a list of options to the user and displays the current item selected.
@@ -464,7 +468,7 @@ class Reference(BaseReference):
     """
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class MultipleReference(BaseReference):
     """
     The MultipleReference field works similar to :class:`Reference`, providing a list of options
@@ -638,13 +642,13 @@ class Quantity(BaseField):
 class TableColumn(BaseField):
     """
     The TableColumn component provides columns for a :class:`Table` field.
-    Currently only columns with a :class:`Quantity` fields are available.
+    Currently only columns with :class:`Quantity` and :class:`Reference` fields are available.
 
     Check out the documentation from :class:`Table` to see more details about the usage and how to retrieve values.
     """
 
     id: str = attrib(validator=non_empty_str)
-    value: Quantity = attrib()
+    value: Union[Quantity, Reference] = attrib()
     caption: str = attrib(init=False, default="")
 
     def __attrs_post_init__(self) -> None:
@@ -652,10 +656,19 @@ class TableColumn(BaseField):
 
     @value.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: Quantity
+        self, attr: Attribute, values: Union[Quantity, Reference]
     ) -> None:
-        if not isinstance(values, Quantity):
-            raise TypeError(f"{attr.name} must be a Quantity, got a {type(values)}.")
+        if isinstance(values, Quantity):
+            return  # Always OK.
+        elif isinstance(values, Reference):
+            if values.container_type is None:
+                raise ValueError(
+                    "When placed on table columns a Reference requires a non None container_type."
+                )
+        else:
+            raise TypeError(
+                f"{attr.name} must be a Quantity or a Reference, got a {type(values)}."
+            )
 
 
 @attr.s(kw_only=True, frozen=True)
@@ -666,6 +679,14 @@ class Table(BaseField):
     .. rubric:: Example myplugin.py
 
     .. code-block:: python
+
+        @data_model(caption="Flow Type")
+        class FlowType:
+            name = String(value="Flow", caption="Name")
+
+        @container_model(caption="Flow Types", model=FlowType, icon="")
+        class FlowTypeContainer:
+            pass
 
         @data_model(icon="", caption="My Model")
         class MyModel:
@@ -685,6 +706,14 @@ class Table(BaseField):
                             value=2,
                             unit="bar",
                             caption="Pressure Column Caption",
+                        ),
+                    ),
+                    TableColumn(
+                        id="flow_type",
+                        value=Reference(
+                            ref_type=FlowType,
+                            container_type="FlowTypeContainer",
+                            caption="Flow Type Column Caption",
                         ),
                     ),
                 ],
@@ -707,7 +736,13 @@ class Table(BaseField):
 
     .. rubric:: **Accessing Table Field from Plugin**:
 
-    In order to access this field from inside the plugin implementation, in C/C++,  you need to use :cpp:func:`get_plugin_input_data_table_quantity`
+    To access this field from inside the plugin implementation, in C/C++, it is possible to access:
+
+    * all the values from a :class:`Quantity` column using :cpp:func:`get_plugin_input_data_table_quantity`;
+
+    * individual entries from a :class:`Quantity` column using :cpp:func:`get_plugin_input_data_quantity` and a `var_name` argument like `"MyModel.table_field[0,temperature]"` (the first item in the "temperature" column);
+
+    * individual entries from a :class:`Reference` column with the ususal functions listed at :ref:`plugin_input_data` and `var_name` arguments like `"MyModel.table_field[1,flow_type]->name"` (the "name" of the second item in the "flow_type" column);
 
     .. rubric:: **Accessing Table Field from Context**:
 
@@ -750,7 +785,7 @@ class Table(BaseField):
 
     """
 
-    rows: FrozenSet[TableColumn] = attrib(converter=tuple)
+    rows: Sequence[TableColumn] = attrib(converter=tuple)
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ
@@ -763,7 +798,7 @@ class Table(BaseField):
             raise TypeError(f"{attr.name} must be a list of TableColumn.")
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class Boolean(BaseField):
     """
     The Boolean field provides a checkbox to select/deselect a property.
@@ -809,7 +844,7 @@ class Boolean(BaseField):
     value: bool = attrib(validator=instance_of(bool))
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, frozen=True)
 class FileContent(BaseField):
     """
     The FileContent component provides a platform-native file dialog to the user to be able to select a file.

@@ -20,6 +20,7 @@ from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
 
+from ..validators import non_empty_str
 from .case_description_attributes import attrib_array
 from .case_description_attributes import attrib_curve
 from .case_description_attributes import attrib_dict_of
@@ -32,6 +33,7 @@ from .case_description_attributes import dict_of
 from .case_description_attributes import dict_of_array
 from .case_description_attributes import dict_with_scalar
 from .case_description_attributes import InvalidReferenceError
+from .case_description_attributes import list_of_optional_integers
 from .case_description_attributes import list_of_strings
 from .case_description_attributes import Numpy1DArray
 from .case_description_attributes import numpy_array_validator
@@ -86,12 +88,43 @@ class PluginTracerReference:
 @attr.s(frozen=True, slots=True)
 class PluginInternalReference:
     plugin_item_id = attr.ib(default=None)
+    container_key = attr.ib(default=None)
 
 
 @attr.s(frozen=True, slots=True)
 class PluginMultipleReference:
     container_key = attr.ib(default=None)
     item_id_list = attr.ib(default=attr.Factory(list))
+
+
+@attr.s(frozen=True, slots=True)
+class TracerReferencePluginTableColumn:
+    """
+    A column holding tracer references.
+
+    :ivar tracer_ids:
+        A list of tracer indexes (by declaration order in the tracer container), entries with
+        the value `None` represent unset references.
+    """
+
+    tracer_ids = attr.ib(validator=list_of_optional_integers)
+
+
+@attr.s(frozen=True, slots=True)
+class InternalReferencePluginTableColumn:
+    """
+    A column holding internal references.
+
+    :ivar plugin_item_ids:
+        A list of item indexes (by declaration order in the relevant container), entries with
+        the value `None` represent unset references.
+
+    :ivar container_key:
+        The name of a class defined in the plugin decorated with `container_model`.
+    """
+
+    plugin_item_ids = attr.ib(validator=list_of_optional_integers)
+    container_key = attr.ib(validator=non_empty_str)
 
 
 @attr.s(frozen=True, slots=True)

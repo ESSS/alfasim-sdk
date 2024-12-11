@@ -30,6 +30,9 @@ PhaseName = str
 list_of_strings = deep_iterable(
     member_validator=optional(instance_of(str)), iterable_validator=instance_of(list)
 )
+list_of_optional_integers = deep_iterable(
+    member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
+)
 AttrNothingType = type(attr.NOTHING)
 ScalarLike = Union[Tuple[Number, str], Scalar]
 ArrayLike = Union[Tuple[Sequence[Number], str], Array]

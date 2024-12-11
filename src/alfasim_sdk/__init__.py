@@ -119,6 +119,12 @@ from alfasim_sdk._internal.alfacase.case_description import (
     PressureContainerDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
+    InternalReferencePluginTableColumn,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
+    TracerReferencePluginTableColumn,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
     PressureNodePropertiesDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import ProfileDescription
@@ -431,6 +437,7 @@ __all__ = [
     "InitialVelocitiesDescription",
     "InitialVolumeFractionsDescription",
     "InternalNodePropertiesDescription",
+    "InternalReferencePluginTableColumn",
     "InterpolationType",
     "LeakEquipmentDescription",
     "LeakLocation",
@@ -516,6 +523,7 @@ __all__ = [
     "TimeOptionsDescription",
     "TracerModelConstantCoefficientsDescription",
     "TracerModelType",
+    "TracerReferencePluginTableColumn",
     "TracerType",
     "TracersDescription",
     "TracersMassFractionsContainerDescription",
