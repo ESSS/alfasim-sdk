@@ -8,6 +8,7 @@ CHANGELOG
 * We have decided internally to revert the versioning schema back to SemVer, starting at ``1.0.0``, in order to improve better backward and forward compatibility support for plugins.
 * Fix bug related to Probabilistic History Matching result reader. The shape of result was wrong.
 * Add the heat transfer mechanism for fluid materials composed by a parcel of radiation and convection.
+* Add support for references inside tables defined by plugins.
 
 
 2024.2 (2024-09-10)
