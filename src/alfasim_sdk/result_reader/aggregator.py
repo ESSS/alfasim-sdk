@@ -15,6 +15,7 @@ from typing import Dict
 from typing import Iterator
 from typing import List
 from typing import Literal
+from typing import NamedTuple
 from typing import Optional
 from typing import Sequence
 from typing import Tuple
@@ -27,6 +28,7 @@ import h5py
 import numpy
 import numpy as np
 from typing_extensions import Self
+from typing_extensions import TypedDict
 
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
@@ -71,7 +73,9 @@ OutputKeyType = str
 A output key is a tuple with the output id and the property id.
 """
 
-TimeSetKeyType = Tuple[int, ...]
+TimeStepIndex = int
+
+TimeSetKeyType = Tuple[TimeStepIndex, ...]
 """\
 A time set key is a tuple of the base time steps relevant for a time set (in ascending order).
 
@@ -96,7 +100,7 @@ A list of floats representing Δt's.
 """
 
 
-BaseTimeStepIndexToMetaList = Dict[int, Dict]
+BaseTimeStepIndexToMetaList = Dict[TimeStepIndex, Dict]
 """\
 A map of base time steps to the metadata contained in the respective result file.
 
@@ -495,6 +499,98 @@ class HistoryMatchingMetadata:
             )
 
 
+class ProfileMetaItem(TypedDict):
+    #: The id of a profile entity.
+    profile_id: str
+
+    #: The name of a property collected in this profile.
+    property_id: str
+
+    #: How many points exist in this profile curve.
+    size: int
+
+    #: The location where this profile is sampled (face, center).
+    location: str
+
+    #: A flag indicating this profile is sampled in the annulus region.
+    is_annulus: bool
+
+    #: A string representing the original associated network element (a pipe) name.
+    network_element_name: str
+
+    #: This profile curve's image unit.
+    unit: str
+
+    #: This profile curve's image category.
+    category: str
+
+    #: This profile curve's domain unit (the category is always `length`).
+    domain_unit: str
+
+    #: The key for the timeset associated with this profile.
+    time_set_key: TimeSetKeyType
+
+    #: The maximum image value of for this profile taking into account all collected time steps.
+    global_max: float
+
+    #: The minimum image value of for this profile taking into account all collected time steps.
+    global_min: float
+
+    #: Identifier of this profile, used to read the result arrays.
+    data_id: dict[int, str]
+
+    #: Identifier of this profile domain, used to read the result arrays.
+    domain_id: dict[int, str]
+
+
+class TrendMetaItem(TypedDict, total=False):
+    #: The id of a trend entity.
+    trend_id: str
+
+    #: The name of a property collected in this trend.
+    property_id: str
+
+    #: A string representing the original associated network element (could be `None`for
+    # global trends) name.
+    network_element_name: str | None
+
+    #: This trend  curve's image unit.
+    unit: str
+
+    #: This trend curve's image category.
+    category: str
+
+    #: Index of the cell where this profile sampled. Can be None if this is not a positional trend.
+    cell_index: int | None
+
+    #: Global position of the cell, in meters. Can be None if this is not a positional trend.
+    cell_position: float | None
+
+    #: The location where this profile is sampled (face, center). Can be None if this is not a
+    # positional trend.
+    location: str | None
+
+    #: The position in which this profile is sampled, in meters. Can be None if this is not a
+    # positional trend.
+    position: float | None
+
+    #: A flag indicating if this profile is sampled in the annulus region. Can be None if this is
+    # not a positional trend.
+    is_annulus: bool | None
+
+    #: The key for the timeset associated with this trend (the timeset is the domain for trends).
+    time_set_key: TimeSetKeyType
+
+    #: The maximum image value of for this trend.
+    max: float
+
+    #: The minimum image value of for this trend.
+    min: float
+
+    #: Used to read the result arrays.
+    index: dict[int, int]
+
+
 @dataclasses.dataclass
 class ALFASimResultMetadata:
     """
@@ -526,14 +622,18 @@ class ALFASimResultMetadata:
         Map "base time steps" to the application version used in the simulation.
     """
 
-    profiles: dict
-    trends: dict
-    time_sets: list
+    profiles: dict[OutputKeyType, ProfileMetaItem]
+    trends: dict[OutputKeyType, TrendMetaItem]
+    time_sets: list[SourceTimeSetKeyType]
     time_sets_unit: str
-    time_steps_boundaries: tuple
-    time_set_info: dict
+    time_steps_boundaries: tuple[
+        tuple[TimeStepIndex, TimeStepIndex], tuple[TimeStepIndex, TimeStepIndex]
+    ]
+    time_set_info: dict[
+        Literal["profiles", "trends"], dict[TimeStepIndex, TimeSetInfoItem]
+    ]
     result_directory: Path
-    app_version_info: dict
+    app_version_info: dict[int, str]
 
     @property
     def trends_time_steps_boundaries(self) -> Tuple[int, int]:
@@ -924,7 +1024,7 @@ def read_time_set_info(
         if size > 0:
             limits[key] = TimeSetLimits(dataset[0], dataset[-1], dataset)
         time_set_info[key] = TimeSetInfoItem(
-            global_start=start, size=size, uuid=time_set_uuid
+            global_start=int(start), size=int(size), uuid=time_set_uuid
         )
         start += size
 
@@ -938,8 +1038,8 @@ def read_time_set_info(
             previous_old_info = time_set_info[previous_key]
             previous_new_uuid = f"{previous_old_info.uuid}-trunc-at-{index}"
             time_set_info[previous_key] = TimeSetInfoItem(
-                global_start=previous_old_info.global_start,
-                size=index,
+                global_start=int(previous_old_info.global_start),
+                size=int(index),
                 uuid=previous_new_uuid,
             )
 
@@ -947,8 +1047,8 @@ def read_time_set_info(
             new_start = previous_old_info.global_start + index
             next_new_uuid = f"{next_old_info.uuid}-trunc-prev-at-{index}"
             time_set_info[next_key] = TimeSetInfoItem(
-                global_start=new_start,
-                size=next_old_info.size,
+                global_start=int(new_start),
+                size=int(next_old_info.size),
                 uuid=next_new_uuid,
             )
 
