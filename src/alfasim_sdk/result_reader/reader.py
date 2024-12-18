@@ -18,9 +18,9 @@ from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator import ALFASimResultMetadata
 from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.aggregator import GSAOutputKey
 from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
 from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
-from alfasim_sdk.result_reader.aggregator import GSAOutputKey
 from alfasim_sdk.result_reader.aggregator import HMOutputKey
 from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_meta_data,
