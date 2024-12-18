@@ -17,6 +17,8 @@ from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
 from alfasim_sdk.result_reader.aggregator import HMOutputKey
 from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
 from alfasim_sdk.result_reader.aggregator import read_history_matching_result
+from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
+from alfasim_sdk.result_reader.aggregator import UPOutputKey
 from alfasim_sdk.result_reader.reader import GlobalSensitivityAnalysisResults
 from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
 from alfasim_sdk.result_reader.reader import HistoryMatchingDeterministicResults
@@ -25,6 +27,7 @@ from alfasim_sdk.result_reader.reader import OverallTrendMetadata
 from alfasim_sdk.result_reader.reader import PositionalTrendMetadata
 from alfasim_sdk.result_reader.reader import ProfileMetadata
 from alfasim_sdk.result_reader.reader import Results
+from alfasim_sdk.result_reader.reader import UncertaintyPropagationResults
 
 
 def test_fail_to_get_curves(results: Results) -> None:
@@ -297,3 +300,37 @@ class TestHistoryMatchingResultsReader:
                 data_index=1,
             ),
         }
+
+
+def test_uncertainty_propagation_results_reader(up_results_dir: Path) -> None:
+    reader = UncertaintyPropagationResults.from_directory(up_results_dir)
+
+    assert np.allclose(
+        reader.timeset, np.array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0])
+    )
+    assert len(reader.results) == 2
+    some_result = reader.results[
+        UPOutputKey(property_name="absolute_pressure", element_name="trend_id_1")
+    ]
+    assert np.allclose(
+        some_result.mean_result, np.array([12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7])
+    )
+    assert len(reader.metadata.items) == 2
+    assert reader.metadata.items[
+        UPOutputKey(property_name="temperature", element_name="trend_id_1")
+    ] == UncertaintyPropagationAnalysesMetaData.UPItem(
+        property_id="temperature",
+        trend_id="trend_id_1",
+        category="temperature",
+        network_element_name="Conexao 1",
+        position=100.0,
+        position_unit="m",
+        unit="K",
+        samples=5,
+        result_index=0,
+        sample_indexes=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]],
+    )
+
+    # Ensure the reader can handle a nonexistent result file.
+    reader = UncertaintyPropagationResults.from_directory(Path("foo"))
+    assert reader is None

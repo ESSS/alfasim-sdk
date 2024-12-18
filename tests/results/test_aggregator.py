@@ -40,6 +40,7 @@ from alfasim_sdk.result_reader.aggregator import (
 )
 from alfasim_sdk.result_reader.aggregator import ResultsNeedFullReloadError
 from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
+from alfasim_sdk.result_reader.aggregator import UPOutputKey
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
@@ -602,22 +603,17 @@ def test_read_uncertainty_propagation_results(
     empty_metadata = read_uncertainty_propagation_analyses_meta_data(
         result_directory=datadir
     )
-    assert empty_metadata.items == {}
-    result = read_uncertainty_propagation_results(
-        metadata=empty_metadata, results_key="absolute_pressure@trend_id_1"
-    )
-    assert result is None
+    assert empty_metadata is None
 
     metadata = read_uncertainty_propagation_analyses_meta_data(
         result_directory=up_results_dir
     )
-    assert list(metadata.items.keys()) == [
-        "temperature@trend_id_1",
-        "absolute_pressure@trend_id_1",
-    ]
+    temp_key = UPOutputKey("temperature", "trend_id_1")
+    pressure_key = UPOutputKey("absolute_pressure", "trend_id_1")
+    assert list(metadata.items.keys()) == [temp_key, pressure_key]
 
-    assert metadata.items["temperature@trend_id_1"].result_index == 0
-    assert metadata.items["temperature@trend_id_1"].sample_indexes == [
+    assert metadata.items[temp_key].result_index == 0
+    assert metadata.items[temp_key].sample_indexes == [
         [0, 0],
         [0, 1],
         [0, 2],
@@ -625,8 +621,8 @@ def test_read_uncertainty_propagation_results(
         [0, 4],
     ]
 
-    assert metadata.items["absolute_pressure@trend_id_1"].result_index == 1
-    assert metadata.items["absolute_pressure@trend_id_1"].sample_indexes == [
+    assert metadata.items[pressure_key].result_index == 1
+    assert metadata.items[pressure_key].sample_indexes == [
         [1, 0],
         [1, 1],
         [1, 2],
@@ -635,22 +631,29 @@ def test_read_uncertainty_propagation_results(
     ]
 
     result = read_uncertainty_propagation_results(
-        metadata=metadata, results_key="temperature@trend_id_1"
+        metadata=metadata, result_keys=[temp_key]
     )
+    assert len(result) == 1
     dict_1 = {
-        "sample_0": result.realization_output[0],
-        "sample_1": result.realization_output[-1],
-        "mean_result": result.mean_result,
-        "std_result": result.std_result,
+        "sample_0": result[temp_key].realization_output[0],
+        "sample_1": result[temp_key].realization_output[-1],
+        "mean_result": result[temp_key].mean_result,
+        "std_result": result[temp_key].std_result,
     }
-    num_regression.check(dict_1, basename="temperature@trend_id_1")
+    num_regression.check(dict_1, basename=str(temp_key))
+
     result = read_uncertainty_propagation_results(
-        metadata=metadata, results_key="absolute_pressure@trend_id_1"
+        metadata=metadata, result_keys=[pressure_key]
     )
+    assert len(result) == 1
     dict_2 = {
-        "sample_0": result.realization_output[0],
-        "sample_1": result.realization_output[-1],
-        "mean_result": result.mean_result,
-        "std_result": result.std_result,
+        "sample_0": result[pressure_key].realization_output[0],
+        "sample_1": result[pressure_key].realization_output[-1],
+        "mean_result": result[pressure_key].mean_result,
+        "std_result": result[pressure_key].std_result,
     }
-    num_regression.check(dict_2, basename="absolute_pressure@trend_id_1")
+    num_regression.check(dict_2, basename=str(pressure_key))
+
+    # Coverage. Check the UPOutputKey correctly fail to parse bad strings.
+    with pytest.raises(ValueError, match="invalid output key: temperate::trend_id"):
+        UPOutputKey.from_string("temperate::trend_id")

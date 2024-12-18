@@ -36,11 +36,21 @@ from alfasim_sdk.result_reader.aggregator import read_profiles_data
 from alfasim_sdk.result_reader.aggregator import read_profiles_domain_data
 from alfasim_sdk.result_reader.aggregator import read_time_sets
 from alfasim_sdk.result_reader.aggregator import read_trends_data
+from alfasim_sdk.result_reader.aggregator import (
+    read_uncertainty_propagation_analyses_meta_data,
+)
+from alfasim_sdk.result_reader.aggregator import read_uncertainty_propagation_results
 from alfasim_sdk.result_reader.aggregator import read_uq_time_set
+from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
+from alfasim_sdk.result_reader.aggregator import UPOutputKey
+from alfasim_sdk.result_reader.aggregator import UPResult
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_GROUP_NAME,
+)
 
 
 @define(frozen=True)
@@ -448,3 +458,26 @@ def _read_curves_data(
         domain = Array("time", raw_curve[1], info.domain_unit)
         result[curve_id] = (info, Curve(image, domain))
     return result
+
+
+@define(frozen=True)
+class UncertaintyPropagationResults:
+    timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
+    results: dict[UPOutputKey, UPResult] = attr.field(
+        validator=_non_empty_dict_validator(UPResult)
+    )
+    metadata: UncertaintyPropagationAnalysesMetaData = attr.field(
+        validator=_non_empty_attr_validator("items")
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_uncertainty_propagation_analyses_meta_data(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            timeset=read_uq_time_set(result_dir, UNCERTAINTY_PROPAGATION_GROUP_NAME),
+            results=read_uncertainty_propagation_results(metadata),
+            metadata=metadata,
+        )

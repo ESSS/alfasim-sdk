@@ -167,6 +167,23 @@ class BaseUQMetaData:
 
 
 @dataclasses.dataclass(frozen=True)
+class UPOutputKey:
+    property_name: str
+    element_name: str
+
+    def __str__(self):
+        return f"{self.property_name}@{self.element_name}"
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        r = re.match(r"^(.*)@(.*)", raw_output_key)
+        if r is None:
+            raise ValueError(f"invalid output key: {raw_output_key}")
+        property_name, element_name = r.groups()
+        return cls(property_name, element_name)
+
+
+@dataclasses.dataclass(frozen=True)
 class UncertaintyPropagationAnalysesMetaData:
     """
     A class that hold the uncertainty propagation analyses metadata.
@@ -204,22 +221,18 @@ class UncertaintyPropagationAnalysesMetaData:
                 sample_indexes=data["sample_indexes"],
             )
 
-    items: Dict[str, UPItem]
+    items: Dict[UPOutputKey, UPItem]
     result_directory: Path
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return UncertaintyPropagationAnalysesMetaData(
-            items={}, result_directory=result_directory
-        )
-
-    @classmethod
-    def get_metadata_from_dir(cls, result_directory: Path) -> Self:
+    def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
         def map_data(
             up_metadata: Dict,
-        ) -> Dict[str, UncertaintyPropagationAnalysesMetaData.UPItem]:
+        ) -> Dict[UPOutputKey, UncertaintyPropagationAnalysesMetaData.UPItem]:
             return {
-                key: UncertaintyPropagationAnalysesMetaData.UPItem.from_dict(data)
+                UPOutputKey.from_string(
+                    key
+                ): UncertaintyPropagationAnalysesMetaData.UPItem.from_dict(data)
                 for key, data in up_metadata.items()
             }
 
@@ -324,23 +337,6 @@ class GlobalSensitivityAnalysisMetadata:
 UQMetadataClass = Union[
     GlobalSensitivityAnalysisMetadata, UncertaintyPropagationAnalysesMetaData
 ]
-
-
-@attr.s(frozen=True)
-class UPResult:
-    """
-    Holder for each uncertainty propagation result.
-    """
-
-    category: str = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    unit: str = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
-    std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
-    mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
 
 
 MetadataClassType = TypeVar("MetadataClassType", bound=UQMetadataClass)
@@ -1961,45 +1957,66 @@ def read_uncertainty_propagation_analyses_meta_data(
     )
 
 
+@attr.s(frozen=True)
+class UPResult:
+    """
+    Holder for each uncertainty propagation result.
+    """
+
+    realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
+    std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
+    mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
+
+
 def read_uncertainty_propagation_results(
-    metadata: UncertaintyPropagationAnalysesMetaData, results_key: str
-) -> Optional[UPResult]:
+    metadata: UncertaintyPropagationAnalysesMetaData,
+    result_keys: Sequence[UPOutputKey] | None = None,
+) -> dict[UPOutputKey, UPResult]:
     """
     Get the uncertainty propagation results.
 
     :param metadata:
         The uncertainty propagation metadata previously read.
 
-    :param results_key:
-        The result key as follows: <property_id@trend_id>
+    :param result_keys:
+        A sequence of result key in the form of "<property_id>@<trend_id>". If None, will read the
+        result of all entries found in the metadata.
     """
-    meta = metadata.items.get(results_key)
-    if not meta:
-        return None
-
     with open_result_file(metadata.result_directory) as file:
+        if file is None:
+            return {}
+
         up_group = file[UNCERTAINTY_PROPAGATION_GROUP_NAME]
         realization_output_samples = up_group[
             UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS
         ]
 
-        realization_outputs = [
-            realization_output_samples[sample_index][qoi_index]
-            for qoi_index, sample_index in meta.sample_indexes
-        ]
-        mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][
-            meta.result_index
-        ]
-        std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][
-            meta.result_index
-        ]
-        return UPResult(
-            realization_output=realization_outputs,
-            mean_result=mean_result,
-            std_result=std_result,
-            category=meta.category,
-            unit=meta.unit,
-        )
+        result_keys = result_keys if result_keys else list(metadata.items.keys())
+        items_meta = {
+            r_key: meta
+            for r_key, meta in metadata.items.items()
+            if r_key in result_keys
+        }
+
+        result: dict[UPOutputKey, UPResult] = {}
+        for key, meta in items_meta.items():
+            realization_outputs = [
+                realization_output_samples[sample_index][qoi_index]
+                for qoi_index, sample_index in meta.sample_indexes
+            ]
+            mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][
+                meta.result_index
+            ]
+            std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][
+                meta.result_index
+            ]
+            result[key] = UPResult(
+                realization_output=realization_outputs,
+                mean_result=mean_result,
+                std_result=std_result,
+            )
+
+        return result
 
 
 def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.array]:
