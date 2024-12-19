@@ -135,7 +135,7 @@ class ResultsNeedFullReloadError(RuntimeError):
     """
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class BaseUQMetaData:
     """
     Base class for UQ metadata analysis.
@@ -166,7 +166,7 @@ class BaseUQMetaData:
     unit: str
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class UPOutputKey:
     property_name: str
     element_name: str
@@ -182,13 +182,13 @@ class UPOutputKey:
         return cls(property_name, element_name)
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class UncertaintyPropagationAnalysesMetaData:
     """
     A class that hold the uncertainty propagation analyses metadata.
     """
 
-    @dataclasses.dataclass(slots=True, frozen=True)
+    @dataclasses.dataclass(frozen=True)
     class UPItem(BaseUQMetaData):
         """
         A class that hold each uncertainty propagation analyses metadata.
@@ -243,7 +243,7 @@ class UncertaintyPropagationAnalysesMetaData:
         )
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class GSAOutputKey:
     property_name: str
     parametric_var_id: str
@@ -260,13 +260,13 @@ class GSAOutputKey:
         return cls(property_name, parametric_var_id, element_name)
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class GlobalSensitivityAnalysisMetadata:
     """
     A class that hold the global sensitivity analysis metadata.
     """
 
-    @dataclasses.dataclass(slots=True, frozen=True)
+    @dataclasses.dataclass(frozen=True)
     class GSAItem(BaseUQMetaData):
         """
         A class that hold each global sensitivity analysis
@@ -358,7 +358,7 @@ def read_results_file(
         )
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class HistoricDataCurveMetadata:
     """
     Metadata of the historic data curves used in the History Matching analysis.
@@ -381,7 +381,7 @@ class HistoricDataCurveMetadata:
         )
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class HMOutputKey:
     parametric_var_id: str
 
@@ -393,7 +393,7 @@ class HMOutputKey:
         return cls(raw_output_key)
 
 
-@dataclasses.dataclass(slots=True, frozen=True)
+@dataclasses.dataclass(frozen=True)
 class HistoryMatchingMetadata:
     """
     Holder for the History Matching results metadata.
@@ -413,7 +413,7 @@ class HistoryMatchingMetadata:
     #: later (ASIM-5713).
     historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = None
 
-    @dataclasses.dataclass(slots=True, frozen=True)
+    @dataclasses.dataclass(frozen=True)
     class HMItem:
         """
         Metadata associated with each item of the HM results.
@@ -585,7 +585,7 @@ class TrendMetaItem(TypedDict, total=False):
     index: dict[int, int]
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass
 class ALFASimResultMetadata:
     """
     :ivar profiles:
@@ -654,7 +654,7 @@ class ALFASimResultMetadata:
         )
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass
 class _MergedMetadataWithStatistics:
     """
     :ivar app_version_info:
