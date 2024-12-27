@@ -470,7 +470,7 @@ DLL_EXPORT int get_state_variable_array(
     - `"A_eff"`: Cross-sectional Area Effective in each control volume, considering the internal deposit layers [m2]
     - `"dv_eff"`: Effective Volume of the control volume, considering the internal deposit layers [m3]
     - `"volumetric_flow_rate"` : Volumetric flow rate [m3/s]
-    - `"T_outer" : Outermost wall temperature (environment temperature) [K]`
+    - `"T_env" : Environment temperature [K]`
 
     It is important to know that the listed `variable_name`s are no available in all #MultiFieldDescriptionScope
     and #GridScope. Because of that, the #error_code must be checked.
