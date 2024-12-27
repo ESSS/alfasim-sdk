@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import dataclasses
 import functools
 import json
 import os
+import re
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
@@ -13,7 +15,9 @@ from typing import Dict
 from typing import Iterator
 from typing import List
 from typing import Literal
+from typing import NamedTuple
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 from typing import Type
 from typing import TypeVar
@@ -24,6 +28,7 @@ import h5py
 import numpy
 import numpy as np
 from typing_extensions import Self
+from typing_extensions import TypedDict
 
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
@@ -68,7 +73,9 @@ OutputKeyType = str
 A output key is a tuple with the output id and the property id.
 """
 
-TimeSetKeyType = Tuple[int, ...]
+TimeStepIndex = int
+
+TimeSetKeyType = Tuple[TimeStepIndex, ...]
 """\
 A time set key is a tuple of the base time steps relevant for a time set (in ascending order).
 
@@ -93,19 +100,20 @@ A list of floats representing Δt's.
 """
 
 
-BaseTimeStepIndexToMetaList = Dict[int, Dict]
+BaseTimeStepIndexToMetaList = Dict[TimeStepIndex, Dict]
 """\
 A map of base time steps to the metadata contained in the respective result file.
 
 All the metadata will represents the same kind of output (profiles/trends).
 """
 
-HistoryMatchingResultKeyType = str
-"""\
-A HM result key is simply the id of the parametric var associated with that particular result.
-"""
 
-TimeSetInfoItem = namedtuple("TimeSetInfoItem", "global_start size uuid")
+class TimeSetInfoItem(NamedTuple):
+    global_start: TimeStepIndex
+    size: int
+    uuid: str
+
+
 TimeSetInfo = Dict[int, TimeSetInfoItem]
 
 
@@ -127,7 +135,7 @@ class ResultsNeedFullReloadError(RuntimeError):
     """
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
 class BaseUQMetaData:
     """
     Base class for UQ metadata analysis.
@@ -149,28 +157,39 @@ class BaseUQMetaData:
         The unit of a dimensionless property (-, %)
     """
 
-    property_id: str = attr.ib(validator=attr.validators.instance_of(str))
-    trend_id: str = attr.ib(validator=attr.validators.instance_of(str))
-    category: str = attr.ib(validator=attr.validators.instance_of(str))
-    network_element_name: Optional[str] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    position: Optional[float] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(float))
-    )
-    position_unit: Optional[str] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    unit: str = attr.ib(validator=attr.validators.instance_of(str))
+    property_id: str
+    trend_id: str
+    category: str
+    network_element_name: Optional[str]
+    position: Optional[float]
+    position_unit: Optional[str]
+    unit: str
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
+class UPOutputKey:
+    property_name: str
+    element_name: str
+
+    def __str__(self):
+        return f"{self.property_name}@{self.element_name}"
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        r = re.match(r"^(.*)@(.*)", raw_output_key)
+        if r is None:
+            raise ValueError(f"invalid output key: {raw_output_key}")
+        property_name, element_name = r.groups()
+        return cls(property_name, element_name)
+
+
+@dataclasses.dataclass(frozen=True)
 class UncertaintyPropagationAnalysesMetaData:
     """
     A class that hold the uncertainty propagation analyses metadata.
     """
 
-    @attr.s(slots=True, hash=False)
+    @dataclasses.dataclass(frozen=True)
     class UPItem(BaseUQMetaData):
         """
         A class that hold each uncertainty propagation analyses metadata.
@@ -183,11 +202,9 @@ class UncertaintyPropagationAnalysesMetaData:
             The indexes to access each sample of an item.
         """
 
-        samples: int = attr.ib(validator=attr.validators.instance_of(int))
-        result_index: int = attr.ib(validator=attr.validators.instance_of(int))
-        sample_indexes: List[List[int]] = attr.ib(
-            validator=attr.validators.instance_of(List)
-        )
+        samples: int
+        result_index: int
+        sample_indexes: List[List[int]]
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -204,22 +221,18 @@ class UncertaintyPropagationAnalysesMetaData:
                 sample_indexes=data["sample_indexes"],
             )
 
-    items: Dict[str, UPItem] = attr.ib(validator=attr.validators.instance_of(Dict))
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    items: Dict[UPOutputKey, UPItem]
+    result_directory: Path
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return UncertaintyPropagationAnalysesMetaData(
-            items={}, result_directory=result_directory
-        )
-
-    @classmethod
-    def get_metadata_from_dir(cls, result_directory: Path) -> Self:
+    def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
         def map_data(
             up_metadata: Dict,
-        ) -> Dict[str, UncertaintyPropagationAnalysesMetaData.UPItem]:
+        ) -> Dict[UPOutputKey, UncertaintyPropagationAnalysesMetaData.UPItem]:
             return {
-                key: UncertaintyPropagationAnalysesMetaData.UPItem.from_dict(data)
+                UPOutputKey.from_string(
+                    key
+                ): UncertaintyPropagationAnalysesMetaData.UPItem.from_dict(data)
                 for key, data in up_metadata.items()
             }
 
@@ -231,13 +244,31 @@ class UncertaintyPropagationAnalysesMetaData:
         )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
+class GSAOutputKey:
+    property_name: str
+    parametric_var_id: str
+    element_name: str
+
+    def __str__(self):
+        return f"{self.property_name}::{self.parametric_var_id}@{self.element_name}"
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        r = re.match(r"^(.*)::(.*)@(.*)", raw_output_key)
+        if r is None:
+            raise ValueError(f"invalid output key: {raw_output_key}")
+        property_name, parametric_var_id, element_name = r.groups()
+        return cls(property_name, parametric_var_id, element_name)
+
+
+@dataclasses.dataclass(frozen=True)
 class GlobalSensitivityAnalysisMetadata:
     """
     A class that hold the global sensitivity analysis metadata.
     """
 
-    @attr.s(slots=True, hash=False)
+    @dataclasses.dataclass(frozen=True)
     class GSAItem(BaseUQMetaData):
         """
         A class that hold each global sensitivity analysis
@@ -252,14 +283,10 @@ class GlobalSensitivityAnalysisMetadata:
             The data index of a quantity of interest.
         """
 
-        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
-        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
-        qoi_index: Optional[int] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(int))
-        )
-        qoi_data_index: Optional[int] = attr.ib(
-            validator=attr.validators.optional(attr.validators.instance_of(int))
-        )
+        parametric_var_id: str
+        parametric_var_name: str
+        qoi_index: Optional[int]
+        qoi_data_index: Optional[int]
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -277,17 +304,11 @@ class GlobalSensitivityAnalysisMetadata:
                 qoi_data_index=data["qoi_data_index"],
             )
 
-    items: Dict[str, GSAItem] = attr.ib(validator=attr.validators.instance_of(Dict))
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    items: Dict[GSAOutputKey, GSAItem]
+    result_directory: Path
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return GlobalSensitivityAnalysisMetadata(
-            items={}, result_directory=result_directory
-        )
-
-    @classmethod
-    def get_metadata_from_dir(cls, result_directory: Path) -> Self:
+    def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
         """
         Return the metadata info from result directory.
         If the directory does not exist/is invalid, return an empty metadata.
@@ -297,9 +318,11 @@ class GlobalSensitivityAnalysisMetadata:
 
         def map_data(
             gsa_metadata: Dict,
-        ) -> Dict[str, GlobalSensitivityAnalysisMetadata.GSAItem]:
+        ) -> Dict[GSAOutputKey, GlobalSensitivityAnalysisMetadata.GSAItem]:
             return {
-                key: GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
+                GSAOutputKey.from_string(
+                    key
+                ): GlobalSensitivityAnalysisMetadata.GSAItem.from_dict(data)
                 for key, data in gsa_metadata.items()
             }
 
@@ -316,23 +339,6 @@ UQMetadataClass = Union[
 ]
 
 
-@attr.s(frozen=True)
-class UPResult:
-    """
-    Holder for each uncertainty propagation result.
-    """
-
-    category: str = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    unit: str = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(str))
-    )
-    realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
-    std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
-    mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
-
-
 MetadataClassType = TypeVar("MetadataClassType", bound=UQMetadataClass)
 
 
@@ -341,10 +347,10 @@ def read_results_file(
     metadata_class: Type[MetadataClassType],
     map_data: Callable,
     meta_data_attrs: str,
-) -> MetadataClassType:
+) -> MetadataClassType | None:
     with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
-            return metadata_class.empty(result_directory=result_directory)
+            return None
 
         loaded_metadata = json.loads(
             result_file[META_GROUP_NAME].attrs[meta_data_attrs]
@@ -354,7 +360,7 @@ def read_results_file(
         )
 
 
-@attr.define(slots=True, hash=True)
+@dataclasses.dataclass(frozen=True)
 class HistoricDataCurveMetadata:
     """
     Metadata of the historic data curves used in the History Matching analysis.
@@ -377,49 +383,54 @@ class HistoricDataCurveMetadata:
         )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass(frozen=True)
+class HMOutputKey:
+    parametric_var_id: str
+
+    def __str__(self):
+        return self.parametric_var_id
+
+    @classmethod
+    def from_string(cls, raw_output_key: str) -> Self:
+        return cls(raw_output_key)
+
+
+@dataclasses.dataclass(frozen=True)
 class HistoryMatchingMetadata:
     """
     Holder for the History Matching results metadata.
     """
 
     #: Map of the data id and its associated metadata.
-    hm_items: Dict[str, HMItem] = attr.ib(validator=attr.validators.instance_of(Dict))
+    hm_items: Dict[HMOutputKey, HMItem]
     #: Map of observed curve id to a dict of Quantity of Interest data, populated with keys
     #: 'trend_id' and 'property_id'. This represents the setup for this HM analysis.
-    objective_functions: Dict[str, Dict[str, str]] = attr.ib(
-        validator=attr.validators.instance_of(Dict)
-    )
+    objective_functions: Dict[str, Dict[str, str]]
     #: Map of parametric vars to the values that represents the analysis, with all existent vars.
     #: Values are either the optimal values (deterministic) or the base values (probabilistic).
-    parametric_vars: Dict[str, float] = attr.ib(
-        validator=attr.validators.instance_of(Dict)
-    )
+    parametric_vars: Dict[str, float]
     #: The directory in which the result is saved.
-    result_directory: Path = attr.ib(validator=attr.validators.instance_of(Path))
+    result_directory: Path
     #: Metadata of the historic curves present in the results. Optional as this was introduced
     #: later (ASIM-5713).
-    historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = attr.ib(
-        validator=attr.validators.optional(attr.validators.instance_of(list)),
-        default=None,
-    )
+    historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = None
 
-    @attr.s(slots=True, hash=False)
+    @dataclasses.dataclass(frozen=True)
     class HMItem:
         """
         Metadata associated with each item of the HM results.
         """
 
         #: The id of the associated parametric var.
-        parametric_var_id: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_id: str
         #: The name of the associated parametric var.
-        parametric_var_name: str = attr.ib(validator=attr.validators.instance_of(str))
+        parametric_var_name: str
         #: Lower limit of the specified range for the parametric var.
-        min_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        min_value: float
         #: Upper limit of the specified range for the parametric var.
-        max_value: float = attr.ib(validator=attr.validators.instance_of(float))
+        max_value: float
         #: The index of the data in the result datasets.
-        data_index: int = attr.ib(validator=attr.validators.instance_of(int))
+        data_index: int
 
         @classmethod
         def from_dict(cls, data: Dict[str, Any]) -> Self:
@@ -437,16 +448,7 @@ class HistoryMatchingMetadata:
             )
 
     @classmethod
-    def empty(cls, result_directory: Path) -> Self:
-        return cls(
-            hm_items={},
-            objective_functions={},
-            parametric_vars={},
-            result_directory=result_directory,
-        )
-
-    @classmethod
-    def from_result_directory(cls, result_directory: Path) -> Self:
+    def from_result_directory(cls, result_directory: Path) -> Self | None:
         """
         Read History Matching results metadata from result directory/file.
 
@@ -455,9 +457,11 @@ class HistoryMatchingMetadata:
 
         def map_meta_items(
             hm_metadata: Dict,
-        ) -> Dict[str, HistoryMatchingMetadata.HMItem]:
+        ) -> Dict[HMOutputKey, HistoryMatchingMetadata.HMItem]:
             return {
-                key: HistoryMatchingMetadata.HMItem.from_dict(data)
+                HMOutputKey.from_string(key): HistoryMatchingMetadata.HMItem.from_dict(
+                    data
+                )
                 for key, data in hm_metadata.items()
             }
 
@@ -468,15 +472,12 @@ class HistoryMatchingMetadata:
 
         with open_result_file(result_directory) as result_file:
             if not result_file:
-                return cls.empty(result_directory=result_directory)
+                return None
 
             loaded_metadata = json.loads(
                 result_file[META_GROUP_NAME].attrs[HISTORY_MATCHING_GROUP_NAME]
             )
-
-            if len(loaded_metadata) == 0:
-                return cls.empty(result_directory=result_directory)
-
+            assert len(loaded_metadata) > 0
             some_item_metadata = list(loaded_metadata.values())[0]
 
             objective_functions = some_item_metadata["objective_functions"]
@@ -494,7 +495,99 @@ class HistoryMatchingMetadata:
             )
 
 
-@attr.s(slots=True, hash=False)
+class ProfileMetaItem(TypedDict):
+    #: The id of a profile entity.
+    profile_id: str
+
+    #: The name of a property collected in this profile.
+    property_id: str
+
+    #: How many points exist in this profile curve.
+    size: int
+
+    #: The location where this profile is sampled (face, center).
+    location: str
+
+    #: A flag indicating this profile is sampled in the annulus region.
+    is_annulus: bool
+
+    #: A string representing the original associated network element (a pipe) name.
+    network_element_name: str
+
+    #: This profile curve's image unit.
+    unit: str
+
+    #: This profile curve's image category.
+    category: str
+
+    #: This profile curve's domain unit (the category is always `length`).
+    domain_unit: str
+
+    #: The key for the timeset associated with this profile.
+    time_set_key: TimeSetKeyType
+
+    #: The maximum image value of for this profile taking into account all collected time steps.
+    global_max: float
+
+    #: The minimum image value of for this profile taking into account all collected time steps.
+    global_min: float
+
+    #: Identifier of this profile, used to read the result arrays.
+    data_id: dict[int, str]
+
+    #: Identifier of this profile domain, used to read the result arrays.
+    domain_id: dict[int, str]
+
+
+class TrendMetaItem(TypedDict, total=False):
+    #: The id of a trend entity.
+    trend_id: str
+
+    #: The name of a property collected in this trend.
+    property_id: str
+
+    #: A string representing the original associated network element (could be `None`for
+    # global trends) name.
+    network_element_name: str | None
+
+    #: This trend  curve's image unit.
+    unit: str
+
+    #: This trend curve's image category.
+    category: str
+
+    #: Index of the cell where this profile sampled. Can be None if this is not a positional trend.
+    cell_index: int | None
+
+    #: Global position of the cell, in meters. Can be None if this is not a positional trend.
+    cell_position: float | None
+
+    #: The location where this profile is sampled (face, center). Can be None if this is not a
+    # positional trend.
+    location: str | None
+
+    #: The position in which this profile is sampled, in meters. Can be None if this is not a
+    # positional trend.
+    position: float | None
+
+    #: A flag indicating if this profile is sampled in the annulus region. Can be None if this is
+    # not a positional trend.
+    is_annulus: bool | None
+
+    #: The key for the timeset associated with this trend (the timeset is the domain for trends).
+    time_set_key: TimeSetKeyType
+
+    #: The maximum image value of for this trend.
+    max: float
+
+    #: The minimum image value of for this trend.
+    min: float
+
+    #: Used to read the result arrays.
+    index: dict[int, int]
+
+
+@dataclasses.dataclass
 class ALFASimResultMetadata:
     """
     :ivar profiles:
@@ -525,14 +618,18 @@ class ALFASimResultMetadata:
         Map "base time steps" to the application version used in the simulation.
     """
 
-    profiles = attr.ib(validator=attr.validators.instance_of(dict))
-    trends = attr.ib(validator=attr.validators.instance_of(dict))
-    time_sets = attr.ib(validator=attr.validators.instance_of(list))
-    time_sets_unit = attr.ib(validator=attr.validators.instance_of(str))
-    time_steps_boundaries = attr.ib(validator=attr.validators.instance_of(tuple))
-    time_set_info = attr.ib(validator=attr.validators.instance_of(dict))
-    result_directory = attr.ib(validator=attr.validators.instance_of(Path))
-    app_version_info = attr.ib(validator=attr.validators.instance_of(dict))
+    profiles: dict[OutputKeyType, ProfileMetaItem]
+    trends: dict[OutputKeyType, TrendMetaItem]
+    time_sets: list[SourceTimeSetKeyType]
+    time_sets_unit: str
+    time_steps_boundaries: tuple[
+        tuple[TimeStepIndex, TimeStepIndex], tuple[TimeStepIndex, TimeStepIndex]
+    ]
+    time_set_info: dict[
+        Literal["profiles", "trends"], dict[TimeStepIndex, TimeSetInfoItem]
+    ]
+    result_directory: Path
+    app_version_info: dict[int, str]
 
     @property
     def trends_time_steps_boundaries(self) -> Tuple[int, int]:
@@ -559,7 +656,7 @@ class ALFASimResultMetadata:
         )
 
 
-@attr.s(slots=True, hash=False)
+@dataclasses.dataclass
 class _MergedMetadataWithStatistics:
     """
     :ivar app_version_info:
@@ -575,10 +672,10 @@ class _MergedMetadataWithStatistics:
         List of sourced time set keys (tuples of relevant base time sets).
     """
 
-    app_version_info = attr.ib(validator=attr.validators.instance_of(dict))
-    profile_key_to_metadata = attr.ib(validator=attr.validators.instance_of(dict))
-    trend_key_to_metadata = attr.ib(validator=attr.validators.instance_of(dict))
-    time_set_keys = attr.ib(validator=attr.validators.instance_of(list))
+    app_version_info: dict
+    profile_key_to_metadata: dict
+    trend_key_to_metadata: dict
+    time_set_keys: list
 
 
 @contextmanager
@@ -923,7 +1020,7 @@ def read_time_set_info(
         if size > 0:
             limits[key] = TimeSetLimits(dataset[0], dataset[-1], dataset)
         time_set_info[key] = TimeSetInfoItem(
-            global_start=start, size=size, uuid=time_set_uuid
+            global_start=int(start), size=int(size), uuid=time_set_uuid
         )
         start += size
 
@@ -937,8 +1034,8 @@ def read_time_set_info(
             previous_old_info = time_set_info[previous_key]
             previous_new_uuid = f"{previous_old_info.uuid}-trunc-at-{index}"
             time_set_info[previous_key] = TimeSetInfoItem(
-                global_start=previous_old_info.global_start,
-                size=index,
+                global_start=int(previous_old_info.global_start),
+                size=int(index),
                 uuid=previous_new_uuid,
             )
 
@@ -946,8 +1043,8 @@ def read_time_set_info(
             new_start = previous_old_info.global_start + index
             next_new_uuid = f"{next_old_info.uuid}-trunc-prev-at-{index}"
             time_set_info[next_key] = TimeSetInfoItem(
-                global_start=new_start,
-                size=next_old_info.size,
+                global_start=int(new_start),
+                size=int(next_old_info.size),
                 uuid=next_new_uuid,
             )
 
@@ -1860,45 +1957,66 @@ def read_uncertainty_propagation_analyses_meta_data(
     )
 
 
+@attr.s(frozen=True)
+class UPResult:
+    """
+    Holder for each uncertainty propagation result.
+    """
+
+    realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
+    std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
+    mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
+
+
 def read_uncertainty_propagation_results(
-    metadata: UncertaintyPropagationAnalysesMetaData, results_key: str
-) -> Optional[UPResult]:
+    metadata: UncertaintyPropagationAnalysesMetaData,
+    result_keys: Sequence[UPOutputKey] | None = None,
+) -> dict[UPOutputKey, UPResult]:
     """
     Get the uncertainty propagation results.
 
     :param metadata:
         The uncertainty propagation metadata previously read.
 
-    :param results_key:
-        The result key as follows: <property_id@trend_id>
+    :param result_keys:
+        A sequence of result key in the form of "<property_id>@<trend_id>". If None, will read the
+        result of all entries found in the metadata.
     """
-    meta = metadata.items.get(results_key)
-    if not meta:
-        return None
-
     with open_result_file(metadata.result_directory) as file:
+        if file is None:
+            return {}
+
         up_group = file[UNCERTAINTY_PROPAGATION_GROUP_NAME]
         realization_output_samples = up_group[
             UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS
         ]
 
-        realization_outputs = [
-            realization_output_samples[sample_index][qoi_index]
-            for qoi_index, sample_index in meta.sample_indexes
-        ]
-        mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][
-            meta.result_index
-        ]
-        std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][
-            meta.result_index
-        ]
-        return UPResult(
-            realization_output=realization_outputs,
-            mean_result=mean_result,
-            std_result=std_result,
-            category=meta.category,
-            unit=meta.unit,
-        )
+        result_keys = result_keys if result_keys else list(metadata.items.keys())
+        items_meta = {
+            r_key: meta
+            for r_key, meta in metadata.items.items()
+            if r_key in result_keys
+        }
+
+        result: dict[UPOutputKey, UPResult] = {}
+        for key, meta in items_meta.items():
+            realization_outputs = [
+                realization_output_samples[sample_index][qoi_index]
+                for qoi_index, sample_index in meta.sample_indexes
+            ]
+            mean_result = up_group[UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT][
+                meta.result_index
+            ]
+            std_result = up_group[UNCERTAINTY_PROPAGATION_DSET_STD_RESULT][
+                meta.result_index
+            ]
+            result[key] = UPResult(
+                realization_output=realization_outputs,
+                mean_result=mean_result,
+                std_result=std_result,
+            )
+
+        return result
 
 
 def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.array]:
@@ -1918,25 +2036,40 @@ def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.
 
 
 def read_global_sensitivity_coefficients(
-    coefficients_key: str,
     metadata: GlobalSensitivityAnalysisMetadata,
-) -> Optional[np.ndarray]:
+    coefficients_key: Sequence[GSAOutputKey] | None = None,
+) -> dict[GSAOutputKey, np.ndarray]:
     """
     Read the global sensitivity analysis coefficients results.
     """
-    # The metadata is empty.
-    if not metadata.items:
-        return None
-    meta = metadata.items[coefficients_key]
     with open_result_file(
         metadata.result_directory, result_filename="result"
     ) as result_file:
-        gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
-        coefficients_dset = gsa_group["global_sensitivity_analysis"]
-        return coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+        if result_file is None:
+            return {}
+
+        coefficients_key = (
+            coefficients_key if coefficients_key else list(metadata.items.keys())
+        )
+        items_meta = {
+            r_key: meta
+            for r_key, meta in metadata.items.items()
+            if r_key in coefficients_key
+        }
+
+        result: dict[GSAOutputKey, np.ndarray] = {}
+        for output_key, meta in items_meta.items():
+            meta = metadata.items[output_key]
+            gsa_group = result_file[GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME]
+            coefficients_dset = gsa_group["global_sensitivity_analysis"]
+            result[output_key] = coefficients_dset[meta.qoi_index, meta.qoi_data_index]
+
+    return result
 
 
-def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMetadata:
+def read_history_matching_metadata(
+    result_directory: Path,
+) -> HistoryMatchingMetadata | None:
     """
     :param result_directory:
         The directory to lookup for the History Matching result file.
@@ -1947,8 +2080,8 @@ def read_history_matching_metadata(result_directory: Path) -> HistoryMatchingMet
 def read_history_matching_result(
     metadata: HistoryMatchingMetadata,
     hm_type: Literal["HM-deterministic", "HM-probabilistic"],
-    hm_result_key: Optional[HistoryMatchingResultKeyType] = None,
-) -> Dict[HistoryMatchingResultKeyType, Union[np.ndarray, float]]:
+    hm_result_key: Optional[HMOutputKey] = None,
+) -> Dict[HMOutputKey, Union[np.ndarray, float]]:
     """
     :param metadata:
         History Matching result metadata.

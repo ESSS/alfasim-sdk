@@ -1,13 +1,11 @@
+import dataclasses
 import itertools
-import json
 import re
 import shutil
 from pathlib import Path
 from typing import List
 from typing import Literal
 
-import attr
-import h5py
 import numpy
 import pytest
 from pytest import FixtureRequest
@@ -15,8 +13,10 @@ from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
 from alfasim_sdk.result_reader.aggregator import concatenate_metadata
+from alfasim_sdk.result_reader.aggregator import GSAOutputKey
 from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
 from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
+from alfasim_sdk.result_reader.aggregator import HMOutputKey
 from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
     read_global_sensitivity_analysis_meta_data,
@@ -40,11 +40,10 @@ from alfasim_sdk.result_reader.aggregator import (
 )
 from alfasim_sdk.result_reader.aggregator import ResultsNeedFullReloadError
 from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
+from alfasim_sdk.result_reader.aggregator import UPOutputKey
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
 )
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 from alfasim_sdk.result_reader.reader import Results
 
@@ -210,7 +209,8 @@ def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
 
 def test_concatenate_metadata_error_conditions_directory(results: Results) -> None:
     md = results.metadata
-    other_md = attr.evolve(md, result_directory=md.result_directory / "other")
+    other_md = dataclasses.replace(md)
+    other_md.result_directory = md.result_directory / "other"
     with pytest.raises(RuntimeError, match="different sources"):
         concatenate_metadata(md, other_md)
 
@@ -303,7 +303,8 @@ def test_read_trends_data_bounds_check(results: Results) -> None:
 
 
 def test_read_trends_data_empty_arrays_when_no_time_set_info(results: Results) -> None:
-    fake_metadata = attr.evolve(results.metadata, time_set_info={})
+    fake_metadata = dataclasses.replace(results.metadata)
+    fake_metadata.time_set_info = {}
     trends = read_trends_data(fake_metadata)
     base_id = "project.study_container.item00001.output_options.trend_out_definition_container"
     assert set(trends.keys()) == {
@@ -346,26 +347,23 @@ def test_read_empty_gsa_metadata(datadir: Path) -> None:
     uq_metadata = read_global_sensitivity_analysis_meta_data(
         result_directory=fake_uq_dir
     )
-    assert uq_metadata.items == {}
-    assert Path(uq_metadata.result_directory) == fake_uq_dir
-
-    fake_uq_dir.mkdir(parents=True)
-    uq_metadata = read_global_sensitivity_analysis_meta_data(
-        result_directory=fake_uq_dir
-    )
-    assert uq_metadata.items == {}
+    assert uq_metadata is None
 
 
 def test_read_gsa_metadata(global_sa_results_dir: Path) -> None:
     uq_metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     global_gsa_meta_data = uq_metadata.items
-    meta_var_1 = global_gsa_meta_data["temperature::parametric_var_1@trend_id_1"]
+    meta_var_1 = global_gsa_meta_data[
+        GSAOutputKey("temperature", "parametric_var_1", "trend_id_1")
+    ]
     assert meta_var_1.qoi_index == 0
     assert meta_var_1.qoi_data_index == 0
     assert meta_var_1.position == 100.0
     assert meta_var_1.parametric_var_name == "A"
 
-    meta_var_2 = global_gsa_meta_data["temperature::parametric_var_2@trend_id_1"]
+    meta_var_2 = global_gsa_meta_data[
+        GSAOutputKey("temperature", "parametric_var_2", "trend_id_1")
+    ]
     assert meta_var_2.qoi_index == 0
     assert meta_var_2.qoi_data_index == 1
     assert meta_var_2.position == 100.0
@@ -377,21 +375,35 @@ def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
         result_directory=global_sa_results_dir,
         group_name=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
     )
-    assert numpy.all(time_set == [0, 1, 2, 3, 4, 5, 6, 7])
+    assert numpy.all(time_set == [1, 2, 3, 4, 5, 6, 7])
 
 
 def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> None:
     metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     data = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_1@trend_id_1",
+        coefficients_key=[
+            GSAOutputKey("temperature", "parametric_var_1", "trend_id_1"),
+            GSAOutputKey("temperature", "parametric_var_2", "trend_id_1"),
+        ],
         metadata=metadata,
     )
-    assert numpy.all(data == (11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7))
-
-    data = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_2@trend_id_1", metadata=metadata
+    numpy.testing.assert_equal(
+        data,
+        {
+            GSAOutputKey("temperature", "parametric_var_1", "trend_id_1"): numpy.array(
+                [11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7]
+            ),
+            GSAOutputKey("temperature", "parametric_var_2", "trend_id_1"): numpy.array(
+                [12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7]
+            ),
+        },
     )
-    assert numpy.all(data == (12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7))
+
+    # Coverage. Check the GSAOutputKey correctly fail to parse bad strings.
+    with pytest.raises(
+        ValueError, match="invalid output key: temperate@param_var_1::trend_id"
+    ):
+        GSAOutputKey.from_string("temperate@param_var_1::trend_id")
 
 
 def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
@@ -406,12 +418,7 @@ def test_read_incomplete_gsa_metadata(global_sa_results_dir: Path) -> None:
     )
     assert gsa_time_set is None
     gsa_meta_data = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
-    assert gsa_meta_data.items == {}
-    coefficients = read_global_sensitivity_coefficients(
-        coefficients_key="temperature::parametric_var_1@trend_id_1",
-        metadata=gsa_meta_data,
-    )
-    assert coefficients is None
+    assert gsa_meta_data is None
 
 
 def test_read_history_matching_result_metadata(
@@ -467,38 +474,17 @@ def test_read_history_matching_result_metadata(
     )
 
     items_meta = metadata.hm_items
-    assert items_meta["parametric_var_1"] == expected_meta1
-    assert items_meta["parametric_var_2"] == expected_meta2
+    assert items_meta[HMOutputKey("parametric_var_1")] == expected_meta1
+    assert items_meta[HMOutputKey("parametric_var_2")] == expected_meta2
 
     # Result file still being created, metadata should be empty.
     creating_file = hm_results_dir / "result.creating"
     creating_file.touch()
 
     metadata = read_history_matching_metadata(hm_results_dir)
-    assert metadata.result_directory == hm_results_dir
-    assert metadata.hm_items == {}
+    assert metadata is None
 
     creating_file.unlink()
-
-    # Non-existent result directory, metadata should be empty.
-    unexistent_result_dir = Path("foo/bar")
-    metadata = read_history_matching_metadata(unexistent_result_dir)
-    assert metadata.result_directory == unexistent_result_dir
-    assert metadata.hm_items == {}
-
-    # Not really expected, but existing result file with empty metadata content should also return
-    # an empty metadata.
-    result_path = datadir / "results"
-    result_path.mkdir(parents=True, exist_ok=True)
-    result_filepath = result_path / "result"
-
-    with h5py.File(result_filepath, "x", libver="latest", locking=False) as file:
-        meta_group = file.create_group(META_GROUP_NAME, track_order=True)
-        meta_group.attrs[HISTORY_MATCHING_GROUP_NAME] = json.dumps({})
-
-    metadata = read_history_matching_metadata(result_path)
-    assert metadata.result_directory == result_path
-    assert metadata.hm_items == {}
 
 
 @pytest.mark.parametrize("hm_type", ("HM-probabilistic", "HM-deterministic"))
@@ -516,40 +502,42 @@ def test_read_history_matching_result_data(
     # Setup.
     if hm_type == "HM-probabilistic":
         expected_results = {
-            "parametric_var_1": np.array([0.1, 0.22, 1.0, 0.8, 0.55]),
-            "parametric_var_2": np.array([3.0, 6.0, 5.1, 4.7, 6.3]),
+            HMOutputKey("parametric_var_1"): np.array([0.1, 0.22, 1.0, 0.8, 0.55]),
+            HMOutputKey("parametric_var_2"): np.array([3.0, 6.0, 5.1, 4.7, 6.3]),
         }
         results_dir = hm_probabilistic_results_dir
     else:
         assert hm_type == "HM-deterministic"
-        expected_results = {"parametric_var_1": 0.1, "parametric_var_2": 3.2}
+        expected_results = {
+            HMOutputKey("parametric_var_1"): 0.1,
+            HMOutputKey("parametric_var_2"): 3.2,
+        }
         results_dir = hm_deterministic_results_dir
 
     metadata = read_history_matching_metadata(results_dir)
 
     # Read the result of a single parametric var entry.
     result = read_history_matching_result(
-        metadata, hm_type=hm_type, hm_result_key="parametric_var_1"
+        metadata, hm_type=hm_type, hm_result_key=HMOutputKey("parametric_var_1")
     )
     assert len(result) == 1
-    assert len(result) == 1
-    assert result["parametric_var_1"] == pytest.approx(
-        expected_results["parametric_var_1"]
+    assert result[HMOutputKey("parametric_var_1")] == pytest.approx(
+        expected_results[HMOutputKey("parametric_var_1")]
     )
 
     # Read the result of all entries.
     result = read_history_matching_result(metadata, hm_type=hm_type)
     assert len(result) == 2
-    assert result["parametric_var_1"] == pytest.approx(
-        expected_results["parametric_var_1"]
+    assert result[HMOutputKey("parametric_var_1")] == pytest.approx(
+        expected_results[HMOutputKey("parametric_var_1")]
     )
-    assert result["parametric_var_2"] == pytest.approx(
-        expected_results["parametric_var_2"]
+    assert result[HMOutputKey("parametric_var_2")] == pytest.approx(
+        expected_results[HMOutputKey("parametric_var_2")]
     )
 
-    # Unexistent result key, result should be empty.
+    # Nonexistent result key, result should be empty.
     result = read_history_matching_result(
-        metadata, hm_type=hm_type, hm_result_key="foo"
+        metadata, hm_type=hm_type, hm_result_key=HMOutputKey("foo")
     )
     assert result == {}
 
@@ -587,7 +575,12 @@ def test_read_history_matching_historic_data_curves(
         )
 
     # For completeness, check result when passing some invalid directory.
-    meta = HistoryMatchingMetadata.empty(result_directory=Path("foo"))
+    meta = HistoryMatchingMetadata(
+        hm_items={},
+        objective_functions={},
+        parametric_vars={},
+        result_directory=Path("foo"),
+    )
     assert read_history_matching_historic_data_curves(meta) == {}
 
 
@@ -610,22 +603,17 @@ def test_read_uncertainty_propagation_results(
     empty_metadata = read_uncertainty_propagation_analyses_meta_data(
         result_directory=datadir
     )
-    assert empty_metadata.items == {}
-    result = read_uncertainty_propagation_results(
-        metadata=empty_metadata, results_key="absolute_pressure@trend_id_1"
-    )
-    assert result is None
+    assert empty_metadata is None
 
     metadata = read_uncertainty_propagation_analyses_meta_data(
         result_directory=up_results_dir
     )
-    assert list(metadata.items.keys()) == [
-        "temperature@trend_id_1",
-        "absolute_pressure@trend_id_1",
-    ]
+    temp_key = UPOutputKey("temperature", "trend_id_1")
+    pressure_key = UPOutputKey("absolute_pressure", "trend_id_1")
+    assert list(metadata.items.keys()) == [temp_key, pressure_key]
 
-    assert metadata.items["temperature@trend_id_1"].result_index == 0
-    assert metadata.items["temperature@trend_id_1"].sample_indexes == [
+    assert metadata.items[temp_key].result_index == 0
+    assert metadata.items[temp_key].sample_indexes == [
         [0, 0],
         [0, 1],
         [0, 2],
@@ -633,8 +621,8 @@ def test_read_uncertainty_propagation_results(
         [0, 4],
     ]
 
-    assert metadata.items["absolute_pressure@trend_id_1"].result_index == 1
-    assert metadata.items["absolute_pressure@trend_id_1"].sample_indexes == [
+    assert metadata.items[pressure_key].result_index == 1
+    assert metadata.items[pressure_key].sample_indexes == [
         [1, 0],
         [1, 1],
         [1, 2],
@@ -643,22 +631,29 @@ def test_read_uncertainty_propagation_results(
     ]
 
     result = read_uncertainty_propagation_results(
-        metadata=metadata, results_key="temperature@trend_id_1"
+        metadata=metadata, result_keys=[temp_key]
     )
+    assert len(result) == 1
     dict_1 = {
-        "sample_0": result.realization_output[0],
-        "sample_1": result.realization_output[-1],
-        "mean_result": result.mean_result,
-        "std_result": result.std_result,
+        "sample_0": result[temp_key].realization_output[0],
+        "sample_1": result[temp_key].realization_output[-1],
+        "mean_result": result[temp_key].mean_result,
+        "std_result": result[temp_key].std_result,
     }
-    num_regression.check(dict_1, basename="temperature@trend_id_1")
+    num_regression.check(dict_1, basename=str(temp_key))
+
     result = read_uncertainty_propagation_results(
-        metadata=metadata, results_key="absolute_pressure@trend_id_1"
+        metadata=metadata, result_keys=[pressure_key]
     )
+    assert len(result) == 1
     dict_2 = {
-        "sample_0": result.realization_output[0],
-        "sample_1": result.realization_output[-1],
-        "mean_result": result.mean_result,
-        "std_result": result.std_result,
+        "sample_0": result[pressure_key].realization_output[0],
+        "sample_1": result[pressure_key].realization_output[-1],
+        "mean_result": result[pressure_key].mean_result,
+        "std_result": result[pressure_key].std_result,
     }
-    num_regression.check(dict_2, basename="absolute_pressure@trend_id_1")
+    num_regression.check(dict_2, basename=str(pressure_key))
+
+    # Coverage. Check the UPOutputKey correctly fail to parse bad strings.
+    with pytest.raises(ValueError, match="invalid output key: temperate::trend_id"):
+        UPOutputKey.from_string("temperate::trend_id")

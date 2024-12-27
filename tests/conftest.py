@@ -219,7 +219,7 @@ def global_sa_results_dir(datadir: Path) -> Path:
 
     result_dir = datadir / "fake_uq_dir"
     result_dir.mkdir(parents=True)
-    time_set = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+    time_set = np.array([1, 2, 3, 4, 5, 6, 7])
     global_sensitivity_analysis = np.array(
         [
             [
