@@ -2539,6 +2539,7 @@ class PvtModelPtTableParametersDescription:
         cp_l_ref=4181.3,
         cp_w_ref=4181.3,
         h_l_ref=104.86e3,
+        h_lg_ref=2.260e6,
         k_g_ref=2.4e-2,
         k_l_ref=5.91e-1,
         k_w_ref=5.91e-1,
@@ -2560,16 +2561,22 @@ class PvtModelPtTableParametersDescription:
             """
             return p / (r * t)
 
-        def constant_gas_density_model(p, t):
-            return rho_g_ref + 0 * p
-
-        def gas_density_derivative_respect_pressure_const_temperature(p, t):
+        def ideal_gas_density_derivative_respect_pressure_const_temperature(p, t):
             return 1 / (r * t)
 
-        def gas_density_derivative_respect_temperature_const_pressure(p, t):
+        def ideal_gas_density_derivative_respect_temperature_const_pressure(p, t):
             return -p / (r * t**2)
+        
+        def constant_gas_density_model(p, t):
+            return rho_g_ref + 0 * p
+        
+        def constant_gas_density_derivative_respect_pressure_const_temperature(p, t):
+            return 0 * p
 
-        def constant_density_model(p, t):
+        def constant_gas_density_derivative_respect_temperature_const_pressure(p, t):
+            return 0 * p
+
+        def oil_density_model(p, t):
             return rho_l_ref + 0 * p
 
         def oil_density_derivative_respect_pressure_const_temperature(p, t):
@@ -2621,8 +2628,7 @@ class PvtModelPtTableParametersDescription:
             return cp_w_ref * t + p / rho_w_ref
 
         def gas_specific_enthalpy_model(p, t):
-            h_lg = 2.260e6
-            return cp_g_ref * t + h_lg + h_l_ref
+            return cp_g_ref * t + h_lg_ref + h_l_ref
 
         def oil_thermal_conductivity_model(p, t):
             return k_l_ref + p * 0
@@ -2642,17 +2648,23 @@ class PvtModelPtTableParametersDescription:
         pressure_values = np.linspace(0.5, 1e10, 4)  # Pa (1e-5 to 1e5 in bar)
         temperature_values = np.linspace(250, 500, 30)  # K
 
-        gas_density_model = (
-            ideal_gas_density_model if ideal_gas else constant_gas_density_model
-        )
-
         t, p = np.meshgrid(temperature_values, pressure_values)
 
-        data = [
-            gas_density_model(p, t).flatten(),
-            gas_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
-            gas_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
-            constant_density_model(p, t).flatten(),
+        if ideal_gas:
+            data = [
+                ideal_gas_density_model(p, t).flatten(),
+                ideal_gas_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
+                ideal_gas_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
+            ]
+        else:
+            data = [
+                constant_gas_density_model(p, t).flatten(),
+                constant_gas_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
+                constant_gas_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
+            ]
+
+        data += [
+            oil_density_model(p, t).flatten(),
             oil_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
             oil_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
             gas_viscosity_model(p, t).flatten(),
