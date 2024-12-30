@@ -2328,6 +2328,82 @@ class PvtModelCorrelationDescription:
 
 
 @attr.s(frozen=True, slots=True)
+class PvtModelConstantPropertiesDescription:
+    """
+    :ivar oil_density_std:
+        default: Scalar(850.0, "kg/m3")
+
+    :ivar gas_density_std:
+        default: Scalar(0.9, "kg/m3")
+
+    :ivar rs_sat:
+        default: Scalar(150.0, "sm3/sm3")
+
+    :ivar pvt_correlation_package:
+        default: `CorrelationPackage.Standing`
+
+    :ivar h2s_mol_frac:
+        default: Scalar(0.000001, "-")
+
+    :ivar co2_mol_frac:
+        default: Scalar(0.999999, "-")
+
+    :ivar oil_viscosity:
+        default: `CorrelationsOilViscosity.Egbogah`
+
+    :ivar gas_viscosity:
+        default: `CorrelationsGasViscosity.LeeGonzalezEakin`
+
+    :ivar surface_tension:
+        default: `CorrelationsSurfaceTension.BakerSwerdloff`
+
+    .. include:: /alfacase_definitions/PvtModelCorrelationDescription.txt
+
+
+    .. rubric:: Examples
+
+    .. tab:: CaseDescription
+
+        .. code-block:: python
+
+            PvtModelCorrelationDescription(
+                default_model="PVT1",
+            )
+
+    .. tab:: Schema
+
+        .. code-block:: yaml
+
+            some_value:
+                some_other_value: fooo
+
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
+    """
+
+    gas_density = attrib_scalar(default=Scalar(1.0, 'kg/m3'))
+    oil_density = attrib_scalar(default=Scalar(1000.0, 'kg/m3'))
+    water_density = attrib_scalar(default=Scalar(1000.0, 'kg/m3'))
+    gas_viscosity = attrib_scalar(default=Scalar(5e-6, 'Pa.s'))
+    oil_viscosity = attrib_scalar(default=Scalar(5e-2, 'Pa.s'))
+    water_viscosity = attrib_scalar(default=Scalar(5e-2, 'Pa.s'))
+    gas_specific_heat = attrib_scalar(default=Scalar(1010.0, 'J/kg.K'))
+    oil_specific_heat = attrib_scalar(default=Scalar(4181.3, 'J/kg.K'))
+    water_specific_heat = attrib_scalar(default=Scalar(4181.3, 'J/kg.K'))
+    gas_thermal_conductivity = attrib_scalar(default=Scalar(2.4e-2, 'W/m.K'))
+    oil_thermal_conductivity = attrib_scalar(default=Scalar(5.91e-1, 'W/m.K'))
+    water_thermal_conductivity = attrib_scalar(default=Scalar(5.91e-1, 'W/m.K'))
+    gas_oil_surface_tension = attrib_scalar(default=Scalar(7.197e-2, 'N/m'))
+    gas_water_surface_tension = attrib_scalar(default=Scalar(7.197e-2, 'N/m'))
+    oil_water_surface_tension = attrib_scalar(default=Scalar(7.197e-2, 'N/m'))
+    gas_specific_enthalpy = attrib_scalar(default=Scalar(2.260e6, 'J/kg'))
+    oil_specific_enthalpy = attrib_scalar(default=Scalar(104.86e3, 'J/kg'))
+
+
+    has_water: bool = attr.ib(default=False)
+
+
+@attr.s(frozen=True, slots=True)
 class HeavyComponentDescription:
     """
     .. include:: /alfacase_definitions/HeavyComponentDescription.txt
@@ -3275,6 +3351,7 @@ class PvtModelsDescription:
     combined = attrib_dict_of(PvtModelCombinedDescription)
     pt_table_parameters = attrib_dict_of(PvtModelPtTableParametersDescription)
     ph_table_parameters = attrib_dict_of(PvtModelPhTableParametersDescription)
+    constant_properties = attrib_dict_of(PvtModelConstantPropertiesDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(
