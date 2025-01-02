@@ -1,0 +1,18 @@
+.. admonition:: Available units for category 'force per length'
+    :class: dropdown
+
+    :"dyne/cm": dynes/centimetre
+    :"kgf/cm": kilograms force/centimetre
+    :"kgf/m": kilogram force per meter
+    :"kN/m": kilonewtons/metre
+    :"lbf/100ft": pounds force per hundred foot
+    :"lbf/30m": pounds force per thirty meters
+    :"lbf/ft": pounds force per foot
+    :"lbf/in": pounds force/inch
+    :"mN/km": millinewtons/kilometre
+    :"mN/m": millinewtons/metre
+    :"N/30m": newton per thirty meters
+    :"N/m": newtons/metre
+    :"pdl/cm": poundals/centimetre
+    :"tonfUK/ft": UK tons force/foot
+    :"tonfUS/ft": US tons force/foot

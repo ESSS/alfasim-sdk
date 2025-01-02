@@ -1,0 +1,24 @@
+.. admonition:: Available units for category 'specific energy'
+    :class: dropdown
+
+    :"Btu/lbm": British thermal units/pound mass
+    :"cal/g": calories/gram
+    :"cal/kg": calories/kilogram
+    :"cal/lbm": calories/pound mass
+    :"erg/g": ergs/gram
+    :"erg/kg": ergs/kilogram
+    :"ft.lbf/lbm": foot pounds force/pound mass
+    :"hp.hr/lbm": horsepower hours/pound mass
+    :"J/g": joules/gram
+    :"J/kg": joules/kilogram
+    :"kcal/g": kilocalories/gram
+    :"kcal/kg": kilocalories/kilogram
+    :"kJ/kg": kilojoule/kilogram
+    :"kW.h/kg": kilowatt hours/kilogram
+    :"kW.h/t": kilowatt hours/tonne
+    :"kW.h/tonUK": kilowatt hours/U.S. ton
+    :"kW.h/tonUS": kilowatt hours/U.S. ton
+    :"lbf.ft/lbm": foot pounds force/pound mass
+    :"MJ/kg": megajoules/kilogram
+    :"MW.h/kg": megawatt hours/kilogram
+    :"therm/lbm": therms/pound mass

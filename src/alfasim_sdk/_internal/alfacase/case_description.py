@@ -2330,55 +2330,65 @@ class PvtModelCorrelationDescription:
 @attr.s(frozen=True, slots=True)
 class PvtModelConstantPropertiesDescription:
     """
-    :ivar oil_density_std:
-        default: Scalar(850.0, "kg/m3")
+    :ivar gas_density:
+        default: Scalar(1.0, "kg/m3")
 
-    :ivar gas_density_std:
-        default: Scalar(0.9, "kg/m3")
+    :ivar oil_density:
+        default: Scalar(1000.0, "kg/m3")
 
-    :ivar rs_sat:
-        default: Scalar(150.0, "sm3/sm3")
-
-    :ivar pvt_correlation_package:
-        default: `CorrelationPackage.Standing`
-
-    :ivar h2s_mol_frac:
-        default: Scalar(0.000001, "-")
-
-    :ivar co2_mol_frac:
-        default: Scalar(0.999999, "-")
-
-    :ivar oil_viscosity:
-        default: `CorrelationsOilViscosity.Egbogah`
+    :ivar water_density:
+        default: Scalar(1000.0, "kg/m3")
 
     :ivar gas_viscosity:
-        default: `CorrelationsGasViscosity.LeeGonzalezEakin`
+        default: Scalar(5e-6, "Pa.s")
 
-    :ivar surface_tension:
-        default: `CorrelationsSurfaceTension.BakerSwerdloff`
+    :ivar oil_viscosity:
+        default: Scalar(5e-2, "Pa.s")
 
-    .. include:: /alfacase_definitions/PvtModelCorrelationDescription.txt
+    :ivar water_viscosity:
+        default: Scalar(5e-2, "Pa.s")
 
+    :ivar gas_specific_heat:
+        default: Scalar(1010.0, "J/kg.K")
 
-    .. rubric:: Examples
+    :ivar oil_specific_heat:
+        default: Scalar(4181.3, "J/kg.K")
 
-    .. tab:: CaseDescription
+    :ivar water_specific_heat:
+        default: Scalar(4181.3, "J/kg.K")
 
-        .. code-block:: python
+    :ivar gas_thermal_conductivity:
+        default: Scalar(2.4e-2, "W/m.K")
 
-            PvtModelCorrelationDescription(
-                default_model="PVT1",
-            )
+    :ivar oil_thermal_conductivity:
+        default: Scalar(5.91e-1, "W/m.K")
 
-    .. tab:: Schema
+    :ivar water_thermal_conductivity:
+        default: Scalar(5.91e-1, "W/m.K")
 
-        .. code-block:: yaml
+    :ivar gas_oil_surface_tension:
+        default: Scalar(7.197e-2, "N/m")
 
-            some_value:
-                some_other_value: fooo
+    :ivar gas_water_surface_tension:
+        default: Scalar(7.197e-2, "N/m")
+
+    :ivar oil_water_surface_tension:    
+        default: Scalar(7.197e-2, "N/m")
+
+    :ivar gas_specific_enthalpy:
+        default: Scalar(2.260e6, "J/kg")
+
+    :ivar oil_specific_enthalpy:   
+        default: Scalar(104.86e3, "J/kg")
+
+    .. include:: /alfacase_definitions/PvtModelConstantPropertiesDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_density.txt
-    .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dynamic_viscosity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_specific_heat_capacity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_thermal_conductivity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_force_per_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_specific_enthalpy.txt
     """
 
     gas_density = attrib_scalar(default=Scalar(1.0, 'kg/m3'))
