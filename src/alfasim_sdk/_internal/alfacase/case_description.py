@@ -2388,7 +2388,7 @@ class PvtModelConstantPropertiesDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_specific_heat_capacity.txt
     .. include:: /alfacase_definitions/list_of_unit_for_thermal_conductivity.txt
     .. include:: /alfacase_definitions/list_of_unit_for_force_per_length.txt
-    .. include:: /alfacase_definitions/list_of_unit_for_specific_enthalpy.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_specific_energy.txt
     """
 
     gas_density = attrib_scalar(default=Scalar(1.0, 'kg/m3'))
