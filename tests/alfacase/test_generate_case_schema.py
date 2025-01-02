@@ -459,6 +459,7 @@ def test_get_cases_class():
         "PvtModelCombinedDescription",
         "PvtModelCompositionalDescription",
         "PvtModelCorrelationDescription",
+        "PvtModelConstantPropertiesDescription",
         "PvtModelsDescription",
         "ReferencedPressureContainerDescription",
         "ReferencedTemperaturesContainerDescription",

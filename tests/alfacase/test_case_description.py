@@ -923,7 +923,7 @@ def test_pvt_model_table_parameters_description_create_constant():
         ideal_gas=False, rho_g_ref=rho_g_ref
     )
     # Check gas_density_derivative_respect_pressure
-    gas_density_derivative_expected_values = 1 / (r * t.flatten())
+    gas_density_derivative_expected_values = 0.0 / (r * t.flatten())
 
     assert pvt.table_variables[0] == approx(gas_density_expected_values)
     assert pvt.table_variables[1] == approx(gas_density_derivative_expected_values)
