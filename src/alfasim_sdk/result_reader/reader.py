@@ -1,21 +1,56 @@
+from __future__ import annotations
+
 from pathlib import Path
+from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import Sequence
 from typing import Tuple
 from typing import Union
 
+import attr
+import numpy as np
 from attr import define
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units import Scalar
+from typing_extensions import Self
 
 from alfasim_sdk.result_reader.aggregator import ALFASimResultMetadata
+from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.aggregator import GSAOutputKey
+from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
+from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
+from alfasim_sdk.result_reader.aggregator import HMOutputKey
+from alfasim_sdk.result_reader.aggregator import (
+    read_global_sensitivity_analysis_meta_data,
+)
+from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
+from alfasim_sdk.result_reader.aggregator import (
+    read_history_matching_historic_data_curves,
+)
+from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
+from alfasim_sdk.result_reader.aggregator import read_history_matching_result
 from alfasim_sdk.result_reader.aggregator import read_metadata
 from alfasim_sdk.result_reader.aggregator import read_profiles_data
 from alfasim_sdk.result_reader.aggregator import read_profiles_domain_data
 from alfasim_sdk.result_reader.aggregator import read_time_sets
 from alfasim_sdk.result_reader.aggregator import read_trends_data
+from alfasim_sdk.result_reader.aggregator import (
+    read_uncertainty_propagation_analyses_meta_data,
+)
+from alfasim_sdk.result_reader.aggregator import read_uncertainty_propagation_results
+from alfasim_sdk.result_reader.aggregator import read_uq_time_set
+from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
+from alfasim_sdk.result_reader.aggregator import UPOutputKey
+from alfasim_sdk.result_reader.aggregator import UPResult
+from alfasim_sdk.result_reader.aggregator_constants import (
+    GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+)
 from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
+from alfasim_sdk.result_reader.aggregator_constants import (
+    UNCERTAINTY_PROPAGATION_GROUP_NAME,
+)
 
 
 @define(frozen=True)
@@ -295,3 +330,154 @@ class Results:
             get_profile_metadata(profile_metadata)
             for profile_metadata in metadata.profiles.values()
         ]
+
+
+def _non_empty_dict_validator(values_type: type) -> Callable:
+    def validator(inst: Any, attribute: attr.Attribute, value: Any) -> None:
+        attr.validators.min_len(1)(inst, attribute, value)
+        attr.validators.instance_of(dict)(inst, attribute, value)
+        assert isinstance(value, dict)
+
+        some_dict_value = list(value.values())[0]
+        if not isinstance(some_dict_value, values_type):
+            raise ValueError(
+                f"values of dict attribute `{attribute.name}` should be of type {values_type},"
+                f" received: {type(some_dict_value)}"
+            )
+
+    return validator
+
+
+def _non_empty_attr_validator(attr_name: str) -> Callable:
+    def validator(inst: Any, attribute: attr.Attribute, value: Any) -> None:
+        attr.validators.min_len(1)(inst, attribute, getattr(value, attr_name))
+
+    return validator
+
+
+@define(frozen=True)
+class GlobalSensitivityAnalysisResults:
+    timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
+    coefficients: dict[GSAOutputKey, np.ndarray] = attr.field(
+        validator=attr.validators.min_len(1)
+    )
+    metadata: GlobalSensitivityAnalysisMetadata = attr.field(
+        validator=_non_empty_attr_validator("items")
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_global_sensitivity_analysis_meta_data(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            timeset=read_uq_time_set(
+                result_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
+            ),
+            coefficients=read_global_sensitivity_coefficients(metadata),
+            metadata=metadata,
+        )
+
+    def get_sensitivity_curve(
+        self, property_name: str, element_name: str, parametric_var_id: str
+    ) -> Curve:
+        output_key = GSAOutputKey(
+            property_name=property_name,
+            element_name=element_name,
+            parametric_var_id=parametric_var_id,
+        )
+        meta = self.metadata.items[output_key]
+        coefficients = self.coefficients[output_key]
+        image = Array(meta.category, values=coefficients, unit=meta.unit)
+        domain = Array(self.timeset, "s")
+        return Curve(image=image, domain=domain)
+
+
+@define(frozen=True)
+class _BaseHistoryMatchingResults:
+    historic_data_curves: dict[str, tuple[HistoricDataCurveMetadata, Curve]]
+    metadata: HistoryMatchingMetadata = attr.field(
+        validator=_non_empty_attr_validator("hm_items")
+    )
+
+
+@define(frozen=True)
+class HistoryMatchingDeterministicResults(_BaseHistoryMatchingResults):
+    deterministic_values: dict[HMOutputKey, float] = attr.field(
+        validator=_non_empty_dict_validator(values_type=float)
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_history_matching_metadata(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            deterministic_values=read_history_matching_result(
+                metadata, "HM-deterministic"
+            ),
+            historic_data_curves=_read_curves_data(metadata),
+            metadata=metadata,
+        )
+
+
+@define(frozen=True)
+class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
+    probabilistic_distributions: dict[HMOutputKey, np.ndarray] = attr.field(
+        validator=_non_empty_dict_validator(values_type=np.ndarray)
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_history_matching_metadata(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            probabilistic_distributions=read_history_matching_result(
+                metadata, "HM-probabilistic"
+            ),
+            historic_data_curves=_read_curves_data(metadata),
+            metadata=metadata,
+        )
+
+
+def _read_curves_data(
+    metadata: HistoryMatchingMetadata,
+) -> dict[str, tuple[HistoricDataCurveMetadata, Curve]]:
+    raw_curves = read_history_matching_historic_data_curves(metadata)
+    curves_info = metadata.historic_data_curve_infos or []
+    curves_info_map = {info.curve_id: info for info in curves_info}
+
+    result: dict[str, tuple[HistoricDataCurveMetadata, Curve]] = {}
+    for curve_id, raw_curve in raw_curves.items():
+        info = curves_info_map[curve_id]
+        image = Array(info.image_category, raw_curve[0], info.image_unit)
+        domain = Array("time", raw_curve[1], info.domain_unit)
+        result[curve_id] = (info, Curve(image, domain))
+    return result
+
+
+@define(frozen=True)
+class UncertaintyPropagationResults:
+    timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
+    results: dict[UPOutputKey, UPResult] = attr.field(
+        validator=_non_empty_dict_validator(UPResult)
+    )
+    metadata: UncertaintyPropagationAnalysesMetaData = attr.field(
+        validator=_non_empty_attr_validator("items")
+    )
+
+    @classmethod
+    def from_directory(cls, result_dir: Path) -> Self | None:
+        metadata = read_uncertainty_propagation_analyses_meta_data(result_dir)
+        if metadata is None:
+            return None
+
+        return cls(
+            timeset=read_uq_time_set(result_dir, UNCERTAINTY_PROPAGATION_GROUP_NAME),
+            results=read_uncertainty_propagation_results(metadata),
+            metadata=metadata,
+        )

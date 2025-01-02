@@ -1,15 +1,33 @@
+from __future__ import annotations
+
 import json
+from pathlib import Path
 
 import numpy
+import numpy as np
 import pytest
 from barril.curve.curve import Curve
+from barril.units import Array
 from barril.units import Scalar
 
+from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
+from alfasim_sdk.result_reader.aggregator import GSAOutputKey
+from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
+from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
+from alfasim_sdk.result_reader.aggregator import HMOutputKey
+from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
+from alfasim_sdk.result_reader.aggregator import read_history_matching_result
+from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
+from alfasim_sdk.result_reader.aggregator import UPOutputKey
+from alfasim_sdk.result_reader.reader import GlobalSensitivityAnalysisResults
 from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
+from alfasim_sdk.result_reader.reader import HistoryMatchingDeterministicResults
+from alfasim_sdk.result_reader.reader import HistoryMatchingProbabilisticResults
 from alfasim_sdk.result_reader.reader import OverallTrendMetadata
 from alfasim_sdk.result_reader.reader import PositionalTrendMetadata
 from alfasim_sdk.result_reader.reader import ProfileMetadata
 from alfasim_sdk.result_reader.reader import Results
+from alfasim_sdk.result_reader.reader import UncertaintyPropagationResults
 
 
 def test_fail_to_get_curves(results: Results) -> None:
@@ -134,3 +152,185 @@ def test_metadata_string():
 
     global_trend = GlobalTrendMetadata("property")
     assert str(global_trend) == "property"
+
+
+def test_global_sensitivity_analysis_results_reader(
+    global_sa_results_dir: Path,
+) -> None:
+    results = GlobalSensitivityAnalysisResults.from_directory(global_sa_results_dir)
+
+    assert results.get_sensitivity_curve(
+        "temperature", "trend_id_1", "parametric_var_1"
+    ) == Curve(
+        image=Array("dimensionless", [11.1, 11.2, 11.3, 11.4, 11.5, 11.6, 11.7], "-"),
+        domain=Array("time", [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0], "s"),
+    )
+    assert results.get_sensitivity_curve(
+        "temperature", "trend_id_1", "parametric_var_2"
+    ) == Curve(
+        image=Array("dimensionless", [12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7], "-"),
+        domain=Array("time", [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0], "s"),
+    )
+
+    assert results.metadata.items[
+        GSAOutputKey("temperature", "parametric_var_1", "trend_id_1")
+    ] == GlobalSensitivityAnalysisMetadata.GSAItem(
+        property_id="temperature",
+        trend_id="trend_id_1",
+        category="dimensionless",
+        network_element_name="Conexao 1",
+        position=100.0,
+        position_unit="m",
+        unit="-",
+        parametric_var_id="parametric_var_id_1",
+        parametric_var_name="A",
+        qoi_index=0,
+        qoi_data_index=0,
+    )
+
+    # Ensure the reader can handle a nonexistent result file.
+    results = GlobalSensitivityAnalysisResults.from_directory(Path("foo"))
+    assert results is None
+
+
+class TestHistoryMatchingResultsReader:
+    def test_deterministic_reader(self, hm_deterministic_results_dir: Path) -> None:
+        results = HistoryMatchingDeterministicResults.from_directory(
+            hm_deterministic_results_dir
+        )
+        assert results.deterministic_values == {
+            HMOutputKey("parametric_var_1"): 0.1,
+            HMOutputKey("parametric_var_2"): 3.2,
+        }
+        self._validate_meta_and_historic_curves(results)
+
+    def test_probabilistic_reader(self, hm_probabilistic_results_dir: Path) -> None:
+        results = HistoryMatchingProbabilisticResults.from_directory(
+            hm_probabilistic_results_dir
+        )
+        np.testing.assert_equal(
+            results.probabilistic_distributions,
+            {
+                HMOutputKey("parametric_var_1"): np.array([0.1, 0.22, 1.0, 0.8, 0.55]),
+                HMOutputKey("parametric_var_2"): np.array([3.0, 6.0, 5.1, 4.7, 6.3]),
+            },
+        )
+        self._validate_meta_and_historic_curves(results)
+
+    def test_wrong_result_file(
+        self, hm_probabilistic_results_dir: Path, hm_deterministic_results_dir: Path
+    ) -> None:
+        """
+        Check that the field validator correctly prevent one from using the deterministic
+        reader to read probabilistic results and vice-versa.
+        """
+        prob_metadata = read_history_matching_metadata(hm_probabilistic_results_dir)
+        prob_values = read_history_matching_result(prob_metadata, "HM-probabilistic")
+
+        with pytest.raises(
+            ValueError,
+            match=r".*deterministic_values.*should be.*float.*received.*ndarray.*",
+        ):
+            HistoryMatchingDeterministicResults(
+                historic_data_curves={},
+                metadata=prob_metadata,
+                deterministic_values=prob_values,
+            )
+
+        det_metadata = read_history_matching_metadata(hm_deterministic_results_dir)
+        det_values = read_history_matching_result(det_metadata, "HM-deterministic")
+
+        with pytest.raises(
+            ValueError,
+            match=r".*probabilistic_distributions.*should be.*ndarray.*received.*float.*",
+        ):
+            HistoryMatchingProbabilisticResults(
+                historic_data_curves={},
+                metadata=det_metadata,
+                probabilistic_distributions=det_values,
+            )
+
+    def _validate_meta_and_historic_curves(
+        self,
+        results: (
+            HistoryMatchingDeterministicResults | HistoryMatchingProbabilisticResults
+        ),
+    ) -> None:
+        assert results.historic_data_curves == {
+            "observed_curve_1": (
+                HistoricDataCurveMetadata(
+                    curve_id="observed_curve_1",
+                    curve_name="curve 1",
+                    domain_unit="s",
+                    image_unit="m3/m3",
+                    image_category="volume fraction",
+                ),
+                Curve(
+                    image=Array("volume fraction", np.array([0.1, 0.5, 0.9]), "m3/m3"),
+                    domain=Array("time", np.array([1.1, 2.2, 3.3]), "s"),
+                ),
+            ),
+            "observed_curve_2": (
+                HistoricDataCurveMetadata(
+                    curve_id="observed_curve_2",
+                    curve_name="curve 2",
+                    domain_unit="s",
+                    image_unit="Pa",
+                    image_category="pressure",
+                ),
+                Curve(
+                    image=Array("pressure", np.array([1.0, 5.0, 9.0, 3.1]), "Pa"),
+                    domain=Array("time", np.array([1.2, 2.3, 3.4, 4.5]), "s"),
+                ),
+            ),
+        }
+        assert results.metadata.hm_items == {
+            HMOutputKey("parametric_var_1"): HistoryMatchingMetadata.HMItem(
+                parametric_var_id="parametric_var_1",
+                parametric_var_name="mg",
+                min_value=0.0,
+                max_value=1.0,
+                data_index=0,
+            ),
+            HMOutputKey("parametric_var_2"): HistoryMatchingMetadata.HMItem(
+                parametric_var_id="parametric_var_2",
+                parametric_var_name="mo",
+                min_value=2.5,
+                max_value=7.5,
+                data_index=1,
+            ),
+        }
+
+
+def test_uncertainty_propagation_results_reader(up_results_dir: Path) -> None:
+    reader = UncertaintyPropagationResults.from_directory(up_results_dir)
+
+    assert np.allclose(
+        reader.timeset, np.array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0])
+    )
+    assert len(reader.results) == 2
+    some_result = reader.results[
+        UPOutputKey(property_name="absolute_pressure", element_name="trend_id_1")
+    ]
+    assert np.allclose(
+        some_result.mean_result, np.array([12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7])
+    )
+    assert len(reader.metadata.items) == 2
+    assert reader.metadata.items[
+        UPOutputKey(property_name="temperature", element_name="trend_id_1")
+    ] == UncertaintyPropagationAnalysesMetaData.UPItem(
+        property_id="temperature",
+        trend_id="trend_id_1",
+        category="temperature",
+        network_element_name="Conexao 1",
+        position=100.0,
+        position_unit="m",
+        unit="K",
+        samples=5,
+        result_index=0,
+        sample_indexes=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]],
+    )
+
+    # Ensure the reader can handle a nonexistent result file.
+    reader = UncertaintyPropagationResults.from_directory(Path("foo"))
+    assert reader is None
