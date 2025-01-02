@@ -315,6 +315,9 @@ def default_case(tmp_path) -> case_description.CaseDescription:
             ph_table_parameters={
                 "PVT5": case_description.PvtModelPhTableParametersDescription.create_empty()
             },
+            constant_properties={
+                "PVT6": case_description.PvtModelConstantPropertiesDescription()
+            },
         )
     )
 
@@ -1510,6 +1513,7 @@ def test_check_fluid_references(default_well: case_description.WallDescription) 
         "pt_table_parameters",
         "ph_table_parameters",
         "tables",
+        "constant_properties",
     }
 
     case = case_description.CaseDescription(
