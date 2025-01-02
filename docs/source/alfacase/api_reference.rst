@@ -63,6 +63,8 @@ PVTs
 
 .. autoclass:: alfasim_sdk.PvtModelPhTableParametersDescription()
 
+.. autoclass:: alfasim_sdk.PvtModelConstantPropertiesDescription()
+
 
 PVT Combined
 -----------------
