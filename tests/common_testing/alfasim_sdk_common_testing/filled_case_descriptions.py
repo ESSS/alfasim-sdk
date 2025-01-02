@@ -89,7 +89,9 @@ PVT_MODEL_PH_TABLE_PARAMETERS = (
         has_water=True
     )
 )
-PVT_MODEL_CONST_TABLE_DEFINITION  = case_description.PvtModelConstantPropertiesDescription()
+PVT_MODEL_CONST_TABLE_DEFINITION = (
+    case_description.PvtModelConstantPropertiesDescription()
+)
 PVT_MODELS_DEFINITION = case_description.PvtModelsDescription(
     default_model="acme",
     compositional={
