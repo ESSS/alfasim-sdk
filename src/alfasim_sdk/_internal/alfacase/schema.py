@@ -595,6 +595,28 @@ profile_output_description_schema = Map(
         "element_name": Str(),
     }
 )
+pvt_model_constant_properties_description_schema = Map(
+    {
+        Optional("gas_density"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_density"): Map({"value": Float(), "unit": Str()}),
+        Optional("water_density"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_viscosity"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_viscosity"): Map({"value": Float(), "unit": Str()}),
+        Optional("water_viscosity"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_specific_heat"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_specific_heat"): Map({"value": Float(), "unit": Str()}),
+        Optional("water_specific_heat"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_thermal_conductivity"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_thermal_conductivity"): Map({"value": Float(), "unit": Str()}),
+        Optional("water_thermal_conductivity"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_oil_surface_tension"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_water_surface_tension"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_water_surface_tension"): Map({"value": Float(), "unit": Str()}),
+        Optional("gas_specific_enthalpy"): Map({"value": Float(), "unit": Str()}),
+        Optional("oil_specific_enthalpy"): Map({"value": Float(), "unit": Str()}),
+        Optional("has_water"): Bool(),
+    }
+)
 pvt_model_correlation_description_schema = Map(
     {
         Optional("oil_density_std"): Map({"value": Float(), "unit": Str()}),
@@ -1161,6 +1183,7 @@ pvt_models_description_schema = Map(
         Optional("correlations"): MapPattern(Str(), pvt_model_correlation_description_schema),
         Optional("compositional"): MapPattern(Str(), pvt_model_compositional_description_schema),
         Optional("combined"): MapPattern(Str(), pvt_model_combined_description_schema),
+        Optional("constant_properties"): MapPattern(Str(), pvt_model_constant_properties_description_schema),
     }
 )
 well_description_schema = Map(
@@ -1199,4 +1222,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 491e5442b3beadcbf3ad91c5ca5d52e1)
+# [[[end]]] (checksum: 6e754d44887f59fc28d5c6908f85925c)

@@ -10,6 +10,7 @@
             correlations: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`\] = {}
             compositional: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`\] = {}
             combined: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCombinedDescription <PvtModelCombinedDescription>`\] = {}
+            constant_properties: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelConstantPropertiesDescription <PvtModelConstantPropertiesDescription>`\] = {}
 
 .. tab:: Schema
 
@@ -24,3 +25,5 @@
                 string: \ :class:`pvt_model_compositional_description_schema <PvtModelCompositionalDescription>`
             combined:  # optional
                 string: \ :class:`pvt_model_combined_description_schema <PvtModelCombinedDescription>`
+            constant_properties:  # optional
+                string: \ :class:`pvt_model_constant_properties_description_schema <PvtModelConstantPropertiesDescription>`
