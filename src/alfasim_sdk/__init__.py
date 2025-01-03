@@ -119,6 +119,12 @@ from alfasim_sdk._internal.alfacase.case_description import (
     PressureContainerDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
+    PluginTableColumnForInternalReference,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
+    PluginTableColumnForTracerReference,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
     PressureNodePropertiesDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import ProfileDescription
@@ -470,6 +476,8 @@ __all__ = [
     "PipeThermalModelType",
     "PipeThermalPositionInput",
     "PluginDescription",
+    "PluginTableColumnForInternalReference",
+    "PluginTableColumnForTracerReference",
     "PositionalPipeTrendDescription",
     "PressureContainerDescription",
     "PressureNodePropertiesDescription",
