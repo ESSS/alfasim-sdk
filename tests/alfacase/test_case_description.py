@@ -315,6 +315,9 @@ def default_case(tmp_path) -> case_description.CaseDescription:
             ph_table_parameters={
                 "PVT5": case_description.PvtModelPhTableParametersDescription.create_empty()
             },
+            constant_properties={
+                "PVT6": case_description.PvtModelConstantPropertiesDescription()
+            },
         )
     )
 
@@ -920,7 +923,7 @@ def test_pvt_model_table_parameters_description_create_constant():
         ideal_gas=False, rho_g_ref=rho_g_ref
     )
     # Check gas_density_derivative_respect_pressure
-    gas_density_derivative_expected_values = 1 / (r * t.flatten())
+    gas_density_derivative_expected_values = 0.0 / (r * t.flatten())
 
     assert pvt.table_variables[0] == approx(gas_density_expected_values)
     assert pvt.table_variables[1] == approx(gas_density_derivative_expected_values)
@@ -1510,6 +1513,7 @@ def test_check_fluid_references(default_well: case_description.WallDescription) 
         "pt_table_parameters",
         "ph_table_parameters",
         "tables",
+        "constant_properties",
     }
 
     case = case_description.CaseDescription(

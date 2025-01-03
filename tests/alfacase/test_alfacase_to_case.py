@@ -264,6 +264,11 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.pvt_model_correlation_description_schema,
         is_dict=True,
     ),
+    "PvtModelConstantPropertiesDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.PVT_MODEL_CONST_TABLE_DEFINITION,
+        schema=schema.pvt_model_constant_properties_description_schema,
+        is_dict=True,
+    ),
     "LinearIPRDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.LINEAR_IPR_DESCRIPTION,
         schema=schema.linear_ipr_description_schema,
