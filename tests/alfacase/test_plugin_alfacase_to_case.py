@@ -16,11 +16,17 @@ from pytest_mock import MockerFixture
 from alfasim_sdk import convert_alfacase_to_description
 from alfasim_sdk import PluginDescription
 from alfasim_sdk._internal.alfacase.case_description import CaseDescription
+from alfasim_sdk._internal.alfacase.case_description import (
+    InternalReferencePluginTableColumn,
+)
 from alfasim_sdk._internal.alfacase.case_description import PluginFileContent
 from alfasim_sdk._internal.alfacase.case_description import PluginInternalReference
 from alfasim_sdk._internal.alfacase.case_description import PluginMultipleReference
 from alfasim_sdk._internal.alfacase.case_description import PluginTableContainer
 from alfasim_sdk._internal.alfacase.case_description import PluginTracerReference
+from alfasim_sdk._internal.alfacase.case_description import (
+    TracerReferencePluginTableColumn,
+)
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     InvalidPluginDataError,
 )
@@ -279,6 +285,10 @@ def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[List[str]], None]:
             class Bar:
                 pass
 
+            @alfasim_sdk.container_model(model=Bar, icon="", caption="Bar Container")
+            class BarContainer:
+                pass
+
             {data_model_source}
 
             @alfasim_sdk.container_model(model=Foo, icon="", caption="Foo Container")
@@ -287,7 +297,7 @@ def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[List[str]], None]:
 
             @alfasim_sdk.hookimpl
             def alfasim_get_data_model_type():
-                return [FooContainer]
+                return [FooContainer, BarContainer]
             """
         )
         plugin_file_source = plugin_file_source.format(
@@ -703,138 +713,215 @@ def test_load_string(datadir, prepare_foobar_plugin):
         convert_alfacase_to_description(alfacase)
 
 
-def test_load_table(datadir, prepare_foobar_plugin):
-    prepare_foobar_plugin(
-        [
-            """x = alfasim_sdk.Table(
-                rows=[
-                    alfasim_sdk.TableColumn(id='aaa', value=alfasim_sdk.Quantity(value=1, unit='m', caption='a')),
-                    alfasim_sdk.TableColumn(id='sss', value=alfasim_sdk.Quantity(value=1, unit='m', caption='s')),
-                ],
-                caption='x',
-            )"""
-        ]
-    )
-    alfacase = datadir / "test.alfacase"
-
-    alfacase.write_text(
-        textwrap.dedent(
-            """\
-            plugins:
-            -   name: foobar
-                is_enabled: True
-                gui_models:
-                    FooContainer:
-                        _children_list:
-                        -   x:
-                                columns:
-                                    aaa:
-                                        values: [1.2, 2.3, 3.4]
-                                        unit: s
-                                    sss:
-                                        values: [9.8, 8.7, 7.6]
-                                        unit: m
-            """
-        )
-    )
-    case = convert_alfacase_to_description(alfacase)
-    assert case.plugins == [
-        PluginDescription(
-            name="foobar",
-            is_enabled=True,
-            gui_models={
-                "FooContainer": {
-                    "_children_list": [
-                        {
-                            "x": PluginTableContainer(
-                                columns={
-                                    "aaa": Array([1.2, 2.3, 3.4], "s"),
-                                    "sss": Array([9.8, 8.7, 7.6], "m"),
-                                }
-                            )
-                        },
+class TestLoadTable:
+    def test_quantity(
+        self, datadir: Path, prepare_foobar_plugin: Callable[[List[str]], None]
+    ) -> None:
+        prepare_foobar_plugin(
+            [
+                """x = alfasim_sdk.Table(
+                    rows=[
+                        alfasim_sdk.TableColumn(id='aaa', value=alfasim_sdk.Quantity(value=1, unit='m', caption='a')),
+                        alfasim_sdk.TableColumn(id='sss', value=alfasim_sdk.Quantity(value=1, unit='m', caption='s')),
                     ],
+                    caption='x',
+                )"""
+            ]
+        )
+        alfacase = datadir / "test.alfacase"
+
+        alfacase.write_text(
+            textwrap.dedent(
+                """\
+                plugins:
+                -   name: foobar
+                    is_enabled: True
+                    gui_models:
+                        FooContainer:
+                            _children_list:
+                            -   x:
+                                    columns:
+                                        aaa:
+                                            values: [1.2, 2.3, 3.4]
+                                            unit: s
+                                        sss:
+                                            values: [9.8, 8.7, 7.6]
+                                            unit: m
+                """
+            )
+        )
+        case = convert_alfacase_to_description(alfacase)
+        assert case.plugins == [
+            PluginDescription(
+                name="foobar",
+                is_enabled=True,
+                gui_models={
+                    "FooContainer": {
+                        "_children_list": [
+                            {
+                                "x": PluginTableContainer(
+                                    columns={
+                                        "aaa": Array([1.2, 2.3, 3.4], "s"),
+                                        "sss": Array([9.8, 8.7, 7.6], "m"),
+                                    }
+                                )
+                            },
+                        ],
+                    },
                 },
-            },
-        ),
-    ]
+            ),
+        ]
 
-    alfacase.write_text(
-        textwrap.dedent(
-            """\
-            plugins:
-            -   name: foobar
-                is_enabled: True
-                gui_models:
-                    FooContainer:
-                        _children_list:
-                        -   x:
-                                columns:
+        alfacase.write_text(
+            textwrap.dedent(
+                """\
+                plugins:
+                -   name: foobar
+                    is_enabled: True
+                    gui_models:
+                        FooContainer:
+                            _children_list:
+                            -   x:
+                                    columns:
+                                        aaa:
+                                            values: [1.2, 2.3, 3.4]
+                                            unit: s
+                """
+            )
+        )
+        with pytest.raises(InvalidPluginDataError, match="Can not convert"):
+            convert_alfacase_to_description(alfacase)
+
+        alfacase.write_text(
+            textwrap.dedent(
+                """\
+                plugins:
+                -   name: foobar
+                    is_enabled: True
+                    gui_models:
+                        FooContainer:
+                            _children_list:
+                            -   x:
+                                    columns:
+                                        aaa:
+                                            values: [1.2, 2.3, 3.4]
+                                            unit: s
+                                        sss:
+                                            values: [9.8, 8.7, 7.6]
+                """
+            )
+        )
+        with pytest.raises(InvalidPluginDataError, match="Can not convert"):
+            convert_alfacase_to_description(alfacase)
+
+        alfacase.write_text(
+            textwrap.dedent(
+                """\
+                plugins:
+                -   name: foobar
+                    is_enabled: True
+                    gui_models:
+                        FooContainer:
+                            _children_list:
+                            -   x:
                                     aaa:
                                         values: [1.2, 2.3, 3.4]
                                         unit: s
-            """
+                """
+            )
         )
-    )
-    with pytest.raises(InvalidPluginDataError, match="Can not convert"):
-        convert_alfacase_to_description(alfacase)
+        with pytest.raises(InvalidPluginDataError, match="Can not convert"):
+            convert_alfacase_to_description(alfacase)
 
-    alfacase.write_text(
-        textwrap.dedent(
-            """\
-            plugins:
-            -   name: foobar
-                is_enabled: True
-                gui_models:
-                    FooContainer:
-                        _children_list:
-                        -   x:
-                                columns:
-                                    aaa:
-                                        values: [1.2, 2.3, 3.4]
-                                        unit: s
-                                    sss:
-                                        values: [9.8, 8.7, 7.6]
-            """
+        alfacase.write_text(
+            textwrap.dedent(
+                """\
+                plugins:
+                -   name: foobar
+                    is_enabled: True
+                    gui_models:
+                        FooContainer:
+                            _children_list:
+                            -   x: A
+                """
+            )
         )
-    )
-    with pytest.raises(InvalidPluginDataError, match="Can not convert"):
-        convert_alfacase_to_description(alfacase)
+        with pytest.raises(InvalidPluginDataError, match="Can not convert"):
+            convert_alfacase_to_description(alfacase)
 
-    alfacase.write_text(
-        textwrap.dedent(
-            """\
-            plugins:
-            -   name: foobar
-                is_enabled: True
-                gui_models:
-                    FooContainer:
-                        _children_list:
-                        -   x:
-                                aaa:
-                                    values: [1.2, 2.3, 3.4]
-                                    unit: s
-            """
+    def test_references(
+        self, datadir: Path, prepare_foobar_plugin: Callable[[List[str]], None]
+    ) -> None:
+        # Setup.
+        prepare_foobar_plugin(
+            [
+                """x = alfasim_sdk.Table(
+                    rows=[
+                        alfasim_sdk.TableColumn(
+                            id='aaa',
+                            value=alfasim_sdk.Reference(
+                                container_type='BarContainer', ref_type=Bar, caption="A Bar"
+                            ),
+                        ),
+                        alfasim_sdk.TableColumn(
+                            id='sss',
+                             value=alfasim_sdk.Reference(
+                                ref_type=alfasim_sdk.TracerType, caption="A Tracer"
+                            ),
+                        ),
+                    ],
+                    caption='x',
+                )"""
+            ]
         )
-    )
-    with pytest.raises(InvalidPluginDataError, match="Can not convert"):
-        convert_alfacase_to_description(alfacase)
+        alfacase = datadir / "test.alfacase"
 
-    alfacase.write_text(
-        textwrap.dedent(
-            """\
-            plugins:
-            -   name: foobar
-                is_enabled: True
-                gui_models:
-                    FooContainer:
-                        _children_list:
-                        -   x: A
-            """
+        alfacase.write_text(
+            textwrap.dedent(
+                """\
+                plugins:
+                -   name: foobar
+                    is_enabled: True
+                    gui_models:
+                        FooContainer:
+                            _children_list:
+                            -   x:
+                                    columns:
+                                        aaa:
+                                            container_key: BarContainer
+                                            plugin_item_ids: [0, 0, 2, 2]
+                                        sss:
+                                            tracer_ids: [1, 2, 3, 3]
+                """
+            )
         )
-    )
-    with pytest.raises(InvalidPluginDataError, match="Can not convert"):
-        convert_alfacase_to_description(alfacase)
+        # Test.
+        case = convert_alfacase_to_description(alfacase)
+        assert case.plugins == [
+            PluginDescription(
+                name="foobar",
+                is_enabled=True,
+                gui_models={
+                    "FooContainer": {
+                        "_children_list": [
+                            {
+                                "x": PluginTableContainer(
+                                    columns={
+                                        "aaa": InternalReferencePluginTableColumn(
+                                            container_key="BarContainer",
+                                            plugin_item_ids=[0, 0, 2, 2],
+                                        ),
+                                        "sss": TracerReferencePluginTableColumn(
+                                            tracer_ids=[1, 2, 3, 3]
+                                        ),
+                                    }
+                                )
+                            },
+                        ],
+                    },
+                },
+            ),
+        ]
 
 
 def test_dump_file_contents_and_update_plugins(datadir, monkeypatch):

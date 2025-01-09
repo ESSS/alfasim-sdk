@@ -11,6 +11,7 @@ CHANGELOG
 * Changed the constructor of result metadata objects in ``alfasim_sdk.result_reader.aggregator`` from ``attr`` to ``dataclasses.dataclass`` to make then more easily integrated into the (de)serialization engine of popular packages such as ``pyserde`` and ``pydantic``.
 * Changed function ``read_global_sensitivity_coefficients`` and ``read_uncertainty_propagation_results`` to accept multiple keys so it can perform bulk reads without having to open the result file every time.
 * Added ``GlobalSensitivityAnalysisResults``, ``HistoryMatchingDeterministicResults``, ``HistoryMatchingProbabilisticResults`` and ``UncertaintyPropagationResults``, which are objects to read and interact with the Uncertainty Quantification analyses results in a more user-friendly way.
+* Plugins can now define tables that contain references to other objects.
 
 2024.2 (2024-09-10)
 ===================

@@ -21,12 +21,18 @@ from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 from alfasim_sdk._internal.alfacase.alfacase_to_case import load_value
 from alfasim_sdk._internal.alfacase.alfacase_to_case import to_case_values
 from alfasim_sdk._internal.alfacase.case_description import CaseDescription
+from alfasim_sdk._internal.alfacase.case_description import (
+    InternalReferencePluginTableColumn,
+)
 from alfasim_sdk._internal.alfacase.case_description import PluginDescription
 from alfasim_sdk._internal.alfacase.case_description import PluginFileContent
 from alfasim_sdk._internal.alfacase.case_description import PluginInternalReference
 from alfasim_sdk._internal.alfacase.case_description import PluginMultipleReference
 from alfasim_sdk._internal.alfacase.case_description import PluginTableContainer
 from alfasim_sdk._internal.alfacase.case_description import PluginTracerReference
+from alfasim_sdk._internal.alfacase.case_description import (
+    TracerReferencePluginTableColumn,
+)
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     InvalidPluginDataError,
 )
@@ -311,8 +317,11 @@ def _convert_reference(
         if is_dict_with_keys(value, "tracer_id"):
             return PluginTracerReference(tracer_id=int(value["tracer_id"]))
     else:
-        if is_dict_with_keys(value, "plugin_item_id"):
-            return PluginInternalReference(plugin_item_id=int(value["plugin_item_id"]))
+        if is_dict_with_keys(value, "plugin_item_id", strict=False):
+            return PluginInternalReference(
+                container_key=value.get("container_key"),
+                plugin_item_id=int(value["plugin_item_id"]),
+            )
     raise InvalidPluginDataError(f"Can not convert to a reference: {value!r}")
 
 
@@ -341,6 +350,35 @@ def _convert_string(
     raise InvalidPluginDataError(f"Can not convert to a string: {value!r}")
 
 
+def _convert_table_column_contents(
+    raw_col: object,
+) -> Union[Array, InternalReferencePluginTableColumn, TracerReferencePluginTableColumn]:
+    """
+    Try to convert an object into a valid table column content.
+
+    This is a helper function to `_convert_table` and is not registered
+    in `_PLUGIN_FIELD_TO_CASEDESCRIPTION`.
+    """
+    if is_dict_with_keys(raw_col, "values", "unit"):
+        # Quantity.
+        return Array([float(v) for v in raw_col["values"]], raw_col["unit"])
+    elif is_dict_with_keys(raw_col, "tracer_ids"):
+        # Reference to tracer.
+        return TracerReferencePluginTableColumn(
+            [(int(v) if v != "None" else None) for v in raw_col["tracer_ids"]]
+        )
+    elif is_dict_with_keys(raw_col, "plugin_item_ids", "container_key"):
+        # Reference to plugin model.
+        return InternalReferencePluginTableColumn(
+            container_key=raw_col["container_key"],
+            plugin_item_ids=[
+                (int(v) if v != "None" else None) for v in raw_col["plugin_item_ids"]
+            ],
+        )
+    else:
+        raise InvalidPluginDataError(f"Can not convert table column: {raw_col!r}")
+
+
 def _convert_table(
     value: object, type_from_plugin: BaseField, alfacase_path: Path
 ) -> PluginTableContainer:
@@ -352,17 +390,9 @@ def _convert_table(
         raw_columns = value["columns"]
         col_ids = [col.id for col in type_from_plugin.rows]
         if is_dict_with_keys(raw_columns, *col_ids):
-            columns = {}
-            for col in col_ids:
-                raw_col = raw_columns[col]
-                if is_dict_with_keys(raw_col, "values", "unit"):
-                    columns[col] = Array(
-                        [float(v) for v in raw_col["values"]], raw_col["unit"]
-                    )
-                else:
-                    raise InvalidPluginDataError(
-                        f"Can not convert table column: {raw_col!r}"
-                    )
+            columns = {
+                col: _convert_table_column_contents(raw_columns[col]) for col in col_ids
+            }
             return PluginTableContainer(columns=columns)
     raise InvalidPluginDataError(f"Can not convert to a table: {value!r}")
 
