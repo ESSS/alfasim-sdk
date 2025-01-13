@@ -114,7 +114,7 @@ class TimeSetInfoItem(NamedTuple):
     uuid: str
 
 
-TimeSetInfo = Dict[int, TimeSetInfoItem]
+TimeSetInfo = Dict[TimeStepIndex, TimeSetInfoItem]
 
 
 _PROFILE_ID_ATTR = "profile_id"
@@ -1957,7 +1957,7 @@ def read_uncertainty_propagation_analyses_meta_data(
     )
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, eq=False)
 class UPResult:
     """
     Holder for each uncertainty propagation result.
@@ -1966,6 +1966,16 @@ class UPResult:
     realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
     std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
     mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, UPResult):
+            return False
+
+        return (
+            np.array_equal(self.realization_output, other.realization_output)
+            and np.array_equal(self.std_result, other.std_result)
+            and np.array_equal(self.mean_result, other.mean_result)
+        )
 
 
 def read_uncertainty_propagation_results(
