@@ -2361,6 +2361,91 @@ class PvtModelCorrelationDescription:
 
 
 @attr.s(frozen=True, slots=True)
+class PvtModelConstantPropertiesDescription:
+    """
+    :ivar gas_density:
+        default: Scalar(1.0, "kg/m3")
+
+    :ivar oil_density:
+        default: Scalar(1000.0, "kg/m3")
+
+    :ivar water_density:
+        default: Scalar(1000.0, "kg/m3")
+
+    :ivar gas_viscosity:
+        default: Scalar(5e-6, "Pa.s")
+
+    :ivar oil_viscosity:
+        default: Scalar(5e-2, "Pa.s")
+
+    :ivar water_viscosity:
+        default: Scalar(5e-2, "Pa.s")
+
+    :ivar gas_specific_heat:
+        default: Scalar(1010.0, "J/kg.K")
+
+    :ivar oil_specific_heat:
+        default: Scalar(4181.3, "J/kg.K")
+
+    :ivar water_specific_heat:
+        default: Scalar(4181.3, "J/kg.K")
+
+    :ivar gas_thermal_conductivity:
+        default: Scalar(2.4e-2, "W/m.K")
+
+    :ivar oil_thermal_conductivity:
+        default: Scalar(5.91e-1, "W/m.K")
+
+    :ivar water_thermal_conductivity:
+        default: Scalar(5.91e-1, "W/m.K")
+
+    :ivar gas_oil_surface_tension:
+        default: Scalar(7.197e-2, "N/m")
+
+    :ivar gas_water_surface_tension:
+        default: Scalar(7.197e-2, "N/m")
+
+    :ivar oil_water_surface_tension:
+        default: Scalar(7.197e-2, "N/m")
+
+    :ivar gas_specific_enthalpy:
+        default: Scalar(2.260e6, "J/kg")
+
+    :ivar oil_specific_enthalpy:
+        default: Scalar(104.86e3, "J/kg")
+
+    .. include:: /alfacase_definitions/PvtModelConstantPropertiesDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_density.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dynamic_viscosity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_specific_heat_capacity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_thermal_conductivity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_force_per_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_specific_energy.txt
+    """
+
+    gas_density = attrib_scalar(default=Scalar(1.0, "kg/m3"))
+    oil_density = attrib_scalar(default=Scalar(1000.0, "kg/m3"))
+    water_density = attrib_scalar(default=Scalar(1000.0, "kg/m3"))
+    gas_viscosity = attrib_scalar(default=Scalar(5e-6, "Pa.s"))
+    oil_viscosity = attrib_scalar(default=Scalar(5e-2, "Pa.s"))
+    water_viscosity = attrib_scalar(default=Scalar(5e-2, "Pa.s"))
+    gas_specific_heat = attrib_scalar(default=Scalar(1010.0, "J/kg.K"))
+    oil_specific_heat = attrib_scalar(default=Scalar(4181.3, "J/kg.K"))
+    water_specific_heat = attrib_scalar(default=Scalar(4181.3, "J/kg.K"))
+    gas_thermal_conductivity = attrib_scalar(default=Scalar(2.4e-2, "W/m.K"))
+    oil_thermal_conductivity = attrib_scalar(default=Scalar(5.91e-1, "W/m.K"))
+    water_thermal_conductivity = attrib_scalar(default=Scalar(5.91e-1, "W/m.K"))
+    gas_oil_surface_tension = attrib_scalar(default=Scalar(7.197e-2, "N/m"))
+    gas_water_surface_tension = attrib_scalar(default=Scalar(7.197e-2, "N/m"))
+    oil_water_surface_tension = attrib_scalar(default=Scalar(7.197e-2, "N/m"))
+    gas_specific_enthalpy = attrib_scalar(default=Scalar(2.260e6, "J/kg"))
+    oil_specific_enthalpy = attrib_scalar(default=Scalar(104.86e3, "J/kg"))
+
+    has_water: bool = attr.ib(default=False)
+
+
+@attr.s(frozen=True, slots=True)
 class HeavyComponentDescription:
     """
     .. include:: /alfacase_definitions/HeavyComponentDescription.txt
@@ -2572,6 +2657,7 @@ class PvtModelPtTableParametersDescription:
         cp_l_ref=4181.3,
         cp_w_ref=4181.3,
         h_l_ref=104.86e3,
+        h_lg_ref=2.260e6,
         k_g_ref=2.4e-2,
         k_l_ref=5.91e-1,
         k_w_ref=5.91e-1,
@@ -2593,16 +2679,22 @@ class PvtModelPtTableParametersDescription:
             """
             return p / (r * t)
 
+        def ideal_gas_density_derivative_respect_pressure_const_temperature(p, t):
+            return 1 / (r * t)
+
+        def ideal_gas_density_derivative_respect_temperature_const_pressure(p, t):
+            return -p / (r * t**2)
+
         def constant_gas_density_model(p, t):
             return rho_g_ref + 0 * p
 
-        def gas_density_derivative_respect_pressure_const_temperature(p, t):
-            return 1 / (r * t)
+        def constant_gas_density_derivative_respect_pressure_const_temperature(p, t):
+            return 0 * p
 
-        def gas_density_derivative_respect_temperature_const_pressure(p, t):
-            return -p / (r * t**2)
+        def constant_gas_density_derivative_respect_temperature_const_pressure(p, t):
+            return 0 * p
 
-        def constant_density_model(p, t):
+        def oil_density_model(p, t):
             return rho_l_ref + 0 * p
 
         def oil_density_derivative_respect_pressure_const_temperature(p, t):
@@ -2654,8 +2746,7 @@ class PvtModelPtTableParametersDescription:
             return cp_w_ref * t + p / rho_w_ref
 
         def gas_specific_enthalpy_model(p, t):
-            h_lg = 2.260e6
-            return cp_g_ref * t + h_lg + h_l_ref
+            return cp_g_ref * t + h_lg_ref + h_l_ref
 
         def oil_thermal_conductivity_model(p, t):
             return k_l_ref + p * 0
@@ -2675,17 +2766,31 @@ class PvtModelPtTableParametersDescription:
         pressure_values = np.linspace(0.5, 1e10, 4)  # Pa (1e-5 to 1e5 in bar)
         temperature_values = np.linspace(250, 500, 30)  # K
 
-        gas_density_model = (
-            ideal_gas_density_model if ideal_gas else constant_gas_density_model
-        )
-
         t, p = np.meshgrid(temperature_values, pressure_values)
 
-        data = [
-            gas_density_model(p, t).flatten(),
-            gas_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
-            gas_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
-            constant_density_model(p, t).flatten(),
+        if ideal_gas:
+            data = [
+                ideal_gas_density_model(p, t).flatten(),
+                ideal_gas_density_derivative_respect_pressure_const_temperature(
+                    p, t
+                ).flatten(),
+                ideal_gas_density_derivative_respect_temperature_const_pressure(
+                    p, t
+                ).flatten(),
+            ]
+        else:
+            data = [
+                constant_gas_density_model(p, t).flatten(),
+                constant_gas_density_derivative_respect_pressure_const_temperature(
+                    p, t
+                ).flatten(),
+                constant_gas_density_derivative_respect_temperature_const_pressure(
+                    p, t
+                ).flatten(),
+            ]
+
+        data += [
+            oil_density_model(p, t).flatten(),
             oil_density_derivative_respect_pressure_const_temperature(p, t).flatten(),
             oil_density_derivative_respect_temperature_const_pressure(p, t).flatten(),
             gas_viscosity_model(p, t).flatten(),
@@ -3296,6 +3401,7 @@ class PvtModelsDescription:
     combined = attrib_dict_of(PvtModelCombinedDescription)
     pt_table_parameters = attrib_dict_of(PvtModelPtTableParametersDescription)
     ph_table_parameters = attrib_dict_of(PvtModelPhTableParametersDescription)
+    constant_properties = attrib_dict_of(PvtModelConstantPropertiesDescription)
 
     @staticmethod
     def get_pvt_file_and_model_name(

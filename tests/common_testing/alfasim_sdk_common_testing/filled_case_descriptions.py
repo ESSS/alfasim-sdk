@@ -89,6 +89,9 @@ PVT_MODEL_PH_TABLE_PARAMETERS = (
         has_water=True
     )
 )
+PVT_MODEL_CONST_TABLE_DEFINITION = (
+    case_description.PvtModelConstantPropertiesDescription()
+)
 PVT_MODELS_DEFINITION = case_description.PvtModelsDescription(
     default_model="acme",
     compositional={
@@ -103,6 +106,7 @@ PVT_MODELS_DEFINITION = case_description.PvtModelsDescription(
         "correlation 2": PVT_MODEL_CORRELATION_DEFINITION,
     },
     tables={"acme": get_acme_tab_file_path(), "gavea_2": get_acme_tab_file_path()},
+    constant_properties={"constant 1": PVT_MODEL_CONST_TABLE_DEFINITION},
 )
 
 SPEED_CURVE_DESCRIPTION = case_description.SpeedCurveDescription(

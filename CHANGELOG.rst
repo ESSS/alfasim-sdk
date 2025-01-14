@@ -8,6 +8,7 @@ CHANGELOG
 * We have decided internally to revert the versioning schema back to SemVer, starting at ``1.0.0``, in order to improve better backward and forward compatibility support for plugins.
 * Fix bug related to Probabilistic History Matching result reader. The shape of result was wrong.
 * Add the heat transfer mechanism for fluid materials composed by a parcel of radiation and convection.
+* Add ``PvtModelConstantPropertiesDescription``: This model is used to define the PVT properties for a fluid with constant values.
 * Changed the constructor of result metadata objects in ``alfasim_sdk.result_reader.aggregator`` from ``attr`` to ``dataclasses.dataclass`` to make then more easily integrated into the (de)serialization engine of popular packages such as ``pyserde`` and ``pydantic``.
 * Changed function ``read_global_sensitivity_coefficients`` and ``read_uncertainty_propagation_results`` to accept multiple keys so it can perform bulk reads without having to open the result file every time.
 * Added ``GlobalSensitivityAnalysisResults``, ``HistoryMatchingDeterministicResults``, ``HistoryMatchingProbabilisticResults`` and ``UncertaintyPropagationResults``, which are objects to read and interact with the Uncertainty Quantification analyses results in a more user-friendly way.
