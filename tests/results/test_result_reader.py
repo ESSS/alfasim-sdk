@@ -190,7 +190,7 @@ def test_global_sensitivity_analysis_results_reader(
     )
 
     # Test equality check.
-    assert results == results
+    assert results == attr.evolve(results)
     assert results != object()
     assert results != attr.evolve(results, timeset=np.array([0.1, 0.2]))
 
@@ -211,7 +211,7 @@ class TestHistoryMatchingResultsReader:
         self._validate_meta_and_historic_curves(results)
 
         # Test equality check.
-        assert results == results
+        assert results == attr.evolve(results)
         assert results != object()
         assert results != attr.evolve(
             results, deterministic_values={HMOutputKey("parametric_var_1"): 0.1}
@@ -231,7 +231,7 @@ class TestHistoryMatchingResultsReader:
         self._validate_meta_and_historic_curves(results)
 
         # Test equality check.
-        assert results == results
+        assert results == attr.evolve(results)
         assert results != object()
         assert results != attr.evolve(
             results,
@@ -355,7 +355,7 @@ def test_uncertainty_propagation_results_reader(up_results_dir: Path) -> None:
     )
 
     # Test equality check.
-    assert reader == reader
+    assert reader == attr.evolve(reader)
     assert reader != object()
     assert reader != attr.evolve(reader, timeset=np.array([0.1, 0.2]))
 
