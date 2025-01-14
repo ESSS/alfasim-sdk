@@ -144,6 +144,9 @@ from alfasim_sdk._internal.alfacase.case_description import (
     PvtModelPtTableParametersDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
+    PvtModelConstantPropertiesDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description import (
     PvtModelPhTableParametersDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description import (
@@ -489,6 +492,7 @@ __all__ = [
     "PvtModelCombinedDescription",
     "PvtModelCompositionalDescription",
     "PvtModelCorrelationDescription",
+    "PvtModelConstantPropertiesDescription",
     "PvtModelPtTableParametersDescription",
     "PvtModelPhTableParametersDescription",
     "PvtModelsDescription",
