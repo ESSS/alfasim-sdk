@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import attr
 import numpy
 import numpy as np
 import pytest
@@ -188,6 +189,11 @@ def test_global_sensitivity_analysis_results_reader(
         qoi_data_index=0,
     )
 
+    # Test equality check.
+    assert results == attr.evolve(results)
+    assert results != object()
+    assert results != attr.evolve(results, timeset=np.array([0.1, 0.2]))
+
     # Ensure the reader can handle a nonexistent result file.
     results = GlobalSensitivityAnalysisResults.from_directory(Path("foo"))
     assert results is None
@@ -204,6 +210,13 @@ class TestHistoryMatchingResultsReader:
         }
         self._validate_meta_and_historic_curves(results)
 
+        # Test equality check.
+        assert results == attr.evolve(results)
+        assert results != object()
+        assert results != attr.evolve(
+            results, deterministic_values={HMOutputKey("parametric_var_1"): 0.1}
+        )
+
     def test_probabilistic_reader(self, hm_probabilistic_results_dir: Path) -> None:
         results = HistoryMatchingProbabilisticResults.from_directory(
             hm_probabilistic_results_dir
@@ -216,6 +229,16 @@ class TestHistoryMatchingResultsReader:
             },
         )
         self._validate_meta_and_historic_curves(results)
+
+        # Test equality check.
+        assert results == attr.evolve(results)
+        assert results != object()
+        assert results != attr.evolve(
+            results,
+            probabilistic_distributions={
+                HMOutputKey("parametric_var_1"): np.array([0.1, 0.3])
+            },
+        )
 
     def test_wrong_result_file(
         self, hm_probabilistic_results_dir: Path, hm_deterministic_results_dir: Path
@@ -330,6 +353,11 @@ def test_uncertainty_propagation_results_reader(up_results_dir: Path) -> None:
         result_index=0,
         sample_indexes=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]],
     )
+
+    # Test equality check.
+    assert reader == attr.evolve(reader)
+    assert reader != object()
+    assert reader != attr.evolve(reader, timeset=np.array([0.1, 0.2]))
 
     # Ensure the reader can handle a nonexistent result file.
     reader = UncertaintyPropagationResults.from_directory(Path("foo"))
