@@ -693,7 +693,8 @@ DLL_EXPORT int get_tracer_name(void* ctx, char* out, void* reference, int size);
 
 /*!
     Gets the tracer reference for a given tracer name. This function is important to obtain the
-    tracer reference of a user defined tracer added by the plugin.
+    tracer reference of a user defined tracer added by the plugin or tracers already defined by ALFAsim.
+    PVT Combined Models will create tracers with their names equals to the fluids names inside the model.
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] reference Tracer reference.
