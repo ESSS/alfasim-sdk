@@ -393,6 +393,23 @@ class GlobalSensitivityAnalysisResults:
         domain = Array(self.timeset, "s")
         return Curve(image=image, domain=domain)
 
+    def __eq__(self, other):
+        if other.__class__ is not self.__class__:
+            return False
+
+        def compare_coefficients(dict_a, dict_b):
+            if dict_a.keys() != dict_b.keys():
+                return False
+            for key in dict_a.keys():
+                if (dict_a[key] != dict_b[key]).any():
+                    return False
+            return True
+
+        return (
+            (self.timeset == other.timeset).all() and
+            compare_coefficients(self.coefficients, other.coefficients) and
+            self.metadata == other.metadata
+        )
 
 @define(frozen=True)
 class _BaseHistoryMatchingResults:
@@ -443,6 +460,23 @@ class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
             metadata=metadata,
         )
 
+    def __eq__(self, other):
+        if other.__class__ is not self.__class__:
+            return False
+
+        def compare_probabilistic_distributions(dict_a, dict_b):
+            if dict_a.keys() != dict_b.keys():
+                return False
+            for key in dict_a.keys():
+                if (dict_a[key] != dict_b[key]).any():
+                    return False
+            return True
+
+        return  (
+            self.historic_data_curves == other.historic_data_curves and
+            self.metadata == other.metadata and
+            compare_probabilistic_distributions(self.probabilistic_distributions, other.probabilistic_distributions)
+        )
 
 def _read_curves_data(
     metadata: HistoryMatchingMetadata,
@@ -480,4 +514,12 @@ class UncertaintyPropagationResults:
             timeset=read_uq_time_set(result_dir, UNCERTAINTY_PROPAGATION_GROUP_NAME),
             results=read_uncertainty_propagation_results(metadata),
             metadata=metadata,
+        )
+
+    def __eq__(self, other):
+        if other.__class__ is not self.__class__:
+            return False
+        return (
+            (self.timeset == other.timeset).all() and
+            self.metadata == other.metadata
         )
