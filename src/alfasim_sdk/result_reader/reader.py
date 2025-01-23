@@ -394,9 +394,8 @@ class GlobalSensitivityAnalysisResults:
         return Curve(image=image, domain=domain)
 
     def __eq__(self, other):
-        if other.__class__ is not self.__class__:
+        if not isinstance(other, GlobalSensitivityAnalysisResults):
             return False
-
         def compare_coefficients(dict_a, dict_b):
             if dict_a.keys() != dict_b.keys():
                 return False
@@ -461,9 +460,8 @@ class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
         )
 
     def __eq__(self, other):
-        if other.__class__ is not self.__class__:
+        if not isinstance(other, HistoryMatchingProbabilisticResults):
             return False
-
         def compare_probabilistic_distributions(dict_a, dict_b):
             if dict_a.keys() != dict_b.keys():
                 return False
@@ -517,7 +515,7 @@ class UncertaintyPropagationResults:
         )
 
     def __eq__(self, other):
-        if other.__class__ is not self.__class__:
+        if not isinstance(other, UncertaintyPropagationResults):
             return False
         return (
             (self.timeset == other.timeset).all() and
