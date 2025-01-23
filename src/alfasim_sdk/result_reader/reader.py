@@ -355,7 +355,7 @@ def _non_empty_attr_validator(attr_name: str) -> Callable:
     return validator
 
 
-@define(frozen=True)
+@define(frozen=True, eq=False)
 class GlobalSensitivityAnalysisResults:
     timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
     coefficients: dict[GSAOutputKey, np.ndarray] = attr.field(
@@ -393,22 +393,22 @@ class GlobalSensitivityAnalysisResults:
         domain = Array(self.timeset, "s")
         return Curve(image=image, domain=domain)
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, GlobalSensitivityAnalysisResults):
             return False
-        def compare_coefficients(dict_a, dict_b):
-            if dict_a.keys() != dict_b.keys():
-                return False
-            for key in dict_a.keys():
-                if (dict_a[key] != dict_b[key]).any():
-                    return False
-            return True
 
         return (
-            (self.timeset == other.timeset).all() and
-            compare_coefficients(self.coefficients, other.coefficients) and
-            self.metadata == other.metadata
+            np.array_equal(self.timeset, other.timeset)
+            and _all_dict_close(self.coefficients, other.coefficients)
+            and self.metadata == other.metadata
         )
+
+
+def _all_dict_close(a: dict[Any, np.ndarray], b: dict[Any, np.ndarray]) -> bool:
+    if a.keys() != b.keys():
+        return False
+    return all(np.array_equal(a[key], b[key]) for key in a)
+
 
 @define(frozen=True)
 class _BaseHistoryMatchingResults:
@@ -439,7 +439,7 @@ class HistoryMatchingDeterministicResults(_BaseHistoryMatchingResults):
         )
 
 
-@define(frozen=True)
+@define(frozen=True, eq=False)
 class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
     probabilistic_distributions: dict[HMOutputKey, np.ndarray] = attr.field(
         validator=_non_empty_dict_validator(values_type=np.ndarray)
@@ -459,22 +459,18 @@ class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
             metadata=metadata,
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, HistoryMatchingProbabilisticResults):
             return False
-        def compare_probabilistic_distributions(dict_a, dict_b):
-            if dict_a.keys() != dict_b.keys():
-                return False
-            for key in dict_a.keys():
-                if (dict_a[key] != dict_b[key]).any():
-                    return False
-            return True
 
-        return  (
-            self.historic_data_curves == other.historic_data_curves and
-            self.metadata == other.metadata and
-            compare_probabilistic_distributions(self.probabilistic_distributions, other.probabilistic_distributions)
+        return (
+            _all_dict_close(
+                self.probabilistic_distributions, other.probabilistic_distributions
+            )
+            and self.historic_data_curves == other.historic_data_curves
+            and self.metadata == other.metadata
         )
+
 
 def _read_curves_data(
     metadata: HistoryMatchingMetadata,
@@ -492,7 +488,7 @@ def _read_curves_data(
     return result
 
 
-@define(frozen=True)
+@define(frozen=True, eq=False)
 class UncertaintyPropagationResults:
     timeset: np.ndarray = attr.field(validator=attr.validators.min_len(1))
     results: dict[UPOutputKey, UPResult] = attr.field(
@@ -514,10 +510,12 @@ class UncertaintyPropagationResults:
             metadata=metadata,
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, UncertaintyPropagationResults):
             return False
+
         return (
-            (self.timeset == other.timeset).all() and
-            self.metadata == other.metadata
+            np.array_equal(self.timeset, other.timeset)
+            and self.results == other.results
+            and self.metadata == other.metadata
         )
