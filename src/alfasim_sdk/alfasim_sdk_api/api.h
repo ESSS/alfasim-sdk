@@ -696,6 +696,11 @@ DLL_EXPORT int get_tracer_name(void* ctx, char* out, void* reference, int size);
     tracer reference of a user defined tracer added by the plugin or tracers already defined by ALFAsim.
     PVT Combined Models will create tracers with their names equals to the fluids names inside the model.
 
+    Example of usage:
+    ~~~~~{.cpp}
+    errcode = get_tracer_ref_by_name(ctx, &tracer_ref, "Combined Fluid 1", plugin_id);
+    ~~~~~
+
     @param[in] ctx ALFAsim's plugins context.
     @param[out] reference Tracer reference.
     @param[in] tracer_name Tracer name.
