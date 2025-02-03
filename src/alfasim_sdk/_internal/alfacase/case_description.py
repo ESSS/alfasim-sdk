@@ -3405,7 +3405,7 @@ class PvtModelsDescription:
 
     @staticmethod
     def get_pvt_file_and_model_name(
-        value: Union[str, Path]
+        value: Union[str, Path],
     ) -> Tuple[Path, Optional[str]]:
         """
         Parse the value provided from the user to get the path for the pvt file and if defined, the pvt model.
@@ -3434,11 +3434,11 @@ class TracersDescription:
     .. include:: /alfacase_definitions/TracersDescription.txt
     """
 
-    constant_coefficients: Dict[
-        str, TracerModelConstantCoefficientsDescription
-    ] = attr.ib(
-        default=attr.Factory(dict),
-        validator=dict_of(TracerModelConstantCoefficientsDescription),
+    constant_coefficients: Dict[str, TracerModelConstantCoefficientsDescription] = (
+        attr.ib(
+            default=attr.Factory(dict),
+            validator=dict_of(TracerModelConstantCoefficientsDescription),
+        )
     )
 
 

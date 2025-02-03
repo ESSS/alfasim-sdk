@@ -26,8 +26,7 @@ def test_get_metadata() -> None:
     from alfasim_sdk._internal.alfasim_sdk_utils import get_metadata
 
     @data_model(icon="model.png", caption="PLUGIN DEV MODEL")
-    class Model:
-        ...
+    class Model: ...
 
     assert get_metadata(Model)["caption"] == "PLUGIN DEV MODEL"
     assert get_metadata(Model)["icon"] == "model.png"

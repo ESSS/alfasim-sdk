@@ -466,7 +466,7 @@ class HistoryMatchingMetadata:
             }
 
         def map_historic_data_infos(
-            infos: List[Dict[str, Any]]
+            infos: List[Dict[str, Any]],
         ) -> List[HistoricDataCurveMetadata]:
             return [HistoricDataCurveMetadata.from_dict(info) for info in infos]
 
@@ -1670,21 +1670,21 @@ def _read_time_sets(
         _TREND_ID_ATTR: [initial_trends_time_step_index, final_trends_time_step_index],
     }
     if initial_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][0]
+        )
     if final_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][0]
+        )
     if initial_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][1]
+        )
     if final_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][1]
+        )
 
     cache = {}
     for time_set_key in time_sets_key_list:
@@ -1756,7 +1756,7 @@ def _read_time_set(
 
 
 def _concatenate_values(
-    data_dict: Dict[Any, List[numpy.ndarray]]
+    data_dict: Dict[Any, List[numpy.ndarray]],
 ) -> Dict[Any, numpy.ndarray]:
     """
     Concatenate the values in the given dict.
@@ -1772,7 +1772,7 @@ def _concatenate_values(
 
 
 def map_output_key_to_time_set_key(
-    all_metadata: Dict[int, Dict]
+    all_metadata: Dict[int, Dict],
 ) -> Dict[OutputKeyType, TimeSetKeyType]:
     """
     Operates on the complete metadata mapping "output key"s to they  respective "time set key".
@@ -1791,7 +1791,7 @@ def map_output_key_to_time_set_key(
 
 
 def map_base_time_set_to_time_set_keys(
-    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType]
+    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType],
 ) -> Dict[int, Tuple[TimeSetKeyType, ...]]:
     """
     Maps base time steps to the "time set key"s where they are found.
