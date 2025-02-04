@@ -38,8 +38,8 @@ def cog(ctx, check=False):
     - on `_internal/alfacase/schema.py` to generate the schema for strictyaml;
     - generate some documentation files;
     """
-    ctx.run(command=f"cog -rc {case_description_source_file_path()}", warn=True)
-    ctx.run(command=f"cog -rc {schema_file_path()}", warn=True)
+    ctx.run(command=f"cog -rc {case_description_source_file_path()}")
+    ctx.run(command=f"cog -rc {schema_file_path()}")
 
     from alfasim_sdk._internal.alfacase.case_description import CaseDescription
     from alfasim_sdk._internal.alfacase.generate_case_description_docstring import (
