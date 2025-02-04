@@ -1,24 +1,14 @@
 import enum
 import inspect
-from functools import lru_cache
-from functools import partial
+from functools import lru_cache, partial
 from numbers import Number
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Type
-from typing import TypeVar
-from typing import Union
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 
 import attr
 from attr.validators import instance_of
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
-from barril.units import UnitDatabase
+from barril.units import Array, Scalar, UnitDatabase
 from strictyaml import YAML
 
 from alfasim_sdk._internal import constants

@@ -1,54 +1,42 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import Sequence
-from typing import Tuple
-from typing import Union
+from typing import Any, Callable, Dict, Sequence, Tuple, Union
 
 import attr
 import numpy as np
 from attr import define
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 from typing_extensions import Self
 
-from alfasim_sdk.result_reader.aggregator import ALFASimResultMetadata
-from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
-from alfasim_sdk.result_reader.aggregator import GSAOutputKey
-from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
-from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
-from alfasim_sdk.result_reader.aggregator import HMOutputKey
 from alfasim_sdk.result_reader.aggregator import (
+    ALFASimResultMetadata,
+    GlobalSensitivityAnalysisMetadata,
+    GSAOutputKey,
+    HistoricDataCurveMetadata,
+    HistoryMatchingMetadata,
+    HMOutputKey,
+    UncertaintyPropagationAnalysesMetaData,
+    UPOutputKey,
+    UPResult,
     read_global_sensitivity_analysis_meta_data,
-)
-from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
-from alfasim_sdk.result_reader.aggregator import (
+    read_global_sensitivity_coefficients,
     read_history_matching_historic_data_curves,
-)
-from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
-from alfasim_sdk.result_reader.aggregator import read_history_matching_result
-from alfasim_sdk.result_reader.aggregator import read_metadata
-from alfasim_sdk.result_reader.aggregator import read_profiles_data
-from alfasim_sdk.result_reader.aggregator import read_profiles_domain_data
-from alfasim_sdk.result_reader.aggregator import read_time_sets
-from alfasim_sdk.result_reader.aggregator import read_trends_data
-from alfasim_sdk.result_reader.aggregator import (
+    read_history_matching_metadata,
+    read_history_matching_result,
+    read_metadata,
+    read_profiles_data,
+    read_profiles_domain_data,
+    read_time_sets,
+    read_trends_data,
     read_uncertainty_propagation_analyses_meta_data,
+    read_uncertainty_propagation_results,
+    read_uq_time_set,
 )
-from alfasim_sdk.result_reader.aggregator import read_uncertainty_propagation_results
-from alfasim_sdk.result_reader.aggregator import read_uq_time_set
-from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
-from alfasim_sdk.result_reader.aggregator import UPOutputKey
-from alfasim_sdk.result_reader.aggregator import UPResult
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    RESULTS_FOLDER_NAME,
     UNCERTAINTY_PROPAGATION_GROUP_NAME,
 )
 

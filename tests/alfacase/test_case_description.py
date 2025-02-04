@@ -1,50 +1,36 @@
 import re
 import textwrap
 from textwrap import dedent
-from typing import Any
-from typing import Callable
+from typing import Any, Callable
 
 import attr
 import pytest
 from attr._make import _CountingAttr
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
+
+from alfasim_sdk import MaterialDescription, NodeCellType
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    InvalidReferenceError,
+    attrib_array,
+    attrib_curve,
+    attrib_enum,
+    attrib_instance,
+    attrib_instance_list,
+    attrib_scalar,
+    collapse_array_repr,
+    generate_multi_input,
+    generate_multi_input_dict,
+    numpy_array_validator,
+    to_array,
+    to_curve,
+)
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
-from alfasim_sdk import MaterialDescription
-from alfasim_sdk import NodeCellType
-from alfasim_sdk._internal import constants
-from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_array
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_curve
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    attrib_instance,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    attrib_instance_list,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_scalar
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    collapse_array_repr,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    generate_multi_input,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    generate_multi_input_dict,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    InvalidReferenceError,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    numpy_array_validator,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import to_array
-from alfasim_sdk._internal.alfacase.case_description_attributes import to_curve
 
 
 # Note: the table parameters descriptions have the same methods, so it could
@@ -64,8 +50,8 @@ def test_physics_description_path_validator(tmp_path):
     """
     Ensure PhysicsDescription.restart_filepath only accepts created files
     """
-    from pathlib import Path
     import re
+    from pathlib import Path
 
     expected_error = re.escape(
         f"'restart_filepath' must be {Path} (got '' that is a {str})."
@@ -405,7 +391,8 @@ class TestResetInvalidReferences:
         case = attr.evolve(
             default_case,
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT1", tables={"PVT1": f"{tmp_path/'dummy.tab'}|INVALID"}
+                default_model="PVT1",
+                tables={"PVT1": f"{tmp_path / 'dummy.tab'}|INVALID"},
             ),
         )
         case.reset_invalid_references()
@@ -413,7 +400,7 @@ class TestResetInvalidReferences:
         assert case.pvt_models.default_model is None
         case = case_description.CaseDescription(
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT2", tables={"PVT2": f"{tmp_path/'dummy.tab'}|PVT2"}
+                default_model="PVT2", tables={"PVT2": f"{tmp_path / 'dummy.tab'}|PVT2"}
             )
         )
         case.reset_invalid_references()
@@ -570,7 +557,8 @@ class TestEnsureValidReferences:
         case = attr.evolve(
             default_case,
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT1", tables={"PVT1": f"{tmp_path/'dummy.tab'}|INVALID"}
+                default_model="PVT1",
+                tables={"PVT1": f"{tmp_path / 'dummy.tab'}|INVALID"},
             ),
         )
         expect_message = "'INVALID' could not be found on 'dummy.tab', available models are: 'PVT1, PVT2'"
@@ -583,7 +571,7 @@ class TestEnsureValidReferences:
         # Ensure the test finishes in a valid state
         case = case_description.CaseDescription(
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT2", tables={"PVT2": f"{tmp_path/'dummy.tab'}|PVT2"}
+                default_model="PVT2", tables={"PVT2": f"{tmp_path / 'dummy.tab'}|PVT2"}
             )
         )
         case.ensure_valid_references()

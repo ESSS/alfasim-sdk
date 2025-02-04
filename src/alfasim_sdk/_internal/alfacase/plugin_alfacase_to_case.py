@@ -1,51 +1,45 @@
 import itertools
 from functools import partial
-from pathlib import Path
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 from types import ModuleType
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Type
-from typing import Union
+from typing import Any, Callable, Dict, List, Optional, Type, Union
 
 import attr
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 from typing_extensions import TypeGuard
 
 from alfasim_sdk import BaseField
-from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
-from alfasim_sdk._internal.alfacase.alfacase_to_case import load_value
-from alfasim_sdk._internal.alfacase.alfacase_to_case import to_case_values
-from alfasim_sdk._internal.alfacase.case_description import CaseDescription
-from alfasim_sdk._internal.alfacase.case_description import (
-    InternalReferencePluginTableColumn,
+from alfasim_sdk._internal.alfacase.alfacase_to_case import (
+    DescriptionDocument,
+    load_value,
+    to_case_values,
 )
-from alfasim_sdk._internal.alfacase.case_description import PluginDescription
-from alfasim_sdk._internal.alfacase.case_description import PluginFileContent
-from alfasim_sdk._internal.alfacase.case_description import PluginInternalReference
-from alfasim_sdk._internal.alfacase.case_description import PluginMultipleReference
-from alfasim_sdk._internal.alfacase.case_description import PluginTableContainer
-from alfasim_sdk._internal.alfacase.case_description import PluginTracerReference
 from alfasim_sdk._internal.alfacase.case_description import (
+    CaseDescription,
+    InternalReferencePluginTableColumn,
+    PluginDescription,
+    PluginFileContent,
+    PluginInternalReference,
+    PluginMultipleReference,
+    PluginTableContainer,
+    PluginTracerReference,
     TracerReferencePluginTableColumn,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     InvalidPluginDataError,
 )
 from alfasim_sdk._internal.alfacase.plugin_introspection import get_attributes
-from alfasim_sdk._internal.types import Boolean
-from alfasim_sdk._internal.types import Enum
-from alfasim_sdk._internal.types import FileContent
-from alfasim_sdk._internal.types import MultipleReference
-from alfasim_sdk._internal.types import Quantity
-from alfasim_sdk._internal.types import Reference
-from alfasim_sdk._internal.types import String
-from alfasim_sdk._internal.types import Table
-from alfasim_sdk._internal.types import TracerType
+from alfasim_sdk._internal.types import (
+    Boolean,
+    Enum,
+    FileContent,
+    MultipleReference,
+    Quantity,
+    Reference,
+    String,
+    Table,
+    TracerType,
+)
 
 _CHILDREN_LIST_KEY = "_children_list"
 
@@ -271,8 +265,7 @@ def _convert_enum(
     if isinstance(value, str) and (value in type_from_plugin.values):
         return value
     raise InvalidPluginDataError(
-        f"Can not convert to an enum: {value!r}"
-        f" (valid values are {type_from_plugin.values!r}"
+        f"Can not convert to an enum: {value!r} (valid values are {type_from_plugin.values!r}"
     )
 
 

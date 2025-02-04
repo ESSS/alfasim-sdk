@@ -2,44 +2,36 @@ from contextlib import suppress
 from datetime import datetime
 from numbers import Number
 from pathlib import Path
-from typing import Any
-from typing import Dict
-from typing import Iterator
-from typing import List
-from typing import Optional
-from typing import Set
-from typing import Tuple
-from typing import Union
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, Union
 
 import attr
 import numpy as np
-from attr.validators import in_
-from attr.validators import instance_of
-from attr.validators import optional
+from attr.validators import in_, instance_of, optional
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from ..validators import non_empty_str
-from .case_description_attributes import attrib_array
-from .case_description_attributes import attrib_curve
-from .case_description_attributes import attrib_dict_of
-from .case_description_attributes import attrib_enum
-from .case_description_attributes import attrib_instance
-from .case_description_attributes import attrib_instance_list
-from .case_description_attributes import attrib_scalar
-from .case_description_attributes import collapse_array_repr
-from .case_description_attributes import dict_of
-from .case_description_attributes import dict_of_array
-from .case_description_attributes import dict_with_scalar
-from .case_description_attributes import InvalidReferenceError
-from .case_description_attributes import list_of_optional_integers
-from .case_description_attributes import list_of_strings
-from .case_description_attributes import Numpy1DArray
-from .case_description_attributes import numpy_array_validator
-from .case_description_attributes import PhaseName
 from alfasim_sdk._internal import constants
 
+from ..validators import non_empty_str
+from .case_description_attributes import (
+    InvalidReferenceError,
+    Numpy1DArray,
+    PhaseName,
+    attrib_array,
+    attrib_curve,
+    attrib_dict_of,
+    attrib_enum,
+    attrib_instance,
+    attrib_instance_list,
+    attrib_scalar,
+    collapse_array_repr,
+    dict_of,
+    dict_of_array,
+    dict_with_scalar,
+    list_of_optional_integers,
+    list_of_strings,
+    numpy_array_validator,
+)
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -842,9 +834,9 @@ class CompressorPressureTableDescription:
     @isentropic_efficiency_table.validator
     def _validate_isentropic_efficiency_table(self, attribute, value):
         isen_eff = np.array(value.GetValues("-"))
-        assert np.all(
-            np.logical_and(isen_eff > 0, isen_eff <= 1.0)
-        ), "Isentropic efficiency must be greater than 0 and lower or equal to 1"
+        assert np.all(np.logical_and(isen_eff > 0, isen_eff <= 1.0)), (
+            "Isentropic efficiency must be greater than 0 and lower or equal to 1"
+        )
 
 
 @attr.s(frozen=True, slots=True)
@@ -993,9 +985,9 @@ class PigEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True)
@@ -1028,9 +1020,9 @@ class ValveEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True)
@@ -1098,9 +1090,9 @@ class LeakEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1872,15 +1864,15 @@ class SeparatorNodePropertiesDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
     @length.validator
     def _validate_length(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "length"
-        ), "Invalid length"
+        assert isinstance(value, Scalar) and value.GetCategory() == "length", (
+            "Invalid length"
+        )
 
     @gas_separation_efficiency.validator
     def _validate_gas_separation_efficiency(self, attribute, value):
@@ -2074,9 +2066,9 @@ class CasingSectionDescription:
     @outer_diameter.validator
     @inner_diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -2099,9 +2091,9 @@ class TubingDescription:
     @outer_diameter.validator
     @inner_diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -2134,9 +2126,9 @@ class OpenHoleDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -2169,9 +2161,9 @@ class GasLiftValveEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s()
@@ -3373,9 +3365,7 @@ class PvtModelsDescription:
 
             PvtModelsDescription(
                 default_model="PVT1",
-                tables={
-                    'PVT1': Path('./my_tab_file.tab')
-                },
+                tables={"PVT1": Path("./my_tab_file.tab")},
             )
 
     .. tab:: Schema
@@ -3405,7 +3395,7 @@ class PvtModelsDescription:
 
     @staticmethod
     def get_pvt_file_and_model_name(
-        value: Union[str, Path]
+        value: Union[str, Path],
     ) -> Tuple[Path, Optional[str]]:
         """
         Parse the value provided from the user to get the path for the pvt file and if defined, the pvt model.
@@ -3434,11 +3424,11 @@ class TracersDescription:
     .. include:: /alfacase_definitions/TracersDescription.txt
     """
 
-    constant_coefficients: Dict[
-        str, TracerModelConstantCoefficientsDescription
-    ] = attr.ib(
-        default=attr.Factory(dict),
-        validator=dict_of(TracerModelConstantCoefficientsDescription),
+    constant_coefficients: Dict[str, TracerModelConstantCoefficientsDescription] = (
+        attr.ib(
+            default=attr.Factory(dict),
+            validator=dict_of(TracerModelConstantCoefficientsDescription),
+        )
     )
 
 

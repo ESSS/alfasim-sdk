@@ -3,17 +3,12 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
-from typing import Union
+from typing import Any, Union
 from zipfile import ZipFile
 
-from colorama import Fore
-from colorama import Style
+from colorama import Fore, Style
 from hookman.hookman_generator import HookManGenerator
-from invoke import Collection
-from invoke import Exit
-from invoke import Task
-from invoke import task
+from invoke import Collection, Exit, Task, task
 from strictyaml.ruamel import YAML
 
 sdk_ns = Collection()
@@ -186,9 +181,9 @@ def compile(ctx, cmake_extra_args="", debug=False, clean=False):
         ],
     )
 
-    assert (
-        shared_lib_path.exists()
-    ), "Compilation task failed, shared lib was not created"
+    assert shared_lib_path.exists(), (
+        "Compilation task failed, shared lib was not created"
+    )
 
     if package_dir.exists():
         shutil.rmtree(package_dir)
@@ -228,11 +223,11 @@ def package_only(ctx, package_name="", dst=""):
 
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
     from alfasim_sdk._internal.alfasim_sdk_utils import (
         get_current_version,
         get_extras_default_required_version,
     )
+    from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 
     plugin_id = str(plugin_dir.name)
     if not package_name:

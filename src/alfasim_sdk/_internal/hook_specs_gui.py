@@ -44,9 +44,11 @@ def alfasim_get_data_model_type():
         from alfasim_sdk import data_model
         from alfasim_sdk import Quantity
 
+
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             distance = Quantity(value=1, unit="m", caption="Distance")
+
 
         @alfasim_sdk.hookimpl
         def alfasim_get_data_model_type():
@@ -69,14 +71,15 @@ def alfasim_get_data_model_type():
         from alfasim_sdk import data_model, container_model
         from alfasim_sdk import Quantity, String
 
+
         @data_model(icon="", caption="My Child")
         class ChildModel:
             distance = Quantity(value=1, unit="m", caption="Distance")
 
 
-        @container_model(icon='', caption='My Container', model=ChildModel)
+        @container_model(icon="", caption="My Container", model=ChildModel)
         class MyModelContainer:
-            my_string = String(value='Initial Value', caption='My String')
+            my_string = String(value="Initial Value", caption="My String")
 
 
         @alfasim_sdk.hookimpl
@@ -96,17 +99,20 @@ def alfasim_get_data_model_type():
         from alfasim_sdk import data_model, container_model
         from alfasim_sdk import Quantity, String
 
+
         @data_model(icon="", caption="My Model")
         class MyModel:
             distance = Quantity(value=1, unit="m", caption="Distance")
+
 
         @data_model(icon="", caption="My Child")
         class ChildModel:
             distance = Quantity(value=1, unit="m", caption="Distance")
 
-        @container_model(icon='', caption='My Container', model=ChildModel)
+
+        @container_model(icon="", caption="My Container", model=ChildModel)
         class MyModelContainer:
-            my_string = String(value='Initial Value', caption='My String')
+            my_string = String(value="Initial Value", caption="My String")
 
 
         @alfasim_sdk.hookimpl
@@ -141,18 +147,20 @@ def alfasim_get_additional_variables():
         from alfasim_sdk import Location
         from alfasim_sdk import Scope
 
+
         @alfasim_sdk.hookimpl
         def alfasim_get_additional_variables():
             return [
                 SecondaryVariable(
-                    name='dummy_variable',
-                    caption='Plugin 1',
-                    unit='m',
+                    name="dummy_variable",
+                    caption="Plugin 1",
+                    unit="m",
                     visibility=Visibility.Internal,
                     location=Location.Center,
                     multifield_scope=Scope.Global,
                     checked_on_gui_default=True,
-                )]
+                )
+            ]
     """
 
 
@@ -194,12 +202,11 @@ def alfasim_get_status(
         from alfasim_sdk import Quantity
         from alfasim_sdk import ErrorMessage
 
+
         # Define MyModel used in this plugin
         @data_model(icon="", caption="My Plugin Model")
         class MyModel:
-            distance = Quantity(
-                value=1, unit="m", caption="Distance"
-            )
+            distance = Quantity(value=1, unit="m", caption="Distance")
 
 
         @alfasim_sdk.hookimpl
@@ -252,10 +259,10 @@ def alfasim_configure_fields(ctx: Context):
 
         @alfasim_sdk.hookimpl
         def alfasim_configure_fields(ctx):
-           return [
-               AddField(name='plugin_continuous_field'),
-               AddField(name='plugin_dispersed_field'),
-           ]
+            return [
+                AddField(name="plugin_continuous_field"),
+                AddField(name="plugin_dispersed_field"),
+            ]
 
 
     """
@@ -280,17 +287,17 @@ def alfasim_configure_layers(ctx: Context):
 
         @alfasim_sdk.hookimpl
         def alfasim_configure_layers(ctx):
-           return [
-               AddLayer(
-                   name='plugin_layer',
-                   fields=['plugin_continuous_field'],
-                   continuous_field='plugin_continuous_field',
-               ),
-               UpdateLayer(
-                   name=OIL_LAYER,
-                   additional_fields=['plugin_dispersed_field'],
-               ),
-           ]
+            return [
+                AddLayer(
+                    name="plugin_layer",
+                    fields=["plugin_continuous_field"],
+                    continuous_field="plugin_continuous_field",
+                ),
+                UpdateLayer(
+                    name=OIL_LAYER,
+                    additional_fields=["plugin_dispersed_field"],
+                ),
+            ]
 
     The image below shows the new added phase on the application.
 
@@ -320,12 +327,12 @@ def alfasim_configure_phases(ctx: Context):
         def alfasim_configure_phases(ctx):
             return [
                 AddPhase(
-                    name='plugin_phase',
+                    name="plugin_phase",
                     fields=[
-                        'plugin_continuous_field',
-                        'plugin_dispersed_field',
+                        "plugin_continuous_field",
+                        "plugin_dispersed_field",
                     ],
-                    primary_field='plugin_continuous_field',
+                    primary_field="plugin_continuous_field",
                     is_solid=False,
                 )
             ]
@@ -358,7 +365,7 @@ def alfasim_configure_phases(ctx: Context):
             return [
                 UpdatePhase(
                     name=OIL_PHASE,
-                    additional_fields=['plugin_dispersed_field'],
+                    additional_fields=["plugin_dispersed_field"],
                 )
             ]
 
@@ -386,9 +393,10 @@ def alfasim_get_phase_properties_calculated_from_plugin():
 
         from alfasim_sdk import GAS_PHASE
 
+
         @alfasim_sdk.hookimpl
         def alfasim_get_phase_properties_calculated_from_plugin():
-            return [GAS_PHASE, 'solid']
+            return [GAS_PHASE, "solid"]
 
     """
 
@@ -439,7 +447,7 @@ def alfasim_get_user_defined_tracers_from_plugin():
 
         @alfasim_sdk.hookimpl
         def alfasim_get_user_defined_tracers_from_plugin():
-            return ['my_tracer']
+            return ["my_tracer"]
 
     .. note::
         The tracer added in the `user-defined tracers from plugin` list will not be considered as a standard tracer, which

@@ -3,18 +3,22 @@ import re
 import pytest
 from barril.units import Scalar
 
-from alfasim_sdk._internal.constants import EmulsionDropletSizeModelType
-from alfasim_sdk._internal.constants import EmulsionInversionPointModelType
-from alfasim_sdk._internal.constants import EmulsionRelativeViscosityModelType
-from alfasim_sdk._internal.constants import HydrodynamicModelType
-from alfasim_sdk._internal.constants import SolidsModelType
-from alfasim_sdk._internal.context import EdgeInfo
-from alfasim_sdk._internal.context import EmulsionModelInfo
-from alfasim_sdk._internal.context import HydrodynamicModelInfo
-from alfasim_sdk._internal.context import NodeInfo
-from alfasim_sdk._internal.context import PhysicsOptionsInfo
-from alfasim_sdk._internal.context import PipelineInfo
-from alfasim_sdk._internal.context import PipelineSegmentInfo
+from alfasim_sdk._internal.constants import (
+    EmulsionDropletSizeModelType,
+    EmulsionInversionPointModelType,
+    EmulsionRelativeViscosityModelType,
+    HydrodynamicModelType,
+    SolidsModelType,
+)
+from alfasim_sdk._internal.context import (
+    EdgeInfo,
+    EmulsionModelInfo,
+    HydrodynamicModelInfo,
+    NodeInfo,
+    PhysicsOptionsInfo,
+    PipelineInfo,
+    PipelineSegmentInfo,
+)
 
 
 def test_plugin_info():

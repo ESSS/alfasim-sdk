@@ -8,27 +8,30 @@ import numpy
 import numpy as np
 import pytest
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
-from alfasim_sdk.result_reader.aggregator import GSAOutputKey
-from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
-from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
-from alfasim_sdk.result_reader.aggregator import HMOutputKey
-from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
-from alfasim_sdk.result_reader.aggregator import read_history_matching_result
-from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
-from alfasim_sdk.result_reader.aggregator import UPOutputKey
-from alfasim_sdk.result_reader.reader import GlobalSensitivityAnalysisResults
-from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
-from alfasim_sdk.result_reader.reader import HistoryMatchingDeterministicResults
-from alfasim_sdk.result_reader.reader import HistoryMatchingProbabilisticResults
-from alfasim_sdk.result_reader.reader import OverallTrendMetadata
-from alfasim_sdk.result_reader.reader import PositionalTrendMetadata
-from alfasim_sdk.result_reader.reader import ProfileMetadata
-from alfasim_sdk.result_reader.reader import Results
-from alfasim_sdk.result_reader.reader import UncertaintyPropagationResults
+from alfasim_sdk.result_reader.aggregator import (
+    GlobalSensitivityAnalysisMetadata,
+    GSAOutputKey,
+    HistoricDataCurveMetadata,
+    HistoryMatchingMetadata,
+    HMOutputKey,
+    UncertaintyPropagationAnalysesMetaData,
+    UPOutputKey,
+    read_history_matching_metadata,
+    read_history_matching_result,
+)
+from alfasim_sdk.result_reader.reader import (
+    GlobalSensitivityAnalysisResults,
+    GlobalTrendMetadata,
+    HistoryMatchingDeterministicResults,
+    HistoryMatchingProbabilisticResults,
+    OverallTrendMetadata,
+    PositionalTrendMetadata,
+    ProfileMetadata,
+    Results,
+    UncertaintyPropagationResults,
+)
 
 
 def test_fail_to_get_curves(results: Results) -> None:

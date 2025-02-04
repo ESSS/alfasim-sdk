@@ -33,9 +33,9 @@ def load_pvt_model_table_parameters_description_from_alfatable(
     """
     Load the content from the alfatable in the given file_path. The validation is turned off due to performance issues.
     """
-    from strictyaml.ruamel.main import YAML
-    from barril.units import Scalar
     import numpy as np
+    from barril.units import Scalar
+    from strictyaml.ruamel.main import YAML
 
     yaml = YAML(typ="safe", pure=True)
     content = yaml.load(Path(file_path))

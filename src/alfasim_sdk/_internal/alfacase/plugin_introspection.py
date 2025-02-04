@@ -3,9 +3,7 @@ from typing import List
 import attr
 
 from alfasim_sdk import BaseField
-from alfasim_sdk._internal.types import Group
-from alfasim_sdk._internal.types import Tab
-from alfasim_sdk._internal.types import Tabs
+from alfasim_sdk._internal.types import Group, Tab, Tabs
 
 
 def _is_tab(value: BaseField) -> bool:

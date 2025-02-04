@@ -3,8 +3,7 @@ import os.path
 import shutil
 import textwrap
 from pathlib import Path
-from typing import Dict
-from typing import List
+from typing import Dict, List
 
 import h5py
 import numpy as np
@@ -17,33 +16,18 @@ from alfasim_sdk.result_reader.aggregator import (
 )
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    HISTORY_MATCHING_GROUP_NAME,
     HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    META_GROUP_NAME,
+    TIME_SET_DSET_NAME,
     UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_GROUP_NAME,
 )
 from alfasim_sdk.result_reader.reader import Results
-
 
 pytest_plugins = [
     "alfasim_sdk.testing.fixtures",
