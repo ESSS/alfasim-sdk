@@ -5,18 +5,14 @@ import textwrap
 import uuid
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import Iterator
-from typing import List
-from typing import Optional
-from typing import Union
+from typing import Iterator, List, Optional, Union
 
 import pytest
 import strictyaml
 from _pytest.compat import assert_never
 from _pytest.monkeypatch import MonkeyPatch
 
-from alfasim_sdk import convert_alfacase_to_description
-from alfasim_sdk import generate_alfacase_file
+from alfasim_sdk import convert_alfacase_to_description, generate_alfacase_file
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 from alfasim_sdk._internal.alfacase.case_description import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
@@ -125,8 +121,7 @@ class AlfasimRunnerFixture:
         alfacase_content = DescriptionDocument(content, self.alfacase_file)
         plugin_description = load_plugin(alfacase_content)
         assert plugin_description is not None, (
-            "Can not load the plugin info,"
-            " maybe you forgot to call `add_plugin_folder`"
+            "Can not load the plugin info, maybe you forgot to call `add_plugin_folder`"
         )
         self._case.plugins.append(plugin_description)
 
@@ -172,7 +167,7 @@ class AlfasimRunnerFixture:
 
                 name = log_file.name
                 header_len = 4 + len(name) + 4
-                return f'{"=" * header_len}\n=== {log_file.name} ===\n{"=" * header_len}\n{contents}'
+                return f"{'=' * header_len}\n=== {log_file.name} ===\n{'=' * header_len}\n{contents}"
 
             results = Results(self.alfacase_data_folder)
             log_calc = results.log_calc
@@ -192,8 +187,7 @@ class AlfasimRunnerFixture:
         """
         runner_from_env = os.environ.get("ALFASIM_RUNNER")
         assert runner_from_env is not None, (
-            "Can not locate the simulator."
-            " Set the environment variable 'ALFASIM_RUNNER'."
+            "Can not locate the simulator. Set the environment variable 'ALFASIM_RUNNER'."
         )
         return runner_from_env.split(" ")
 

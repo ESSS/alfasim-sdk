@@ -1,19 +1,12 @@
 import numbers
-from typing import Callable
-from typing import List
-from typing import Optional
-from typing import Sequence
-from typing import Union
+from typing import Callable, List, Optional, Sequence, Union
 
 import attr
 from attr import attrib
 from attr._make import Attribute
-from attr.validators import instance_of
-from attr.validators import is_callable
-from attr.validators import optional
+from attr.validators import instance_of, is_callable, optional
 
-from alfasim_sdk._internal.validators import non_empty_str
-from alfasim_sdk._internal.validators import valid_unit
+from alfasim_sdk._internal.validators import non_empty_str, valid_unit
 
 
 @attr.s(kw_only=True, frozen=True)
@@ -74,18 +67,19 @@ class BaseField:
 
     .. code-block:: python
 
-        @data_model(icon='', caption='My Plugin')
+        @data_model(icon="", caption="My Plugin")
         class MyModel:
-            my_string_1= String(
-                value='String 1',
-                caption='My String 1',
+            my_string_1 = String(
+                value="String 1",
+                caption="My String 1",
                 tooltip="Some Text <br> <b> More Information</b>",
             )
             my_string_2 = String(
-                value='String 2',
-                caption='My String 2',
+                value="String 2",
+                caption="My String 2",
                 tooltip="∩ ∪ ∫ ∬ ∮",
             )
+
 
         @alfasim_sdk.hookimpl
         def alfasim_get_data_model_type():
@@ -126,15 +120,17 @@ class BaseField:
         def my_check(self, ctx):
             return self.bool_value
 
+
         @data_model(icon="", caption="My Plugin")
         class MyModel:
             bool_value = Boolean(value=True, caption="Enabled")
             N_ions = Quantity(
-                caption='Number of Ions',
+                caption="Number of Ions",
                 value=1,
-                unit='-',
+                unit="-",
                 enable_expr=my_check,
             )
+
 
         @alfasim_sdk.hookimpl
         def alfasim_get_data_model_type():
@@ -496,9 +492,7 @@ class MultipleReference(BaseReference):
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
-            tracer_ref = MultipleReference(
-                ref_type=TracerType, caption="Tracer Type"
-            )
+            tracer_ref = MultipleReference(ref_type=TracerType, caption="Tracer Type")
 
 
     .. image:: /_static/images/api/multiplereference_field_example_1.png
@@ -590,9 +584,7 @@ class Quantity(BaseField):
 
         @data_model(icon="", caption="My Plugin")
         class MyModel:
-            quantity_field = Quantity(
-                value=1, unit="degC", caption="Quantity Field"
-            )
+            quantity_field = Quantity(value=1, unit="degC", caption="Quantity Field")
 
 
     .. image:: /_static/images/api/quantity_field_example.png
@@ -684,13 +676,15 @@ class Table(BaseField):
         class FlowType:
             name = String(value="Flow", caption="Name")
 
+
         @container_model(caption="Flow Types", model=FlowType, icon="")
         class FlowTypeContainer:
             pass
 
+
         @data_model(icon="", caption="My Model")
         class MyModel:
-            table_field=Table(
+            table_field = Table(
                 rows=[
                     TableColumn(
                         id="temperature",

@@ -1,6 +1,5 @@
 import functools
-from typing import Callable
-from typing import Optional
+from typing import Callable, Optional
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_attr_class
 
@@ -47,9 +46,9 @@ def container_model(
             distance = Quantity(value=1, unit="m", caption="Distance")
 
 
-        @container_model(icon='', caption='My Container', model=ChildModel)
+        @container_model(icon="", caption="My Container", model=ChildModel)
         class MyModelContainer:
-            my_string = String(value='Initial Value', caption='My String')
+            my_string = String(value="Initial Value", caption="My String")
 
 
         @alfasim_sdk.hookimpl
@@ -142,14 +141,14 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
 
     .. code-block:: python
 
-        @data_model(icon='', caption='My Plugin')
+        @data_model(icon="", caption="My Plugin")
         class MyModel:
-                distance = Quantity(value=1, unit='m', caption='Distance')
+            distance = Quantity(value=1, unit="m", caption="Distance")
 
 
         @alfasim_sdk.hookimpl
         def alfasim_get_data_model_type():
-                return [MyModel]
+            return [MyModel]
 
     .. image:: /_static/images/api/data_model_example_1_1.png
         :scale: 90%

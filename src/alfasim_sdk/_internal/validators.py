@@ -1,8 +1,7 @@
 from typing import Any
 
 from attr._make import Attribute
-from attr.validators import deep_iterable
-from attr.validators import instance_of
+from attr.validators import deep_iterable, instance_of
 
 
 def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:

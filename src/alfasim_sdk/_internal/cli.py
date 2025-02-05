@@ -6,7 +6,6 @@ from textwrap import dedent
 import click
 from hookman.hookman_generator import HookManGenerator
 
-
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 plugin_dir_option = click.option(

@@ -3,8 +3,7 @@ import itertools
 import re
 import shutil
 from pathlib import Path
-from typing import List
-from typing import Literal
+from typing import List, Literal
 
 import numpy
 import pytest
@@ -12,39 +11,33 @@ from pytest import FixtureRequest
 from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
-from alfasim_sdk.result_reader.aggregator import concatenate_metadata
-from alfasim_sdk.result_reader.aggregator import GSAOutputKey
-from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
-from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
-from alfasim_sdk.result_reader.aggregator import HMOutputKey
-from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
+    GSAOutputKey,
+    HistoricDataCurveMetadata,
+    HistoryMatchingMetadata,
+    HMOutputKey,
+    ResultsNeedFullReloadError,
+    TimeSetInfoItem,
+    UPOutputKey,
+    concatenate_metadata,
+    open_result_files,
     read_global_sensitivity_analysis_meta_data,
-)
-from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
-from alfasim_sdk.result_reader.aggregator import (
+    read_global_sensitivity_coefficients,
     read_history_matching_historic_data_curves,
-)
-from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
-from alfasim_sdk.result_reader.aggregator import read_history_matching_result
-from alfasim_sdk.result_reader.aggregator import read_metadata
-from alfasim_sdk.result_reader.aggregator import read_profiles_local_statistics
-from alfasim_sdk.result_reader.aggregator import read_time_sets
-from alfasim_sdk.result_reader.aggregator import read_trends_data
-from alfasim_sdk.result_reader.aggregator import (
+    read_history_matching_metadata,
+    read_history_matching_result,
+    read_metadata,
+    read_profiles_local_statistics,
+    read_time_sets,
+    read_trends_data,
     read_uncertainty_propagation_analyses_meta_data,
-)
-from alfasim_sdk.result_reader.aggregator import read_uncertainty_propagation_results
-from alfasim_sdk.result_reader.aggregator import (
+    read_uncertainty_propagation_results,
     read_uq_time_set,
 )
-from alfasim_sdk.result_reader.aggregator import ResultsNeedFullReloadError
-from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
-from alfasim_sdk.result_reader.aggregator import UPOutputKey
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+    RESULTS_FOLDER_NAME,
 )
-from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 from alfasim_sdk.result_reader.reader import Results
 
 

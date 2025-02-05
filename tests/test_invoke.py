@@ -11,7 +11,6 @@ from _pytest.monkeypatch import MonkeyPatch
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
 
-
 plugin_id = "acme"
 invoke_cmd = shutil.which("invoke")
 alfasim_sdk_cmd = shutil.which("alfasim-sdk")

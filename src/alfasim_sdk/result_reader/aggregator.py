@@ -8,63 +8,46 @@ import re
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import DefaultDict
-from typing import Dict
-from typing import Iterator
-from typing import List
-from typing import Literal
-from typing import NamedTuple
-from typing import Optional
-from typing import Sequence
-from typing import Tuple
-from typing import Type
-from typing import TypeVar
-from typing import Union
+from typing import (
+    Any,
+    Callable,
+    DefaultDict,
+    Dict,
+    Iterator,
+    List,
+    Literal,
+    NamedTuple,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+)
 
 import attr
 import h5py
 import numpy
 import numpy as np
-from typing_extensions import Self
-from typing_extensions import TypedDict
+from typing_extensions import Self, TypedDict
 
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    HISTORY_MATCHING_GROUP_NAME,
     HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    META_GROUP_NAME,
+    PROFILES_GROUP_NAME,
     PROFILES_STATISTICS_DSET_NAME_SUFFIX,
-)
-from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_LOCKING_MODE
-from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_PREFIX
-from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
-from alfasim_sdk.result_reader.aggregator_constants import TRENDS_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    RESULT_FILE_LOCKING_MODE,
+    RESULT_FILE_PREFIX,
+    TIME_SET_DSET_NAME,
+    TRENDS_GROUP_NAME,
     UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_GROUP_NAME,
 )
 
@@ -466,7 +449,7 @@ class HistoryMatchingMetadata:
             }
 
         def map_historic_data_infos(
-            infos: List[Dict[str, Any]]
+            infos: List[Dict[str, Any]],
         ) -> List[HistoricDataCurveMetadata]:
             return [HistoricDataCurveMetadata.from_dict(info) for info in infos]
 
@@ -1179,9 +1162,7 @@ def _merge_metadata_and_read_global_statistics(
             start_index, stop_index = partial_indices[-1]  # The most recent.
 
             if start_index < stop_index:
-                statistics = trends_statistics[
-                    output_id
-                ]  # type: Dict[str, numpy.ndarray]
+                statistics = trends_statistics[output_id]  # type: Dict[str, numpy.ndarray]
                 data_index = meta["index"]
                 min_value, max_value = trends_statistic[:, data_index]
                 statistics["min"] = numpy.nanmin((min_value, statistics["min"]))
@@ -1670,21 +1651,21 @@ def _read_time_sets(
         _TREND_ID_ATTR: [initial_trends_time_step_index, final_trends_time_step_index],
     }
     if initial_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][0]
+        )
     if final_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][0]
+        )
     if initial_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][1]
+        )
     if final_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][1]
+        )
 
     cache = {}
     for time_set_key in time_sets_key_list:
@@ -1756,7 +1737,7 @@ def _read_time_set(
 
 
 def _concatenate_values(
-    data_dict: Dict[Any, List[numpy.ndarray]]
+    data_dict: Dict[Any, List[numpy.ndarray]],
 ) -> Dict[Any, numpy.ndarray]:
     """
     Concatenate the values in the given dict.
@@ -1772,7 +1753,7 @@ def _concatenate_values(
 
 
 def map_output_key_to_time_set_key(
-    all_metadata: Dict[int, Dict]
+    all_metadata: Dict[int, Dict],
 ) -> Dict[OutputKeyType, TimeSetKeyType]:
     """
     Operates on the complete metadata mapping "output key"s to they  respective "time set key".
@@ -1791,7 +1772,7 @@ def map_output_key_to_time_set_key(
 
 
 def map_base_time_set_to_time_set_keys(
-    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType]
+    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType],
 ) -> Dict[int, Tuple[TimeSetKeyType, ...]]:
     """
     Maps base time steps to the "time set key"s where they are found.

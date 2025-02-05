@@ -1,22 +1,17 @@
 import math
 from enum import Enum
 from functools import partial
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Union
+from typing import Any, Dict, List, Union
 
 import attr
 import numpy as np
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
 from alfasim_sdk import MultiInputType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
+from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
 
 ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, List, List[Enum]]
 

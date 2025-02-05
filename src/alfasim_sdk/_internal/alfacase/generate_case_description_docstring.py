@@ -1,12 +1,6 @@
 import enum
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Sequence
-from typing import Tuple
-from typing import Type
+from typing import Any, Callable, Dict, List, Sequence, Tuple, Type
 
 import attr
 from attr._make import Attribute
@@ -14,22 +8,23 @@ from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units._scalar import Scalar
 
-from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk._internal.alfacase.generate_schema import is_array
-from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
-from alfasim_sdk._internal.alfacase.generate_schema import is_boolean
-from alfasim_sdk._internal.alfacase.generate_schema import is_curve
-from alfasim_sdk._internal.alfacase.generate_schema import is_dict
-from alfasim_sdk._internal.alfacase.generate_schema import is_enum
-from alfasim_sdk._internal.alfacase.generate_schema import is_float
-from alfasim_sdk._internal.alfacase.generate_schema import is_int
-from alfasim_sdk._internal.alfacase.generate_schema import is_list
-from alfasim_sdk._internal.alfacase.generate_schema import is_path
-from alfasim_sdk._internal.alfacase.generate_schema import is_scalar
-from alfasim_sdk._internal.alfacase.generate_schema import is_str
-from alfasim_sdk._internal.alfacase.generate_schema import is_union
-from alfasim_sdk._internal.alfacase.generate_schema import obtain_schema_name
-
+from alfasim_sdk._internal.alfacase.generate_schema import (
+    IGNORED_PROPERTIES,
+    is_array,
+    is_attrs,
+    is_boolean,
+    is_curve,
+    is_dict,
+    is_enum,
+    is_float,
+    is_int,
+    is_list,
+    is_path,
+    is_scalar,
+    is_str,
+    is_union,
+    obtain_schema_name,
+)
 
 INDENT = "    "
 
@@ -126,7 +121,7 @@ def _generate_declaration_for_class(class_: Any) -> List[str]:
     """Return all attributes for the given Class with CaseDescription definition."""
     class_fields = attr.fields_dict(class_)
     return [
-        f"{INDENT*2}class {class_.__name__}",
+        f"{INDENT * 2}class {class_.__name__}",
         *_get_declaration(class_fields, LIST_OF_CASE_ATTRIBUTES),
     ]
 
