@@ -79,6 +79,7 @@ def convert_description_to_alfacase(
     """
     import attr
     from strictyaml import YAML
+
     from .case_to_alfacase import convert_dict_to_valid_alfacase_format
 
     alfacase_description_dict = attr.asdict(alfacase_description, recurse=False)
@@ -96,7 +97,9 @@ def convert_alfacase_to_description(
     """
     Return a :class:`alfasim_sdk._internal.alfacase.case_description` with all information provided on file_yaml.
     """
-    from alfasim_sdk._internal.alfacase.alfacase_to_case import load_case_description
-    from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
+    from alfasim_sdk._internal.alfacase.alfacase_to_case import (
+        DescriptionDocument,
+        load_case_description,
+    )
 
     return load_case_description(DescriptionDocument.from_file(file_alfacase))

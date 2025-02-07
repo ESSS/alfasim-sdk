@@ -1,14 +1,8 @@
-from typing import Any
-from typing import Dict
-from typing import Optional
-from typing import Tuple
+from typing import Any, Dict, Optional, Tuple
 
 import attr
 
-from alfasim_sdk._internal.types import BaseField
-from alfasim_sdk._internal.types import Group
-from alfasim_sdk._internal.types import Tab
-from alfasim_sdk._internal.types import Tabs
+from alfasim_sdk._internal.types import BaseField, Group, Tab, Tabs
 
 
 def get_attr_class(

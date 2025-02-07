@@ -91,11 +91,11 @@ def test_attribute_order():
     from alfasim_sdk._internal.models import data_model
     from alfasim_sdk._internal.types import (
         Boolean,
-        Reference,
-        TracerType,
         Enum,
-        String,
         Quantity,
+        Reference,
+        String,
+        TracerType,
     )
 
     @data_model(icon="", caption="caption")

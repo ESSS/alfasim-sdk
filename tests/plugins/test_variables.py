@@ -24,11 +24,11 @@ import pytest
 )
 def test_validation(attr, expected_type_error, expected_message):
     from alfasim_sdk._internal.variables import (
-        Visibility,
         Location,
         Scope,
         SecondaryVariable,
         Type,
+        Visibility,
     )
 
     attrs = dict(

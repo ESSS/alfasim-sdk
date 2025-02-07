@@ -1,25 +1,16 @@
 import pytest
 from barril.units import Array
 
+from alfasim_sdk._internal import constants
+
 from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_compressor_pressure_table_description,
-)
-from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_constant_initial_pressure_description,
-)
-from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_constant_initial_temperatures_description,
-)
-from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_constant_pvt_table,
-)
-from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_linear_initial_pressure_description,
-)
-from .common_testing.alfasim_sdk_common_testing.case_builders import (
     build_linear_initial_temperatures_description,
 )
-from alfasim_sdk._internal import constants
 
 
 def test_build_constant_initial_temperatures_description():

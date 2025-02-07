@@ -2,10 +2,12 @@ from textwrap import dedent
 
 import numpy as np
 
-from alfasim_sdk import convert_alfacase_to_description
-from alfasim_sdk import generate_alfacase_file
-from alfasim_sdk import generate_alfatable_file
-from alfasim_sdk import PvtModelPtTableParametersDescription
+from alfasim_sdk import (
+    PvtModelPtTableParametersDescription,
+    convert_alfacase_to_description,
+    generate_alfacase_file,
+    generate_alfatable_file,
+)
 
 
 def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
