@@ -2,8 +2,8 @@
 CHANGELOG
 =========
 
-1.0.0 (UNRELEASED)
-================
+1.0.0 (2025-02-07)
+==================
 
 * We have decided internally to revert the versioning schema back to SemVer, starting at ``1.0.0``, in order to improve better backward and forward compatibility support for plugins.
 * Fix bug related to Probabilistic History Matching result reader. The shape of result was wrong.
