@@ -2,8 +2,7 @@ import re
 
 import pytest
 
-from alfasim_sdk import ErrorMessage
-from alfasim_sdk import WarningMessage
+from alfasim_sdk import ErrorMessage, WarningMessage
 
 
 @pytest.mark.parametrize("status_class", [WarningMessage, ErrorMessage])

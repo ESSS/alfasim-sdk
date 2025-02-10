@@ -2,15 +2,14 @@ from pathlib import Path
 
 import numpy as np
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from . import case_builders
-from . import get_acme_tab_file_path
 from alfasim_sdk import LeakLocation
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
+
+from . import case_builders, get_acme_tab_file_path
 
 BIP_DESCRIPTION = case_description.BipDescription(
     component_1="C1", component_2="C2", value=0.5
@@ -988,9 +987,9 @@ def ensure_descriptions_are_equal(
         if is_ndarray or (
             is_list and isinstance(first(expected_value, None), np.ndarray)
         ):
-            assert np.array_equal(
-                obtained_description_dict[key], expected_value
-            ), f"Not equal on {path}{key}"
+            assert np.array_equal(obtained_description_dict[key], expected_value), (
+                f"Not equal on {path}{key}"
+            )
             continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
         is_array = isinstance(expected_value, Array)
@@ -998,9 +997,9 @@ def ensure_descriptions_are_equal(
             unit = expected_value.GetUnit()
             obtained_values = np.array(obtained_description_dict[key].GetValues(unit))
             expected_values = np.array(expected_value.GetValues(unit))
-            assert np.allclose(
-                obtained_values, expected_values
-            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            assert np.allclose(obtained_values, expected_values), (
+                f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            )
             continue  # pragma no cover [bug on coverage.py
 
         is_curve = isinstance(expected_value, Curve)
@@ -1009,21 +1008,21 @@ def ensure_descriptions_are_equal(
             domain_unit = expected_value.GetDomain().GetUnit()
             expected_domain_values = expected_value.GetDomain().GetValues(domain_unit)
             obtained_domain_values = obtained_curve.GetDomain().GetValues(domain_unit)
-            assert np.allclose(
-                expected_domain_values, obtained_domain_values
-            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            assert np.allclose(expected_domain_values, obtained_domain_values), (
+                f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            )
             image_unit = expected_value.GetImage().GetUnit()
             expected_image_values = expected_value.GetImage().GetValues(image_unit)
             obtained_image_values = obtained_curve.GetImage().GetValues(image_unit)
-            assert np.allclose(
-                expected_image_values, obtained_image_values
-            ), f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            assert np.allclose(expected_image_values, obtained_image_values), (
+                f"Not equal on {path}{key}\nObtained={obtained_values} != {expected_values}"
+            )
             continue  # pragma no cover [bug on coverage.py: https://github.com/nedbat/coveragepy/issues/198]
 
         # Skip the check when materials or walls only has defaults values
         if key in ("materials", "walls") and first(expected_value, None) is None:
             continue
 
-        assert (
-            obtained_description_dict[key] == expected_value
-        ), f'Not equal on {path}{key}\nAttribute "{key}" doesn\'t match, obtained "{obtained_description_dict[key]}" while "{expected_value}" was expected.'
+        assert obtained_description_dict[key] == expected_value, (
+            f'Not equal on {path}{key}\nAttribute "{key}" doesn\'t match, obtained "{obtained_description_dict[key]}" while "{expected_value}" was expected.'
+        )

@@ -3,27 +3,13 @@ import textwrap
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import NewType
-from typing import Optional
-from typing import Sequence
-from typing import Tuple
-from typing import Union
+from typing import Any, Callable, Dict, List, NewType, Optional, Sequence, Tuple, Union
 
 import attr
 import numpy as np
-from attr.validators import deep_iterable
-from attr.validators import deep_mapping
-from attr.validators import in_
-from attr.validators import instance_of
-from attr.validators import optional
+from attr.validators import deep_iterable, deep_mapping, in_, instance_of, optional
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
-
+from barril.units import Array, Scalar
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str

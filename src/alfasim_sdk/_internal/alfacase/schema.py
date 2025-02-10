@@ -1,3 +1,4 @@
+# isort: skip_file
 # fmt: off
 # #[[[cog
 # import cog

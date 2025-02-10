@@ -4,12 +4,10 @@ from typing import Optional
 
 import attr
 from attr import attrib
-from attr.validators import instance_of
-from attr.validators import optional
+from attr.validators import instance_of, optional
 from barril.units import UnitDatabase
 
-from alfasim_sdk._internal.validators import non_empty_str
-from alfasim_sdk._internal.validators import valid_unit
+from alfasim_sdk._internal.validators import non_empty_str, valid_unit
 
 
 class Visibility(Enum):

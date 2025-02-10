@@ -4,9 +4,7 @@ from typing import Callable
 import attr
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_attr_class
-from alfasim_sdk._internal.types import Group
-from alfasim_sdk._internal.types import Tab
-from alfasim_sdk._internal.types import Tabs
+from alfasim_sdk._internal.types import Group, Tab, Tabs
 
 
 def tabs() -> Callable:
@@ -27,7 +25,6 @@ def tabs() -> Callable:
 
             @tabs()
             class MainPage:
-
                 @tab(caption="Fist Tab")
                 class Tab1:
                     field_1 = String(caption="First Tab", value="Default")
