@@ -224,6 +224,7 @@ def get_plugin_installed_files(
         artifacts_dir / f"{plugin_id}.py",
         assets_dir / "plugin.yaml",
         assets_dir / "README.md",
+        assets_dir / "CHANGELOG.rst",
     ]
     return expected_files
 
