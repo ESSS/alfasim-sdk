@@ -168,6 +168,10 @@ def compile(ctx, cmake_extra_args="", debug=False, clean=False):
         print_message(f"cmake args = {cmake_args}", color=Fore.YELLOW, bright=True)
 
     cmake_cmd = shutil.which("cmake")
+    if cmake_cmd is None:
+        msg = "Cmake is not available. Please install at least version 3.5.2 to compile the plugin"
+        raise Exit(message=msg, code=1)
+
     subprocess.check_call([f"{cmake_cmd}"] + cmake_args)
     subprocess.check_call(
         [
