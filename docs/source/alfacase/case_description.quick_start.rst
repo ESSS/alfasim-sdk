@@ -29,7 +29,7 @@ From a terminal, and inside a virtual environment, update pip:
 
 Install the |sdk| with:
 
->>> pip install alfasim-sdk
+>>> python -m pip install alfasim-sdk
 
 .. note::
 

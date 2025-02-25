@@ -75,6 +75,7 @@ def new(dst, caption, plugin_id, author_name, author_email):
             +---assets
             |       plugin.yaml
             |       README.md
+            |       CHANGELOG.rst
             |
             \---src
                 |   CMakeLists.txt

@@ -224,6 +224,7 @@ def get_plugin_installed_files(
         artifacts_dir / f"{plugin_id}.py",
         assets_dir / "plugin.yaml",
         assets_dir / "README.md",
+        assets_dir / "CHANGELOG.rst",
     ]
     return expected_files
 
@@ -298,7 +299,7 @@ def test_install_plugin_missing_plugin(new_plugin_dir: Path, monkeypatch: Monkey
         stderr=subprocess.STDOUT,
     )
 
-    error_message_chunk = "Could not find any '*.hmplugin'"
+    error_message_chunk = "None or more than one '*.hmplugin' found"
     assert result.returncode == 1
     assert error_message_chunk in result.stdout.decode("utf-8")
 
