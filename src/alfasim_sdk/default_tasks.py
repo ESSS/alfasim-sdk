@@ -168,6 +168,10 @@ def compile(ctx, cmake_extra_args="", debug=False, clean=False):
         print_message(f"cmake args = {cmake_args}", color=Fore.YELLOW, bright=True)
 
     cmake_cmd = shutil.which("cmake")
+    if cmake_cmd is None:
+        msg = "Cmake is not available. Please install at least version 3.5.2 to compile the plugin"
+        raise Exit(message=msg, code=1)
+
     subprocess.check_call([f"{cmake_cmd}"] + cmake_args)
     subprocess.check_call(
         [
@@ -325,15 +329,15 @@ def install_plugin(ctx, install_dir=None):
     plugin_folder = Path(ctx.config._project_prefix)
     plugin_id = plugin_folder.name
 
-    try:
-        hm_plugin_path = next(plugin_folder.glob("*.hmplugin"))
-    except StopIteration:
+    hm_plugins_files = list(plugin_folder.glob("*.hmplugin"))
+    if len(hm_plugins_files) != 1:
         print_message(
-            f"Could not find any '*.hmplugin' in {plugin_folder}.",
+            f"None or more than one '*.hmplugin' found in {plugin_folder}. Currently, this task only install the plugin if there is just one .hmplugin in the plugin folder.",
             color=Fore.RED,
             bright=True,
         )
         raise Exit(code=1)
+    hm_plugin_path = hm_plugins_files[0]
 
     if not hm_plugin_path.is_file():
         print_message(

@@ -24,7 +24,7 @@ the official docs <https://www.python.org/downloads/>`_.
 
         >>> conda create -n sdk_env
         >>> conda activate sdk_env
-        >>> pip install alfasim-sdk
+        >>> python -m pip install alfasim-sdk
 
     Alternatively, an ``environment.yml`` can be added to your project and ``alfasim-sdk`` can be declared at ``pip`` dependencies.
 
