@@ -60,11 +60,13 @@ def initialize(ctx: "void*") -> "int":
             if (errcode != 0){
                 return errcode;
             }
+            // Reading info from the user interface
+            double value;
+            alfasim_sdk_api.get_plugin_input_data_quantity(
+                ctx, &value, plugin_id, "MyModel.quantity");
+
             // Setting internal data to each thread
             for (int thread_id = 0; thread_id < n_threads; ++thread_id){
-                double value;
-                alfasim_sdk_api.get_plugin_input_data_quantity(
-                    ctx, &value, plugin_id, thread_id);
                 void* data = new double(value);
                 alfasim_sdk_api.set_plugin_data(
                     ctx, plugin_id, data, thread_id);
@@ -72,7 +74,7 @@ def initialize(ctx: "void*") -> "int":
             return OK;
         }
 
-    It is important to note that ``void* data`` at line 22 could be a more complex data structure, like a
+    It is important to note that ``void* data`` at line 25 could be a more complex data structure, like a
     class object for example.
     """
 
