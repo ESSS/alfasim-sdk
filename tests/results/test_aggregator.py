@@ -146,7 +146,7 @@ def test_read_metadata_invalid_index(results: Results, index_arg_name: str) -> N
         read_metadata(results.results_folder, **{index_arg_name: 999})
 
 
-def test_concatenate_metadata_plain(results: Results) -> None:
+def test_concatenate_metadata_plain(results: Results, datadir: Path) -> None:
     results_folder = results.results_folder
 
     md_a = read_metadata(
@@ -177,6 +177,11 @@ def test_concatenate_metadata_plain(results: Results) -> None:
     md_bb = concatenate_metadata(md_middle, md_b)
     assert ((5, 40), (14, 62)) == md_bb.time_steps_boundaries
 
+    # Ensure we don't bother when the directories are not the same.
+    md_a.result_directory = datadir / "foo"
+    md_aaa = concatenate_metadata(md_a, md_middle)
+    assert ((0, 0), (5, 40)) == md_aaa.time_steps_boundaries
+
 
 def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
     results_folder = results.results_folder
@@ -198,14 +203,6 @@ def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
         ("profile_id", (0, 2605, 4478)),
         ("trend_id", (0, 2605, 4478)),
     ]
-
-
-def test_concatenate_metadata_error_conditions_directory(results: Results) -> None:
-    md = results.metadata
-    other_md = dataclasses.replace(md)
-    other_md.result_directory = md.result_directory / "other"
-    with pytest.raises(RuntimeError, match="different sources"):
-        concatenate_metadata(md, other_md)
 
 
 def test_concatenate_metadata_error_conditions_more_files(
