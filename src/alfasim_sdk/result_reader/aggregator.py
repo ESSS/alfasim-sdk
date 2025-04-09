@@ -1800,9 +1800,6 @@ def concatenate_metadata(
     Concatenate two result metadata objects.
     """
 
-    if r_b.result_directory != r_a.result_directory:
-        raise RuntimeError("Can not concatenate result from different sources.")
-
     a_initial_ts_index, a_final_ts_index = r_a.time_steps_boundaries
     if a_initial_ts_index == a_final_ts_index:
         return r_b
