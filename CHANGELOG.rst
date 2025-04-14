@@ -5,6 +5,9 @@ CHANGELOG
 1.1.0 (Unreleased)
 ==================
 
+* **Breaking Change**: Remove the ``result_directory`` attribute from all the result metadata objects declared in ``result_reader.aggregator`` module and instead demand it to be passed as argument to the result reading functions (``read_time_sets``, ``read_history_matching_result`` and so on); do so to ensure metadata is independent from the result file location, as demanded by the new ALFAsim client/server architecture.
+
+
 1.0.0 (2025-02-07)
 ==================
 
