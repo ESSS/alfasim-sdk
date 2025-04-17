@@ -251,7 +251,9 @@ class TestHistoryMatchingResultsReader:
         reader to read probabilistic results and vice-versa.
         """
         prob_metadata = read_history_matching_metadata(hm_probabilistic_results_dir)
-        prob_values = read_history_matching_result(prob_metadata, "HM-probabilistic")
+        prob_values = read_history_matching_result(
+            hm_probabilistic_results_dir, prob_metadata, "HM-probabilistic"
+        )
 
         with pytest.raises(
             ValueError,
@@ -264,7 +266,9 @@ class TestHistoryMatchingResultsReader:
             )
 
         det_metadata = read_history_matching_metadata(hm_deterministic_results_dir)
-        det_values = read_history_matching_result(det_metadata, "HM-deterministic")
+        det_values = read_history_matching_result(
+            hm_deterministic_results_dir, det_metadata, "HM-deterministic"
+        )
 
         with pytest.raises(
             ValueError,

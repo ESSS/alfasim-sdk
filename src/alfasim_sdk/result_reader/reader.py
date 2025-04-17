@@ -129,10 +129,10 @@ class Results:
         metadata = self.metadata
         trend_metadata = metadata.trends[trend_key]
         time_set_key = ("trend_id", trend_metadata["time_set_key"])
-        time_sets = read_time_sets(metadata, [time_set_key])
+        time_sets = read_time_sets(self.results_folder, metadata, [time_set_key])
         time_set = time_sets[time_set_key]
 
-        trend_data = read_trends_data(metadata, [trend_key])
+        trend_data = read_trends_data(self.results_folder, metadata, [trend_key])
         data = trend_data[trend_key]
 
         return Curve(
@@ -150,10 +150,12 @@ class Results:
         """
         metadata = self.metadata
         profile_metadata = metadata.profiles[profile_key]
-        domains = read_profiles_domain_data(metadata, [profile_key], index)
+        domains = read_profiles_domain_data(
+            self.results_folder, metadata, [profile_key], index
+        )
         domain = domains[profile_key]
 
-        images = read_profiles_data(metadata, [profile_key], index)
+        images = read_profiles_data(self.results_folder, metadata, [profile_key], index)
         image = images[profile_key]
 
         return Curve(
@@ -363,7 +365,7 @@ class GlobalSensitivityAnalysisResults:
             timeset=read_uq_time_set(
                 result_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
             ),
-            coefficients=read_global_sensitivity_coefficients(metadata),
+            coefficients=read_global_sensitivity_coefficients(result_dir, metadata),
             metadata=metadata,
         )
 
@@ -420,9 +422,9 @@ class HistoryMatchingDeterministicResults(_BaseHistoryMatchingResults):
 
         return cls(
             deterministic_values=read_history_matching_result(
-                metadata, "HM-deterministic"
+                result_dir, metadata, "HM-deterministic"
             ),
-            historic_data_curves=_read_curves_data(metadata),
+            historic_data_curves=_read_curves_data(result_dir, metadata),
             metadata=metadata,
         )
 
@@ -441,9 +443,9 @@ class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
 
         return cls(
             probabilistic_distributions=read_history_matching_result(
-                metadata, "HM-probabilistic"
+                result_dir, metadata, "HM-probabilistic"
             ),
-            historic_data_curves=_read_curves_data(metadata),
+            historic_data_curves=_read_curves_data(result_dir, metadata),
             metadata=metadata,
         )
 
@@ -461,9 +463,10 @@ class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
 
 
 def _read_curves_data(
+    result_directory: Path,
     metadata: HistoryMatchingMetadata,
 ) -> dict[str, tuple[HistoricDataCurveMetadata, Curve]]:
-    raw_curves = read_history_matching_historic_data_curves(metadata)
+    raw_curves = read_history_matching_historic_data_curves(result_directory, metadata)
     curves_info = metadata.historic_data_curve_infos or []
     curves_info_map = {info.curve_id: info for info in curves_info}
 
@@ -494,7 +497,7 @@ class UncertaintyPropagationResults:
 
         return cls(
             timeset=read_uq_time_set(result_dir, UNCERTAINTY_PROPAGATION_GROUP_NAME),
-            results=read_uncertainty_propagation_results(metadata),
+            results=read_uncertainty_propagation_results(result_dir, metadata),
             metadata=metadata,
         )
 
