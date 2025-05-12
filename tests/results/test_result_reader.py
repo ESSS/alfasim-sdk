@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import attr
@@ -139,9 +138,16 @@ def test_logs(results: Results) -> None:
     log_calc = results.log_calc
     assert "NEW TIME-STEP" in log_calc.read_text()
 
-    status = json.loads(results.status.read_text())
+
+def test_status(results: Results, datadir: Path) -> None:
+    # Status exist.
+    status = results.status
     assert status["state"] == "FINISHED"
     assert status["progress"] == 1.0
+
+    # Status do not exist, should be None.
+    non_existent_results = Results(datadir / "foo.data")
+    assert non_existent_results.status is None
 
 
 def test_metadata_string():
