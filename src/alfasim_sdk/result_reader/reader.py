@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sqlite3
+from contextlib import closing
 from pathlib import Path
 from typing import Any, Callable, Dict, Sequence, Tuple, Union
 
@@ -111,8 +113,19 @@ class Results:
         return self._metadata
 
     @property
-    def status(self) -> Path:
-        return self.data_folder / "status/status.json"
+    def status(self) -> dict[str, Any] | None:
+        communication_db = self.data_folder / "communication.sqlite"
+        if not communication_db.is_file():
+            return None
+
+        sql = "SELECT * FROM status ORDER BY creation_timestamp DESC, _id DESC;"
+        conn = sqlite3.connect(communication_db)
+        conn.row_factory = (
+            sqlite3.Row
+        )  # Use Row factory so the result will come as a dict.
+        with closing(conn):
+            with conn:
+                return conn.execute(sql).fetchone()
 
     @property
     def log(self) -> Path:
