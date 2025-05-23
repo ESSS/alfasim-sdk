@@ -1013,6 +1013,8 @@ pump_equipment_description_schema = Map(
         Optional("table"): table_pump_description_schema,
         Optional("speed_curve"): speed_curve_description_schema,
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
+        Optional("speed_type"): Enum(['constant', 'curve']),
+        Optional("constant_speed"): Map({"value": Float(), "unit": Str()}),
         Optional("esp_table"): table_pump_description_schema,
         Optional("esp_speed_input_type"): Enum(['constant', 'curve']),
         Optional("esp_speed"): Map({"value": Float(), "unit": Str()}),
@@ -1223,4 +1225,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (checksum: 6e754d44887f59fc28d5c6908f85925c)
+# [[[end]]] (checksum: 0cbf372d9c178328b76aeda61906177f)
