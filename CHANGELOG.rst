@@ -2,6 +2,10 @@
 CHANGELOG
 =========
 
+1.2.0 (Unreleased)
+==================
+* Add two new properties for PumpEquipmentDescription: speed_type and constant_speed.
+
 1.1.0 (Unreleased)
 ==================
 
