@@ -418,6 +418,15 @@ class PumpThermalEfficiencyModel(Enum):
     PumpEfficiencyCurve = "efficiency_curve_based"
 
 
+class PumpSpeedType(Enum):
+    """
+    Defines the type of speed to be used by a pump equipment.
+    """
+
+    Constant = "constant"
+    Curve = "curve"
+
+
 class OutputAttachmentLocation(Enum):
     """
     Output Attachment Location will tell the location in which this attachment's data should be retrieved from.

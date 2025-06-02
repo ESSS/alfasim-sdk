@@ -767,7 +767,10 @@ class PumpEquipmentDescription:
     speed_curve_interpolation_type = attrib_enum(
         default=constants.InterpolationType.Constant
     )
-
+    speed_type = attrib_enum(default=constants.PumpSpeedType.Constant)
+    constant_speed = attrib_scalar(
+        category="angle per time", default=Scalar(500, "rpm")
+    )
     # Electric Submersible Pump
     esp_table = attrib_instance(TablePumpDescription)
     # [[[cog
