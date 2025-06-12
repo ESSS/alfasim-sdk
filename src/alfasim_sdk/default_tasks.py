@@ -11,6 +11,8 @@ from hookman.hookman_generator import HookManGenerator
 from invoke import Collection, Exit, Task, task
 from strictyaml.ruamel import YAML
 
+from alfasim_sdk._internal.alfasim_sdk_utils import get_required_python_version
+
 sdk_ns = Collection()
 
 
@@ -229,23 +231,24 @@ def package_only(ctx, package_name="", dst=""):
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
     from alfasim_sdk._internal.alfasim_sdk_utils import (
         get_current_version,
-        get_extras_default_required_version,
+        get_required_sdk_version,
     )
-    from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
 
     plugin_id = str(plugin_dir.name)
     if not package_name:
         package_name = plugin_id
     package_name_suffix = f"sdk-{get_current_version()}"
-    extras_defaults = {
-        EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
+    requirements = {
+        "alfasim_sdk": get_required_sdk_version(),
+        "python": get_required_python_version(),
     }
+
     hm.generate_plugin_package(
         package_name,
         plugin_dir,
         dst,
-        extras_defaults=extras_defaults,
         package_name_suffix=package_name_suffix,
+        requirements=requirements,
     )
 
 

@@ -6,6 +6,11 @@ from textwrap import dedent
 import click
 from hookman.hookman_generator import HookManGenerator
 
+from alfasim_sdk._internal.alfasim_sdk_utils import (
+    get_required_python_version,
+    get_required_sdk_version,
+)
+
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 plugin_dir_option = click.option(
@@ -104,6 +109,11 @@ def new(dst, caption, plugin_id, author_name, author_email):
         "}",
     ]
 
+    requirements = {
+        "alfasim_sdk": get_required_sdk_version(),
+        "python": get_required_python_version(),
+    }
+
     hm.generate_plugin_template(
         caption,
         plugin_id,
@@ -113,6 +123,7 @@ def new(dst, caption, plugin_id, author_name, author_email):
         extra_includes=alfasim_sdk_include,
         extra_body_lines=default_impls_for_hooks,
         exclude_hooks=["HOOK_FINALIZE", "HOOK_INITIALIZE"],
+        requirements=requirements,
     )
 
     source_folder = dst / plugin_id / "src"
