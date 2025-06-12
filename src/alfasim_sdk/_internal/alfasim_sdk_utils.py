@@ -94,6 +94,7 @@ def get_required_sdk_version() -> str:
     """
     return f">={get_current_version()}"
 
+
 def get_required_python_version() -> str:
     """
     Return the required python version to be included in plugins metadata when using

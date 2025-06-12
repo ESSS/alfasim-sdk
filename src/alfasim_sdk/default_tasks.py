@@ -12,6 +12,7 @@ from invoke import Collection, Exit, Task, task
 from strictyaml.ruamel import YAML
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_required_python_version
+
 sdk_ns = Collection()
 
 
@@ -237,7 +238,10 @@ def package_only(ctx, package_name="", dst=""):
     if not package_name:
         package_name = plugin_id
     package_name_suffix = f"sdk-{get_current_version()}"
-    requirements = {"alfasim_sdk": get_required_sdk_version(), "python": get_required_python_version()}
+    requirements = {
+        "alfasim_sdk": get_required_sdk_version(),
+        "python": get_required_python_version(),
+    }
 
     hm.generate_plugin_package(
         package_name,
