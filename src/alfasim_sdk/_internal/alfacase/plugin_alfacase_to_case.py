@@ -150,7 +150,9 @@ def get_case_description_attribute_loader_dict_for_plugin(
     """
     plugin_id = load_value("name", alfacase_content)
     plugin_version = load_value("version", alfacase_content)
-    data_structure: list[type] | None = load_plugin_data_structure(plugin_id, plugin_version)
+    data_structure: list[type] | None = load_plugin_data_structure(
+        plugin_id, plugin_version
+    )
     if data_structure is None:
         return None
     else:
@@ -195,7 +197,9 @@ def import_module(path: Path) -> ModuleType:
     return module
 
 
-def load_plugin_data_structure(plugin_id: str, plugin_version: str) -> list[type] | None:
+def load_plugin_data_structure(
+    plugin_id: str, plugin_version: str
+) -> list[type] | None:
     """
     Obtain the models for a given plugin.
     """
