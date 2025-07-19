@@ -5,6 +5,8 @@ CHANGELOG
 1.2.0 (Unreleased)
 ==================
 
+* Add ``version`` property for ``PluginsDescription``
+
 1.1.0 (2025-05-28)
 ==================
 
