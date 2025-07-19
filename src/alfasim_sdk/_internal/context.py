@@ -23,6 +23,7 @@ class PluginInfo:
 
     caption: str = attr.attrib(validator=non_empty_str)
     name: str = attr.attrib(validator=non_empty_str)
+    version: str = attr.attrib(validator=non_empty_str)
     enabled: bool = attr.attrib(validator=instance_of(bool))
     models: List[str] = attr.attrib(validator=list_of_strings)
 
