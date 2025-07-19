@@ -82,7 +82,7 @@ def abx_plugin_source(datadir: Path) -> Path:
     creative name "abx" plugin.
     """
     plugin_root = datadir / "test_plugins"
-    plugin_file = plugin_root / "abx/artifacts/abx.py"
+    plugin_file = plugin_root / "abx-1.0.0/artifacts/abx.py"
     plugin_file.parent.mkdir(parents=True)
     plugin_file.write_text(
         textwrap.dedent(
@@ -128,7 +128,7 @@ def importable_plugin_source(datadir: Path) -> Path:
     creative name "abx" plugin.
     """
     plugin_root = datadir / "test_plugins"
-    plugin_file = plugin_root / "importable/artifacts/importable.py"
+    plugin_file = plugin_root / "importable-1.0.0/artifacts/importable.py"
     plugin_file.parent.mkdir(parents=True)
     plugin_file.write_text(
         textwrap.dedent(

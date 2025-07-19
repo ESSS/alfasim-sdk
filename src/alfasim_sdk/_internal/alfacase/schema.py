@@ -510,6 +510,7 @@ pipe_segments_description_schema = Map(
 plugin_description_schema = Map(
     {
         Optional("name"): Str(),
+        Optional("version"): Str(),
         Optional("gui_models"): MapPattern(Str(), Any()),
         Optional("is_enabled"): Bool(),
     }
@@ -1225,4 +1226,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: DL83LZwXgy)
+# [[[end]]] (sum: jDukYWvpWK) (sum: DL83LZwXgy)
