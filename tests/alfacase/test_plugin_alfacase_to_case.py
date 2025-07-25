@@ -34,7 +34,7 @@ from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
 def test_get_plugin_module_candidates(monkeypatch):
     monkeypatch.setenv("ALFASIM_PLUGINS_DIR", f"foo{os.path.pathsep}bar")
     monkeypatch.setattr(Path, "home", lambda: Path("xxx"))
-    candidates = get_plugin_module_candidates("cool_stuff","1.0.0")
+    candidates = get_plugin_module_candidates("cool_stuff", "1.0.0")
     assert candidates == [
         Path("foo/cool_stuff-1.0.0/artifacts/cool_stuff.py"),
         Path("bar/cool_stuff-1.0.0/artifacts/cool_stuff.py"),
@@ -54,7 +54,7 @@ class TestLoadPluginDataStructure:
         with pytest.raises(ModuleNotFoundError):
             import alfasim_sdk_plugins.importable  # noqa
 
-        models = load_plugin_data_structure("importable","1.0.0")
+        models = load_plugin_data_structure("importable", "1.0.0")
         assert [m.__name__ for m in models] == ["Foo"]
 
         import alfasim_sdk_plugins.importable  # noqa
@@ -108,7 +108,7 @@ class TestLoadPluginDataStructure:
             plugin_alfacase_to_case, "import_module", new=mock_import_module
         )
 
-        load_plugin_data_structure("importable","1.0.0")
+        load_plugin_data_structure("importable", "1.0.0")
 
         assert bad_namespace not in alfasim_sdk_plugins.__path__
         assert good_namespace in alfasim_sdk_plugins.__path__
