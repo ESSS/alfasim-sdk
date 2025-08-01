@@ -5,6 +5,9 @@ CHANGELOG
 1.2.0 (Unreleased)
 ==================
 
+* Add ``version`` property for ``PluginsDescription``
+* **Breaking Change**: Add ``alfasim_get_version`` GUI specification hook to be implemented by plugins.
+
 1.1.0 (2025-05-28)
 ==================
 
