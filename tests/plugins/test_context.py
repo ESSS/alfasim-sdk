@@ -26,27 +26,55 @@ def test_plugin_info():
 
     error_msg = "'name' must be 'str' (got 1 that is a 'int')"
     with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PluginInfo(name=1, caption="Caption", enabled="True", models="Anything", version='1.0.0')
+        PluginInfo(
+            name=1,
+            caption="Caption",
+            enabled="True",
+            models="Anything",
+            version="1.0.0",
+        )
 
     error_msg = "'enabled' must be <class 'bool'> (got 'True' that is a <class 'str'>)."
     with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PluginInfo(name="Acme", caption="Caption", enabled="True", models="Anything", version='2.0.0')
+        PluginInfo(
+            name="Acme",
+            caption="Caption",
+            enabled="True",
+            models="Anything",
+            version="2.0.0",
+        )
 
     error_msg = (
         "'models' must be <class 'list'> (got 'Anything' that is a <class 'str'>)."
     )
     with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PluginInfo(name="Acme", caption="Caption", enabled=True, models="Anything", version='1.1.0')
+        PluginInfo(
+            name="Acme",
+            caption="Caption",
+            enabled=True,
+            models="Anything",
+            version="1.1.0",
+        )
 
     error_msg = "'models' must be <class 'str'> (got 1 that is a <class 'int'>)."
     with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PluginInfo(name="Acme", caption="Caption", enabled=True, models=[1, 2, 3], version='1.0.0')
+        PluginInfo(
+            name="Acme",
+            caption="Caption",
+            enabled=True,
+            models=[1, 2, 3],
+            version="1.0.0",
+        )
 
     error_msg = "'version' must be 'str' (got 2 that is a 'int')"
     with pytest.raises(TypeError, match=re.escape(error_msg)):
-        PluginInfo(name="Acme", caption="Caption", enabled=True, models=[1, 2, 3], version=2)
+        PluginInfo(
+            name="Acme", caption="Caption", enabled=True, models=[1, 2, 3], version=2
+        )
 
-    PluginInfo(name="Acme", caption="Caption", enabled=True, models=["1", "2"], version='1.0.0')
+    PluginInfo(
+        name="Acme", caption="Caption", enabled=True, models=["1", "2"], version="1.0.0"
+    )
 
 
 def test_pipeline_info():
