@@ -2,7 +2,7 @@ import itertools
 from functools import partial
 from pathlib import Path, PurePosixPath
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Type, Union, Sequence
+from typing import Any, Callable, Dict, List, Optional, Sequence, Type, Union
 
 import attr
 from barril.units import Array, Scalar
@@ -150,8 +150,10 @@ def get_case_description_attribute_loader_dict_for_plugin(
     but designed to load plugins data (class info is not readily available).
     """
     plugin_id = load_value("name", alfacase_content)
-    plugin_version =load_value("version", alfacase_content)
-    data_structure: list[type] | None = load_plugin_data_structure(plugin_id, Version(plugin_version))
+    plugin_version = load_value("version", alfacase_content)
+    data_structure: list[type] | None = load_plugin_data_structure(
+        plugin_id, Version(plugin_version)
+    )
     if data_structure is None:
         return None
     else:
@@ -163,7 +165,9 @@ def get_case_description_attribute_loader_dict_for_plugin(
         }
 
 
-def get_plugin_module_candidates(plugin_id: str, plugin_version: Version) -> Sequence[Path]:
+def get_plugin_module_candidates(
+    plugin_id: str, plugin_version: Version
+) -> Sequence[Path]:
     """
     List the possible module paths to the plugins models.
     """
@@ -196,7 +200,9 @@ def import_module(path: Path) -> ModuleType:
     return module
 
 
-def load_plugin_data_structure(plugin_id: str, plugin_version: Version) -> list[type] | None:
+def load_plugin_data_structure(
+    plugin_id: str, plugin_version: Version
+) -> list[type] | None:
     """
     Obtain the models for a given plugin.
     """

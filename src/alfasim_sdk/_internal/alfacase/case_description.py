@@ -54,7 +54,6 @@ from .case_description_attributes import (
 
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
-
     # The plugin id.
     name: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     # The current version of plugin.
