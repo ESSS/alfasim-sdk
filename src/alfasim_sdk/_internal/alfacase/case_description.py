@@ -54,21 +54,13 @@ from .case_description_attributes import (
 
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
-    """
-    :ivar name:
-        The plugin id.
-
-    :ivar gui_models:
-        The plugin input format depends on the specific plugin implementation.
-
-    :ivar is_enabled:
-        A flag indicating if this plugin is enabled.
-
-    .. include:: /alfacase_definitions/PluginDescription.txt
-    """
-
-    name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    gui_models: Dict[str, Any] = attr.ib(default=attr.Factory(dict))
+    # The plugin id.
+    name: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    # The current version of plugin.
+    version: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    # The plugin input format depends on the specific plugin implementation.
+    gui_models: dict[str, Any] = attr.ib(default=attr.Factory(dict))
+    # A flag indicating if this plugin is enabled.
     is_enabled: bool = attr.ib(default=True)
 
 

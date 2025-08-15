@@ -2,10 +2,11 @@ import itertools
 from functools import partial
 from pathlib import Path, PurePosixPath
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Type, Union
+from typing import Any, Callable, Dict, List, Optional, Sequence, Type, Union
 
 import attr
 from barril.units import Array, Scalar
+from packaging.version import Version
 from typing_extensions import TypeGuard
 
 from alfasim_sdk import BaseField
@@ -149,20 +150,26 @@ def get_case_description_attribute_loader_dict_for_plugin(
     but designed to load plugins data (class info is not readily available).
     """
     plugin_id = load_value("name", alfacase_content)
-    data_structure: Optional[List[Type]] = load_plugin_data_structure(plugin_id)
+    plugin_version = load_value("version", alfacase_content)
+    data_structure: list[type] | None = load_plugin_data_structure(
+        plugin_id, Version(plugin_version)
+    )
     if data_structure is None:
         return None
     else:
         return {
             "name": load_value,
+            "version": load_value,
             "gui_models": partial(load_gui_models, data_structure=data_structure),
             "is_enabled": load_value,
         }
 
 
-def get_plugin_module_candidates(plugin_id: str) -> List[Path]:
+def get_plugin_module_candidates(
+    plugin_id: str, plugin_version: Version
+) -> Sequence[Path]:
     """
-    List the possible module paths the the plugins models.
+    List the possible module paths to the plugins models.
     """
     from os import environ
     from os.path import pathsep
@@ -174,7 +181,7 @@ def get_plugin_module_candidates(plugin_id: str) -> List[Path]:
         alfasim_plugins_dirs = alfasim_plugins_dir_env_var.split(pathsep)
 
     alfasim_plugins_dirs.append(Path.home() / ".alfasim_plugins")
-    asset_suffix = f"{plugin_id}/artifacts/{plugin_id}.py"
+    asset_suffix = f"{plugin_id}-{plugin_version}/artifacts/{plugin_id}.py"
     return [Path(p) / asset_suffix for p in alfasim_plugins_dirs]
 
 
@@ -193,13 +200,15 @@ def import_module(path: Path) -> ModuleType:
     return module
 
 
-def load_plugin_data_structure(plugin_id: str) -> Optional[List[Type]]:
+def load_plugin_data_structure(
+    plugin_id: str, plugin_version: Version
+) -> list[type] | None:
     """
     Obtain the models for a given plugin.
     """
     import alfasim_sdk_plugins
 
-    for candidate in get_plugin_module_candidates(plugin_id):
+    for candidate in get_plugin_module_candidates(plugin_id, plugin_version):
         if candidate.is_file():
             # Update the "alfasim_sdk_plugins" namespace.
             namespace_package_str = None
