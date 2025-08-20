@@ -26,25 +26,14 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 )
 from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
     dump_file_contents_and_update_plugins,
-    get_plugin_module_candidates,
     load_plugin_data_structure,
+    obtain_alfasim_plugins_dir
 )
-
-
-def test_get_plugin_module_candidates(monkeypatch):
-    monkeypatch.setenv("ALFASIM_PLUGINS_DIR", f"foo{os.path.pathsep}bar")
-    monkeypatch.setattr(Path, "home", lambda: Path("xxx"))
-    candidates = get_plugin_module_candidates("cool_stuff", "1.0.0")
-    assert candidates == [
-        Path("foo/cool_stuff-1.0.0/artifacts/cool_stuff.py"),
-        Path("bar/cool_stuff-1.0.0/artifacts/cool_stuff.py"),
-        Path("xxx/.alfasim_plugins/cool_stuff-1.0.0/artifacts/cool_stuff.py"),
-    ]
-
 
 class TestLoadPluginDataStructure:
     def test_without_importable_python(self, abx_plugin: None) -> None:
-        models = load_plugin_data_structure("abx", "1.0.0")
+        alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+        models = load_plugin_data_structure("abx", "1.0.0", alfasim_plugins_dir)
         assert [m.__name__ for m in models] == ["AContainer", "BContainer"]
 
         with pytest.raises(ModuleNotFoundError):
@@ -54,7 +43,8 @@ class TestLoadPluginDataStructure:
         with pytest.raises(ModuleNotFoundError):
             import alfasim_sdk_plugins.importable  # noqa
 
-        models = load_plugin_data_structure("importable", "1.0.0")
+        alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+        models = load_plugin_data_structure("importable", "1.0.0", alfasim_plugins_dir)
         assert [m.__name__ for m in models] == ["Foo"]
 
         import alfasim_sdk_plugins.importable  # noqa
@@ -107,8 +97,8 @@ class TestLoadPluginDataStructure:
         mocker.patch.object(
             plugin_alfacase_to_case, "import_module", new=mock_import_module
         )
-
-        load_plugin_data_structure("importable", "1.0.0")
+        alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+        load_plugin_data_structure("importable", "1.0.0", alfasim_plugins_dir)
 
         assert bad_namespace not in alfasim_sdk_plugins.__path__
         assert good_namespace in alfasim_sdk_plugins.__path__
@@ -1073,3 +1063,82 @@ def test_load_not_installed_plugin(datadir):
 
     case = convert_alfacase_to_description(alfacase)
     assert case.plugins == []
+
+def test_load_plugin_without_version(datadir: Path, abx_plugin: None, monkeypatch: MonkeyPatch) -> None:
+    """
+    Test to ensure the backward compatibility in case of version is not specifeid in the
+    .alfacase file.
+    """
+    plugins_root = datadir / "test_plugins"
+    monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(plugins_root))
+
+    assets = plugins_root / "abx-1.0.0" / "assets"
+    assets.mkdir()
+
+    plugin_yaml = assets /"plugin.yaml"
+    plugin_yaml.touch()
+
+    alfacase = datadir / "test.alfacase"
+    alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abx
+                is_enabled: False
+                gui_models:
+                    AContainer:
+                        _children_list:
+                        -   asd: aaa
+                        -   qwe: sss
+                    BContainer:
+                        _children_list:
+                        -   qwe: zzz
+                        -   asd: xxx
+            """
+        )
+    )
+    case = convert_alfacase_to_description(alfacase)
+    assert case.plugins == [
+        PluginDescription(
+            name="abx",
+            version=None,
+            is_enabled=False,
+            gui_models={
+                "AContainer": {
+                    "_children_list": [
+                        {"asd": "aaa"},
+                        {"qwe": "sss"},
+                    ],
+                },
+                "BContainer": {
+                    "_children_list": [
+                        {"qwe": "zzz"},
+                        {"asd": "xxx"},
+                    ],
+                },
+            },
+        ),
+    ]
+
+    wrong_alfacase = datadir / "wrong.alfacase"
+    wrong_alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abs
+                is_enabled: False
+                gui_models:
+                    AContainer:
+                        _children_list:
+                        -   asd: aaa
+                        -   qwe: sss
+                    BContainer:
+                        _children_list:
+                        -   qwe: zzz
+                        -   asd: xxx
+            """
+        )
+    )
+    expected_message = "Plugin 'abs' is not installed"
+    with pytest.raises(RuntimeError, match=expected_message):
+        case = convert_alfacase_to_description(wrong_alfacase)

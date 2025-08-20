@@ -5,6 +5,7 @@ CHANGELOG
 1.2.0 (Unreleased)
 ==================
 
+* Add backward compatibility for alfacase files which does not specify the version in plugins.
 * Add ``version`` property for ``PluginsDescription``
 * **Breaking Change**: Add ``alfasim_get_version`` GUI specification hook to be implemented by plugins.
 
