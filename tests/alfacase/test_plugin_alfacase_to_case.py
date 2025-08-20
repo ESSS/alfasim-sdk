@@ -27,8 +27,9 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
     dump_file_contents_and_update_plugins,
     load_plugin_data_structure,
-    obtain_alfasim_plugins_dir
+    obtain_alfasim_plugins_dir,
 )
+
 
 class TestLoadPluginDataStructure:
     def test_without_importable_python(self, abx_plugin: None) -> None:
@@ -1064,7 +1065,10 @@ def test_load_not_installed_plugin(datadir):
     case = convert_alfacase_to_description(alfacase)
     assert case.plugins == []
 
-def test_load_plugin_without_version(datadir: Path, abx_plugin: None, monkeypatch: MonkeyPatch) -> None:
+
+def test_load_plugin_without_version(
+    datadir: Path, abx_plugin: None, monkeypatch: MonkeyPatch
+) -> None:
     """
     Test to ensure the backward compatibility in case of version is not specifeid in the
     .alfacase file.
@@ -1075,7 +1079,7 @@ def test_load_plugin_without_version(datadir: Path, abx_plugin: None, monkeypatc
     assets = plugins_root / "abx-1.0.0" / "assets"
     assets.mkdir()
 
-    plugin_yaml = assets /"plugin.yaml"
+    plugin_yaml = assets / "plugin.yaml"
     plugin_yaml.touch()
 
     alfacase = datadir / "test.alfacase"

@@ -171,6 +171,7 @@ def get_case_description_attribute_loader_dict_for_plugin(
             "is_enabled": load_value,
         }
 
+
 def obtain_alfasim_plugins_dir() -> Sequence[Path | str]:
     from os import environ
     from os.path import pathsep
@@ -185,7 +186,10 @@ def obtain_alfasim_plugins_dir() -> Sequence[Path | str]:
 
     return alfasim_plugins_dirs
 
-def obtain_most_current_version(plugin_id: str, alfasim_plugins_dirs: Sequence[Path | str]) -> Version:
+
+def obtain_most_current_version(
+    plugin_id: str, alfasim_plugins_dirs: Sequence[Path | str]
+) -> Version:
     """
     Obtain the most current version of the plugin.
 
@@ -234,6 +238,7 @@ def load_plugin_data_structure(
     Obtain the models for a given plugin.
     """
     import alfasim_sdk_plugins
+
     asset_suffix = f"{plugin_id}-{plugin_version}/artifacts/{plugin_id}.py"
     plugin_module_candidates = [Path(p) / asset_suffix for p in alfasim_plugins_dirs]
     for candidate in plugin_module_candidates:
