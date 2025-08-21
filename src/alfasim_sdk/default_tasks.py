@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 from typing import Any, Union
 from zipfile import ZipFile
+
 from colorama import Fore, Style
 from hookman.hookman_generator import HookManGenerator
 from invoke import Collection, Exit, Task, task
@@ -340,7 +341,7 @@ def install_plugin(ctx, install_dir=None):
         )
         raise Exit(code=1)
     yaml = YAML(typ="safe", pure=True)
-    plugin_version = yaml.load(plugin_yml)['version']
+    plugin_version = yaml.load(plugin_yml)["version"]
 
     hm_plugins_files = list(plugin_folder.glob("*.hmplugin"))
     if len(hm_plugins_files) != 1:
