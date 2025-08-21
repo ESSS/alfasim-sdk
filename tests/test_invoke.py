@@ -245,7 +245,10 @@ def create_fake_hmplugin(plugin_dir: Path, monkeypatch: MonkeyPatch) -> Path:
 
     with ZipFile(hmplugin_filename, "w") as package_file:
         for file in fake_files:
-            file.write_text(data="", encoding="utf-8")
+            if file.suffix == ".yaml":
+                file.write_text(data="version: 1.0.0")
+            else:
+                file.write_text(data="", encoding="utf-8")
             package_file.write(file, arcname=file.relative_to(plugin_dir))
 
     return hmplugin_filename
@@ -262,9 +265,10 @@ def test_install_plugin(new_plugin_dir: Path, tmp_path: Path, monkeypatch: Monke
     )
 
     monkeypatch.chdir(install_dir)
+    plugin_dir = f"{plugin_id}-1.0.0"
     for file in fake_hmplugin_files:
         relative_path = Path(
-            plugin_id + "/" + file.parent.stem + "/" + file.stem + file.suffix
+            plugin_dir + "/" + file.parent.stem + "/" + file.stem + file.suffix
         )
         assert relative_path.is_file()
 
@@ -283,9 +287,10 @@ def test_install_plugin_user_folder(
     subprocess.run([f"{invoke_cmd}", "install-plugin"], env=env)
 
     monkeypatch.chdir(install_dir)
+    plugin_dir = f"{plugin_id}-1.0.0"
     for file in fake_hmplugin_files:
         relative_path = Path(
-            plugin_id + "/" + file.parent.stem + "/" + file.stem + file.suffix
+            plugin_dir + "/" + file.parent.stem + "/" + file.stem + file.suffix
         )
         assert relative_path.is_file()
 
@@ -342,9 +347,10 @@ def test_reinstall_plugin(
     )
 
     monkeypatch.chdir(install_dir)
+    plugin_dir = f"{plugin_id}-1.0.0"
     for file in fake_hmplugin_files:
         relative_path = Path(
-            plugin_id + "/" + file.parent.stem + "/" + file.stem + file.suffix
+            plugin_dir + "/" + file.parent.stem + "/" + file.stem + file.suffix
         )
         assert relative_path.is_file()
 

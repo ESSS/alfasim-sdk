@@ -332,6 +332,17 @@ def install_plugin(ctx, install_dir=None):
     plugin_folder = Path(ctx.config._project_prefix)
     plugin_id = plugin_folder.name
 
+    plugin_yml = plugin_folder / "assets" / "plugin.yaml"
+    if not plugin_yml.is_file():
+        print_message(
+            f"The 'plugin.yaml' not found in {plugin_folder}.",
+            color=Fore.RED,
+            bright=True,
+        )
+        raise Exit(code=1)
+    yaml = YAML(typ="safe", pure=True)
+    plugin_version = yaml.load(plugin_yml)["version"]
+
     hm_plugins_files = list(plugin_folder.glob("*.hmplugin"))
     if len(hm_plugins_files) != 1:
         print_message(
@@ -362,11 +373,12 @@ def install_plugin(ctx, install_dir=None):
         color=Fore.YELLOW,
         bright=True,
     )
+    plugin_dir = f"{plugin_id}-{plugin_version}"
     with ZipFile(hm_plugin_path) as plugin_file_zip:
-        plugin_file_zip.extractall(os.path.join(install_dir, plugin_id))
+        plugin_file_zip.extractall(os.path.join(install_dir, plugin_dir))
 
     print_message(
-        f"Successfully installed plugin {plugin_id} into {install_dir}",
+        f"Successfully installed plugin {plugin_id}-{plugin_version} into {install_dir}",
         color=Fore.GREEN,
         bright=True,
     )
