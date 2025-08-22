@@ -172,7 +172,7 @@ def obtain_alfasim_plugins_dir() -> Sequence[Path]:
     alfasim_plugins_dir_env_var = environ.get("ALFASIM_PLUGINS_DIR")
     alfasim_plugins_dirs = []
     if alfasim_plugins_dir_env_var is not None:
-        plugins_dir =  alfasim_plugins_dir_env_var.split(pathsep)
+        plugins_dir = alfasim_plugins_dir_env_var.split(pathsep)
         all_plugins_dir = [Path(dir) for dir in plugins_dir]
         alfasim_plugins_dirs.extend(all_plugins_dir)
 
