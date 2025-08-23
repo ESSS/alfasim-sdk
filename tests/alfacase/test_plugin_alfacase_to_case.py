@@ -34,7 +34,7 @@ from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
 class TestLoadPluginDataStructure:
     def test_without_importable_python(self, abx_plugin: None) -> None:
         alfasim_plugins_dir = obtain_alfasim_plugins_dir()
-        models = load_plugin_data_structure("abx", "1.0.0", alfasim_plugins_dir)
+        models = load_plugin_data_structure("abx", alfasim_plugins_dir)
         assert [m.__name__ for m in models] == ["AContainer", "BContainer"]
 
         with pytest.raises(ModuleNotFoundError):
@@ -45,7 +45,7 @@ class TestLoadPluginDataStructure:
             import alfasim_sdk_plugins.importable  # noqa
 
         alfasim_plugins_dir = obtain_alfasim_plugins_dir()
-        models = load_plugin_data_structure("importable", "1.0.0", alfasim_plugins_dir)
+        models = load_plugin_data_structure("importable", alfasim_plugins_dir)
         assert [m.__name__ for m in models] == ["Foo"]
 
         import alfasim_sdk_plugins.importable  # noqa
@@ -99,7 +99,7 @@ class TestLoadPluginDataStructure:
             plugin_alfacase_to_case, "import_module", new=mock_import_module
         )
         alfasim_plugins_dir = obtain_alfasim_plugins_dir()
-        load_plugin_data_structure("importable", "1.0.0", alfasim_plugins_dir)
+        load_plugin_data_structure("importable", alfasim_plugins_dir)
 
         assert bad_namespace not in alfasim_sdk_plugins.__path__
         assert good_namespace in alfasim_sdk_plugins.__path__
@@ -1143,6 +1143,3 @@ def test_load_plugin_without_version(
             """
         )
     )
-    expected_message = "Plugin 'abs' is not installed"
-    with pytest.raises(RuntimeError, match=expected_message):
-        case = convert_alfacase_to_description(wrong_alfacase)

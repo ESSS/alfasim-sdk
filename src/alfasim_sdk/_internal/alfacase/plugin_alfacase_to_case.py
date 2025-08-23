@@ -6,7 +6,6 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Type, Union
 
 import attr
 from barril.units import Array, Scalar
-from packaging.version import Version
 from typing_extensions import TypeGuard
 
 from alfasim_sdk import BaseField
@@ -152,14 +151,8 @@ def get_case_description_attribute_loader_dict_for_plugin(
     plugin_id = load_value("name", alfacase_content)
     alfasim_plugins_dir = obtain_alfasim_plugins_dir()
 
-    # Backward compatibility for DescriptionDocument which does not have a version specified.
-    try:
-        version = load_value("version", alfacase_content)
-    except KeyError:
-        version = obtain_most_current_version(plugin_id, alfasim_plugins_dir)
-
     data_structure: list[type] | None = load_plugin_data_structure(
-        plugin_id, version, alfasim_plugins_dir
+        plugin_id, alfasim_plugins_dir
     )
     if data_structure is None:
         return None
@@ -172,48 +165,20 @@ def get_case_description_attribute_loader_dict_for_plugin(
         }
 
 
-def obtain_alfasim_plugins_dir() -> Sequence[Path | str]:
+def obtain_alfasim_plugins_dir() -> Sequence[Path]:
     from os import environ
     from os.path import pathsep
 
     alfasim_plugins_dir_env_var = environ.get("ALFASIM_PLUGINS_DIR")
-    if alfasim_plugins_dir_env_var is None:
-        alfasim_plugins_dirs = []
-    else:
-        alfasim_plugins_dirs = alfasim_plugins_dir_env_var.split(pathsep)
+    alfasim_plugins_dirs = []
+    if alfasim_plugins_dir_env_var is not None:
+        plugins_dir = alfasim_plugins_dir_env_var.split(pathsep)
+        all_plugins_dir = [Path(dir) for dir in plugins_dir]
+        alfasim_plugins_dirs.extend(all_plugins_dir)
 
     alfasim_plugins_dirs.append(Path.home() / ".alfasim_plugins")
 
     return alfasim_plugins_dirs
-
-
-def obtain_most_current_version(
-    plugin_id: str, alfasim_plugins_dirs: Sequence[Path | str]
-) -> Version:
-    """
-    Obtain the most current version of the plugin.
-
-    :param plugin_id:
-        The id of plugin.
-
-    :param alfasim_plugins_dirs:
-        All directories which can contain alfasim plugins.
-    """
-    plugin_versions = []
-
-    for plugins_dir in alfasim_plugins_dirs:
-        if Path(plugins_dir).is_dir():
-            for dir in Path(plugins_dir).iterdir():
-                plugin_yaml = dir / "assets" / "plugin.yaml"
-                if plugin_yaml.is_file():
-                    id, version = dir.name.rsplit("-", maxsplit=1)
-                    if plugin_id == id:
-                        plugin_versions.append(Version(version))
-
-    if len(plugin_versions) == 0:
-        raise RuntimeError(f"Plugin '{plugin_id}' is not installed")
-
-    return max(plugin_versions)
 
 
 def import_module(path: Path) -> ModuleType:
@@ -232,15 +197,18 @@ def import_module(path: Path) -> ModuleType:
 
 
 def load_plugin_data_structure(
-    plugin_id: str, plugin_version: Version, alfasim_plugins_dirs: Sequence[Path]
+    plugin_id: str, alfasim_plugins_dirs: Sequence[Path]
 ) -> list[type] | None:
     """
     Obtain the models for a given plugin.
     """
     import alfasim_sdk_plugins
 
-    asset_suffix = f"{plugin_id}-{plugin_version}/artifacts/{plugin_id}.py"
-    plugin_module_candidates = [Path(p) / asset_suffix for p in alfasim_plugins_dirs]
+    module_name = f"{plugin_id}.py"
+    plugin_module_candidates = []
+    for plugins_dir in alfasim_plugins_dirs:
+        plugin_module_candidates.extend(plugins_dir.glob(f"*/artifacts/{module_name}"))
+
     for candidate in plugin_module_candidates:
         if candidate.is_file():
             # Update the "alfasim_sdk_plugins" namespace.
