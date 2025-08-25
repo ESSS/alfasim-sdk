@@ -66,6 +66,10 @@ class HydrodynamicModelType(Enum):
 
     - ThreeLayersNineFieldsGasOilWater - 'Multi-field, Unit Cell (gas-oil-water)':
         Full three phase gas oil water model. Three continuous fields and six dispersed fields.
+
+    - ThreeLayersSevenFieldsGasOilWater - 'Multi-field, Unit Cell (gas-oil-water), water in oil:
+        Three phase (gas, oil, and water) with two continuous layers (gas and oil), 3 dispersed fields (water in oil,
+        oil in gas and gas in oil) with all water dispersed in oil layer.
     """
 
     TwoFields = "hydrodynamic_model_2_fields"
@@ -74,8 +78,8 @@ class HydrodynamicModelType(Enum):
     FiveFieldsSolid = "hydrodynamic_model_5_fields_solid"  # Under Development
     FiveFieldsWater = "hydrodynamic_model_5_fields_water"  # Under Development
     FiveFieldsCO2 = "hydrodynamic_model_5_fields_co2"  # Under Development
-    ThreeLayersNoBubbleGasOilWater = (
-        "hydrodynamic_model_3_layers_no_bubble_gas_oil_water"  # Under Development
+    TwoLayersGasOilWater = (
+        "hydrodynamic_model_2_layers_gas_oil_3_phases_water_in_oil"  # Under Development
     )
     ThreeLayersWaterWithCO2 = (
         "hydrodynamic_model_3_layers_water_with_co2"  # Under Development
