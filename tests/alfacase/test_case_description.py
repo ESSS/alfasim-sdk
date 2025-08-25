@@ -46,25 +46,6 @@ def table_parameters_description(request):
     return request.param
 
 
-def test_physics_description_path_validator(tmp_path):
-    """
-    Ensure PhysicsDescription.restart_filepath only accepts created files
-    """
-    import re
-    from pathlib import Path
-
-    expected_error = re.escape(
-        f"'restart_filepath' must be {Path} (got '' that is a {str})."
-    )
-    with pytest.raises(TypeError, match=expected_error):
-        case_description.PhysicsDescription(restart_filepath="")
-
-    tmp_file = tmp_path / "tmp.txt"
-    tmp_file.touch()
-    assert case_description.PhysicsDescription(restart_filepath=tmp_file)
-    assert case_description.PhysicsDescription(restart_filepath=None)
-
-
 def test_cv_table_description():
     expected_msg = "Opening and Flow Coefficient must have the same size, got 2 items for flow_coefficient and 1 for opening"
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
@@ -354,28 +335,6 @@ def test_check_pvt_model_files_handling_white_space(default_case, tmp_path):
             default_model="PVT1", tables={"PVT1": f"{tmp_path / 'dummy.tab'}| PVT1"}
         ),
     )
-    case.ensure_valid_references()
-
-
-def test_check_restart_file_exists(default_case, tmp_path):
-    """Ensure that the method EnsureValidReferences from CaseDescription catches errors with invalid restart files."""
-    restart_file = tmp_path / "dummy.restart"
-    case = attr.evolve(
-        default_case,
-        physics=case_description.PhysicsDescription(
-            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
-            restart_filepath=restart_file,
-        ),
-    )
-    expected_error = re.escape(f"Restart file '{restart_file}' is not a valid file")
-
-    with pytest.raises(
-        InvalidReferenceError,
-        match=expected_error,
-    ):
-        case.ensure_valid_references()
-
-    restart_file.write_text("Restart file contents")
     case.ensure_valid_references()
 
 

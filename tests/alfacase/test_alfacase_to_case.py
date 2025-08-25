@@ -17,7 +17,6 @@ from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     get_array_loader,
     get_scalar_loader,
     load_mass_source_node_properties_description,
-    load_physics_description,
     load_pvt_models_description,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
@@ -69,73 +68,68 @@ class AlfacaseTestConfig:
         )
 
 
+class AlfacaseHelper:
+    def __init__(self, tmp_path) -> None:
+        self.tmp_path = Path(tmp_path)
+
+    def generate_description(
+        self,
+        alfacase_config: AlfacaseTestConfig,
+        remove_redundant_input_type_data: bool = False,
+    ):
+        """
+        Helper method to generate a "Description" from the given alfacase_config
+        """
+        alfacase_string = convert_description_to_alfacase(
+            alfacase_config.description_expected,
+            remove_redundant_input_type_data=remove_redundant_input_type_data,
+        )
+        alfacase_content = strictyaml.dirty_load(
+            yaml_string=alfacase_string,
+            schema=alfacase_config.schema,
+            allow_flow_style=True,
+        )
+
+        # 'LoadPvtModelsDescription' is special case and the DescriptionDocument doesn't need a FakeKey
+        skip_dict = alfacase_config.load_function_name == "load_pvt_models_description"
+
+        if alfacase_config.is_sequence:
+            alfacase_content = [alfacase_content]
+        elif alfacase_config.is_dict and not skip_dict:
+            alfacase_content = YAML(CommentedMap({YAML("FakeKey"): alfacase_content}))
+
+        description_document = DescriptionDocument(
+            content=alfacase_content, file_path=self.tmp_path / "test_case.alfacase"
+        )
+        if hasattr(alfacase_to_case, alfacase_config.load_function_name):
+            loader = getattr(alfacase_to_case, alfacase_config.load_function_name)
+        else:
+            loader = alfacase_to_case.get_instance_loader(
+                class_=alfacase_config.description_expected.__class__
+            )
+
+        return loader(description_document)
+
+    def ensure_description_has_all_properties(
+        self, expected_description_class, obtained_description_obj
+    ):
+        """
+        Helper method that check if all attributes from the original class are present on
+        the generated case.
+        """
+        all_keys = attr.fields_dict(expected_description_class).keys()
+        obtained_keys = attr.asdict(obtained_description_obj).keys()
+
+        expected_keys = {key for key in all_keys if key not in IGNORED_PROPERTIES}
+        obtained_keys = {key for key in obtained_keys if key not in IGNORED_PROPERTIES}
+
+        assert expected_keys == obtained_keys, (
+            f"Error: missing the following key(s): {set(expected_keys).symmetric_difference(set(obtained_keys))}"
+        )
+
+
 @pytest.fixture
-def alfacase_to_case_helper(tmp_path):
-    class AlfacaseHelper:
-        def __init__(self, tmp_path) -> None:
-            self.tmp_path = Path(tmp_path)
-
-        def generate_description(
-            self,
-            alfacase_config: AlfacaseTestConfig,
-            remove_redundant_input_type_data: bool = False,
-        ):
-            """
-            Helper method to generate a "Description" from the given alfacase_config
-            """
-            alfacase_string = convert_description_to_alfacase(
-                alfacase_config.description_expected,
-                remove_redundant_input_type_data=remove_redundant_input_type_data,
-            )
-            alfacase_content = strictyaml.dirty_load(
-                yaml_string=alfacase_string,
-                schema=alfacase_config.schema,
-                allow_flow_style=True,
-            )
-
-            # 'LoadPvtModelsDescription' is special case and the DescriptionDocument doesn't need a FakeKey
-            skip_dict = (
-                alfacase_config.load_function_name == "load_pvt_models_description"
-            )
-
-            if alfacase_config.is_sequence:
-                alfacase_content = [alfacase_content]
-            elif alfacase_config.is_dict and not skip_dict:
-                alfacase_content = YAML(
-                    CommentedMap({YAML("FakeKey"): alfacase_content})
-                )
-
-            description_document = DescriptionDocument(
-                content=alfacase_content, file_path=self.tmp_path / "test_case.alfacase"
-            )
-            if hasattr(alfacase_to_case, alfacase_config.load_function_name):
-                loader = getattr(alfacase_to_case, alfacase_config.load_function_name)
-            else:
-                loader = alfacase_to_case.get_instance_loader(
-                    class_=alfacase_config.description_expected.__class__
-                )
-
-            return loader(description_document)
-
-        def ensure_description_has_all_properties(
-            self, expected_description_class, obtained_description_obj
-        ):
-            """
-            Helper method that check if all attributes from the original class are present on
-            the generated case.
-            """
-            all_keys = attr.fields_dict(expected_description_class).keys()
-            obtained_keys = attr.asdict(obtained_description_obj).keys()
-
-            expected_keys = {key for key in all_keys if key not in IGNORED_PROPERTIES}
-            obtained_keys = {
-                key for key in obtained_keys if key not in IGNORED_PROPERTIES
-            }
-
-            assert expected_keys == obtained_keys, (
-                f"Error: missing the following key(s): {set(expected_keys).symmetric_difference(set(obtained_keys))}"
-            )
-
+def alfacase_to_case_helper(tmp_path: Path) -> AlfacaseHelper:
     return AlfacaseHelper(tmp_path)
 
 
@@ -241,6 +235,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.PACKER_DESCRIPTION,
         schema=schema.packer_description_schema,
         is_sequence=True,
+    ),
+    "RestartPointKey": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.RESTART_POINT_KEY,
+        schema=schema.restart_point_key_schema,
     ),
     "PhysicsDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PHYSICS_DESCRIPTION,
@@ -571,7 +569,9 @@ ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
 
 
 @pytest.mark.parametrize("class_", ALL_CLASSES_THAT_NEEDS_SCHEMA)
-def test_convert_alfacase_to_description(alfacase_to_case_helper, class_, tmp_path):
+def test_convert_alfacase_to_description(
+    alfacase_to_case_helper: AlfacaseHelper, class_: type, tmp_path: Path
+) -> None:
     """
     Test to convert Alfacase from all classes of alfasim_core.simulation_models.case_description that needs a Alfacase schema
     """
@@ -847,49 +847,6 @@ def test_get_scalar_loader():
     expected_msg = "Both parameters 'category' and 'from_unit' were provided, only one must be informed"
     with pytest.raises(ValueError, match=expected_msg):
         get_scalar_loader(category="length", from_unit="m")
-
-
-def test_convert_alfacase_to_description_restart_file_path(tmp_path):
-    """
-    Round-trip test with a description that has a Path as type.
-        - YAML representation should be a Str()
-        - CaseDescription should be a pathlib.Path
-    """
-
-    alfacase_file = tmp_path / "test_case.yaml"
-    some_folder = tmp_path / "some_folder"
-    some_folder.mkdir()
-    restart_file = some_folder / "restart.state"
-    restart_file.touch()
-
-    physics_with_restart_file = attr.evolve(
-        filled_case_descriptions.PHYSICS_DESCRIPTION, restart_filepath=restart_file
-    )
-
-    alfacase_string = convert_description_to_alfacase(physics_with_restart_file)
-    restart_file_relative_path = restart_file.relative_to(alfacase_file.parent)
-    assert f"restart_filepath: {restart_file.absolute()}" in alfacase_string
-    alfacase_string = alfacase_string.replace(
-        f"restart_filepath: {restart_file.absolute()}",
-        f"restart_filepath: {restart_file_relative_path}",
-    )
-
-    alfacase_content = strictyaml.dirty_load(
-        yaml_string=alfacase_string,
-        schema=schema.physics_description_schema,
-        allow_flow_style=True,
-    )
-
-    assert isinstance(alfacase_content["restart_filepath"].value, str)
-    assert alfacase_content["restart_filepath"].value == str(
-        Path("some_folder/restart.state")
-    )
-
-    description_document = DescriptionDocument(
-        content=alfacase_content, file_path=alfacase_file
-    )
-    physics_description = load_physics_description(description_document)
-    assert physics_description.restart_filepath == restart_file
 
 
 def test_invalid_yaml_contents_parsing(tmp_path):

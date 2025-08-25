@@ -1900,11 +1900,7 @@ def load_well_description(
 def load_physics_description(
     document: DescriptionDocument,
 ) -> case_description.PhysicsDescription:
-    return load_instance(
-        document,
-        case_description.PhysicsDescription,
-        explicit_loaders=dict(restart_filepath=load_path),
-    )
+    return load_instance(document, case_description.PhysicsDescription)
 
 
 # fmt: off
