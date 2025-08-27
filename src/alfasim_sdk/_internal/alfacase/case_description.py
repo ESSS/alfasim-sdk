@@ -14,6 +14,7 @@ from alfasim_sdk._internal import constants
 
 from ..validators import non_empty_str
 from .case_description_attributes import (
+    DescriptionError,
     InvalidReferenceError,
     Numpy1DArray,
     PhaseName,
@@ -3427,6 +3428,17 @@ class TracersDescription:
     )
 
 
+@attr.s(frozen=True, kw_only=True)
+class RestartPointKey:
+    """
+    .. include:: /alfacase_definitions/RestartPointKey.txt
+    """
+
+    id: str = attr.ib(validator=instance_of(str))
+    simulation_time: float = attr.ib(validator=instance_of(float))
+    timestep_index: int = attr.ib(validator=instance_of(int))
+
+
 @attr.s()
 class PhysicsDescription:
     """
@@ -3444,6 +3456,7 @@ class PhysicsDescription:
     restart_filepath: Optional[Path] = attr.ib(
         default=None, validator=optional(instance_of(Path))
     )
+    restart_point_key = attrib_instance(RestartPointKey, is_optional=True)
     keep_former_results: bool = attr.ib(default=False, validator=instance_of(bool))
     emulsion_model_enabled: bool = attr.ib(default=True, validator=instance_of(bool))
     emulsion_relative_viscosity_model = attrib_enum(
@@ -3725,9 +3738,15 @@ class CaseDescription:
         for key in keys_from_pvt_tables_to_remove:
             del self.pvt_models.tables[key]
 
-    def _check_restart_file(self):
+    def _check_restart_file(self) -> None:
         restart_file = self.physics.restart_filepath
-        if restart_file and not Path(restart_file).is_file():
+        if restart_file is None:
+            return
+
+        if self.physics.restart_point_key is not None:
+            raise DescriptionError("restart_filepath and restart_point_key cannot both be set")
+
+        if not Path(restart_file).is_file():
             raise InvalidReferenceError(
                 f"Restart file '{restart_file}' is not a valid file"
             )
@@ -3793,7 +3812,7 @@ class CaseDescription:
                 f"The following elements have an invalid fluid assigned: {', '.join(sorted(elements_with_invalid_fluid))}.\n"
             )
 
-    def ensure_valid_references(self):
+    def ensure_valid_references(self) -> None:
         """
         Ensure that all attributes that uses references has consistent values, otherwise an exception is raised.
         # TODO: ASIM-3635: Add Check for source and target parameters of PipeDescription

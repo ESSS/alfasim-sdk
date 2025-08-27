@@ -1,5 +1,6 @@
 import re
 import textwrap
+from pathlib import Path
 from textwrap import dedent
 from typing import Any, Callable
 
@@ -13,6 +14,7 @@ from alfasim_sdk import MaterialDescription, NodeCellType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    DescriptionError,
     InvalidReferenceError,
     attrib_array,
     attrib_curve,
@@ -53,9 +55,7 @@ def test_physics_description_path_validator(tmp_path):
     import re
     from pathlib import Path
 
-    expected_error = re.escape(
-        f"'restart_filepath' must be {Path} (got '' that is a {str})."
-    )
+    expected_error = re.escape(f"'restart_filepath' must be {Path} (got '' that is a {str}).")
     with pytest.raises(TypeError, match=expected_error):
         case_description.PhysicsDescription(restart_filepath="")
 
@@ -182,24 +182,28 @@ def test_curve_attributes_converter():
     class Foo:
         x = attrib_curve(category="length", domain_category="time")
 
-    expected_msg = "Expected pair (image_array, domain_array) or Curve, got None (type: <class 'NoneType'>)"
+    expected_msg = (
+        "Expected pair (image_array, domain_array) or Curve, got None (type: <class 'NoneType'>)"
+    )
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
         Foo(x=None)
 
     # Fail to convert image (error context).
-    expected_msg = "Curve image: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    expected_msg = (
+        "Curve image: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    )
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
         Foo(x=(None, None))
 
     # Fail to convert domain (error context).
-    expected_msg = "Curve domain: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    expected_msg = (
+        "Curve domain: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
+    )
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
         Foo(x=(([1, 11, 111], "m"), None))
 
     # Image and domain does not have the same size.
-    expected_msg = (
-        "The length of the image (3) is different from the size of the domain (2)"
-    )
+    expected_msg = "The length of the image (3) is different from the size of the domain (2)"
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
         Foo(x=(([1, 11, 111], "m"), ([0, 10], "s")))
 
@@ -207,9 +211,7 @@ def test_curve_attributes_converter():
 
 
 def test_scalar_attribute():
-    expected_msg = (
-        "If `default` is not a scalar then `category` is required to be not `None`"
-    )
+    expected_msg = "If `default` is not a scalar then `category` is required to be not `None`"
     for kwargs in [{}, {"default": None}]:
         with pytest.raises(ValueError, match=expected_msg):
 
@@ -229,9 +231,7 @@ def test_scalar_attribute():
     instance_with_tuple = Foo(position=(1, "m"))
     assert isinstance(instance_with_tuple.position, Scalar)
 
-    expected_msg = (
-        "Expected pair (value, unit) or Scalar, got None (type: <class 'NoneType'>)"
-    )
+    expected_msg = "Expected pair (value, unit) or Scalar, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
         Foo(position=None)
 
@@ -301,9 +301,7 @@ def default_case(tmp_path) -> case_description.CaseDescription:
             ph_table_parameters={
                 "PVT5": case_description.PvtModelPhTableParametersDescription.create_empty()
             },
-            constant_properties={
-                "PVT6": case_description.PvtModelConstantPropertiesDescription()
-            },
+            constant_properties={"PVT6": case_description.PvtModelConstantPropertiesDescription()},
         )
     )
 
@@ -324,12 +322,8 @@ def default_well() -> case_description.WellDescription:
         stagnant_fluid="Lift Gas",
         top_node="Node 1",
         bottom_node="Node 2",
-        annulus=case_description.AnnulusDescription(
-            has_annulus_flow=False, top_node="Node 1"
-        ),
-        formation=case_description.FormationDescription(
-            reference_y_coordinate=Scalar(0, "m")
-        ),
+        annulus=case_description.AnnulusDescription(has_annulus_flow=False, top_node="Node 1"),
+        formation=case_description.FormationDescription(reference_y_coordinate=Scalar(0, "m")),
         environment=case_description.EnvironmentDescription(
             thermal_model=constants.PipeThermalModelType.SteadyState
         ),
@@ -377,6 +371,53 @@ def test_check_restart_file_exists(default_case, tmp_path):
 
     restart_file.write_text("Restart file contents")
     case.ensure_valid_references()
+
+
+def test_check_restart_point_key_or_filepath(
+    default_case: case_description.CaseDescription, tmp_path: Path
+) -> None:
+    """Ensure that setting both restart_point_key and restart_filepath results in an error."""
+    restart_filepath = tmp_path / "dummy.restart"
+    restart_filepath.touch()
+
+    restart_point_key = case_description.RestartPointKey(
+        id="dummy", simulation_time=1234.5, timestep_index=12
+    )
+
+    # With both set it should fail.
+    case = attr.evolve(
+        default_case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=restart_filepath,
+            restart_point_key=restart_point_key,
+        ),
+    )
+    with pytest.raises(
+        DescriptionError,
+        match="restart_filepath and restart_point_key cannot both be set",
+    ):
+        case.ensure_valid_references()
+
+    # With one it should succeed.
+    attr.evolve(
+        case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=None,
+            restart_point_key=restart_point_key,
+        ),
+    ).ensure_valid_references()
+
+    # Or with the other.
+    attr.evolve(
+        case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=restart_filepath,
+            restart_point_key=None,
+        ),
+    ).ensure_valid_references()
 
 
 class TestResetInvalidReferences:
@@ -561,7 +602,9 @@ class TestEnsureValidReferences:
                 tables={"PVT1": f"{tmp_path / 'dummy.tab'}|INVALID"},
             ),
         )
-        expect_message = "'INVALID' could not be found on 'dummy.tab', available models are: 'PVT1, PVT2'"
+        expect_message = (
+            "'INVALID' could not be found on 'dummy.tab', available models are: 'PVT1, PVT2'"
+        )
         with pytest.raises(
             InvalidReferenceError,
             match=re.escape(expect_message),
@@ -734,9 +777,7 @@ class TestEnsureValidReferences:
         """
         If a WellDescription uses an invalid PvtModel, an InvalidReferenceError must be raised.
         """
-        case = attr.evolve(
-            default_case, wells=[attr.evolve(default_well, pvt_model="Foo")]
-        )
+        case = attr.evolve(default_case, wells=[attr.evolve(default_well, pvt_model="Foo")])
         expected_error = (
             "PVT model 'Foo' selected on 'Well 1' is not declared on 'pvt_models', "
             "available pvt_models are: PVT1, PVT2, PVT3"
@@ -845,10 +886,7 @@ def test_pvt_model_table_parameters_description_post_init(table_parameters_descr
     # The following check are only for coverage purpose
     assert table_params.pressure_unit == "Pa"
 
-    if (
-        table_parameters_description
-        == case_description.PvtModelPtTableParametersDescription
-    ):
+    if table_parameters_description == case_description.PvtModelPtTableParametersDescription:
         assert table_params.temperature_unit == "K"
     else:
         assert table_params.enthalpy_unit == "J/kg"
@@ -861,9 +899,7 @@ def test_numpy_array_validator():
     class Dummy:
         x = attr.ib(validator=numpy_array_validator(dimension=1))
 
-    expected_error_msg = (
-        "'x' must be <class 'numpy.ndarray'> (got 1 that is a <class 'int'>)."
-    )
+    expected_error_msg = "'x' must be <class 'numpy.ndarray'> (got 1 that is a <class 'int'>)."
 
     with pytest.raises(TypeError, match=re.escape(expected_error_msg)):
         Dummy(x=1)
@@ -961,13 +997,9 @@ def test_pvt_model_table_parameters_description_create_ph_table_with_dummy_dict(
     """
     import numpy as np
 
-    dummy_dict = (
-        case_description.PvtModelPhTableParametersDescription.dummy_parameters_dict()
-    )
+    dummy_dict = case_description.PvtModelPhTableParametersDescription.dummy_parameters_dict()
 
-    ph_table_description = case_description.PvtModelPhTableParametersDescription(
-        **dummy_dict
-    )
+    ph_table_description = case_description.PvtModelPhTableParametersDescription(**dummy_dict)
 
     assert ph_table_description.enthalpy_values == np.array([0.0])
     assert ph_table_description.variable_names == []
@@ -1017,9 +1049,7 @@ def test_check_profile_description(default_case):
         )
 
     # Empty Profile is allowed.
-    profile = case_description.ProfileDescription(
-        length_and_elevation=None, x_and_y=None
-    )
+    profile = case_description.ProfileDescription(length_and_elevation=None, x_and_y=None)
     assert profile.length_and_elevation is None
     assert profile.x_and_y is None
 
@@ -1067,9 +1097,7 @@ def test_to_curve():
     domain = Array("time", [0, 1.1, 2.2], "s")
     curve = Curve(image, domain)
     assert to_curve((([1, 2, 3], "m"), domain)) == curve
-    with pytest.raises(
-        TypeError, match=r"Curve image: Expected pair \(values, unit\) or Array"
-    ):
+    with pytest.raises(TypeError, match=r"Curve image: Expected pair \(values, unit\) or Array"):
         to_curve((("foo", [1, 2, 3], "m"), domain))
     with pytest.raises(TypeError, match=type_error_msg):
         to_curve(("foo", [1, 2, 3], "m"))
@@ -1128,9 +1156,7 @@ def test_curve_attrib_category_and_domain_required(none_arg):
     assert isinstance(attrib_curve(non_curve_default, **category_args), _CountingAttr)
 
     category_args[none_arg] = None
-    expected_msg = (
-        f"If `default` is not a curve then `{none_arg}` is required to be not `None`"
-    )
+    expected_msg = f"If `default` is not a curve then `{none_arg}` is required to be not `None`"
     with pytest.raises(ValueError, match=expected_msg):
         attrib_curve(non_curve_default, **category_args)
 
@@ -1238,7 +1264,9 @@ def test_invalid_fluid_reference_on_nodes():
         ],
     )
 
-    expected_error = "The following elements have an invalid fluid assigned: 'Node 1', 'Node 2', 'Node 3'."
+    expected_error = (
+        "The following elements have an invalid fluid assigned: 'Node 1', 'Node 2', 'Node 3'."
+    )
     with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
         case.ensure_valid_references()
 
@@ -1268,9 +1296,7 @@ def test_invalid_fluid_reference_on_pipes():
                 source="",
                 target="",
                 segments=build_simple_segment(),
-                initial_conditions=case_description.InitialConditionsDescription(
-                    fluid="acme5"
-                ),
+                initial_conditions=case_description.InitialConditionsDescription(fluid="acme5"),
                 equipment=case_description.EquipmentDescription(
                     mass_sources={
                         "MassSource": case_description.MassSourceEquipmentDescription(
@@ -1327,7 +1353,9 @@ def test_invalid_fluid_reference_on_wells(default_well):
             )
         ],
     )
-    expected_error = "The following elements have an invalid fluid assigned: 'Annulus from Well 1', 'Well 1'."
+    expected_error = (
+        "The following elements have an invalid fluid assigned: 'Annulus from Well 1', 'Well 1'."
+    )
     with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
         case.ensure_valid_references()
 
@@ -1378,21 +1406,11 @@ def test_case_description_duplicate_names(default_well):
             },
         ),
         nodes=[
-            case_description.NodeDescription(
-                name="ACME", node_type=NodeCellType.Pressure
-            ),
-            case_description.NodeDescription(
-                name="ACME", node_type=NodeCellType.Pressure
-            ),
-            case_description.NodeDescription(
-                name="Node1", node_type=NodeCellType.Pressure
-            ),
-            case_description.NodeDescription(
-                name="FOO", node_type=NodeCellType.Pressure
-            ),
-            case_description.NodeDescription(
-                name="FOO", node_type=NodeCellType.Pressure
-            ),
+            case_description.NodeDescription(name="ACME", node_type=NodeCellType.Pressure),
+            case_description.NodeDescription(name="ACME", node_type=NodeCellType.Pressure),
+            case_description.NodeDescription(name="Node1", node_type=NodeCellType.Pressure),
+            case_description.NodeDescription(name="FOO", node_type=NodeCellType.Pressure),
+            case_description.NodeDescription(name="FOO", node_type=NodeCellType.Pressure),
         ],
         pipes=[
             case_description.PipeDescription(
@@ -1449,9 +1467,7 @@ def test_case_description_duplicate_names_between_elements(default_well):
             case_description.NodeDescription(
                 name="ACME Node <-> Well", node_type=NodeCellType.Pressure
             ),
-            case_description.NodeDescription(
-                name="Node1", node_type=NodeCellType.Pressure
-            ),
+            case_description.NodeDescription(name="Node1", node_type=NodeCellType.Pressure),
         ],
         pipes=[
             case_description.PipeDescription(
@@ -1488,9 +1504,7 @@ def test_check_fluid_references(default_well: case_description.WallDescription) 
     Test _check_fluid_references isn't yielding errors for a correct CaseDescription.
     """
 
-    known_pvt_properties = set(
-        attr.fields_dict(case_description.PvtModelsDescription).keys()
-    )
+    known_pvt_properties = set(attr.fields_dict(case_description.PvtModelsDescription).keys())
     # Be sure to update the 'known_pvt_models' in CaseDescription._get_all_fluids
     # if this assert breaks because a new PVT Model was added.
     assert known_pvt_properties == {
@@ -1507,9 +1521,7 @@ def test_check_fluid_references(default_well: case_description.WallDescription) 
     case = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
             default_model="Default PVT",
-            correlations={
-                "Default PVT": case_description.PvtModelCorrelationDescription()
-            },
+            correlations={"Default PVT": case_description.PvtModelCorrelationDescription()},
             combined={
                 "Test PVT Combined": case_description.PvtModelCombinedDescription(
                     fluids={
@@ -1537,9 +1549,7 @@ def test_check_fluid_references(default_well: case_description.WallDescription) 
         well = attr.evolve(
             default_well,
             pvt_model=pvt_model,
-            initial_conditions=case_description.InitialConditionsDescription(
-                fluid=fluid
-            ),
+            initial_conditions=case_description.InitialConditionsDescription(fluid=fluid),
         )
 
         case = attr.evolve(
