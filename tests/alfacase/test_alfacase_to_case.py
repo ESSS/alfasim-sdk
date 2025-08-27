@@ -242,6 +242,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.packer_description_schema,
         is_sequence=True,
     ),
+    "RestartPointKey": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.RESTART_POINT_KEY,
+        schema=schema.restart_point_key_schema,
+    ),
     "PhysicsDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PHYSICS_DESCRIPTION,
         schema=schema.physics_description_schema,

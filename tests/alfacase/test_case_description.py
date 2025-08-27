@@ -1,5 +1,6 @@
 import re
 import textwrap
+from pathlib import Path
 from textwrap import dedent
 from typing import Any, Callable
 
@@ -13,6 +14,7 @@ from alfasim_sdk import MaterialDescription, NodeCellType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    DescriptionError,
     InvalidReferenceError,
     attrib_array,
     attrib_curve,
@@ -377,6 +379,56 @@ def test_check_restart_file_exists(default_case, tmp_path):
 
     restart_file.write_text("Restart file contents")
     case.ensure_valid_references()
+
+
+def test_check_restart_point_key_or_filepath(
+    default_case: case_description.CaseDescription, tmp_path: Path
+) -> None:
+    """Ensure that setting both restart_point_key and restart_filepath results in an error."""
+    restart_filepath = tmp_path / "dummy.restart"
+    restart_filepath.touch()
+
+    restart_point_key = case_description.RestartPointKey(
+        id="dummy",
+        location=case_description.RestartPointLocation.Local,
+        simulation_time=1234.5,
+        timestep_index=12,
+    )
+
+    # With both set it should fail.
+    case = attr.evolve(
+        default_case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=restart_filepath,
+            restart_point_key=restart_point_key,
+        ),
+    )
+    with pytest.raises(
+        DescriptionError,
+        match="restart_filepath and restart_point_key cannot both be set",
+    ):
+        case.ensure_valid_references()
+
+    # With one it should succeed.
+    attr.evolve(
+        case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=None,
+            restart_point_key=restart_point_key,
+        ),
+    ).ensure_valid_references()
+
+    # Or with the other.
+    attr.evolve(
+        case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=restart_filepath,
+            restart_point_key=None,
+        ),
+    ).ensure_valid_references()
 
 
 class TestResetInvalidReferences:
