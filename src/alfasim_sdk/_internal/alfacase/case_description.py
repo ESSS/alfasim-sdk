@@ -3435,6 +3435,7 @@ class RestartPointKey:
     """
 
     id: str = attr.ib(validator=instance_of(str))
+    location: str = attr.ib(validator=instance_of(str))
     simulation_time: float = attr.ib(validator=instance_of(float))
     timestep_index: int = attr.ib(validator=instance_of(int))
 

@@ -680,7 +680,7 @@ TIME_OPTIONS_DESCRIPTION = case_description.TimeOptionsDescription(
 )
 
 RESTART_POINT_KEY = case_description.RestartPointKey(
-    id=Path(__file__).stem, simulation_time=1234.5, timestep_index=12
+    id=Path(__file__).stem, location="local", simulation_time=1234.5, timestep_index=12
 )
 
 PHYSICS_DESCRIPTION = case_description.PhysicsDescription(

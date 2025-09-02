@@ -381,7 +381,7 @@ def test_check_restart_point_key_or_filepath(
     restart_filepath.touch()
 
     restart_point_key = case_description.RestartPointKey(
-        id="dummy", simulation_time=1234.5, timestep_index=12
+        id="dummy", location="local", simulation_time=1234.5, timestep_index=12
     )
 
     # With both set it should fail.

@@ -708,6 +708,7 @@ reservoir_inflow_equipment_description_schema = Map(
 restart_point_key_schema = Map(
     {
         "id": Str(),
+        "location": Str(),
         "simulation_time": Float(),
         "timestep_index": Int(),
     }
@@ -1234,4 +1235,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: HzBLE7xnMU)
+# [[[end]]] (sum: GiaHrCrvsK)
