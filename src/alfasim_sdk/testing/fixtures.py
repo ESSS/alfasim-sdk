@@ -189,7 +189,7 @@ class AlfasimRunnerFixture:
         assert runner_from_env is not None, (
             "Can not locate the simulator. Set the environment variable 'ALFASIM_RUNNER'."
         )
-        return runner_from_env.split(" ")
+        return [x.strip() for x in runner_from_env.split()]
 
     def _run_simulator(self, command: List[str], cwd: Path) -> None:
         current_env = os.environ.copy()
