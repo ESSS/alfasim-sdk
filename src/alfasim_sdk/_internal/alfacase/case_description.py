@@ -3745,7 +3745,9 @@ class CaseDescription:
             return
 
         if self.physics.restart_point_key is not None:
-            raise DescriptionError("restart_filepath and restart_point_key cannot both be set")
+            raise DescriptionError(
+                "restart_filepath and restart_point_key cannot both be set"
+            )
 
         if not Path(restart_file).is_file():
             raise InvalidReferenceError(
