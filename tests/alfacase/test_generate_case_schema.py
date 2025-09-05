@@ -462,6 +462,7 @@ def test_get_cases_class():
         "ReferencedVelocitiesContainerDescription",
         "ReferencedVolumeFractionsContainerDescription",
         "ReservoirInflowEquipmentDescription",
+        "RestartPointKey",
         "SeparatorNodePropertiesDescription",
         "SpeedCurveDescription",
         "SurgeVolumeOptionsDescription",
