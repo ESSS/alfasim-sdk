@@ -10,7 +10,7 @@ from attr._make import _CountingAttr
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
 
-from alfasim_sdk import MaterialDescription, NodeCellType, CaseDescription
+from alfasim_sdk import CaseDescription, MaterialDescription, NodeCellType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
