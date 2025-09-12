@@ -10,7 +10,7 @@ from attr._make import _CountingAttr
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
 
-from alfasim_sdk import MaterialDescription, NodeCellType
+from alfasim_sdk import MaterialDescription, NodeCellType, CaseDescription
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
@@ -537,9 +537,10 @@ class TestEnsureValidReferences:
     Ensure that the attributes from CaseDescription that have references to other elements are valid.
     """
 
-    def test_pvt_model_are_valid(self, default_case):
+    def test_pvt_model_are_valid(self, default_case: CaseDescription) -> None:
         """
-        Check that the validation for invalid references works for all types of PvtModel. (Composition, Correlation, Tables and TableParameters).
+        Check that the validation for invalid references works for all types of PvtModel
+        (Composition, Correlation, Tables, Constant and TableParameters).
         """
         case = attr.evolve(
             default_case,
@@ -594,12 +595,9 @@ class TestEnsureValidReferences:
                 ),
             ],
         )
-        expect_message = "PVT model 'PVT6' selected on 'Pipe 6' is not declared on 'pvt_models', available pvt_models are: PVT1, PVT2, PVT3, PVT4, PVT5"
-        with pytest.raises(
-            InvalidReferenceError,
-            match=re.escape(expect_message),
-        ):
-            case.ensure_valid_references()
+        # Add the Constant PVT as a valid reference (ASIM-6291).
+        [constant_property] = list(case.pvt_models.constant_properties.keys())
+        assert constant_property == "PVT6"
 
     def test_pvt_model_from_file_is_in_valid(self, default_case, tmp_path):
         """
