@@ -3624,6 +3624,7 @@ class CaseDescription:
                 self.pvt_models.combined.keys(),
                 self.pvt_models.pt_table_parameters.keys(),
                 self.pvt_models.ph_table_parameters.keys(),
+                self.pvt_models.constant_properties.keys(),
             )
         )
         if (
