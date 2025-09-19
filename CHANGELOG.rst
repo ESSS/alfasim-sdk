@@ -8,7 +8,8 @@ CHANGELOG
 * Add backward compatibility for alfacase files which does not specify the version in plugins.
 * Add ``version`` property for ``PluginsDescription``
 * **Breaking Change**: Add ``alfasim_get_version`` GUI specification hook to be implemented by plugins.
-* **Breaking Change**: ``HydrodynamicModelType.ThreeLayersNoBubbleGasOilWater``  renamed to ``HydrodynamicModelType.TwoLayersGasOilWater``
+* **Breaking Change**: ``HydrodynamicModelType.ThreeLayersNoBubbleGasOilWater``  renamed to ``HydrodynamicModelType.TwoLayersGasOilWater``.
+* Update barril constrain to allow barril from the major version 2.
 
 1.1.0 (2025-05-28)
 ==================
