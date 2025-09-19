@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-1.2.0 (Unreleased)
+1.2.0 (2025-09-19)
 ==================
 * Add ``constant_properties`` pvt to be a valid reference in CaseDescription.
 * Add backward compatibility for alfacase files which does not specify the version in plugins.
