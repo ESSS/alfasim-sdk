@@ -3506,6 +3506,9 @@ class PhysicsDescription:
     fluid_material_convection_correlation = attrib_enum(
         default=constants.FluidMaterialConvectionCorrelation.HasanKabir1994
     )
+    steady_state_guess_initialization = attrib_enum(
+        default=constants.SteadyStateGuessInitializationType.QuasiHydrostatic
+    )
 
 
 @attr.s()

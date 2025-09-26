@@ -5,6 +5,8 @@ CHANGELOG
 1.3.0 (Unreleased)
 ==================
 
+* Add ``steady_state_guess_initialization`` attribute to ``PhysicsDescription`` and ``SteadyStateGuessInitializationType`` enum to support different steady state initial guess calculation strategies.
+
 1.2.0 (2025-09-19)
 ==================
 * Add ``constant_properties`` pvt to be a valid reference in CaseDescription.
