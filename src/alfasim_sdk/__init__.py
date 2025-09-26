@@ -216,6 +216,7 @@ from alfasim_sdk._internal.constants import (
     SimulationModeType,
     SimulationRegimeType,
     SolidsModelType,
+    SteadyStateGuessInitializationType,
     SurfaceTensionType,
     SurgeVolumeTimeMode,
     TableInputType,
@@ -224,7 +225,6 @@ from alfasim_sdk._internal.constants import (
     ValveType,
     WellConnectionPort,
     WellIndexPhaseType,
-    SteadyStateGuessInitializationType,
 )
 
 # Plugins: Context

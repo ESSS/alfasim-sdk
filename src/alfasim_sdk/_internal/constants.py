@@ -569,7 +569,7 @@ class SteadyStateGuessInitializationType(Enum):
     """
     Options for steady state initial guess calculation strategy.
     """
-    
+
     # QuasiHydrostatic: Uses quasi-hydrostatic initial guess calculation
     QuasiHydrostatic = "quasi_hydrostatic"
     # UserDefined: Uses user-defined initial guess calculation
