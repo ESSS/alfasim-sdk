@@ -224,6 +224,7 @@ from alfasim_sdk._internal.constants import (
     ValveType,
     WellConnectionPort,
     WellIndexPhaseType,
+    SteadyStateGuessInitializationType,
 )
 
 # Plugins: Context
@@ -435,6 +436,7 @@ __all__ = [
     "SurfaceTensionType",
     "SurgeVolumeOptionsDescription",
     "SurgeVolumeTimeMode",
+    "SteadyStateGuessInitializationType",
     "Table",
     "TableColumn",
     "TableIPRDescription",

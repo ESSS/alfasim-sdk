@@ -27,6 +27,7 @@
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  = FluidMaterialConvectionCorrelation.HasanKabir1994
+            steady_state_guess_initialization: \ :class:`SteadyStateGuessInitializationType <alfasim_sdk._internal.constants.SteadyStateGuessInitializationType>`\  = SteadyStateGuessInitializationType.QuasiHydrostatic
 
 .. tab:: Schema
 
@@ -74,3 +75,4 @@
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  # optional
+            steady_state_guess_initialization: \ :class:`SteadyStateGuessInitializationType <alfasim_sdk._internal.constants.SteadyStateGuessInitializationType>`\  # optional

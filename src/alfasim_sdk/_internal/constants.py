@@ -563,3 +563,14 @@ class FluidMaterialConvectionCorrelation(Enum):
     HasanKabir2002 = "Hasan and Kabir 2002"
     FuzongZhou2013 = "Fuzong Zhou 2013"
     Holman1981 = "Holman 1981"
+
+
+class SteadyStateGuessInitializationType(Enum):
+    """
+    Options for steady state initial guess calculation strategy.
+    """
+    
+    # QuasiHydrostatic: Uses quasi-hydrostatic initial guess calculation
+    QuasiHydrostatic = "quasi_hydrostatic"
+    # UserDefined: Uses user-defined initial guess calculation
+    UserDefined = "user_defined"

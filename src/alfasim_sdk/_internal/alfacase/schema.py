@@ -994,6 +994,7 @@ physics_description_schema = Map(
         Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
         Optional("fluid_material_convection_correlation"): Enum(['Hasan and Kabir 1994', 'Hasan and Kabir 2002', 'Fuzong Zhou 2013', 'Holman 1981']),
+        Optional("steady_state_guess_initialization"): Enum(['quasi_hydrostatic', 'user_defined']),
     }
 )
 positional_pipe_trend_description_schema = Map(
@@ -1235,4 +1236,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: 0yzy/3VKZ3)
+# [[[end]]] (sum: H3pw6QCGWA)
