@@ -436,7 +436,7 @@ SURGE_VOLUME_OPTIONS_DESCRIPTION = case_description.SurgeVolumeOptionsDescriptio
 )
 POSITIONAL_PIPE_TREND_OUTPUT_DESCRIPTION = (
     case_description.PositionalPipeTrendDescription(
-        curve_names=["oil mass flow rate","pressure"],
+        curve_names=["oil mass flow rate", "pressure"],
         element_name="pipe 1",
         position=Scalar(2950.0, "m"),
         location=constants.OutputAttachmentLocation.Main,
