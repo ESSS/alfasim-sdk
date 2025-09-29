@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.0.1 (2025-09-29)
+==================
+
+* Relax barril constrain (barril version 2 has no breaking changes).
+
 1.0.0 (2025-02-07)
 ==================
 
