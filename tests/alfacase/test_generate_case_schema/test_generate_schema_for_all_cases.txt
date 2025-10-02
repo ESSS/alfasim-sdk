@@ -426,42 +426,6 @@ packer_description_schema = Map(
     }
 )
 
-physics_description_schema = Map(
-    {
-        Optional("hydrodynamic_model"): Enum(['hydrodynamic_model_2_fields', 'hydrodynamic_model_4_fields', 'hydrodynamic_model_3_layers_gas_oil_water', 'hydrodynamic_model_5_fields_solid', 'hydrodynamic_model_5_fields_water', 'hydrodynamic_model_5_fields_co2', 'hydrodynamic_model_3_layers_no_bubble_gas_oil_water', 'hydrodynamic_model_3_layers_water_with_co2', 'hydrodynamic_model_3_layers_7_fields_gas_oil_water', 'hydrodynamic_model_3_layers_9_fields_gas_oil_water']),
-        Optional("simulation_regime"): Enum(['simulation_regime_transient', 'simulation_regime_steady_state']),
-        Optional("energy_model"): Enum(['no_model', 'global_model', 'layers_model']),
-        Optional("solids_model"): Enum(['no_model', 'thomas1965_equilibrium', 'mills1985_equilibrium', 'santamaria2010_equilibrium', 'from_plugin']),
-        Optional("solids_model_plugin_id"): Str(),
-        Optional("initial_condition_strategy"): Enum(['constant', 'steady_state', 'restart']),
-        Optional("restart_filepath"): Str(),
-        Optional("keep_former_results"): Bool(),
-        Optional("emulsion_model_enabled"): Bool(),
-        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based', 'from_plugin']),
-        Optional("emulsion_pal_rhodes_phi_rel_100"): Map({"value": Float(), "unit": Str()}),
-        Optional("emulsion_woelflin_a"): Map({"value": Float(), "unit": Str()}),
-        Optional("emulsion_woelflin_b"): Map({"value": Float(), "unit": Str()}),
-        Optional("emulsion_table_based_rel_visc_curve"): Map(
-            {
-                "image": Map({"values": Seq(Float()), "unit": Str()}),
-                "domain": Map({"values": Seq(Float()), "unit": Str()}),
-            }
-        ),
-        Optional("emulsion_relative_viscosity_tuning_factor"): Map(
-            {
-                "image": Map({"values": Seq(Float()), "unit": Str()}),
-                "domain": Map({"values": Seq(Float()), "unit": Str()}),
-            }
-        ),
-        Optional("emulsion_droplet_size_model"): Enum(['model_default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
-        Optional("emulsion_inversion_point_model"): Enum(['model_default', 'brauner_and_ullmann_2002', 'brinkman1952_and_yeh1964', 'constant']),
-        Optional("emulsion_inversion_water_cut"): Map({"value": Float(), "unit": Str()}),
-        Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
-        Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
-        Optional("fluid_material_convection_correlation"): Enum(['Hasan and Kabir 1994', 'Hasan and Kabir 2002', 'Fuzong Zhou 2013', 'Holman 1981']),
-    }
-)
-
 pig_equipment_description_schema = Map(
     {
         "diameter": Map({"value": Float(), "unit": Str()}),
@@ -527,6 +491,7 @@ pipe_segments_description_schema = Map(
 plugin_description_schema = Map(
     {
         Optional("name"): Str(),
+        Optional("version"): Str(),
         Optional("gui_models"): MapPattern(Str(), Any()),
         Optional("is_enabled"): Bool(),
     }
@@ -765,6 +730,15 @@ reservoir_inflow_equipment_description_schema = Map(
         "length": Map({"value": Float(), "unit": Str()}),
         Optional("productivity_ipr"): Str(),
         Optional("injectivity_ipr"): Str(),
+    }
+)
+
+restart_point_key_schema = Map(
+    {
+        "id": Str(),
+        "location": Enum(['local', 'remote']),
+        "simulation_time": Float(),
+        "timestep_index": Int(),
     }
 )
 
@@ -1042,6 +1016,44 @@ leak_equipment_description_schema = Map(
     }
 )
 
+physics_description_schema = Map(
+    {
+        Optional("hydrodynamic_model"): Enum(['hydrodynamic_model_2_fields', 'hydrodynamic_model_4_fields', 'hydrodynamic_model_3_layers_gas_oil_water', 'hydrodynamic_model_5_fields_solid', 'hydrodynamic_model_5_fields_water', 'hydrodynamic_model_5_fields_co2', 'hydrodynamic_model_2_layers_gas_oil_3_phases_water_in_oil', 'hydrodynamic_model_3_layers_water_with_co2', 'hydrodynamic_model_3_layers_7_fields_gas_oil_water', 'hydrodynamic_model_3_layers_9_fields_gas_oil_water']),
+        Optional("simulation_regime"): Enum(['simulation_regime_transient', 'simulation_regime_steady_state']),
+        Optional("energy_model"): Enum(['no_model', 'global_model', 'layers_model']),
+        Optional("solids_model"): Enum(['no_model', 'thomas1965_equilibrium', 'mills1985_equilibrium', 'santamaria2010_equilibrium', 'from_plugin']),
+        Optional("solids_model_plugin_id"): Str(),
+        Optional("initial_condition_strategy"): Enum(['constant', 'steady_state', 'restart']),
+        Optional("restart_filepath"): Str(),
+        Optional("restart_point_key"): restart_point_key_schema,
+        Optional("keep_former_results"): Bool(),
+        Optional("emulsion_model_enabled"): Bool(),
+        Optional("emulsion_relative_viscosity_model"): Enum(['model_default', 'taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based', 'from_plugin']),
+        Optional("emulsion_pal_rhodes_phi_rel_100"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_woelflin_a"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_woelflin_b"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_table_based_rel_visc_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("emulsion_relative_viscosity_tuning_factor"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("emulsion_droplet_size_model"): Enum(['model_default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
+        Optional("emulsion_inversion_point_model"): Enum(['model_default', 'brauner_and_ullmann_2002', 'brinkman1952_and_yeh1964', 'constant']),
+        Optional("emulsion_inversion_water_cut"): Map({"value": Float(), "unit": Str()}),
+        Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
+        Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
+        Optional("fluid_material_convection_correlation"): Enum(['Hasan and Kabir 1994', 'Hasan and Kabir 2002', 'Fuzong Zhou 2013', 'Holman 1981']),
+        Optional("steady_state_guess_initialization"): Enum(['quasi_hydrostatic', 'user_defined']),
+    }
+)
+
 positional_pipe_trend_description_schema = Map(
     {
         Optional("name"): Str(),
@@ -1071,6 +1083,8 @@ pump_equipment_description_schema = Map(
         Optional("table"): table_pump_description_schema,
         Optional("speed_curve"): speed_curve_description_schema,
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
+        Optional("speed_type"): Enum(['constant', 'curve']),
+        Optional("constant_speed"): Map({"value": Float(), "unit": Str()}),
         Optional("esp_table"): table_pump_description_schema,
         Optional("esp_speed_input_type"): Enum(['constant', 'curve']),
         Optional("esp_speed"): Map({"value": Float(), "unit": Str()}),

@@ -81,6 +81,7 @@ def test_alfasim_runner_add_plugin(
         textwrap.dedent(
             """\
             name: abx
+            version: 1.0.0
             """
         )
     )
@@ -107,6 +108,7 @@ def test_alfasim_runner_from_case_description(
         textwrap.dedent(
             """\
             name: abx
+            version: 1.0.0
             """
         )
     )

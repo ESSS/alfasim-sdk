@@ -3,8 +3,7 @@ import itertools
 import re
 import shutil
 from pathlib import Path
-from typing import List
-from typing import Literal
+from typing import List, Literal
 
 import numpy
 import pytest
@@ -12,39 +11,33 @@ from pytest import FixtureRequest
 from pytest_mock import MockerFixture
 from pytest_regressions.num_regression import NumericRegressionFixture
 
-from alfasim_sdk.result_reader.aggregator import concatenate_metadata
-from alfasim_sdk.result_reader.aggregator import GSAOutputKey
-from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
-from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
-from alfasim_sdk.result_reader.aggregator import HMOutputKey
-from alfasim_sdk.result_reader.aggregator import open_result_files
 from alfasim_sdk.result_reader.aggregator import (
+    GSAOutputKey,
+    HistoricDataCurveMetadata,
+    HistoryMatchingMetadata,
+    HMOutputKey,
+    ResultsNeedFullReloadError,
+    TimeSetInfoItem,
+    UPOutputKey,
+    concatenate_metadata,
+    open_result_files,
     read_global_sensitivity_analysis_meta_data,
-)
-from alfasim_sdk.result_reader.aggregator import read_global_sensitivity_coefficients
-from alfasim_sdk.result_reader.aggregator import (
+    read_global_sensitivity_coefficients,
     read_history_matching_historic_data_curves,
-)
-from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
-from alfasim_sdk.result_reader.aggregator import read_history_matching_result
-from alfasim_sdk.result_reader.aggregator import read_metadata
-from alfasim_sdk.result_reader.aggregator import read_profiles_local_statistics
-from alfasim_sdk.result_reader.aggregator import read_time_sets
-from alfasim_sdk.result_reader.aggregator import read_trends_data
-from alfasim_sdk.result_reader.aggregator import (
+    read_history_matching_metadata,
+    read_history_matching_result,
+    read_metadata,
+    read_profiles_local_statistics,
+    read_time_sets,
+    read_trends_data,
     read_uncertainty_propagation_analyses_meta_data,
-)
-from alfasim_sdk.result_reader.aggregator import read_uncertainty_propagation_results
-from alfasim_sdk.result_reader.aggregator import (
+    read_uncertainty_propagation_results,
     read_uq_time_set,
 )
-from alfasim_sdk.result_reader.aggregator import ResultsNeedFullReloadError
-from alfasim_sdk.result_reader.aggregator import TimeSetInfoItem
-from alfasim_sdk.result_reader.aggregator import UPOutputKey
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
+    RESULTS_FOLDER_NAME,
 )
-from alfasim_sdk.result_reader.aggregator_constants import RESULTS_FOLDER_NAME
 from alfasim_sdk.result_reader.reader import Results
 
 
@@ -153,7 +146,7 @@ def test_read_metadata_invalid_index(results: Results, index_arg_name: str) -> N
         read_metadata(results.results_folder, **{index_arg_name: 999})
 
 
-def test_concatenate_metadata_plain(results: Results) -> None:
+def test_concatenate_metadata_plain(results: Results, datadir: Path) -> None:
     results_folder = results.results_folder
 
     md_a = read_metadata(
@@ -184,6 +177,11 @@ def test_concatenate_metadata_plain(results: Results) -> None:
     md_bb = concatenate_metadata(md_middle, md_b)
     assert ((5, 40), (14, 62)) == md_bb.time_steps_boundaries
 
+    # Ensure we don't bother when the directories are not the same.
+    md_a.result_directory = datadir / "foo"
+    md_aaa = concatenate_metadata(md_a, md_middle)
+    assert ((0, 0), (5, 40)) == md_aaa.time_steps_boundaries
+
 
 def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
     results_folder = results.results_folder
@@ -205,14 +203,6 @@ def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
         ("profile_id", (0, 2605, 4478)),
         ("trend_id", (0, 2605, 4478)),
     ]
-
-
-def test_concatenate_metadata_error_conditions_directory(results: Results) -> None:
-    md = results.metadata
-    other_md = dataclasses.replace(md)
-    other_md.result_directory = md.result_directory / "other"
-    with pytest.raises(RuntimeError, match="different sources"):
-        concatenate_metadata(md, other_md)
 
 
 def test_concatenate_metadata_error_conditions_more_files(
@@ -289,23 +279,30 @@ def test_read_profiles_local_statistics(
     results: Results, num_regression: NumericRegressionFixture
 ) -> None:
     local_statistics = read_profiles_local_statistics(
-        results.metadata, list(results.metadata.profiles.keys()), 0
+        results.results_folder,
+        results.metadata,
+        list(results.metadata.profiles.keys()),
+        0,
     )
     num_regression.check(local_statistics)
 
 
 def test_read_trends_data_bounds_check(results: Results) -> None:
     with pytest.raises(ValueError, match="Invalid initial_trends_time_step_index"):
-        read_trends_data(results.metadata, initial_trends_time_step_index=999)
+        read_trends_data(
+            results.results_folder, results.metadata, initial_trends_time_step_index=999
+        )
 
     with pytest.raises(ValueError, match="Invalid final_trends_time_step_index"):
-        read_trends_data(results.metadata, final_trends_time_step_index=999)
+        read_trends_data(
+            results.results_folder, results.metadata, final_trends_time_step_index=999
+        )
 
 
 def test_read_trends_data_empty_arrays_when_no_time_set_info(results: Results) -> None:
     fake_metadata = dataclasses.replace(results.metadata)
     fake_metadata.time_set_info = {}
-    trends = read_trends_data(fake_metadata)
+    trends = read_trends_data(results.results_folder, fake_metadata)
     base_id = "project.study_container.item00001.output_options.trend_out_definition_container"
     assert set(trends.keys()) == {
         f"pipe total liquid volume@{base_id}.item00003",
@@ -337,7 +334,7 @@ def test_fancy_path(datadir: Path, request: FixtureRequest):
 def test_read_time_sets(
     results: Results, num_regression: NumericRegressionFixture
 ) -> None:
-    time_sets = read_time_sets(results.metadata)
+    time_sets = read_time_sets(results.results_folder, results.metadata)
     num_regression.check({str(k): v for k, v in time_sets.items()})
 
 
@@ -381,6 +378,7 @@ def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
 def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> None:
     metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
     data = read_global_sensitivity_coefficients(
+        result_directory=global_sa_results_dir,
         coefficients_key=[
             GSAOutputKey("temperature", "parametric_var_1", "trend_id_1"),
             GSAOutputKey("temperature", "parametric_var_2", "trend_id_1"),
@@ -434,7 +432,6 @@ def test_read_history_matching_result_metadata(
     # Existent and completed result file, metadata should be filled.
     metadata = read_history_matching_metadata(hm_results_dir)
 
-    assert metadata.result_directory == hm_results_dir
     assert metadata.objective_functions == {
         "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
         "observed_curve_2": {"trend_id": "trend_2", "property_id": "pressure"},
@@ -518,7 +515,10 @@ def test_read_history_matching_result_data(
 
     # Read the result of a single parametric var entry.
     result = read_history_matching_result(
-        metadata, hm_type=hm_type, hm_result_key=HMOutputKey("parametric_var_1")
+        results_dir,
+        metadata,
+        hm_type=hm_type,
+        hm_result_key=HMOutputKey("parametric_var_1"),
     )
     assert len(result) == 1
     assert result[HMOutputKey("parametric_var_1")] == pytest.approx(
@@ -526,7 +526,7 @@ def test_read_history_matching_result_data(
     )
 
     # Read the result of all entries.
-    result = read_history_matching_result(metadata, hm_type=hm_type)
+    result = read_history_matching_result(results_dir, metadata, hm_type=hm_type)
     assert len(result) == 2
     assert result[HMOutputKey("parametric_var_1")] == pytest.approx(
         expected_results[HMOutputKey("parametric_var_1")]
@@ -537,7 +537,7 @@ def test_read_history_matching_result_data(
 
     # Nonexistent result key, result should be empty.
     result = read_history_matching_result(
-        metadata, hm_type=hm_type, hm_result_key=HMOutputKey("foo")
+        results_dir, metadata, hm_type=hm_type, hm_result_key=HMOutputKey("foo")
     )
     assert result == {}
 
@@ -545,14 +545,14 @@ def test_read_history_matching_result_data(
     creating_file = results_dir / "result.creating"
     creating_file.touch()
 
-    result = read_history_matching_result(metadata, hm_type=hm_type)
+    result = read_history_matching_result(results_dir, metadata, hm_type=hm_type)
     assert result == {}
 
     creating_file.unlink()
 
     # Receiving an invalid History Matching type should raise.
     with pytest.raises(ValueError, match="type `foobar` not supported"):
-        read_history_matching_result(metadata, "foobar")  # type: ignore
+        read_history_matching_result(results_dir, metadata, "foobar")  # type: ignore
 
 
 def test_read_history_matching_historic_data_curves(
@@ -565,7 +565,7 @@ def test_read_history_matching_historic_data_curves(
     result_directories = (hm_probabilistic_results_dir, hm_deterministic_results_dir)
     for result_dir in result_directories:
         metadata = read_history_matching_metadata(result_dir)
-        curves = read_history_matching_historic_data_curves(metadata)
+        curves = read_history_matching_historic_data_curves(result_dir, metadata)
         assert len(curves) == 2
         assert curves["observed_curve_1"] == pytest.approx(
             numpy.array([[0.1, 0.5, 0.9], [1.1, 2.2, 3.3]])
@@ -579,9 +579,8 @@ def test_read_history_matching_historic_data_curves(
         hm_items={},
         objective_functions={},
         parametric_vars={},
-        result_directory=Path("foo"),
     )
-    assert read_history_matching_historic_data_curves(meta) == {}
+    assert read_history_matching_historic_data_curves(Path("foo"), meta) == {}
 
 
 def test_read_history_matching_historic_data_curves_backward_compatibility(
@@ -593,7 +592,7 @@ def test_read_history_matching_historic_data_curves_backward_compatibility(
     """
     result_dir = hm_results_dir_without_historic_data
     metadata = read_history_matching_metadata(result_dir)
-    curves = read_history_matching_historic_data_curves(metadata)
+    curves = read_history_matching_historic_data_curves(result_dir, metadata)
     assert curves == {}
 
 
@@ -631,7 +630,7 @@ def test_read_uncertainty_propagation_results(
     ]
 
     result = read_uncertainty_propagation_results(
-        metadata=metadata, result_keys=[temp_key]
+        result_directory=up_results_dir, metadata=metadata, result_keys=[temp_key]
     )
     assert len(result) == 1
     dict_1 = {
@@ -643,7 +642,7 @@ def test_read_uncertainty_propagation_results(
     num_regression.check(dict_1, basename=str(temp_key))
 
     result = read_uncertainty_propagation_results(
-        metadata=metadata, result_keys=[pressure_key]
+        result_directory=up_results_dir, metadata=metadata, result_keys=[pressure_key]
     )
     assert len(result) == 1
     dict_2 = {

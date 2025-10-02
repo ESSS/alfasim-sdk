@@ -8,63 +8,46 @@ import re
 from collections import namedtuple
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import DefaultDict
-from typing import Dict
-from typing import Iterator
-from typing import List
-from typing import Literal
-from typing import NamedTuple
-from typing import Optional
-from typing import Sequence
-from typing import Tuple
-from typing import Type
-from typing import TypeVar
-from typing import Union
+from typing import (
+    Any,
+    Callable,
+    DefaultDict,
+    Dict,
+    Iterator,
+    List,
+    Literal,
+    NamedTuple,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+)
 
 import attr
 import h5py
 import numpy
 import numpy as np
-from typing_extensions import Self
-from typing_extensions import TypedDict
+from typing_extensions import Self, TypedDict
 
 from alfasim_sdk.result_reader.aggregator_constants import (
     GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_DETERMINISTIC_DSET_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import HISTORY_MATCHING_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    HISTORY_MATCHING_GROUP_NAME,
     HISTORY_MATCHING_HISTORIC_DATA_GROUP_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     HISTORY_MATCHING_PROBABILISTIC_DSET_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import META_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import PROFILES_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    META_GROUP_NAME,
+    PROFILES_GROUP_NAME,
     PROFILES_STATISTICS_DSET_NAME_SUFFIX,
-)
-from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_LOCKING_MODE
-from alfasim_sdk.result_reader.aggregator_constants import RESULT_FILE_PREFIX
-from alfasim_sdk.result_reader.aggregator_constants import TIME_SET_DSET_NAME
-from alfasim_sdk.result_reader.aggregator_constants import TRENDS_GROUP_NAME
-from alfasim_sdk.result_reader.aggregator_constants import (
+    RESULT_FILE_LOCKING_MODE,
+    RESULT_FILE_PREFIX,
+    TIME_SET_DSET_NAME,
+    TRENDS_GROUP_NAME,
     UNCERTAINTY_PROPAGATION_DSET_MEAN_RESULT,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_REALIZATION_OUTPUTS,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_DSET_STD_RESULT,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
-)
-from alfasim_sdk.result_reader.aggregator_constants import (
     UNCERTAINTY_PROPAGATION_GROUP_NAME,
 )
 
@@ -222,7 +205,6 @@ class UncertaintyPropagationAnalysesMetaData:
             )
 
     items: Dict[UPOutputKey, UPItem]
-    result_directory: Path
 
     @classmethod
     def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
@@ -305,7 +287,6 @@ class GlobalSensitivityAnalysisMetadata:
             )
 
     items: Dict[GSAOutputKey, GSAItem]
-    result_directory: Path
 
     @classmethod
     def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
@@ -355,9 +336,7 @@ def read_results_file(
         loaded_metadata = json.loads(
             result_file[META_GROUP_NAME].attrs[meta_data_attrs]
         )
-        return metadata_class(
-            items=map_data(loaded_metadata), result_directory=result_directory
-        )
+        return metadata_class(items=map_data(loaded_metadata))
 
 
 @dataclasses.dataclass(frozen=True)
@@ -409,8 +388,6 @@ class HistoryMatchingMetadata:
     #: Map of parametric vars to the values that represents the analysis, with all existent vars.
     #: Values are either the optimal values (deterministic) or the base values (probabilistic).
     parametric_vars: Dict[str, float]
-    #: The directory in which the result is saved.
-    result_directory: Path
     #: Metadata of the historic curves present in the results. Optional as this was introduced
     #: later (ASIM-5713).
     historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = None
@@ -466,7 +443,7 @@ class HistoryMatchingMetadata:
             }
 
         def map_historic_data_infos(
-            infos: List[Dict[str, Any]]
+            infos: List[Dict[str, Any]],
         ) -> List[HistoricDataCurveMetadata]:
             return [HistoricDataCurveMetadata.from_dict(info) for info in infos]
 
@@ -491,7 +468,6 @@ class HistoryMatchingMetadata:
                 objective_functions=objective_functions,
                 historic_data_curve_infos=historic_curve_infos,
                 parametric_vars=parametric_vars,
-                result_directory=result_directory,
             )
 
 
@@ -611,9 +587,6 @@ class ALFASimResultMetadata:
     :ivar time_set_info:
         Map output type to maps of base time steps to `TimeSetInfoItem`.
 
-    :ivar result_directory:
-        The path where this data has been read.
-
     :ivar app_version_info:
         Map "base time steps" to the application version used in the simulation.
     """
@@ -628,7 +601,6 @@ class ALFASimResultMetadata:
     time_set_info: dict[
         Literal["profiles", "trends"], dict[TimeStepIndex, TimeSetInfoItem]
     ]
-    result_directory: Path
     app_version_info: dict[int, str]
 
     @property
@@ -768,7 +740,6 @@ def _get_empty_result(
     profile_index: int = 0,
     trend_index: int = 0,
     *,
-    result_directory: Path,
     previous_time_set_info: Optional[Dict] = None,
 ) -> ALFASimResultMetadata:
     """
@@ -784,7 +755,6 @@ def _get_empty_result(
             (profile_index, trend_index),
         ),
         time_set_info=previous_time_set_info,
-        result_directory=result_directory,
         app_version_info={},
     )
 
@@ -829,17 +799,11 @@ def read_metadata(
         previous_time_set_info = {}
 
     if not result_directory.is_dir():
-        return _get_empty_result(
-            result_directory=result_directory,
-            previous_time_set_info=previous_time_set_info,
-        )
+        return _get_empty_result(previous_time_set_info=previous_time_set_info)
 
     with open_result_files(result_directory) as result_files:
         if len(result_files) == 0:
-            return _get_empty_result(
-                result_directory=result_directory,
-                previous_time_set_info=previous_time_set_info,
-            )
+            return _get_empty_result(previous_time_set_info=previous_time_set_info)
         else:
             return _read_metadata(
                 result_directory,
@@ -939,7 +903,6 @@ def _read_metadata(
         return _get_empty_result(
             initial_profiles_time_step_index,
             initial_trends_time_step_index,
-            result_directory=result_directory,
             previous_time_set_info=previous_time_set_info,
         )
 
@@ -988,7 +951,6 @@ def _read_metadata(
             PROFILES_GROUP_NAME: profiles_time_set_info,
             TRENDS_GROUP_NAME: trends_time_set_info,
         },
-        result_directory=result_directory,
         app_version_info=merged_metadata.app_version_info,
     )
     return result_metadata
@@ -1179,9 +1141,7 @@ def _merge_metadata_and_read_global_statistics(
             start_index, stop_index = partial_indices[-1]  # The most recent.
 
             if start_index < stop_index:
-                statistics = trends_statistics[
-                    output_id
-                ]  # type: Dict[str, numpy.ndarray]
+                statistics = trends_statistics[output_id]  # type: Dict[str, numpy.ndarray]
                 data_index = meta["index"]
                 min_value, max_value = trends_statistic[:, data_index]
                 statistics["min"] = numpy.nanmin((min_value, statistics["min"]))
@@ -1386,9 +1346,10 @@ def _remap_profile_time_step_index(
 
 
 def _read_profile_arrays(
-    result_metadata,
-    output_keys,
-    time_step_index,
+    result_directory: Path,
+    result_metadata: ALFASimResultMetadata,
+    output_keys: List[OutputKeyType],
+    time_step_index: int,
     *,
     group_name: str,
     data_attr: str,
@@ -1401,7 +1362,7 @@ def _read_profile_arrays(
     profiles_metadata = result_metadata.profiles
     profiles_time_set_info = result_metadata.time_set_info[PROFILES_GROUP_NAME]
 
-    with open_result_files(result_metadata.result_directory) as result_files:
+    with open_result_files(result_directory) as result_files:
         profiles = {}
         for profile_key in output_keys:
             meta = profiles_metadata[profile_key]
@@ -1426,6 +1387,7 @@ def _read_profile_arrays(
 
 
 def read_profiles_data(
+    result_directory: Path,
     result_metadata: ALFASimResultMetadata,
     output_keys: List[OutputKeyType],
     time_step_index: int,
@@ -1437,6 +1399,7 @@ def read_profiles_data(
         a `numpy.array` is mapped.
     """
     return _read_profile_arrays(
+        result_directory,
         result_metadata,
         output_keys,
         time_step_index,
@@ -1447,6 +1410,7 @@ def read_profiles_data(
 
 
 def read_profiles_domain_data(
+    result_directory: Path,
     result_metadata: ALFASimResultMetadata,
     output_keys: List[OutputKeyType],
     time_step_index: int,
@@ -1458,6 +1422,7 @@ def read_profiles_domain_data(
         a `numpy.array` is mapped.
     """
     return _read_profile_arrays(
+        result_directory,
         result_metadata,
         output_keys,
         time_step_index,
@@ -1468,6 +1433,7 @@ def read_profiles_domain_data(
 
 
 def read_profiles_local_statistics(
+    result_directory: Path,
     result_metadata: ALFASimResultMetadata,
     output_keys: List[OutputKeyType],
     time_step_index: int,
@@ -1479,6 +1445,7 @@ def read_profiles_local_statistics(
         a `numpy.array` is mapped.
     """
     return _read_profile_arrays(
+        result_directory,
         result_metadata,
         output_keys,
         time_step_index,
@@ -1490,12 +1457,16 @@ def read_profiles_local_statistics(
 
 
 def read_trends_data(
+    result_directory: Path,
     result_metadata: ALFASimResultMetadata,
     output_keys: Optional[List[OutputKeyType]] = None,
     initial_trends_time_step_index: Optional[int] = None,
     final_trends_time_step_index: Optional[int] = None,
 ) -> Dict[OutputKeyType, numpy.array]:
     """
+    :param result_directory:
+        The directory the provided metadata was read.
+
     :param result_metadata:
         The metadata for the results.
 
@@ -1511,7 +1482,7 @@ def read_trends_data(
     :return:
         The data for the trends listed in `output_keys`.
     """
-    with open_result_files(result_metadata.result_directory) as result_files:
+    with open_result_files(result_directory) as result_files:
         return _read_trends_data(
             result_metadata,
             output_keys,
@@ -1603,6 +1574,7 @@ def _read_trends_data(
 
 
 def read_time_sets(
+    result_directory: Path,
     result_metadata: ALFASimResultMetadata,
     time_sets_key_list: Optional[List[SourceTimeSetKeyType]] = None,
     initial_profiles_time_step_index: Optional[int] = None,
@@ -1611,6 +1583,9 @@ def read_time_sets(
     final_trends_time_step_index: Optional[int] = None,
 ) -> Dict[SourceTimeSetKeyType, numpy.array]:
     """
+    :param result_directory:
+        The directory the provided metadata was read.
+
     :param result_metadata:
         The metadata for the results.
 
@@ -1632,7 +1607,7 @@ def read_time_sets(
     :return:
         The data for the time sets listed in `time_sets_key_list`.
     """
-    with open_result_files(result_metadata.result_directory) as result_files:
+    with open_result_files(result_directory) as result_files:
         return _read_time_sets(
             result_metadata,
             time_sets_key_list,
@@ -1670,21 +1645,21 @@ def _read_time_sets(
         _TREND_ID_ATTR: [initial_trends_time_step_index, final_trends_time_step_index],
     }
     if initial_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][0]
+        )
     if final_profiles_time_step_index is None:
-        time_step_index_range_to_read[_PROFILE_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][0]
+        time_step_index_range_to_read[_PROFILE_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][0]
+        )
     if initial_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            0
-        ] = result_metadata.time_steps_boundaries[0][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][0] = (
+            result_metadata.time_steps_boundaries[0][1]
+        )
     if final_trends_time_step_index is None:
-        time_step_index_range_to_read[_TREND_ID_ATTR][
-            1
-        ] = result_metadata.time_steps_boundaries[1][1]
+        time_step_index_range_to_read[_TREND_ID_ATTR][1] = (
+            result_metadata.time_steps_boundaries[1][1]
+        )
 
     cache = {}
     for time_set_key in time_sets_key_list:
@@ -1756,7 +1731,7 @@ def _read_time_set(
 
 
 def _concatenate_values(
-    data_dict: Dict[Any, List[numpy.ndarray]]
+    data_dict: Dict[Any, List[numpy.ndarray]],
 ) -> Dict[Any, numpy.ndarray]:
     """
     Concatenate the values in the given dict.
@@ -1772,7 +1747,7 @@ def _concatenate_values(
 
 
 def map_output_key_to_time_set_key(
-    all_metadata: Dict[int, Dict]
+    all_metadata: Dict[int, Dict],
 ) -> Dict[OutputKeyType, TimeSetKeyType]:
     """
     Operates on the complete metadata mapping "output key"s to they  respective "time set key".
@@ -1791,7 +1766,7 @@ def map_output_key_to_time_set_key(
 
 
 def map_base_time_set_to_time_set_keys(
-    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType]
+    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType],
 ) -> Dict[int, Tuple[TimeSetKeyType, ...]]:
     """
     Maps base time steps to the "time set key"s where they are found.
@@ -1818,9 +1793,6 @@ def concatenate_metadata(
     """
     Concatenate two result metadata objects.
     """
-
-    if r_b.result_directory != r_a.result_directory:
-        raise RuntimeError("Can not concatenate result from different sources.")
 
     a_initial_ts_index, a_final_ts_index = r_a.time_steps_boundaries
     if a_initial_ts_index == a_final_ts_index:
@@ -1928,7 +1900,6 @@ def concatenate_metadata(
             r_b.time_steps_boundaries[1],
         ),
         time_set_info=r_b.time_set_info,
-        result_directory=r_a.result_directory,
         app_version_info=app_version_info,
     )
 
@@ -1979,11 +1950,15 @@ class UPResult:
 
 
 def read_uncertainty_propagation_results(
+    result_directory: Path,
     metadata: UncertaintyPropagationAnalysesMetaData,
     result_keys: Sequence[UPOutputKey] | None = None,
 ) -> dict[UPOutputKey, UPResult]:
     """
     Get the uncertainty propagation results.
+
+    :param result_directory:
+        The directory the provided metadata was read.
 
     :param metadata:
         The uncertainty propagation metadata previously read.
@@ -1992,7 +1967,7 @@ def read_uncertainty_propagation_results(
         A sequence of result key in the form of "<property_id>@<trend_id>". If None, will read the
         result of all entries found in the metadata.
     """
-    with open_result_file(metadata.result_directory) as file:
+    with open_result_file(result_directory) as file:
         if file is None:
             return {}
 
@@ -2046,15 +2021,24 @@ def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.
 
 
 def read_global_sensitivity_coefficients(
+    result_directory: Path,
     metadata: GlobalSensitivityAnalysisMetadata,
     coefficients_key: Sequence[GSAOutputKey] | None = None,
 ) -> dict[GSAOutputKey, np.ndarray]:
     """
     Read the global sensitivity analysis coefficients results.
+
+    :param result_directory:
+        The directory the provided metadata was read.
+
+    :param metadata:
+        The global sensitivity analysis result metadata previously read.
+
+    :param coefficients_key:
+        If passed will return the result of only the specified element keys. Defaults to None, in
+        which case the result of all keys found in the metadata will be returned.
     """
-    with open_result_file(
-        metadata.result_directory, result_filename="result"
-    ) as result_file:
+    with open_result_file(result_directory, result_filename="result") as result_file:
         if result_file is None:
             return {}
 
@@ -2088,18 +2072,27 @@ def read_history_matching_metadata(
 
 
 def read_history_matching_result(
+    result_directory: Path,
     metadata: HistoryMatchingMetadata,
     hm_type: Literal["HM-deterministic", "HM-probabilistic"],
     hm_result_key: Optional[HMOutputKey] = None,
 ) -> Dict[HMOutputKey, Union[np.ndarray, float]]:
     """
+    Read the results of a History Matching analysis.
+
+    :param result_directory:
+        The directory the provided metadata was read.
+
     :param metadata:
         History Matching result metadata.
+
     :param hm_type:
         The type of HM analysis. Can be 'deterministic' or 'probabilistic'.
+
     :param hm_result_key:
         The id of the parametric vars to collect the result. Defaults to None, in which case the
         result of all keys found in the metadata will be returned.
+
     :return:
         A dict mapping the HM result key (the parametric var id) to its corresponding result, which
         could be an array with N values (N being the sampling size) for the probabilistic or a single
@@ -2117,7 +2110,7 @@ def read_history_matching_result(
         dataset_key = HISTORY_MATCHING_PROBABILISTIC_DSET_NAME
         slicer = lambda index: (slice(None), index)
 
-    with open_result_file(metadata.result_directory) as result_file:
+    with open_result_file(result_directory) as result_file:
         if not result_file:
             return {}
 
@@ -2136,14 +2129,23 @@ def read_history_matching_result(
 
 
 def read_history_matching_historic_data_curves(
+    result_directory: Path,
     metadata: HistoryMatchingMetadata,
 ) -> Dict[str, np.ndarray]:
     """
+    Read the historic/observed curves data present in a History Matching result file.
+
+    :param result_directory:
+        The directory the provided metadata was read.
+
+    :param metadata:
+        History Matching result metadata.
+
     :return:
         Map of historic data curve id to the actual curve, represented as an array of points in the
         form [[y1, y2, ..., yn], [x1, x1, ..., xn]].
     """
-    with open_result_file(metadata.result_directory) as result_file:
+    with open_result_file(result_directory) as result_file:
         if not result_file:
             return {}
 

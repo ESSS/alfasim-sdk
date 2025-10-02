@@ -2,29 +2,23 @@ import os
 import textwrap
 from datetime import datetime
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import List
+from typing import Any, Callable, List
 from unittest.mock import ANY
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 from pytest_mock import MockerFixture
 
-from alfasim_sdk import convert_alfacase_to_description
-from alfasim_sdk import PluginDescription
-from alfasim_sdk._internal.alfacase.case_description import CaseDescription
+from alfasim_sdk import PluginDescription, convert_alfacase_to_description
 from alfasim_sdk._internal.alfacase.case_description import (
+    CaseDescription,
     InternalReferencePluginTableColumn,
-)
-from alfasim_sdk._internal.alfacase.case_description import PluginFileContent
-from alfasim_sdk._internal.alfacase.case_description import PluginInternalReference
-from alfasim_sdk._internal.alfacase.case_description import PluginMultipleReference
-from alfasim_sdk._internal.alfacase.case_description import PluginTableContainer
-from alfasim_sdk._internal.alfacase.case_description import PluginTracerReference
-from alfasim_sdk._internal.alfacase.case_description import (
+    PluginFileContent,
+    PluginInternalReference,
+    PluginMultipleReference,
+    PluginTableContainer,
+    PluginTracerReference,
     TracerReferencePluginTableColumn,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
@@ -32,29 +26,15 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 )
 from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
     dump_file_contents_and_update_plugins,
-)
-from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
-    get_plugin_module_candidates,
-)
-from alfasim_sdk._internal.alfacase.plugin_alfacase_to_case import (
     load_plugin_data_structure,
+    obtain_alfasim_plugins_dir,
 )
-
-
-def test_get_plugin_module_candidates(monkeypatch):
-    monkeypatch.setenv("ALFASIM_PLUGINS_DIR", f"foo{os.path.pathsep}bar")
-    monkeypatch.setattr(Path, "home", lambda: Path("xxx"))
-    candidates = get_plugin_module_candidates("cool_stuff")
-    assert candidates == [
-        Path("foo/cool_stuff/artifacts/cool_stuff.py"),
-        Path("bar/cool_stuff/artifacts/cool_stuff.py"),
-        Path("xxx/.alfasim_plugins/cool_stuff/artifacts/cool_stuff.py"),
-    ]
 
 
 class TestLoadPluginDataStructure:
     def test_without_importable_python(self, abx_plugin: None) -> None:
-        models = load_plugin_data_structure("abx")
+        alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+        models = load_plugin_data_structure("abx", alfasim_plugins_dir)
         assert [m.__name__ for m in models] == ["AContainer", "BContainer"]
 
         with pytest.raises(ModuleNotFoundError):
@@ -64,7 +44,8 @@ class TestLoadPluginDataStructure:
         with pytest.raises(ModuleNotFoundError):
             import alfasim_sdk_plugins.importable  # noqa
 
-        models = load_plugin_data_structure("importable")
+        alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+        models = load_plugin_data_structure("importable", alfasim_plugins_dir)
         assert [m.__name__ for m in models] == ["Foo"]
 
         import alfasim_sdk_plugins.importable  # noqa
@@ -85,7 +66,7 @@ class TestLoadPluginDataStructure:
 
         # Create an invalid "importable" plugin.
         plugin_root = datadir / "test_invalid_plugins"
-        plugin_file = plugin_root / "importable/artifacts/importable.py"
+        plugin_file = plugin_root / "importable-1.0.0/artifacts/importable.py"
         plugin_file.parent.mkdir(parents=True)
         plugin_file.touch()
         invalid_namespace = plugin_file.parent / "alfasim_sdk_plugins"
@@ -96,7 +77,7 @@ class TestLoadPluginDataStructure:
 
         # Prepare to check if the namespace is being updated while trying to load the plugin.
         valid_namespace = (
-            importable_plugin_source / "importable/artifacts/alfasim_sdk_plugins"
+            importable_plugin_source / "importable-1.0.0/artifacts/alfasim_sdk_plugins"
         )
         good_namespace = str(valid_namespace.absolute())
         bad_namespace = str(invalid_namespace.absolute())
@@ -117,8 +98,8 @@ class TestLoadPluginDataStructure:
         mocker.patch.object(
             plugin_alfacase_to_case, "import_module", new=mock_import_module
         )
-
-        load_plugin_data_structure("importable")
+        alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+        load_plugin_data_structure("importable", alfasim_plugins_dir)
 
         assert bad_namespace not in alfasim_sdk_plugins.__path__
         assert good_namespace in alfasim_sdk_plugins.__path__
@@ -135,6 +116,7 @@ def test_load_plugin_multiple_containers(datadir, abx_plugin):
             """\
             plugins:
             -   name: abx
+                version: 1.0.0
                 is_enabled: False
                 gui_models:
                     AContainer:
@@ -152,6 +134,7 @@ def test_load_plugin_multiple_containers(datadir, abx_plugin):
     assert case.plugins == [
         PluginDescription(
             name="abx",
+            version="1.0.0",
             is_enabled=False,
             gui_models={
                 "AContainer": {
@@ -199,6 +182,7 @@ def test_load_plugin_with_missing_top_level_models(
             """\
             plugins:
             -   name: abx
+                version: 1.0.0
                 gui_models: {}
             """
         )
@@ -207,6 +191,7 @@ def test_load_plugin_with_missing_top_level_models(
     assert case.plugins == [
         PluginDescription(
             name="abx",
+            version="1.0.0",
             is_enabled=True,
             gui_models={},
         ),
@@ -225,6 +210,7 @@ def test_load_plugin_empty_top_containers(datadir: Path, abx_plugin: None) -> No
             """\
             plugins:
             -   name: abx
+                version: 1.0.0
                 gui_models:
                     # strictyaml requires adjacent mappings to have the same internal indent.
                     AContainer: {}
@@ -236,6 +222,7 @@ def test_load_plugin_empty_top_containers(datadir: Path, abx_plugin: None) -> No
     assert case.plugins == [
         PluginDescription(
             name="abx",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "AContainer": {"_children_list": []},
@@ -268,7 +255,7 @@ def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[List[str]], None]:
     def prepare_foobar_plugin_impl(data_model_fields: List[str]) -> None:
         plugin_root = datadir / "test_plugins"
         monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(plugin_root))
-        plugin_file = plugin_root / "foobar/artifacts/foobar.py"
+        plugin_file = plugin_root / "foobar-1.0.0/artifacts/foobar.py"
         plugin_file.parent.mkdir(parents=True)
 
         data_model_source = "\n    ".join(
@@ -317,6 +304,7 @@ def test_load_boolean(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -330,6 +318,7 @@ def test_load_boolean(datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -347,6 +336,7 @@ def test_load_boolean(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -370,6 +360,7 @@ def test_load_enum(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -383,6 +374,7 @@ def test_load_enum(datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -400,6 +392,7 @@ def test_load_enum(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -423,6 +416,7 @@ def test_load_file_content(monkeypatch, datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -458,6 +452,7 @@ def test_load_file_content(monkeypatch, datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -472,6 +467,7 @@ def test_load_file_content(monkeypatch, datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -497,6 +493,7 @@ def test_load_multiple_reference(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -511,6 +508,7 @@ def test_load_multiple_reference(datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -532,6 +530,7 @@ def test_load_multiple_reference(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -558,6 +557,7 @@ def test_load_reference(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -573,6 +573,7 @@ def test_load_reference(datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -592,6 +593,7 @@ def test_load_reference(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -616,6 +618,7 @@ def test_load_quantity(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -633,6 +636,7 @@ def test_load_quantity(datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -650,6 +654,7 @@ def test_load_quantity(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -671,6 +676,7 @@ def test_load_string(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -684,6 +690,7 @@ def test_load_string(datadir, prepare_foobar_plugin):
     assert case.plugins == [
         PluginDescription(
             name="foobar",
+            version="1.0.0",
             is_enabled=True,
             gui_models={
                 "FooContainer": {
@@ -701,6 +708,7 @@ def test_load_string(datadir, prepare_foobar_plugin):
             """\
             plugins:
             -   name: foobar
+                version: 1.0.0
                 is_enabled: True
                 gui_models:
                     FooContainer:
@@ -735,6 +743,7 @@ class TestLoadTable:
                 """\
                 plugins:
                 -   name: foobar
+                    version: 1.0.0
                     is_enabled: True
                     gui_models:
                         FooContainer:
@@ -754,6 +763,7 @@ class TestLoadTable:
         assert case.plugins == [
             PluginDescription(
                 name="foobar",
+                version="1.0.0",
                 is_enabled=True,
                 gui_models={
                     "FooContainer": {
@@ -777,6 +787,7 @@ class TestLoadTable:
                 """\
                 plugins:
                 -   name: foobar
+                    version: 1.0.0
                     is_enabled: True
                     gui_models:
                         FooContainer:
@@ -797,6 +808,7 @@ class TestLoadTable:
                 """\
                 plugins:
                 -   name: foobar
+                    version: 1.0.0
                     is_enabled: True
                     gui_models:
                         FooContainer:
@@ -819,6 +831,7 @@ class TestLoadTable:
                 """\
                 plugins:
                 -   name: foobar
+                    version: 1.0.0
                     is_enabled: True
                     gui_models:
                         FooContainer:
@@ -838,6 +851,7 @@ class TestLoadTable:
                 """\
                 plugins:
                 -   name: foobar
+                    version: 1.0.0
                     is_enabled: True
                     gui_models:
                         FooContainer:
@@ -881,6 +895,7 @@ class TestLoadTable:
                 """\
                 plugins:
                 -   name: foobar
+                    version: 1.0.0
                     is_enabled: True
                     gui_models:
                         FooContainer:
@@ -900,6 +915,7 @@ class TestLoadTable:
         assert case.plugins == [
             PluginDescription(
                 name="foobar",
+                version="1.0.0",
                 is_enabled=True,
                 gui_models={
                     "FooContainer": {
@@ -933,6 +949,7 @@ def test_dump_file_contents_and_update_plugins(datadir, monkeypatch):
         plugins=[
             PluginDescription(
                 name="foobar",
+                version="1.0.0",
                 is_enabled=True,
                 gui_models={
                     "FooContainer": {
@@ -988,7 +1005,7 @@ def test_dump_file_contents_and_update_plugins(datadir, monkeypatch):
 def test_load_plugin_without_inputs(datadir, monkeypatch):
     plugin_root = datadir / "test_plugins"
     monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(plugin_root))
-    plugin_file = plugin_root / "no_input/artifacts/no_input.py"
+    plugin_file = plugin_root / "no_input-1.0.0/artifacts/no_input.py"
     plugin_file.parent.mkdir(parents=True)
     plugin_file_source = textwrap.dedent(
         """\
@@ -1011,6 +1028,7 @@ def test_load_plugin_without_inputs(datadir, monkeypatch):
             """\
             plugins:
             -   name: no_input
+                version: 1.0.0
                 is_enabled: True
             """
         )
@@ -1020,6 +1038,7 @@ def test_load_plugin_without_inputs(datadir, monkeypatch):
     assert case.plugins == [
         PluginDescription(
             name="no_input",
+            version="1.0.0",
             is_enabled=True,
             gui_models={},
         ),
@@ -1033,6 +1052,7 @@ def test_load_not_installed_plugin(datadir):
             """\
             plugins:
             -   name: not_installed
+                version: 0.0.0
                 is_enabled: True
                 gui_models:
                     AContainer:
@@ -1044,3 +1064,82 @@ def test_load_not_installed_plugin(datadir):
 
     case = convert_alfacase_to_description(alfacase)
     assert case.plugins == []
+
+
+def test_load_plugin_without_version(
+    datadir: Path, abx_plugin: None, monkeypatch: MonkeyPatch
+) -> None:
+    """
+    Test to ensure the backward compatibility in case of version is not specifeid in the
+    .alfacase file.
+    """
+    plugins_root = datadir / "test_plugins"
+    monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(plugins_root))
+
+    assets = plugins_root / "abx-1.0.0" / "assets"
+    assets.mkdir()
+
+    plugin_yaml = assets / "plugin.yaml"
+    plugin_yaml.touch()
+
+    alfacase = datadir / "test.alfacase"
+    alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abx
+                is_enabled: False
+                gui_models:
+                    AContainer:
+                        _children_list:
+                        -   asd: aaa
+                        -   qwe: sss
+                    BContainer:
+                        _children_list:
+                        -   qwe: zzz
+                        -   asd: xxx
+            """
+        )
+    )
+    case = convert_alfacase_to_description(alfacase)
+    assert case.plugins == [
+        PluginDescription(
+            name="abx",
+            version=None,
+            is_enabled=False,
+            gui_models={
+                "AContainer": {
+                    "_children_list": [
+                        {"asd": "aaa"},
+                        {"qwe": "sss"},
+                    ],
+                },
+                "BContainer": {
+                    "_children_list": [
+                        {"qwe": "zzz"},
+                        {"asd": "xxx"},
+                    ],
+                },
+            },
+        ),
+    ]
+
+    wrong_alfacase = datadir / "wrong.alfacase"
+    wrong_alfacase.write_text(
+        textwrap.dedent(
+            """\
+            plugins:
+            -   name: abs
+                is_enabled: False
+                gui_models:
+                    AContainer:
+                        _children_list:
+                        -   asd: aaa
+                        -   qwe: sss
+                    BContainer:
+                        _children_list:
+                        -   qwe: zzz
+                        -   asd: xxx
+            """
+        )
+    )

@@ -6,14 +6,12 @@ from collections import deque
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import List
-from typing import Set
+from typing import List, Set
 
 import attr
 import typing_inspect
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 from strictyaml.utils import flatten
 from typing_inspect import is_optional_type
 
@@ -44,7 +42,7 @@ def is_list(type_: type) -> bool:
 
 def list_to_alfacase_schema(type_: type, indent: int) -> str:
     list_value = typing_inspect.get_args(type_)[0]
-    return f"Seq({_get_attr_value(list_value, indent=indent+1)})"
+    return f"Seq({_get_attr_value(list_value, indent=indent + 1)})"
 
 
 def is_float(type_: type) -> bool:
@@ -373,7 +371,7 @@ def _get_classes(class_: type) -> Set[type]:
 
     classes = []
     for key, value in attr.fields_dict(class_).items():
-        if needs_schema(value.type) and not key in IGNORED_PROPERTIES:
+        if needs_schema(value.type) and key not in IGNORED_PROPERTIES:
             classes.append(get_attr_class_type(value.type))
 
     return set(flatten(classes))

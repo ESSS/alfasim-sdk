@@ -1,45 +1,39 @@
 from contextlib import suppress
 from datetime import datetime
+from enum import Enum
 from numbers import Number
 from pathlib import Path
-from typing import Any
-from typing import Dict
-from typing import Iterator
-from typing import List
-from typing import Optional
-from typing import Set
-from typing import Tuple
-from typing import Union
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, Union
 
 import attr
 import numpy as np
-from attr.validators import in_
-from attr.validators import instance_of
-from attr.validators import optional
+from attr.validators import in_, instance_of, optional
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from ..validators import non_empty_str
-from .case_description_attributes import attrib_array
-from .case_description_attributes import attrib_curve
-from .case_description_attributes import attrib_dict_of
-from .case_description_attributes import attrib_enum
-from .case_description_attributes import attrib_instance
-from .case_description_attributes import attrib_instance_list
-from .case_description_attributes import attrib_scalar
-from .case_description_attributes import collapse_array_repr
-from .case_description_attributes import dict_of
-from .case_description_attributes import dict_of_array
-from .case_description_attributes import dict_with_scalar
-from .case_description_attributes import InvalidReferenceError
-from .case_description_attributes import list_of_optional_integers
-from .case_description_attributes import list_of_strings
-from .case_description_attributes import Numpy1DArray
-from .case_description_attributes import numpy_array_validator
-from .case_description_attributes import PhaseName
 from alfasim_sdk._internal import constants
 
+from ..validators import non_empty_str
+from .case_description_attributes import (
+    DescriptionError,
+    InvalidReferenceError,
+    Numpy1DArray,
+    PhaseName,
+    attrib_array,
+    attrib_curve,
+    attrib_dict_of,
+    attrib_enum,
+    attrib_instance,
+    attrib_instance_list,
+    attrib_scalar,
+    collapse_array_repr,
+    dict_of,
+    dict_of_array,
+    dict_with_scalar,
+    list_of_optional_integers,
+    list_of_strings,
+    numpy_array_validator,
+)
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -62,21 +56,13 @@ from alfasim_sdk._internal import constants
 
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
-    """
-    :ivar name:
-        The plugin id.
-
-    :ivar gui_models:
-        The plugin input format depends on the specific plugin implementation.
-
-    :ivar is_enabled:
-        A flag indicating if this plugin is enabled.
-
-    .. include:: /alfacase_definitions/PluginDescription.txt
-    """
-
-    name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    gui_models: Dict[str, Any] = attr.ib(default=attr.Factory(dict))
+    # The plugin id.
+    name: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    # The current version of plugin.
+    version: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    # The plugin input format depends on the specific plugin implementation.
+    gui_models: dict[str, Any] = attr.ib(default=attr.Factory(dict))
+    # A flag indicating if this plugin is enabled.
     is_enabled: bool = attr.ib(default=True)
 
 
@@ -775,7 +761,10 @@ class PumpEquipmentDescription:
     speed_curve_interpolation_type = attrib_enum(
         default=constants.InterpolationType.Constant
     )
-
+    speed_type = attrib_enum(default=constants.PumpSpeedType.Constant)
+    constant_speed = attrib_scalar(
+        category="angle per time", default=Scalar(500, "rpm")
+    )
     # Electric Submersible Pump
     esp_table = attrib_instance(TablePumpDescription)
     # [[[cog
@@ -842,9 +831,9 @@ class CompressorPressureTableDescription:
     @isentropic_efficiency_table.validator
     def _validate_isentropic_efficiency_table(self, attribute, value):
         isen_eff = np.array(value.GetValues("-"))
-        assert np.all(
-            np.logical_and(isen_eff > 0, isen_eff <= 1.0)
-        ), "Isentropic efficiency must be greater than 0 and lower or equal to 1"
+        assert np.all(np.logical_and(isen_eff > 0, isen_eff <= 1.0)), (
+            "Isentropic efficiency must be greater than 0 and lower or equal to 1"
+        )
 
 
 @attr.s(frozen=True, slots=True)
@@ -993,9 +982,9 @@ class PigEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True)
@@ -1028,9 +1017,9 @@ class ValveEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True)
@@ -1098,9 +1087,9 @@ class LeakEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -1872,15 +1861,15 @@ class SeparatorNodePropertiesDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
     @length.validator
     def _validate_length(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "length"
-        ), "Invalid length"
+        assert isinstance(value, Scalar) and value.GetCategory() == "length", (
+            "Invalid length"
+        )
 
     @gas_separation_efficiency.validator
     def _validate_gas_separation_efficiency(self, attribute, value):
@@ -2074,9 +2063,9 @@ class CasingSectionDescription:
     @outer_diameter.validator
     @inner_diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -2099,9 +2088,9 @@ class TubingDescription:
     @outer_diameter.validator
     @inner_diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -2134,9 +2123,9 @@ class OpenHoleDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True)
@@ -2169,9 +2158,9 @@ class GasLiftValveEquipmentDescription:
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
-        assert (
-            isinstance(value, Scalar) and value.GetCategory() == "diameter"
-        ), "Invalid diameter"
+        assert isinstance(value, Scalar) and value.GetCategory() == "diameter", (
+            "Invalid diameter"
+        )
 
 
 @attr.s()
@@ -3373,9 +3362,7 @@ class PvtModelsDescription:
 
             PvtModelsDescription(
                 default_model="PVT1",
-                tables={
-                    'PVT1': Path('./my_tab_file.tab')
-                },
+                tables={"PVT1": Path("./my_tab_file.tab")},
             )
 
     .. tab:: Schema
@@ -3405,7 +3392,7 @@ class PvtModelsDescription:
 
     @staticmethod
     def get_pvt_file_and_model_name(
-        value: Union[str, Path]
+        value: Union[str, Path],
     ) -> Tuple[Path, Optional[str]]:
         """
         Parse the value provided from the user to get the path for the pvt file and if defined, the pvt model.
@@ -3434,12 +3421,29 @@ class TracersDescription:
     .. include:: /alfacase_definitions/TracersDescription.txt
     """
 
-    constant_coefficients: Dict[
-        str, TracerModelConstantCoefficientsDescription
-    ] = attr.ib(
-        default=attr.Factory(dict),
-        validator=dict_of(TracerModelConstantCoefficientsDescription),
+    constant_coefficients: Dict[str, TracerModelConstantCoefficientsDescription] = (
+        attr.ib(
+            default=attr.Factory(dict),
+            validator=dict_of(TracerModelConstantCoefficientsDescription),
+        )
     )
+
+
+class RestartPointLocation(Enum):
+    Local = "local"
+    Remote = "remote"
+
+
+@attr.s(frozen=True, kw_only=True)
+class RestartPointKey:
+    """
+    .. include:: /alfacase_definitions/RestartPointKey.txt
+    """
+
+    id: str = attr.ib(validator=instance_of(str))
+    location = attrib_enum(RestartPointLocation)
+    simulation_time: float = attr.ib(validator=instance_of(float))
+    timestep_index: int = attr.ib(validator=instance_of(int))
 
 
 @attr.s()
@@ -3459,6 +3463,7 @@ class PhysicsDescription:
     restart_filepath: Optional[Path] = attr.ib(
         default=None, validator=optional(instance_of(Path))
     )
+    restart_point_key = attrib_instance(RestartPointKey, is_optional=True)
     keep_former_results: bool = attr.ib(default=False, validator=instance_of(bool))
     emulsion_model_enabled: bool = attr.ib(default=True, validator=instance_of(bool))
     emulsion_relative_viscosity_model = attrib_enum(
@@ -3500,6 +3505,9 @@ class PhysicsDescription:
     )
     fluid_material_convection_correlation = attrib_enum(
         default=constants.FluidMaterialConvectionCorrelation.HasanKabir1994
+    )
+    steady_state_guess_initialization = attrib_enum(
+        default=constants.SteadyStateGuessInitializationType.QuasiHydrostatic
     )
 
 
@@ -3619,6 +3627,7 @@ class CaseDescription:
                 self.pvt_models.combined.keys(),
                 self.pvt_models.pt_table_parameters.keys(),
                 self.pvt_models.ph_table_parameters.keys(),
+                self.pvt_models.constant_properties.keys(),
             )
         )
         if (
@@ -3740,9 +3749,17 @@ class CaseDescription:
         for key in keys_from_pvt_tables_to_remove:
             del self.pvt_models.tables[key]
 
-    def _check_restart_file(self):
+    def _check_restart_file(self) -> None:
         restart_file = self.physics.restart_filepath
-        if restart_file and not Path(restart_file).is_file():
+        if restart_file is None:
+            return
+
+        if self.physics.restart_point_key is not None:
+            raise DescriptionError(
+                "restart_filepath and restart_point_key cannot both be set"
+            )
+
+        if not Path(restart_file).is_file():
             raise InvalidReferenceError(
                 f"Restart file '{restart_file}' is not a valid file"
             )
@@ -3808,7 +3825,7 @@ class CaseDescription:
                 f"The following elements have an invalid fluid assigned: {', '.join(sorted(elements_with_invalid_fluid))}.\n"
             )
 
-    def ensure_valid_references(self):
+    def ensure_valid_references(self) -> None:
         """
         Ensure that all attributes that uses references has consistent values, otherwise an exception is raised.
         # TODO: ASIM-3635: Add Check for source and target parameters of PipeDescription

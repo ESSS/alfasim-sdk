@@ -2,17 +2,19 @@ import re
 from pathlib import Path
 
 import pytest
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
+
+from alfasim_sdk import (
+    MultiInputType,
+    NumericalOptionsDescription,
+    convert_description_to_alfacase,
+)
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
-from alfasim_sdk import convert_description_to_alfacase
-from alfasim_sdk import MultiInputType
-from alfasim_sdk import NumericalOptionsDescription
-from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 
 
 def test_convert_description_to_alfacase_with_empty_dict(datadir: Path) -> None:

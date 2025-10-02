@@ -1,27 +1,22 @@
 from pathlib import Path
 from textwrap import dedent
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
+from typing import Dict, List, Optional, Union
 
 import attr
 import pytest
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from alfasim_sdk import CaseDescription
-from alfasim_sdk import CompressorEquipmentDescription
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_instance
+from alfasim_sdk import CaseDescription, CompressorEquipmentDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    Numpy1DArray,
+    attrib_enum,
+    attrib_instance,
     attrib_instance_list,
+    attrib_scalar,
 )
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_scalar
-from alfasim_sdk._internal.alfacase.case_description_attributes import Numpy1DArray
-from alfasim_sdk._internal.alfacase.generate_schema import _obtain_referred_type
-from alfasim_sdk._internal.alfacase.generate_schema import generate_alfacase_schema
 from alfasim_sdk._internal.alfacase.generate_schema import (
+    _obtain_referred_type,
+    generate_alfacase_schema,
     get_all_classes_that_needs_schema,
 )
 from alfasim_sdk._internal.alfacase.schema import case_description_schema
@@ -467,6 +462,7 @@ def test_get_cases_class():
         "ReferencedVelocitiesContainerDescription",
         "ReferencedVolumeFractionsContainerDescription",
         "ReservoirInflowEquipmentDescription",
+        "RestartPointKey",
         "SeparatorNodePropertiesDescription",
         "SpeedCurveDescription",
         "SurgeVolumeOptionsDescription",
@@ -495,9 +491,7 @@ def test_get_cases_class():
         "WellDescription",
         "XAndYDescription",
     }
-    assert (
-        obtained == expected
-    ), f"""
+    assert obtained == expected, f"""
            Missing in the expected: {obtained.difference(expected) or None}.
            Extra in expected: {expected.difference(obtained) or None}
        """

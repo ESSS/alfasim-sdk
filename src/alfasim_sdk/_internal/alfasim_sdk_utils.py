@@ -1,14 +1,9 @@
-from typing import Any
-from typing import Dict
-from typing import Optional
-from typing import Tuple
+import sys
+from typing import Any, Dict, Optional, Tuple
 
 import attr
 
-from alfasim_sdk._internal.types import BaseField
-from alfasim_sdk._internal.types import Group
-from alfasim_sdk._internal.types import Tab
-from alfasim_sdk._internal.types import Tabs
+from alfasim_sdk._internal.types import BaseField, Group, Tab, Tabs
 
 
 def get_attr_class(
@@ -92,9 +87,19 @@ def get_current_version() -> str:
     return alfasim_sdk.__version__
 
 
-def get_extras_default_required_version() -> str:
+def get_required_sdk_version() -> str:
     """
     Returns a string with default alfasim-sdk version requirement for plugins.
     Default is greater or equal to current alfasim-sdk version.
     """
     return f">={get_current_version()}"
+
+
+def get_required_python_version() -> str:
+    """
+    Return the required python version to be included in plugins metadata when using
+    the CLI to generate a template.
+    """
+    # Assume most plugins will use compiled code and include an upper bound.
+    major, minor, *_ = sys.version_info
+    return f">={major}.{minor},<{major}.{minor + 1}"

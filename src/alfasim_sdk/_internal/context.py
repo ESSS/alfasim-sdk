@@ -1,20 +1,17 @@
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
 import attr
-from attr.validators import deep_iterable
-from attr.validators import in_
-from attr.validators import instance_of
-from attr.validators import optional
+from attr.validators import deep_iterable, in_, instance_of, optional
 from barril.units import Scalar
 
-from alfasim_sdk._internal.constants import EmulsionDropletSizeModelType
-from alfasim_sdk._internal.constants import EmulsionInversionPointModelType
-from alfasim_sdk._internal.constants import EmulsionRelativeViscosityModelType
-from alfasim_sdk._internal.constants import HydrodynamicModelType
-from alfasim_sdk._internal.constants import SolidsModelType
-from alfasim_sdk._internal.validators import list_of_strings
-from alfasim_sdk._internal.validators import non_empty_str
+from alfasim_sdk._internal.constants import (
+    EmulsionDropletSizeModelType,
+    EmulsionInversionPointModelType,
+    EmulsionRelativeViscosityModelType,
+    HydrodynamicModelType,
+    SolidsModelType,
+)
+from alfasim_sdk._internal.validators import list_of_strings, non_empty_str
 
 
 @attr.s(frozen=True)
@@ -26,6 +23,7 @@ class PluginInfo:
 
     caption: str = attr.attrib(validator=non_empty_str)
     name: str = attr.attrib(validator=non_empty_str)
+    version: str = attr.attrib(validator=non_empty_str)
     enabled: bool = attr.attrib(validator=instance_of(bool))
     models: List[str] = attr.attrib(validator=list_of_strings)
 
@@ -200,6 +198,7 @@ class Context:
                 name = String(value="ALFAsim", caption="Field")
                 scalar = Quantity(value=1, unit="degC", caption="Field")
 
+
             @alfasim_sdk.hookimpl
             def alfasim_get_data_model_type():
                 return [MyModel]
@@ -209,10 +208,10 @@ class Context:
         .. code-block:: console
 
 
-            >>> ctx.get_model('MyModel')
+            >>> ctx.get_model("MyModel")
             MyModel(name='ALFAsim', scalar=Scalar(1.0, 'degC', 'temperature'))
 
-            >>> ctx.get_model('MyModel').name
+            >>> ctx.get_model("MyModel").name
             'ALFAsim'
 
         At runtime, you can also verify the names of the models defined by a given plugin.
@@ -275,6 +274,7 @@ class Context:
             class MyModel:
                 name = String(value="ALFAsim", caption="Field")
                 scalar = Quantity(value=1, unit="degC", caption="Field")
+
 
             @alfasim_sdk.hookimpl
             def alfasim_get_data_model_type():

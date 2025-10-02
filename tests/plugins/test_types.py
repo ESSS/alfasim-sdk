@@ -2,8 +2,7 @@ import re
 
 import pytest
 
-from alfasim_sdk._internal.types import MultipleReference
-from alfasim_sdk._internal.types import Reference
+from alfasim_sdk._internal.types import MultipleReference, Reference
 
 
 @pytest.mark.parametrize("expression_type", ["enable_expr", "visible_expr"])
@@ -81,8 +80,8 @@ def test_enum():
 
 @pytest.mark.parametrize("class_", [Reference, MultipleReference])
 def test_reference(class_):
+    from alfasim_sdk._internal.models import container_model, data_model
     from alfasim_sdk._internal.types import TracerType
-    from alfasim_sdk._internal.models import data_model, container_model
 
     @data_model(caption="caption")
     class Data:
@@ -160,7 +159,7 @@ def test_table():
 
 
 def test_table_column():
-    from alfasim_sdk._internal.types import TableColumn, Quantity
+    from alfasim_sdk._internal.types import Quantity, TableColumn
 
     with pytest.raises(
         TypeError, match="value must be a Quantity or a Reference, got a <class 'str'>."

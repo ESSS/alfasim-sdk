@@ -1,51 +1,45 @@
 import itertools
 from functools import partial
-from pathlib import Path
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 from types import ModuleType
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Type
-from typing import Union
+from typing import Any, Callable, Dict, List, Optional, Sequence, Type, Union
 
 import attr
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 from typing_extensions import TypeGuard
 
 from alfasim_sdk import BaseField
-from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
-from alfasim_sdk._internal.alfacase.alfacase_to_case import load_value
-from alfasim_sdk._internal.alfacase.alfacase_to_case import to_case_values
-from alfasim_sdk._internal.alfacase.case_description import CaseDescription
-from alfasim_sdk._internal.alfacase.case_description import (
-    InternalReferencePluginTableColumn,
+from alfasim_sdk._internal.alfacase.alfacase_to_case import (
+    DescriptionDocument,
+    load_value,
+    to_case_values,
 )
-from alfasim_sdk._internal.alfacase.case_description import PluginDescription
-from alfasim_sdk._internal.alfacase.case_description import PluginFileContent
-from alfasim_sdk._internal.alfacase.case_description import PluginInternalReference
-from alfasim_sdk._internal.alfacase.case_description import PluginMultipleReference
-from alfasim_sdk._internal.alfacase.case_description import PluginTableContainer
-from alfasim_sdk._internal.alfacase.case_description import PluginTracerReference
 from alfasim_sdk._internal.alfacase.case_description import (
+    CaseDescription,
+    InternalReferencePluginTableColumn,
+    PluginDescription,
+    PluginFileContent,
+    PluginInternalReference,
+    PluginMultipleReference,
+    PluginTableContainer,
+    PluginTracerReference,
     TracerReferencePluginTableColumn,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     InvalidPluginDataError,
 )
 from alfasim_sdk._internal.alfacase.plugin_introspection import get_attributes
-from alfasim_sdk._internal.types import Boolean
-from alfasim_sdk._internal.types import Enum
-from alfasim_sdk._internal.types import FileContent
-from alfasim_sdk._internal.types import MultipleReference
-from alfasim_sdk._internal.types import Quantity
-from alfasim_sdk._internal.types import Reference
-from alfasim_sdk._internal.types import String
-from alfasim_sdk._internal.types import Table
-from alfasim_sdk._internal.types import TracerType
+from alfasim_sdk._internal.types import (
+    Boolean,
+    Enum,
+    FileContent,
+    MultipleReference,
+    Quantity,
+    Reference,
+    String,
+    Table,
+    TracerType,
+)
 
 _CHILDREN_LIST_KEY = "_children_list"
 
@@ -147,7 +141,7 @@ def load_plugin(alfacase_content: DescriptionDocument) -> Optional[PluginDescrip
 
 def get_case_description_attribute_loader_dict_for_plugin(
     alfacase_content: DescriptionDocument,
-) -> Optional[Dict[str, Callable]]:
+) -> dict[str, Callable] | None:
     """
     Create a dict of loaders to be used with `to_case_values`, if the plugin is not installed return `None`.
 
@@ -155,33 +149,36 @@ def get_case_description_attribute_loader_dict_for_plugin(
     but designed to load plugins data (class info is not readily available).
     """
     plugin_id = load_value("name", alfacase_content)
-    data_structure: Optional[List[Type]] = load_plugin_data_structure(plugin_id)
+    alfasim_plugins_dir = obtain_alfasim_plugins_dir()
+
+    data_structure: list[type] | None = load_plugin_data_structure(
+        plugin_id, alfasim_plugins_dir
+    )
     if data_structure is None:
         return None
     else:
         return {
             "name": load_value,
+            "version": load_value,
             "gui_models": partial(load_gui_models, data_structure=data_structure),
             "is_enabled": load_value,
         }
 
 
-def get_plugin_module_candidates(plugin_id: str) -> List[Path]:
-    """
-    List the possible module paths the the plugins models.
-    """
+def obtain_alfasim_plugins_dir() -> Sequence[Path]:
     from os import environ
     from os.path import pathsep
 
     alfasim_plugins_dir_env_var = environ.get("ALFASIM_PLUGINS_DIR")
-    if alfasim_plugins_dir_env_var is None:
-        alfasim_plugins_dirs = []
-    else:
-        alfasim_plugins_dirs = alfasim_plugins_dir_env_var.split(pathsep)
+    alfasim_plugins_dirs = []
+    if alfasim_plugins_dir_env_var is not None:
+        plugins_dir = alfasim_plugins_dir_env_var.split(pathsep)
+        all_plugins_dir = [Path(dir) for dir in plugins_dir]
+        alfasim_plugins_dirs.extend(all_plugins_dir)
 
     alfasim_plugins_dirs.append(Path.home() / ".alfasim_plugins")
-    asset_suffix = f"{plugin_id}/artifacts/{plugin_id}.py"
-    return [Path(p) / asset_suffix for p in alfasim_plugins_dirs]
+
+    return alfasim_plugins_dirs
 
 
 def import_module(path: Path) -> ModuleType:
@@ -199,13 +196,20 @@ def import_module(path: Path) -> ModuleType:
     return module
 
 
-def load_plugin_data_structure(plugin_id: str) -> Optional[List[Type]]:
+def load_plugin_data_structure(
+    plugin_id: str, alfasim_plugins_dirs: Sequence[Path]
+) -> list[type] | None:
     """
     Obtain the models for a given plugin.
     """
     import alfasim_sdk_plugins
 
-    for candidate in get_plugin_module_candidates(plugin_id):
+    module_name = f"{plugin_id}.py"
+    plugin_module_candidates = []
+    for plugins_dir in alfasim_plugins_dirs:
+        plugin_module_candidates.extend(plugins_dir.glob(f"*/artifacts/{module_name}"))
+
+    for candidate in plugin_module_candidates:
         if candidate.is_file():
             # Update the "alfasim_sdk_plugins" namespace.
             namespace_package_str = None
@@ -271,8 +275,7 @@ def _convert_enum(
     if isinstance(value, str) and (value in type_from_plugin.values):
         return value
     raise InvalidPluginDataError(
-        f"Can not convert to an enum: {value!r}"
-        f" (valid values are {type_from_plugin.values!r}"
+        f"Can not convert to an enum: {value!r} (valid values are {type_from_plugin.values!r}"
     )
 
 

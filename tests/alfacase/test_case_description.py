@@ -1,50 +1,38 @@
 import re
 import textwrap
+from pathlib import Path
 from textwrap import dedent
-from typing import Any
-from typing import Callable
+from typing import Any, Callable
 
 import attr
 import pytest
 from attr._make import _CountingAttr
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
+
+from alfasim_sdk import CaseDescription, MaterialDescription, NodeCellType
+from alfasim_sdk._internal import constants
+from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    DescriptionError,
+    InvalidReferenceError,
+    attrib_array,
+    attrib_curve,
+    attrib_enum,
+    attrib_instance,
+    attrib_instance_list,
+    attrib_scalar,
+    collapse_array_repr,
+    generate_multi_input,
+    generate_multi_input_dict,
+    numpy_array_validator,
+    to_array,
+    to_curve,
+)
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
-from alfasim_sdk import MaterialDescription
-from alfasim_sdk import NodeCellType
-from alfasim_sdk._internal import constants
-from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_array
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_curve
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_enum
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    attrib_instance,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    attrib_instance_list,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import attrib_scalar
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    collapse_array_repr,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    generate_multi_input,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    generate_multi_input_dict,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    InvalidReferenceError,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import (
-    numpy_array_validator,
-)
-from alfasim_sdk._internal.alfacase.case_description_attributes import to_array
-from alfasim_sdk._internal.alfacase.case_description_attributes import to_curve
 
 
 # Note: the table parameters descriptions have the same methods, so it could
@@ -64,8 +52,8 @@ def test_physics_description_path_validator(tmp_path):
     """
     Ensure PhysicsDescription.restart_filepath only accepts created files
     """
-    from pathlib import Path
     import re
+    from pathlib import Path
 
     expected_error = re.escape(
         f"'restart_filepath' must be {Path} (got '' that is a {str})."
@@ -393,6 +381,56 @@ def test_check_restart_file_exists(default_case, tmp_path):
     case.ensure_valid_references()
 
 
+def test_check_restart_point_key_or_filepath(
+    default_case: case_description.CaseDescription, tmp_path: Path
+) -> None:
+    """Ensure that setting both restart_point_key and restart_filepath results in an error."""
+    restart_filepath = tmp_path / "dummy.restart"
+    restart_filepath.touch()
+
+    restart_point_key = case_description.RestartPointKey(
+        id="dummy",
+        location=case_description.RestartPointLocation.Local,
+        simulation_time=1234.5,
+        timestep_index=12,
+    )
+
+    # With both set it should fail.
+    case = attr.evolve(
+        default_case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=restart_filepath,
+            restart_point_key=restart_point_key,
+        ),
+    )
+    with pytest.raises(
+        DescriptionError,
+        match="restart_filepath and restart_point_key cannot both be set",
+    ):
+        case.ensure_valid_references()
+
+    # With one it should succeed.
+    attr.evolve(
+        case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=None,
+            restart_point_key=restart_point_key,
+        ),
+    ).ensure_valid_references()
+
+    # Or with the other.
+    attr.evolve(
+        case,
+        physics=case_description.PhysicsDescription(
+            initial_condition_strategy=constants.InitialConditionStrategyType.Restart,
+            restart_filepath=restart_filepath,
+            restart_point_key=None,
+        ),
+    ).ensure_valid_references()
+
+
 class TestResetInvalidReferences:
     def test_remove_pvt_entry_from_pvt_models_when_pvt_model_is_invalid(
         self, default_case, tmp_path
@@ -405,7 +443,8 @@ class TestResetInvalidReferences:
         case = attr.evolve(
             default_case,
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT1", tables={"PVT1": f"{tmp_path/'dummy.tab'}|INVALID"}
+                default_model="PVT1",
+                tables={"PVT1": f"{tmp_path / 'dummy.tab'}|INVALID"},
             ),
         )
         case.reset_invalid_references()
@@ -413,7 +452,7 @@ class TestResetInvalidReferences:
         assert case.pvt_models.default_model is None
         case = case_description.CaseDescription(
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT2", tables={"PVT2": f"{tmp_path/'dummy.tab'}|PVT2"}
+                default_model="PVT2", tables={"PVT2": f"{tmp_path / 'dummy.tab'}|PVT2"}
             )
         )
         case.reset_invalid_references()
@@ -498,9 +537,10 @@ class TestEnsureValidReferences:
     Ensure that the attributes from CaseDescription that have references to other elements are valid.
     """
 
-    def test_pvt_model_are_valid(self, default_case):
+    def test_pvt_model_are_valid(self, default_case: CaseDescription) -> None:
         """
-        Check that the validation for invalid references works for all types of PvtModel. (Composition, Correlation, Tables and TableParameters).
+        Check that the validation for invalid references works for all types of PvtModel
+        (Composition, Correlation, Tables, Constant and TableParameters).
         """
         case = attr.evolve(
             default_case,
@@ -555,12 +595,9 @@ class TestEnsureValidReferences:
                 ),
             ],
         )
-        expect_message = "PVT model 'PVT6' selected on 'Pipe 6' is not declared on 'pvt_models', available pvt_models are: PVT1, PVT2, PVT3, PVT4, PVT5"
-        with pytest.raises(
-            InvalidReferenceError,
-            match=re.escape(expect_message),
-        ):
-            case.ensure_valid_references()
+        # Add the Constant PVT as a valid reference (ASIM-6291).
+        [constant_property] = list(case.pvt_models.constant_properties.keys())
+        assert constant_property == "PVT6"
 
     def test_pvt_model_from_file_is_in_valid(self, default_case, tmp_path):
         """
@@ -570,7 +607,8 @@ class TestEnsureValidReferences:
         case = attr.evolve(
             default_case,
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT1", tables={"PVT1": f"{tmp_path/'dummy.tab'}|INVALID"}
+                default_model="PVT1",
+                tables={"PVT1": f"{tmp_path / 'dummy.tab'}|INVALID"},
             ),
         )
         expect_message = "'INVALID' could not be found on 'dummy.tab', available models are: 'PVT1, PVT2'"
@@ -583,7 +621,7 @@ class TestEnsureValidReferences:
         # Ensure the test finishes in a valid state
         case = case_description.CaseDescription(
             pvt_models=case_description.PvtModelsDescription(
-                default_model="PVT2", tables={"PVT2": f"{tmp_path/'dummy.tab'}|PVT2"}
+                default_model="PVT2", tables={"PVT2": f"{tmp_path / 'dummy.tab'}|PVT2"}
             )
         )
         case.ensure_valid_references()

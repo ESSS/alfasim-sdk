@@ -24,7 +24,7 @@ the official docs <https://www.python.org/downloads/>`_.
 
         >>> conda create -n sdk_env
         >>> conda activate sdk_env
-        >>> pip install alfasim-sdk
+        >>> python -m pip install alfasim-sdk
 
     Alternatively, an ``environment.yml`` can be added to your project and ``alfasim-sdk`` can be declared at ``pip`` dependencies.
 
@@ -105,11 +105,14 @@ The highlights here are for:
 Refer to the :ref:`Plugin Structure section <plugin_structure-section>` for more details about how the folder and files are structured.
 The section :ref:`plugin-by-example-section` shows how to create simple plugins that make use of the `User Interface Hooks` and the `Solver Hooks`.
 
+An example of a plugin implementation is available `here <https://github.com/ESSS/alfasim-plugin-template>`_.
+
 Invoke
 ------
 
 Since version 0.17.0, |sdk| started using `pyinvoke`_ tasks in order facilitate and standardize the plugins development process
-using pre-defined tasks. A standard ``tasks.py`` file is generated automatically by the :program:`new` command, which can be customized by the user if needed.
+using pre-defined tasks. You should install ``invoke`` package in your previously created environment. A standard ``tasks.py`` file
+is generated automatically by the :program:`new` command, which can be customized by the user if needed.
 
 To list the tasks available, use:
 

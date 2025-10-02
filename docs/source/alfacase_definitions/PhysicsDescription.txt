@@ -12,6 +12,7 @@
             solids_model_plugin_id: str = ''
             initial_condition_strategy: \ :class:`InitialConditionStrategyType <alfasim_sdk._internal.constants.InitialConditionStrategyType>`\  = InitialConditionStrategyType.Constant
             restart_filepath: \ :class:`Optional <typing.Optional>`\[Path] = None
+            restart_point_key: \ :class:`Optional <typing.Optional>`\[\ :class:`RestartPointKey <RestartPointKey>`\] = None
             keep_former_results: bool = False
             emulsion_model_enabled: bool = True
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  = EmulsionRelativeViscosityModelType.ModelDefault
@@ -26,6 +27,7 @@
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  = FluidMaterialConvectionCorrelation.HasanKabir1994
+            steady_state_guess_initialization: \ :class:`SteadyStateGuessInitializationType <alfasim_sdk._internal.constants.SteadyStateGuessInitializationType>`\  = SteadyStateGuessInitializationType.QuasiHydrostatic
 
 .. tab:: Schema
 
@@ -38,6 +40,7 @@
             solids_model_plugin_id: string  # optional
             initial_condition_strategy: \ :class:`InitialConditionStrategyType <alfasim_sdk._internal.constants.InitialConditionStrategyType>`\  # optional
             restart_filepath: string  # optional
+            restart_point_key: \ :class:`restart_point_key_schema <RestartPointKey>`\  # optional
             keep_former_results: boolean  # optional
             emulsion_model_enabled: boolean  # optional
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  # optional
@@ -72,3 +75,4 @@
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  # optional
+            steady_state_guess_initialization: \ :class:`SteadyStateGuessInitializationType <alfasim_sdk._internal.constants.SteadyStateGuessInitializationType>`\  # optional

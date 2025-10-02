@@ -1,5 +1,4 @@
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
@@ -125,12 +124,12 @@ def build_compressor_pressure_table_description(
     making it a explicit table with all combinations.
     """
     expected_size = len(speed_entries) * len(corrected_mass_flow_rate_entries)
-    assert expected_size == len(
-        pressure_ratio_table
-    ), f"Missing pressure entries. Expected {expected_size} but got {len(pressure_ratio_table)}"
-    assert expected_size == len(
-        isentropic_efficiency_table
-    ), f"Missing isentropic efficiency entries. Expected {expected_size} but got {len(isentropic_efficiency_table)}"
+    assert expected_size == len(pressure_ratio_table), (
+        f"Missing pressure entries. Expected {expected_size} but got {len(pressure_ratio_table)}"
+    )
+    assert expected_size == len(isentropic_efficiency_table), (
+        f"Missing isentropic efficiency entries. Expected {expected_size} but got {len(isentropic_efficiency_table)}"
+    )
 
     adjusted_speeds = []
     adjusted_flow_rates = []

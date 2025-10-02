@@ -3,18 +3,15 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
-from typing import Union
+from typing import Any, Union
 from zipfile import ZipFile
 
-from colorama import Fore
-from colorama import Style
+from colorama import Fore, Style
 from hookman.hookman_generator import HookManGenerator
-from invoke import Collection
-from invoke import Exit
-from invoke import Task
-from invoke import task
+from invoke import Collection, Exit, Task, task
 from strictyaml.ruamel import YAML
+
+from alfasim_sdk._internal.alfasim_sdk_utils import get_required_python_version
 
 sdk_ns = Collection()
 
@@ -173,6 +170,10 @@ def compile(ctx, cmake_extra_args="", debug=False, clean=False):
         print_message(f"cmake args = {cmake_args}", color=Fore.YELLOW, bright=True)
 
     cmake_cmd = shutil.which("cmake")
+    if cmake_cmd is None:
+        msg = "Cmake is not available. Please install at least version 3.5.2 to compile the plugin"
+        raise Exit(message=msg, code=1)
+
     subprocess.check_call([f"{cmake_cmd}"] + cmake_args)
     subprocess.check_call(
         [
@@ -186,9 +187,9 @@ def compile(ctx, cmake_extra_args="", debug=False, clean=False):
         ],
     )
 
-    assert (
-        shared_lib_path.exists()
-    ), "Compilation task failed, shared lib was not created"
+    assert shared_lib_path.exists(), (
+        "Compilation task failed, shared lib was not created"
+    )
 
     if package_dir.exists():
         shutil.rmtree(package_dir)
@@ -228,25 +229,26 @@ def package_only(ctx, package_name="", dst=""):
 
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
-    from alfasim_sdk._internal.constants import EXTRAS_REQUIRED_VERSION_KEY
     from alfasim_sdk._internal.alfasim_sdk_utils import (
         get_current_version,
-        get_extras_default_required_version,
+        get_required_sdk_version,
     )
 
     plugin_id = str(plugin_dir.name)
     if not package_name:
         package_name = plugin_id
     package_name_suffix = f"sdk-{get_current_version()}"
-    extras_defaults = {
-        EXTRAS_REQUIRED_VERSION_KEY: get_extras_default_required_version()
+    requirements = {
+        "alfasim_sdk": get_required_sdk_version(),
+        "python": get_required_python_version(),
     }
+
     hm.generate_plugin_package(
         package_name,
         plugin_dir,
         dst,
-        extras_defaults=extras_defaults,
         package_name_suffix=package_name_suffix,
+        requirements=requirements,
     )
 
 
@@ -330,15 +332,26 @@ def install_plugin(ctx, install_dir=None):
     plugin_folder = Path(ctx.config._project_prefix)
     plugin_id = plugin_folder.name
 
-    try:
-        hm_plugin_path = next(plugin_folder.glob("*.hmplugin"))
-    except StopIteration:
+    plugin_yml = plugin_folder / "assets" / "plugin.yaml"
+    if not plugin_yml.is_file():
         print_message(
-            f"Could not find any '*.hmplugin' in {plugin_folder}.",
+            f"The 'plugin.yaml' not found in {plugin_folder}.",
             color=Fore.RED,
             bright=True,
         )
         raise Exit(code=1)
+    yaml = YAML(typ="safe", pure=True)
+    plugin_version = yaml.load(plugin_yml)["version"]
+
+    hm_plugins_files = list(plugin_folder.glob("*.hmplugin"))
+    if len(hm_plugins_files) != 1:
+        print_message(
+            f"None or more than one '*.hmplugin' found in {plugin_folder}. Currently, this task only install the plugin if there is just one .hmplugin in the plugin folder.",
+            color=Fore.RED,
+            bright=True,
+        )
+        raise Exit(code=1)
+    hm_plugin_path = hm_plugins_files[0]
 
     if not hm_plugin_path.is_file():
         print_message(
@@ -360,11 +373,12 @@ def install_plugin(ctx, install_dir=None):
         color=Fore.YELLOW,
         bright=True,
     )
+    plugin_dir = f"{plugin_id}-{plugin_version}"
     with ZipFile(hm_plugin_path) as plugin_file_zip:
-        plugin_file_zip.extractall(os.path.join(install_dir, plugin_id))
+        plugin_file_zip.extractall(os.path.join(install_dir, plugin_dir))
 
     print_message(
-        f"Successfully installed plugin {plugin_id} into {install_dir}",
+        f"Successfully installed plugin {plugin_id}-{plugin_version} into {install_dir}",
         color=Fore.GREEN,
         bright=True,
     )

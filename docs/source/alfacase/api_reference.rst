@@ -21,6 +21,10 @@ Options
 
 .. autoclass:: alfasim_sdk.PhysicsDescription()
 
+.. autoclass:: alfasim_sdk.RestartPointKey()
+
+.. autoclass:: alfasim_sdk.RestartPointLocation()
+
 .. autoclass:: alfasim_sdk.TimeOptionsDescription()
 
 .. autoclass:: alfasim_sdk.NumericalOptionsDescription()

@@ -6,39 +6,39 @@ import attr
 import numpy
 import pytest
 import strictyaml
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 from strictyaml import YAML
 from strictyaml.ruamel.comments import CommentedMap
 
-from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
-from ..common_testing.alfasim_sdk_common_testing import get_acme_tab_file_path
-from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
-    ensure_descriptions_are_equal,
-)
 from alfasim_sdk import convert_description_to_alfacase
-from alfasim_sdk._internal.alfacase import alfacase_to_case
-from alfasim_sdk._internal.alfacase import case_description
-from alfasim_sdk._internal.alfacase import schema
-from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
-from alfasim_sdk._internal.alfacase.alfacase_to_case import get_array_loader
-from alfasim_sdk._internal.alfacase.alfacase_to_case import get_scalar_loader
+from alfasim_sdk._internal.alfacase import alfacase_to_case, case_description, schema
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
+    DescriptionDocument,
+    get_array_loader,
+    get_scalar_loader,
     load_mass_source_node_properties_description,
+    load_physics_description,
+    load_pvt_models_description,
 )
-from alfasim_sdk._internal.alfacase.alfacase_to_case import load_physics_description
-from alfasim_sdk._internal.alfacase.alfacase_to_case import load_pvt_models_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
-from alfasim_sdk._internal.alfacase.generate_schema import convert_to_snake_case
 from alfasim_sdk._internal.alfacase.generate_schema import (
+    IGNORED_PROPERTIES,
+    convert_to_snake_case,
     get_all_classes_that_needs_schema,
+    is_attrs,
 )
-from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES
-from alfasim_sdk._internal.alfacase.generate_schema import is_attrs
 from alfasim_sdk._internal.alfacase.schema import (
     mass_source_node_properties_description_schema,
 )
 from alfasim_sdk._internal.constants import MultiInputType
+
+from ..common_testing.alfasim_sdk_common_testing import (
+    filled_case_descriptions,
+    get_acme_tab_file_path,
+)
+from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
+    ensure_descriptions_are_equal,
+)
 
 
 @attr.s(frozen=True)
@@ -132,9 +132,9 @@ def alfacase_to_case_helper(tmp_path):
                 key for key in obtained_keys if key not in IGNORED_PROPERTIES
             }
 
-            assert (
-                expected_keys == obtained_keys
-            ), f"Error: missing the following key(s): {set(expected_keys).symmetric_difference(set(obtained_keys))}"
+            assert expected_keys == obtained_keys, (
+                f"Error: missing the following key(s): {set(expected_keys).symmetric_difference(set(obtained_keys))}"
+            )
 
     return AlfacaseHelper(tmp_path)
 
@@ -241,6 +241,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         description_expected=filled_case_descriptions.PACKER_DESCRIPTION,
         schema=schema.packer_description_schema,
         is_sequence=True,
+    ),
+    "RestartPointKey": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.RESTART_POINT_KEY,
+        schema=schema.restart_point_key_schema,
     ),
     "PhysicsDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.PHYSICS_DESCRIPTION,

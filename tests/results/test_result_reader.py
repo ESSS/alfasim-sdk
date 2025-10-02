@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import attr
@@ -8,27 +7,30 @@ import numpy
 import numpy as np
 import pytest
 from barril.curve.curve import Curve
-from barril.units import Array
-from barril.units import Scalar
+from barril.units import Array, Scalar
 
-from alfasim_sdk.result_reader.aggregator import GlobalSensitivityAnalysisMetadata
-from alfasim_sdk.result_reader.aggregator import GSAOutputKey
-from alfasim_sdk.result_reader.aggregator import HistoricDataCurveMetadata
-from alfasim_sdk.result_reader.aggregator import HistoryMatchingMetadata
-from alfasim_sdk.result_reader.aggregator import HMOutputKey
-from alfasim_sdk.result_reader.aggregator import read_history_matching_metadata
-from alfasim_sdk.result_reader.aggregator import read_history_matching_result
-from alfasim_sdk.result_reader.aggregator import UncertaintyPropagationAnalysesMetaData
-from alfasim_sdk.result_reader.aggregator import UPOutputKey
-from alfasim_sdk.result_reader.reader import GlobalSensitivityAnalysisResults
-from alfasim_sdk.result_reader.reader import GlobalTrendMetadata
-from alfasim_sdk.result_reader.reader import HistoryMatchingDeterministicResults
-from alfasim_sdk.result_reader.reader import HistoryMatchingProbabilisticResults
-from alfasim_sdk.result_reader.reader import OverallTrendMetadata
-from alfasim_sdk.result_reader.reader import PositionalTrendMetadata
-from alfasim_sdk.result_reader.reader import ProfileMetadata
-from alfasim_sdk.result_reader.reader import Results
-from alfasim_sdk.result_reader.reader import UncertaintyPropagationResults
+from alfasim_sdk.result_reader.aggregator import (
+    GlobalSensitivityAnalysisMetadata,
+    GSAOutputKey,
+    HistoricDataCurveMetadata,
+    HistoryMatchingMetadata,
+    HMOutputKey,
+    UncertaintyPropagationAnalysesMetaData,
+    UPOutputKey,
+    read_history_matching_metadata,
+    read_history_matching_result,
+)
+from alfasim_sdk.result_reader.reader import (
+    GlobalSensitivityAnalysisResults,
+    GlobalTrendMetadata,
+    HistoryMatchingDeterministicResults,
+    HistoryMatchingProbabilisticResults,
+    OverallTrendMetadata,
+    PositionalTrendMetadata,
+    ProfileMetadata,
+    Results,
+    UncertaintyPropagationResults,
+)
 
 
 def test_fail_to_get_curves(results: Results) -> None:
@@ -136,9 +138,16 @@ def test_logs(results: Results) -> None:
     log_calc = results.log_calc
     assert "NEW TIME-STEP" in log_calc.read_text()
 
-    status = json.loads(results.status.read_text())
+
+def test_status(results: Results, datadir: Path) -> None:
+    # Status exist.
+    status = results.status
     assert status["state"] == "FINISHED"
     assert status["progress"] == 1.0
+
+    # Status do not exist, should be None.
+    non_existent_results = Results(datadir / "foo.data")
+    assert non_existent_results.status is None
 
 
 def test_metadata_string():
@@ -248,7 +257,9 @@ class TestHistoryMatchingResultsReader:
         reader to read probabilistic results and vice-versa.
         """
         prob_metadata = read_history_matching_metadata(hm_probabilistic_results_dir)
-        prob_values = read_history_matching_result(prob_metadata, "HM-probabilistic")
+        prob_values = read_history_matching_result(
+            hm_probabilistic_results_dir, prob_metadata, "HM-probabilistic"
+        )
 
         with pytest.raises(
             ValueError,
@@ -261,7 +272,9 @@ class TestHistoryMatchingResultsReader:
             )
 
         det_metadata = read_history_matching_metadata(hm_deterministic_results_dir)
-        det_values = read_history_matching_result(det_metadata, "HM-deterministic")
+        det_values = read_history_matching_result(
+            hm_deterministic_results_dir, det_metadata, "HM-deterministic"
+        )
 
         with pytest.raises(
             ValueError,
