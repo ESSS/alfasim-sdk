@@ -2,10 +2,12 @@
 CHANGELOG
 =========
 
+
 1.3.0 (Unreleased)
 ==================
 
 * Add ``steady_state_guess_initialization`` attribute to ``PhysicsDescription`` and ``SteadyStateGuessInitializationType`` enum to support different steady state initial guess calculation strategies.
+
 
 1.2.0 (2025-09-19)
 ==================
@@ -16,11 +18,18 @@ CHANGELOG
 * **Breaking Change**: ``HydrodynamicModelType.ThreeLayersNoBubbleGasOilWater``  renamed to ``HydrodynamicModelType.TwoLayersGasOilWater``.
 * Update barril constrain to allow barril from the major version 2.
 
+
 1.1.0 (2025-05-28)
 ==================
 
 * **Breaking Change**: Remove the ``result_directory`` attribute from all the result metadata objects declared in ``result_reader.aggregator`` module and instead demand it to be passed as argument to the result reading functions (``read_time_sets``, ``read_history_matching_result`` and so on); do so to ensure metadata is independent from the result file location, as demanded by the new ALFAsim client/server architecture.
 * **Breaking Change**: Changed the return value of the ``status`` property of the ``Results`` reader, from a json file path to a dict with the status data already inplace.
+
+
+1.0.1 (2025-09-29)
+==================
+
+* Relax barril constrain (barril version 2 has no breaking changes).
 
 
 1.0.0 (2025-02-07)
