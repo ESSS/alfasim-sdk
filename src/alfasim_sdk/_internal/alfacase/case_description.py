@@ -3499,6 +3499,10 @@ class PhysicsDescription:
     )
     emulsion_model_plugin_id: str = attr.ib(default="", validator=instance_of(str))
 
+    friction_factor_correlation_model = attrib_enum(default=constants.FrictionFactorCorrelationModelType.ModelDefault)
+
+    friction_factor_correlation_plugin_id: str = attr.ib(default="", validator=instance_of(str))
+
     flash_model = attrib_enum(default=constants.FlashModel.HydrocarbonAndWater)
     correlations_package = attrib_enum(
         default=constants.CorrelationPackageType.Classical
