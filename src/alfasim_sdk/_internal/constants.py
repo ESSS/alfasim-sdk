@@ -169,6 +169,21 @@ class SolidsModelType(Enum):
     FromPlugin = "from_plugin"
 
 
+class FrictionFactorCorrelationModelType(Enum):
+    """
+    Informs which friction factor correlation model should be used:
+
+    - ModelDefault:
+        From ALFAsim's internal default friction factor correlation.
+
+    - FromPlugin:
+        Friction factor correlation is calculated from plugin hooks with an external implementation.
+    """
+
+    ModelDefault = "from_package"
+    FromPlugin = "from_plugin"
+
+
 class NodeCellType(Enum):
     Internal = "internal_node"
     MassSource = "mass_source_boundary"
