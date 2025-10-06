@@ -991,6 +991,8 @@ physics_description_schema = Map(
         Optional("emulsion_droplet_size_model"): Enum(['model_default', 'hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
         Optional("emulsion_inversion_point_model"): Enum(['model_default', 'brauner_and_ullmann_2002', 'brinkman1952_and_yeh1964', 'constant']),
         Optional("emulsion_inversion_water_cut"): Map({"value": Float(), "unit": Str()}),
+        Optional("friction_factor_correlation_model"): Enum(['model_default', 'from_plugin']),
+        Optional("friction_factor_correlation_plugin_id"): Str(),
         Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
         Optional("fluid_material_convection_correlation"): Enum(['Hasan and Kabir 1994', 'Hasan and Kabir 2002', 'Fuzong Zhou 2013', 'Holman 1981']),
@@ -1236,4 +1238,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: H3pw6QCGWA)
+# [[[end]]] (sum: tt1Md81hbV) 

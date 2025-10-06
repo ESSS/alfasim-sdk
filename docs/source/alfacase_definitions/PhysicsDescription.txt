@@ -24,6 +24,8 @@
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.ModelDefault
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  = EmulsionInversionPointModelType.ModelDefault
             emulsion_inversion_water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.4, 'm3/m3', 'volume per volume')
+            friction_factor_correlation_model: \ :class:`FrictionFactorCorrelationModelType <alfasim_sdk._internal.constants.FrictionFactorCorrelationModelType>`\  = FrictionFactorCorrelationModelType.ModelDefault
+            friction_factor_correlation_plugin_id: str = ''
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  = FluidMaterialConvectionCorrelation.HasanKabir1994
@@ -72,6 +74,8 @@
             emulsion_inversion_water_cut:  # optional
                 value: number
                 unit: string
+            friction_factor_correlation_model: \ :class:`FrictionFactorCorrelationModelType <alfasim_sdk._internal.constants.FrictionFactorCorrelationModelType>`\  # optional
+            friction_factor_correlation_plugin_id: string  # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  # optional

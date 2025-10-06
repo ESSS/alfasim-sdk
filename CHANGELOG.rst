@@ -7,6 +7,7 @@ CHANGELOG
 ==================
 
 * Add ``steady_state_guess_initialization`` attribute to ``PhysicsDescription`` and ``SteadyStateGuessInitializationType`` enum to support different steady state initial guess calculation strategies.
+* Add ``friction_factor_correlation_model`` and ``friction_factor_correlation_plugin_id`` attribute to ``PhysicsDescription`` to support different friction factor correlation models through alfacase.
 
 
 1.2.0 (2025-09-19)
