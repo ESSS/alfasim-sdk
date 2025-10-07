@@ -169,6 +169,21 @@ class SolidsModelType(Enum):
     FromPlugin = "from_plugin"
 
 
+class FrictionFactorCorrelationModelType(Enum):
+    """
+    Informs which friction factor correlation model should be used:
+
+    - ModelDefault:
+        From the friction factor correlation associated with the CorrelationPackageType.
+
+    - FromPlugin:
+        Friction factor correlation is calculated from plugin hooks with an external implementation.
+    """
+
+    ModelDefault = "model_default"
+    FromPlugin = "from_plugin"
+
+
 class NodeCellType(Enum):
     Internal = "internal_node"
     MassSource = "mass_source_boundary"
