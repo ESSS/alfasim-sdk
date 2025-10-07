@@ -1238,4 +1238,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: tt1Md81hbV) 
+# [[[end]]] (sum: tt1Md81hbV)
