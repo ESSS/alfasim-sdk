@@ -2,12 +2,25 @@
 Releasing
 =========
 
-When releasing a new branch should be created to update the release date for the version in ``CHANGELOG.str``.
+1. Create a new branch.
 
-The version being released is listed in https://github.com/ESSS/alfasim-sdk/blob/master/src/alfasim_sdk/_internal/version.py, if needed this value should be changed to match accordingly.
+2. Update the version in `version.py`_.
 
-Any other required changes related to the release should also be included in the same branch.
+3. Update the release date in `CHANGELOG.rst`_.
 
-When all changes are ready the branch should be tagged ``v<release-number>`` and merged.
+4. Open a PR and add reviewers.
 
-After released, update `version.py <src/alfasim_sdk/_internal/version.py>`__ with the next release version planned for ALFAsim (adding the suffix `.dev`) and add a new *unreleased* section to the ``CHANGELOG.rst``. Note that this version number appears on ALFAsim's About window, so should be done **before** the next ALFAsim planned release.
+5. Once the PR has been **approved** and **all tests are passing**:
+
+   1. Push a tag named ``v<release-version>``.
+   2. Merge the PR -- make sure  to **merge** (as opposed to squash), as we want to preserve the commit where the tag was applied.
+
+6. Create a new branch and:
+
+   1. Update `version.py`_ to the next release version, adding the suffix `.dev`. For example, if the release just made was ``1.2.0``, change the version to ``1.3.0.dev``.
+   2. Add a new *unreleased* section to `CHANGELOG.rst`_.
+   3. Open a PR.
+
+
+.. _version.py: src/alfasim_sdk/_internal/version.py
+.. _CHANGELOG.rst: CHANGELOG.rst
