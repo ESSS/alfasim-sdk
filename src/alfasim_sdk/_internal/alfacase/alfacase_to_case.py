@@ -70,6 +70,7 @@ def get_category_for(unit: Optional[str]) -> Optional[str]:
     """
     if unit:
         return UnitDatabase.GetSingleton().GetDefaultCategory(unit)
+    return None
 
 
 def update_multi_input_flags(document: DescriptionDocument, item_description: T) -> T:

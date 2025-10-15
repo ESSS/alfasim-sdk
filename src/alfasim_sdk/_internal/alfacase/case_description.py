@@ -2696,7 +2696,7 @@ class PvtModelCombinedDescription:
     )
 
 
-@attr.s(slots=True, eq=False)
+@attr.s(slots=True, eq=False, auto_attribs=True)
 class PvtModelPtTableParametersDescription:
     """
     :ivar pressure_values:
