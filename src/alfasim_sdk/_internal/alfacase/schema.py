@@ -474,7 +474,7 @@ pipe_segments_description_schema = Map(
 )
 plugin_description_schema = Map(
     {
-        Optional("name"): Str(),
+        "name": Str(),
         Optional("version"): Str(),
         Optional("gui_models"): MapPattern(Str(), Any()),
         Optional("is_enabled"): Bool(),
@@ -559,7 +559,7 @@ profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "location": Enum(['main', 'annulus', 'not_defined']),
-        "element_name": Str(),
+        Optional("element_name"): Str(),
     }
 )
 pvt_model_constant_properties_description_schema = Map(
@@ -1238,4 +1238,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: tt1Md81hbV)
+# [[[end]]] (sum: MNb701FVIo)

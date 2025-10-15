@@ -44,7 +44,7 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
 
 def _convert_value_to_valid_alfacase_format(
     value: ATTRIBUTES, enable_flow_style_on_numpy: bool
-) -> str | dict[str, Any] | list[str] | list[list[str]]| list[dict[str, Any]]:
+) -> str | dict[str, Any] | list[str] | list[list[str]] | list[dict[str, Any]]:
     """
     Returns an yaml convertible representation from the given equipment_attribute
 
@@ -153,7 +153,7 @@ def convert_dict_to_valid_alfacase_format(
                 converted_value = [
                     convert_dict_to_valid_alfacase_format(
                         # Argument 1 to "asdict" has incompatible type "Any | Enum"; expected "AttrsInstance"  [arg-type]
-                        to_dict(i), # type:ignore[arg-type]
+                        to_dict(i),  # type:ignore[arg-type]
                         enable_flow_style_on_numpy=enable_flow_style_on_numpy,
                         remove_redundant_input_type_data=remove_redundant_input_type_data,
                     )

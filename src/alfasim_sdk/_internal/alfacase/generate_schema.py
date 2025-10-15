@@ -5,7 +5,7 @@ from collections import deque
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import List, Set, Any, Dict, Callable
+from typing import Any, Callable, Dict, List, Set
 
 import attr
 import typing_inspect
@@ -285,7 +285,8 @@ def _get_attribute_schema(key: str, value: Any, indent: int = 2) -> str:
     if value.default is attr.NOTHING and is_optional_type(value.type):
         msg = (
             "StrictYAML doesn't support None value (only missing keys denote a value), "
-            "therefore Optional type are only allowed when the case has a default value."
+            "therefore Optional type are only allowed when the case has a default value.\n"
+            f"Key: {key}"
         )
         raise TypeError(msg)
     attribute_name = _get_attr_name(key, value)

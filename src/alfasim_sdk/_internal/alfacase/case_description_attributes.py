@@ -31,11 +31,11 @@ def generate_multi_input(
     return textwrap.dedent(
         f"""\
         # fmt: off
-        {prop_name}_input_type = attrib_enum(default=constants.MultiInputType.Constant)
-        {prop_name} = attrib_scalar(
+        {prop_name}_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
+        {prop_name}: Scalar = attrib_scalar(
             default=Scalar({category!r}, {default_value!r}, {unit!r})
         )
-        {prop_name}_curve = attrib_curve(
+        {prop_name}_curve: Curve = attrib_curve(
             default=Curve(Array({category!r}, [], {unit!r}), Array({"time"!r}, [], {"s"!r}))
         )
         # fmt: on"""
@@ -46,7 +46,7 @@ def generate_multi_input_dict(prop_name: str, category: str) -> str:
     return textwrap.dedent(
         f"""\
         # fmt: off
-        {prop_name}_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        {prop_name}_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
         {prop_name}: Dict[str, Scalar] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={{"type": "scalar_dict", "category": {category!r}}},
@@ -220,14 +220,13 @@ def attrib_scalar(
     return attr.ib(
         default=default,
         converter=partial(to_scalar, is_optional=is_optional),
-        type=Optional[Scalar] if is_optional else Scalar,
+        # type=Optional[Scalar] if is_optional else Scalar,
         metadata=metadata,
     )
 
 
 def attrib_array(
     default: Union[ArrayLike, AttrNothingType] = attr.NOTHING,
-    is_optional: bool = False,
     category: Optional[str] = None,
 ) -> attr._make._CountingAttr:
     """
@@ -256,7 +255,12 @@ def attrib_array(
             )
 
     metadata = {"type": "array", "category": category}
-    return attr.ib(default=default, converter=to_array, type=Array, metadata=metadata)
+    return attr.ib(
+        default=default,
+        converter=to_array,
+        # type=Array,
+        metadata=metadata,
+    )
 
 
 def attrib_curve(
@@ -312,7 +316,7 @@ def attrib_curve(
     return attr.ib(
         default=default,
         converter=partial(to_curve, is_optional=is_optional),
-        type=Optional[Curve] if is_optional else Curve,
+        # type=Optional[Curve] if is_optional else Curve,
         metadata=metadata,
     )
 
@@ -334,7 +338,7 @@ def attrib_instance(type_: type, is_optional: bool = False) -> Any:
     return attr.ib(
         default=default,
         validator=validator,
-        type=type_,
+        # type=type_,
         metadata=metadata,
     )
 
@@ -358,7 +362,7 @@ def attrib_instance_list(type_: type) -> Any:
     return attr.ib(
         default=attr.Factory(list),
         validator=_validator,
-        type=List[type_],
+        # type=List[type_],
         metadata=metadata,
     )
 
@@ -392,7 +396,11 @@ def attrib_enum(
         )
 
     metadata = {"type": "enum", "enum_class": type_}
-    return attr.ib(default=default, validator=in_(type_), type=type_, metadata=metadata)
+    return attr.ib(
+        default=default,
+        validator=in_(type_),
+        metadata=metadata,
+    )  # type=type_)
 
 
 def dict_of(type_: type) -> Callable:
@@ -422,7 +430,7 @@ def attrib_dict_of(type_: type) -> attr._make._CountingAttr:
     return attr.ib(
         default=attr.Factory(dict),
         validator=dict_of(type_),
-        type=Dict[str, type_],
+        # type=Dict[str, type_],
         metadata=metadata,
     )
 

@@ -428,7 +428,9 @@ def load_model(alfacase_content: DescriptionDocument, class_: Type) -> dict[str,
         name: str = attribute.name
         if name in alfacase_content.content:
             value: Union[dict, list, str] = alfacase_content.content[name].data
-            convert_func: Callable = _PLUGIN_FIELD_TO_CASEDESCRIPTION[type(type_from_plugin)]
+            convert_func: Callable = _PLUGIN_FIELD_TO_CASEDESCRIPTION[
+                type(type_from_plugin)
+            ]
             result[name] = convert_func(value, type_from_plugin, alfacase_path)
 
     child_model_type = alfasim_metadata["model"]
