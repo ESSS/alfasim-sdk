@@ -46,7 +46,8 @@ def _generate_alfatable_file_for_pvt_models_description(
 
 
 def convert_description_to_alfacase(
-    alfacase_description: case_description.CaseDescription,
+    alfacase_description: case_description.CaseDescription
+    | case_description.PvtModelPtTableParametersDescription,
     *,
     enable_flow_style_on_numpy: bool = False,
     remove_redundant_input_type_data: bool = True,

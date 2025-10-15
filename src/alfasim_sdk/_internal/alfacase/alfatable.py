@@ -8,7 +8,8 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import Numpy1DAr
 def generate_alfatable_file(
     alfacase_file: Path,
     alfatable_filename: str,
-    description: case_description.CaseDescription,
+    description: case_description.CaseDescription
+    | case_description.PvtModelPtTableParametersDescription,
 ) -> Path:
     """
     Create `.alfatable` file for the given description.
