@@ -2016,7 +2016,7 @@ def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.
     """
     with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
-            return
+            return None
         return result_file[group_name]["time_set"][:]
 
 

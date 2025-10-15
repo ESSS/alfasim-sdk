@@ -194,7 +194,7 @@ def attrib_scalar(
     default: Union[ScalarLike, AttrNothingType] = attr.NOTHING,
     is_optional: bool = False,
     category: Optional[str] = None,
-) -> attr._make._CountingAttr:
+) -> Any:
     """
     Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
 
@@ -228,7 +228,7 @@ def attrib_scalar(
 def attrib_array(
     default: Union[ArrayLike, AttrNothingType] = attr.NOTHING,
     category: Optional[str] = None,
-) -> attr._make._CountingAttr:
+) -> Any:
     """
     Create a new attr attribute with a converter to Array accepting also tuple(values, unit).
 
@@ -268,7 +268,7 @@ def attrib_curve(
     is_optional: bool = False,
     category: Optional[str] = None,
     domain_category: Optional[str] = None,
-) -> attr._make._CountingAttr:
+) -> Any:
     """
     Create a new attr attribute with a converter to Curve accepting also tuple(image, domain).
 
@@ -367,9 +367,7 @@ def attrib_instance_list(type_: type) -> Any:
     )
 
 
-def attrib_enum(
-    type_: Optional[EnumMeta] = None, default: Any = attr.NOTHING
-) -> attr._make._CountingAttr:
+def attrib_enum(type_: Optional[EnumMeta] = None, default: Any = attr.NOTHING) -> Any:
     """
     Create a new attr attribute with validator for enums
     When a default value is provided the type_ is automatically computed
