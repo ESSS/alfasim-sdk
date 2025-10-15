@@ -2,8 +2,9 @@ import inspect
 import operator
 import sys
 from collections import deque
+from collections.abc import Iterator
 from contextlib import contextmanager
-from enum import EnumMeta
+from enum import Enum, EnumMeta
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Set
 
@@ -23,7 +24,7 @@ def is_enum(value: Any):
     return isinstance(value, EnumMeta)
 
 
-def enum_to_alfacase_schema(type_: type, indent: int) -> str:
+def enum_to_alfacase_schema(type_: Any, indent: int) -> str:
     return f"Enum({[i.value for i in type_]})"
 
 
@@ -105,7 +106,7 @@ def is_union(type_: type) -> bool:
 
 
 @contextmanager
-def _map_section(lines: List[str], indent=0) -> List[str]:
+def _map_section(lines: List[str], indent=0) -> Iterator[List[str]]:
     body_indent = indent + 1
     lines.append("Map(")
     lines.append(f"{INDENTANTION * body_indent}{{")
@@ -114,7 +115,7 @@ def _map_section(lines: List[str], indent=0) -> List[str]:
     lines.append(f"{INDENTANTION * indent})")
 
 
-def union_to_alfacase_schema(type_: type, *, indent=0) -> str:
+def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
     """
     Creates a structure that allows multiples types for the same key.
 
@@ -136,7 +137,7 @@ def union_to_alfacase_schema(type_: type, *, indent=0) -> str:
         return "Str()"
 
     # Attrs classes
-    lines = []
+    lines: list[str] = []
     map_items_indent = indent + 2
     with _map_section(lines, indent=indent):
         for arg in type_.__args__:
@@ -197,7 +198,7 @@ def path_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Str()"
 
 
-LIST_OF_IMPLEMENTATIONS: List[tuple[type, Callable]] = [
+LIST_OF_IMPLEMENTATIONS: List[tuple[Callable, Callable]] = [
     (is_enum, enum_to_alfacase_schema),
     (is_attrs, attrs_to_alfacase_schema),
     (is_list, list_to_alfacase_schema),
@@ -255,7 +256,7 @@ def obtain_schema_name(class_: type) -> str:
     return convert_to_snake_case(class_.__name__) + "_schema"
 
 
-def _get_attr_name(key: str, value: attr.ib) -> str:
+def _get_attr_name(key: str, value: attr.Attribute) -> str:
     """
     Note: for stricyyaml schema, an Optional type means that the user don't need
     to inform a value. While for type hint, an Optional type means that the attribute accepts None.

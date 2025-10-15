@@ -5,7 +5,7 @@ import functools
 import json
 import os
 import re
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from contextlib import contextmanager
 from pathlib import Path
 from typing import (
@@ -651,7 +651,7 @@ class _MergedMetadataWithStatistics:
 
 
 @contextmanager
-def open_result_files(result_directory: Path) -> Dict[int, h5py.File]:
+def open_result_files(result_directory: Path) -> Iterator[Dict[int, h5py.File]]:
     """
     Return a dict with the result files.
 
@@ -1774,9 +1774,7 @@ def map_base_time_set_to_time_set_keys(
     :param output_key_to_time_set_key_dict:
         See `MapOutputKeyToTimeSetKey` return value documentation.
     """
-    from collections import defaultdict
-
-    base_ts_index_dict = defaultdict(set)
+    base_ts_index_dict = defaultdict[int, set[TimeSetKeyType]](set)
     for time_set_key in output_key_to_time_set_key_dict.values():
         for base_ts in time_set_key:
             time_set_key_set = base_ts_index_dict[base_ts]
@@ -2004,7 +2002,7 @@ def read_uncertainty_propagation_results(
         return result
 
 
-def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[numpy.array]:
+def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[np.ndarray]:
     """
     Get the time set for uq-based analysis results (Global Sensitivity Analysis or Uncertainty Propagation).
 
@@ -2121,9 +2119,8 @@ def read_history_matching_result(
             for key, meta in metadata.hm_items.items():
                 result_map[key] = result[slicer(meta.data_index)]
         else:
-            meta = metadata.hm_items.get(hm_result_key)
-            if meta is not None:
-                result_map[hm_result_key] = result[slicer(meta.data_index)]
+            if (m := metadata.hm_items.get(hm_result_key)) is not None:
+                result_map[hm_result_key] = result[slicer(m.data_index)]
 
         return result_map
 
@@ -2157,7 +2154,7 @@ def read_history_matching_historic_data_curves(
 
         return {
             info.curve_id: result[info.curve_id][:]
-            for info in metadata.historic_data_curve_infos
+            for info in (metadata.historic_data_curve_infos or ())
         }
 
 

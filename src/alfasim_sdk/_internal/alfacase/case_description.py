@@ -80,7 +80,7 @@ class PluginInternalReference:
 @attr.s(frozen=True, slots=True)
 class PluginMultipleReference:
     container_key: str | None = attr.ib(default=None)
-    item_id_list: list[str] = attr.ib(default=attr.Factory(list))
+    item_id_list: list[int] = attr.ib(default=attr.Factory(list))
 
 
 @attr.s(frozen=True, slots=True)
