@@ -3,7 +3,7 @@ import inspect
 from functools import lru_cache, partial
 from numbers import Number
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Type, TypeVar, Union
 
 import attr
 from attr.validators import instance_of
@@ -32,8 +32,14 @@ class DescriptionDocument:
     content = attr.ib(type=YAML)
     file_path = attr.ib(type=Path, validator=instance_of(Path))
 
-    def __getitem__(self, key: str) -> "DescriptionDocument":
+    def __getitem__(self, key: str | int) -> "DescriptionDocument":
         return DescriptionDocument(self.content[key], self.file_path)
+
+    def __len__(self) -> int:
+        return len(self.content)
+
+    def __iter__(self) -> Iterator["DescriptionDocument"]:
+        return (self[i] for i in range(len(self)))
 
     def __contains__(self, item: str) -> bool:
         return item in self.content
@@ -150,7 +156,9 @@ def get_instance_loader(*, class_: type) -> Callable:
     return partial(load_instance, class_=class_)
 
 
-def load_dict_of_instance(alfacase_content: DescriptionDocument, class_: Type[T]) -> T:
+def load_dict_of_instance(
+    alfacase_content: DescriptionDocument, class_: Type[T]
+) -> dict[str, T]:
     return {
         key.data: load_instance(
             DescriptionDocument(value, alfacase_content.file_path), class_=class_
@@ -505,7 +513,7 @@ def load_pvt_tables(alfacase_content: DescriptionDocument) -> Dict[str, Path]:
 def load_pvt_model_correlation_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.PvtModelCorrelationDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "oil_density_std": get_scalar_loader(from_unit="kg/m3"),
         "gas_density_std": get_scalar_loader(from_unit="kg/m3"),
         "rs_sat": get_scalar_loader(from_unit="sm3/sm3"),
@@ -534,7 +542,7 @@ def load_pvt_model_correlation_description(
 def load_heavy_component_description(
     document: DescriptionDocument,
 ) -> List[case_description.HeavyComponentDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "scn": load_value,
         "MW": get_scalar_loader(from_unit="kg/mol"),
@@ -555,7 +563,7 @@ def load_heavy_component_description(
 def load_light_component_description(
     document: DescriptionDocument,
 ) -> List[case_description.LightComponentDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "Pc": get_scalar_loader(from_unit="Pa"),
         "Tc": get_scalar_loader(from_unit="K"),
@@ -585,7 +593,7 @@ def load_light_component_description(
 def load_bip_description(
     document: DescriptionDocument,
 ) -> List[case_description.BipDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "component_1": load_value,
         "component_2": load_value,
         "value": load_value,
@@ -604,7 +612,7 @@ def load_bip_description(
 def load_composition_description(
     document: DescriptionDocument,
 ) -> List[case_description.CompositionDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "component": load_value,
         "molar_fraction": get_scalar_loader(from_unit="mol/mol"),
         "reference_enthalpy": get_scalar_loader(from_unit="J/mol"),
@@ -624,7 +632,7 @@ def load_composition_description(
 def load_compositional_fluid_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.CompositionalFluidDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "composition": load_composition_description,
         "fraction_pairs": load_bip_description,
     }
@@ -647,7 +655,7 @@ def load_compositional_fluid_description(
 def load_pvt_model_compositional_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.PvtModelCompositionalDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "equation_of_state_type": get_enum_loader(
             enum_class=constants.EquationOfStateType
         ),
@@ -716,7 +724,7 @@ def to_case_values(
         Dictionary with pairs attribute_name:loader_function to convert the values from YAML content
         to case description domain.
     """
-    alfacase_to_case_description = {}
+    alfacase_to_case_description: dict[str, Any] = {}
     for attr_name, function_handle in alfacase_to_case_description_dict.items():
         if attr_name in document:
             alfacase_to_case_description[attr_name] = execute_loader(
@@ -743,7 +751,7 @@ def execute_loader(
 def load_casing_section_description(
     document: DescriptionDocument,
 ) -> List[case_description.CasingSectionDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "hanger_depth": get_scalar_loader(from_unit="m"),
         "settings_depth": get_scalar_loader(from_unit="m"),
@@ -771,7 +779,7 @@ def load_environment_property_description(
     document: DescriptionDocument,
 ) -> List[case_description.EnvironmentPropertyDescription]:
     # fmt: off
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         'type': get_enum_loader(enum_class=constants.PipeEnvironmentHeatTransferCoefficientModelType),
         'position': get_scalar_loader(from_unit='m'),
         'temperature': get_scalar_loader(from_unit='degC'),
@@ -797,7 +805,7 @@ def load_environment_property_description(
 def load_formation_layer_description(
     document: DescriptionDocument,
 ) -> List[case_description.FormationLayerDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "start": get_scalar_loader(from_unit="m"),
         "material": load_value,
@@ -817,7 +825,7 @@ def load_formation_layer_description(
 def load_gas_lift_valve_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.GasLiftValveEquipmentDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "position": get_scalar_loader(from_unit="m"),
         "diameter": get_scalar_loader(category="diameter"),
@@ -872,7 +880,7 @@ def get_initial_conditions_table_loader(
         attr_loader = get_array_loader(from_unit=attr_unit)
 
     def load_initial_conditions_table(document: DescriptionDocument):
-        alfacase_to_case_description = {
+        alfacase_to_case_description: dict[str, Any] = {
             "positions": get_array_loader(from_unit="m"),
             attr_name: attr_loader,
         }
@@ -892,7 +900,7 @@ def get_tracers_initial_conditions_table_loader(
     attr_loader = get_list_of_arrays_loader(from_unit=attr_unit)
 
     def load_initial_conditions_table(document: DescriptionDocument):
-        alfacase_to_case_description = {
+        alfacase_to_case_description: dict[str, Any] = {
             "positions": get_array_loader(from_unit="m"),
             attr_name: attr_loader,
         }
@@ -925,7 +933,7 @@ load_velocities_container_description = get_initial_conditions_table_loader(
 def load_initial_velocities_description(
     document: DescriptionDocument,
 ) -> case_description.InitialVelocitiesDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
         "table_x": load_referenced_velocities_container_description,
         "table_y": load_referenced_velocities_container_description,
@@ -957,7 +965,7 @@ load_temperatures_container_description = get_initial_conditions_table_loader(
 def load_initial_temperatures_description(
     document: DescriptionDocument,
 ) -> case_description.InitialTemperaturesDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
         "table_x": load_referenced_temperatures_container_description,
         "table_y": load_referenced_temperatures_container_description,
@@ -989,7 +997,7 @@ load_volume_fractions_container_description = get_initial_conditions_table_loade
 def load_initial_volume_fractions_description(
     document: DescriptionDocument,
 ) -> case_description.InitialVolumeFractionsDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
         "table_x": load_referenced_volume_fractions_container_description,
         "table_y": load_referenced_volume_fractions_container_description,
@@ -1019,7 +1027,7 @@ load_pressure_container_description = get_initial_conditions_table_loader(
 def load_initial_pressures_description(
     document: DescriptionDocument,
 ) -> case_description.InitialPressuresDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
         "table_x": load_referenced_pressure_container_description,
         "table_y": load_referenced_pressure_container_description,
@@ -1051,7 +1059,7 @@ load_tracers_mass_fractions_container_description = (
 def load_initial_tracers_mass_fractions_description(
     document: DescriptionDocument,
 ) -> case_description.InitialTracersMassFractionsDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "position_input_type": get_enum_loader(enum_class=constants.TableInputType),
         "table_x": load_referenced_tracers_mass_fractions_container_description,
         "table_y": load_referenced_tracers_mass_fractions_container_description,
@@ -1067,7 +1075,7 @@ def load_initial_tracers_mass_fractions_description(
 def load_initial_conditions_description(
     document: DescriptionDocument,
 ) -> case_description.InitialConditionsDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "velocities": load_initial_velocities_description,
         "temperatures": load_initial_temperatures_description,
         "volume_fractions": load_initial_volume_fractions_description,
@@ -1089,7 +1097,7 @@ def _load_mass_source_common() -> Dict[str, Callable]:
 def load_mass_source_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.MassSourceEquipmentDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "position": get_scalar_loader(from_unit="m"),
         "material_above_filler": load_value,
@@ -1114,7 +1122,7 @@ def load_mass_source_equipment_description(
 def load_material_description(
     document: DescriptionDocument,
 ) -> List[case_description.MaterialDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "material_type": get_enum_loader(enum_class=constants.MaterialType),
         "density": get_scalar_loader(from_unit="kg/m3"),
@@ -1140,7 +1148,7 @@ def load_material_description(
 def load_internal_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.InternalNodePropertiesDescription:
-    alfacase_to_case_description = {"fluid": load_value}
+    alfacase_to_case_description: dict[str, Any] = {"fluid": load_value}
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.InternalNodePropertiesDescription(**case_values)
     return update_multi_input_flags(document, item_description)
@@ -1167,7 +1175,7 @@ def load_pressure_node_properties_description(
 def load_separator_node_properties_description(
     document: DescriptionDocument,
 ) -> case_description.SeparatorNodePropertiesDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "environment_temperature": get_scalar_loader(from_unit="K"),
         "geometry": get_enum_loader(enum_class=constants.SeparatorGeometryType),
         "length": get_scalar_loader(from_unit="m"),
@@ -1190,7 +1198,7 @@ def load_separator_node_properties_description(
 def load_node_description(
     document: DescriptionDocument,
 ) -> List[case_description.NodeDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "node_type": get_enum_loader(enum_class=constants.NodeCellType),
         "pvt_model": load_value,
@@ -1218,7 +1226,7 @@ def load_node_description(
 def load_packer_description(
     document: DescriptionDocument,
 ) -> List[case_description.PackerDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "position": get_scalar_loader(from_unit="m"),
         "material_above": load_value,
@@ -1237,7 +1245,7 @@ def load_packer_description(
 def load_pipe_segments_description(
     document: DescriptionDocument,
 ) -> case_description.PipeSegmentsDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "start_positions": get_array_loader(from_unit="m"),
         "diameters": get_array_loader(from_unit="m"),
         "roughnesses": get_array_loader(from_unit="m"),
@@ -1251,7 +1259,7 @@ def load_pipe_segments_description(
 def load_profile_output_description(
     document: DescriptionDocument,
 ) -> List[case_description.ProfileOutputDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "curve_names": load_value,
         "element_name": load_value,
         "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
@@ -1315,7 +1323,7 @@ def load_forchheimer_ipr_description(
 def load_ipr_curve_description(
     document: DescriptionDocument,
 ) -> case_description.IPRCurveDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "pressure_difference": get_array_loader(from_unit="Pa"),
         "flow_rate": get_array_loader(from_unit="sm3/d"),
     }
@@ -1327,7 +1335,7 @@ def load_ipr_curve_description(
 def load_table_ipr_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.LinearIPRDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "well_index_phase": get_enum_loader(enum_class=constants.WellIndexPhaseType),
         "table": load_ipr_curve_description,
     }
@@ -1348,7 +1356,7 @@ def load_table_ipr_description(
 def load_ipr_models_description(
     document: DescriptionDocument,
 ) -> case_description.IPRModelsDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "linear_models": load_linear_ipr_description,
         "table_models": load_table_ipr_description,
         "vogel_models": load_vogel_ipr_description,
@@ -1369,7 +1377,7 @@ def _load_pressure_source_common() -> Dict[str, Callable]:
 def load_reservoir_inflow_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.ReservoirInflowEquipmentDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "fluid": load_value,
         "start": get_scalar_loader(from_unit="m"),
@@ -1400,7 +1408,7 @@ def load_reservoir_inflow_equipment_description(
 def load_speed_curve_description(
     document: DescriptionDocument,
 ) -> case_description.SpeedCurveDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "time": get_array_loader(from_unit="s"),
         "speed": get_array_loader(from_unit="rpm"),
     }
@@ -1412,7 +1420,7 @@ def load_speed_curve_description(
 def load_table_pump_description(
     document: DescriptionDocument,
 ) -> case_description.TablePumpDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "speeds": get_array_loader(from_unit="rpm"),
         "void_fractions": get_array_loader(category="volume fraction"),
         "flow_rates": get_array_loader(category="volume flow rate"),
@@ -1429,8 +1437,8 @@ def load_table_pump_description(
 def generate_trend_description(
     document: DescriptionDocument,
     alfacase_to_case_description: Dict[str, Callable],
-    description_type: [T],
-) -> [T]:
+    description_type: type[T],
+) -> T:
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = description_type(**case_values)
     return update_multi_input_flags(document, item_description)
@@ -1455,7 +1463,7 @@ def load_positional_pipe_trend_description(
 def load_equipment_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.EquipmentTrendDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "curve_names": load_value,
         "element_name": load_value,
     }
@@ -1472,7 +1480,7 @@ def load_equipment_trend_description(
 def load_separator_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.SeparatorTrendDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "curve_names": load_value,
         "element_name": load_value,
     }
@@ -1489,7 +1497,7 @@ def load_separator_trend_description(
 def load_controller_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.ControllerTrendDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "curve_names": load_value,
         "element_name": load_value,
     }
@@ -1506,7 +1514,7 @@ def load_controller_trend_description(
 def load_global_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.GlobalTrendDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "curve_names": load_value,
     }
     return [
@@ -1522,7 +1530,7 @@ def load_global_trend_description(
 def load_overall_pipe_trend_description(
     document: DescriptionDocument,
 ) -> List[case_description.OverallPipeTrendDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "curve_names": load_value,
         "element_name": load_value,
         "location": get_enum_loader(enum_class=constants.OutputAttachmentLocation),
@@ -1540,7 +1548,7 @@ def load_overall_pipe_trend_description(
 def load_tubing_description(
     document: DescriptionDocument,
 ) -> List[case_description.TubingDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "length": get_scalar_loader(from_unit="m"),
         "outer_diameter": get_scalar_loader(category="diameter"),
@@ -1563,7 +1571,7 @@ def load_tubing_description(
 def load_wall_layer_description(
     document: DescriptionDocument,
 ) -> List[case_description.WallLayerDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "thickness": get_scalar_loader(from_unit="m"),
         "material_name": load_value,
         "has_annulus_flow": load_value,
@@ -1583,7 +1591,7 @@ def load_wall_layer_description(
 def load_annulus_description(
     document: DescriptionDocument,
 ) -> case_description.AnnulusDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "has_annulus_flow": load_value,
         "pvt_model": load_value,
         "top_node": load_value,
@@ -1606,7 +1614,7 @@ def load_trends_output_description(
 def load_case_output_description(
     document: DescriptionDocument,
 ) -> case_description.CaseOutputDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "profiles": load_profile_output_description,
         "automatic_profile_frequency": load_value,
         "profile_frequency": get_scalar_loader(from_unit="s"),
@@ -1622,7 +1630,7 @@ def load_case_output_description(
 def load_open_hole_description(
     document: DescriptionDocument,
 ) -> List[case_description.OpenHoleDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "length": get_scalar_loader(from_unit="m"),
         "diameter": get_scalar_loader(category="diameter"),
@@ -1643,7 +1651,7 @@ def load_open_hole_description(
 def load_casing_description(
     document: DescriptionDocument,
 ) -> case_description.CasingDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "casing_sections": load_casing_section_description,
         "tubings": load_tubing_description,
         "packers": load_packer_description,
@@ -1657,7 +1665,7 @@ def load_casing_description(
 def load_compressor_pressure_table_description(
     document: DescriptionDocument,
 ) -> case_description.CompressorPressureTableDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "speed_entries": get_array_loader(from_unit="rpm"),
         "corrected_mass_flow_rate_entries": get_array_loader(from_unit="kg/s"),
         "pressure_ratio_table": get_array_loader(from_unit="-"),
@@ -1673,7 +1681,7 @@ def load_compressor_pressure_table_description(
 def load_compressor_equipment_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.CompressorEquipmentDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "position": get_scalar_loader(from_unit="m"),
         "table": load_compressor_pressure_table_description,
@@ -1706,7 +1714,7 @@ def load_compressor_equipment_description(
 def load_environment_description(
     document: DescriptionDocument,
 ) -> case_description.EnvironmentDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "thermal_model": get_enum_loader(enum_class=constants.PipeThermalModelType),
         "position_input_mode": get_enum_loader(
             enum_class=constants.PipeThermalPositionInput
@@ -1723,7 +1731,7 @@ def load_environment_description(
 def load_formation_description(
     document: DescriptionDocument,
 ) -> case_description.FormationDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "reference_y_coordinate": get_scalar_loader(from_unit="m"),
         "layers": load_formation_layer_description,
     }
@@ -1779,7 +1787,7 @@ def load_pig_equipment_description(
 def load_wall_description(
     document: DescriptionDocument,
 ) -> List[case_description.WallDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "inner_roughness": get_scalar_loader(from_unit="m"),
         "wall_layer_container": load_wall_layer_description,
@@ -1804,7 +1812,7 @@ def load_equipment_description(
 def load_x_and_y_description(
     document: DescriptionDocument,
 ) -> case_description.XAndYDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "x": get_array_loader(from_unit="m"),
         "y": get_array_loader(from_unit="m"),
     }
@@ -1818,7 +1826,7 @@ def load_x_and_y_description(
 def load_length_and_elevation_description(
     document: DescriptionDocument,
 ) -> case_description.LengthAndElevationDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "length": get_array_loader(from_unit="m"),
         "elevation": get_array_loader(from_unit="m"),
     }
@@ -1832,7 +1840,7 @@ def load_length_and_elevation_description(
 def load_profile_description(
     document: DescriptionDocument,
 ) -> case_description.ProfileDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "x_and_y": load_x_and_y_description,
         "length_and_elevation": load_length_and_elevation_description,
     }
@@ -1844,8 +1852,7 @@ def load_profile_description(
 def load_pipe_description(
     document: DescriptionDocument,
 ) -> List[case_description.PipeDescription]:
-    # fmt: off
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "environment": load_environment_description,
         "equipment": load_equipment_description,
         "initial_conditions": load_initial_conditions_description,
@@ -1859,7 +1866,6 @@ def load_pipe_description(
         "target_port": get_enum_loader(enum_class=constants.WellConnectionPort),
     }
 
-    # fmt: on
     def generate_pipes_description(document: DescriptionDocument):
         case_values = to_case_values(document, alfacase_to_case_description)
         item_description = case_description.PipeDescription(**case_values)
@@ -1873,7 +1879,7 @@ def load_pipe_description(
 def load_well_description(
     document: DescriptionDocument,
 ) -> List[case_description.WellDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
         "pvt_model": load_value,
         "stagnant_fluid": load_value,
@@ -1908,35 +1914,38 @@ def load_physics_description(
     )
 
 
-# fmt: off
-def load_numerical_options_description(document: DescriptionDocument) -> case_description.NumericalOptionsDescription:
-    alfacase_to_case_description = {
-        'tolerance': load_value,
-        'maximum_iterations': load_value,
-        'maximum_timestep_change_factor': load_value,
-        'maximum_cfl_value': load_value,
-        'nonlinear_solver_type': get_enum_loader(enum_class=constants.NonlinearSolverType),
-        'relaxed_tolerance': load_value,
-        'divergence_tolerance': load_value,
-        'friction_factor_evaluation_strategy': get_enum_loader(enum_class=constants.EvaluationStrategyType),
-        'simulation_mode': get_enum_loader(enum_class=constants.SimulationModeType),
-        'enable_solver_caching': load_value,
-        'caching_rtol': load_value,
-        'caching_atol': load_value,
-        'always_repeat_timestep': load_value,
-        'enable_fast_compositional': load_value
+def load_numerical_options_description(
+    document: DescriptionDocument,
+) -> case_description.NumericalOptionsDescription:
+    alfacase_to_case_description: dict[str, Any] = {
+        "tolerance": load_value,
+        "maximum_iterations": load_value,
+        "maximum_timestep_change_factor": load_value,
+        "maximum_cfl_value": load_value,
+        "nonlinear_solver_type": get_enum_loader(
+            enum_class=constants.NonlinearSolverType
+        ),
+        "relaxed_tolerance": load_value,
+        "divergence_tolerance": load_value,
+        "friction_factor_evaluation_strategy": get_enum_loader(
+            enum_class=constants.EvaluationStrategyType
+        ),
+        "simulation_mode": get_enum_loader(enum_class=constants.SimulationModeType),
+        "enable_solver_caching": load_value,
+        "caching_rtol": load_value,
+        "caching_atol": load_value,
+        "always_repeat_timestep": load_value,
+        "enable_fast_compositional": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.NumericalOptionsDescription(**case_values)
     return update_multi_input_flags(document, item_description)
-# fmt: on
 
 
-# fmt: off
 def load_time_options_description(
-    document: DescriptionDocument
+    document: DescriptionDocument,
 ) -> case_description.TimeOptionsDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "stop_on_steady_state": load_value,
         "initial_time": get_scalar_loader(from_unit="h"),
         "final_time": get_scalar_loader(from_unit="h"),
@@ -1950,13 +1959,11 @@ def load_time_options_description(
     item_description = case_description.TimeOptionsDescription(**case_values)
     return update_multi_input_flags(document, item_description)
 
-# fmt: on
-
 
 def load_tracer_model_constant_coefficients_description(
     document: DescriptionDocument,
 ) -> Dict[str, case_description.TracerModelConstantCoefficientsDescription]:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "partition_coefficients": get_scalar_dict_loader(category="mass fraction")
     }
 
@@ -1979,7 +1986,7 @@ def load_tracer_model_constant_coefficients_description(
 def load_tracers_description(
     document: DescriptionDocument,
 ) -> case_description.TracersDescription:
-    alfacase_to_case_description = {
+    alfacase_to_case_description: dict[str, Any] = {
         "constant_coefficients": load_tracer_model_constant_coefficients_description
     }
     case_values = to_case_values(document, alfacase_to_case_description)
@@ -1994,29 +2001,29 @@ def load_case_description(
         load_list_of_plugin,
     )
 
-    # fmt: off
-    alfacase_to_case_description = {
-        'physics': load_physics_description,
-        'numerical_options': load_numerical_options_description,
-        'time_options': load_time_options_description,
-        'max_timestep_change_factor': load_value,
-        'max_cfl_value': load_value,
-        'friction_factor_evaluation_strategy': get_enum_loader(enum_class=constants.EvaluationStrategyType),
-        'name': load_value,
-        'comment': load_value,
-        'plugins': load_list_of_plugin,
-        'positions': load_value,
-        'tracers': load_tracers_description,
-        'ipr_models': load_ipr_models_description,
-        'pvt_models': load_pvt_models_description,
-        'materials': load_material_description,
-        'nodes': load_node_description,
-        'outputs': load_case_output_description,
-        'pipes': load_pipe_description,
-        'walls': load_wall_description,
-        'wells': load_well_description,
+    alfacase_to_case_description: dict[str, Any] = {
+        "physics": load_physics_description,
+        "numerical_options": load_numerical_options_description,
+        "time_options": load_time_options_description,
+        "max_timestep_change_factor": load_value,
+        "max_cfl_value": load_value,
+        "friction_factor_evaluation_strategy": get_enum_loader(
+            enum_class=constants.EvaluationStrategyType
+        ),
+        "name": load_value,
+        "comment": load_value,
+        "plugins": load_list_of_plugin,
+        "positions": load_value,
+        "tracers": load_tracers_description,
+        "ipr_models": load_ipr_models_description,
+        "pvt_models": load_pvt_models_description,
+        "materials": load_material_description,
+        "nodes": load_node_description,
+        "outputs": load_case_output_description,
+        "pipes": load_pipe_description,
+        "walls": load_wall_description,
+        "wells": load_well_description,
     }
-    # fmt: on
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.CaseDescription(**case_values)
     return update_multi_input_flags(document, item_description)
