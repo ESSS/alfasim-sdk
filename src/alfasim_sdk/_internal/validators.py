@@ -1,10 +1,10 @@
 from typing import Any
 
-from attr._make import Attribute
+from attr import Attribute
 from attr.validators import deep_iterable, instance_of
 
 
-def non_empty_str(self: Any, attribute: Attribute, value: str) -> None:
+def non_empty_str(self: Any, attribute: Attribute, value: Any) -> None:
     """
     A validator that raises a ValueError if the initializer is called with a empty string '' or '  '
     """

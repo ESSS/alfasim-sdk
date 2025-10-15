@@ -401,7 +401,7 @@ def attrib_enum(type_: Optional[EnumMeta] = None, default: Any = attr.NOTHING) -
     )  # type=type_)
 
 
-def dict_of(type_: type) -> Callable:
+def dict_of(type_: type | tuple[type, ...]) -> Callable:
     """
     An attr validator that performs validation of dictionary values.
 
@@ -419,7 +419,7 @@ def dict_of(type_: type) -> Callable:
     )
 
 
-def attrib_dict_of(type_: type) -> attr._make._CountingAttr:
+def attrib_dict_of(type_: type) -> Any:
     """
     Create a new attr attribute with validator for an atribute that is a dictionary with keys as str (to represent
     the name) and the content of an instance of type_

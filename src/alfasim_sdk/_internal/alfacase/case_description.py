@@ -1,9 +1,10 @@
+from collections.abc import Mapping
 from contextlib import suppress
 from datetime import datetime
 from enum import Enum
 from numbers import Number
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, TypeAlias, Union
 
 import attr
 import numpy as np
@@ -54,7 +55,7 @@ from .case_description_attributes import (
 # [[[end]]] (sum: 1B2M2Y8Asg)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginDescription:
     # The plugin id.
     name: str = attr.ib(validator=instance_of(str))
@@ -66,24 +67,24 @@ class PluginDescription:
     is_enabled: bool = attr.ib(default=True)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginTracerReference:
     tracer_id: int | None = attr.ib(default=None)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginInternalReference:
     plugin_item_id: int | None = attr.ib(default=None)
     container_key: str | None = attr.ib(default=None)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginMultipleReference:
     container_key: str | None = attr.ib(default=None)
     item_id_list: list[int] = attr.ib(default=attr.Factory(list))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class TracerReferencePluginTableColumn:
     """
     A column holding tracer references.
@@ -96,7 +97,7 @@ class TracerReferencePluginTableColumn:
     tracer_ids: list[int | None] = attr.ib(validator=list_of_optional_integers)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class InternalReferencePluginTableColumn:
     """
     A column holding internal references.
@@ -113,12 +114,12 @@ class InternalReferencePluginTableColumn:
     container_key: str = attr.ib(validator=non_empty_str)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginTableContainer:
     columns: dict[str, Any] = attr.ib(default=attr.Factory(dict))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginFileContent:
     path: Path = attr.ib(validator=instance_of(Path))
     content: bytes = attr.ib(validator=instance_of(bytes))
@@ -162,7 +163,7 @@ class PluginFileContent:
             )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class SurgeVolumeOptionsDescription:
     """
     .. include:: /alfacase_definitions/SurgeVolumeOptionsDescription.txt
@@ -300,7 +301,7 @@ class TrendsOutputDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CaseOutputDescription:
     """
     .. include:: /alfacase_definitions/CaseOutputDescription.txt
@@ -581,7 +582,7 @@ class _PressureSourceCommon:
     # [[[end]]] (sum: 5Lrwey+Qot)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CompositionDescription:
     """
     :ivar component:
@@ -603,7 +604,7 @@ class CompositionDescription:
     reference_enthalpy: Scalar = attrib_scalar(default=Scalar(0, "J/mol"))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class BipDescription:
     """
     .. include:: /alfacase_definitions/BipDescription.txt
@@ -614,7 +615,7 @@ class BipDescription:
     value: float = attr.ib(validator=instance_of(float), converter=float)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CompositionalFluidDescription:
     """
     .. include:: /alfacase_definitions/CompositionalFluidDescription.txt
@@ -626,7 +627,7 @@ class CompositionalFluidDescription:
     fraction_pairs: list[BipDescription] = attrib_instance_list(BipDescription)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CombinedFluidDescription:
     """
     .. include:: /alfacase_definitions/CombinedFluidDescription.txt
@@ -765,7 +766,7 @@ class TablePumpDescription:
 # fmt: on
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PumpEquipmentDescription:
     """
     .. include:: /alfacase_definitions/PumpEquipmentDescription.txt
@@ -823,9 +824,10 @@ class PumpEquipmentDescription:
         category="density", default=Scalar(0.0, "kg/m3")
     )
     esp_manufacturer: Optional[str] = attr.ib(
-        default="", validator=optional(instance_of(str))
+        default="",
+        validator=optional(instance_of(str)),  # type:ignore[arg-type]
     )
-    esp_model: str = attr.ib(default="", validator=optional(instance_of(str)))
+    esp_model: str = attr.ib(default="", validator=instance_of(str))
     esp_viscosity_model: constants.PumpViscosityModel = attrib_enum(
         default=constants.PumpViscosityModel.NoModel
     )
@@ -834,7 +836,7 @@ class PumpEquipmentDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CompressorPressureTableDescription:
     """
     :ivar corrected_mass_flow_rate_entries:
@@ -878,7 +880,7 @@ class CompressorPressureTableDescription:
         )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CompressorEquipmentDescription:
     """
     .. include:: /alfacase_definitions/CompressorEquipmentDescription.txt
@@ -910,7 +912,7 @@ class CompressorEquipmentDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CvTableDescription:
     """
     .. include:: /alfacase_definitions/CvTableDescription.txt
@@ -931,7 +933,7 @@ class CvTableDescription:
             raise ValueError(msg)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PigEquipmentDescription:
     """
     .. include:: /alfacase_definitions/PigEquipmentDescription.txt
@@ -1039,7 +1041,7 @@ class PigEquipmentDescription:
         )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ValveEquipmentDescription:
     """
     .. include:: /alfacase_definitions/ValveEquipmentDescription.txt
@@ -1078,7 +1080,7 @@ class ValveEquipmentDescription:
         )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class LeakEquipmentDescription:
     """
     .. include:: /alfacase_definitions/LeakEquipmentDescription.txt
@@ -1174,14 +1176,14 @@ class IPRCurveDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class CommonIPR:
     well_index_phase: constants.WellIndexPhaseType = attrib_enum(
         default=constants.WellIndexPhaseType.Oil
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class LinearIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/LinearIPRDescription.txt
@@ -1207,7 +1209,7 @@ class LinearIPRDescription(CommonIPR):
     # [[[end]]] (sum: r3U12R+7CY)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class VogelIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/VogelIPRDescription.txt
@@ -1233,7 +1235,7 @@ class VogelIPRDescription(CommonIPR):
     # [[[end]]] (sum: BsUYnwfXz2)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class FetkovichIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/FetkovichIPRDescription.txt
@@ -1260,7 +1262,7 @@ class FetkovichIPRDescription(CommonIPR):
     # [[[end]]] (sum: r3U12R+7CY)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ForchheimerIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/ForchheimerIPRDescription.txt
@@ -1304,7 +1306,7 @@ class ForchheimerIPRDescription(CommonIPR):
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class TableIPRDescription(CommonIPR):
     """
     .. include:: /alfacase_definitions/TableIPRDescription.txt
@@ -1313,7 +1315,7 @@ class TableIPRDescription(CommonIPR):
     table: IPRCurveDescription = attrib_instance(IPRCurveDescription)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class IPRModelsDescription:
     """
     :ivar linear_models:
@@ -1368,7 +1370,7 @@ class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class HeatSourceEquipmentDescription:
     """
     .. include:: /alfacase_definitions/HeatSourceEquipmentDescription.txt
@@ -1395,7 +1397,7 @@ class HeatSourceEquipmentDescription:
     # [[[end]]] (sum: 0l1Sjk5IZu)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PipeSegmentsDescription:
     """
     .. include:: /alfacase_definitions/PipeSegmentsDescription.txt
@@ -1412,7 +1414,7 @@ class PipeSegmentsDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ReferencedPressureContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedPressureContainerDescription.txt
@@ -1426,7 +1428,7 @@ class ReferencedPressureContainerDescription:
     pressures: Array = attr.ib(default=Array([1e5], "Pa"))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PressureContainerDescription:
     """
     .. include:: /alfacase_definitions/PressureContainerDescription.txt
@@ -1439,7 +1441,7 @@ class PressureContainerDescription:
     pressures: Array = attr.ib(default=Array([1e5], "Pa"))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class InitialPressuresDescription:
     """
     .. include:: /alfacase_definitions/InitialPressuresDescription.txt
@@ -1459,7 +1461,7 @@ class InitialPressuresDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ReferencedVolumeFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedVolumeFractionsContainerDescription.txt
@@ -1474,7 +1476,7 @@ class ReferencedVolumeFractionsContainerDescription:
     fractions: Dict[PhaseName, Array] = attr.ib(default={})
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class VolumeFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/VolumeFractionsContainerDescription.txt
@@ -1493,7 +1495,7 @@ class VolumeFractionsContainerDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class InitialVolumeFractionsDescription:
     """
     .. include:: /alfacase_definitions/InitialVolumeFractionsDescription.txt
@@ -1513,7 +1515,7 @@ class InitialVolumeFractionsDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ReferencedTracersMassFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedTracersMassFractionsContainerDescription.txt
@@ -1527,7 +1529,7 @@ class ReferencedTracersMassFractionsContainerDescription:
     tracers_mass_fractions: List[Array] = attr.ib(default=[])
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class TracersMassFractionsContainerDescription:
     """
     .. include:: /alfacase_definitions/TracersMassFractionsContainerDescription.txt
@@ -1540,7 +1542,7 @@ class TracersMassFractionsContainerDescription:
     tracers_mass_fractions: List[Array] = attr.ib(default=[])
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class InitialTracersMassFractionsDescription:
     """
     .. include:: /alfacase_definitions/InitialTracersMassFractionsDescription.txt
@@ -1560,7 +1562,7 @@ class InitialTracersMassFractionsDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ReferencedVelocitiesContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedVelocitiesContainerDescription.txt
@@ -1574,7 +1576,7 @@ class ReferencedVelocitiesContainerDescription:
     velocities: Dict[PhaseName, Array] = attr.ib(default={})
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class VelocitiesContainerDescription:
     """
     .. include:: /alfacase_definitions/VelocitiesContainerDescription.txt
@@ -1593,7 +1595,7 @@ class VelocitiesContainerDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class InitialVelocitiesDescription:
     """
     .. include:: /alfacase_definitions/InitialVelocitiesDescription.txt
@@ -1613,7 +1615,7 @@ class InitialVelocitiesDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ReferencedTemperaturesContainerDescription:
     """
     .. include:: /alfacase_definitions/ReferencedTemperaturesContainerDescription.txt
@@ -1627,7 +1629,7 @@ class ReferencedTemperaturesContainerDescription:
     temperatures: Array = attr.ib(default=Array([], "K"))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class TemperaturesContainerDescription:
     """
     .. include:: /alfacase_definitions/TemperaturesContainerDescription.txt
@@ -1642,7 +1644,7 @@ class TemperaturesContainerDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class InitialTemperaturesDescription:
     """
     .. include:: /alfacase_definitions/InitialTemperaturesDescription.txt
@@ -1709,10 +1711,10 @@ class InitialConditionArrays:
     )
 
 
-value_and_unit = Tuple[Number, str]
+ValueAndUnit: TypeAlias = tuple[float, str]
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class LengthAndElevationDescription:
     """
     Describe a pipe with length and elevation.
@@ -1731,7 +1733,7 @@ class LengthAndElevationDescription:
 
     def iter_values_and_unit(
         self,
-    ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
+    ) -> Iterator[Tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns an iterator containing a pair of values with length and elevation along with their units."""
         if self.length and self.elevation:
             length_values = self.length.GetValues(self.length.unit)
@@ -1739,10 +1741,8 @@ class LengthAndElevationDescription:
             for length, elevation in zip(length_values, elevation_values):
                 yield (length, self.length.unit), (elevation, self.elevation.unit)
 
-        return iter(())
 
-
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class XAndYDescription:
     """
     Describe a pipe with a sequence of coordinates.
@@ -1757,10 +1757,13 @@ class XAndYDescription:
 
     def iter_values_and_unit(
         self,
-    ) -> Iterator[Tuple[value_and_unit, value_and_unit]]:
+    ) -> Iterator[Tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns a pair of values with the x and y value along with their units."""
-        for x, y in zip(self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)):
-            yield (x, self.x.unit), (y, self.y.unit)
+        if self.x and self.y:
+            for x, y in zip(
+                self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)
+            ):
+                yield (x, self.x.unit), (y, self.y.unit)
 
 
 @attr.s()
@@ -1848,7 +1851,7 @@ class EnvironmentPropertyDescription:
     fluid_velocity: Scalar = attrib_scalar(default=Scalar(0.0, "m/s"))
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class EnvironmentDescription:
     """
     .. include:: /alfacase_definitions/EnvironmentDescription.txt
@@ -1878,7 +1881,7 @@ class EnvironmentDescription:
             return self.tvd_properties_table
 
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class PipeDescription:
     """
     .. include:: /alfacase_definitions/PipeDescription.txt
@@ -1912,21 +1915,21 @@ class PipeDescription:
     regime_capturing_mesh_threshold: Scalar = attrib_scalar(default=Scalar(0.0, "-"))
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class PressureNodePropertiesDescription(_PressureSourceCommon):
     """
     .. include:: /alfacase_definitions/PressureNodePropertiesDescription.txt
     """
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class MassSourceNodePropertiesDescription(_MassSourceCommon):
     """
     .. include:: /alfacase_definitions/MassSourceNodePropertiesDescription.txt
     """
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class InternalNodePropertiesDescription:
     """
     .. include:: /alfacase_definitions/InternalNodePropertiesDescription.txt
@@ -1935,7 +1938,7 @@ class InternalNodePropertiesDescription:
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class SeparatorNodePropertiesDescription:
     """
     :ivar overall_heat_transfer_coefficient:
@@ -1960,7 +1963,7 @@ class SeparatorNodePropertiesDescription:
     )
     diameter: Scalar = attrib_scalar(default=Scalar("diameter", 1.0, "m"))
     nozzles: Dict[str, Scalar] = attr.ib(
-        default=attr.Factory(dict), validator=optional(dict_with_scalar)
+        default=attr.Factory(dict), validator=dict_with_scalar
     )
     initial_phase_volume_fractions: Dict[str, Scalar] = attr.ib(
         default={
@@ -2053,7 +2056,7 @@ class ControllerOutputSignalPropertiesDescription:
         assert isinstance(value, float) and value >= 0.0
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class ControllerNodePropertiesDescription:
     """
     :ivar type:
@@ -2161,7 +2164,7 @@ class FormationDescription:
     )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class CasingSectionDescription:
     """
     .. include:: /alfacase_definitions/CasingSectionDescription.txt
@@ -2196,7 +2199,7 @@ class CasingSectionDescription:
         )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class TubingDescription:
     """
     .. include:: /alfacase_definitions/TubingDescription.txt
@@ -2236,7 +2239,7 @@ class PackerDescription:
     )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class OpenHoleDescription:
     """
     .. include:: /alfacase_definitions/OpenHoleDescription.txt
@@ -2270,7 +2273,7 @@ class CasingDescription:
     open_holes: List[OpenHoleDescription] = attrib_instance_list(OpenHoleDescription)
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class GasLiftValveEquipmentDescription:
     """
     .. include:: /alfacase_definitions/GasLiftValveEquipmentDescription.txt
@@ -2377,7 +2380,7 @@ class MaterialDescription:
     expansion: Scalar = attrib_scalar(default=Scalar(0, "1/K"))
     viscosity: Scalar = attrib_scalar(default=Scalar(0, "cP"))
 
-    def as_dict(self) -> Dict[str, Union[str, value_and_unit]]:
+    def as_dict(self) -> Mapping[str, Union[Any, ValueAndUnit]]:
         """
         Helper function that returns a dict with all information needed to create a Material.
 
@@ -2424,7 +2427,7 @@ class WallDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PvtModelCorrelationDescription:
     """
     :ivar oil_density_std:
@@ -2497,7 +2500,7 @@ class PvtModelCorrelationDescription:
     )
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class PvtModelConstantPropertiesDescription:
     """
     :ivar gas_density:
@@ -2582,7 +2585,7 @@ class PvtModelConstantPropertiesDescription:
     has_water: bool = attr.ib(default=False)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class HeavyComponentDescription:
     """
     .. include:: /alfacase_definitions/HeavyComponentDescription.txt
@@ -2597,7 +2600,7 @@ class HeavyComponentDescription:
     rho: Scalar = attrib_scalar(default=Scalar(0, "kg/m3"))
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class LightComponentDescription:
     """
     .. include:: /alfacase_definitions/LightComponentDescription.txt
@@ -3906,7 +3909,10 @@ class CaseDescription:
                         f"available pvt_models are: {', '.join(pvt_models_available)}"
                     )
 
-        for element in chain(self.nodes, self.pipes, self.wells):
+        items: Iterator[NodeDescription | PipeDescription | WellDescription] = chain(
+            self.nodes, self.pipes, self.wells
+        )
+        for element in items:
             _handle_invalid_reference(element, element.name, element.pvt_model)
 
             # Well has an annulus that also has a pvt_model but, doesn't have a name
