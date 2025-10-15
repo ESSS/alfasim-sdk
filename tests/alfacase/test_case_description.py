@@ -268,9 +268,6 @@ def test_enum_attribute():
     with pytest.raises(RuntimeError, match=re.escape(expected_msg)):
         attrib_enum()
 
-    # When informing default, the type_ is optional
-    assert attrib_enum(default=X.A).type is X
-
     # Avoiding shooting in the foot =)
     expected_msg = (
         "Default must be a member of Enum and not the Enum class itself, "

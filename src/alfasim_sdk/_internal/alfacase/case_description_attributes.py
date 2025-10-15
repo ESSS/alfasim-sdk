@@ -317,7 +317,7 @@ def attrib_curve(
     )
 
 
-def attrib_instance(type_: type, is_optional: bool = False) -> attr._make._CountingAttr:
+def attrib_instance(type_: type, is_optional: bool = False) -> Any:
     """
     Create a new attr attribute with validator for the given type_
     """
@@ -339,7 +339,7 @@ def attrib_instance(type_: type, is_optional: bool = False) -> attr._make._Count
     )
 
 
-def attrib_instance_list(type_: type) -> attr._make._CountingAttr:
+def attrib_instance_list(type_: type) -> Any:
     """
     Create a new attr attribute with validator for the given type_
     All attributes created are expected to be List of the given type_

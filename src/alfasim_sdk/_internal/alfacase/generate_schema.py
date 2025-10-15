@@ -1,12 +1,11 @@
 import inspect
 import operator
 import sys
-import typing
 from collections import deque
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import List, Set
+from typing import List, Set, Any, Dict, Callable
 
 import attr
 import typing_inspect
@@ -20,7 +19,7 @@ from alfasim_sdk import CaseDescription
 INDENTANTION = "    "
 
 
-def is_enum(value: typing.Any):
+def is_enum(value: Any):
     return isinstance(value, EnumMeta)
 
 
@@ -37,7 +36,7 @@ def numpy_1_darray_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_list(type_: type) -> bool:
-    return typing_inspect.get_origin(type_) in (typing.List, list)
+    return typing_inspect.get_origin(type_) in (List, list)
 
 
 def list_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -78,7 +77,7 @@ def attrs_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_dict(type_: type) -> bool:
-    return typing_inspect.get_origin(type_) in (typing.Dict, dict)
+    return typing_inspect.get_origin(type_) in (Dict, dict)
 
 
 def dict_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -198,7 +197,7 @@ def path_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Str()"
 
 
-LIST_OF_IMPLEMENTATIONS: List[typing.Tuple[type, typing.Callable]] = [
+LIST_OF_IMPLEMENTATIONS: List[tuple[type, Callable]] = [
     (is_enum, enum_to_alfacase_schema),
     (is_attrs, attrs_to_alfacase_schema),
     (is_list, list_to_alfacase_schema),
@@ -229,7 +228,7 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
         if predicate_function(type_):
             return handle_function(type_, indent=indent)
 
-    if type_ is typing.Any:
+    if type_ is Any:
         return "Any()"
 
     raise RuntimeError(
@@ -276,7 +275,7 @@ IGNORED_PROPERTIES = (
 )
 
 
-def _get_attribute_schema(key: str, value: attr.ib, indent: int = 2) -> str:
+def _get_attribute_schema(key: str, value: Any, indent: int = 2) -> str:
     """
     Helper method that return the equivalent schema for the given key and value.
 
@@ -384,8 +383,8 @@ def get_all_classes_that_needs_schema(class_: type) -> List[type]:
     :param type class_:
         Target class to return all elements that needs schema.
     """
-    graph = {}
-    search_queue = deque()
+    graph: dict[type, set[type]] = {}
+    search_queue: deque[type] = deque()
 
     graph[CaseDescription] = _get_classes(class_)
     search_queue += graph[CaseDescription]

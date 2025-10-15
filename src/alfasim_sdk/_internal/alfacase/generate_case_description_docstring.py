@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Sequence, Tuple, Type
 
 import attr
-from attr._make import Attribute
+from attr import Attribute
 from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units._scalar import Scalar
@@ -117,7 +117,7 @@ def generate_definition(class_name: str) -> str:
     return "\n".join(lines)
 
 
-def _generate_declaration_for_class(class_: Any) -> List[str]:
+def _generate_declaration_for_class(class_: Any) -> Sequence[str]:
     """Return all attributes for the given Class with CaseDescription definition."""
     class_fields = attr.fields_dict(class_)
     return [
@@ -126,7 +126,7 @@ def _generate_declaration_for_class(class_: Any) -> List[str]:
     ]
 
 
-def _generate_declaration_for_schema(class_: Any) -> List[str]:
+def _generate_declaration_for_schema(class_: Any) -> Sequence[str]:
     """Return all attributes for the given Class using ALFACase schema definition."""
     class_fields = attr.fields_dict(class_)
     return _get_declaration(class_fields, LIST_OF_CASE_SCHEMAS, is_schema=True)
@@ -139,11 +139,14 @@ def _get_case_attr_default_value(value: attr.Attribute) -> str:
         return ""
 
     default_value_string = " = "
-    if isinstance(value.default, enum.Enum):
+    if value.default is None:
+        default_value_string += "None"
+    elif isinstance(value.default, enum.Enum):
         default_value_string += (
             f"{value.default.__class__.__name__}.{value.default.name}"
         )
-    elif isinstance(value.default, attr.Factory):
+    # Argument 2 to "isinstance" has incompatible type overloaded function; expected "_ClassInfo"
+    elif isinstance(value.default, attr.Factory):  # type:ignore[arg-type]
         if value.default.factory is dict:
             default_value_string += "{}"
         elif value.default.factory is list:
@@ -161,10 +164,10 @@ def _get_case_attr_default_value(value: attr.Attribute) -> str:
 
 
 def _get_declaration(
-    class_: Dict[str, Attribute],
-    list_of_predicate_and_handles: Sequence[Tuple[Callable, Callable]],
+    class_: dict[str, Attribute],
+    list_of_predicate_and_handles: Sequence[tuple[Callable, Callable]],
     is_schema: bool = False,
-) -> List[str]:
+) -> Sequence[str]:
     """Helper class to extract the logic to iterate over the attributes from the given class."""
     lines = []
     for attribute_name, value in class_.items():
@@ -421,7 +424,7 @@ def curve_formatted_for_schema(value: Type[Curve], *, number_of_indent=1) -> str
     return f"\n{block_indentation}image:{array_schema}\n{block_indentation}domain:{array_schema}"
 
 
-LIST_OF_CASE_ATTRIBUTES = [
+LIST_OF_CASE_ATTRIBUTES: list[tuple[Callable, Callable]] = [
     (is_enum, enum_formatted),
     (is_attrs, attrs_formatted),
     (is_list, list_formatted),
@@ -438,7 +441,7 @@ LIST_OF_CASE_ATTRIBUTES = [
 ]
 
 
-LIST_OF_CASE_SCHEMAS = [
+LIST_OF_CASE_SCHEMAS: list[tuple[Callable, Callable]] = [
     (is_enum, enum_formatted),
     (is_attrs, attrs_formatted_for_schema),
     (is_list, list_formatted_for_schema),

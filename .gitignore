@@ -114,3 +114,4 @@ docs/alfasim_sdk_api/
 
 # PyCharm
 .idea/
+/.dmypy.json

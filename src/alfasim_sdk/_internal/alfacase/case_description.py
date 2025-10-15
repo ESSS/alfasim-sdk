@@ -57,9 +57,9 @@ from .case_description_attributes import (
 @attr.s(frozen=True, slots=True)
 class PluginDescription:
     # The plugin id.
-    name: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    name: str = attr.ib(validator=optional(instance_of(str)))
     # The current version of plugin.
-    version: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    version: str = attr.ib(validator=optional(instance_of(str)))
     # The plugin input format depends on the specific plugin implementation.
     gui_models: dict[str, Any] = attr.ib(default=attr.Factory(dict))
     # A flag indicating if this plugin is enabled.
@@ -3600,8 +3600,8 @@ class CaseDescription:
     comment: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
     physics = attrib_instance(PhysicsDescription)
     time_options = attrib_instance(TimeOptionsDescription)
-    numerical_options = attrib_instance(NumericalOptionsDescription)
-    plugins = attrib_instance_list(PluginDescription)
+    numerical_options: NumericalOptionsDescription = attrib_instance(NumericalOptionsDescription)
+    plugins: list[PluginDescription] = attrib_instance_list(PluginDescription)
     ipr_models = attrib_instance(IPRModelsDescription)
     pvt_models = attrib_instance(PvtModelsDescription)
     tracers = attrib_instance(TracersDescription)
