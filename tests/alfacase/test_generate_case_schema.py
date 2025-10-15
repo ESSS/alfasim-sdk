@@ -118,9 +118,9 @@ class TestGenerateStrictYaml:
     def test_scalar(self):
         @attr.s
         class Foo:
-            scalar_1 = attrib_scalar(category="length")
-            scalar_2 = attrib_scalar(default=None, category="length")
-            scalar_3 = attrib_scalar(default=Scalar(1, "K"))
+            scalar_1: Scalar = attrib_scalar(category="length")
+            scalar_2: Scalar = attrib_scalar(default=None, category="length")
+            scalar_3: Scalar = attrib_scalar(default=Scalar(1, "K"))
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -233,8 +233,8 @@ class TestGenerateStrictYaml:
 
         @attr.s
         class Foo:
-            x_1 = attrib_instance(X1)
-            x_2 = attrib_instance_list(X1)
+            x_1: X1 = attrib_instance(X1)
+            x_2: list[X1] = attrib_instance_list(X1)
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -260,8 +260,8 @@ class TestGenerateStrictYaml:
         @attr.s
         class Foo:
             x_1: List[Bar] = attr.ib()
-            x_2 = attrib_enum(type_=Bar)
-            x_3 = attrib_enum(default=Bar.b)
+            x_2: Bar = attrib_enum(type_=Bar)
+            x_3: Bar = attrib_enum(default=Bar.b)
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -296,7 +296,7 @@ class TestGenerateStrictYaml:
         assert schema == expected_schema
 
         @attr.s
-        class Foo:
+        class Foo:  # type:ignore[no-redef]
             x_1: Optional[str] = attr.ib()
 
         @attr.s

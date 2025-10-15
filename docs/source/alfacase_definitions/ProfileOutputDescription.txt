@@ -7,7 +7,7 @@
         class ProfileOutputDescription
             curve_names: \ :class:`List <typing.List>`\[str]
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
-            element_name: str
+            element_name: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
@@ -16,4 +16,4 @@
             curve_names: 
                 - str
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`
-            element_name: string
+            element_name: string  # optional

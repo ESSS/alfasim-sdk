@@ -35,6 +35,7 @@ class TestLoadPluginDataStructure:
     def test_without_importable_python(self, abx_plugin: None) -> None:
         alfasim_plugins_dir = obtain_alfasim_plugins_dir()
         models = load_plugin_data_structure("abx", alfasim_plugins_dir)
+        assert models is not None
         assert [m.__name__ for m in models] == ["AContainer", "BContainer"]
 
         with pytest.raises(ModuleNotFoundError):
@@ -46,6 +47,7 @@ class TestLoadPluginDataStructure:
 
         alfasim_plugins_dir = obtain_alfasim_plugins_dir()
         models = load_plugin_data_structure("importable", alfasim_plugins_dir)
+        assert models is not None
         assert [m.__name__ for m in models] == ["Foo"]
 
         import alfasim_sdk_plugins.importable  # noqa

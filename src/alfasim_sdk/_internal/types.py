@@ -1,9 +1,7 @@
-import numbers
 from typing import Callable, List, Optional, Sequence, Union
 
 import attr
-from attr import attrib
-from attr._make import Attribute
+from attr import Attribute, attrib
 from attr.validators import instance_of, is_callable, optional
 
 from alfasim_sdk._internal.validators import non_empty_str, valid_unit
@@ -327,7 +325,7 @@ class Enum(BaseField):
                 )
 
 
-@attr.s(kw_only=True, frozen=True)
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
 class BaseReference(BaseField):
     ref_type: type = attrib()
     container_type: Optional[str] = attrib(
@@ -358,7 +356,8 @@ class BaseReference(BaseField):
                     f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model'"
                 )
 
-            if value._alfasim_metadata["model"] is not None:
+            # Checked above.
+            if value._alfasim_metadata["model"] is not None:  # type:ignore[attr-defined]
                 raise TypeError(
                     f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model', got a class decorated with 'container_model'"
                 )
@@ -626,7 +625,7 @@ class Quantity(BaseField):
     .. _Scalar documentation from Barril:  https://barril.readthedocs.io/en/latest/api.html#scalar
     """
 
-    value: numbers.Real = attrib(validator=instance_of(numbers.Real))
+    value: float | int = attrib(validator=instance_of(float | int))
     unit: str = attrib(validator=[non_empty_str, valid_unit])
 
 
@@ -663,7 +662,7 @@ class TableColumn(BaseField):
             )
 
 
-@attr.s(kw_only=True, frozen=True)
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
 class Table(BaseField):
     """
     The Table component provides a table to the user to be able input values manually or by importing it from a file.
@@ -779,7 +778,12 @@ class Table(BaseField):
 
     """
 
-    rows: Sequence[TableColumn] = attrib(converter=tuple)
+    rows: Sequence[TableColumn] = attrib()
+
+    def __attrs_post_init__(self) -> None:
+        # Cannot use attrib(converter=tuple) because it causes type errors downstream:
+        # error: List item 0 has incompatible type "TableColumn"; expected "T"  [list-item]
+        object.__setattr__(self, "rows", tuple(self.rows))
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ

@@ -200,8 +200,8 @@ internal_node_properties_description_schema = Map(
 )
 length_and_elevation_description_schema = Map(
     {
-        Optional("length"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("elevation"): Map({"values": Seq(Float()), "unit": Str()}),
+        "length": Map({"values": Seq(Float()), "unit": Str()}),
+        "elevation": Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 light_component_description_schema = Map(
@@ -474,7 +474,7 @@ pipe_segments_description_schema = Map(
 )
 plugin_description_schema = Map(
     {
-        Optional("name"): Str(),
+        "name": Str(),
         Optional("version"): Str(),
         Optional("gui_models"): MapPattern(Str(), Any()),
         Optional("is_enabled"): Bool(),
@@ -559,7 +559,7 @@ profile_output_description_schema = Map(
     {
         "curve_names": Seq(Str()),
         "location": Enum(['main', 'annulus', 'not_defined']),
-        "element_name": Str(),
+        Optional("element_name"): Str(),
     }
 )
 pvt_model_constant_properties_description_schema = Map(
@@ -828,14 +828,14 @@ volume_fractions_container_description_schema = Map(
 wall_layer_description_schema = Map(
     {
         "thickness": Map({"value": Float(), "unit": Str()}),
-        "material_name": Str(),
+        Optional("material_name"): Str(),
         Optional("has_annulus_flow"): Bool(),
     }
 )
 x_and_y_description_schema = Map(
     {
-        Optional("x"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("y"): Map({"values": Seq(Float()), "unit": Str()}),
+        "x": Map({"values": Seq(Float()), "unit": Str()}),
+        "y": Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 casing_description_schema = Map(
@@ -1238,4 +1238,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: tt1Md81hbV)
+# [[[end]]] (sum: LuOXM+VOhO)

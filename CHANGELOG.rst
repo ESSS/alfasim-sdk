@@ -6,6 +6,8 @@ CHANGELOG
 1.4.0 (UNRELEASED)
 ==================
 
+* Types are now exported and can be verified by type-checkers such as ``mypy``.
+
 
 1.3.0 (2025-10-07)
 ==================

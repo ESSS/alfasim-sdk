@@ -44,7 +44,7 @@ class AlfasimRunnerFixture:
         return self.project_folder / "case.data"
 
     @property
-    def results(self) -> Results:
+    def results(self) -> Results | None:
         return self._results
 
     def check_not_run(self) -> None:
@@ -123,6 +123,7 @@ class AlfasimRunnerFixture:
         assert plugin_description is not None, (
             "Can not load the plugin info, maybe you forgot to call `add_plugin_folder`"
         )
+        assert self._case is not None
         self._case.plugins.append(plugin_description)
 
         plugins_names = [p.name for p in self._case.plugins]
@@ -143,6 +144,8 @@ class AlfasimRunnerFixture:
         self.check_base_case_is_loaded()
 
         self.alfacase_data_folder.mkdir()
+        assert self._case is not None
+        assert self.alfacase_file is not None
         generate_alfacase_file(self._case, self.alfacase_file)
 
         try:
@@ -175,9 +178,9 @@ class AlfasimRunnerFixture:
             msg = "\n".join([list_log(log_calc), list_log(log)])
             raise RuntimeError(msg) from error
         finally:
-            self._results = Results(self.alfacase_data_folder)
+            self._results = results = Results(self.alfacase_data_folder)
 
-        return self.results
+        return results
 
     def get_runner(self) -> List[str]:
         """

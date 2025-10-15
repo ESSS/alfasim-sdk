@@ -1,4 +1,5 @@
-from typing import List, Optional
+from abc import ABC, abstractmethod
+from typing import Any, List, Optional
 
 import attr
 from attr.validators import deep_iterable, in_, instance_of, optional
@@ -166,7 +167,7 @@ class PhysicsOptionsInfo:
     )
 
 
-class Context:
+class Context(ABC):
     """
     The context class provides information about the current state of the application
     and the models implemented by the user.
@@ -179,7 +180,8 @@ class Context:
     - :func:`~alfasim_sdk._internal.hook_specs_gui.alfasim_get_status` hook
     """
 
-    def get_model(self, model_name: str) -> Optional[type]:
+    @abstractmethod
+    def get_model(self, model_name: str) -> Optional[Any]:
         """
         Returns an instance of the given ``model_name``.
 
@@ -222,6 +224,7 @@ class Context:
 
         """
 
+    @abstractmethod
     def get_pipelines(self) -> Optional[List[PipelineInfo]]:
         """
         Return a list with all Pipes available on the Network from the Project.
@@ -256,6 +259,7 @@ class Context:
         Checkout the :class:`~alfasim_sdk._internal.context.PipelineInfo` section to know more about the properties available.
         """
 
+    @abstractmethod
     def get_plugins_infos(self) -> List[PluginInfo]:
         """
         Return a list of all plugins available on ALFAsim.
@@ -298,6 +302,7 @@ class Context:
         Checkout the :class:`PluginInfo` section to know more about the properties available.
         """
 
+    @abstractmethod
     def get_plugin_info_by_id(self, plugin_id: str) -> PluginInfo:
         """
         Similar to :func:`get_plugins_infos` but returns a single instance of :class:`PluginInfo`
@@ -308,6 +313,7 @@ class Context:
         :raises ValueError: When the plugin informed by ``plugin_id`` it's not available.
         """
 
+    @abstractmethod
     def get_edges(self) -> Optional[List[EdgeInfo]]:
         """
         Return a list of all Edges available on ALFAsim.
@@ -333,6 +339,7 @@ class Context:
         Checkout the :class:`EdgeInfo` section to know more about the properties available.
         """
 
+    @abstractmethod
     def get_nodes(self) -> Optional[List[NodeInfo]]:
         """
         Return a list of all Nodes available on ALFAsim.
@@ -360,6 +367,7 @@ class Context:
         Checkout the :class:`NodeInfo` section to know more about the properties available.
         """
 
+    @abstractmethod
     def get_physics_options(self) -> PhysicsOptionsInfo:
         """
         Return the physics options from the current project from ALFAsim.

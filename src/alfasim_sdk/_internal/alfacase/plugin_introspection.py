@@ -2,8 +2,7 @@ from typing import List
 
 import attr
 
-from alfasim_sdk import BaseField
-from alfasim_sdk._internal.types import Group, Tab, Tabs
+from alfasim_sdk._internal.types import BaseField, Group, Tab, Tabs
 
 
 def _is_tab(value: BaseField) -> bool:

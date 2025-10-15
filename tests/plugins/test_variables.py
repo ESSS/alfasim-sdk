@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 
 
@@ -17,7 +19,7 @@ import pytest
         (
             dict(default_value="1"),
             TypeError,
-            "'default_value' must be <class 'numbers.Real'>",
+            "'default_value' must be float | int",
         ),
         (dict(type=""), TypeError, "'type' must be <enum 'Type'>"),
     ],
@@ -31,7 +33,7 @@ def test_validation(attr, expected_type_error, expected_message):
         Visibility,
     )
 
-    attrs = dict(
+    attrs: dict[str, Any] = dict(
         name="var_name",
         caption="Var Name",
         type=Type.Int,
@@ -69,7 +71,7 @@ def test_variable_with_custom_category():
         default_unit="mm",
     )
 
-    attrs = dict(
+    secondary_variable = SecondaryVariable(
         name="wax_thickness",
         caption="Wax Thickness",
         type=Type.Double,
@@ -80,4 +82,4 @@ def test_variable_with_custom_category():
         multifield_scope=Scope.Global,
         checked_on_gui_default=False,
     )
-    assert SecondaryVariable(**attrs).category == "film thickness"
+    assert secondary_variable.category == "film thickness"

@@ -111,7 +111,7 @@ def test_package_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
 
     from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
 
-    os_type = "win" if os.sys.platform == "win32" else "linux"
+    os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
     package_filename = Path(f"acme-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin")
     assert package_filename.is_file()
@@ -133,7 +133,7 @@ def test_package_task_empty_package_name(
 
     from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
 
-    os_type = "win" if os.sys.platform == "win32" else "linux"
+    os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
     package_filename = Path(f"acme-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin")
     assert package_filename.is_file()
@@ -237,7 +237,7 @@ def create_fake_hmplugin(plugin_dir: Path, monkeypatch: MonkeyPatch) -> Path:
     artifacts_dir.mkdir()
     fake_files = get_plugin_installed_files(plugin_dir, monkeypatch)
 
-    os_type = "win" if os.sys.platform == "win32" else "linux"
+    os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
     hmplugin_filename = Path(
         f"{plugin_id}-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin"
@@ -347,10 +347,10 @@ def test_reinstall_plugin(
     )
 
     monkeypatch.chdir(install_dir)
-    plugin_dir = f"{plugin_id}-1.0.0"
+    plugin_base_dir = f"{plugin_id}-1.0.0"
     for file in fake_hmplugin_files:
         relative_path = Path(
-            plugin_dir + "/" + file.parent.stem + "/" + file.stem + file.suffix
+            plugin_base_dir + "/" + file.parent.stem + "/" + file.stem + file.suffix
         )
         assert relative_path.is_file()
 
@@ -366,7 +366,7 @@ def test_clean_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
     extra_build_folder.mkdir(parents=True, exist_ok=True)
     assert extra_build_folder.is_dir()
 
-    os_type = "win" if os.sys.platform == "win32" else "linux"
+    os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
     hm_plugin_file = Path(
         f"{plugin_id}-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin"

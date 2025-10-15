@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 import pytest
 
@@ -9,15 +10,23 @@ from alfasim_sdk._internal.types import MultipleReference, Reference
 def test_enable_expr_and_visible_expr(expression_type):
     from alfasim_sdk._internal.types import String
 
-    inputs = {"value": "value", "caption": "caption", expression_type: ""}
+    inputs: dict[str, Any] = {
+        "value": "value",
+        "caption": "caption",
+        expression_type: "",
+    }
     with pytest.raises(TypeError, match=f"'{expression_type}' must be callable"):
         String(**inputs)
 
     def function_definition():  # pragma: no cover
         pass
 
-    valid_input_1 = {"value": "value", "caption": "caption", expression_type: None}
-    valid_input_2 = {
+    valid_input_1: dict[str, Any] = {
+        "value": "value",
+        "caption": "caption",
+        expression_type: None,
+    }
+    valid_input_2: dict[str, Any] = {
         "value": "value",
         "caption": "caption",
         expression_type: function_definition,
@@ -32,17 +41,17 @@ def test_string():
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
     ):
-        String(value="acme")
+        String(value="acme")  # type:ignore[call-arg]
 
     with pytest.raises(
         TypeError, match=re.escape("'caption' must be 'str' (got 1 that is a 'int')")
     ):
-        String(value="acme", caption=1)
+        String(value="acme", caption=1)  # type:ignore[arg-type]
 
     with pytest.raises(
         TypeError, match=re.escape("'value' must be 'str' (got 1 that is a 'int')")
     ):
-        String(value=1, caption="caption")
+        String(value=1, caption="caption")  # type:ignore[arg-type]
 
 
 def test_enum():
@@ -51,15 +60,15 @@ def test_enum():
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
     ):
-        Enum(values=["s"], initial="")
+        Enum(values=["s"], initial="")  # type:ignore[call-arg]
 
     with pytest.raises(TypeError, match="values must be a list, got a 'str'."):
-        Enum(values="", caption="caption")
+        Enum(values="", caption="caption")  # type:ignore[arg-type]
 
     with pytest.raises(
         TypeError, match="values must be a list of strings, the item '1' is a 'int'"
     ):
-        Enum(values=[1], caption="caption")
+        Enum(values=[1], caption="caption")  # type:ignore[list-item]
 
     with pytest.raises(
         ValueError, match='Enum type cannot have an empty string on field "values"'
@@ -100,7 +109,7 @@ def test_reference(class_):
         class_(ref_type="")
 
     with pytest.raises(TypeError, match="ref_type must be a class"):
-        class_(ref_type="", caption="caption")
+        class_(ref_type="", caption="caption")  # type:ignore[arg-type]
 
     with pytest.raises(
         TypeError,
@@ -132,15 +141,15 @@ def test_quantity():
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
     ):
-        Quantity(value="", unit="")
+        Quantity(value="", unit="")  # type:ignore[arg-type, call-arg]
 
-    with pytest.raises(TypeError, match="'value' must be <class 'numbers.Real'>"):
-        Quantity(value="", unit="", caption="caption")
+    with pytest.raises(TypeError, match="'value' must be float | int"):
+        Quantity(value="", unit="", caption="caption")  # type:ignore[arg-type]
 
     with pytest.raises(
         TypeError, match=re.escape("'unit' must be 'str' (got 1 that is a 'int')")
     ):
-        Quantity(value=1, unit=1, caption="caption")
+        Quantity(value=1, unit=1, caption="caption")  # type:ignore[arg-type]
 
 
 def test_table():
@@ -149,13 +158,13 @@ def test_table():
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
     ):
-        Table(rows=[])
+        Table(rows=[])  # type:ignore[call-arg]
 
     with pytest.raises(TypeError, match="rows must be a list with TableColumn."):
         Table(rows=[], caption="caption")
 
     with pytest.raises(TypeError, match="rows must be a list of TableColumn."):
-        Table(rows=[""], caption="caption")
+        Table(rows=[""], caption="caption")  # type:ignore[list-item]
 
 
 def test_table_column():
@@ -164,7 +173,7 @@ def test_table_column():
     with pytest.raises(
         TypeError, match="value must be a Quantity or a Reference, got a <class 'str'>."
     ):
-        TableColumn(id="id", value="")
+        TableColumn(id="id", value="")  # type:ignore[arg-type]
 
     column = TableColumn(
         id="id", value=Quantity(value=1, unit="m", caption="CAPTION FOR COLUMN")
@@ -178,10 +187,10 @@ def test_boolean():
     with pytest.raises(
         TypeError, match="missing 1 required keyword-only argument: 'caption'"
     ):
-        Boolean(value="")
+        Boolean(value="")  # type:ignore[arg-type, call-arg]
 
     with pytest.raises(TypeError, match="'value' must be <class 'bool'"):
-        Boolean(value=1, caption="caption")
+        Boolean(value=1, caption="caption")  # type:ignore[arg-type]
 
 
 def test_file_content():
@@ -203,7 +212,7 @@ def test_tooltips():
         "'tooltip' must be <class 'str'> (got 2 that is a <class 'int'>)."
     )
     with pytest.raises(TypeError, match=expected_msg):
-        Boolean(value=True, caption="caption", tooltip=2)
+        Boolean(value=True, caption="caption", tooltip=2)  # type:ignore[arg-type]
 
     field = Boolean(value=True, caption="caption", tooltip="∩ ∪ ∫ ∬ ∭ ∮")
     assert field.tooltip == "∩ ∪ ∫ ∬ ∭ ∮"
