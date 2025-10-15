@@ -3,7 +3,18 @@ import inspect
 from functools import lru_cache, partial
 from numbers import Number
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterator, List, Optional, Type, TypeVar, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 
 import attr
 from attr.validators import instance_of
@@ -14,7 +25,7 @@ from strictyaml import YAML
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 
-T = TypeVar("T")
+T = TypeVar("T", bound=attr.AttrsInstance)
 
 
 @attr.s
@@ -112,7 +123,7 @@ def update_multi_input_flags(document: DescriptionDocument, item_description: T)
                 fields_to_update[key] = new_value
 
     if fields_to_update:
-        item_description = attr.evolve(item_description, **fields_to_update)
+        return attr.evolve(item_description, **fields_to_update)  # type:ignore[misc]
     return item_description
 
 
@@ -357,7 +368,7 @@ def get_curve_loader(
         args["domain_category"] = _obtain_category_for_scalar(
             domain_category, from_domain_unit
         )
-    return partial(load_curve, **args)
+    return partial(load_curve, **args)  # type:ignore[arg-type]
 
 
 def load_dict_of_curves(
@@ -389,7 +400,7 @@ def get_curve_dict_loader(
     )
 
 
-def _obtain_category_for_scalar(category: str, from_unit: str) -> str:
+def _obtain_category_for_scalar(category: str | None, from_unit: str | None) -> str:
     """
     Obtain the category to be used for GetArrayLoader and GetScalarLoader.
 
@@ -403,7 +414,11 @@ def _obtain_category_for_scalar(category: str, from_unit: str) -> str:
     if category is None and from_unit is None:
         raise ValueError("Either 'category' or 'from_unit' parameter must be defined")
 
-    return category or get_category_for(from_unit)
+    result = category or get_category_for(from_unit)
+    assert result is not None, (
+        f"_obtain_category_for_scalar failed for {category} and unit={from_unit}"
+    )
+    return result
 
 
 def load_dict_with_scalar(
@@ -435,7 +450,7 @@ def load_enum(
     return enum_class(enum_value)
 
 
-def get_enum_loader(*, enum_class: enum.EnumMeta) -> Callable:
+def get_enum_loader(*, enum_class: type[enum.Enum]) -> Callable:
     """
     Return a LoadEnum function pre-populated with the enum_class
     """
@@ -1181,7 +1196,7 @@ def load_separator_node_properties_description(
         "length": get_scalar_loader(from_unit="m"),
         "overall_heat_transfer_coefficient": get_scalar_loader(from_unit="W/m2.K"),
         "diameter": get_scalar_loader(category="diameter"),
-        "nozzles": get_scalar_dict_loader(category=get_category_for("m")),
+        "nozzles": get_scalar_dict_loader(category="length"),
         "initial_phase_volume_fractions": get_scalar_dict_loader(
             category="volume fraction"
         ),
