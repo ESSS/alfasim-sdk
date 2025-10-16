@@ -8,7 +8,6 @@ import attr
 from barril.units import Array, Scalar
 from typing_extensions import TypeGuard
 
-from alfasim_sdk import BaseField
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
     load_value,
@@ -30,6 +29,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 )
 from alfasim_sdk._internal.alfacase.plugin_introspection import get_attributes
 from alfasim_sdk._internal.types import (
+    BaseField,
     Boolean,
     Enum,
     FileContent,

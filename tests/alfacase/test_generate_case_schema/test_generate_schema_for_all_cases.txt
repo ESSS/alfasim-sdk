@@ -204,8 +204,8 @@ internal_node_properties_description_schema = Map(
 
 length_and_elevation_description_schema = Map(
     {
-        Optional("length"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("elevation"): Map({"values": Seq(Float()), "unit": Str()}),
+        "length": Map({"values": Seq(Float()), "unit": Str()}),
+        "elevation": Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 
@@ -877,8 +877,8 @@ wall_layer_description_schema = Map(
 
 x_and_y_description_schema = Map(
     {
-        Optional("x"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("y"): Map({"values": Seq(Float()), "unit": Str()}),
+        "x": Map({"values": Seq(Float()), "unit": Str()}),
+        "y": Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 

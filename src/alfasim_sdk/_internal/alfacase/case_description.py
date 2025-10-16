@@ -1724,22 +1724,17 @@ class LengthAndElevationDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    length: Optional[Array] = attr.ib(
-        default=None, validator=optional(instance_of(Array))
-    )
-    elevation: Optional[Array] = attr.ib(
-        default=None, validator=optional(instance_of(Array))
-    )
+    length: Array = attr.ib(validator=instance_of(Array))
+    elevation: Array = attr.ib(validator=instance_of(Array))
 
     def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns an iterator containing a pair of values with length and elevation along with their units."""
-        if self.length and self.elevation:
-            length_values = self.length.GetValues(self.length.unit)
-            elevation_values = self.elevation.GetValues(self.elevation.unit)
-            for length, elevation in zip(length_values, elevation_values):
-                yield (length, self.length.unit), (elevation, self.elevation.unit)
+        length_values = self.length.GetValues(self.length.unit)
+        elevation_values = self.elevation.GetValues(self.elevation.unit)
+        for length, elevation in zip(length_values, elevation_values):
+            yield (length, self.length.unit), (elevation, self.elevation.unit)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1752,18 +1747,15 @@ class XAndYDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    x: Optional[Array] = attr.ib(default=None, validator=optional(instance_of(Array)))
-    y: Optional[Array] = attr.ib(default=None, validator=optional(instance_of(Array)))
+    x: Array = attr.ib(validator=instance_of(Array))
+    y: Array = attr.ib(validator=instance_of(Array))
 
     def iter_values_and_unit(
         self,
     ) -> Iterator[Tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns a pair of values with the x and y value along with their units."""
-        if self.x and self.y:
-            for x, y in zip(
-                self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)
-            ):
-                yield (x, self.x.unit), (y, self.y.unit)
+        for x, y in zip(self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)):
+            yield (x, self.x.unit), (y, self.y.unit)
 
 
 @attr.s(auto_attribs=True)
