@@ -134,7 +134,7 @@ def test_quantity():
     ):
         Quantity(value="", unit="")
 
-    with pytest.raises(TypeError, match="'value' must be <class 'numbers.Real'>"):
+    with pytest.raises(TypeError, match="'value' must be float | int"):
         Quantity(value="", unit="", caption="caption")
 
     with pytest.raises(
