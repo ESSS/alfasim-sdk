@@ -69,12 +69,12 @@ class PluginDescription:
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginTracerReference:
-    tracer_id: int | None = attr.ib(default=None)
+    tracer_id: int
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
 class PluginInternalReference:
-    plugin_item_id: int | None = attr.ib(default=None)
+    plugin_item_id: int
     container_key: str | None = attr.ib(default=None)
 
 
