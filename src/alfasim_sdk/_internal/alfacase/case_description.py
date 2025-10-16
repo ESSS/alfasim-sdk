@@ -2741,17 +2741,17 @@ class PvtModelPtTableParametersDescription:
         default=Scalar(15, "degC"), is_optional=True
     )
 
-    gas_density_std: Scalar = attrib_scalar(
+    gas_density_std: Optional[Scalar] = attrib_scalar(
         default=Scalar(1, "kg/m3"), is_optional=True
     )
-    oil_density_std: Scalar = attrib_scalar(
+    oil_density_std: Optional[Scalar] = attrib_scalar(
         default=Scalar(800, "kg/m3"), is_optional=True
     )
-    water_density_std: Scalar = attrib_scalar(
+    water_density_std: Optional[Scalar] = attrib_scalar(
         default=Scalar(1000, "kg/m3"), is_optional=True
     )
 
-    gas_oil_ratio: Scalar = attrib_scalar(
+    gas_oil_ratio: Optional[Scalar] = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GOR
     gas_liquid_ratio: Optional[Scalar] = attrib_scalar(
