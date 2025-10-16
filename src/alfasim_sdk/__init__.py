@@ -144,6 +144,7 @@ from alfasim_sdk._internal.alfacase.case_description import (
     WellDescription,
     XAndYDescription,
 )
+from alfasim_sdk._internal.alfacase.case_description_attributes import Numpy1DArray
 from alfasim_sdk._internal.cli import console_main
 
 # Constants
@@ -378,6 +379,7 @@ __all__ = [
     "NodeDescription",
     "NonlinearSolverType",
     "NumericalOptionsDescription",
+    "Numpy1DArray",
     "OIL_FIELD",
     "OIL_LAYER",
     "OIL_PHASE",
