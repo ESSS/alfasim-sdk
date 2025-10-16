@@ -190,13 +190,13 @@ class SurgeVolumeOptionsDescription:
     )
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, auto_attribs=True)
 class _BaseTrendOutputDescription:
     name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
     curve_names: List[str] = attr.ib(validator=list_of_strings)
 
 
-@attr.s()
+@attr.s(auto_attribs=True, kw_only=True)
 class PositionalPipeTrendDescription(_BaseTrendOutputDescription):
     """
     .. include:: /alfacase_definitions/PositionalPipeTrendDescription.txt
@@ -214,14 +214,14 @@ class PositionalPipeTrendDescription(_BaseTrendOutputDescription):
     )
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class GlobalTrendDescription(_BaseTrendOutputDescription):
     """
     .. include:: /alfacase_definitions/GlobalTrendDescription.txt
     """
 
 
-@attr.s()
+@attr.s(auto_attribs=True, kw_only=True)
 class OverallPipeTrendDescription(_BaseTrendOutputDescription):
     """
     .. include:: /alfacase_definitions/OverallPipeTrendDescription.txt
@@ -233,7 +233,7 @@ class OverallPipeTrendDescription(_BaseTrendOutputDescription):
     element_name: str = attr.ib(validator=instance_of(str))
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class EquipmentTrendDescription(_BaseTrendOutputDescription):
     """
     .. include:: /alfacase_definitions/EquipmentTrendDescription.txt
@@ -242,7 +242,7 @@ class EquipmentTrendDescription(_BaseTrendOutputDescription):
     element_name: str = attr.ib(validator=instance_of(str))
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class SeparatorTrendDescription(_BaseTrendOutputDescription):
     """
     .. include:: /alfacase_definitions/SeparatorTrendDescription.txt
@@ -251,7 +251,7 @@ class SeparatorTrendDescription(_BaseTrendOutputDescription):
     element_name: str = attr.ib(validator=instance_of(str))
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class ControllerTrendDescription(_BaseTrendOutputDescription):
     """
     .. include:: /alfacase_definitions/ControllerTrendDescription.txt
@@ -260,7 +260,7 @@ class ControllerTrendDescription(_BaseTrendOutputDescription):
     element_name: str = attr.ib(validator=instance_of(str))
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class ProfileOutputDescription:
     """
     .. include:: /alfacase_definitions/ProfileOutputDescription.txt
@@ -275,7 +275,7 @@ class ProfileOutputDescription:
     )
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class TrendsOutputDescription:
     """
     .. include:: /alfacase_definitions/TrendsOutputDescription.txt
@@ -321,7 +321,7 @@ class CaseOutputDescription:
     profile_frequency: Scalar = attrib_scalar(default=Scalar(0.1, "s"))
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, auto_attribs=True)
 class _MassSourceCommon:
     """
     :ivar total_mass_flow_rate:
@@ -456,7 +456,7 @@ class _MassSourceCommon:
     # [[[end]]] (sum: SvK32WGNil)
 
 
-@attr.s(kw_only=True)
+@attr.s(kw_only=True, auto_attribs=True)
 class _PressureSourceCommon:
     """
 
@@ -638,7 +638,7 @@ class CombinedFluidDescription:
     )
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class MassSourceEquipmentDescription(_MassSourceCommon):
     """
     .. include:: /alfacase_definitions/MassSourceEquipmentDescription.txt
@@ -649,7 +649,7 @@ class MassSourceEquipmentDescription(_MassSourceCommon):
     position: Scalar = attrib_scalar(category="length")
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class SpeedCurveDescription:
     """
     .. include:: /alfacase_definitions/SpeedCurveDescription.txt
@@ -664,7 +664,7 @@ class SpeedCurveDescription:
 
 
 # fmt: off
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True,auto_attribs=True)
 class TablePumpDescription:
     """
 
@@ -1158,7 +1158,7 @@ class LeakEquipmentDescription:
         )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class IPRCurveDescription:
     """
     .. include:: /alfacase_definitions/IPRCurveDescription.txt
@@ -1352,7 +1352,7 @@ class IPRModelsDescription:
     )
 
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     """
     .. include:: /alfacase_definitions/ReservoirInflowEquipmentDescription.txt
@@ -1664,7 +1664,7 @@ class InitialTemperaturesDescription:
     )
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class InitialConditionsDescription:
     """
     .. include:: /alfacase_definitions/InitialConditionsDescription.txt
@@ -1688,7 +1688,7 @@ class InitialConditionsDescription:
     fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, auto_attribs=True)
 class InitialConditionArrays:
     """
     .. include:: /alfacase_definitions/InitialConditionArrays.txt
@@ -1766,7 +1766,7 @@ class XAndYDescription:
                 yield (x, self.x.unit), (y, self.y.unit)
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class ProfileDescription:
     """
     Describe a pipe by either length and inclination or by X and Y coordinates.
@@ -1798,7 +1798,7 @@ class ProfileDescription:
             raise ValueError(msg)
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class EquipmentDescription:
     """
     .. include:: /alfacase_definitions/EquipmentDescription.txt
@@ -1828,7 +1828,7 @@ class EquipmentDescription:
     pigs: Dict[str, PigEquipmentDescription] = attrib_dict_of(PigEquipmentDescription)
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class EnvironmentPropertyDescription:
     """
     .. include:: /alfacase_definitions/EnvironmentPropertyDescription.txt
@@ -1999,7 +1999,7 @@ class SeparatorNodePropertiesDescription:
         assert isinstance(value, Scalar) and 0.6 <= value.GetValue("-") <= 1.0
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class ControllerInputSignalPropertiesDescription:
     """
     :ivar target_variable:
@@ -2021,7 +2021,7 @@ class ControllerInputSignalPropertiesDescription:
     unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class ControllerOutputSignalPropertiesDescription:
     """
     :ivar controlled_property:
@@ -2107,7 +2107,7 @@ class ControllerNodePropertiesDescription:
         )
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class NodeDescription:
     """
     .. include:: /alfacase_definitions/NodeDescription.txt
@@ -2135,7 +2135,7 @@ class NodeDescription:
     )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class FormationLayerDescription:
     """
     .. include:: /alfacase_definitions/FormationLayerDescription.txt
@@ -2150,7 +2150,7 @@ class FormationLayerDescription:
     )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class FormationDescription:
     """
     .. include:: /alfacase_definitions/FormationDescription.txt
@@ -2259,7 +2259,7 @@ class OpenHoleDescription:
         )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class CasingDescription:
     """
     .. include:: /alfacase_definitions/CasingDescription.txt
@@ -2296,7 +2296,7 @@ class GasLiftValveEquipmentDescription:
         )
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class AnnulusEquipmentDescription:
     """
     .. include:: /alfacase_definitions/AnnulusEquipmentDescription.txt
@@ -2310,7 +2310,7 @@ class AnnulusEquipmentDescription:
     )
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class AnnulusDescription:
     """
     .. include:: /alfacase_definitions/AnnulusDescription.txt
@@ -2329,7 +2329,7 @@ class AnnulusDescription:
     top_node: str = attr.ib(validator=instance_of(str))
 
 
-@attr.s(slots=True, kw_only=True)
+@attr.s(slots=True, kw_only=True, auto_attribs=True)
 class WellDescription:
     """
     .. include:: /alfacase_definitions/WellDescription.txt
@@ -2355,7 +2355,7 @@ class WellDescription:
     equipment: EquipmentDescription = attrib_instance(EquipmentDescription)
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class MaterialDescription:
     """
     .. include:: /alfacase_definitions/MaterialDescription.txt
@@ -2412,7 +2412,7 @@ class WallLayerDescription:
     has_annulus_flow: bool = attr.ib(default=False, validator=instance_of(bool))
 
 
-@attr.s
+@attr.s(auto_attribs=True)
 class WallDescription:
     """
     .. include:: /alfacase_definitions/WallDescription.txt
@@ -2628,7 +2628,7 @@ class LightComponentDescription:
     Cp_4: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
 
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class PvtModelCompositionalDescription:
     """
 
@@ -2676,7 +2676,7 @@ class PvtModelCompositionalDescription:
     )
 
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class PvtModelCombinedDescription:
     """
     :ivar reference_pvt_model:
@@ -3074,7 +3074,7 @@ class PvtModelPtTableParametersDescription:
         )
 
 
-@attr.s(slots=True, eq=False)
+@attr.s(slots=True, eq=False, auto_attribs=True)
 class PvtModelPhTableParametersDescription:
     """
     :ivar pressure_values:
@@ -3486,7 +3486,7 @@ class PvtModelPhTableParametersDescription:
         )
 
 
-@attr.s(slots=True)
+@attr.s(slots=True, auto_attribs=True)
 class PvtModelsDescription:
     """
     Holds a PVT which is used by the simulator to obtain fluid characteristics, such as density and viscosity,
@@ -3605,7 +3605,7 @@ class PvtModelsDescription:
         return Path(parts[0].strip()), model_name
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class TracerModelConstantCoefficientsDescription:
     """
     .. include:: /alfacase_definitions/TracerModelConstantCoefficientsDescription.txt
@@ -3618,7 +3618,7 @@ class TracerModelConstantCoefficientsDescription:
     )
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class TracersDescription:
     """
     .. include:: /alfacase_definitions/TracersDescription.txt
@@ -3637,7 +3637,7 @@ class RestartPointLocation(Enum):
     Remote = "remote"
 
 
-@attr.s(frozen=True, kw_only=True)
+@attr.s(frozen=True, kw_only=True, auto_attribs=True)
 class RestartPointKey:
     """
     .. include:: /alfacase_definitions/RestartPointKey.txt
@@ -3649,7 +3649,7 @@ class RestartPointKey:
     timestep_index: int = attr.ib(validator=instance_of(int))
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class PhysicsDescription:
     """
     .. include:: /alfacase_definitions/PhysicsDescription.txt
@@ -3740,7 +3740,7 @@ class PhysicsDescription:
     )
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class TimeOptionsDescription:
     """
     .. include:: /alfacase_definitions/TimeOptionsDescription.txt
@@ -3763,7 +3763,7 @@ class TimeOptionsDescription:
     )
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class NumericalOptionsDescription:
     """
     .. include:: /alfacase_definitions/NumericalOptionsDescription.txt
@@ -3791,7 +3791,7 @@ class NumericalOptionsDescription:
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
 
 
-@attr.s(frozen=True)
+@attr.s(frozen=True, auto_attribs=True)
 class AlfasimVersionInfo:
     """
     Information about the ALFAsim release used to generate the alfacase file.
@@ -3814,7 +3814,7 @@ class AlfasimVersionInfo:
     date: str = attr.ib()
 
 
-@attr.s()
+@attr.s(auto_attribs=True)
 class CaseDescription:
     """
     .. include:: /alfacase_definitions/CaseDescription.txt
