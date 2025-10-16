@@ -207,7 +207,9 @@ class UncertaintyPropagationAnalysesMetaData:
     items: Dict[UPOutputKey, UPItem]
 
     @classmethod
-    def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
+    def get_metadata_from_dir(
+        cls, result_directory: Path
+    ) -> UncertaintyPropagationAnalysesMetaData | None:
         def map_data(
             up_metadata: Dict,
         ) -> Dict[UPOutputKey, UncertaintyPropagationAnalysesMetaData.UPItem]:
@@ -218,12 +220,16 @@ class UncertaintyPropagationAnalysesMetaData:
                 for key, data in up_metadata.items()
             }
 
-        return read_results_file(
+        result = read_results_file(
             result_directory=result_directory,
             metadata_class=cls,
             meta_data_attrs=UNCERTAINTY_PROPAGATION_GROUP_META_ATTR_NAME,
             map_data=map_data,
         )
+        assert isinstance(result, UncertaintyPropagationAnalysesMetaData | None), repr(
+            result
+        )
+        return result
 
 
 @dataclasses.dataclass(frozen=True)
@@ -289,7 +295,9 @@ class GlobalSensitivityAnalysisMetadata:
     items: Dict[GSAOutputKey, GSAItem]
 
     @classmethod
-    def get_metadata_from_dir(cls, result_directory: Path) -> Self | None:
+    def get_metadata_from_dir(
+        cls, result_directory: Path
+    ) -> GlobalSensitivityAnalysisMetadata | None:
         """
         Return the metadata info from result directory.
         If the directory does not exist/is invalid, return an empty metadata.
@@ -307,12 +315,16 @@ class GlobalSensitivityAnalysisMetadata:
                 for key, data in gsa_metadata.items()
             }
 
-        return read_results_file(
+        result = read_results_file(
             result_directory=result_directory,
             metadata_class=cls,
             map_data=map_data,
             meta_data_attrs=GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME,
         )
+        assert isinstance(result, GlobalSensitivityAnalysisMetadata | None), repr(
+            result
+        )
+        return result
 
 
 UQMetadataClass = Union[
@@ -328,7 +340,7 @@ def read_results_file(
     metadata_class: Type[MetadataClassType],
     map_data: Callable,
     meta_data_attrs: str,
-) -> MetadataClassType | None:
+) -> GlobalSensitivityAnalysisMetadata | UncertaintyPropagationAnalysesMetaData | None:
     with open_result_file(result_directory, result_filename="result") as result_file:
         if not result_file:
             return None
@@ -754,7 +766,8 @@ def _get_empty_result(
             (profile_index, trend_index),
             (profile_index, trend_index),
         ),
-        time_set_info=previous_time_set_info,
+        # Argument "time_set_info" to "ALFASimResultMetadata" has incompatible type "dict[Any, Any] | None"; expected "dict[Literal['profiles', 'trends'], dict[int, TimeSetInfoItem]]"  [arg-type]
+        time_set_info=previous_time_set_info,  # type:ignore[arg-type]
         app_version_info={},
     )
 
@@ -795,9 +808,6 @@ def read_metadata(
         If omitted a time set truncation is not detected. This is only relevant
         when progressive reading is used (..see: `ConcatenateMetadata`).
     """
-    if previous_time_set_info is None:
-        previous_time_set_info = {}
-
     if not result_directory.is_dir():
         return _get_empty_result(previous_time_set_info=previous_time_set_info)
 
@@ -811,7 +821,7 @@ def read_metadata(
                 final_profiles_time_step_index=final_profiles_time_step_index,
                 initial_trends_time_step_index=initial_trends_time_step_index,
                 final_trends_time_step_index=final_trends_time_step_index,
-                previous_time_set_info=previous_time_set_info,
+                previous_time_set_info=previous_time_set_info or {},
                 result_files=result_files,
             )
 
@@ -823,7 +833,7 @@ def _read_metadata(
     final_profiles_time_step_index: Optional[int] = None,
     initial_trends_time_step_index: Optional[int] = None,
     final_trends_time_step_index: Optional[int] = None,
-    previous_time_set_info: Optional[Dict] = None,
+    previous_time_set_info: Dict,
     result_files: Dict[int, h5py.File],
 ) -> ALFASimResultMetadata:
     """
@@ -843,7 +853,9 @@ def _read_metadata(
         result_files
     )
 
-    def normalize_time_step_index(n: int, total_size: int, *, default: int):
+    def normalize_time_step_index(
+        n: int | None, total_size: int, *, default: int
+    ) -> int:
         if n is None:
             return default
         if n < 0:
