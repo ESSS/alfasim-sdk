@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import attr
 from attr.validators import deep_iterable, in_, instance_of, optional
@@ -181,7 +181,7 @@ class Context(ABC):
     """
 
     @abstractmethod
-    def get_model(self, model_name: str) -> Optional[type]:
+    def get_model(self, model_name: str) -> Optional[Any]:
         """
         Returns an instance of the given ``model_name``.
 
