@@ -2216,7 +2216,7 @@ class TubingDescription:
         )
 
 
-@attr.s(frozen=True, slots=True, kw_only=True)
+@attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
 class PackerDescription:
     """
     .. include:: /alfacase_definitions/PackerDescription.txt
