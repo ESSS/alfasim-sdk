@@ -778,7 +778,7 @@ class Table(BaseField):
 
     """
 
-    rows: Sequence[TableColumn] = attrib(converter=tuple)
+    rows: Sequence[TableColumn] = attrib()
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ
