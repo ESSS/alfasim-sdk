@@ -1,4 +1,4 @@
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from contextlib import suppress
 from datetime import datetime
 from enum import Enum
@@ -1409,7 +1409,7 @@ class PipeSegmentsDescription:
     start_positions: Array = attr.ib(validator=optional(instance_of(Array)))
     diameters: Array = attr.ib(validator=optional(instance_of(Array)))
     roughnesses: Array = attr.ib(validator=optional(instance_of(Array)))
-    wall_names: Optional[List[str]] = attr.ib(
+    wall_names: list[str | None] | None = attr.ib(
         default=None, validator=optional(list_of_strings)
     )
 

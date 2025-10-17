@@ -294,7 +294,12 @@ def union_formatted(value: Any) -> str:
     elif is_array(ref_value):
         name = _get_array_reference()
     elif is_list(ref_value):
-        name = f"{_get_list_reference()}[{ref_value.__args__[0].__name__}]"
+        inner_type = ref_value.__args__[0]
+        if is_union(inner_type):
+            inner_value = union_formatted(inner_type)
+        else:
+            inner_value = inner_type.__name__
+        name = f"{_get_list_reference()}[{inner_value}]"
     else:
         name = ref_value.__name__
 
@@ -332,8 +337,10 @@ def list_formatted_for_schema(value: Any) -> str:
     argument = value.__args__[0]
     if is_attrs(argument):
         return f"\n{block_indentation}- {attrs_formatted_for_schema(argument)}"
-
-    return f"\n{block_indentation}- {argument.__name__}"
+    elif is_union(argument):
+        return f"\n{block_indentation}- {union_formatted_for_schema(argument)}"
+    else:
+        return f"\n{block_indentation}- {argument.__name__}"
 
 
 def dict_formatted_for_schema(value: Any) -> str:
