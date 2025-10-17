@@ -918,7 +918,7 @@ CONTROLLER_INPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
 
 CONTROLLER_OUTPUT_SIGNAL_PROPERTIES_DESCRIPTION = (
     case_description.ControllerOutputSignalPropertiesDescription(
-        controlled_property="opening",
+        controlled_property="valve current opening",
         unit="%",
         network_element_name="VALVE",
         min_value=0.0,
