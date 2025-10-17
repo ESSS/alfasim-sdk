@@ -22,7 +22,7 @@
             esp_speed_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Hz, s)[]
             esp_number_of_stages: int = 1
             esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
-            esp_manufacturer: str = ''
+            esp_manufacturer: \ :class:`Optional <typing.Optional>`\[str] = ''
             esp_model: str = ''
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  = PumpViscosityModel.NoModel
             density_correction_enabled: bool = False

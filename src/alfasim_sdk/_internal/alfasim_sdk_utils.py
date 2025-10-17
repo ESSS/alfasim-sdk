@@ -11,14 +11,14 @@ def get_attr_class(
     caption: str,
     icon: Optional[str],
     model: Optional[type],
-    bases: Optional[Tuple] = (),
+    bases: tuple[type, ...] = (),
 ):
     attributes = get_all_attributes(class_)
 
     attr_class = attr.make_class(name=class_.__name__, attrs=attributes, bases=bases)
     attr_class.__qualname__ = class_.__qualname__
     attr_class.__module__ = class_.__module__
-    attr_class._alfasim_metadata = {
+    attr_class._alfasim_metadata = {  # type:ignore[attr-defined]
         "caption": caption,
         "icon": icon,
         "model": model,

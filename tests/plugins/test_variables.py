@@ -17,7 +17,7 @@ import pytest
         (
             dict(default_value="1"),
             TypeError,
-            "'default_value' must be <class 'numbers.Real'>",
+            "'default_value' must be float | int",
         ),
         (dict(type=""), TypeError, "'type' must be <enum 'Type'>"),
     ],

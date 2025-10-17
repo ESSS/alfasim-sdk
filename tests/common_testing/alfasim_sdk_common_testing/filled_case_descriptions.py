@@ -948,6 +948,7 @@ NODE_CONTROLLER_DESCRIPTION = case_description.NodeDescription(
 
 PLUGIN_DESCRIPTION = case_description.PluginDescription(
     name="user_plugin",
+    version="0.1",
     is_enabled=False,
     gui_models={},
 )

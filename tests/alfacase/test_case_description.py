@@ -268,9 +268,6 @@ def test_enum_attribute():
     with pytest.raises(RuntimeError, match=re.escape(expected_msg)):
         attrib_enum()
 
-    # When informing default, the type_ is optional
-    assert attrib_enum(default=X.A).type is X
-
     # Avoiding shooting in the foot =)
     expected_msg = (
         "Default must be a member of Enum and not the Enum class itself, "
@@ -1190,11 +1187,11 @@ def test_generate_multi_input():
     assert obtained == textwrap.dedent(
         """\
         # fmt: off
-        foo_input_type = attrib_enum(default=constants.MultiInputType.Constant)
-        foo = attrib_scalar(
+        foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
+        foo: Scalar = attrib_scalar(
             default=Scalar('length', 1.2, 'm')
         )
-        foo_curve = attrib_curve(
+        foo_curve: Curve = attrib_curve(
             default=Curve(Array('length', [], 'm'), Array('time', [], 's'))
         )
         # fmt: on"""
@@ -1206,7 +1203,7 @@ def test_generate_multi_input_dict():
     assert obtained == textwrap.dedent(
         """\
         # fmt: off
-        foo_input_type = attrib_enum(default=constants.MultiInputType.Constant)
+        foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
         foo: Dict[str, Scalar] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={"type": "scalar_dict", "category": 'length'},

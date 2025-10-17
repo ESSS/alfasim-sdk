@@ -6,7 +6,7 @@
 
         class WallLayerDescription
             thickness: \ :class:`Scalar <barril.units.Scalar>`
-            material_name: str
+            material_name: \ :class:`Optional <typing.Optional>`\[str] = None
             has_annulus_flow: bool = False
 
 .. tab:: Schema
@@ -16,5 +16,5 @@
             thickness: 
                 value: number
                 unit: string
-            material_name: string
+            material_name: string  # optional
             has_annulus_flow: boolean  # optional
