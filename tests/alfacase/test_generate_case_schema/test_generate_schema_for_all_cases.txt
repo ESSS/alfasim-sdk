@@ -870,7 +870,7 @@ volume_fractions_container_description_schema = Map(
 wall_layer_description_schema = Map(
     {
         "thickness": Map({"value": Float(), "unit": Str()}),
-        "material_name": Str(),
+        Optional("material_name"): Str(),
         Optional("has_annulus_flow"): Bool(),
     }
 )

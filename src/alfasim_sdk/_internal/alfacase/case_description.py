@@ -2385,10 +2385,10 @@ class MaterialDescription:
         }
 
 
-@attr.s
+@attr.s(auto_attribs=True)
 class WallLayerDescription:
     """
-    Used for defining the default walls.
+    Defines one of the wall layers around a pipe.
 
     :ivar thickness:
     :ivar material_name:
@@ -2400,7 +2400,9 @@ class WallLayerDescription:
     """
 
     thickness: Scalar = attr.ib(validator=instance_of(Scalar))
-    material_name: str = attr.ib(validator=instance_of(str))
+    material_name: str | None = attr.ib(
+        default=None, validator=optional(instance_of(str))
+    )
     has_annulus_flow: bool = attr.ib(default=False, validator=instance_of(bool))
 
 
