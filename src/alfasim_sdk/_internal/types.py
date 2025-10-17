@@ -780,6 +780,11 @@ class Table(BaseField):
 
     rows: Sequence[TableColumn] = attrib()
 
+    def __attrs_post_init__(self) -> None:
+        # Cannot use attrib(converter=tuple) because it causes type errors downstream:
+        # error: List item 0 has incompatible type "TableColumn"; expected "T"  [list-item]
+        object.__setattr__(self, "rows", tuple(self.rows))
+
     @rows.validator
     def check(  # pylint: disable=arguments-differ
         self, attr: Attribute, values: Union[List[str], str]
