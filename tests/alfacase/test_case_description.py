@@ -1,8 +1,9 @@
 import re
 import textwrap
+from collections.abc import Callable
 from pathlib import Path
 from textwrap import dedent
-from typing import Any, Callable
+from typing import Any
 
 import attr
 import pytest
@@ -1205,11 +1206,11 @@ def test_generate_multi_input_dict():
         """\
         # fmt: off
         foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        foo: Dict[str, Scalar] = attr.ib(
+        foo: dict[str, Scalar] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={"type": "scalar_dict", "category": 'length'},
         )
-        foo_curve: Dict[str, Curve] = attr.ib(
+        foo_curve: dict[str, Curve] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Curve),
             metadata={"type": "curve_dict", "category": 'length'},
         )

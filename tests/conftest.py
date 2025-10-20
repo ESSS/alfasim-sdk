@@ -3,7 +3,6 @@ import os.path
 import shutil
 import textwrap
 from pathlib import Path
-from typing import Dict, List
 
 import h5py
 import numpy as np
@@ -51,7 +50,7 @@ def results(datadir: Path, request: FixtureRequest) -> Results:
 
 
 @pytest.fixture()
-def creating_results(results: Results) -> List[Path]:
+def creating_results(results: Results) -> list[Path]:
     """
     This fixture will affect ``results`` where all the result files are in
     the "creating" state. The list of files returned can be removed to
@@ -369,7 +368,7 @@ def _create_and_populate_hm_result_file(
     result_dir: Path,
     result: np.ndarray,
     result_dataset_key: str,
-    historic_data_curves: Dict[str, np.ndarray],
+    historic_data_curves: dict[str, np.ndarray],
 ) -> None:
     result_dir.mkdir(parents=True, exist_ok=True)
     result_filepath = result_dir / "result"

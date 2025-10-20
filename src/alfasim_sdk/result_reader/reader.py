@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import sqlite3
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import closing
 from pathlib import Path
-from typing import Any, Callable, Dict, Sequence, Tuple, Union
+from typing import Any
 
 import attr
 import numpy as np
@@ -197,7 +197,7 @@ class Results:
         self,
         property_name: str,
         element_name: str,
-        position: Union[Scalar, Tuple[float, str]],
+        position: Scalar | tuple[float, str],
     ) -> Curve:
         """
         Return a positional trend.

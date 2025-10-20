@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional
+from typing import Any
 
 import attr
 from attr.validators import deep_iterable, in_, instance_of, optional
@@ -26,7 +26,7 @@ class PluginInfo:
     name: str = attr.attrib(validator=non_empty_str)
     version: str = attr.attrib(validator=non_empty_str)
     enabled: bool = attr.attrib(validator=instance_of(bool))
-    models: List[str] = attr.attrib(validator=list_of_strings)
+    models: list[str] = attr.attrib(validator=list_of_strings)
 
 
 @attr.s(frozen=True)
@@ -78,7 +78,7 @@ class PipelineInfo:
 
     name = attr.attrib(type=str, validator=non_empty_str)
     edge_name = attr.attrib(type=str, validator=non_empty_str)
-    segments = attr.attrib(type=List[PipelineSegmentInfo], validator=list_of_segments)
+    segments = attr.attrib(type=list[PipelineSegmentInfo], validator=list_of_segments)
     total_length = attr.attrib(type=Scalar, validator=instance_of(Scalar))
 
 
@@ -90,7 +90,7 @@ class NodeInfo:
     """
 
     name: str = attr.attrib(validator=non_empty_str)
-    number_of_phases_from_associated_pvt: Optional[int] = attr.attrib(
+    number_of_phases_from_associated_pvt: int | None = attr.attrib(
         validator=optional(instance_of(int))
     )
 
@@ -103,7 +103,7 @@ class EdgeInfo:
     """
 
     name: str = attr.attrib(validator=non_empty_str)
-    number_of_phases_from_associated_pvt: Optional[int] = attr.attrib(
+    number_of_phases_from_associated_pvt: int | None = attr.attrib(
         validator=optional(instance_of(int))
     )
 
@@ -117,9 +117,9 @@ class HydrodynamicModelInfo:
     selected_base_type: HydrodynamicModelType = attr.attrib(
         validator=in_(HydrodynamicModelType)
     )
-    phases: List[str] = attr.attrib(validator=list_of_strings)
-    fields: List[str] = attr.attrib(validator=list_of_strings)
-    layers: List[str] = attr.attrib(validator=list_of_strings)
+    phases: list[str] = attr.attrib(validator=list_of_strings)
+    fields: list[str] = attr.attrib(validator=list_of_strings)
+    layers: list[str] = attr.attrib(validator=list_of_strings)
     has_water_phase = attr.attrib(type=bool, validator=instance_of(bool))
 
 
@@ -181,7 +181,7 @@ class Context(ABC):
     """
 
     @abstractmethod
-    def get_model(self, model_name: str) -> Optional[Any]:
+    def get_model(self, model_name: str) -> Any | None:
         """
         Returns an instance of the given ``model_name``.
 
@@ -225,7 +225,7 @@ class Context(ABC):
         """
 
     @abstractmethod
-    def get_pipelines(self) -> Optional[List[PipelineInfo]]:
+    def get_pipelines(self) -> list[PipelineInfo] | None:
         """
         Return a list with all Pipes available on the Network from the Project.
         Each Pipe is represented by an instance of :class:`~alfasim_sdk._internal.context.PipelineInfo`.
@@ -260,7 +260,7 @@ class Context(ABC):
         """
 
     @abstractmethod
-    def get_plugins_infos(self) -> List[PluginInfo]:
+    def get_plugins_infos(self) -> list[PluginInfo]:
         """
         Return a list of all plugins available on ALFAsim.
         Each plugin is represented by an instance of :class:`PluginInfo`.
@@ -314,7 +314,7 @@ class Context(ABC):
         """
 
     @abstractmethod
-    def get_edges(self) -> Optional[List[EdgeInfo]]:
+    def get_edges(self) -> list[EdgeInfo] | None:
         """
         Return a list of all Edges available on ALFAsim.
         Each Edge is represented by an instance of :class:`EdgeInfo`.
@@ -340,7 +340,7 @@ class Context(ABC):
         """
 
     @abstractmethod
-    def get_nodes(self) -> Optional[List[NodeInfo]]:
+    def get_nodes(self) -> list[NodeInfo] | None:
         """
         Return a list of all Nodes available on ALFAsim.
         Each Node is represented by an instance of :class:`NodeInfo`.

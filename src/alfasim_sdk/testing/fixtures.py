@@ -3,9 +3,9 @@ import subprocess
 import tempfile
 import textwrap
 import uuid
+from collections.abc import Iterator
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import Iterator, List, Optional, Union
 
 import pytest
 import strictyaml
@@ -25,9 +25,9 @@ class AlfasimRunnerFixture:
     def __init__(self, datadir: Path, monkeypatch: MonkeyPatch):
         self.datadir = datadir
         self.monkeypatch = monkeypatch
-        self._project_folder: Optional[Path] = None
-        self._case: Optional[CaseDescription] = None
-        self._results: Optional[Results] = None
+        self._project_folder: Path | None = None
+        self._case: CaseDescription | None = None
+        self._results: Results | None = None
 
     @property
     def project_folder(self) -> Path:
@@ -60,7 +60,7 @@ class AlfasimRunnerFixture:
         self.check_not_run()
         self.check_base_case_is_not_loaded()
 
-    def load_base_from_alfacase(self, *parts: Union[str, Path]) -> None:
+    def load_base_from_alfacase(self, *parts: str | Path) -> None:
         """
         Define the base case from an alfacase file.
         """
@@ -76,7 +76,7 @@ class AlfasimRunnerFixture:
         self.check_can_load_base()
         self._case = case_description
 
-    def add_plugin_folder(self, *parts: Union[str, Path]) -> None:
+    def add_plugin_folder(self, *parts: str | Path) -> None:
         """
         Define where the plugin files are installed.
 
@@ -92,7 +92,7 @@ class AlfasimRunnerFixture:
         plugins_dir = str(folder) + os.path.pathsep + plugins_dir
         self.monkeypatch.setenv("ALFASIM_PLUGINS_DIR", plugins_dir)
 
-    def add_plugin(self, plugin_conf: Union[str]) -> None:
+    def add_plugin(self, plugin_conf: str) -> None:
         """
         Add the given plugin configuration to the case to be run.
         """
@@ -182,7 +182,7 @@ class AlfasimRunnerFixture:
 
         return results
 
-    def get_runner(self) -> List[str]:
+    def get_runner(self) -> list[str]:
         """
         Obtain the command line to run the simulation.
 
@@ -194,7 +194,7 @@ class AlfasimRunnerFixture:
         )
         return [x.strip() for x in runner_from_env.split()]
 
-    def _run_simulator(self, command: List[str], cwd: Path) -> None:
+    def _run_simulator(self, command: list[str], cwd: Path) -> None:
         current_env = os.environ.copy()
         current_env["ALFASIM_PID_FILE_SECRET"] = f"testing-{uuid.uuid4()}"
 

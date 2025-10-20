@@ -1,16 +1,11 @@
 import textwrap
+from collections.abc import Callable, Sequence
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
 from typing import (
     Any,
-    Callable,
-    Dict,
-    List,
     NewType,
-    Optional,
-    Sequence,
-    Tuple,
     TypeGuard,
     Union,
 )
@@ -30,9 +25,9 @@ list_of_strings = deep_iterable(
 list_of_optional_integers = deep_iterable(
     member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
 )
-ScalarLike = Union[Tuple[Number, str], Scalar]
-ArrayLike = Union[Tuple[Sequence[Number], str], Array]
-CurveLike = Union[Tuple[ArrayLike, ArrayLike], Curve]
+ScalarLike = Union[tuple[Number, str], Scalar]
+ArrayLike = Union[tuple[Sequence[Number], str], Array]
+CurveLike = Union[tuple[ArrayLike, ArrayLike], Curve]
 
 
 def generate_multi_input(
@@ -57,11 +52,11 @@ def generate_multi_input_dict(prop_name: str, category: str) -> str:
         f"""\
         # fmt: off
         {prop_name}_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        {prop_name}: Dict[str, Scalar] = attr.ib(
+        {prop_name}: dict[str, Scalar] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={{"type": "scalar_dict", "category": {category!r}}},
         )
-        {prop_name}_curve: Dict[str, Curve] = attr.ib(
+        {prop_name}_curve: dict[str, Curve] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Curve),
             metadata={{"type": "curve_dict", "category": {category!r}}},
         )
@@ -76,7 +71,7 @@ def is_two_element_tuple(value: object) -> TypeGuard[tuple[Any, Any]]:
     return isinstance(value, tuple) and (len(value) == 2)
 
 
-def prepare_error_message(message: str, error_context: Optional[str] = None) -> str:
+def prepare_error_message(message: str, error_context: str | None = None) -> str:
     """
     If `error_context` is not None prepend that to error message.
     """
@@ -97,7 +92,7 @@ def collapse_array_repr(value: Any) -> str:
 
 
 def to_scalar(
-    value: ScalarLike, is_optional: bool = False, *, error_context: Optional[str] = None
+    value: ScalarLike, is_optional: bool = False, *, error_context: str | None = None
 ) -> Scalar:
     """
     Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
@@ -131,7 +126,7 @@ def to_scalar(
 
 
 def to_array(
-    value: Any, is_optional: bool = False, *, error_context: Optional[str] = None
+    value: Any, is_optional: bool = False, *, error_context: str | None = None
 ) -> Array | None:
     """
     Converter to be used with attr.ib, accepts tuples and Array as input.
@@ -162,7 +157,7 @@ def to_array(
 
 
 def to_curve(
-    value: Any, is_optional: bool = False, *, error_context: Optional[str] = None
+    value: Any, is_optional: bool = False, *, error_context: str | None = None
 ) -> Curve | None:
     """
     Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
@@ -204,9 +199,9 @@ def to_curve(
 
 
 def attrib_scalar(
-    default: Union[ScalarLike, attrs.NothingType, None] = attr.NOTHING,
+    default: ScalarLike | attrs.NothingType | None = attr.NOTHING,
     is_optional: bool = False,
-    category: Optional[str] = None,
+    category: str | None = None,
 ) -> Any:
     """
     Create a new attr attribute with a converter to Scalar accepting also tuple(value, unit).
@@ -238,8 +233,8 @@ def attrib_scalar(
 
 
 def attrib_array(
-    default: Union[ArrayLike, attrs.NothingType] = attr.NOTHING,
-    category: Optional[str] = None,
+    default: ArrayLike | attrs.NothingType = attr.NOTHING,
+    category: str | None = None,
 ) -> Any:
     """
     Create a new attr attribute with a converter to Array accepting also tuple(values, unit).
@@ -275,10 +270,10 @@ def attrib_array(
 
 
 def attrib_curve(
-    default: Union[CurveLike, attrs.NothingType] = attr.NOTHING,
+    default: CurveLike | attrs.NothingType = attr.NOTHING,
     is_optional: bool = False,
-    category: Optional[str] = None,
-    domain_category: Optional[str] = None,
+    category: str | None = None,
+    domain_category: str | None = None,
 ) -> Any:
     """
     Create a new attr attribute with a converter to Curve accepting also tuple(image, domain).
@@ -374,7 +369,7 @@ def attrib_instance_list(type_: type) -> Any:
     )
 
 
-def attrib_enum(type_: Optional[EnumMeta] = None, default: Any = attr.NOTHING) -> Any:
+def attrib_enum(type_: EnumMeta | None = None, default: Any = attr.NOTHING) -> Any:
     """
     Create a new attr attribute with validator for enums
     When a default value is provided the type_ is automatically computed

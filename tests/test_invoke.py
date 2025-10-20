@@ -3,7 +3,6 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import List
 from zipfile import ZipFile
 
 import pytest
@@ -210,7 +209,7 @@ def test_uninstall_plugin_invalid_dir(
 
 def get_plugin_installed_files(
     plugin_dir: Path, monkeypatch: MonkeyPatch
-) -> List[Path]:
+) -> list[Path]:
     """
     Get the files that are installed in the user folder when the user calls
     invoke install-plugin-to-user-folder

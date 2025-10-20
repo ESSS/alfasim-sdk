@@ -1,6 +1,7 @@
 import enum
+from collections.abc import Callable, Sequence
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Sequence, Tuple, Type
+from typing import Any
 
 import attr
 from attr import Attribute
@@ -392,7 +393,7 @@ def union_formatted_for_schema(value: Any) -> str:
     return name
 
 
-def scalar_formatted_for_schema(value: Type[Scalar], *, number_of_indent=1) -> str:
+def scalar_formatted_for_schema(value: type[Scalar], *, number_of_indent=1) -> str:
     """
     Return a string showing how to configure a Scalar.
 
@@ -404,7 +405,7 @@ def scalar_formatted_for_schema(value: Type[Scalar], *, number_of_indent=1) -> s
     return f"\n{block_indentation}value: number\n{block_indentation}unit: string"
 
 
-def array_formatted_for_schema(value: Type[Array], *, number_of_indent=1) -> str:
+def array_formatted_for_schema(value: type[Array], *, number_of_indent=1) -> str:
     """
     Return a string showing how to configure a Array.
 
@@ -416,7 +417,7 @@ def array_formatted_for_schema(value: Type[Array], *, number_of_indent=1) -> str
     return f"\n{block_indentation}values: [number]\n{block_indentation}unit: string"
 
 
-def curve_formatted_for_schema(value: Type[Curve], *, number_of_indent=1) -> str:
+def curve_formatted_for_schema(value: type[Curve], *, number_of_indent=1) -> str:
     """
     Return a string showing how to configure a Array.
 

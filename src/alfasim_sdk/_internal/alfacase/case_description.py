@@ -1,10 +1,9 @@
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping
 from contextlib import suppress
 from datetime import datetime
 from enum import Enum
-from numbers import Number
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, TypeAlias, Union
+from typing import Any, TypeAlias
 
 import attr
 import numpy as np
@@ -129,7 +128,7 @@ class PluginFileContent:
 
     @classmethod
     def from_path(
-        cls, file_path: Path, root: Optional[Path] = None
+        cls, file_path: Path, root: Path | None = None
     ) -> "PluginFileContent":
         """
         Helper method for creation of ``FileContent`` from a ``Path`` object
@@ -179,21 +178,21 @@ class SurgeVolumeOptionsDescription:
     drainage_mode: constants.DrainageRateMode = attrib_enum(
         type_=constants.DrainageRateMode, default=constants.DrainageRateMode.Automatic
     )
-    start_time: Optional[Scalar] = attrib_scalar(
+    start_time: Scalar | None = attrib_scalar(
         category="time", is_optional=True, default=None
     )
-    end_time: Optional[Scalar] = attrib_scalar(
+    end_time: Scalar | None = attrib_scalar(
         category="time", is_optional=True, default=None
     )
-    maximum_drainage_rate: Optional[Scalar] = attrib_scalar(
+    maximum_drainage_rate: Scalar | None = attrib_scalar(
         category="volume flow rate", is_optional=True, default=None
     )
 
 
 @attr.s(kw_only=True, auto_attribs=True)
 class _BaseTrendOutputDescription:
-    name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    curve_names: List[str] = attr.ib(validator=list_of_strings)
+    name: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    curve_names: list[str] = attr.ib(validator=list_of_strings)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -270,7 +269,7 @@ class ProfileOutputDescription:
     location: constants.OutputAttachmentLocation = attrib_enum(
         type_=constants.OutputAttachmentLocation
     )
-    element_name: Optional[str] = attr.ib(
+    element_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
 
@@ -356,7 +355,7 @@ class _MassSourceCommon:
     .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
     """
 
-    fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     tracer_mass_fraction: Array = attr.ib(
         default=Array([], "-"),
         validator=instance_of(Array),
@@ -386,32 +385,32 @@ class _MassSourceCommon:
     # ]]]
     # fmt: off
     volumetric_flow_rates_std_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    volumetric_flow_rates_std: Dict[str, Scalar] = attr.ib(
+    volumetric_flow_rates_std: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'standard volume per time'},
     )
-    volumetric_flow_rates_std_curve: Dict[str, Curve] = attr.ib(
+    volumetric_flow_rates_std_curve: dict[str, Curve] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Curve),
         metadata={"type": "curve_dict", "category": 'standard volume per time'},
     )
     # fmt: on
-    # [[[end]]] (sum: XnttTG+t3p)
+    # [[[end]]] (sum: LHETA/Ml6x)
 
     # [[[cog
     # cog_out_multi_input_dict("mass_flow_rates", "mass flow rate")
     # ]]]
     # fmt: off
     mass_flow_rates_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    mass_flow_rates: Dict[str, Scalar] = attr.ib(
+    mass_flow_rates: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'mass flow rate'},
     )
-    mass_flow_rates_curve: Dict[str, Curve] = attr.ib(
+    mass_flow_rates_curve: dict[str, Curve] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Curve),
         metadata={"type": "curve_dict", "category": 'mass flow rate'},
     )
     # fmt: on
-    # [[[end]]] (sum: QIJUOMXIta)
+    # [[[end]]] (sum: TdUaJF6JS+)
 
     # [[[cog
     # cog_out_multi_input("total_mass_flow_rate", "mass flow rate", 1.0, "kg/s")
@@ -495,7 +494,7 @@ class _PressureSourceCommon:
     # fmt: on
     # [[[end]]] (sum: Nu7J18/uyl)
 
-    fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
     tracer_mass_fraction: Array = attr.ib(
         default=Array([], "-", "mass fraction"),
@@ -512,32 +511,32 @@ class _PressureSourceCommon:
     # ]]]
     # fmt: off
     mass_fractions_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    mass_fractions: Dict[str, Scalar] = attr.ib(
+    mass_fractions: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'mass fraction'},
     )
-    mass_fractions_curve: Dict[str, Curve] = attr.ib(
+    mass_fractions_curve: dict[str, Curve] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Curve),
         metadata={"type": "curve_dict", "category": 'mass fraction'},
     )
     # fmt: on
-    # [[[end]]] (sum: pzJY2Ph8oC)
+    # [[[end]]] (sum: 3ryMqAbjl3)
 
     # [[[cog
     # cog_out_multi_input_dict("volume_fractions", "volume fraction")
     # ]]]
     # fmt: off
     volume_fractions_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    volume_fractions: Dict[str, Scalar] = attr.ib(
+    volume_fractions: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'volume fraction'},
     )
-    volume_fractions_curve: Dict[str, Curve] = attr.ib(
+    volume_fractions_curve: dict[str, Curve] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Curve),
         metadata={"type": "curve_dict", "category": 'volume fraction'},
     )
     # fmt: on
-    # [[[end]]] (sum: pBeo2Y/gMz)
+    # [[[end]]] (sum: rikXFMJhOC)
 
     # [[[cog
     # cog_out_multi_input("gas_liquid_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -633,9 +632,7 @@ class CombinedFluidDescription:
     .. include:: /alfacase_definitions/CombinedFluidDescription.txt
     """
 
-    pvt_model: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    pvt_model: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
@@ -823,7 +820,7 @@ class PumpEquipmentDescription:
     esp_reference_density: Scalar = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
     )
-    esp_manufacturer: Optional[str] = attr.ib(
+    esp_manufacturer: str | None = attr.ib(
         default="",
         validator=optional(instance_of(str)),  # type:ignore[arg-type]
     )
@@ -1024,13 +1021,13 @@ class PigEquipmentDescription:
         default=constants.PigTrappingMode.Automatic
     )
     trap_position: Scalar = attrib_scalar(default=Scalar(0.0, "m"), category="length")
-    trap_pipe_name: Optional[str] = attr.ib(
+    trap_pipe_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     route_mode: constants.PigRoutingMode = attrib_enum(
         default=constants.PigRoutingMode.Automatic
     )
-    pipe_route_names: Optional[List[str]] = attr.ib(
+    pipe_route_names: list[str] | None = attr.ib(
         default=None, validator=optional(list_of_strings)
     )
 
@@ -1140,7 +1137,7 @@ class LeakEquipmentDescription:
     # fmt: on
     # [[[end]]] (sum: 2rH2wVwV7l)
 
-    target_pipe_name: Optional[str] = attr.ib(
+    target_pipe_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     target_position: Scalar = attrib_scalar(default=Scalar(0.0, "m"))
@@ -1335,19 +1332,19 @@ class IPRModelsDescription:
     .. include:: /alfacase_definitions/IPRModelsDescription.txt
     """
 
-    linear_models: Dict[str, LinearIPRDescription] = attr.ib(
+    linear_models: dict[str, LinearIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(LinearIPRDescription)
     )
-    vogel_models: Dict[str, VogelIPRDescription] = attr.ib(
+    vogel_models: dict[str, VogelIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(VogelIPRDescription)
     )
-    fetkovich_models: Dict[str, FetkovichIPRDescription] = attr.ib(
+    fetkovich_models: dict[str, FetkovichIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(FetkovichIPRDescription)
     )
-    forchheimer_models: Dict[str, ForchheimerIPRDescription] = attr.ib(
+    forchheimer_models: dict[str, ForchheimerIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(ForchheimerIPRDescription)
     )
-    table_models: Dict[str, TableIPRDescription] = attr.ib(
+    table_models: dict[str, TableIPRDescription] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(TableIPRDescription)
     )
 
@@ -1362,10 +1359,10 @@ class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
 
     start: Scalar = attrib_scalar(category="length")
     length: Scalar = attrib_scalar(category="length")
-    productivity_ipr: Optional[str] = attr.ib(
+    productivity_ipr: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    injectivity_ipr: Optional[str] = attr.ib(
+    injectivity_ipr: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
 
@@ -1473,7 +1470,7 @@ class ReferencedVolumeFractionsContainerDescription:
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
-    fractions: Dict[PhaseName, Array] = attr.ib(default={})
+    fractions: dict[PhaseName, Array] = attr.ib(default={})
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1486,7 +1483,7 @@ class VolumeFractionsContainerDescription:
     """
 
     positions: Array = attr.ib(default=Array([0.0], "m"))
-    fractions: Dict[PhaseName, Array] = attr.ib(
+    fractions: dict[PhaseName, Array] = attr.ib(
         default={
             constants.FLUID_GAS: Array([0.1], "-"),
             constants.FLUID_OIL: Array([0.9], "-"),
@@ -1526,7 +1523,7 @@ class ReferencedTracersMassFractionsContainerDescription:
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
-    tracers_mass_fractions: List[Array] = attr.ib(default=[])
+    tracers_mass_fractions: list[Array] = attr.ib(default=[])
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1539,7 +1536,7 @@ class TracersMassFractionsContainerDescription:
     """
 
     positions: Array = attr.ib(default=Array([], "m"))
-    tracers_mass_fractions: List[Array] = attr.ib(default=[])
+    tracers_mass_fractions: list[Array] = attr.ib(default=[])
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1573,7 +1570,7 @@ class ReferencedVelocitiesContainerDescription:
 
     reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
-    velocities: Dict[PhaseName, Array] = attr.ib(default={})
+    velocities: dict[PhaseName, Array] = attr.ib(default={})
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1586,7 +1583,7 @@ class VelocitiesContainerDescription:
     """
 
     positions: Array = attr.ib(default=Array([0.0], "m"))
-    velocities: Dict[PhaseName, Array] = attr.ib(
+    velocities: dict[PhaseName, Array] = attr.ib(
         default={
             constants.FLUID_GAS: Array([1e-8], "m/s"),
             constants.FLUID_OIL: Array([1e-8], "m/s"),
@@ -1685,7 +1682,7 @@ class InitialConditionsDescription:
     temperatures: InitialTemperaturesDescription = attr.ib(
         default=InitialTemperaturesDescription()
     )
-    fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -1700,13 +1697,13 @@ class InitialConditionArrays:
     """
 
     pressure: Array = attr.ib(validator=instance_of(Array))
-    volume_fractions: Dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
-    velocity: Dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
-    temperature: Dict[str, Array] = attr.ib(validator=dict_of_array)
-    x_coord_center: Optional[Array] = attr.ib(
+    volume_fractions: dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
+    velocity: dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
+    temperature: dict[str, Array] = attr.ib(validator=dict_of_array)
+    x_coord_center: Array | None = attr.ib(
         default=None, validator=optional(instance_of(Array))
     )
-    x_coord_face: Optional[Array] = attr.ib(
+    x_coord_face: Array | None = attr.ib(
         default=None, validator=optional(instance_of(Array))
     )
 
@@ -1729,7 +1726,7 @@ class LengthAndElevationDescription:
 
     def iter_values_and_unit(
         self,
-    ) -> Iterator[Tuple[ValueAndUnit, ValueAndUnit]]:
+    ) -> Iterator[tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns an iterator containing a pair of values with length and elevation along with their units."""
         length_values = self.length.GetValues(self.length.unit)
         elevation_values = self.elevation.GetValues(self.elevation.unit)
@@ -1752,7 +1749,7 @@ class XAndYDescription:
 
     def iter_values_and_unit(
         self,
-    ) -> Iterator[Tuple[ValueAndUnit, ValueAndUnit]]:
+    ) -> Iterator[tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns a pair of values with the x and y value along with their units."""
         for x, y in zip(self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)):
             yield (x, self.x.unit), (y, self.y.unit)
@@ -1776,10 +1773,8 @@ class ProfileDescription:
 
     """
 
-    x_and_y: Optional[XAndYDescription] = attr.ib(default=None)
-    length_and_elevation: Optional[LengthAndElevationDescription] = attr.ib(
-        default=None
-    )
+    x_and_y: XAndYDescription | None = attr.ib(default=None)
+    length_and_elevation: LengthAndElevationDescription | None = attr.ib(default=None)
 
     def __attrs_post_init__(self):
         if self.length_and_elevation and self.x_and_y:
@@ -1796,28 +1791,28 @@ class EquipmentDescription:
     .. include:: /alfacase_definitions/EquipmentDescription.txt
     """
 
-    mass_sources: Dict[str, MassSourceEquipmentDescription] = attrib_dict_of(
+    mass_sources: dict[str, MassSourceEquipmentDescription] = attrib_dict_of(
         MassSourceEquipmentDescription
     )
-    pumps: Dict[str, PumpEquipmentDescription] = attrib_dict_of(
+    pumps: dict[str, PumpEquipmentDescription] = attrib_dict_of(
         PumpEquipmentDescription
     )
-    valves: Dict[str, ValveEquipmentDescription] = attrib_dict_of(
+    valves: dict[str, ValveEquipmentDescription] = attrib_dict_of(
         ValveEquipmentDescription
     )
-    reservoir_inflows: Dict[str, ReservoirInflowEquipmentDescription] = attrib_dict_of(
+    reservoir_inflows: dict[str, ReservoirInflowEquipmentDescription] = attrib_dict_of(
         ReservoirInflowEquipmentDescription
     )
-    heat_sources: Dict[str, HeatSourceEquipmentDescription] = attrib_dict_of(
+    heat_sources: dict[str, HeatSourceEquipmentDescription] = attrib_dict_of(
         HeatSourceEquipmentDescription
     )
-    compressors: Dict[str, CompressorEquipmentDescription] = attrib_dict_of(
+    compressors: dict[str, CompressorEquipmentDescription] = attrib_dict_of(
         CompressorEquipmentDescription
     )
-    leaks: Dict[str, LeakEquipmentDescription] = attrib_dict_of(
+    leaks: dict[str, LeakEquipmentDescription] = attrib_dict_of(
         LeakEquipmentDescription
     )
-    pigs: Dict[str, PigEquipmentDescription] = attrib_dict_of(PigEquipmentDescription)
+    pigs: dict[str, PigEquipmentDescription] = attrib_dict_of(PigEquipmentDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
@@ -1858,10 +1853,10 @@ class EnvironmentDescription:
         default=constants.PipeThermalPositionInput.Md
     )
     reference_y_coordinate: Scalar = attrib_scalar(default=Scalar("length", 0.0, "m"))
-    md_properties_table: List[EnvironmentPropertyDescription] = attrib_instance_list(
+    md_properties_table: list[EnvironmentPropertyDescription] = attrib_instance_list(
         EnvironmentPropertyDescription
     )
-    tvd_properties_table: List[EnvironmentPropertyDescription] = attrib_instance_list(
+    tvd_properties_table: list[EnvironmentPropertyDescription] = attrib_instance_list(
         EnvironmentPropertyDescription
     )
 
@@ -1882,15 +1877,13 @@ class PipeDescription:
     name: str = attr.ib(validator=instance_of(str))
     source: str = attr.ib(validator=instance_of(str))
     target: str = attr.ib(validator=instance_of(str))
-    source_port: Optional[constants.WellConnectionPort] = attr.ib(
+    source_port: constants.WellConnectionPort | None = attr.ib(
         default=None, validator=optional(in_(constants.WellConnectionPort))
     )
-    target_port: Optional[constants.WellConnectionPort] = attr.ib(
+    target_port: constants.WellConnectionPort | None = attr.ib(
         default=None, validator=optional(in_(constants.WellConnectionPort))
     )
-    pvt_model: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    pvt_model: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     profile: ProfileDescription = attrib_instance(ProfileDescription)
     equipment: EquipmentDescription = attrib_instance(EquipmentDescription)
     environment: EnvironmentDescription = attrib_instance(EnvironmentDescription)
@@ -1927,7 +1920,7 @@ class InternalNodePropertiesDescription:
     .. include:: /alfacase_definitions/InternalNodePropertiesDescription.txt
     """
 
-    fluid: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
@@ -1954,10 +1947,10 @@ class SeparatorNodePropertiesDescription:
         default=Scalar(0.0, "W/m2.K")
     )
     diameter: Scalar = attrib_scalar(default=Scalar("diameter", 1.0, "m"))
-    nozzles: Dict[str, Scalar] = attr.ib(
+    nozzles: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_with_scalar
     )
-    initial_phase_volume_fractions: Dict[str, Scalar] = attr.ib(
+    initial_phase_volume_fractions: dict[str, Scalar] = attr.ib(
         default={
             constants.FLUID_GAS: Scalar("volume fraction", 0.5, "-"),
             constants.FLUID_OIL: Scalar("volume fraction", 0.5, "-"),
@@ -2004,13 +1997,13 @@ class ControllerInputSignalPropertiesDescription:
     .. include:: /alfacase_definitions/ControllerInputSignalPropertiesDescription.txt
     """
 
-    target_variable: Optional[str] = attr.ib(
+    target_variable: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    input_trend_name: Optional[str] = attr.ib(
+    input_trend_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    unit: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
@@ -2032,11 +2025,11 @@ class ControllerOutputSignalPropertiesDescription:
     .. include:: /alfacase_definitions/ControllerOutputSignalPropertiesDescription.txt
     """
 
-    controlled_property: Optional[str] = attr.ib(
+    controlled_property: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    unit: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    network_element_name: Optional[str] = attr.ib(
+    unit: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    network_element_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     min_value: float = attr.ib(default=-1.0e50, converter=float)
@@ -2107,9 +2100,7 @@ class NodeDescription:
 
     name: str = attr.ib()
     node_type: constants.NodeCellType = attrib_enum(type_=constants.NodeCellType)
-    pvt_model: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    pvt_model: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     pressure_properties: PressureNodePropertiesDescription = attrib_instance(
         PressureNodePropertiesDescription
     )
@@ -2137,9 +2128,7 @@ class FormationLayerDescription:
 
     name: str = attr.ib(validator=instance_of(str))
     start: Scalar = attrib_scalar(category="length")
-    material: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
@@ -2151,7 +2140,7 @@ class FormationDescription:
     """
 
     reference_y_coordinate: Scalar = attrib_scalar(category="length")
-    layers: List[FormationLayerDescription] = attrib_instance_list(
+    layers: list[FormationLayerDescription] = attrib_instance_list(
         FormationLayerDescription
     )
 
@@ -2171,14 +2160,12 @@ class CasingSectionDescription:
     outer_diameter: Scalar = attrib_scalar(category="diameter")
     inner_diameter: Scalar = attrib_scalar(category="diameter")
     inner_roughness: Scalar = attrib_scalar(category="length")
-    material: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     top_of_filler: Scalar = attrib_scalar(category="length")
-    filler_material: Optional[str] = attr.ib(
+    filler_material: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    material_above_filler: Optional[str] = attr.ib(
+    material_above_filler: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
 
@@ -2204,9 +2191,7 @@ class TubingDescription:
     outer_diameter: Scalar = attrib_scalar(category="diameter")
     inner_diameter: Scalar = attrib_scalar(category="diameter")
     inner_roughness: Scalar = attrib_scalar(category="length")
-    material: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
     @outer_diameter.validator
     @inner_diameter.validator
@@ -2226,7 +2211,7 @@ class PackerDescription:
 
     name: str = attr.ib(validator=instance_of(str))
     position: Scalar = attrib_scalar(category="length")
-    material_above: Optional[str] = attr.ib(
+    material_above: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
 
@@ -2257,12 +2242,12 @@ class CasingDescription:
     .. include:: /alfacase_definitions/CasingDescription.txt
     """
 
-    casing_sections: List[CasingSectionDescription] = attrib_instance_list(
+    casing_sections: list[CasingSectionDescription] = attrib_instance_list(
         CasingSectionDescription
     )
-    tubings: List[TubingDescription] = attrib_instance_list(TubingDescription)
-    packers: List[PackerDescription] = attrib_instance_list(PackerDescription)
-    open_holes: List[OpenHoleDescription] = attrib_instance_list(OpenHoleDescription)
+    tubings: list[TubingDescription] = attrib_instance_list(TubingDescription)
+    packers: list[PackerDescription] = attrib_instance_list(PackerDescription)
+    open_holes: list[OpenHoleDescription] = attrib_instance_list(OpenHoleDescription)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
@@ -2294,10 +2279,10 @@ class AnnulusEquipmentDescription:
     .. include:: /alfacase_definitions/AnnulusEquipmentDescription.txt
     """
 
-    leaks: Dict[str, LeakEquipmentDescription] = attrib_dict_of(
+    leaks: dict[str, LeakEquipmentDescription] = attrib_dict_of(
         LeakEquipmentDescription
     )
-    gas_lift_valves: Dict[str, GasLiftValveEquipmentDescription] = attrib_dict_of(
+    gas_lift_valves: dict[str, GasLiftValveEquipmentDescription] = attrib_dict_of(
         GasLiftValveEquipmentDescription
     )
 
@@ -2309,9 +2294,7 @@ class AnnulusDescription:
     """
 
     has_annulus_flow: bool = attr.ib(validator=instance_of(bool))
-    pvt_model: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
+    pvt_model: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     initial_conditions: InitialConditionsDescription = attrib_instance(
         InitialConditionsDescription
     )
@@ -2328,10 +2311,8 @@ class WellDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    pvt_model: Optional[str] = attr.ib(
-        default=None, validator=optional(instance_of(str))
-    )
-    stagnant_fluid: Optional[str] = attr.ib(
+    pvt_model: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    stagnant_fluid: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
     profile: ProfileDescription = attrib_instance(ProfileDescription)
@@ -2372,7 +2353,7 @@ class MaterialDescription:
     expansion: Scalar = attrib_scalar(default=Scalar(0, "1/K"))
     viscosity: Scalar = attrib_scalar(default=Scalar(0, "cP"))
 
-    def as_dict(self) -> Mapping[str, Union[Any, ValueAndUnit]]:
+    def as_dict(self) -> Mapping[str, Any | ValueAndUnit]:
         """
         Helper function that returns a dict with all information needed to create a Material.
 
@@ -2416,7 +2397,7 @@ class WallDescription:
 
     name: str = attr.ib(validator=instance_of(str))
     inner_roughness: Scalar = attrib_scalar(default=Scalar(0, "m"))
-    wall_layer_container: List[WallLayerDescription] = attrib_instance_list(
+    wall_layer_container: list[WallLayerDescription] = attrib_instance_list(
         WallLayerDescription
     )
 
@@ -2659,13 +2640,13 @@ class PvtModelCompositionalDescription:
     viscosity_model: constants.PVTCompositionalViscosityModel = attrib_enum(
         default=constants.PVTCompositionalViscosityModel.CorrespondingStatesPrinciple
     )
-    heavy_components: List[HeavyComponentDescription] = attrib_instance_list(
+    heavy_components: list[HeavyComponentDescription] = attrib_instance_list(
         HeavyComponentDescription
     )
-    light_components: List[LightComponentDescription] = attrib_instance_list(
+    light_components: list[LightComponentDescription] = attrib_instance_list(
         LightComponentDescription
     )
-    fluids: Dict[str, CompositionalFluidDescription] = attrib_dict_of(
+    fluids: dict[str, CompositionalFluidDescription] = attrib_dict_of(
         CompositionalFluidDescription
     )
 
@@ -2685,10 +2666,10 @@ class PvtModelCombinedDescription:
 
     """
 
-    reference_pvt_model: Optional[str] = attr.ib(
+    reference_pvt_model: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    fluids: Dict[str, CombinedFluidDescription] = attrib_dict_of(
+    fluids: dict[str, CombinedFluidDescription] = attrib_dict_of(
         CombinedFluidDescription
     )
 
@@ -2722,43 +2703,43 @@ class PvtModelPtTableParametersDescription:
     temperature_values: Numpy1DArray = attr.ib(
         validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
     )
-    table_variables: List[Numpy1DArray] = attr.ib(
+    table_variables: list[Numpy1DArray] = attr.ib(
         validator=numpy_array_validator(dimension=1, is_list=True),
         repr=collapse_array_repr,
     )
-    variable_names: List[str] = attr.ib(validator=list_of_strings)
+    variable_names: list[str] = attr.ib(validator=list_of_strings)
 
-    pressure_std: Optional[Scalar] = attrib_scalar(
+    pressure_std: Scalar | None = attrib_scalar(
         default=Scalar(1, "bar"), is_optional=True
     )
-    temperature_std: Optional[Scalar] = attrib_scalar(
+    temperature_std: Scalar | None = attrib_scalar(
         default=Scalar(15, "degC"), is_optional=True
     )
 
-    gas_density_std: Optional[Scalar] = attrib_scalar(
+    gas_density_std: Scalar | None = attrib_scalar(
         default=Scalar(1, "kg/m3"), is_optional=True
     )
-    oil_density_std: Optional[Scalar] = attrib_scalar(
+    oil_density_std: Scalar | None = attrib_scalar(
         default=Scalar(800, "kg/m3"), is_optional=True
     )
-    water_density_std: Optional[Scalar] = attrib_scalar(
+    water_density_std: Scalar | None = attrib_scalar(
         default=Scalar(1000, "kg/m3"), is_optional=True
     )
 
-    gas_oil_ratio: Optional[Scalar] = attrib_scalar(
+    gas_oil_ratio: Scalar | None = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GOR
-    gas_liquid_ratio: Optional[Scalar] = attrib_scalar(
+    gas_liquid_ratio: Scalar | None = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GLR
-    water_cut: Optional[Scalar] = attrib_scalar(
+    water_cut: Scalar | None = attrib_scalar(
         default=Scalar(0, "-"), is_optional=True
     )  # WC
-    total_water_fraction: Optional[Scalar] = attrib_scalar(
+    total_water_fraction: Scalar | None = attrib_scalar(
         default=Scalar(0, "-"), is_optional=True
     )
 
-    label: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    label: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     number_of_phases: int = attr.ib(default=2, validator=instance_of(int))
     warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
 
@@ -3097,43 +3078,43 @@ class PvtModelPhTableParametersDescription:
     enthalpy_values: Numpy1DArray = attr.ib(
         validator=numpy_array_validator(dimension=1), repr=collapse_array_repr
     )
-    table_variables: List[Numpy1DArray] = attr.ib(
+    table_variables: list[Numpy1DArray] = attr.ib(
         validator=numpy_array_validator(dimension=1, is_list=True),
         repr=collapse_array_repr,
     )
-    variable_names: List[str] = attr.ib(validator=list_of_strings)
+    variable_names: list[str] = attr.ib(validator=list_of_strings)
 
-    pressure_std: Optional[Scalar] = attrib_scalar(
+    pressure_std: Scalar | None = attrib_scalar(
         default=Scalar(1, "bar"), is_optional=True
     )
-    temperature_std: Optional[Scalar] = attrib_scalar(
+    temperature_std: Scalar | None = attrib_scalar(
         default=Scalar(15, "degC"), is_optional=True
     )
 
-    gas_density_std: Optional[Scalar] = attrib_scalar(
+    gas_density_std: Scalar | None = attrib_scalar(
         default=Scalar(1, "kg/m3"), is_optional=True
     )
-    oil_density_std: Optional[Scalar] = attrib_scalar(
+    oil_density_std: Scalar | None = attrib_scalar(
         default=Scalar(800, "kg/m3"), is_optional=True
     )
-    water_density_std: Optional[Scalar] = attrib_scalar(
+    water_density_std: Scalar | None = attrib_scalar(
         default=Scalar(1000, "kg/m3"), is_optional=True
     )
 
-    gas_oil_ratio: Optional[Scalar] = attrib_scalar(
+    gas_oil_ratio: Scalar | None = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GOR
-    gas_liquid_ratio: Optional[Scalar] = attrib_scalar(
+    gas_liquid_ratio: Scalar | None = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GLR
-    water_cut: Optional[Scalar] = attrib_scalar(
+    water_cut: Scalar | None = attrib_scalar(
         default=Scalar(0, "-"), is_optional=True
     )  # WC
-    total_water_fraction: Optional[Scalar] = attrib_scalar(
+    total_water_fraction: Scalar | None = attrib_scalar(
         default=Scalar(0, "-"), is_optional=True
     )
 
-    label: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    label: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     number_of_phases: int = attr.ib(default=2, validator=instance_of(int))
     warn_when_outside: bool = attr.ib(default=True, validator=instance_of(bool))
 
@@ -3561,36 +3542,36 @@ class PvtModelsDescription:
 
     """
 
-    default_model: Optional[str] = attr.ib(
+    default_model: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
 
-    tables: Dict[str, Union[str, Path]] = attr.ib(
+    tables: dict[str, str | Path] = attr.ib(
         default=attr.Factory(dict), validator=dict_of((str, Path))
     )
-    correlations: Dict[str, PvtModelCorrelationDescription] = attrib_dict_of(
+    correlations: dict[str, PvtModelCorrelationDescription] = attrib_dict_of(
         PvtModelCorrelationDescription
     )
-    compositional: Dict[str, PvtModelCompositionalDescription] = attrib_dict_of(
+    compositional: dict[str, PvtModelCompositionalDescription] = attrib_dict_of(
         PvtModelCompositionalDescription
     )
-    combined: Dict[str, PvtModelCombinedDescription] = attrib_dict_of(
+    combined: dict[str, PvtModelCombinedDescription] = attrib_dict_of(
         PvtModelCombinedDescription
     )
-    pt_table_parameters: Dict[str, PvtModelPtTableParametersDescription] = (
+    pt_table_parameters: dict[str, PvtModelPtTableParametersDescription] = (
         attrib_dict_of(PvtModelPtTableParametersDescription)
     )
-    ph_table_parameters: Dict[str, PvtModelPhTableParametersDescription] = (
+    ph_table_parameters: dict[str, PvtModelPhTableParametersDescription] = (
         attrib_dict_of(PvtModelPhTableParametersDescription)
     )
-    constant_properties: Dict[str, PvtModelConstantPropertiesDescription] = (
+    constant_properties: dict[str, PvtModelConstantPropertiesDescription] = (
         attrib_dict_of(PvtModelConstantPropertiesDescription)
     )
 
     @staticmethod
     def get_pvt_file_and_model_name(
-        value: Union[str, Path],
-    ) -> Tuple[Path, Optional[str]]:
+        value: str | Path,
+    ) -> tuple[Path, str | None]:
         """
         Parse the value provided from the user to get the path for the pvt file and if defined, the pvt model.
         """
@@ -3607,7 +3588,7 @@ class TracerModelConstantCoefficientsDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_mass_fraction.txt
     """
 
-    partition_coefficients: Dict[str, Scalar] = attr.ib(
+    partition_coefficients: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar)
     )
 
@@ -3618,7 +3599,7 @@ class TracersDescription:
     .. include:: /alfacase_definitions/TracersDescription.txt
     """
 
-    constant_coefficients: Dict[str, TracerModelConstantCoefficientsDescription] = (
+    constant_coefficients: dict[str, TracerModelConstantCoefficientsDescription] = (
         attr.ib(
             default=attr.Factory(dict),
             validator=dict_of(TracerModelConstantCoefficientsDescription),
@@ -3665,10 +3646,10 @@ class PhysicsDescription:
     initial_condition_strategy: constants.InitialConditionStrategyType = attrib_enum(
         default=constants.InitialConditionStrategyType.Constant
     )
-    restart_filepath: Optional[Path] = attr.ib(
+    restart_filepath: Path | None = attr.ib(
         default=None, validator=optional(instance_of(Path))
     )
-    restart_point_key: Optional[RestartPointKey] = attrib_instance(
+    restart_point_key: RestartPointKey | None = attrib_instance(
         RestartPointKey, is_optional=True
     )
     keep_former_results: bool = attr.ib(default=False, validator=instance_of(bool))
@@ -3814,11 +3795,11 @@ class CaseDescription:
     .. include:: /alfacase_definitions/CaseDescription.txt
     """
 
-    name: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
-    alfasim_version_info: Optional[AlfasimVersionInfo] = attrib_instance(
+    name: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    alfasim_version_info: AlfasimVersionInfo | None = attrib_instance(
         AlfasimVersionInfo, is_optional=True
     )
-    comment: Optional[str] = attr.ib(default=None, validator=optional(instance_of(str)))
+    comment: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     physics: PhysicsDescription = attrib_instance(PhysicsDescription)
     time_options: TimeOptionsDescription = attrib_instance(TimeOptionsDescription)
     numerical_options: NumericalOptionsDescription = attrib_instance(
@@ -3829,11 +3810,11 @@ class CaseDescription:
     pvt_models: PvtModelsDescription = attrib_instance(PvtModelsDescription)
     tracers: TracersDescription = attrib_instance(TracersDescription)
     outputs: CaseOutputDescription = attrib_instance(CaseOutputDescription)
-    pipes: List[PipeDescription] = attrib_instance_list(PipeDescription)
-    nodes: List[NodeDescription] = attrib_instance_list(NodeDescription)
-    wells: List[WellDescription] = attrib_instance_list(WellDescription)
-    materials: List[MaterialDescription] = attrib_instance_list(MaterialDescription)
-    walls: List[WallDescription] = attrib_instance_list(WallDescription)
+    pipes: list[PipeDescription] = attrib_instance_list(PipeDescription)
+    nodes: list[NodeDescription] = attrib_instance_list(NodeDescription)
+    wells: list[WellDescription] = attrib_instance_list(WellDescription)
+    materials: list[MaterialDescription] = attrib_instance_list(MaterialDescription)
+    walls: list[WallDescription] = attrib_instance_list(WallDescription)
 
     def _check_pvt_model_references(self, reset_invalid_reference: bool = False):
         """
@@ -3933,7 +3914,7 @@ class CaseDescription:
             Set the element to None if a insistence is found instead of raising an exception.
         """
 
-        def _get_all_pvt_models_declared_on_file(file_path: Path) -> Set[str]:
+        def _get_all_pvt_models_declared_on_file(file_path: Path) -> set[str]:
             """
             Read the pvt model file and return a tuple with all PVT Models declared on it
             """
@@ -3998,7 +3979,7 @@ class CaseDescription:
                 f"Restart file '{restart_file}' is not a valid file"
             )
 
-    def _get_all_fluids(self) -> List[str]:
+    def _get_all_fluids(self) -> list[str]:
         """
         Returns a list of fluids names for all pvt models in the CaseDescription.
         """

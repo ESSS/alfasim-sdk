@@ -1,5 +1,3 @@
-from typing import List
-
 import attr
 
 from alfasim_sdk._internal.types import BaseField, Group, Tab, Tabs
@@ -19,7 +17,7 @@ def _is_group(value: BaseField) -> bool:
     return isinstance(value, type) and issubclass(value, Group)
 
 
-def get_attributes(user_model_class) -> List[attr.Attribute]:
+def get_attributes(user_model_class) -> list[attr.Attribute]:
     """
     Return only the attribute for the given class, fields related with layout (such as Tabs) are ignored.
     """

@@ -2,11 +2,11 @@ import inspect
 import operator
 import sys
 from collections import deque
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
-from enum import Enum, EnumMeta
+from enum import EnumMeta
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Set
+from typing import Any
 
 import attr
 import typing_inspect
@@ -37,7 +37,7 @@ def numpy_1_darray_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_list(type_: type) -> bool:
-    return typing_inspect.get_origin(type_) in (List, list)
+    return typing_inspect.get_origin(type_) in (list, list)
 
 
 def list_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -78,7 +78,7 @@ def attrs_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_dict(type_: type) -> bool:
-    return typing_inspect.get_origin(type_) in (Dict, dict)
+    return typing_inspect.get_origin(type_) in (dict, dict)
 
 
 def dict_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -106,7 +106,7 @@ def is_union(type_: type) -> bool:
 
 
 @contextmanager
-def _map_section(lines: List[str], indent=0) -> Iterator[List[str]]:
+def _map_section(lines: list[str], indent=0) -> Iterator[list[str]]:
     body_indent = indent + 1
     lines.append("Map(")
     lines.append(f"{INDENTANTION * body_indent}{{")
@@ -198,7 +198,7 @@ def path_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Str()"
 
 
-LIST_OF_IMPLEMENTATIONS: List[tuple[Callable, Callable]] = [
+LIST_OF_IMPLEMENTATIONS: list[tuple[Callable, Callable]] = [
     (is_enum, enum_to_alfacase_schema),
     (is_attrs, attrs_to_alfacase_schema),
     (is_list, list_to_alfacase_schema),
@@ -318,7 +318,7 @@ def _is_from_typing_module(type_: type) -> bool:
     return is_list(type_) or is_dict(type_) or typing_inspect.is_union_type(type_)
 
 
-def _obtain_referred_type(type_) -> List[type]:
+def _obtain_referred_type(type_) -> list[type]:
     """
     Obtain the type referred by the type hint.
 
@@ -355,7 +355,7 @@ def _obtain_referred_type(type_) -> List[type]:
     raise TypeError(f"type_ must be a List or Union referring other types, got {type_}")
 
 
-def _get_classes(class_: type) -> Set[type]:
+def _get_classes(class_: type) -> set[type]:
     """
     Helper function to return a set of attr classes that needs schema.
     """
@@ -378,7 +378,7 @@ def _get_classes(class_: type) -> Set[type]:
     return set(flatten(classes))
 
 
-def get_all_classes_that_needs_schema(class_: type) -> List[type]:
+def get_all_classes_that_needs_schema(class_: type) -> list[type]:
     """
     Iterates over the "class_"  attributes searching for objects that needs schema (attr classes)
 

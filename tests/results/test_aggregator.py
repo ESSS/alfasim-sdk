@@ -3,7 +3,7 @@ import itertools
 import re
 import shutil
 from pathlib import Path
-from typing import Any, List, Literal
+from typing import Any, Literal
 
 import numpy
 import numpy as np
@@ -62,7 +62,7 @@ def test_read_metadata_from_results_sanity(results: Results) -> None:
 
 
 def test_read_empty_metadata_creating_results(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     results_folder = results.results_folder
     md = read_metadata(results_folder)
@@ -70,7 +70,7 @@ def test_read_empty_metadata_creating_results(
 
 
 def test_read_metadata_need_reload_error(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     results_folder = results.results_folder
 
@@ -205,7 +205,7 @@ def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
 
 
 def test_concatenate_metadata_error_conditions_more_files(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     creating_results[0].unlink()
     md = results.metadata
@@ -218,7 +218,7 @@ def test_concatenate_metadata_error_conditions_more_files(
 
 
 def test_concatenate_metadata_error_conditions_not_adjacent(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     creating_results[0].unlink()
     md = results.metadata
@@ -324,7 +324,7 @@ def test_fancy_path(datadir: Path, request: FixtureRequest):
     shutil.copytree(sample_results_data_folder, test_data_folder)
     results = Results(test_data_folder)
     # Try to read the results from the fancy named folder.
-    assert set([p.property_name for p in results.list_profiles()]) == {
+    assert {p.property_name for p in results.list_profiles()} == {
         "pressure",
         "total mass flow rate",
     }

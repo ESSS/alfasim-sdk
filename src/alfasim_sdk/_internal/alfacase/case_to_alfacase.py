@@ -1,7 +1,7 @@
 import math
 from enum import Enum
 from functools import partial
-from typing import Any, Dict, List, Union, cast
+from typing import Any, Union, cast
 
 import attr
 import numpy as np
@@ -13,7 +13,7 @@ from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
 
-ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, List, List[Enum]]
+ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, list, list[Enum]]
 
 NON_FININTE_VALUES_TO_STRING = [
     (math.isnan, ".nan"),
@@ -22,7 +22,7 @@ NON_FININTE_VALUES_TO_STRING = [
 ]
 
 
-def format_list(values: List[Any], *, enable_flow_style: bool = False):
+def format_list(values: list[Any], *, enable_flow_style: bool = False):
     """
     This method marks specific nodes for dumping in flow mode,
     and everything "below" will then be dumped with flow-mode as well.
@@ -113,11 +113,11 @@ def _convert_value_to_valid_alfacase_format(
 
 
 def convert_dict_to_valid_alfacase_format(
-    case_description_dict: Dict[str, ATTRIBUTES],
+    case_description_dict: dict[str, ATTRIBUTES],
     *,
     enable_flow_style_on_numpy: bool,
     remove_redundant_input_type_data: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Convert all values of the dictionary to string.
 
@@ -129,7 +129,7 @@ def convert_dict_to_valid_alfacase_format(
     :param remove_redundant_input_type_data:
         For transient entries remove input type selector, and the unused constant or curve entries.
     """
-    transient_fields: Dict[str, MultiInputType] = {}
+    transient_fields: dict[str, MultiInputType] = {}
     converted_dict: dict[str, Any] = {}
     converted_value: Any
     for key, value in case_description_dict.items():

@@ -1,12 +1,12 @@
 import itertools
+from collections.abc import Callable, Sequence
 from functools import partial
 from pathlib import Path, PurePosixPath
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Sequence, Type, Union
+from typing import Any, TypeGuard
 
 import attr
 from barril.units import Array, Scalar
-from typing_extensions import TypeGuard
 
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
@@ -115,7 +115,7 @@ def dump_file_contents_and_update_plugins(
 
 def load_list_of_plugin(
     alfacase_content: DescriptionDocument,
-) -> List[PluginDescription]:
+) -> list[PluginDescription]:
     """
     A loader function similar to ``load_list_of_instance`` for plugins.
     """
@@ -126,7 +126,7 @@ def load_list_of_plugin(
     return [p for p in plugins if p is not None]
 
 
-def load_plugin(alfacase_content: DescriptionDocument) -> Optional[PluginDescription]:
+def load_plugin(alfacase_content: DescriptionDocument) -> PluginDescription | None:
     """
     A loader function similar to ``load_instance`` for plugins.
     """
@@ -240,7 +240,7 @@ def load_plugin_data_structure(
 
 def is_dict_with_keys(
     possible_dict: object, *keys: str, strict: bool = True
-) -> TypeGuard[Dict]:
+) -> TypeGuard[dict]:
     """
     Check if `possible_dict` is a `dict` with keys `keys`.
     If `strict` is `True` the dict can not have extra keys.
@@ -312,7 +312,7 @@ def _convert_multiple_reference(
 
 def _convert_reference(
     value: object, type_from_plugin: BaseField, alfacase_path: Path
-) -> Union[PluginTracerReference, PluginInternalReference]:
+) -> PluginTracerReference | PluginInternalReference:
     """
     Try to convert a object loaded from alfacase as a plugin internal reference or plugin trace reference.
     """
@@ -357,7 +357,7 @@ def _convert_string(
 
 def _convert_table_column_contents(
     raw_col: object,
-) -> Union[Array, InternalReferencePluginTableColumn, TracerReferencePluginTableColumn]:
+) -> Array | InternalReferencePluginTableColumn | TracerReferencePluginTableColumn:
     """
     Try to convert an object into a valid table column content.
 
@@ -402,7 +402,7 @@ def _convert_table(
     raise InvalidPluginDataError(f"Can not convert to a table: {value!r}")
 
 
-_PLUGIN_FIELD_TO_CASEDESCRIPTION: Dict[Type, Callable] = {
+_PLUGIN_FIELD_TO_CASEDESCRIPTION: dict[type, Callable] = {
     Boolean: _convert_boolean,
     Enum: _convert_enum,
     FileContent: _convert_file_content,
@@ -414,11 +414,11 @@ _PLUGIN_FIELD_TO_CASEDESCRIPTION: Dict[Type, Callable] = {
 }
 
 
-def load_model(alfacase_content: DescriptionDocument, class_: Type) -> dict[str, Any]:
+def load_model(alfacase_content: DescriptionDocument, class_: type) -> dict[str, Any]:
     """
     Convert alfacase fragment as a dict equivalent to a plugin model.
     """
-    alfasim_metadata: Optional[object] = getattr(class_, "_alfasim_metadata")
+    alfasim_metadata: object | None = getattr(class_, "_alfasim_metadata")
     assert isinstance(alfasim_metadata, dict)
     alfacase_path = alfacase_content.file_path
 
@@ -427,7 +427,7 @@ def load_model(alfacase_content: DescriptionDocument, class_: Type) -> dict[str,
         type_from_plugin = attribute.default
         name: str = attribute.name
         if name in alfacase_content.content:
-            value: Union[dict, list, str] = alfacase_content.content[name].data
+            value: dict | list | str = alfacase_content.content[name].data
             convert_func: Callable = _PLUGIN_FIELD_TO_CASEDESCRIPTION[
                 type(type_from_plugin)
             ]
@@ -445,7 +445,7 @@ def load_model(alfacase_content: DescriptionDocument, class_: Type) -> dict[str,
 
 
 def load_gui_models(
-    alfacase_content: DescriptionDocument, *, data_structure: List[Type]
+    alfacase_content: DescriptionDocument, *, data_structure: list[type]
 ):
     result = {}
     for model in data_structure:

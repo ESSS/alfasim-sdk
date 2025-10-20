@@ -1,4 +1,4 @@
-from typing import Callable, List, Optional, Sequence, Union
+from collections.abc import Callable, Sequence
 
 import attr
 from attr import Attribute, attrib
@@ -191,10 +191,10 @@ class BaseField:
 
     caption: str = attrib(validator=non_empty_str)
     tooltip: str = attrib(default="", validator=instance_of(str))
-    enable_expr: Optional[Callable] = attrib(
+    enable_expr: Callable | None = attrib(
         default=None, validator=optional(is_callable())
     )
-    visible_expr: Optional[Callable] = attrib(
+    visible_expr: Callable | None = attrib(
         default=None, validator=optional(is_callable())
     )
 
@@ -299,12 +299,12 @@ class Enum(BaseField):
 
     """
 
-    values: List[str] = attrib()
-    initial: Optional[str] = attrib(validator=optional(instance_of(str)), default=None)
+    values: list[str] = attrib()
+    initial: str | None = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: List[str]
+        self, attr: Attribute, values: list[str]
     ) -> None:
         if not isinstance(values, list):
             raise TypeError(
@@ -328,9 +328,7 @@ class Enum(BaseField):
 @attr.s(kw_only=True, frozen=True, auto_attribs=True)
 class BaseReference(BaseField):
     ref_type: type = attrib()
-    container_type: Optional[str] = attrib(
-        default=None, validator=optional(non_empty_str)
-    )
+    container_type: str | None = attrib(default=None, validator=optional(non_empty_str))
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
@@ -639,7 +637,7 @@ class TableColumn(BaseField):
     """
 
     id: str = attrib(validator=non_empty_str)
-    value: Union[Quantity, Reference] = attrib()
+    value: Quantity | Reference = attrib()
     caption: str = attrib(init=False, default="")
 
     def __attrs_post_init__(self) -> None:
@@ -647,7 +645,7 @@ class TableColumn(BaseField):
 
     @value.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: Union[Quantity, Reference]
+        self, attr: Attribute, values: Quantity | Reference
     ) -> None:
         if isinstance(values, Quantity):
             return  # Always OK.
@@ -787,7 +785,7 @@ class Table(BaseField):
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: Union[List[str], str]
+        self, attr: Attribute, values: list[str] | str
     ):
         if not values:
             raise TypeError(f"{attr.name} must be a list with TableColumn.")
@@ -935,7 +933,7 @@ class AddLayer:
     """
 
     name: str = attr.ib()
-    fields: List[str] = attr.ib()
+    fields: list[str] = attr.ib()
     continuous_field: str = attr.ib()
 
 
@@ -958,7 +956,7 @@ class UpdateLayer:
     """
 
     name: str = attr.ib()
-    additional_fields: List[str] = attr.ib()
+    additional_fields: list[str] = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
@@ -979,7 +977,7 @@ class AddPhase:
     """
 
     name: str = attr.ib()
-    fields: List[str] = attr.ib()
+    fields: list[str] = attr.ib()
     primary_field: str = attr.ib()
     is_solid: bool = attr.ib(default=False)
 
@@ -1002,4 +1000,4 @@ class UpdatePhase:
     """
 
     name: str = attr.ib()
-    additional_fields: List[str] = attr.ib()
+    additional_fields: list[str] = attr.ib()

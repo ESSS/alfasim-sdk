@@ -6,22 +6,14 @@ import json
 import os
 import re
 from collections import defaultdict, namedtuple
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from pathlib import Path
 from typing import (
     Any,
-    Callable,
     DefaultDict,
-    Dict,
-    Iterator,
-    List,
     Literal,
     NamedTuple,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
     TypeVar,
     Union,
 )
@@ -58,32 +50,32 @@ A output key is a tuple with the output id and the property id.
 
 TimeStepIndex = int
 
-TimeSetKeyType = Tuple[TimeStepIndex, ...]
+TimeSetKeyType = tuple[TimeStepIndex, ...]
 """\
 A time set key is a tuple of the base time steps relevant for a time set (in ascending order).
 
 The "base time step"s are the time steps for which are global metadata folders.
 """
 
-SourceTimeSetKeyType = Tuple[str, TimeSetKeyType]
+SourceTimeSetKeyType = tuple[str, TimeSetKeyType]
 """\
 A source time set key is a tuple containing:
     - a source identifier, the output's type that caused this time set to emerge (trend/profile);
     - a list of "base time step"s of relevance;
 """
 
-TimeSetType = List[float]
+TimeSetType = list[float]
 """\
 A time set is just a list o floats (the time steps in this time set).
 """
 
-DeltaTsType = List[float]
+DeltaTsType = list[float]
 """\
 A list of floats representing Δt's.
 """
 
 
-BaseTimeStepIndexToMetaList = Dict[TimeStepIndex, Dict]
+BaseTimeStepIndexToMetaList = dict[TimeStepIndex, dict]
 """\
 A map of base time steps to the metadata contained in the respective result file.
 
@@ -97,7 +89,7 @@ class TimeSetInfoItem(NamedTuple):
     uuid: str
 
 
-TimeSetInfo = Dict[TimeStepIndex, TimeSetInfoItem]
+TimeSetInfo = dict[TimeStepIndex, TimeSetInfoItem]
 
 
 _PROFILE_ID_ATTR = "profile_id"
@@ -143,9 +135,9 @@ class BaseUQMetaData:
     property_id: str
     trend_id: str
     category: str
-    network_element_name: Optional[str]
-    position: Optional[float]
-    position_unit: Optional[str]
+    network_element_name: str | None
+    position: float | None
+    position_unit: str | None
     unit: str
 
 
@@ -187,10 +179,10 @@ class UncertaintyPropagationAnalysesMetaData:
 
         samples: int
         result_index: int
-        sample_indexes: List[List[int]]
+        sample_indexes: list[list[int]]
 
         @classmethod
-        def from_dict(cls, data: Dict[str, Any]) -> Self:
+        def from_dict(cls, data: dict[str, Any]) -> Self:
             return cls(
                 property_id=data["property_id"],
                 trend_id=data["trend_id"],
@@ -204,15 +196,15 @@ class UncertaintyPropagationAnalysesMetaData:
                 sample_indexes=data["sample_indexes"],
             )
 
-    items: Dict[UPOutputKey, UPItem]
+    items: dict[UPOutputKey, UPItem]
 
     @classmethod
     def get_metadata_from_dir(
         cls, result_directory: Path
     ) -> UncertaintyPropagationAnalysesMetaData | None:
         def map_data(
-            up_metadata: Dict,
-        ) -> Dict[UPOutputKey, UncertaintyPropagationAnalysesMetaData.UPItem]:
+            up_metadata: dict,
+        ) -> dict[UPOutputKey, UncertaintyPropagationAnalysesMetaData.UPItem]:
             return {
                 UPOutputKey.from_string(
                     key
@@ -273,11 +265,11 @@ class GlobalSensitivityAnalysisMetadata:
 
         parametric_var_id: str
         parametric_var_name: str
-        qoi_index: Optional[int]
-        qoi_data_index: Optional[int]
+        qoi_index: int | None
+        qoi_data_index: int | None
 
         @classmethod
-        def from_dict(cls, data: Dict[str, Any]) -> Self:
+        def from_dict(cls, data: dict[str, Any]) -> Self:
             return cls(
                 property_id=data["property_id"],
                 trend_id=data["trend_id"],
@@ -292,7 +284,7 @@ class GlobalSensitivityAnalysisMetadata:
                 qoi_data_index=data["qoi_data_index"],
             )
 
-    items: Dict[GSAOutputKey, GSAItem]
+    items: dict[GSAOutputKey, GSAItem]
 
     @classmethod
     def get_metadata_from_dir(
@@ -306,8 +298,8 @@ class GlobalSensitivityAnalysisMetadata:
         """
 
         def map_data(
-            gsa_metadata: Dict,
-        ) -> Dict[GSAOutputKey, GlobalSensitivityAnalysisMetadata.GSAItem]:
+            gsa_metadata: dict,
+        ) -> dict[GSAOutputKey, GlobalSensitivityAnalysisMetadata.GSAItem]:
             return {
                 GSAOutputKey.from_string(
                     key
@@ -337,7 +329,7 @@ MetadataClassType = TypeVar("MetadataClassType", bound=UQMetadataClass)
 
 def read_results_file(
     result_directory: Path,
-    metadata_class: Type[MetadataClassType],
+    metadata_class: type[MetadataClassType],
     map_data: Callable,
     meta_data_attrs: str,
 ) -> GlobalSensitivityAnalysisMetadata | UncertaintyPropagationAnalysesMetaData | None:
@@ -364,7 +356,7 @@ class HistoricDataCurveMetadata:
     image_category: str
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         return cls(
             curve_id=data["curve_id"],
             curve_name=data["curve_name"],
@@ -393,16 +385,16 @@ class HistoryMatchingMetadata:
     """
 
     #: Map of the data id and its associated metadata.
-    hm_items: Dict[HMOutputKey, HMItem]
+    hm_items: dict[HMOutputKey, HMItem]
     #: Map of observed curve id to a dict of Quantity of Interest data, populated with keys
     #: 'trend_id' and 'property_id'. This represents the setup for this HM analysis.
-    objective_functions: Dict[str, Dict[str, str]]
+    objective_functions: dict[str, dict[str, str]]
     #: Map of parametric vars to the values that represents the analysis, with all existent vars.
     #: Values are either the optimal values (deterministic) or the base values (probabilistic).
-    parametric_vars: Dict[str, float]
+    parametric_vars: dict[str, float]
     #: Metadata of the historic curves present in the results. Optional as this was introduced
     #: later (ASIM-5713).
-    historic_data_curve_infos: Optional[List[HistoricDataCurveMetadata]] = None
+    historic_data_curve_infos: list[HistoricDataCurveMetadata] | None = None
 
     @dataclasses.dataclass(frozen=True)
     class HMItem:
@@ -422,7 +414,7 @@ class HistoryMatchingMetadata:
         data_index: int
 
         @classmethod
-        def from_dict(cls, data: Dict[str, Any]) -> Self:
+        def from_dict(cls, data: dict[str, Any]) -> Self:
             """
             Parse a dict into a HM item.
 
@@ -445,8 +437,8 @@ class HistoryMatchingMetadata:
         """
 
         def map_meta_items(
-            hm_metadata: Dict,
-        ) -> Dict[HMOutputKey, HistoryMatchingMetadata.HMItem]:
+            hm_metadata: dict,
+        ) -> dict[HMOutputKey, HistoryMatchingMetadata.HMItem]:
             return {
                 HMOutputKey.from_string(key): HistoryMatchingMetadata.HMItem.from_dict(
                     data
@@ -455,8 +447,8 @@ class HistoryMatchingMetadata:
             }
 
         def map_historic_data_infos(
-            infos: List[Dict[str, Any]],
-        ) -> List[HistoricDataCurveMetadata]:
+            infos: list[dict[str, Any]],
+        ) -> list[HistoricDataCurveMetadata]:
             return [HistoricDataCurveMetadata.from_dict(info) for info in infos]
 
         with open_result_file(result_directory) as result_file:
@@ -643,7 +635,7 @@ class ALFASimResultMetadata:
         )
 
     @property
-    def trends_time_steps_boundaries(self) -> Tuple[int, int]:
+    def trends_time_steps_boundaries(self) -> tuple[int, int]:
         """
         Return a tuple with the initial and final time step boundaries for trends.
         """
@@ -655,7 +647,7 @@ class ALFASimResultMetadata:
         )
 
     @property
-    def profile_time_steps_boundaries(self) -> Tuple[int, int]:
+    def profile_time_steps_boundaries(self) -> tuple[int, int]:
         """
         Return a tuple with the initial and final time step boundaries for profiles.
         """
@@ -690,7 +682,7 @@ class _MergedMetadataWithStatistics:
 
 
 @contextmanager
-def open_result_files(result_directory: Path) -> Iterator[Dict[int, h5py.File]]:
+def open_result_files(result_directory: Path) -> Iterator[dict[int, h5py.File]]:
     """
     Return a dict with the result files.
 
@@ -765,7 +757,7 @@ def _open_result_file(filename: Path) -> h5py.File:
 
 
 def _get_number_of_base_time_steps_from_time_set_info(
-    time_set_info_source_dict: Dict,
+    time_set_info_source_dict: dict,
 ) -> int:
     from itertools import chain
 
@@ -778,11 +770,11 @@ def _get_number_of_base_time_steps_from_time_set_info(
 def read_metadata(
     result_directory: Path,
     *,
-    initial_profiles_time_step_index: Optional[int] = None,
-    final_profiles_time_step_index: Optional[int] = None,
-    initial_trends_time_step_index: Optional[int] = None,
-    final_trends_time_step_index: Optional[int] = None,
-    previous_time_set_info: Optional[Dict] = None,
+    initial_profiles_time_step_index: int | None = None,
+    final_profiles_time_step_index: int | None = None,
+    initial_trends_time_step_index: int | None = None,
+    final_trends_time_step_index: int | None = None,
+    previous_time_set_info: dict | None = None,
 ) -> ALFASimResultMetadata:
     """
     Read all meta data for the given range.
@@ -836,12 +828,12 @@ def read_metadata(
 def _read_metadata(
     result_directory: Path,
     *,
-    initial_profiles_time_step_index: Optional[int] = None,
-    final_profiles_time_step_index: Optional[int] = None,
-    initial_trends_time_step_index: Optional[int] = None,
-    final_trends_time_step_index: Optional[int] = None,
-    previous_time_set_info: Dict,
-    result_files: Dict[int, h5py.File],
+    initial_profiles_time_step_index: int | None = None,
+    final_profiles_time_step_index: int | None = None,
+    initial_trends_time_step_index: int | None = None,
+    final_trends_time_step_index: int | None = None,
+    previous_time_set_info: dict,
+    result_files: dict[int, h5py.File],
 ) -> ALFASimResultMetadata:
     """
     See `read_metadata`.
@@ -976,7 +968,7 @@ def _read_metadata(
 
 
 def read_time_set_info(
-    result_files: Dict[int, h5py.File], container_group_name: str
+    result_files: dict[int, h5py.File], container_group_name: str
 ) -> TimeSetInfo:
     """
     :return:
@@ -1059,11 +1051,11 @@ def _global_index_to_file_based_index(
 
 
 def _merge_metadata_and_read_global_statistics(
-    result_files: Dict[int, h5py.File],
-    global_profiles_metadata: Dict[int, Dict],
-    profiles_time_set_info: Dict[int, TimeSetInfoItem],
-    global_trends_metadata: Dict[int, Dict],
-    trends_time_set_info: Dict[int, TimeSetInfoItem],
+    result_files: dict[int, h5py.File],
+    global_profiles_metadata: dict[int, dict],
+    profiles_time_set_info: dict[int, TimeSetInfoItem],
+    global_trends_metadata: dict[int, dict],
+    trends_time_set_info: dict[int, TimeSetInfoItem],
     initial_profiles_time_step_index: int,
     final_profiles_time_step_index: int,
     initial_trends_time_step_index: int,
@@ -1075,10 +1067,10 @@ def _merge_metadata_and_read_global_statistics(
     skip_sentinel = object()
 
     # Setup "helpers".
-    @attr.s
+    @attr.s(auto_attribs=True)
     class Helper:
-        meta = attr.ib(default=attr.Factory(dict), init=False)  # type: Dict
-        output_type_name = attr.ib(validator=attr.validators.instance_of(str))
+        meta: dict = attr.ib(default=attr.Factory(dict), init=False)
+        output_type_name: str = attr.ib(validator=attr.validators.instance_of(str))
 
     profiles_helper = Helper(output_type_name="profile_id")
     trends_helper = Helper(output_type_name="trend_id")
@@ -1108,11 +1100,11 @@ def _merge_metadata_and_read_global_statistics(
         ),
     }
 
-    time_set_ranges: Dict[SourceTimeSetKeyType, List[Tuple[int, int]]] = {}
-    global_profiles_statistics: DefaultDict[int, Dict[str, float]] = defaultdict(
+    time_set_ranges: dict[SourceTimeSetKeyType, list[tuple[int, int]]] = {}
+    global_profiles_statistics: DefaultDict[int, dict[str, float]] = defaultdict(
         lambda: {"global_max": np.nan, "global_min": np.nan}
     )
-    trends_statistics: DefaultDict[int, Dict[str, float]] = defaultdict(
+    trends_statistics: DefaultDict[int, dict[str, float]] = defaultdict(
         lambda: {"max": np.nan, "min": np.nan}
     )
 
@@ -1167,9 +1159,9 @@ def _merge_metadata_and_read_global_statistics(
     def update_helper(
         helper: Helper,
         ts_index: int,
-        global_metadata_dict: Mapping[int, Dict],
+        global_metadata_dict: Mapping[int, dict],
         base_ts_to_time_set_keys_dict: Mapping[int, Sequence[TimeSetKeyType]],
-    ) -> Optional[object]:
+    ) -> object | None:
         """
         Updates the helper. Use/update `global_time_set_indices` from outer scope.
         Merges the index/data_id_domain_id from the various base time set indices into a
@@ -1288,8 +1280,8 @@ def _merge_metadata_and_read_global_statistics(
 
 
 def _read_global_metadata(
-    result_files: Dict[int, h5py.File],
-) -> Tuple[BaseTimeStepIndexToMetaList, BaseTimeStepIndexToMetaList]:
+    result_files: dict[int, h5py.File],
+) -> tuple[BaseTimeStepIndexToMetaList, BaseTimeStepIndexToMetaList]:
     """
     :return:
         - a dict mapping base time steps to a list of profile metadata items;
@@ -1323,10 +1315,10 @@ def _read_global_metadata(
 
 
 def _remap_profile_time_step_index(
-    profile_time_set_info: Dict[int, TimeSetInfoItem],
-    time_set_key: Tuple[int, ...],
+    profile_time_set_info: dict[int, TimeSetInfoItem],
+    time_set_key: tuple[int, ...],
     time_step_index: int,
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     """
     :return:
         - the result file key;
@@ -1367,14 +1359,14 @@ def _remap_profile_time_step_index(
 def _read_profile_arrays(
     result_directory: Path,
     result_metadata: ALFASimResultMetadata,
-    output_keys: List[OutputKeyType],
+    output_keys: list[OutputKeyType],
     time_step_index: int,
     *,
     group_name: str,
     data_attr: str,
     data_id_suffix: str = "",
     slicer: Callable[[int], Any],
-) -> Dict[OutputKeyType, Optional[np.ndarray]]:
+) -> dict[OutputKeyType, np.ndarray | None]:
     """
     This is the core implementation of `read_profiles_data`/`read_profiles_domain_data`.
     """
@@ -1410,9 +1402,9 @@ def _read_profile_arrays(
 def read_profiles_data(
     result_directory: Path,
     result_metadata: ALFASimResultMetadata,
-    output_keys: List[OutputKeyType],
+    output_keys: list[OutputKeyType],
     time_step_index: int,
-) -> Dict[OutputKeyType, Optional[np.ndarray]]:
+) -> dict[OutputKeyType, np.ndarray | None]:
     """
     :return:
         The data for the profiles listed in `output_keys` for the given
@@ -1433,9 +1425,9 @@ def read_profiles_data(
 def read_profiles_domain_data(
     result_directory: Path,
     result_metadata: ALFASimResultMetadata,
-    output_keys: List[OutputKeyType],
+    output_keys: list[OutputKeyType],
     time_step_index: int,
-) -> Dict[OutputKeyType, Optional[np.ndarray]]:
+) -> dict[OutputKeyType, np.ndarray | None]:
     """
     :return:
         The data for the profiles listed in `output_keys` for the given
@@ -1456,9 +1448,9 @@ def read_profiles_domain_data(
 def read_profiles_local_statistics(
     result_directory: Path,
     result_metadata: ALFASimResultMetadata,
-    output_keys: List[OutputKeyType],
+    output_keys: list[OutputKeyType],
     time_step_index: int,
-) -> Dict[OutputKeyType, Optional[np.ndarray]]:
+) -> dict[OutputKeyType, np.ndarray | None]:
     """
     :return:
         The statistics for the profiles listed in `output_keys` for the given
@@ -1480,10 +1472,10 @@ def read_profiles_local_statistics(
 def read_trends_data(
     result_directory: Path,
     result_metadata: ALFASimResultMetadata,
-    output_keys: Optional[List[OutputKeyType]] = None,
-    initial_trends_time_step_index: Optional[int] = None,
-    final_trends_time_step_index: Optional[int] = None,
-) -> Dict[OutputKeyType, np.ndarray]:
+    output_keys: list[OutputKeyType] | None = None,
+    initial_trends_time_step_index: int | None = None,
+    final_trends_time_step_index: int | None = None,
+) -> dict[OutputKeyType, np.ndarray]:
     """
     :param result_directory:
         The directory the provided metadata was read.
@@ -1515,12 +1507,12 @@ def read_trends_data(
 
 def _read_trends_data(
     result_metadata: ALFASimResultMetadata,
-    output_keys: Optional[List[OutputKeyType]] = None,
-    initial_trends_time_step_index: Optional[int] = None,
-    final_trends_time_step_index: Optional[int] = None,
+    output_keys: list[OutputKeyType] | None = None,
+    initial_trends_time_step_index: int | None = None,
+    final_trends_time_step_index: int | None = None,
     *,
-    result_files: Dict[int, h5py.File],
-) -> Dict[OutputKeyType, np.ndarray]:
+    result_files: dict[int, h5py.File],
+) -> dict[OutputKeyType, np.ndarray]:
     """
     See `read_trends_data`.
     """
@@ -1600,12 +1592,12 @@ def _read_trends_data(
 def read_time_sets(
     result_directory: Path,
     result_metadata: ALFASimResultMetadata,
-    time_sets_key_list: Optional[List[SourceTimeSetKeyType]] = None,
-    initial_profiles_time_step_index: Optional[int] = None,
-    final_profiles_time_step_index: Optional[int] = None,
-    initial_trends_time_step_index: Optional[int] = None,
-    final_trends_time_step_index: Optional[int] = None,
-) -> Dict[SourceTimeSetKeyType, np.ndarray]:
+    time_sets_key_list: list[SourceTimeSetKeyType] | None = None,
+    initial_profiles_time_step_index: int | None = None,
+    final_profiles_time_step_index: int | None = None,
+    initial_trends_time_step_index: int | None = None,
+    final_trends_time_step_index: int | None = None,
+) -> dict[SourceTimeSetKeyType, np.ndarray]:
     """
     :param result_directory:
         The directory the provided metadata was read.
@@ -1645,14 +1637,14 @@ def read_time_sets(
 
 def _read_time_sets(
     result_metadata: ALFASimResultMetadata,
-    time_sets_key_list: Optional[List[SourceTimeSetKeyType]] = None,
-    initial_profiles_time_step_index: Optional[int] = None,
-    final_profiles_time_step_index: Optional[int] = None,
-    initial_trends_time_step_index: Optional[int] = None,
-    final_trends_time_step_index: Optional[int] = None,
+    time_sets_key_list: list[SourceTimeSetKeyType] | None = None,
+    initial_profiles_time_step_index: int | None = None,
+    final_profiles_time_step_index: int | None = None,
+    initial_trends_time_step_index: int | None = None,
+    final_trends_time_step_index: int | None = None,
     *,
-    result_files: Dict[int, h5py.File],
-) -> Dict[SourceTimeSetKeyType, np.ndarray]:
+    result_files: dict[int, h5py.File],
+) -> dict[SourceTimeSetKeyType, np.ndarray]:
     """
     See `read_time_sets`.
     """
@@ -1714,12 +1706,12 @@ def _read_time_sets(
 
 
 def _read_time_set(
-    dsets: Dict[int, h5py.File],
-    base_ts_list: Tuple[int, ...],
-    time_set_info: Dict[int, TimeSetInfoItem],
+    dsets: dict[int, h5py.File],
+    base_ts_list: tuple[int, ...],
+    time_set_info: dict[int, TimeSetInfoItem],
     global_start: int,
     global_stop: int,
-) -> List[np.ndarray]:
+) -> list[np.ndarray]:
     """
     Read a single Time Set (used by `ReadTimeSets`).
 
@@ -1757,8 +1749,8 @@ def _read_time_set(
 
 
 def _concatenate_values(
-    data_dict: Dict[Any, List[np.ndarray]],
-) -> Dict[Any, np.ndarray]:
+    data_dict: dict[Any, list[np.ndarray]],
+) -> dict[Any, np.ndarray]:
     """
     Concatenate the values in the given dict.
     """
@@ -1773,8 +1765,8 @@ def _concatenate_values(
 
 
 def map_output_key_to_time_set_key(
-    all_metadata: Dict[int, Dict],
-) -> Dict[OutputKeyType, TimeSetKeyType]:
+    all_metadata: dict[int, dict],
+) -> dict[OutputKeyType, TimeSetKeyType]:
     """
     Operates on the complete metadata mapping "output key"s to they  respective "time set key".
 
@@ -1790,8 +1782,8 @@ def map_output_key_to_time_set_key(
 
 
 def map_base_time_set_to_time_set_keys(
-    output_key_to_time_set_key_dict: Dict[OutputKeyType, TimeSetKeyType],
-) -> Dict[int, Tuple[TimeSetKeyType, ...]]:
+    output_key_to_time_set_key_dict: dict[OutputKeyType, TimeSetKeyType],
+) -> dict[int, tuple[TimeSetKeyType, ...]]:
     """
     Maps base time steps to the "time set key"s where they are found.
 
@@ -1928,7 +1920,7 @@ def concatenate_metadata(
 
 def read_global_sensitivity_analysis_meta_data(
     result_directory: Path,
-) -> Optional[GlobalSensitivityAnalysisMetadata]:
+) -> GlobalSensitivityAnalysisMetadata | None:
     """
     Read the global sensitivity analysis metadata persisted in a result file.
     """
@@ -1940,7 +1932,7 @@ def read_global_sensitivity_analysis_meta_data(
 
 def read_uncertainty_propagation_analyses_meta_data(
     result_directory: Path,
-) -> Optional[UncertaintyPropagationAnalysesMetaData]:
+) -> UncertaintyPropagationAnalysesMetaData | None:
     """
     Read the uncertainty propagation analyses metadata persisted in a result file.
     """
@@ -1956,7 +1948,7 @@ class UPResult:
     Holder for each uncertainty propagation result.
     """
 
-    realization_output: List[np.ndarray] = attr.ib(default=attr.Factory(List))
+    realization_output: list[np.ndarray] = attr.ib(default=attr.Factory(list))
     std_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
     mean_result: np.ndarray = attr.ib(default=attr.Factory(lambda: np.array([])))
 
@@ -2026,7 +2018,7 @@ def read_uncertainty_propagation_results(
         return result
 
 
-def read_uq_time_set(result_directory: Path, group_name: str) -> Optional[np.ndarray]:
+def read_uq_time_set(result_directory: Path, group_name: str) -> np.ndarray | None:
     """
     Get the time set for uq-based analysis results (Global Sensitivity Analysis or Uncertainty Propagation).
 
@@ -2097,8 +2089,8 @@ def read_history_matching_result(
     result_directory: Path,
     metadata: HistoryMatchingMetadata,
     hm_type: Literal["HM-deterministic", "HM-probabilistic"],
-    hm_result_key: Optional[HMOutputKey] = None,
-) -> Dict[HMOutputKey, Union[np.ndarray, float]]:
+    hm_result_key: HMOutputKey | None = None,
+) -> dict[HMOutputKey, np.ndarray | float]:
     """
     Read the results of a History Matching analysis.
 
@@ -2152,7 +2144,7 @@ def read_history_matching_result(
 def read_history_matching_historic_data_curves(
     result_directory: Path,
     metadata: HistoryMatchingMetadata,
-) -> Dict[str, np.ndarray]:
+) -> dict[str, np.ndarray]:
     """
     Read the historic/observed curves data present in a History Matching result file.
 
@@ -2185,7 +2177,7 @@ def read_history_matching_historic_data_curves(
 @contextmanager
 def open_result_file(
     result_directory: Path, result_filename: str = "result"
-) -> Iterator[Optional[h5py.File]]:
+) -> Iterator[h5py.File | None]:
     """
     :param result_directory:
         The directory to lookup for the result file.

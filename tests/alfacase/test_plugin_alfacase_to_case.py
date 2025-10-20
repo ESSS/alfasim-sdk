@@ -1,8 +1,9 @@
 import os
 import textwrap
+from collections.abc import Callable
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, List
+from typing import Any
 from unittest.mock import ANY
 
 import pytest
@@ -235,7 +236,7 @@ def test_load_plugin_empty_top_containers(datadir: Path, abx_plugin: None) -> No
 
 
 @pytest.fixture(name="prepare_foobar_plugin")
-def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[List[str]], None]:
+def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[list[str]], None]:
     """
     Create a fake plugin and "install"s it.
 
@@ -254,7 +255,7 @@ def prepare_foobar_plugin_(monkeypatch, datadir) -> Callable[[List[str]], None]:
     ```
     """
 
-    def prepare_foobar_plugin_impl(data_model_fields: List[str]) -> None:
+    def prepare_foobar_plugin_impl(data_model_fields: list[str]) -> None:
         plugin_root = datadir / "test_plugins"
         monkeypatch.setenv("ALFASIM_PLUGINS_DIR", str(plugin_root))
         plugin_file = plugin_root / "foobar-1.0.0/artifacts/foobar.py"
@@ -725,7 +726,7 @@ def test_load_string(datadir, prepare_foobar_plugin):
 
 class TestLoadTable:
     def test_quantity(
-        self, datadir: Path, prepare_foobar_plugin: Callable[[List[str]], None]
+        self, datadir: Path, prepare_foobar_plugin: Callable[[list[str]], None]
     ) -> None:
         prepare_foobar_plugin(
             [
@@ -866,7 +867,7 @@ class TestLoadTable:
             convert_alfacase_to_description(alfacase)
 
     def test_references(
-        self, datadir: Path, prepare_foobar_plugin: Callable[[List[str]], None]
+        self, datadir: Path, prepare_foobar_plugin: Callable[[list[str]], None]
     ) -> None:
         # Setup.
         prepare_foobar_plugin(

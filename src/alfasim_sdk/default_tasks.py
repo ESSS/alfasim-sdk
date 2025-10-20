@@ -3,7 +3,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 from zipfile import ZipFile
 
 from colorama import Fore, Style
@@ -46,7 +46,7 @@ def sdk_task(*args: object, **kwargs: object) -> Any:
 
 def print_message(
     message: str,
-    color: Union[str, None] = None,
+    color: str | None = None,
     bright: bool = True,
     endline: str = "\n",
 ) -> None:
