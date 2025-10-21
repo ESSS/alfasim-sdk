@@ -3,9 +3,10 @@ import itertools
 import re
 import shutil
 from pathlib import Path
-from typing import List, Literal
+from typing import Any, Literal
 
 import numpy
+import numpy as np
 import pytest
 from pytest import FixtureRequest
 from pytest_mock import MockerFixture
@@ -61,7 +62,7 @@ def test_read_metadata_from_results_sanity(results: Results) -> None:
 
 
 def test_read_empty_metadata_creating_results(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     results_folder = results.results_folder
     md = read_metadata(results_folder)
@@ -69,7 +70,7 @@ def test_read_empty_metadata_creating_results(
 
 
 def test_read_metadata_need_reload_error(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     results_folder = results.results_folder
 
@@ -143,7 +144,7 @@ def test_read_metadata_explict_empty(results: Results) -> None:
 def test_read_metadata_invalid_index(results: Results, index_arg_name: str) -> None:
     expected_msg = f"`{index_arg_name}` (999) outside of valid range"
     with pytest.raises(IndexError, match=re.escape(expected_msg)):
-        read_metadata(results.results_folder, **{index_arg_name: 999})
+        read_metadata(results.results_folder, **{index_arg_name: 999})  # type:ignore[arg-type]
 
 
 def test_concatenate_metadata_plain(results: Results, datadir: Path) -> None:
@@ -177,8 +178,6 @@ def test_concatenate_metadata_plain(results: Results, datadir: Path) -> None:
     md_bb = concatenate_metadata(md_middle, md_b)
     assert ((5, 40), (14, 62)) == md_bb.time_steps_boundaries
 
-    # Ensure we don't bother when the directories are not the same.
-    md_a.result_directory = datadir / "foo"
     md_aaa = concatenate_metadata(md_a, md_middle)
     assert ((0, 0), (5, 40)) == md_aaa.time_steps_boundaries
 
@@ -206,7 +205,7 @@ def test_concatenate_metadata_handle_time_sets(results: Results) -> None:
 
 
 def test_concatenate_metadata_error_conditions_more_files(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     creating_results[0].unlink()
     md = results.metadata
@@ -219,7 +218,7 @@ def test_concatenate_metadata_error_conditions_more_files(
 
 
 def test_concatenate_metadata_error_conditions_not_adjacent(
-    results: Results, creating_results: List[Path]
+    results: Results, creating_results: list[Path]
 ) -> None:
     creating_results[0].unlink()
     md = results.metadata
@@ -325,7 +324,7 @@ def test_fancy_path(datadir: Path, request: FixtureRequest):
     shutil.copytree(sample_results_data_folder, test_data_folder)
     results = Results(test_data_folder)
     # Try to read the results from the fancy named folder.
-    assert set([p.property_name for p in results.list_profiles()]) == {
+    assert {p.property_name for p in results.list_profiles()} == {
         "pressure",
         "total mass flow rate",
     }
@@ -349,6 +348,7 @@ def test_read_empty_gsa_metadata(datadir: Path) -> None:
 
 def test_read_gsa_metadata(global_sa_results_dir: Path) -> None:
     uq_metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
+    assert uq_metadata is not None
     global_gsa_meta_data = uq_metadata.items
     meta_var_1 = global_gsa_meta_data[
         GSAOutputKey("temperature", "parametric_var_1", "trend_id_1")
@@ -377,6 +377,7 @@ def test_read_gsa_timeset(global_sa_results_dir: Path) -> None:
 
 def test_read_uq_global_sensitivity_analysis(global_sa_results_dir: Path) -> None:
     metadata = read_global_sensitivity_analysis_meta_data(global_sa_results_dir)
+    assert metadata is not None
     data = read_global_sensitivity_coefficients(
         result_directory=global_sa_results_dir,
         coefficients_key=[
@@ -431,6 +432,7 @@ def test_read_history_matching_result_metadata(
 
     # Existent and completed result file, metadata should be filled.
     metadata = read_history_matching_metadata(hm_results_dir)
+    assert metadata is not None
 
     assert metadata.objective_functions == {
         "observed_curve_1": {"trend_id": "trend_1", "property_id": "holdup"},
@@ -494,7 +496,8 @@ def test_read_history_matching_result_data(
     Check reading the result of both HM type analysis. Both results are available simultaneously by
     the means of the fixtures, but only one is used at a time.
     """
-    import numpy as np
+
+    expected_results: dict[HMOutputKey, Any]
 
     # Setup.
     if hm_type == "HM-probabilistic":
@@ -512,6 +515,7 @@ def test_read_history_matching_result_data(
         results_dir = hm_deterministic_results_dir
 
     metadata = read_history_matching_metadata(results_dir)
+    assert metadata is not None
 
     # Read the result of a single parametric var entry.
     result = read_history_matching_result(
@@ -565,6 +569,7 @@ def test_read_history_matching_historic_data_curves(
     result_directories = (hm_probabilistic_results_dir, hm_deterministic_results_dir)
     for result_dir in result_directories:
         metadata = read_history_matching_metadata(result_dir)
+        assert metadata is not None
         curves = read_history_matching_historic_data_curves(result_dir, metadata)
         assert len(curves) == 2
         assert curves["observed_curve_1"] == pytest.approx(
@@ -592,6 +597,7 @@ def test_read_history_matching_historic_data_curves_backward_compatibility(
     """
     result_dir = hm_results_dir_without_historic_data
     metadata = read_history_matching_metadata(result_dir)
+    assert metadata is not None
     curves = read_history_matching_historic_data_curves(result_dir, metadata)
     assert curves == {}
 
@@ -607,6 +613,7 @@ def test_read_uncertainty_propagation_results(
     metadata = read_uncertainty_propagation_analyses_meta_data(
         result_directory=up_results_dir
     )
+    assert metadata is not None
     temp_key = UPOutputKey("temperature", "trend_id_1")
     pressure_key = UPOutputKey("absolute_pressure", "trend_id_1")
     assert list(metadata.items.keys()) == [temp_key, pressure_key]

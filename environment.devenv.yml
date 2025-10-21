@@ -18,3 +18,6 @@ environment:
   PYTHONPATH:
     - {{ os.path.join(root, 'src') }}
     - {{ os.path.join(root, 'tests', 'common_testing') }}
+
+  MYPYPATH:
+    - {{ os.path.join(root, 'src') }}

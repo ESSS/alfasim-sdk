@@ -1,7 +1,7 @@
 import math
 from enum import Enum
 from functools import partial
-from typing import Any, Dict, List, Union
+from typing import Any, Union, cast
 
 import attr
 import numpy as np
@@ -13,7 +13,7 @@ from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
 
-ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, List, List[Enum]]
+ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, list, list[Enum]]
 
 NON_FININTE_VALUES_TO_STRING = [
     (math.isnan, ".nan"),
@@ -22,7 +22,7 @@ NON_FININTE_VALUES_TO_STRING = [
 ]
 
 
-def format_list(values: List[Any], *, enable_flow_style: bool = False):
+def format_list(values: list[Any], *, enable_flow_style: bool = False):
     """
     This method marks specific nodes for dumping in flow mode,
     and everything "below" will then be dumped with flow-mode as well.
@@ -44,7 +44,7 @@ def format_list(values: List[Any], *, enable_flow_style: bool = False):
 
 def _convert_value_to_valid_alfacase_format(
     value: ATTRIBUTES, enable_flow_style_on_numpy: bool
-) -> Union[str, Dict[str, str], List[str], List[List[str]]]:
+) -> str | dict[str, Any] | list[str] | list[list[str]] | list[dict[str, Any]]:
     """
     Returns an yaml convertible representation from the given equipment_attribute
 
@@ -81,7 +81,8 @@ def _convert_value_to_valid_alfacase_format(
     ):
         return [
             format_list(
-                values=[str(np_value) for np_value in np_array],
+                # Item "Enum" of "Any | Enum" has no attribute "__iter__" (not iterable)  [union-attr]
+                values=[str(np_value) for np_value in np_array],  # type:ignore[union-attr]
                 enable_flow_style=enable_flow_style_on_numpy,
             )
             for np_array in value
@@ -91,6 +92,7 @@ def _convert_value_to_valid_alfacase_format(
         return [
             {"values": [str(i) for i in item.values], "unit": item.unit}
             for item in value
+            if isinstance(item, Array)
         ]
 
     if isinstance(value, list):
@@ -111,11 +113,11 @@ def _convert_value_to_valid_alfacase_format(
 
 
 def convert_dict_to_valid_alfacase_format(
-    case_description_dict: Dict[str, ATTRIBUTES],
+    case_description_dict: dict[str, ATTRIBUTES],
     *,
     enable_flow_style_on_numpy: bool,
     remove_redundant_input_type_data: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Convert all values of the dictionary to string.
 
@@ -127,8 +129,9 @@ def convert_dict_to_valid_alfacase_format(
     :param remove_redundant_input_type_data:
         For transient entries remove input type selector, and the unused constant or curve entries.
     """
-    transient_fields: Dict[str, MultiInputType] = {}
-    converted_dict = {}
+    transient_fields: dict[str, MultiInputType] = {}
+    converted_dict: dict[str, Any] = {}
+    converted_value: Any
     for key, value in case_description_dict.items():
         is_empty_dict = isinstance(value, dict) and not value
         ignore = key in IGNORED_PROPERTIES
@@ -142,13 +145,15 @@ def convert_dict_to_valid_alfacase_format(
             assert key.endswith(constants.MULTI_INPUT_TYPE_SUFFIX)
             transient_fields[key] = value
 
-        if is_attrs(value):
+        # Argument 1 to "is_attrs" has incompatible type "Scalar | Array[Any] | Curve | Enum | ndarray[Any, Any] | list[Any] | list[Enum]"; expected "type"  [arg-type]
+        if is_attrs(value):  # type:ignore[arg-type]
             to_dict = partial(attr.asdict, recurse=False)
 
             if isinstance(value, list):
                 converted_value = [
                     convert_dict_to_valid_alfacase_format(
-                        to_dict(i),
+                        # Argument 1 to "asdict" has incompatible type "Any | Enum"; expected "AttrsInstance"  [arg-type]
+                        to_dict(i),  # type:ignore[arg-type]
                         enable_flow_style_on_numpy=enable_flow_style_on_numpy,
                         remove_redundant_input_type_data=remove_redundant_input_type_data,
                     )
@@ -156,7 +161,8 @@ def convert_dict_to_valid_alfacase_format(
                 ]
             else:
                 converted_value = convert_dict_to_valid_alfacase_format(
-                    to_dict(value),
+                    # Argument 1 to "asdict" has incompatible type "Scalar | Array[Any] | Curve | Enum | ndarray[Any, Any]"; expected "AttrsInstance"  [arg-type]
+                    to_dict(value),  # type:ignore[arg-type]
                     enable_flow_style_on_numpy=enable_flow_style_on_numpy,
                     remove_redundant_input_type_data=remove_redundant_input_type_data,
                 )
@@ -176,7 +182,7 @@ def convert_dict_to_valid_alfacase_format(
         if isinstance(value, list) and all(isinstance(item, dict) for item in value):
             converted_dict[key] = [
                 convert_dict_to_valid_alfacase_format(
-                    item,
+                    cast(dict, item),
                     enable_flow_style_on_numpy=enable_flow_style_on_numpy,
                     remove_redundant_input_type_data=remove_redundant_input_type_data,
                 )

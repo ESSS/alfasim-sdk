@@ -3,6 +3,7 @@ colorama
 coverage
 invoke
 more-itertools
+mypy
 pandas
 pytest
 pytest-cov

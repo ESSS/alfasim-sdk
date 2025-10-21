@@ -107,7 +107,7 @@ def test_attribute_order():
         quantity = Quantity(value=1, unit="m", caption="caption")
 
     expected_order = ["boolean", "data_reference", "enum", "string", "quantity"]
-    assert [attr.name for attr in Model.__attrs_attrs__] == expected_order
+    assert [attr.name for attr in Model.__attrs_attrs__] == expected_order  # type:ignore[attr-defined]
 
 
 def test_check_model_in_container_model():

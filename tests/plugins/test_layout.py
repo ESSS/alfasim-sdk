@@ -21,13 +21,13 @@ def test_group():
     import attr
 
     # Checking the Model has all attributes
-    assert [x.name for x in attr.fields(ValidClass)] == [
+    assert [x.name for x in attr.fields(ValidClass)] == [  # type:ignore[arg-type]
         "string_from_main",
         "GroupMain",
     ]
 
     # Checking attributes from the GroupMain
-    group_class = attr.fields(ValidClass)[1].default
+    group_class = attr.fields(ValidClass)[1].default  # type:ignore[arg-type]
     assert [x.name for x in attr.fields(group_class)] == ["string_from_group"]
 
     # A Group inside a tab is valid
@@ -49,7 +49,7 @@ def test_group():
             class Tab2:
                 string_from_second_tab = String(caption="second", value="2")
 
-    tabs_main = attr.fields(ValidClassTabGroup)[0].default
+    tabs_main = attr.fields(ValidClassTabGroup)[0].default  # type:ignore[arg-type]
     tab_1 = attr.fields(tabs_main)[0].default
     tab_2 = attr.fields(tabs_main)[1].default
     string_from_first_tab = attr.fields(tab_1)[0].default
@@ -102,12 +102,12 @@ def test_tabs():
     import attr
 
     # Checking the Model has all attributes
-    assert len(attr.fields(ValidClass)) == 2
-    assert attr.fields(ValidClass)[0].name == "string_from_main"
-    assert attr.fields(ValidClass)[1].name == "TabsMain"
+    assert len(attr.fields(ValidClass)) == 2  # type:ignore[arg-type]
+    assert attr.fields(ValidClass)[0].name == "string_from_main"  # type:ignore[arg-type]
+    assert attr.fields(ValidClass)[1].name == "TabsMain"  # type:ignore[arg-type]
 
     # Checking attributes from the @tabs
-    tabs_main_class = attr.fields(ValidClass)[1].default
+    tabs_main_class = attr.fields(ValidClass)[1].default  # type:ignore[arg-type]
     assert len(attr.fields(tabs_main_class)) == 2
     assert attr.fields(tabs_main_class)[0].name == "Tab1"
     assert attr.fields(tabs_main_class)[1].name == "Tab2"

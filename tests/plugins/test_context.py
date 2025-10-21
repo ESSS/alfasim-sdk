@@ -27,10 +27,10 @@ def test_plugin_info():
     error_msg = "'name' must be 'str' (got 1 that is a 'int')"
     with pytest.raises(TypeError, match=re.escape(error_msg)):
         PluginInfo(
-            name=1,
+            name=1,  # type:ignore[arg-type]
             caption="Caption",
-            enabled="True",
-            models="Anything",
+            enabled="True",  # type:ignore[arg-type]
+            models="Anything",  # type:ignore[arg-type]
             version="1.0.0",
         )
 
@@ -39,8 +39,8 @@ def test_plugin_info():
         PluginInfo(
             name="Acme",
             caption="Caption",
-            enabled="True",
-            models="Anything",
+            enabled="True",  # type:ignore[arg-type]
+            models="Anything",  # type:ignore[arg-type]
             version="2.0.0",
         )
 
@@ -52,7 +52,7 @@ def test_plugin_info():
             name="Acme",
             caption="Caption",
             enabled=True,
-            models="Anything",
+            models="Anything",  # type:ignore[arg-type]
             version="1.1.0",
         )
 
@@ -62,14 +62,18 @@ def test_plugin_info():
             name="Acme",
             caption="Caption",
             enabled=True,
-            models=[1, 2, 3],
+            models=[1, 2, 3],  # type:ignore[list-item]
             version="1.0.0",
         )
 
     error_msg = "'version' must be 'str' (got 2 that is a 'int')"
     with pytest.raises(TypeError, match=re.escape(error_msg)):
         PluginInfo(
-            name="Acme", caption="Caption", enabled=True, models=[1, 2, 3], version=2
+            name="Acme",
+            caption="Caption",
+            enabled=True,
+            models=[1, 2, 3],  # type:ignore[list-item]
+            version=2,  # type:ignore[arg-type]
         )
 
     PluginInfo(
@@ -113,31 +117,34 @@ def test_pipeline_segments():
 
     with pytest.raises(TypeError, match=re.escape(diameter_msg)):
         PipelineSegmentInfo(
-            inner_diameter=1, start_position=1, is_custom=None, roughness=1
+            inner_diameter=1,  # type:ignore[arg-type]
+            start_position=1,  # type:ignore[arg-type]
+            is_custom=None,  # type:ignore[arg-type]
+            roughness=1,  # type:ignore[arg-type]
         )
 
     with pytest.raises(TypeError, match=re.escape(position_msg)):
         PipelineSegmentInfo(
             inner_diameter=Scalar("diameter", 0.15, "m"),
-            start_position=1,
-            is_custom=None,
-            roughness=1,
+            start_position=1,  # type:ignore[arg-type]
+            is_custom=None,  # type:ignore[arg-type]
+            roughness=1,  # type:ignore[arg-type]
         )
 
     with pytest.raises(TypeError, match=re.escape(is_custom_msg)):
         PipelineSegmentInfo(
             inner_diameter=Scalar("diameter", 0.15, "m"),
             start_position=Scalar(0.0, "m"),
-            is_custom=None,
-            roughness=1,
+            is_custom=None,  # type:ignore[arg-type]
+            roughness=1,  # type:ignore[arg-type]
         )
 
     with pytest.raises(TypeError, match=re.escape(roughness_msg)):
         PipelineSegmentInfo(
             inner_diameter=Scalar("diameter", 0.15, "m"),
             start_position=Scalar(0.0, "m"),
-            is_custom=True,
-            roughness=1,
+            is_custom=True,  # type:ignore[arg-type]
+            roughness=1,  # type:ignore[arg-type]
         )
 
 

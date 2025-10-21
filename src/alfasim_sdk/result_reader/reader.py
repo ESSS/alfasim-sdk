@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import sqlite3
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import closing
 from pathlib import Path
-from typing import Any, Callable, Dict, Sequence, Tuple, Union
+from typing import Any
 
 import attr
 import numpy as np
@@ -19,6 +20,8 @@ from alfasim_sdk.result_reader.aggregator import (
     HistoricDataCurveMetadata,
     HistoryMatchingMetadata,
     HMOutputKey,
+    ProfileMetaItem,
+    TrendMetaItem,
     UncertaintyPropagationAnalysesMetaData,
     UPOutputKey,
     UPResult,
@@ -88,10 +91,10 @@ class Results:
     using network element names instead internal alfasim ids.
     """
 
-    def __init__(self, alfacase_data_folder: Path):
+    def __init__(self, alfacase_data_folder: Path) -> None:
         self._data_folder = alfacase_data_folder
         self._position_margin = 0.01
-        self._metadata: ALFASimResultMetadata = None
+        self._metadata: ALFASimResultMetadata | None = None
 
     @property
     def data_folder(self) -> Path:
@@ -167,9 +170,17 @@ class Results:
             self.results_folder, metadata, [profile_key], index
         )
         domain = domains[profile_key]
+        if domain is None:
+            raise RuntimeError(
+                f"profile_key {profile_key} at index {index} has no domain"
+            )
 
         images = read_profiles_data(self.results_folder, metadata, [profile_key], index)
         image = images[profile_key]
+        if image is None:
+            raise RuntimeError(
+                f"profile_key {profile_key} at index {index} has no image"
+            )
 
         return Curve(
             image=Array(
@@ -186,7 +197,7 @@ class Results:
         self,
         property_name: str,
         element_name: str,
-        position: Union[Scalar, Tuple[float, str]],
+        position: Scalar | tuple[float, str],
     ) -> Curve:
         """
         Return a positional trend.
@@ -203,7 +214,10 @@ class Results:
                 and (trend_metadata["network_element_name"] == element_name)
                 and ("position" in trend_metadata)
             ):
-                md_pos: float = trend_metadata["position"]
+                md_pos = trend_metadata["position"]
+                assert md_pos is not None, (
+                    f"Trend position not found: {trend_metadata!r}"
+                )
                 if abs(position_m - md_pos) < self._position_margin:
                     return self._read_trend(trend_key)
 
@@ -254,11 +268,24 @@ class Results:
         List the collected positional trends.
         """
         metadata = self.metadata
+
+        def get_network_element_name(m: TrendMetaItem) -> str:
+            value = m["network_element_name"]
+            if value is None:
+                raise RuntimeError(f"Metadata {m!r} has no network_element_name")
+            return value
+
+        def get_position(m: TrendMetaItem) -> float:
+            value = m["position"]
+            if value is None:
+                raise RuntimeError(f"Metadata {m!r} is not a positional trend")
+            return value
+
         return [
             PositionalTrendMetadata(
                 trend_metadata["property_id"],
-                trend_metadata["network_element_name"],
-                Scalar(trend_metadata["position"], "m"),
+                get_network_element_name(trend_metadata),
+                Scalar(get_position(trend_metadata), "m"),
             )
             for trend_metadata in metadata.trends.values()
             if "position" in trend_metadata
@@ -317,7 +344,7 @@ class Results:
         """
         metadata = self.metadata
 
-        def get_profile_metadata(meta: Dict) -> ProfileMetadata:
+        def get_profile_metadata(meta: ProfileMetaItem) -> ProfileMetadata:
             # This is not a simple string formatting because we need to
             # calculate the time set size.
             time_set_info = metadata.time_set_info["profiles"]
@@ -374,10 +401,12 @@ class GlobalSensitivityAnalysisResults:
         if metadata is None:
             return None
 
+        timeset = read_uq_time_set(result_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME)
+        assert timeset is not None, (
+            f"metadata {metadata!r} exists, so time-set must exist too"
+        )
         return cls(
-            timeset=read_uq_time_set(
-                result_dir, GLOBAL_SENSITIVITY_ANALYSIS_GROUP_NAME
-            ),
+            timeset=timeset,
             coefficients=read_global_sensitivity_coefficients(result_dir, metadata),
             metadata=metadata,
         )
@@ -393,6 +422,7 @@ class GlobalSensitivityAnalysisResults:
         meta = self.metadata.items[output_key]
         coefficients = self.coefficients[output_key]
         image = Array(meta.category, values=coefficients, unit=meta.unit)
+        assert self.timeset is not None, "get_sensitivity_curve: no timeset"
         domain = Array(self.timeset, "s")
         return Curve(image=image, domain=domain)
 
@@ -401,13 +431,15 @@ class GlobalSensitivityAnalysisResults:
             return False
 
         return (
-            np.array_equal(self.timeset, other.timeset)
+            optional_array_equal(self.timeset, other.timeset)
             and _all_dict_close(self.coefficients, other.coefficients)
             and self.metadata == other.metadata
         )
 
 
-def _all_dict_close(a: dict[Any, np.ndarray], b: dict[Any, np.ndarray]) -> bool:
+def _all_dict_close(
+    a: Mapping[Any, np.ndarray | float], b: Mapping[Any, np.ndarray | float]
+) -> bool:
     if a.keys() != b.keys():
         return False
     return all(np.array_equal(a[key], b[key]) for key in a)
@@ -423,7 +455,7 @@ class _BaseHistoryMatchingResults:
 
 @define(frozen=True)
 class HistoryMatchingDeterministicResults(_BaseHistoryMatchingResults):
-    deterministic_values: dict[HMOutputKey, float] = attr.field(
+    deterministic_values: dict[HMOutputKey, np.ndarray | float] = attr.field(
         validator=_non_empty_dict_validator(values_type=float)
     )
 
@@ -444,7 +476,7 @@ class HistoryMatchingDeterministicResults(_BaseHistoryMatchingResults):
 
 @define(frozen=True, eq=False)
 class HistoryMatchingProbabilisticResults(_BaseHistoryMatchingResults):
-    probabilistic_distributions: dict[HMOutputKey, np.ndarray] = attr.field(
+    probabilistic_distributions: dict[HMOutputKey, np.ndarray | float] = attr.field(
         validator=_non_empty_dict_validator(values_type=np.ndarray)
     )
 
@@ -508,8 +540,12 @@ class UncertaintyPropagationResults:
         if metadata is None:
             return None
 
+        timeset = read_uq_time_set(result_dir, UNCERTAINTY_PROPAGATION_GROUP_NAME)
+        assert timeset is not None, (
+            f"metadata {metadata!r} exists, so time-set must exist too"
+        )
         return cls(
-            timeset=read_uq_time_set(result_dir, UNCERTAINTY_PROPAGATION_GROUP_NAME),
+            timeset=timeset,
             results=read_uncertainty_propagation_results(result_dir, metadata),
             metadata=metadata,
         )
@@ -519,7 +555,13 @@ class UncertaintyPropagationResults:
             return False
 
         return (
-            np.array_equal(self.timeset, other.timeset)
+            optional_array_equal(self.timeset, other.timeset)
             and self.results == other.results
             and self.metadata == other.metadata
         )
+
+
+def optional_array_equal(a: np.ndarray | None, b: np.ndarray | None) -> bool:
+    return (a is not None and b is not None and np.array_equal(a, b)) or (
+        a is None and b is None
+    )

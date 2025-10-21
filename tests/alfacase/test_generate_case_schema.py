@@ -1,6 +1,5 @@
 from pathlib import Path
 from textwrap import dedent
-from typing import Dict, List, Optional, Union
 
 import attr
 import pytest
@@ -26,10 +25,10 @@ class TestGenerateStrictYaml:
     def test_list_schema(self):
         @attr.s
         class Foo:
-            float_list: List[float] = attr.ib()
-            int_list: List[int] = attr.ib()
-            bool_list: List[bool] = attr.ib()
-            str_list: List[str] = attr.ib()
+            float_list: list[float] = attr.ib()
+            int_list: list[int] = attr.ib()
+            bool_list: list[bool] = attr.ib()
+            str_list: list[str] = attr.ib()
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -77,7 +76,7 @@ class TestGenerateStrictYaml:
         @attr.s
         class Foo:
             array_1: Array = attr.ib()
-            array_2: Optional[Array] = attr.ib(default=None)
+            array_2: Array | None = attr.ib(default=None)
             array_3: Array = attr.ib(default=Array([1], "K"))
 
         schema = generate_alfacase_schema(Foo)
@@ -118,9 +117,9 @@ class TestGenerateStrictYaml:
     def test_scalar(self):
         @attr.s
         class Foo:
-            scalar_1 = attrib_scalar(category="length")
-            scalar_2 = attrib_scalar(default=None, category="length")
-            scalar_3 = attrib_scalar(default=Scalar(1, "K"))
+            scalar_1: Scalar = attrib_scalar(category="length")
+            scalar_2: Scalar = attrib_scalar(default=None, category="length")
+            scalar_3: Scalar = attrib_scalar(default=Scalar(1, "K"))
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -154,11 +153,11 @@ class TestGenerateStrictYaml:
 
         @attr.s
         class Foo:
-            x_1: Union[X1, X2] = attr.ib()
-            x_2: Union[X1, X2] = attr.ib(default=X1(bool_1=True))
-            x_3: Union[str, Path] = attr.ib(default="SomePath")
+            x_1: X1 | X2 = attr.ib()
+            x_2: X1 | X2 = attr.ib(default=X1(bool_1=True))
+            x_3: str | Path = attr.ib(default="SomePath")
             # Optional[str] is equivalent to Union[str, None] and in this case we want only str
-            x_4: Optional[str] = attr.ib(default="SomePath")
+            x_4: str | None = attr.ib(default="SomePath")
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -189,9 +188,9 @@ class TestGenerateStrictYaml:
     def test_dict_schema(self):
         @attr.s
         class Foo:
-            x_1: Dict[str, float] = attr.ib()
-            x_2: Dict[str, Array] = attr.ib()
-            x_3: Optional[Dict[str, Scalar]] = attr.ib(default=None)
+            x_1: dict[str, float] = attr.ib()
+            x_2: dict[str, Array] = attr.ib()
+            x_3: dict[str, Scalar] | None = attr.ib(default=None)
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -233,8 +232,8 @@ class TestGenerateStrictYaml:
 
         @attr.s
         class Foo:
-            x_1 = attrib_instance(X1)
-            x_2 = attrib_instance_list(X1)
+            x_1: X1 = attrib_instance(X1)
+            x_2: list[X1] = attrib_instance_list(X1)
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -259,9 +258,9 @@ class TestGenerateStrictYaml:
 
         @attr.s
         class Foo:
-            x_1: List[Bar] = attr.ib()
-            x_2 = attrib_enum(type_=Bar)
-            x_3 = attrib_enum(default=Bar.b)
+            x_1: list[Bar] = attr.ib()
+            x_2: Bar = attrib_enum(type_=Bar)
+            x_3: Bar = attrib_enum(default=Bar.b)
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -281,7 +280,7 @@ class TestGenerateStrictYaml:
     def test_optional_type_hint(self):
         @attr.s
         class Foo:
-            x_1: Optional[str] = attr.ib(default=None)
+            x_1: str | None = attr.ib(default=None)
 
         schema = generate_alfacase_schema(Foo)
         expected_schema = dedent(
@@ -296,12 +295,12 @@ class TestGenerateStrictYaml:
         assert schema == expected_schema
 
         @attr.s
-        class Foo:
-            x_1: Optional[str] = attr.ib()
+        class Foo:  # type:ignore[no-redef]
+            x_1: str | None = attr.ib()
 
         @attr.s
         class Bar:
-            x_1: Union[str, None] = attr.ib()
+            x_1: str | None = attr.ib()
 
         import re
 
@@ -504,9 +503,9 @@ def test_obtain_referred_type():
 
     @attr.s
     class A:
-        x: List[str] = attr.ib()
-        y: List[B] = attr.ib()
-        z: Union[str, int] = attr.ib()
+        x: list[str] = attr.ib()
+        y: list[B] = attr.ib()
+        z: str | int = attr.ib()
         w: str = attr.ib()
 
     assert _obtain_referred_type(attr.fields_dict(A)["x"].type) == [str]

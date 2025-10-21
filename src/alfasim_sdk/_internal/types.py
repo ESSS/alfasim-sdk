@@ -1,9 +1,7 @@
-import numbers
-from typing import Callable, List, Optional, Sequence, Union
+from collections.abc import Callable, Sequence
 
 import attr
-from attr import attrib
-from attr._make import Attribute
+from attr import Attribute, attrib
 from attr.validators import instance_of, is_callable, optional
 
 from alfasim_sdk._internal.validators import non_empty_str, valid_unit
@@ -193,10 +191,10 @@ class BaseField:
 
     caption: str = attrib(validator=non_empty_str)
     tooltip: str = attrib(default="", validator=instance_of(str))
-    enable_expr: Optional[Callable] = attrib(
+    enable_expr: Callable | None = attrib(
         default=None, validator=optional(is_callable())
     )
-    visible_expr: Optional[Callable] = attrib(
+    visible_expr: Callable | None = attrib(
         default=None, validator=optional(is_callable())
     )
 
@@ -301,12 +299,12 @@ class Enum(BaseField):
 
     """
 
-    values: List[str] = attrib()
-    initial: Optional[str] = attrib(validator=optional(instance_of(str)), default=None)
+    values: list[str] = attrib()
+    initial: str | None = attrib(validator=optional(instance_of(str)), default=None)
 
     @values.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: List[str]
+        self, attr: Attribute, values: list[str]
     ) -> None:
         if not isinstance(values, list):
             raise TypeError(
@@ -327,12 +325,10 @@ class Enum(BaseField):
                 )
 
 
-@attr.s(kw_only=True, frozen=True)
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
 class BaseReference(BaseField):
     ref_type: type = attrib()
-    container_type: Optional[str] = attrib(
-        default=None, validator=optional(non_empty_str)
-    )
+    container_type: str | None = attrib(default=None, validator=optional(non_empty_str))
 
     def __attrs_post_init__(self):
         if issubclass(self.ref_type, ALFAsimType):
@@ -358,7 +354,8 @@ class BaseReference(BaseField):
                     f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model'"
                 )
 
-            if value._alfasim_metadata["model"] is not None:
+            # Checked above.
+            if value._alfasim_metadata["model"] is not None:  # type:ignore[attr-defined]
                 raise TypeError(
                     f"{attr.name} must be an ALFAsim type or a class decorated with 'data_model', got a class decorated with 'container_model'"
                 )
@@ -626,7 +623,7 @@ class Quantity(BaseField):
     .. _Scalar documentation from Barril:  https://barril.readthedocs.io/en/latest/api.html#scalar
     """
 
-    value: numbers.Real = attrib(validator=instance_of(numbers.Real))
+    value: float | int = attrib(validator=instance_of(float | int))
     unit: str = attrib(validator=[non_empty_str, valid_unit])
 
 
@@ -640,7 +637,7 @@ class TableColumn(BaseField):
     """
 
     id: str = attrib(validator=non_empty_str)
-    value: Union[Quantity, Reference] = attrib()
+    value: Quantity | Reference = attrib()
     caption: str = attrib(init=False, default="")
 
     def __attrs_post_init__(self) -> None:
@@ -648,7 +645,7 @@ class TableColumn(BaseField):
 
     @value.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: Union[Quantity, Reference]
+        self, attr: Attribute, values: Quantity | Reference
     ) -> None:
         if isinstance(values, Quantity):
             return  # Always OK.
@@ -663,7 +660,7 @@ class TableColumn(BaseField):
             )
 
 
-@attr.s(kw_only=True, frozen=True)
+@attr.s(kw_only=True, frozen=True, auto_attribs=True)
 class Table(BaseField):
     """
     The Table component provides a table to the user to be able input values manually or by importing it from a file.
@@ -779,11 +776,16 @@ class Table(BaseField):
 
     """
 
-    rows: Sequence[TableColumn] = attrib(converter=tuple)
+    rows: Sequence[TableColumn] = attrib()
+
+    def __attrs_post_init__(self) -> None:
+        # Cannot use attrib(converter=tuple) because it causes type errors downstream:
+        # error: List item 0 has incompatible type "TableColumn"; expected "T"  [list-item]
+        object.__setattr__(self, "rows", tuple(self.rows))
 
     @rows.validator
     def check(  # pylint: disable=arguments-differ
-        self, attr: Attribute, values: Union[List[str], str]
+        self, attr: Attribute, values: list[str] | str
     ):
         if not values:
             raise TypeError(f"{attr.name} must be a list with TableColumn.")
@@ -931,7 +933,7 @@ class AddLayer:
     """
 
     name: str = attr.ib()
-    fields: List[str] = attr.ib()
+    fields: list[str] = attr.ib()
     continuous_field: str = attr.ib()
 
 
@@ -954,7 +956,7 @@ class UpdateLayer:
     """
 
     name: str = attr.ib()
-    additional_fields: List[str] = attr.ib()
+    additional_fields: list[str] = attr.ib()
 
 
 @attr.s(kw_only=True, frozen=True)
@@ -975,7 +977,7 @@ class AddPhase:
     """
 
     name: str = attr.ib()
-    fields: List[str] = attr.ib()
+    fields: list[str] = attr.ib()
     primary_field: str = attr.ib()
     is_solid: bool = attr.ib(default=False)
 
@@ -998,4 +1000,4 @@ class UpdatePhase:
     """
 
     name: str = attr.ib()
-    additional_fields: List[str] = attr.ib()
+    additional_fields: list[str] = attr.ib()

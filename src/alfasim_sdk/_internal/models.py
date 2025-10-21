@@ -1,12 +1,10 @@
 import functools
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from alfasim_sdk._internal.alfasim_sdk_utils import get_attr_class
 
 
-def container_model(
-    *, model: type, caption: str, icon: Optional[str] = None
-) -> Callable:
+def container_model(*, model: type, caption: str, icon: str | None = None) -> Callable:
     """
     ``container_model`` is an object that keeps together many different properties defined by the plugin and allows developers
     to build user interfaces in a declarative way similar to :func:`data_model`.
@@ -110,7 +108,7 @@ def container_model(
     return apply
 
 
-def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
+def data_model(*, caption: str, icon: str | None = None) -> Callable:
     """
     ``data_model`` is an object that keeps together many different properties defined by the plugin and allows developers
     to build user interfaces in a declarative way.
@@ -161,7 +159,7 @@ def data_model(*, caption: str, icon: Optional[str] = None) -> Callable:
 
     def apply(class_: type):
         @functools.wraps(class_)
-        def wrap_class(class_: type, caption: str, icon: Optional[str]):
+        def wrap_class(class_: type, caption: str, icon: str | None):
             return get_attr_class(class_, caption, icon, model=None)
 
         return wrap_class(class_, caption, icon)

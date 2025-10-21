@@ -3,6 +3,7 @@ from textwrap import dedent
 import numpy as np
 
 from alfasim_sdk import (
+    Numpy1DArray,
     PvtModelPtTableParametersDescription,
     convert_alfacase_to_description,
     generate_alfacase_file,
@@ -12,12 +13,12 @@ from alfasim_sdk import (
 
 def test_alfatable_has_flow_style_for_numpy_array(tmp_path):
     description = PvtModelPtTableParametersDescription(
-        pressure_values=np.array([1, 2, 3]),
-        temperature_values=np.array([4, 5, 6]),
+        pressure_values=Numpy1DArray(np.array([1, 2, 3])),
+        temperature_values=Numpy1DArray(np.array([4, 5, 6])),
         table_variables=[
-            np.array([42, 42, 42]),
-            np.array([20, 20, 20]),
-            np.array([30, 30, 30]),
+            Numpy1DArray(np.array([42, 42, 42])),
+            Numpy1DArray(np.array([20, 20, 20])),
+            Numpy1DArray(np.array([30, 30, 30])),
         ],
         variable_names=["a", "b", "c"],
     )
@@ -82,13 +83,13 @@ def test_alfacase_file_export(tmp_path):
     }
     from alfasim_sdk._internal.alfacase import case_description
 
-    case_description = case_description.CaseDescription(
+    description = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
             pt_table_parameters=pvt_model_table_parameter
         )
     )
 
-    generate_alfacase_file(case_description, alfacase_file)
+    generate_alfacase_file(description, alfacase_file)
     assert alfacase_file.is_file()
     assert alfatable_file.is_file()
     # Load

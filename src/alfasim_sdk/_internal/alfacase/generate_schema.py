@@ -1,12 +1,12 @@
 import inspect
 import operator
 import sys
-import typing
 from collections import deque
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import List, Set
+from typing import Any
 
 import attr
 import typing_inspect
@@ -20,11 +20,11 @@ from alfasim_sdk import CaseDescription
 INDENTANTION = "    "
 
 
-def is_enum(value: typing.Any):
+def is_enum(value: Any):
     return isinstance(value, EnumMeta)
 
 
-def enum_to_alfacase_schema(type_: type, indent: int) -> str:
+def enum_to_alfacase_schema(type_: Any, indent: int) -> str:
     return f"Enum({[i.value for i in type_]})"
 
 
@@ -37,7 +37,7 @@ def numpy_1_darray_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_list(type_: type) -> bool:
-    return typing_inspect.get_origin(type_) in (typing.List, list)
+    return typing_inspect.get_origin(type_) in (list, list)
 
 
 def list_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -78,7 +78,7 @@ def attrs_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_dict(type_: type) -> bool:
-    return typing_inspect.get_origin(type_) in (typing.Dict, dict)
+    return typing_inspect.get_origin(type_) in (dict, dict)
 
 
 def dict_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -106,7 +106,7 @@ def is_union(type_: type) -> bool:
 
 
 @contextmanager
-def _map_section(lines: List[str], indent=0) -> List[str]:
+def _map_section(lines: list[str], indent=0) -> Iterator[list[str]]:
     body_indent = indent + 1
     lines.append("Map(")
     lines.append(f"{INDENTANTION * body_indent}{{")
@@ -115,7 +115,7 @@ def _map_section(lines: List[str], indent=0) -> List[str]:
     lines.append(f"{INDENTANTION * indent})")
 
 
-def union_to_alfacase_schema(type_: type, *, indent=0) -> str:
+def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
     """
     Creates a structure that allows multiples types for the same key.
 
@@ -137,7 +137,7 @@ def union_to_alfacase_schema(type_: type, *, indent=0) -> str:
         return "Str()"
 
     # Attrs classes
-    lines = []
+    lines: list[str] = []
     map_items_indent = indent + 2
     with _map_section(lines, indent=indent):
         for arg in type_.__args__:
@@ -198,7 +198,7 @@ def path_to_alfacase_schema(type_: type, indent: int) -> str:
     return "Str()"
 
 
-LIST_OF_IMPLEMENTATIONS: List[typing.Tuple[type, typing.Callable]] = [
+LIST_OF_IMPLEMENTATIONS: list[tuple[Callable, Callable]] = [
     (is_enum, enum_to_alfacase_schema),
     (is_attrs, attrs_to_alfacase_schema),
     (is_list, list_to_alfacase_schema),
@@ -229,7 +229,7 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
         if predicate_function(type_):
             return handle_function(type_, indent=indent)
 
-    if type_ is typing.Any:
+    if type_ is Any:
         return "Any()"
 
     raise RuntimeError(
@@ -256,7 +256,7 @@ def obtain_schema_name(class_: type) -> str:
     return convert_to_snake_case(class_.__name__) + "_schema"
 
 
-def _get_attr_name(key: str, value: attr.ib) -> str:
+def _get_attr_name(key: str, value: attr.Attribute) -> str:
     """
     Note: for stricyyaml schema, an Optional type means that the user don't need
     to inform a value. While for type hint, an Optional type means that the attribute accepts None.
@@ -276,7 +276,7 @@ IGNORED_PROPERTIES = (
 )
 
 
-def _get_attribute_schema(key: str, value: attr.ib, indent: int = 2) -> str:
+def _get_attribute_schema(key: str, value: Any, indent: int = 2) -> str:
     """
     Helper method that return the equivalent schema for the given key and value.
 
@@ -286,7 +286,8 @@ def _get_attribute_schema(key: str, value: attr.ib, indent: int = 2) -> str:
     if value.default is attr.NOTHING and is_optional_type(value.type):
         msg = (
             "StrictYAML doesn't support None value (only missing keys denote a value), "
-            "therefore Optional type are only allowed when the case has a default value."
+            "therefore Optional type are only allowed when the case has a default value.\n"
+            f"Key: {key}"
         )
         raise TypeError(msg)
     attribute_name = _get_attr_name(key, value)
@@ -317,7 +318,7 @@ def _is_from_typing_module(type_: type) -> bool:
     return is_list(type_) or is_dict(type_) or typing_inspect.is_union_type(type_)
 
 
-def _obtain_referred_type(type_) -> List[type]:
+def _obtain_referred_type(type_) -> list[type]:
     """
     Obtain the type referred by the type hint.
 
@@ -354,7 +355,7 @@ def _obtain_referred_type(type_) -> List[type]:
     raise TypeError(f"type_ must be a List or Union referring other types, got {type_}")
 
 
-def _get_classes(class_: type) -> Set[type]:
+def _get_classes(class_: type) -> set[type]:
     """
     Helper function to return a set of attr classes that needs schema.
     """
@@ -377,15 +378,15 @@ def _get_classes(class_: type) -> Set[type]:
     return set(flatten(classes))
 
 
-def get_all_classes_that_needs_schema(class_: type) -> List[type]:
+def get_all_classes_that_needs_schema(class_: type) -> list[type]:
     """
     Iterates over the "class_"  attributes searching for objects that needs schema (attr classes)
 
     :param type class_:
         Target class to return all elements that needs schema.
     """
-    graph = {}
-    search_queue = deque()
+    graph: dict[type, set[type]] = {}
+    search_queue: deque[type] = deque()
 
     graph[CaseDescription] = _get_classes(class_)
     search_queue += graph[CaseDescription]

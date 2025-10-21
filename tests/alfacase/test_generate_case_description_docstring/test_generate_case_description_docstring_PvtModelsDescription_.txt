@@ -6,7 +6,7 @@
 
         class PvtModelsDescription
             default_model: \ :class:`Optional <typing.Optional>`\[str] = None
-            tables: \ :class:`Dict <typing.Dict>`\[str, Union[str, pathlib.Path]] = {}
+            tables: \ :class:`Dict <typing.Dict>`\[str, str | pathlib.Path] = {}
             correlations: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCorrelationDescription <PvtModelCorrelationDescription>`\] = {}
             compositional: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCompositionalDescription <PvtModelCompositionalDescription>`\] = {}
             combined: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PvtModelCombinedDescription <PvtModelCombinedDescription>`\] = {}

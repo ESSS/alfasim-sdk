@@ -1,6 +1,4 @@
-import numbers
 from enum import Enum
-from typing import Optional
 
 import attr
 from attr import attrib
@@ -91,7 +89,7 @@ class SecondaryVariable:
     caption: str = attrib(validator=non_empty_str)
     type = attrib(validator=instance_of(Type), default=Type.Double)
     unit = attrib(validator=[non_empty_str, valid_unit])
-    category: str = attrib(validator=optional(non_empty_str))
+    category: str | None = attrib(validator=optional(non_empty_str))
     visibility: Visibility = attrib(
         validator=instance_of(Visibility), default=Visibility.Output
     )
@@ -99,8 +97,8 @@ class SecondaryVariable:
         validator=instance_of(Location), default=Location.Center
     )
     multifield_scope: Scope = attrib(validator=instance_of(Scope), default=Scope.Global)
-    default_value: Optional[numbers.Real] = attrib(
-        validator=optional(instance_of(numbers.Real)), default=None
+    default_value: float | None = attrib(
+        validator=optional(instance_of(float | int)), default=None
     )
     checked_on_gui_default: bool = attrib(validator=instance_of(bool), default=True)
 

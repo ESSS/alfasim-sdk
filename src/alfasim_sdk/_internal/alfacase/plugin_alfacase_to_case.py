@@ -1,14 +1,13 @@
 import itertools
+from collections.abc import Callable, Sequence
 from functools import partial
 from pathlib import Path, PurePosixPath
 from types import ModuleType
-from typing import Any, Callable, Dict, List, Optional, Sequence, Type, Union
+from typing import Any, TypeGuard
 
 import attr
 from barril.units import Array, Scalar
-from typing_extensions import TypeGuard
 
-from alfasim_sdk import BaseField
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
     load_value,
@@ -30,6 +29,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 )
 from alfasim_sdk._internal.alfacase.plugin_introspection import get_attributes
 from alfasim_sdk._internal.types import (
+    BaseField,
     Boolean,
     Enum,
     FileContent,
@@ -56,11 +56,12 @@ def get_unused_filename(alfacase_folder: Path, path: Path) -> Path:
             fullpath = fullpath.with_name(f"{stem} ({i}){path.suffix}")
         else:
             return fullpath
+    raise RuntimeError(f"Could not find an unused filename in {alfacase_folder}")
 
 
 def _dump_file_contents_and_update_dict(
     gui_models_part: object, alfacase_folder: Path
-) -> object:
+) -> Any:
     """
     If ``gui_models_part``:
     - is a ``dict`` or ``list`` an updated copy returned;
@@ -95,8 +96,7 @@ def _dump_file_contents_and_update_plugin_description(
     where the ``PluginFileContent`` instances are replaced by a path to files
     with the expected content.
     """
-    gui_models = plugin.gui_models
-    gui_models = _dump_file_contents_and_update_dict(gui_models, alfacase_folder)
+    gui_models = _dump_file_contents_and_update_dict(plugin.gui_models, alfacase_folder)
     return attr.evolve(plugin, gui_models=gui_models)
 
 
@@ -109,12 +109,13 @@ def dump_file_contents_and_update_plugins(
         _dump_file_contents_and_update_plugin_description(p, alfacase_folder)
         for p in plugins
     ]
-    return attr.evolve(alfacase_description, plugins=plugins)
+    # Unexpected keyword argument "plugins" for "evolve" of "CaseDescription"  [call-arg]
+    return attr.evolve(alfacase_description, plugins=plugins)  # type:ignore[call-arg]
 
 
 def load_list_of_plugin(
     alfacase_content: DescriptionDocument,
-) -> List[PluginDescription]:
+) -> list[PluginDescription]:
     """
     A loader function similar to ``load_list_of_instance`` for plugins.
     """
@@ -125,7 +126,7 @@ def load_list_of_plugin(
     return [p for p in plugins if p is not None]
 
 
-def load_plugin(alfacase_content: DescriptionDocument) -> Optional[PluginDescription]:
+def load_plugin(alfacase_content: DescriptionDocument) -> PluginDescription | None:
     """
     A loader function similar to ``load_instance`` for plugins.
     """
@@ -149,6 +150,7 @@ def get_case_description_attribute_loader_dict_for_plugin(
     but designed to load plugins data (class info is not readily available).
     """
     plugin_id = load_value("name", alfacase_content)
+    assert isinstance(plugin_id, str)
     alfasim_plugins_dir = obtain_alfasim_plugins_dir()
 
     data_structure: list[type] | None = load_plugin_data_structure(
@@ -205,7 +207,7 @@ def load_plugin_data_structure(
     import alfasim_sdk_plugins
 
     module_name = f"{plugin_id}.py"
-    plugin_module_candidates = []
+    plugin_module_candidates: list[Any] = []
     for plugins_dir in alfasim_plugins_dirs:
         plugin_module_candidates.extend(plugins_dir.glob(f"*/artifacts/{module_name}"))
 
@@ -229,7 +231,7 @@ def load_plugin_data_structure(
 
             # Cleanup "alfasim_sdk_plugins" namespace.
             # When a valid plugin is found leave the namespace package unchanged.
-            if remove_namespace_package:
+            if remove_namespace_package and namespace_package_str:
                 alfasim_sdk_plugins.__path__.remove(namespace_package_str)
 
     else:
@@ -238,7 +240,7 @@ def load_plugin_data_structure(
 
 def is_dict_with_keys(
     possible_dict: object, *keys: str, strict: bool = True
-) -> TypeGuard[Dict]:
+) -> TypeGuard[dict]:
     """
     Check if `possible_dict` is a `dict` with keys `keys`.
     If `strict` is `True` the dict can not have extra keys.
@@ -310,7 +312,7 @@ def _convert_multiple_reference(
 
 def _convert_reference(
     value: object, type_from_plugin: BaseField, alfacase_path: Path
-) -> Union[PluginTracerReference, PluginInternalReference]:
+) -> PluginTracerReference | PluginInternalReference:
     """
     Try to convert a object loaded from alfacase as a plugin internal reference or plugin trace reference.
     """
@@ -355,7 +357,7 @@ def _convert_string(
 
 def _convert_table_column_contents(
     raw_col: object,
-) -> Union[Array, InternalReferencePluginTableColumn, TracerReferencePluginTableColumn]:
+) -> Array | InternalReferencePluginTableColumn | TracerReferencePluginTableColumn:
     """
     Try to convert an object into a valid table column content.
 
@@ -400,8 +402,7 @@ def _convert_table(
     raise InvalidPluginDataError(f"Can not convert to a table: {value!r}")
 
 
-_PluginDataLoader = Callable[[object, BaseField, Path], object]
-_PLUGIN_FIELD_TO_CASEDESCRIPTION: Dict[Type, _PluginDataLoader] = {
+_PLUGIN_FIELD_TO_CASEDESCRIPTION: dict[type, Callable] = {
     Boolean: _convert_boolean,
     Enum: _convert_enum,
     FileContent: _convert_file_content,
@@ -413,21 +414,23 @@ _PLUGIN_FIELD_TO_CASEDESCRIPTION: Dict[Type, _PluginDataLoader] = {
 }
 
 
-def load_model(alfacase_content: DescriptionDocument, class_: Type) -> Dict[str, Any]:
+def load_model(alfacase_content: DescriptionDocument, class_: type) -> dict[str, Any]:
     """
     Convert alfacase fragment as a dict equivalent to a plugin model.
     """
-    alfasim_metadata: Optional[object] = getattr(class_, "_alfasim_metadata")
+    alfasim_metadata: object | None = getattr(class_, "_alfasim_metadata")
     assert isinstance(alfasim_metadata, dict)
     alfacase_path = alfacase_content.file_path
 
-    result = {}
+    result: dict[str, Any] = {}
     for attribute in get_attributes(class_):
         type_from_plugin = attribute.default
         name: str = attribute.name
         if name in alfacase_content.content:
-            value: Union[dict, list, str] = alfacase_content.content[name].data
-            convert_func = _PLUGIN_FIELD_TO_CASEDESCRIPTION[type(type_from_plugin)]
+            value: dict | list | str = alfacase_content.content[name].data
+            convert_func: Callable = _PLUGIN_FIELD_TO_CASEDESCRIPTION[
+                type(type_from_plugin)
+            ]
             result[name] = convert_func(value, type_from_plugin, alfacase_path)
 
     child_model_type = alfasim_metadata["model"]
@@ -442,7 +445,7 @@ def load_model(alfacase_content: DescriptionDocument, class_: Type) -> Dict[str,
 
 
 def load_gui_models(
-    alfacase_content: DescriptionDocument, *, data_structure: List[Type]
+    alfacase_content: DescriptionDocument, *, data_structure: list[type]
 ):
     result = {}
     for model in data_structure:

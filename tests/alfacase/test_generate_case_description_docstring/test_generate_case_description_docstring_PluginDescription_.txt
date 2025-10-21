@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class PluginDescription
-            name: \ :class:`Optional <typing.Optional>`\[str] = None
+            name: str
             version: \ :class:`Optional <typing.Optional>`\[str] = None
             gui_models: \ :class:`Dict <typing.Dict>`\[str, Any] = {}
             is_enabled: bool = True
@@ -14,7 +14,7 @@
 
     .. parsed-literal::
 
-            name: string  # optional
+            name: string
             version: string  # optional
             gui_models:  # optional
                 string: Any

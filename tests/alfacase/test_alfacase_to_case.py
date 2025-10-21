@@ -125,11 +125,12 @@ def alfacase_to_case_helper(tmp_path):
             the generated case.
             """
             all_keys = attr.fields_dict(expected_description_class).keys()
-            obtained_keys = attr.asdict(obtained_description_obj).keys()
 
             expected_keys = {key for key in all_keys if key not in IGNORED_PROPERTIES}
             obtained_keys = {
-                key for key in obtained_keys if key not in IGNORED_PROPERTIES
+                key
+                for key in attr.asdict(obtained_description_obj).keys()
+                if key not in IGNORED_PROPERTIES
             }
 
             assert expected_keys == obtained_keys, (

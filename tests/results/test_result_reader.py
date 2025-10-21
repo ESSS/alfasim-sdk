@@ -142,6 +142,7 @@ def test_logs(results: Results) -> None:
 def test_status(results: Results, datadir: Path) -> None:
     # Status exist.
     status = results.status
+    assert status is not None
     assert status["state"] == "FINISHED"
     assert status["progress"] == 1.0
 
@@ -168,6 +169,7 @@ def test_global_sensitivity_analysis_results_reader(
     global_sa_results_dir: Path,
 ) -> None:
     results = GlobalSensitivityAnalysisResults.from_directory(global_sa_results_dir)
+    assert results is not None
 
     assert results.get_sensitivity_curve(
         "temperature", "trend_id_1", "parametric_var_1"
@@ -213,6 +215,7 @@ class TestHistoryMatchingResultsReader:
         results = HistoryMatchingDeterministicResults.from_directory(
             hm_deterministic_results_dir
         )
+        assert results is not None
         assert results.deterministic_values == {
             HMOutputKey("parametric_var_1"): 0.1,
             HMOutputKey("parametric_var_2"): 3.2,
@@ -230,6 +233,7 @@ class TestHistoryMatchingResultsReader:
         results = HistoryMatchingProbabilisticResults.from_directory(
             hm_probabilistic_results_dir
         )
+        assert results is not None
         np.testing.assert_equal(
             results.probabilistic_distributions,
             {
@@ -257,6 +261,7 @@ class TestHistoryMatchingResultsReader:
         reader to read probabilistic results and vice-versa.
         """
         prob_metadata = read_history_matching_metadata(hm_probabilistic_results_dir)
+        assert prob_metadata is not None
         prob_values = read_history_matching_result(
             hm_probabilistic_results_dir, prob_metadata, "HM-probabilistic"
         )
@@ -272,6 +277,7 @@ class TestHistoryMatchingResultsReader:
             )
 
         det_metadata = read_history_matching_metadata(hm_deterministic_results_dir)
+        assert det_metadata is not None
         det_values = read_history_matching_result(
             hm_deterministic_results_dir, det_metadata, "HM-deterministic"
         )
@@ -340,6 +346,7 @@ class TestHistoryMatchingResultsReader:
 
 def test_uncertainty_propagation_results_reader(up_results_dir: Path) -> None:
     reader = UncertaintyPropagationResults.from_directory(up_results_dir)
+    assert reader is not None
 
     assert np.allclose(
         reader.timeset, np.array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0])

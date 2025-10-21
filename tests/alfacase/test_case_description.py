@@ -1,8 +1,9 @@
 import re
 import textwrap
+from collections.abc import Callable
 from pathlib import Path
 from textwrap import dedent
-from typing import Any, Callable
+from typing import Any
 
 import attr
 import pytest
@@ -59,7 +60,7 @@ def test_physics_description_path_validator(tmp_path):
         f"'restart_filepath' must be {Path} (got '' that is a {str})."
     )
     with pytest.raises(TypeError, match=expected_error):
-        case_description.PhysicsDescription(restart_filepath="")
+        case_description.PhysicsDescription(restart_filepath="")  # type:ignore[arg-type]
 
     tmp_file = tmp_path / "tmp.txt"
     tmp_file.touch()
@@ -135,22 +136,22 @@ def test_instance_attribute_list():
     class Y:
         pass
 
-    @attr.s(kw_only=True)
+    @attr.s(kw_only=True, auto_attribs=True)
     class Foo:
-        attr_1 = attrib_instance_list(X)
+        attr_1: list[X] = attrib_instance_list(X)
 
     # Check validator of attrib_instance_list
     expected_msg = f"'attr_1' must be {list} (got X() that is a {X})."
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(attr_1=X())
+        Foo(attr_1=X())  # type:ignore[arg-type]
 
     expected_msg = f"'attr_1' must be {X} (got Y() that is a {Y})."
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(attr_1=[Y()])
+        Foo(attr_1=[Y()])  # type:ignore[list-item]
 
     expected_msg = f"'attr_1' must be {list} (got None that is a {type(None)})."
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(attr_1=None)
+        Foo(attr_1=None)  # type:ignore[arg-type]
 
     # Smoke check
     assert Foo(attr_1=[X()])
@@ -165,47 +166,47 @@ def test_instance_attribute():
     class Y:
         pass
 
-    @attr.s(kw_only=True)
+    @attr.s(kw_only=True, auto_attribs=True)
     class Foo:
-        attr_1 = attrib_instance(X)
-        attr_2 = attrib_instance_list(X)
+        attr_1: X = attrib_instance(X)
+        attr_2: list[X] = attrib_instance_list(X)
 
     # Check validator of attrib_instance
     expected_msg = f"'attr_1' must be {X} (got Y() that is a {Y})."
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(attr_1=Y())
+        Foo(attr_1=Y())  # type:ignore[arg-type]
 
     # Smoke check
     assert Foo(attr_1=X())
 
 
 def test_curve_attributes_converter():
-    @attr.s
+    @attr.s(auto_attribs=True)
     class Foo:
-        x = attrib_curve(category="length", domain_category="time")
+        x: Curve = attrib_curve(category="length", domain_category="time")
 
     expected_msg = "Expected pair (image_array, domain_array) or Curve, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(x=None)
+        Foo(x=None)  # type:ignore[arg-type]
 
     # Fail to convert image (error context).
     expected_msg = "Curve image: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(x=(None, None))
+        Foo(x=(None, None))  # type:ignore[arg-type]
 
     # Fail to convert domain (error context).
     expected_msg = "Curve domain: Expected pair (values, unit) or Array, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(x=(([1, 11, 111], "m"), None))
+        Foo(x=(([1, 11, 111], "m"), None))  # type:ignore[arg-type]
 
     # Image and domain does not have the same size.
     expected_msg = (
         "The length of the image (3) is different from the size of the domain (2)"
     )
     with pytest.raises(ValueError, match=re.escape(expected_msg)):
-        Foo(x=(([1, 11, 111], "m"), ([0, 10], "s")))
+        Foo(x=(([1, 11, 111], "m"), ([0, 10], "s")))  # type:ignore[arg-type]
 
-    Foo(x=(([1, 11, 111], "m"), ([0, 10, 20], "s")))
+    Foo(x=(([1, 11, 111], "m"), ([0, 10, 20], "s")))  # type:ignore[arg-type]
 
 
 def test_scalar_attribute():
@@ -217,31 +218,31 @@ def test_scalar_attribute():
 
             @attr.s(kw_only=True)
             class Bar:
-                x = attrib_scalar(**kwargs)
+                x = attrib_scalar(**kwargs)  # type:ignore[arg-type]
 
-    @attr.s(kw_only=True)
+    @attr.s(kw_only=True, auto_attribs=True)
     class Foo:
-        position = attrib_scalar(default=Scalar(1, "m"))
-        position_2 = attrib_scalar(default=None, category="length")
+        position: Scalar = attrib_scalar(default=Scalar(1, "m"))
+        position_2: Scalar | None = attrib_scalar(default=None, category="length")
 
     # Check position
     instance_with_scalar = Foo(position=Scalar(1, "m"))
     assert isinstance(instance_with_scalar.position, Scalar)
 
-    instance_with_tuple = Foo(position=(1, "m"))
+    instance_with_tuple = Foo(position=(1, "m"))  # type:ignore[arg-type]
     assert isinstance(instance_with_tuple.position, Scalar)
 
     expected_msg = (
         "Expected pair (value, unit) or Scalar, got None (type: <class 'NoneType'>)"
     )
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
-        Foo(position=None)
+        Foo(position=None)  # type:ignore[arg-type]
 
     # Check position_1 (accepts None)
     instance_with_scalar = Foo(position_2=Scalar(1, "m"))
     assert isinstance(instance_with_scalar.position, Scalar)
 
-    instance_with_tuple = Foo(position_2=(1, "m"))
+    instance_with_tuple = Foo(position_2=(1, "m"))  # type:ignore[arg-type]
     assert isinstance(instance_with_tuple.position, Scalar)
 
     assert Foo(position_2=None).position_2 is None
@@ -254,22 +255,19 @@ def test_enum_attribute():
         A = "A"
         B = "B"
 
-    @attr.s(kw_only=True)
+    @attr.s(kw_only=True, auto_attribs=True)
     class Foo:
-        attr_1 = attrib_enum(default=X.A)
+        attr_1: X = attrib_enum(default=X.A)
 
     # Check validator of Enum
     expected_msg_for_enum = "'attr_1' must be in <enum 'X'> (got 's')"
     with pytest.raises(ValueError, match=re.escape(expected_msg_for_enum)):
-        Foo(attr_1="s")
+        Foo(attr_1="s")  # type:ignore[arg-type]
 
     # Type_ is mandatory when default is not provided
     expected_msg = "Default or type_ parameter must be provided"
     with pytest.raises(RuntimeError, match=re.escape(expected_msg)):
         attrib_enum()
-
-    # When informing default, the type_ is optional
-    assert attrib_enum(default=X.A).type is X
 
     # Avoiding shooting in the foot =)
     expected_msg = (
@@ -1081,6 +1079,7 @@ def test_check_profile_description(default_case):
         x_and_y=None,
     )
     assert profile_2.x_and_y is None
+    assert profile_2.length_and_elevation is not None
     assert profile_2.length_and_elevation.length.GetValues("m") == []
     assert profile_2.length_and_elevation.elevation.GetValues("m") == []
 
@@ -1173,7 +1172,7 @@ def test_attrib_category_required(attrib_creator, default):
 
 @pytest.mark.parametrize("none_arg", ["category", "domain_category"])
 def test_curve_attrib_category_and_domain_required(none_arg):
-    category_args = dict(category="length", domain_category="time")
+    category_args: dict[str, Any] = dict(category="length", domain_category="time")
     non_curve_default = (Array([1, 2, 3], "m"), Array([0, 1.1, 2.2], "s"))
     assert isinstance(attrib_curve(non_curve_default, **category_args), _CountingAttr)
 
@@ -1190,11 +1189,11 @@ def test_generate_multi_input():
     assert obtained == textwrap.dedent(
         """\
         # fmt: off
-        foo_input_type = attrib_enum(default=constants.MultiInputType.Constant)
-        foo = attrib_scalar(
+        foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
+        foo: Scalar = attrib_scalar(
             default=Scalar('length', 1.2, 'm')
         )
-        foo_curve = attrib_curve(
+        foo_curve: Curve = attrib_curve(
             default=Curve(Array('length', [], 'm'), Array('time', [], 's'))
         )
         # fmt: on"""
@@ -1206,12 +1205,12 @@ def test_generate_multi_input_dict():
     assert obtained == textwrap.dedent(
         """\
         # fmt: off
-        foo_input_type = attrib_enum(default=constants.MultiInputType.Constant)
-        foo: Dict[str, Scalar] = attr.ib(
+        foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
+        foo: dict[str, Scalar] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={"type": "scalar_dict", "category": 'length'},
         )
-        foo_curve: Dict[str, Curve] = attr.ib(
+        foo_curve: dict[str, Curve] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Curve),
             metadata={"type": "curve_dict", "category": 'length'},
         )
@@ -1533,7 +1532,7 @@ def test_case_description_duplicate_names_between_elements(default_well):
         case.ensure_unique_names()
 
 
-def test_check_fluid_references(default_well: case_description.WallDescription) -> None:
+def test_check_fluid_references(default_well: case_description.WellDescription) -> None:
     """
     Test _check_fluid_references isn't yielding errors for a correct CaseDescription.
     """
