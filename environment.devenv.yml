@@ -2,7 +2,7 @@ name: alfasim-sdk
 
 
 dependencies:
-  - attrs >= 19.1.0
+  - attrs >= 24.3.0
   - barril
   - boltons
   - click
