@@ -7,7 +7,7 @@ CHANGELOG
 ==================
 
 * Types are now exported and can be verified by type-checkers such as ``mypy``.
-
+* ``PhysicsDescription.restart_point_key`` has been removed: it did not make sense in the context of a ``case`` file as it referenced data inside the ``.data`` directory. The only way to configure restart is using ``PhysicsDescription.restart_filepath``.
 
 1.3.0 (2025-10-07)
 ==================

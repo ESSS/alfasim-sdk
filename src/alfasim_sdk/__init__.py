@@ -127,8 +127,6 @@ from alfasim_sdk._internal.alfacase.case_description import (
     ReferencedVelocitiesContainerDescription,
     ReferencedVolumeFractionsContainerDescription,
     ReservoirInflowEquipmentDescription,
-    RestartPointKey,
-    RestartPointLocation,
     SeparatorNodePropertiesDescription,
     SeparatorTrendDescription,
     SpeedCurveDescription,
