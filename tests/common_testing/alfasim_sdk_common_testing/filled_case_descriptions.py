@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import numpy as np
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
@@ -679,12 +677,6 @@ TIME_OPTIONS_DESCRIPTION = case_description.TimeOptionsDescription(
     minimum_time_for_steady_state_stop=Scalar(7, "s"),
 )
 
-RESTART_POINT_KEY = case_description.RestartPointKey(
-    id=Path(__file__).stem,
-    location=case_description.RestartPointLocation.Local,
-    simulation_time=1234.5,
-    timestep_index=12,
-)
 
 PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     hydrodynamic_model=constants.HydrodynamicModelType.ThreeLayersNineFieldsGasOilWater,
@@ -692,7 +684,6 @@ PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     energy_model=constants.EnergyModel.LayersModel,
     solids_model=constants.SolidsModelType.Mills1985Equilibrium,
     initial_condition_strategy=constants.InitialConditionStrategyType.SteadyState,
-    restart_point_key=RESTART_POINT_KEY,
     keep_former_results=True,
     correlations_package=constants.CorrelationPackageType.Alfasim,
     emulsion_model_enabled=True,
