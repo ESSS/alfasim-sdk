@@ -3,7 +3,7 @@ CHANGELOG
 =========
 
 
-1.4.0 (UNRELEASED)
+1.4.0 (2025-10-31)
 ==================
 
 * Types are now exported and can be verified by type-checkers such as ``mypy``.
