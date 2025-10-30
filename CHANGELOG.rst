@@ -7,6 +7,8 @@ CHANGELOG
 
 * **Breaking Change**: The function ``convert_description_to_alfacase`` has been removed from the public API, use ``generate_alfacase_file`` instead.
 
+* Add ``progressive_cavity_pump`` as a new pump type option in ``PumpType`` enum.
+
 
 1.4.0 (2025-11-14)
 ==================
