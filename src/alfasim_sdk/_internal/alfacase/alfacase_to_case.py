@@ -1440,6 +1440,7 @@ def load_table_pump_description(
         "heads": get_array_loader(from_unit="m"),
         "efficiencies": get_array_loader(from_unit="%"),
         "powers": get_array_loader(from_unit="W"),
+        "torques": get_array_loader(from_unit="N.m"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.TablePumpDescription(**case_values)

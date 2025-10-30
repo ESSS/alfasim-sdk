@@ -424,6 +424,7 @@ TABLE_PUMP_DESCRIPTION = case_description.TablePumpDescription(
     heads=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "m") * 1.0e5 / (9.8 * 1000.0),
     efficiencies=Array([0.01, 0.2, 0.4, 0.2, 0.009, 0.18, 0.36, 0.18], "-"),
     powers=Array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "W"),
+    torques=Array([0.0, 0.0, 0.0, 0.0, 19.1, 22.9, 26.7, 30.6], "N.m"),
 )
 SURGE_VOLUME_OPTIONS_DESCRIPTION = case_description.SurgeVolumeOptionsDescription(
     time_mode=constants.SurgeVolumeTimeMode.UserDefined,

@@ -787,6 +787,7 @@ table_pump_description_schema = Map(
         Optional("heads"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("efficiencies"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("powers"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("torques"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 temperatures_container_description_schema = Map(
@@ -1229,4 +1230,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: R2T4gbe3ct)
+# [[[end]]] (sum: pPP2WuWNdo)
