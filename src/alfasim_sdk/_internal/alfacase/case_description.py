@@ -764,7 +764,7 @@ class TablePumpDescription:
                 f"    - {len(self.powers)} items for powers\n"
             )
             raise ValueError(msg)
-        
+
         # Validate torques separately: if not empty, it must have the expected length
         torques_length = len(self.torques)
         if torques_length != 0 and torques_length != expected_length:
