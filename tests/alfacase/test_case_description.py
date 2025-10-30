@@ -100,7 +100,7 @@ def test_table_pump_description_length():
             efficiencies=Array([1], "-"),
             powers=Array([1], "W"),
         )
-    
+
     # Test torques validation separately
     expected_msg_torques = dedent(
         """\
