@@ -8,6 +8,7 @@ CHANGELOG
 
 * Types are now exported and can be verified by type-checkers such as ``mypy``.
 * Add ``progressive_cavity_pump`` as a new pump type option in ``PumpType`` enum.
+* Add ``torques`` field to ``TablePumpDescription`` to support PCP (Progressive Cavity Pump) pump models.
 
 
 1.3.0 (2025-10-07)
