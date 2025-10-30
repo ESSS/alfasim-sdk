@@ -5,6 +5,8 @@ CHANGELOG
 1.5.0 (UNRELEASED)
 ==================
 
+* Add ``progressive_cavity_pump`` as a new pump type option in ``PumpType`` enum.
+
 
 1.4.0 (2025-11-14)
 ==================
