@@ -688,12 +688,16 @@ class TablePumpDescription:
         Pump power values. There a relation between other pump variables and power. In SI units:
         BHP [W] = P [Pa] * Q [m^3/s] / eff [%]
 
+    :ivar torques:
+        Pump torque values. Used for PCP pumps.
+
     .. include:: /alfacase_definitions/TablePumpDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
     .. include:: /alfacase_definitions/list_of_unit_for_volume_flow_rate.txt
     .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_torque.txt
     """
     speeds: Array = attrib_array(Array("angle per time", [0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'))
     void_fractions: Array = attrib_array(Array("volume fraction", ([0.0] * 6 + [0.1] * 6) * 3, '-'))
@@ -739,12 +743,15 @@ class TablePumpDescription:
         )
     )
 
+    torques: Array = attrib_array(Array([], 'N.m'))
 
 
     def __attrs_post_init__(self):
         expected_length = len(self.speeds)
         all_fields = list(attr.fields_dict(self.__class__).keys())
-        if any(len(getattr(self, field)) != expected_length for field in all_fields):
+        # torques is optional, so it can be empty or have the expected length
+        fields_to_check = [field for field in all_fields if field != 'torques']
+        if any(len(getattr(self, field)) != expected_length for field in fields_to_check):
             msg = (
                 f"speeds, void_fractions, flow_rates, pressure_boosts, heads, efficiencies and powers must have the "
                 f"same size, got:\n"
@@ -755,6 +762,16 @@ class TablePumpDescription:
                 f"    - {len(self.heads)} items for heads\n"
                 f"    - {len(self.efficiencies)} items for efficiencies\n"
                 f"    - {len(self.powers)} items for powers\n"
+            )
+            raise ValueError(msg)
+        
+        # Validate torques separately: if not empty, it must have the expected length
+        torques_length = len(self.torques)
+        if torques_length != 0 and torques_length != expected_length:
+            msg = (
+                f"torques must be either empty or have the same size as other fields, got:\n"
+                f"    - {expected_length} items expected\n"
+                f"    - {torques_length} items for torques\n"
             )
             raise ValueError(msg)
 
