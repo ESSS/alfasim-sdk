@@ -3684,7 +3684,9 @@ class PhysicsDescription:
         default=constants.EmulsionDropletSizeModelType.Brauner2001
     )
     emulsion_inversion_point_model: constants.EmulsionInversionPointModelType = (
-        attrib_enum(default=constants.EmulsionInversionPointModelType.BraunerUllmann2002)
+        attrib_enum(
+            default=constants.EmulsionInversionPointModelType.BraunerUllmann2002
+        )
     )
     emulsion_inversion_water_cut: Scalar = attrib_scalar(
         default=Scalar("volume per volume", 0.4, "m3/m3")

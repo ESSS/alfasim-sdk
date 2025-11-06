@@ -18,6 +18,7 @@ from strictyaml import YAML
 
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.migration import migrate_alfacase_yaml_to_latest
 
 T = TypeVar("T", bound=attr.AttrsInstance)
 
@@ -62,9 +63,11 @@ class DescriptionDocument:
         )
         from alfasim_sdk._internal.alfacase.schema import case_description_schema
 
+        data_as_text = Path(file_path).read_text(encoding="UTF-8")
+        migrated_content = migrate_alfacase_yaml_to_latest(data_as_text)
         try:
             content = strictyaml.dirty_load(
-                yaml_string=Path(file_path).read_text(encoding="UTF-8"),
+                yaml_string=migrated_content,
                 schema=case_description_schema,
                 allow_flow_style=True,
             )
