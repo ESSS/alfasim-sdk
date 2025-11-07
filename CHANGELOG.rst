@@ -7,7 +7,10 @@ CHANGELOG
 ==================
 
 * Types are now exported and can be verified by type-checkers such as ``mypy``.
-
+* The ``ModelDefault`` member has been removed from the following enums:
+ * ``EmulsionRelativeViscosityModelType``: Replace by ``EmulsionRelativeViscosityModelType.Brinkman1952``.
+ * ``EmulsionDropletSizeModelType``: Replace by ``EmulsionDropletSizeModelType.Brauner2001``.
+ * ``EmulsionInversionPointModelType``: Replace by ``EmulsionInversionPointModelType.BraunerUllmann2002``.
 
 1.3.0 (2025-10-07)
 ==================
