@@ -897,24 +897,15 @@ def test_invalid_yaml_contents_parsing(tmp_path):
     """
     Errors while parsing YAML should be detected and raised as our custom exception.
     """
-    import re
-
     alfacase_content = "Invalid YAML contents"
     alfacase_file = tmp_path / "invalid-yaml.alfacase"
     alfacase_file.write_text(data=alfacase_content, encoding="UTF-8")
 
     expected_msg = (
-        "when expecting a mapping\n"
-        '  in "<unicode string>", line 1, column 1:\n'
-        "    Invalid YAML contents\n"
-        "     ^ (line: 1)\n"
-        "found arbitrary text\n"
-        '  in "<unicode string>", line 2, column 1:\n'
-        "    ...\n"
-        "    ^ (line: 2)"
+        "Expected a mapping for the alfacase file, but got: Invalid YAML contents"
     )
 
-    with pytest.raises(DescriptionError, match=re.escape(expected_msg)):
+    with pytest.raises(DescriptionError, match=expected_msg):
         DescriptionDocument.from_file(alfacase_file)
 
 
