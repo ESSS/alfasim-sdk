@@ -5,6 +5,8 @@
 # from alfasim_sdk import CaseDescription
 # from alfasim_sdk._internal.alfacase.generate_schema import get_all_classes_that_needs_schema, generate_alfacase_schema
 # cog.out("from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder")
+# cog.out("\n")
+# cog.out("from alfasim_sdk._internal.alfacase.generate_schema import UnsafeOrValidator")
 # cog.out("\n\n")
 # cog.out("\n\n")
 # list_of_classes_that_needs_schema = get_all_classes_that_needs_schema(CaseDescription)
@@ -12,6 +14,7 @@
 #    cog.out(generate_alfacase_schema(class_))
 # ]]]
 from strictyaml import Any, Bool, Enum, Int, Map, MapPattern, Optional, Seq, Str, Float # noreorder
+from alfasim_sdk._internal.alfacase.generate_schema import UnsafeOrValidator
 
 
 
@@ -424,7 +427,10 @@ physics_description_schema = Map(
         Optional("keep_former_results"): Bool(),
         Optional("emulsion_model_enabled"): Bool(),
         Optional("emulsion_relative_viscosity_model"): Enum(['taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based', 'from_plugin']),
-        Optional("emulsion_pal_rhodes_phi_rel_100"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_pal_rhodes_phi_rel_100"): UnsafeOrValidator(
+                Map({"value": Float(), "unit": Str()}),
+                Map({"value": Str(), "unit": Str()}),
+        ),
         Optional("emulsion_woelflin_a"): Map({"value": Float(), "unit": Str()}),
         Optional("emulsion_woelflin_b"): Map({"value": Float(), "unit": Str()}),
         Optional("emulsion_table_based_rel_visc_curve"): Map(
@@ -1229,4 +1235,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: immZIfp/Lh)
+# [[[end]]] (checksum: 58473c64efbb4e0b46f90c479d21d1a7) (sum: immZIfp/Lh)
