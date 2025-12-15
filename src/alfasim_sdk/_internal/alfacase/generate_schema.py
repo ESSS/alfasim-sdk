@@ -12,10 +12,13 @@ import attr
 import typing_inspect
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
+from strictyaml import Validator
+from strictyaml.exceptions import YAMLValidationError
 from strictyaml.utils import flatten
 from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
+from alfasim_sdk._internal.alfacase.case_description_attributes import ScalarExpression
 
 INDENTANTION = "    "
 
@@ -132,20 +135,42 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
     The current implementation doesn't work in cases where multiple types are required for the same attribute.
     Ex.: like str | float or List[float] | float
     """
+    # StrictYaml does not accept "|" unions as described in the docs above. This specific case handle the case
+    # where users specify a Scalar | ScalarExpression as type hint.
+    COMPLEX_SCHEMAS = {
+        Scalar: scalar_to_alfacase_schema,
+        ScalarExpression: scalar_expression_to_alfacase_schema,
+    }
     # PvtModel Tables
     if set(type_.__args__) == {str, Path}:
         return "Str()"
 
-    # Attrs classes
     lines: list[str] = []
+    # Complex types are types who need a specific mapping to allocate the data from alfacase file.
+    complex_types = [type_ for type_ in type_.__args__ if type_ in COMPLEX_SCHEMAS]
+    normal_types = [type_ for type_ in type_.__args__ if type_ not in COMPLEX_SCHEMAS]
+
     map_items_indent = indent + 2
-    with _map_section(lines, indent=indent):
-        for arg in type_.__args__:
-            key = convert_to_snake_case(arg.__name__.replace("Description", ""))
-            value = obtain_schema_name(arg)
-            lines.append(
-                f'{INDENTANTION * map_items_indent}Optional("{key}"): Seq({value}),'
+    if len(complex_types) > 1:
+        UNSAFE_OR_VALIDATOR = "UnsafeOrValidator("
+        lines.append(UNSAFE_OR_VALIDATOR)
+        for type_ in complex_types:
+            schema_generator = COMPLEX_SCHEMAS[type_]
+            value = (
+                f"{INDENTANTION * map_items_indent}{schema_generator(type_, indent=0)},"
             )
+            lines.append(value)
+        lines.append(f"{INDENTANTION * indent})")
+
+    if len(normal_types) > 1:
+        # Attrs classes
+        with _map_section(lines, indent=indent):
+            for type_ in normal_types:
+                key = convert_to_snake_case(type_.__name__.replace("Description", ""))
+                value = obtain_schema_name(type_)
+                lines.append(
+                    f'{INDENTANTION * map_items_indent}Optional("{key}"): Seq({value}),'
+                )
 
     return "\n".join(lines)
 
@@ -156,6 +181,14 @@ def is_scalar(type_: type) -> bool:
 
 def scalar_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"value": Float(), "unit": Str()})'
+
+
+def is_scalar_expression(type_: type) -> bool:
+    return inspect.isclass(type_) and issubclass(type_, ScalarExpression)
+
+
+def scalar_expression_to_alfacase_schema(type_: type, indent: int) -> str:
+    return 'Map({"value": Str(), "unit": Str()})'
 
 
 def is_array(type_: type) -> bool:
@@ -209,6 +242,7 @@ LIST_OF_IMPLEMENTATIONS: list[tuple[Callable, Callable]] = [
     (is_dict, dict_to_alfacase_schema),
     (is_union, union_to_alfacase_schema),
     (is_scalar, scalar_to_alfacase_schema),
+    (is_scalar_expression, scalar_expression_to_alfacase_schema),
     (is_array, array_to_alfacase_schema),
     (is_curve, curve_to_alfacase_schema),
     (is_int, int_to_alfacase_schema),
@@ -405,3 +439,32 @@ def get_all_classes_that_needs_schema(class_: type) -> list[type]:
         result.extend(sorted(dependencies, key=operator.attrgetter("__name__")))
 
     return result
+
+
+class UnsafeOrValidator(Validator):
+    """
+    Custom validator to bypass the OR validation of StrictYAML OR operation.
+
+    Strict YAML does not support UNION operations on property type hints. But, in the ASIM-5436
+    where we introduced the multiple runs in the ALFACASE file, users can specify both Scalar values
+    or expression like 'A+B+1' which will be evaluated for a Scalar value later.
+    """
+
+    def __init__(self, validator_a, validator_b):
+        assert isinstance(validator_a, Validator), "validator_a must be a Validator"
+        assert isinstance(validator_b, Validator), "validator_b must be a Validator"
+
+        self._validator_a = validator_a
+        self._validator_b = validator_b
+
+    def __call__(self, chunk):
+        try:
+            result = self._validator_a(chunk)
+            result._selected_validator = result._validator
+            result._validator = self
+            return result
+        except YAMLValidationError:
+            result = self._validator_b(chunk)
+            result._selected_validator = result._validator
+            result._validator = self
+            return result

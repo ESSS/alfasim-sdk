@@ -3,17 +3,24 @@ from textwrap import dedent
 
 import attr
 import pytest
+import strictyaml
 from barril.units import Array, Scalar
+from strictyaml import Float, Map, Optional, Str
 
-from alfasim_sdk import CaseDescription, CompressorEquipmentDescription
+from alfasim_sdk import (
+    CaseDescription,
+    CompressorEquipmentDescription,
+)
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     Numpy1DArray,
+    ScalarExpression,
     attrib_enum,
     attrib_instance,
     attrib_instance_list,
     attrib_scalar,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import (
+    UnsafeOrValidator,
     _obtain_referred_type,
     generate_alfacase_schema,
     get_all_classes_that_needs_schema,
@@ -518,3 +525,59 @@ def test_obtain_referred_type():
     )
     with pytest.raises(TypeError, match=msg):
         assert _obtain_referred_type(attr.fields_dict(A)["w"].type) == [str]
+
+
+def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
+    """
+    Test a case where is necessary to have a Union type hint with complex classes like Scalar and ScalarExpression.
+    """
+
+    @attr.s
+    class Foo:
+        scalar: Scalar | ScalarExpression = attrib_scalar(
+            default=Scalar("dimensionless", 4.2, "-")
+        )
+
+    # Generating schema.
+    schema = generate_alfacase_schema(Foo)
+
+    expected_schema = dedent("""\
+    foo_schema = Map(
+        {
+            Optional("scalar"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()})
+            Map({"value": Str(), "unit": Str()})
+        ),
+        }
+    )
+    """)
+    assert schema == expected_schema
+
+
+def test_usafe_or_validator() -> None:
+    """
+    Test the scenario where a unique Schema accepts both Scalar and ScalarExpression values using the.
+    UnsafeOrValidator to bypass the StrictYAML OR validation.
+    """
+    schema_1 = Map({"value": Float(), "unit": Str()})
+    schema_2 = Map({"value": Str(), "unit": Str()})
+    schema = Map({Optional("scalar"): UnsafeOrValidator(schema_1, schema_2)})
+
+    yaml_content_1 = """\
+    scalar:
+        value: 1
+        unit: '-'
+    """
+
+    content_1 = strictyaml.dirty_load(yaml_content_1, schema=schema)
+    assert content_1 == content_1.data == {"scalar": {"value": 1.0, "unit": "-"}}
+
+    yaml_content_2 = """\
+    scalar:
+        value: "A + B"
+        unit: '-'
+    """
+
+    yaml_content_2 = strictyaml.dirty_load(yaml_content_2, schema=schema)
+
+    assert yaml_content_2.data == {"scalar": {"unit": "-", "value": "A + B"}}
