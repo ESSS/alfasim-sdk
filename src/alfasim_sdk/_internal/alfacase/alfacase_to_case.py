@@ -2006,6 +2006,17 @@ def load_tracers_description(
     return update_multi_input_flags(document, item_description)
 
 
+def load_multiple_runs_description(
+    document: DescriptionDocument,
+) -> case_description.MultipleRunsDescription:
+    alfacase_to_case_description: dict[str, Any] = {
+        "variables": load_value,
+        "variations": load_value,
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    return case_description.MultipleRunsDescription(**case_values)
+
+
 def load_case_description(
     document: DescriptionDocument,
 ) -> case_description.CaseDescription:
@@ -2035,6 +2046,7 @@ def load_case_description(
         "pipes": load_pipe_description,
         "walls": load_wall_description,
         "wells": load_well_description,
+        "multiple_runs": load_multiple_runs_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.CaseDescription(**case_values)

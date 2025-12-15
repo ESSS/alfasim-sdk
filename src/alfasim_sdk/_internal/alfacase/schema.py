@@ -374,6 +374,12 @@ material_description_schema = Map(
         Optional("viscosity"): Map({"value": Float(), "unit": Str()}),
     }
 )
+multiple_runs_description_schema = Map(
+    {
+        Optional("variables"): MapPattern(Str(), Float()),
+        Optional("variations"): MapPattern(Str(), MapPattern(Str(), Float())),
+    }
+)
 numerical_options_description_schema = Map(
     {
         Optional("nonlinear_solver_type"): Enum(['nonlinear_solver_newton_basic', 'nonlinear_solver_newton_backtracking', 'nonlinear_solver_alfasim_quasi_newton']),
@@ -1233,6 +1239,7 @@ case_description_schema = Map(
         Optional("wells"): Seq(well_description_schema),
         Optional("materials"): Seq(material_description_schema),
         Optional("walls"): Seq(wall_description_schema),
+        Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 58473c64efbb4e0b46f90c479d21d1a7) (sum: immZIfp/Lh)
+# [[[end]]] (checksum: 310abc7cc35049f36bedde4816d6f869) (sum: immZIfp/Lh)
