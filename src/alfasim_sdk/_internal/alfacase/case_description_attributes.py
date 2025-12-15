@@ -1,13 +1,15 @@
 import textwrap
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
 from typing import (
     Any,
     NewType,
+    Protocol,
+    TypeAlias,
     TypeGuard,
-    Union,
 )
 
 import attr
@@ -16,6 +18,7 @@ import numpy as np
 from attr.validators import deep_iterable, deep_mapping, in_, instance_of, optional
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
+from typing_extensions import assert_never
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str
@@ -25,9 +28,44 @@ list_of_strings = deep_iterable(
 list_of_optional_integers = deep_iterable(
     member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
 )
-ScalarLike = Union[tuple[Number, str], Scalar]
-ArrayLike = Union[tuple[Sequence[Number], str], Array]
-CurveLike = Union[tuple[ArrayLike, ArrayLike], Curve]
+
+
+class ExpressionProtocol(Protocol):
+    """
+    A generic protocol for any class that can evaluate a mathematical
+    expression and return a value of type T (e.g., Scalar or float).
+    """
+
+    def eval_expression(self, namespace: dict[str, float]) -> float: ...
+
+
+@dataclass(frozen=True)
+class ScalarExpression:
+    value: str
+    unit: str
+    category: str | None = None
+
+    def eval_expression(self, namespace: dict[str, float]) -> Scalar:
+        evaluated_value = eval(self.value, namespace)
+        if self.category is None:
+            return Scalar((evaluated_value, self.unit))
+        else:
+            return Scalar(evaluated_value, self.unit, self.category)
+
+
+@dataclass(frozen=True)
+class FloatExpression:
+    value: str = attr.ib(validator=instance_of(str))
+
+    def eval_expression(self, namespace: dict[str, float]) -> float:
+        evaluated_value = eval(self.value, namespace)
+        return evaluated_value
+
+
+ScalarLike: TypeAlias = tuple[Number, str] | Scalar
+ScalarExpressionLike: TypeAlias = tuple[str, str] | ScalarExpression
+ArrayLike: TypeAlias = tuple[Sequence[Number], str] | Array
+CurveLike: TypeAlias = tuple[ArrayLike, ArrayLike] | Curve
 
 
 def generate_multi_input(
@@ -92,8 +130,11 @@ def collapse_array_repr(value: Any) -> str:
 
 
 def to_scalar(
-    value: ScalarLike, is_optional: bool = False, *, error_context: str | None = None
-) -> Scalar:
+    value: ScalarLike | ScalarExpressionLike,
+    is_optional: bool = False,
+    *,
+    error_context: str | None = None,
+) -> Scalar | ScalarExpression:
     """
     Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
     by `attrib_scalar`.
@@ -113,16 +154,31 @@ def to_scalar(
     """
     if is_optional and value is None:
         return value
-    if is_two_element_tuple(value):
-        return Scalar(value)
-    elif isinstance(value, Scalar):
-        return value
 
     message = prepare_error_message(
         f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})",
         error_context,
     )
-    raise TypeError(message)
+
+    match value:
+        case tuple():
+            if is_two_element_tuple(value):
+                value, unit = value
+                match value:
+                    case float() | int():
+                        return Scalar(value, unit)
+                    case str():
+                        return ScalarExpression(value=value, unit=unit)
+                    case unreachable:
+                        assert_never(unreachable)
+            else:
+                raise TypeError(message)
+        case Scalar() | ScalarExpression():
+            return value
+        case None:
+            raise TypeError(message)
+        case unreachable:
+            assert_never(unreachable)
 
 
 def to_array(
