@@ -3770,6 +3770,20 @@ class AlfasimVersionInfo:
     date: str = attr.ib()
 
 
+@attr.s(frozen=True, auto_attribs=True)
+class MultipleRunsDescription:
+    """
+    .. include:: /alfacase_definitions/MultipleRunsDescription.txt
+    """
+
+    variables: dict[str, float] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of((str, float))
+    )
+    variations: dict[str, dict[str, float]] = attr.ib(
+        default=attr.Factory(dict), validator=dict_of((int, dict))
+    )
+
+
 @attr.s(auto_attribs=True)
 class CaseDescription:
     """
@@ -3796,6 +3810,7 @@ class CaseDescription:
     wells: list[WellDescription] = attrib_instance_list(WellDescription)
     materials: list[MaterialDescription] = attrib_instance_list(MaterialDescription)
     walls: list[WallDescription] = attrib_instance_list(WallDescription)
+    multiple_runs: MultipleRunsDescription = attrib_instance(MultipleRunsDescription)
 
     def _check_pvt_model_references(self, reset_invalid_reference: bool = False):
         """

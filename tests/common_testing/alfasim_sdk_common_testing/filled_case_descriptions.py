@@ -735,6 +735,13 @@ ALFASIM_VERSION_INFO = case_description.AlfasimVersionInfo(
     revision="0123456789abcdef",
     date="2024-04-02 12:00",
 )
+MULTIPLE_RUNS_DESCRIPTION = case_description.MultipleRunsDescription(
+    variables={"A": 1.0, "B": 2.0, "C": 3.0},
+    variations={
+        "1": {"A": 1.1, "B": 2.1, "C": 3.1},
+        "2": {"A": 1.11, "B": 2.11, "C": 3.11},
+    },
+)
 
 CASE = case_description.CaseDescription(
     name="divergent_pipes",
@@ -755,6 +762,7 @@ CASE = case_description.CaseDescription(
     wells=[WELL_DESCRIPTION],
     materials=[MATERIAL_DESCRIPTION],
     walls=[WALL_DESCRIPTION],
+    multiple_runs=MULTIPLE_RUNS_DESCRIPTION,
 )
 REFERENCED_VOLUME_FRACTIONS_CONTAINER_DESCRIPTION = (
     case_description.ReferencedVolumeFractionsContainerDescription(
