@@ -11,12 +11,18 @@ from attr._make import _CountingAttr
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
 
-from alfasim_sdk import CaseDescription, MaterialDescription, NodeCellType
+from alfasim_sdk import (
+    CaseDescription,
+    MaterialDescription,
+    NodeCellType,
+    PhysicsDescription,
+)
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     DescriptionError,
     InvalidReferenceError,
+    ScalarExpression,
     attrib_array,
     attrib_curve,
     attrib_enum,
@@ -29,6 +35,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     numpy_array_validator,
     to_array,
     to_curve,
+    to_scalar,
 )
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
@@ -222,7 +229,7 @@ def test_scalar_attribute():
 
     @attr.s(kw_only=True, auto_attribs=True)
     class Foo:
-        position: Scalar = attrib_scalar(default=Scalar(1, "m"))
+        position: ScalarExpression | Scalar = attrib_scalar(default=Scalar(1, "m"))
         position_2: Scalar | None = attrib_scalar(default=None, category="length")
 
     # Check position
@@ -246,6 +253,11 @@ def test_scalar_attribute():
     assert isinstance(instance_with_tuple.position, Scalar)
 
     assert Foo(position_2=None).position_2 is None
+
+    foo = Foo(position=ScalarExpression(value="A+1", unit="m"))
+    assert foo.position.eval_expression(namespace={"A": 1}) == Scalar(
+        "length", 2.0, "m"
+    )
 
 
 def test_enum_attribute():
@@ -1571,3 +1583,26 @@ def test_check_fluid_references(default_well: case_description.WellDescription) 
         )
 
         case.ensure_valid_references()
+
+
+def test_to_scalar_with_scalar_expression() -> None:
+    scalar_expression = to_scalar(("A+1", "%"))
+    assert scalar_expression == ScalarExpression(value="A+1", unit="%")
+
+    scalar = scalar_expression.eval_expression(namespace={"A": 10})
+    assert scalar == Scalar(11.0, "%", "dimensionless")
+
+
+def test_case_description_with_expression() -> None:
+    physics_desc = PhysicsDescription()
+    physics_desc.emulsion_pal_rhodes_phi_rel_100 = ScalarExpression(
+        value="A+B+1", category="dimensionless", unit="%"
+    )
+    em_pal_rhodes = physics_desc.emulsion_pal_rhodes_phi_rel_100
+    value = em_pal_rhodes.eval_expression(namespace={"A": 1, "B": 2})
+    assert value == Scalar(4.0, "%", "dimensionless")
+
+    physics_desc.emulsion_pal_rhodes_phi_rel_100 = Scalar("dimensionless", 10, "%")
+    assert physics_desc.emulsion_pal_rhodes_phi_rel_100 == Scalar(
+        10, "%", "dimensionless"
+    )
