@@ -6,10 +6,10 @@
 
         class TubingDescription
             name: str
-            length: \ :class:`Scalar <barril.units.Scalar>`
-            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`
-            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
+            length: \ :class:`Optional <typing.Optional>`\[Scalar]
+            outer_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
+            inner_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
+            inner_roughness: \ :class:`Optional <typing.Optional>`\[Scalar]
             material: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
@@ -17,16 +17,8 @@
     .. parsed-literal::
 
             name: string
-            length: 
-                value: number
-                unit: string
-            outer_diameter: 
-                value: number
-                unit: string
-            inner_diameter: 
-                value: number
-                unit: string
-            inner_roughness: 
-                value: number
-                unit: string
+            length: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            outer_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            inner_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            inner_roughness: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
             material: string  # optional

@@ -6,7 +6,7 @@
 
         class FormationLayerDescription
             name: str
-            start: \ :class:`Scalar <barril.units.Scalar>`
+            start: \ :class:`Optional <typing.Optional>`\[Scalar]
             material: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
@@ -14,7 +14,5 @@
     .. parsed-literal::
 
             name: string
-            start: 
-                value: number
-                unit: string
+            start: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
             material: string  # optional

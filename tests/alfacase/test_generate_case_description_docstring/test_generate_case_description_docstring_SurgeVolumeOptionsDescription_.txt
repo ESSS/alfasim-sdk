@@ -17,12 +17,6 @@
 
             time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`\  # optional
             drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`\  # optional
-            start_time:  # optional
-                value: number
-                unit: string
-            end_time:  # optional
-                value: number
-                unit: string
-            maximum_drainage_rate:  # optional
-                value: number
-                unit: string
+            start_time: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression | None  # optional
+            end_time: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression | None  # optional
+            maximum_drainage_rate: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression | None  # optional

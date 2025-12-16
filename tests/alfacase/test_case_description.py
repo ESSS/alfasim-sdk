@@ -1176,7 +1176,7 @@ def test_generate_multi_input():
         """\
         # fmt: off
         foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        foo: Scalar = attrib_scalar(
+        foo: ScalarDescriptionType = attrib_scalar(
             default=Scalar('length', 1.2, 'm')
         )
         foo_curve: Curve = attrib_curve(
@@ -1192,7 +1192,7 @@ def test_generate_multi_input_dict():
         """\
         # fmt: off
         foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        foo: dict[str, Scalar] = attr.ib(
+        foo: dict[str, ScalarDescriptionType] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={"type": "scalar_dict", "category": 'length'},
         )

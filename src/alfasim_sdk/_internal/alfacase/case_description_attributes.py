@@ -76,7 +76,7 @@ def generate_multi_input(
         f"""\
         # fmt: off
         {prop_name}_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        {prop_name}: Scalar = attrib_scalar(
+        {prop_name}: ScalarDescriptionType = attrib_scalar(
             default=Scalar({category!r}, {default_value!r}, {unit!r})
         )
         {prop_name}_curve: Curve = attrib_curve(
@@ -91,7 +91,7 @@ def generate_multi_input_dict(prop_name: str, category: str) -> str:
         f"""\
         # fmt: off
         {prop_name}_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        {prop_name}: dict[str, Scalar] = attr.ib(
+        {prop_name}: dict[str, ScalarDescriptionType] = attr.ib(
             default=attr.Factory(dict), validator=dict_of(Scalar),
             metadata={{"type": "scalar_dict", "category": {category!r}}},
         )

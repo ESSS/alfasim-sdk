@@ -340,11 +340,23 @@ def test_generate_strict_yaml_schema_for_class():
         """\
         compressor_equipment_description_schema = Map(
             {
-                "position": Map({"value": Float(), "unit": Str()}),
+                "position": UnsafeOrValidator(
+                    Map({"value": Float(), "unit": Str()}),
+                    Map({"value": Str(), "unit": Str()}),
+                ),
                 Optional("speed_curve"): speed_curve_description_schema,
-                Optional("reference_pressure"): Map({"value": Float(), "unit": Str()}),
-                Optional("reference_temperature"): Map({"value": Float(), "unit": Str()}),
-                Optional("constant_speed"): Map({"value": Float(), "unit": Str()}),
+                Optional("reference_pressure"): UnsafeOrValidator(
+                    Map({"value": Float(), "unit": Str()}),
+                    Map({"value": Str(), "unit": Str()}),
+                ),
+                Optional("reference_temperature"): UnsafeOrValidator(
+                    Map({"value": Float(), "unit": Str()}),
+                    Map({"value": Str(), "unit": Str()}),
+                ),
+                Optional("constant_speed"): UnsafeOrValidator(
+                    Map({"value": Float(), "unit": Str()}),
+                    Map({"value": Str(), "unit": Str()}),
+                ),
                 Optional("compressor_type"): Enum(['speed_curve', 'constant_speed']),
                 Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
                 Optional("flow_direction"): Enum(['forward', 'backward']),
@@ -447,6 +459,7 @@ def test_get_cases_class():
         "MassSourceEquipmentDescription",
         "MassSourceNodePropertiesDescription",
         "MaterialDescription",
+        "MultipleRunsDescription",
         "NodeDescription",
         "NumericalOptionsDescription",
         "OpenHoleDescription",
@@ -545,9 +558,9 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
     foo_schema = Map(
         {
             Optional("scalar"): UnsafeOrValidator(
-            Map({"value": Float(), "unit": Str()})
-            Map({"value": Str(), "unit": Str()})
-        ),
+                Map({"value": Float(), "unit": Str()}),
+                Map({"value": Str(), "unit": Str()}),
+            ),
         }
     )
     """)
