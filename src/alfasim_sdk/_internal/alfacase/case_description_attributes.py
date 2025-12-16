@@ -62,6 +62,7 @@ class FloatExpression:
         return evaluated_value
 
 
+ScalarDescriptionType: TypeAlias = Scalar | ScalarExpression
 ScalarLike: TypeAlias = tuple[Number, str] | Scalar
 ScalarExpressionLike: TypeAlias = tuple[str, str] | ScalarExpression
 ArrayLike: TypeAlias = tuple[Sequence[Number], str] | Array

@@ -4,6 +4,7 @@ from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
     load_case_description,
 )
+from alfasim_sdk._internal.alfacase.case_description_attributes import ScalarExpression
 
 
 def test_alcase_to_case_with_multiple_runs(datadir: Path) -> None:
@@ -16,3 +17,20 @@ def test_alcase_to_case_with_multiple_runs(datadir: Path) -> None:
         "1": {"A": 1.1, "B": 2.1, "C": 3.1},
         "2": {"A": 1.11, "B": 2.11, "C": 3.11},
     }
+
+
+def test_physics_description_with_expressions(datadir: Path) -> None:
+    alfacase_file = datadir / "test_multiple_runs.alfacase"
+
+    case = load_case_description(DescriptionDocument.from_file(alfacase_file))
+    physics_desc = case.physics
+
+    assert physics_desc.emulsion_pal_rhodes_phi_rel_100 == ScalarExpression(
+        value="A+1", unit="-", category="dimensionless"
+    )
+    assert physics_desc.emulsion_woelflin_a == ScalarExpression(
+        value="B + C", unit="-", category="dimensionless"
+    )
+    assert physics_desc.emulsion_inversion_water_cut == ScalarExpression(
+        value="C + A", unit="m3/m3", category="volume per volume"
+    )
