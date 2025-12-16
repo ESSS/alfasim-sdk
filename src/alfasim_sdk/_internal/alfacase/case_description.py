@@ -177,13 +177,13 @@ class SurgeVolumeOptionsDescription:
     drainage_mode: constants.DrainageRateMode = attrib_enum(
         type_=constants.DrainageRateMode, default=constants.DrainageRateMode.Automatic
     )
-    start_time: Scalar | None = attrib_scalar(
+    start_time: ScalarDescriptionType | None = attrib_scalar(
         category="time", is_optional=True, default=None
     )
-    end_time: Scalar | None = attrib_scalar(
+    end_time: ScalarDescriptionType | None = attrib_scalar(
         category="time", is_optional=True, default=None
     )
-    maximum_drainage_rate: Scalar | None = attrib_scalar(
+    maximum_drainage_rate: ScalarDescriptionType | None = attrib_scalar(
         category="volume flow rate", is_optional=True, default=None
     )
 
@@ -205,7 +205,7 @@ class PositionalPipeTrendDescription(_BaseTrendOutputDescription):
     location: constants.OutputAttachmentLocation = attrib_enum(
         type_=constants.OutputAttachmentLocation
     )
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
     element_name: str = attr.ib(validator=instance_of(str))
     surge_volume_options: SurgeVolumeOptionsDescription = attrib_instance(
         SurgeVolumeOptionsDescription
@@ -309,14 +309,14 @@ class CaseOutputDescription:
 
     automatic_trend_frequency: bool = attr.ib(default=True, validator=instance_of(bool))
     trends: TrendsOutputDescription = attrib_instance(TrendsOutputDescription)
-    trend_frequency: Scalar = attrib_scalar(default=Scalar(0.1, "s"))
+    trend_frequency: ScalarDescriptionType = attrib_scalar(default=Scalar(0.1, "s"))
     automatic_profile_frequency: bool = attr.ib(
         default=True, validator=instance_of(bool)
     )
     profiles: list[ProfileOutputDescription] = attrib_instance_list(
         ProfileOutputDescription
     )
-    profile_frequency: Scalar = attrib_scalar(default=Scalar(0.1, "s"))
+    profile_frequency: ScalarDescriptionType = attrib_scalar(default=Scalar(0.1, "s"))
 
 
 @attr.s(kw_only=True, auto_attribs=True)
@@ -366,14 +366,14 @@ class _MassSourceCommon:
     # ]]]
     # fmt: off
     temperature_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    temperature: Scalar = attrib_scalar(
+    temperature: ScalarDescriptionType = attrib_scalar(
         default=Scalar('temperature', 288.6, 'K')
     )
     temperature_curve: Curve = attrib_curve(
         default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 36eec9d7cfeeca5d2b1988767baa76ce) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
+    # [[[end]]] (checksum: 707ae01f2d59528c4595e8e25f916295) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
 
     source_type: constants.MassSourceType = attrib_enum(
         default=constants.MassSourceType.MassFlowRates
@@ -384,7 +384,7 @@ class _MassSourceCommon:
     # ]]]
     # fmt: off
     volumetric_flow_rates_std_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    volumetric_flow_rates_std: dict[str, Scalar] = attr.ib(
+    volumetric_flow_rates_std: dict[str, ScalarDescriptionType] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'standard volume per time'},
     )
@@ -393,14 +393,14 @@ class _MassSourceCommon:
         metadata={"type": "curve_dict", "category": 'standard volume per time'},
     )
     # fmt: on
-    # [[[end]]] (checksum: 2c711303f325eb1d8d0b1f25b85cacf3) (sum: LHETA/Ml6x) (sum: LHETA/Ml6x)
+    # [[[end]]] (checksum: d6d37d1be631bd60ce1f2dd5f8af35ad) (sum: LHETA/Ml6x) (sum: LHETA/Ml6x)
 
     # [[[cog
     # cog_out_multi_input_dict("mass_flow_rates", "mass flow rate")
     # ]]]
     # fmt: off
     mass_flow_rates_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    mass_flow_rates: dict[str, Scalar] = attr.ib(
+    mass_flow_rates: dict[str, ScalarDescriptionType] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'mass flow rate'},
     )
@@ -409,49 +409,49 @@ class _MassSourceCommon:
         metadata={"type": "curve_dict", "category": 'mass flow rate'},
     )
     # fmt: on
-    # [[[end]]] (checksum: 4dd51a245e894bea8f763169ce32cd7b) (sum: TdUaJF6JS+) (sum: TdUaJF6JS+)
+    # [[[end]]] (checksum: 6f7ed313c43d060c73553c644c6ccf24) (sum: TdUaJF6JS+) (sum: TdUaJF6JS+)
 
     # [[[cog
     # cog_out_multi_input("total_mass_flow_rate", "mass flow rate", 1.0, "kg/s")
     # ]]]
     # fmt: off
     total_mass_flow_rate_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    total_mass_flow_rate: Scalar = attrib_scalar(
+    total_mass_flow_rate: ScalarDescriptionType = attrib_scalar(
         default=Scalar('mass flow rate', 1.0, 'kg/s')
     )
     total_mass_flow_rate_curve: Curve = attrib_curve(
         default=Curve(Array('mass flow rate', [], 'kg/s'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: cf48708c4bb8457576769694eee229a0) (sum: z0hwjEu4RX) (sum: z0hwjEu4RX)
+    # [[[end]]] (checksum: 6dd3e49453d6a173bdc8b7bebd2bbc38) (sum: z0hwjEu4RX) (sum: z0hwjEu4RX)
 
     # [[[cog
     # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
     # ]]]
     # fmt: off
     water_cut_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    water_cut: Scalar = attrib_scalar(
+    water_cut: ScalarDescriptionType = attrib_scalar(
         default=Scalar('volume fraction', 0.0, '-')
     )
     water_cut_curve: Curve = attrib_curve(
         default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: e4baf07b2f90a2d9a01065e5b11c7e2c) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
+    # [[[end]]] (checksum: 53609e0b45bf46a5aaf61afaf695d4ea) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
 
     # [[[cog
     # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
     # ]]]
     # fmt: off
     gas_oil_ratio_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    gas_oil_ratio: Scalar = attrib_scalar(
+    gas_oil_ratio: ScalarDescriptionType = attrib_scalar(
         default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
     )
     gas_oil_ratio_curve: Curve = attrib_curve(
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 4af2b7d9618d8a5957f0df76497e26e8) (sum: SvK32WGNil) (sum: SvK32WGNil)
+    # [[[end]]] (checksum: 437a943db2f8976e463c22301c8e0f4b) (sum: SvK32WGNil) (sum: SvK32WGNil)
 
 
 @attr.s(kw_only=True, auto_attribs=True)
@@ -470,28 +470,28 @@ class _PressureSourceCommon:
     # ]]]
     # fmt: off
     pressure_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    pressure: Scalar = attrib_scalar(
+    pressure: ScalarDescriptionType = attrib_scalar(
         default=Scalar('pressure', 100000.0, 'Pa')
     )
     pressure_curve: Curve = attrib_curve(
         default=Curve(Array('pressure', [], 'Pa'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: fe0aecae34c286913db71e81d0b64de8) (sum: /grsrjTChp) (sum: /grsrjTChp)
+    # [[[end]]] (checksum: 3604863b092d15ef9ecbb62fede69c77) (sum: /grsrjTChp) (sum: /grsrjTChp)
 
     # [[[cog
     # cog_out_multi_input("temperature", "temperature", constants.DEFAULT_TEMPERATURE_IN_K, "K")
     # ]]]
     # fmt: off
     temperature_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    temperature: Scalar = attrib_scalar(
+    temperature: ScalarDescriptionType = attrib_scalar(
         default=Scalar('temperature', 288.6, 'K')
     )
     temperature_curve: Curve = attrib_curve(
         default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 36eec9d7cfeeca5d2b1988767baa76ce) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
+    # [[[end]]] (checksum: 707ae01f2d59528c4595e8e25f916295) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
 
     fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
@@ -510,7 +510,7 @@ class _PressureSourceCommon:
     # ]]]
     # fmt: off
     mass_fractions_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    mass_fractions: dict[str, Scalar] = attr.ib(
+    mass_fractions: dict[str, ScalarDescriptionType] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'mass fraction'},
     )
@@ -519,14 +519,14 @@ class _PressureSourceCommon:
         metadata={"type": "curve_dict", "category": 'mass fraction'},
     )
     # fmt: on
-    # [[[end]]] (checksum: debc8ca806e39772d4a20569869a4655) (sum: 3ryMqAbjl3) (sum: 3ryMqAbjl3)
+    # [[[end]]] (checksum: 71f84607f5b887f5a749a8c414468585) (sum: 3ryMqAbjl3) (sum: 3ryMqAbjl3)
 
     # [[[cog
     # cog_out_multi_input_dict("volume_fractions", "volume fraction")
     # ]]]
     # fmt: off
     volume_fractions_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    volume_fractions: dict[str, Scalar] = attr.ib(
+    volume_fractions: dict[str, ScalarDescriptionType] = attr.ib(
         default=attr.Factory(dict), validator=dict_of(Scalar),
         metadata={"type": "scalar_dict", "category": 'volume fraction'},
     )
@@ -535,49 +535,49 @@ class _PressureSourceCommon:
         metadata={"type": "curve_dict", "category": 'volume fraction'},
     )
     # fmt: on
-    # [[[end]]] (checksum: ae291714c26138281dadee1d613b610c) (sum: rikXFMJhOC) (sum: rikXFMJhOC)
+    # [[[end]]] (checksum: a9ec4769688e92a8ce380c4dac9dd9b0) (sum: rikXFMJhOC) (sum: rikXFMJhOC)
 
     # [[[cog
     # cog_out_multi_input("gas_liquid_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
     # ]]]
     # fmt: off
     gas_liquid_ratio_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    gas_liquid_ratio: Scalar = attrib_scalar(
+    gas_liquid_ratio: ScalarDescriptionType = attrib_scalar(
         default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
     )
     gas_liquid_ratio_curve: Curve = attrib_curve(
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: cb3b16929b1c03d48380d4d83416260e) (sum: yzsWkpscA9) (sum: yzsWkpscA9)
+    # [[[end]]] (checksum: ef3ee0d56ef9098755c542250aa956cb) (sum: yzsWkpscA9) (sum: yzsWkpscA9)
 
     # [[[cog
     # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
     # ]]]
     # fmt: off
     gas_oil_ratio_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    gas_oil_ratio: Scalar = attrib_scalar(
+    gas_oil_ratio: ScalarDescriptionType = attrib_scalar(
         default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
     )
     gas_oil_ratio_curve: Curve = attrib_curve(
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 4af2b7d9618d8a5957f0df76497e26e8) (sum: SvK32WGNil) (sum: SvK32WGNil)
+    # [[[end]]] (checksum: 437a943db2f8976e463c22301c8e0f4b) (sum: SvK32WGNil) (sum: SvK32WGNil)
 
     # [[[cog
     # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
     # ]]]
     # fmt: off
     water_cut_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    water_cut: Scalar = attrib_scalar(
+    water_cut: ScalarDescriptionType = attrib_scalar(
         default=Scalar('volume fraction', 0.0, '-')
     )
     water_cut_curve: Curve = attrib_curve(
         default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: e4baf07b2f90a2d9a01065e5b11c7e2c) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
+    # [[[end]]] (checksum: 53609e0b45bf46a5aaf61afaf695d4ea) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -598,8 +598,10 @@ class CompositionDescription:
     """
 
     component: str = attr.ib(validator=instance_of(str))
-    molar_fraction: Scalar = attrib_scalar(default=Scalar(0, "mol/mol"))
-    reference_enthalpy: Scalar = attrib_scalar(default=Scalar(0, "J/mol"))
+    molar_fraction: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "mol/mol"))
+    reference_enthalpy: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0, "J/mol")
+    )
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -642,7 +644,7 @@ class MassSourceEquipmentDescription(_MassSourceCommon):
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
@@ -772,11 +774,13 @@ class PumpEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
     flow_direction: constants.FlowDirection = attrib_enum(
         default=constants.FlowDirection.Forward
     )
-    thermal_efficiency: Scalar = attrib_scalar(default=Scalar(100.0, "%"))
+    thermal_efficiency: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(100.0, "%")
+    )
     thermal_efficiency_model: constants.PumpThermalEfficiencyModel = attrib_enum(
         default=constants.PumpThermalEfficiencyModel.Constant
     )
@@ -784,7 +788,7 @@ class PumpEquipmentDescription:
     type: constants.PumpType = attrib_enum(default=constants.PumpType.ConstantPressure)
 
     # Constant Pressure Boost Pump
-    pressure_boost: Scalar = attrib_scalar(
+    pressure_boost: ScalarDescriptionType = attrib_scalar(
         category="pressure", default=Scalar(1.0e5, "Pa")
     )
 
@@ -797,7 +801,7 @@ class PumpEquipmentDescription:
     speed_type: constants.PumpSpeedType = attrib_enum(
         default=constants.PumpSpeedType.Constant
     )
-    constant_speed: Scalar = attrib_scalar(
+    constant_speed: ScalarDescriptionType = attrib_scalar(
         category="angle per time", default=Scalar(500, "rpm")
     )
     # Electric Submersible Pump
@@ -807,16 +811,16 @@ class PumpEquipmentDescription:
     # ]]]
     # fmt: off
     esp_speed_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    esp_speed: Scalar = attrib_scalar(
+    esp_speed: ScalarDescriptionType = attrib_scalar(
         default=Scalar('angle per time', 0.0, 'Hz')
     )
     esp_speed_curve: Curve = attrib_curve(
         default=Curve(Array('angle per time', [], 'Hz'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 771667f1bb93ca194cfbd6d9d0bdf142) (sum: dxZn8buTyh) (sum: dxZn8buTyh)
+    # [[[end]]] (checksum: 3330bf2c8913524c6628ce98592057ac) (sum: dxZn8buTyh) (sum: dxZn8buTyh)
     esp_number_of_stages: int = attr.ib(default=1, validator=instance_of(int))
-    esp_reference_density: Scalar = attrib_scalar(
+    esp_reference_density: ScalarDescriptionType = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
     )
     esp_manufacturer: str | None = attr.ib(
@@ -887,11 +891,15 @@ class CompressorEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_angle_per_time.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
     speed_curve: SpeedCurveDescription = attrib_instance(SpeedCurveDescription)
-    reference_pressure: Scalar = attrib_scalar(default=Scalar(1.0, "bar"))
-    reference_temperature: Scalar = attrib_scalar(default=Scalar(25, "degC"))
-    constant_speed: Scalar = attrib_scalar(
+    reference_pressure: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(1.0, "bar")
+    )
+    reference_temperature: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(25, "degC")
+    )
+    constant_speed: ScalarDescriptionType = attrib_scalar(
         default=Scalar(500, "rpm"), category="angle per time"
     )
     compressor_type: constants.CompressorSpeedType = attrib_enum(
@@ -941,8 +949,8 @@ class PigEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_force_per_velocity_squared.txt
     """
 
-    diameter: Scalar = attrib_scalar(category="diameter")
-    position: Scalar = attrib_scalar(category="length")
+    diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
 
     launch_times: Array = attrib_array(default=Array([0.0], "s"))
 
@@ -951,75 +959,77 @@ class PigEquipmentDescription:
     # ]]]
     # fmt: off
     mass_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    mass: Scalar = attrib_scalar(
+    mass: ScalarDescriptionType = attrib_scalar(
         default=Scalar('mass', 140.0, 'kg')
     )
     mass_curve: Curve = attrib_curve(
         default=Curve(Array('mass', [], 'kg'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 05d6649a53deb426a4994942ef832481) (sum: BdZkmlPetC) (sum: BdZkmlPetC)
+    # [[[end]]] (checksum: 8f230dea4c25e73a7241b001a0d616c5) (sum: BdZkmlPetC) (sum: BdZkmlPetC)
 
     # [[[cog
     # cog_out_multi_input("static_force", "force", 1000.0, "N")
     # ]]]
     # fmt: off
     static_force_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    static_force: Scalar = attrib_scalar(
+    static_force: ScalarDescriptionType = attrib_scalar(
         default=Scalar('force', 1000.0, 'N')
     )
     static_force_curve: Curve = attrib_curve(
         default=Curve(Array('force', [], 'N'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 409fe45d1b77c811bee669ded70381e2) (sum: QJ/kXRt3yB) (sum: QJ/kXRt3yB)
+    # [[[end]]] (checksum: 5be9fe6a006631f898a938b6144f17c0) (sum: QJ/kXRt3yB) (sum: QJ/kXRt3yB)
 
     # [[[cog
     # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "N.s/m")
     # ]]]
     # fmt: off
     wall_friction_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    wall_friction: Scalar = attrib_scalar(
+    wall_friction: ScalarDescriptionType = attrib_scalar(
         default=Scalar('force per velocity', 1000.0, 'N.s/m')
     )
     wall_friction_curve: Curve = attrib_curve(
         default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: c18bbaf817458dcdc08daf023ebd2c4e) (sum: wYu6+BdFjc) (sum: wYu6+BdFjc)
+    # [[[end]]] (checksum: 2d467fe5170f6b612e85d2d7697ffa39) (sum: wYu6+BdFjc) (sum: wYu6+BdFjc)
 
     # [[[cog
     # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "N.s/m")
     # ]]]
     # fmt: off
     linear_friction_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    linear_friction: Scalar = attrib_scalar(
+    linear_friction: ScalarDescriptionType = attrib_scalar(
         default=Scalar('force per velocity', 10.0, 'N.s/m')
     )
     linear_friction_curve: Curve = attrib_curve(
         default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: ed5518774184459e8f36e3c1cc54fcd2) (sum: 7VUYd0GERZ) (sum: 7VUYd0GERZ)
+    # [[[end]]] (checksum: 8c6aa94dca2ba92604b895ad732c8805) (sum: 7VUYd0GERZ) (sum: 7VUYd0GERZ)
 
     # [[[cog
     # cog_out_multi_input("quadratic_friction", "force per velocity squared", 0.0, "N.s2/m2")
     # ]]]
     # fmt: off
     quadratic_friction_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    quadratic_friction: Scalar = attrib_scalar(
+    quadratic_friction: ScalarDescriptionType = attrib_scalar(
         default=Scalar('force per velocity squared', 0.0, 'N.s2/m2')
     )
     quadratic_friction_curve: Curve = attrib_curve(
         default=Curve(Array('force per velocity squared', [], 'N.s2/m2'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 6d2f7c8c5023fc1aef42273bd66d8e92) (sum: bS98jFAj/B) (sum: bS98jFAj/B)
+    # [[[end]]] (checksum: c0def0cea6e15a916eb134d0b8cb0938) (sum: bS98jFAj/B) (sum: bS98jFAj/B)
 
     trap_mode: constants.PigTrappingMode = attrib_enum(
         default=constants.PigTrappingMode.Automatic
     )
-    trap_position: Scalar = attrib_scalar(default=Scalar(0.0, "m"), category="length")
+    trap_position: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "m"), category="length"
+    )
     trap_pipe_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1046,9 +1056,11 @@ class ValveEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
     type: constants.ValveType = attrib_enum(default=constants.ValveType.PerkinsValve)
-    diameter: Scalar = attrib_scalar(default=Scalar("diameter", 0.01, "m"))
+    diameter: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("diameter", 0.01, "m")
+    )
     flow_direction: constants.FlowDirection = attrib_enum(
         default=constants.FlowDirection.Forward
     )
@@ -1058,7 +1070,9 @@ class ValveEquipmentDescription:
         default=constants.ValveOpeningType.ConstantOpening
     )
     # --> When ValveOpeningType.ConstantOpening
-    opening: Scalar = attrib_scalar(default=Scalar("dimensionless", 100, "%"))
+    opening: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 100, "%")
+    )
     # --> When ValveOpeningType.TableInterpolation
     opening_curve_interpolation_type: constants.InterpolationType = attrib_enum(
         default=constants.InterpolationType.Constant
@@ -1085,14 +1099,16 @@ class LeakEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
     location: constants.LeakLocation = attrib_enum(default=constants.LeakLocation.Main)
     model: constants.LeakModel = attrib_enum(default=constants.LeakModel.Orifice)
     type: constants.LeakType = attrib_enum(default=constants.LeakType.Internal)
 
     # Perkins model parameters
-    diameter: Scalar = attrib_scalar(default=Scalar("diameter", 0.05, "m"))
-    discharge_coefficient: Scalar = attrib_scalar(
+    diameter: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("diameter", 0.05, "m")
+    )
+    discharge_coefficient: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 0.85, "-")
     )
 
@@ -1106,18 +1122,18 @@ class LeakEquipmentDescription:
     )
 
     # Gas-lift parameters of minimum pressure difference opening type
-    minimum_pressure_difference: Scalar = attrib_scalar(
+    minimum_pressure_difference: ScalarDescriptionType = attrib_scalar(
         default=Scalar("pressure", 0.0, "Pa")
     )
 
     # Gas-lift parameters of pressure operated opening type
-    bellows_reference_pressure: Scalar = attrib_scalar(
+    bellows_reference_pressure: ScalarDescriptionType = attrib_scalar(
         default=Scalar("pressure", 10, "bar")
     )
-    bellows_reference_temperature: Scalar = attrib_scalar(
+    bellows_reference_temperature: ScalarDescriptionType = attrib_scalar(
         default=Scalar("temperature", 15, "degC")
     )
-    port_to_bellows_area_ratio: Scalar = attrib_scalar(
+    port_to_bellows_area_ratio: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 0.1, "-")
     )
 
@@ -1127,25 +1143,25 @@ class LeakEquipmentDescription:
     # ]]]
     # fmt: off
     opening_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    opening: Scalar = attrib_scalar(
+    opening: ScalarDescriptionType = attrib_scalar(
         default=Scalar('dimensionless', 1.0, '-')
     )
     opening_curve: Curve = attrib_curve(
         default=Curve(Array('dimensionless', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: dab1f6c15c15ee59d41984a7be583fdb) (sum: 2rH2wVwV7l) (sum: 2rH2wVwV7l)
+    # [[[end]]] (checksum: 00e7e1460b89e8da38d5506d7ace188a) (sum: 2rH2wVwV7l) (sum: 2rH2wVwV7l)
 
     target_pipe_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    target_position: Scalar = attrib_scalar(default=Scalar(0.0, "m"))
+    target_position: ScalarDescriptionType = attrib_scalar(default=Scalar(0.0, "m"))
     target_location: constants.LeakLocation = attrib_enum(
         default=constants.LeakLocation.Main
     )
 
     backflow: bool = attr.ib(default=False, validator=instance_of(bool))
-    backpressure: Scalar = attrib_scalar(default=Scalar(1.0, "bar"))
+    backpressure: ScalarDescriptionType = attrib_scalar(default=Scalar(1.0, "bar"))
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
@@ -1188,21 +1204,23 @@ class LinearIPRDescription(CommonIPR):
     .. include:: /alfacase_definitions/list_of_unit_for_productivity_index.txt
     """
 
-    min_pressure_difference: Scalar = attrib_scalar(default=Scalar(0.0, "Pa"))
+    min_pressure_difference: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "Pa")
+    )
 
     # [[[cog
     # cog_out_multi_input("well_index", "productivity index", 24.0, "m3/bar.d")
     # ]]]
     # fmt: off
     well_index_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    well_index: Scalar = attrib_scalar(
+    well_index: ScalarDescriptionType = attrib_scalar(
         default=Scalar('productivity index', 24.0, 'm3/bar.d')
     )
     well_index_curve: Curve = attrib_curve(
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: af7535d91fbb09855f640560f9fc40df) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
+    # [[[end]]] (checksum: f9b27bcce53cda44e6016aae8ae4310a) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1214,21 +1232,23 @@ class VogelIPRDescription(CommonIPR):
     .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_time.txt
     """
 
-    min_pressure_difference: Scalar = attrib_scalar(default=Scalar(0.0, "Pa"))
+    min_pressure_difference: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "Pa")
+    )
 
     # [[[cog
     # cog_out_multi_input("well_max_flow_rate", "standard volume per time", 1.0, "sm3/d")
     # ]]]
     # fmt: off
     well_max_flow_rate_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    well_max_flow_rate: Scalar = attrib_scalar(
+    well_max_flow_rate: ScalarDescriptionType = attrib_scalar(
         default=Scalar('standard volume per time', 1.0, 'sm3/d')
     )
     well_max_flow_rate_curve: Curve = attrib_curve(
         default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 06c5189f07d7cf65f91791c7209627a6) (sum: BsUYnwfXz2) (sum: BsUYnwfXz2)
+    # [[[end]]] (checksum: d3d52ce629999478d7a8aa9ed7fc1c51) (sum: BsUYnwfXz2) (sum: BsUYnwfXz2)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1240,22 +1260,26 @@ class FetkovichIPRDescription(CommonIPR):
     .. include:: /alfacase_definitions/list_of_unit_for_productivity_index.txt
     """
 
-    min_pressure_difference: Scalar = attrib_scalar(default=Scalar(0.0, "Pa"))
-    bubble_point_pressure: Scalar = attrib_scalar(default=Scalar(0.0, "Pa"))
+    min_pressure_difference: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "Pa")
+    )
+    bubble_point_pressure: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "Pa")
+    )
 
     # [[[cog
     # cog_out_multi_input("well_index", "productivity index", 24.0, "m3/bar.d")
     # ]]]
     # fmt: off
     well_index_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    well_index: Scalar = attrib_scalar(
+    well_index: ScalarDescriptionType = attrib_scalar(
         default=Scalar('productivity index', 24.0, 'm3/bar.d')
     )
     well_index_curve: Curve = attrib_curve(
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: af7535d91fbb09855f640560f9fc40df) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
+    # [[[end]]] (checksum: f9b27bcce53cda44e6016aae8ae4310a) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1279,25 +1303,35 @@ class ForchheimerIPRDescription(CommonIPR):
     well_index_phase: constants.WellIndexPhaseType = attrib_enum(
         default=constants.WellIndexPhaseType.Gas
     )
-    min_pressure_difference: Scalar = attrib_scalar(default=Scalar(0.0, "Pa"))
-    gas_viscosity: Scalar = attrib_scalar(
+    min_pressure_difference: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "Pa")
+    )
+    gas_viscosity: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dynamic viscosity", 0.0, "Pa.s")
     )
-    gas_z_factor: Scalar = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
-    reservoir_permeability: Scalar = attrib_scalar(
+    gas_z_factor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 0.0, "-")
+    )
+    reservoir_permeability: ScalarDescriptionType = attrib_scalar(
         default=Scalar("permeability rock", 0.0, "m2")
     )
-    drainage_radius: Scalar = attrib_scalar(default=Scalar("length", 0.0, "m"))
-    well_radius: Scalar = attrib_scalar(default=Scalar("length", 0.0, "m"))
-    well_skin_factor: Scalar = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
-    non_darcy_parameter: Scalar = attrib_scalar(
+    drainage_radius: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("length", 0.0, "m")
+    )
+    well_radius: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("length", 0.0, "m")
+    )
+    well_skin_factor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 0.0, "-")
+    )
+    non_darcy_parameter: ScalarDescriptionType = attrib_scalar(
         default=Scalar("nonDarcy flow coefficient", 0.0, "Pa.s/m6")
     )
 
-    B_coeff: Scalar = attrib_scalar(
+    B_coeff: ScalarDescriptionType = attrib_scalar(
         default=Scalar("forchheimer linear productivity index", 0.0, "Pa2.s/scm")
     )
-    C_coeff: Scalar = attrib_scalar(
+    C_coeff: ScalarDescriptionType = attrib_scalar(
         default=Scalar("forchheimer quadratic productivity index", 0.0, "Pa2.s2/scm2")
     )
 
@@ -1356,8 +1390,8 @@ class ReservoirInflowEquipmentDescription(_PressureSourceCommon):
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    start: Scalar = attrib_scalar(category="length")
-    length: Scalar = attrib_scalar(category="length")
+    start: ScalarDescriptionType = attrib_scalar(category="length")
+    length: ScalarDescriptionType = attrib_scalar(category="length")
     productivity_ipr: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -1375,22 +1409,22 @@ class HeatSourceEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_power.txt
     """
 
-    start: Scalar = attrib_scalar(category="length")
-    length: Scalar = attrib_scalar(category="length")
+    start: ScalarDescriptionType = attrib_scalar(category="length")
+    length: ScalarDescriptionType = attrib_scalar(category="length")
 
     # [[[cog
     # cog_out_multi_input("power", "power", 0, 'W')
     # ]]]
     # fmt: off
     power_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-    power: Scalar = attrib_scalar(
+    power: ScalarDescriptionType = attrib_scalar(
         default=Scalar('power', 0, 'W')
     )
     power_curve: Curve = attrib_curve(
         default=Curve(Array('power', [], 'W'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: d25d528e4e4866ea6d8297491dcd8a40) (sum: 0l1Sjk5IZu) (sum: 0l1Sjk5IZu)
+    # [[[end]]] (checksum: 1c2f1851f9156238464f93070019929c) (sum: 0l1Sjk5IZu) (sum: 0l1Sjk5IZu)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1419,7 +1453,7 @@ class ReferencedPressureContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
 
-    reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
+    reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([0.0], "m"))
     pressures: Array = attr.ib(default=Array([1e5], "Pa"))
 
@@ -1467,7 +1501,7 @@ class ReferencedVolumeFractionsContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
+    reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     fractions: dict[PhaseName, Array] = attr.ib(default={})
 
@@ -1520,7 +1554,7 @@ class ReferencedTracersMassFractionsContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
+    reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     tracers_mass_fractions: list[Array] = attr.ib(default=[])
 
@@ -1567,7 +1601,7 @@ class ReferencedVelocitiesContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
-    reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
+    reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     velocities: dict[PhaseName, Array] = attr.ib(default={})
 
@@ -1620,7 +1654,7 @@ class ReferencedTemperaturesContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
-    reference_coordinate: Scalar = attr.ib(default=Scalar(0.0, "m"))
+    reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
     positions: Array = attr.ib(default=Array([], "m"))
     temperatures: Array = attr.ib(default=Array([], "K"))
 
@@ -1825,16 +1859,18 @@ class EnvironmentPropertyDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
-    temperature: Scalar = attrib_scalar(category="temperature")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
+    temperature: ScalarDescriptionType = attrib_scalar(category="temperature")
     type: constants.PipeEnvironmentHeatTransferCoefficientModelType = attrib_enum(
         type_=constants.PipeEnvironmentHeatTransferCoefficientModelType
     )
-    heat_transfer_coefficient: Scalar = attrib_scalar(default=Scalar(0.0, "W/m2.K"))
-    overall_heat_transfer_coefficient: Scalar = attrib_scalar(
+    heat_transfer_coefficient: ScalarDescriptionType = attrib_scalar(
         default=Scalar(0.0, "W/m2.K")
     )
-    fluid_velocity: Scalar = attrib_scalar(default=Scalar(0.0, "m/s"))
+    overall_heat_transfer_coefficient: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "W/m2.K")
+    )
+    fluid_velocity: ScalarDescriptionType = attrib_scalar(default=Scalar(0.0, "m/s"))
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
@@ -1851,7 +1887,9 @@ class EnvironmentDescription:
     position_input_mode: constants.PipeThermalPositionInput = attrib_enum(
         default=constants.PipeThermalPositionInput.Md
     )
-    reference_y_coordinate: Scalar = attrib_scalar(default=Scalar("length", 0.0, "m"))
+    reference_y_coordinate: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("length", 0.0, "m")
+    )
     md_properties_table: list[EnvironmentPropertyDescription] = attrib_instance_list(
         EnvironmentPropertyDescription
     )
@@ -1896,7 +1934,9 @@ class PipeDescription:
     flow_pattern_model: constants.FlowPatternModel = attrib_enum(
         default=constants.FlowPatternModel.UnitCell
     )
-    regime_capturing_mesh_threshold: Scalar = attrib_scalar(default=Scalar(0.0, "-"))
+    regime_capturing_mesh_threshold: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "-")
+    )
 
 
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
@@ -1937,15 +1977,19 @@ class SeparatorNodePropertiesDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
     """
 
-    environment_temperature: Scalar = attrib_scalar(default=Scalar(25.0, "degC"))
+    environment_temperature: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(25.0, "degC")
+    )
     geometry: constants.SeparatorGeometryType = attrib_enum(
         default=constants.SeparatorGeometryType.VerticalCylinder
     )
-    length: Scalar = attrib_scalar(default=Scalar(1.0, "m"))
-    overall_heat_transfer_coefficient: Scalar = attrib_scalar(
+    length: ScalarDescriptionType = attrib_scalar(default=Scalar(1.0, "m"))
+    overall_heat_transfer_coefficient: ScalarDescriptionType = attrib_scalar(
         default=Scalar(0.0, "W/m2.K")
     )
-    diameter: Scalar = attrib_scalar(default=Scalar("diameter", 1.0, "m"))
+    diameter: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("diameter", 1.0, "m")
+    )
     nozzles: dict[str, Scalar] = attr.ib(
         default=attr.Factory(dict), validator=dict_with_scalar
     )
@@ -1955,10 +1999,10 @@ class SeparatorNodePropertiesDescription:
             constants.FLUID_OIL: Scalar("volume fraction", 0.5, "-"),
         }
     )
-    gas_separation_efficiency: Scalar = attrib_scalar(
+    gas_separation_efficiency: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 1.0, "-")
     )
-    liquid_separation_efficiency: Scalar = attrib_scalar(
+    liquid_separation_efficiency: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 1.0, "-")
     )
 
@@ -2064,8 +2108,8 @@ class ControllerNodePropertiesDescription:
     type: constants.ControllerType = attrib_enum(default=constants.ControllerType.PID)
     gain: float = attr.ib(default=1e-4, converter=float)
     setpoint: float = attr.ib(default=0.0, converter=float)
-    integral_time: Scalar = attrib_scalar(default=Scalar(10, "s"))
-    derivative_time: Scalar = attrib_scalar(default=Scalar(1, "s"))
+    integral_time: ScalarDescriptionType = attrib_scalar(default=Scalar(10, "s"))
+    derivative_time: ScalarDescriptionType = attrib_scalar(default=Scalar(1, "s"))
 
     input_signal_properties: ControllerInputSignalPropertiesDescription = (
         attrib_instance(ControllerInputSignalPropertiesDescription)
@@ -2126,7 +2170,7 @@ class FormationLayerDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    start: Scalar = attrib_scalar(category="length")
+    start: ScalarDescriptionType = attrib_scalar(category="length")
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
 
@@ -2138,7 +2182,7 @@ class FormationDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    reference_y_coordinate: Scalar = attrib_scalar(category="length")
+    reference_y_coordinate: ScalarDescriptionType = attrib_scalar(category="length")
     layers: list[FormationLayerDescription] = attrib_instance_list(
         FormationLayerDescription
     )
@@ -2153,14 +2197,14 @@ class CasingSectionDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    hanger_depth: Scalar = attrib_scalar(category="length")
-    settings_depth: Scalar = attrib_scalar(category="length")
-    hole_diameter: Scalar = attrib_scalar(category="diameter")
-    outer_diameter: Scalar = attrib_scalar(category="diameter")
-    inner_diameter: Scalar = attrib_scalar(category="diameter")
-    inner_roughness: Scalar = attrib_scalar(category="length")
+    hanger_depth: ScalarDescriptionType = attrib_scalar(category="length")
+    settings_depth: ScalarDescriptionType = attrib_scalar(category="length")
+    hole_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    outer_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    inner_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    inner_roughness: ScalarDescriptionType = attrib_scalar(category="length")
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
-    top_of_filler: Scalar = attrib_scalar(category="length")
+    top_of_filler: ScalarDescriptionType = attrib_scalar(category="length")
     filler_material: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -2186,10 +2230,10 @@ class TubingDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    length: Scalar = attrib_scalar(category="length")
-    outer_diameter: Scalar = attrib_scalar(category="diameter")
-    inner_diameter: Scalar = attrib_scalar(category="diameter")
-    inner_roughness: Scalar = attrib_scalar(category="length")
+    length: ScalarDescriptionType = attrib_scalar(category="length")
+    outer_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    inner_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    inner_roughness: ScalarDescriptionType = attrib_scalar(category="length")
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
     @outer_diameter.validator
@@ -2209,7 +2253,7 @@ class PackerDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    position: Scalar = attrib_scalar(category="length")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
     material_above: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -2224,9 +2268,9 @@ class OpenHoleDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    length: Scalar = attrib_scalar(category="length")
-    diameter: Scalar = attrib_scalar(category="diameter")
-    inner_roughness: Scalar = attrib_scalar(category="length")
+    length: ScalarDescriptionType = attrib_scalar(category="length")
+    diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
+    inner_roughness: ScalarDescriptionType = attrib_scalar(category="length")
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
@@ -2259,11 +2303,13 @@ class GasLiftValveEquipmentDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    position: Scalar = attrib_scalar(category="length")
-    diameter: Scalar = attrib_scalar(category="diameter")
+    position: ScalarDescriptionType = attrib_scalar(category="length")
+    diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
     valve_type: constants.ValveType = attrib_enum(type_=constants.ValveType)
-    delta_p_min: Scalar = attrib_scalar(category="pressure")
-    discharge_coefficient: Scalar = attrib_scalar(category="dimensionless")
+    delta_p_min: ScalarDescriptionType = attrib_scalar(category="pressure")
+    discharge_coefficient: ScalarDescriptionType = attrib_scalar(
+        category="dimensionless"
+    )
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
@@ -2344,13 +2390,19 @@ class MaterialDescription:
     material_type: constants.MaterialType = attrib_enum(
         default=constants.MaterialType.Solid
     )
-    density: Scalar = attrib_scalar(default=Scalar(1, "kg/m3"))
-    thermal_conductivity: Scalar = attrib_scalar(default=Scalar(0, "W/m.degC"))
-    heat_capacity: Scalar = attrib_scalar(default=Scalar(0, "J/kg.degC"))
-    inner_emissivity: Scalar = attrib_scalar(default=Scalar("emissivity", 0, "-"))
-    outer_emissivity: Scalar = attrib_scalar(default=Scalar("emissivity", 0, "-"))
-    expansion: Scalar = attrib_scalar(default=Scalar(0, "1/K"))
-    viscosity: Scalar = attrib_scalar(default=Scalar(0, "cP"))
+    density: ScalarDescriptionType = attrib_scalar(default=Scalar(1, "kg/m3"))
+    thermal_conductivity: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0, "W/m.degC")
+    )
+    heat_capacity: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "J/kg.degC"))
+    inner_emissivity: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("emissivity", 0, "-")
+    )
+    outer_emissivity: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("emissivity", 0, "-")
+    )
+    expansion: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "1/K"))
+    viscosity: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "cP"))
 
     def as_dict(self) -> Mapping[str, Any | ValueAndUnit]:
         """
@@ -2379,7 +2431,7 @@ class WallLayerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    thickness: Scalar = attr.ib(validator=instance_of(Scalar))
+    thickness: ScalarDescriptionType = attr.ib(validator=instance_of(Scalar))
     material_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
@@ -2395,7 +2447,7 @@ class WallDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    inner_roughness: Scalar = attrib_scalar(default=Scalar(0, "m"))
+    inner_roughness: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "m"))
     wall_layer_container: list[WallLayerDescription] = attrib_instance_list(
         WallLayerDescription
     )
@@ -2455,14 +2507,16 @@ class PvtModelCorrelationDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_standard_volume_per_standard_volume.txt
     """
 
-    oil_density_std: Scalar = attrib_scalar(default=Scalar(850.0, "kg/m3"))
-    gas_density_std: Scalar = attrib_scalar(default=Scalar(0.9, "kg/m3"))
-    rs_sat: Scalar = attrib_scalar(default=Scalar(150.0, "sm3/sm3"))
+    oil_density_std: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(850.0, "kg/m3")
+    )
+    gas_density_std: ScalarDescriptionType = attrib_scalar(default=Scalar(0.9, "kg/m3"))
+    rs_sat: ScalarDescriptionType = attrib_scalar(default=Scalar(150.0, "sm3/sm3"))
     pvt_correlation_package: constants.CorrelationPackage = attrib_enum(
         default=constants.CorrelationPackage.Standing
     )
-    h2s_mol_frac: Scalar = attrib_scalar(default=Scalar(0, "-"))
-    co2_mol_frac: Scalar = attrib_scalar(default=Scalar(0, "-"))
+    h2s_mol_frac: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "-"))
+    co2_mol_frac: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "-"))
     oil_viscosity: constants.CorrelationsOilViscosity = attrib_enum(
         default=constants.CorrelationsOilViscosity.Egbogah
     )
@@ -2538,23 +2592,47 @@ class PvtModelConstantPropertiesDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_specific_energy.txt
     """
 
-    gas_density: Scalar = attrib_scalar(default=Scalar(1.0, "kg/m3"))
-    oil_density: Scalar = attrib_scalar(default=Scalar(1000.0, "kg/m3"))
-    water_density: Scalar = attrib_scalar(default=Scalar(1000.0, "kg/m3"))
-    gas_viscosity: Scalar = attrib_scalar(default=Scalar(5e-6, "Pa.s"))
-    oil_viscosity: Scalar = attrib_scalar(default=Scalar(5e-2, "Pa.s"))
-    water_viscosity: Scalar = attrib_scalar(default=Scalar(5e-2, "Pa.s"))
-    gas_specific_heat: Scalar = attrib_scalar(default=Scalar(1010.0, "J/kg.K"))
-    oil_specific_heat: Scalar = attrib_scalar(default=Scalar(4181.3, "J/kg.K"))
-    water_specific_heat: Scalar = attrib_scalar(default=Scalar(4181.3, "J/kg.K"))
-    gas_thermal_conductivity: Scalar = attrib_scalar(default=Scalar(2.4e-2, "W/m.K"))
-    oil_thermal_conductivity: Scalar = attrib_scalar(default=Scalar(5.91e-1, "W/m.K"))
-    water_thermal_conductivity: Scalar = attrib_scalar(default=Scalar(5.91e-1, "W/m.K"))
-    gas_oil_surface_tension: Scalar = attrib_scalar(default=Scalar(7.197e-2, "N/m"))
-    gas_water_surface_tension: Scalar = attrib_scalar(default=Scalar(7.197e-2, "N/m"))
-    oil_water_surface_tension: Scalar = attrib_scalar(default=Scalar(7.197e-2, "N/m"))
-    gas_specific_enthalpy: Scalar = attrib_scalar(default=Scalar(2.260e6, "J/kg"))
-    oil_specific_enthalpy: Scalar = attrib_scalar(default=Scalar(104.86e3, "J/kg"))
+    gas_density: ScalarDescriptionType = attrib_scalar(default=Scalar(1.0, "kg/m3"))
+    oil_density: ScalarDescriptionType = attrib_scalar(default=Scalar(1000.0, "kg/m3"))
+    water_density: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(1000.0, "kg/m3")
+    )
+    gas_viscosity: ScalarDescriptionType = attrib_scalar(default=Scalar(5e-6, "Pa.s"))
+    oil_viscosity: ScalarDescriptionType = attrib_scalar(default=Scalar(5e-2, "Pa.s"))
+    water_viscosity: ScalarDescriptionType = attrib_scalar(default=Scalar(5e-2, "Pa.s"))
+    gas_specific_heat: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(1010.0, "J/kg.K")
+    )
+    oil_specific_heat: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(4181.3, "J/kg.K")
+    )
+    water_specific_heat: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(4181.3, "J/kg.K")
+    )
+    gas_thermal_conductivity: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(2.4e-2, "W/m.K")
+    )
+    oil_thermal_conductivity: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(5.91e-1, "W/m.K")
+    )
+    water_thermal_conductivity: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(5.91e-1, "W/m.K")
+    )
+    gas_oil_surface_tension: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(7.197e-2, "N/m")
+    )
+    gas_water_surface_tension: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(7.197e-2, "N/m")
+    )
+    oil_water_surface_tension: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(7.197e-2, "N/m")
+    )
+    gas_specific_enthalpy: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(2.260e6, "J/kg")
+    )
+    oil_specific_enthalpy: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(104.86e3, "J/kg")
+    )
 
     has_water: bool = attr.ib(default=False)
 
@@ -2570,8 +2648,8 @@ class HeavyComponentDescription:
 
     name: str = attr.ib(validator=instance_of(str))
     scn: int = attr.ib(validator=instance_of(int), converter=int)
-    MW: Scalar = attrib_scalar(default=Scalar(0, "kg/mol"))
-    rho: Scalar = attrib_scalar(default=Scalar(0, "kg/m3"))
+    MW: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "kg/mol"))
+    rho: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "kg/m3"))
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -2588,18 +2666,26 @@ class LightComponentDescription:
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    Pc: Scalar = attrib_scalar(default=Scalar("pressure", 0, "Pa"))
-    Tc: Scalar = attrib_scalar(default=Scalar("temperature", 0, "K"))
-    Vc: Scalar = attrib_scalar(default=Scalar("molar volume", 0, "m3/mol"))
-    omega: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    MW: Scalar = attrib_scalar(default=Scalar("mass per mol", 0, "kg/mol"))
-    Tb: Scalar = attrib_scalar(default=Scalar("temperature", 0, "K"))
-    Parachor: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    Cp_0: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    Cp_1: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    Cp_2: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    Cp_3: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
-    Cp_4: Scalar = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
+    Pc: ScalarDescriptionType = attrib_scalar(default=Scalar("pressure", 0, "Pa"))
+    Tc: ScalarDescriptionType = attrib_scalar(default=Scalar("temperature", 0, "K"))
+    Vc: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("molar volume", 0, "m3/mol")
+    )
+    omega: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 0, "-")
+    )
+    MW: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("mass per mol", 0, "kg/mol")
+    )
+    Tb: ScalarDescriptionType = attrib_scalar(default=Scalar("temperature", 0, "K"))
+    Parachor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 0, "-")
+    )
+    Cp_0: ScalarDescriptionType = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
+    Cp_1: ScalarDescriptionType = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
+    Cp_2: ScalarDescriptionType = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
+    Cp_3: ScalarDescriptionType = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
+    Cp_4: ScalarDescriptionType = attrib_scalar(default=Scalar("dimensionless", 0, "-"))
 
 
 @attr.s(slots=True, auto_attribs=True)
@@ -3708,13 +3794,23 @@ class TimeOptionsDescription:
     automatic_restart_autosave_frequency: bool = attr.ib(
         default=True, validator=instance_of(bool)
     )
-    initial_time: Scalar = attrib_scalar(default=Scalar("time", 0.0, "s"))
-    final_time: Scalar = attrib_scalar(default=Scalar("time", 10.0, "s"))
-    initial_timestep: Scalar = attrib_scalar(default=Scalar("time", 1e-4, "s"))
-    minimum_timestep: Scalar = attrib_scalar(default=Scalar("time", 1e-12, "s"))
-    maximum_timestep: Scalar = attrib_scalar(default=Scalar("time", 0.1, "s"))
-    restart_autosave_frequency: Scalar = attrib_scalar(default=Scalar("time", 1, "h"))
-    minimum_time_for_steady_state_stop: Scalar = attrib_scalar(
+    initial_time: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("time", 0.0, "s")
+    )
+    final_time: ScalarDescriptionType = attrib_scalar(default=Scalar("time", 10.0, "s"))
+    initial_timestep: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("time", 1e-4, "s")
+    )
+    minimum_timestep: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("time", 1e-12, "s")
+    )
+    maximum_timestep: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("time", 0.1, "s")
+    )
+    restart_autosave_frequency: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("time", 1, "h")
+    )
+    minimum_time_for_steady_state_stop: ScalarDescriptionType = attrib_scalar(
         default=Scalar("time", 0.0, "s")
     )
 

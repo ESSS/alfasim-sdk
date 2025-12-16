@@ -6,57 +6,33 @@
 
         class LightComponentDescription
             name: str
-            Pc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
-            Tc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
-            Vc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm3/mol', 'molar volume')
-            omega: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            MW: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/mol', 'mass per mol')
-            Tb: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
-            Parachor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Pc: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'Pa', 'pressure')
+            Tc: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'K', 'temperature')
+            Vc: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'm3/mol', 'molar volume')
+            omega: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            MW: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'kg/mol', 'mass per mol')
+            Tb: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'K', 'temperature')
+            Parachor: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            Cp_0: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            Cp_1: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            Cp_2: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            Cp_3: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            Cp_4: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string
-            Pc:  # optional
-                value: number
-                unit: string
-            Tc:  # optional
-                value: number
-                unit: string
-            Vc:  # optional
-                value: number
-                unit: string
-            omega:  # optional
-                value: number
-                unit: string
-            MW:  # optional
-                value: number
-                unit: string
-            Tb:  # optional
-                value: number
-                unit: string
-            Parachor:  # optional
-                value: number
-                unit: string
-            Cp_0:  # optional
-                value: number
-                unit: string
-            Cp_1:  # optional
-                value: number
-                unit: string
-            Cp_2:  # optional
-                value: number
-                unit: string
-            Cp_3:  # optional
-                value: number
-                unit: string
-            Cp_4:  # optional
-                value: number
-                unit: string
+            Pc: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Tc: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Vc: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            omega: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            MW: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Tb: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Parachor: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Cp_0: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Cp_1: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Cp_2: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Cp_3: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            Cp_4: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional

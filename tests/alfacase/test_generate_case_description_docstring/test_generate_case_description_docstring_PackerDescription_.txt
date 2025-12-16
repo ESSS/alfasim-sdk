@@ -6,7 +6,7 @@
 
         class PackerDescription
             name: str
-            position: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Optional <typing.Optional>`\[Scalar]
             material_above: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
@@ -14,7 +14,5 @@
     .. parsed-literal::
 
             name: string
-            position: 
-                value: number
-                unit: string
+            position: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
             material_above: string  # optional

@@ -5,30 +5,20 @@
     .. parsed-literal::
 
         class EnvironmentPropertyDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`
-            temperature: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Optional <typing.Optional>`\[Scalar]
+            temperature: \ :class:`Optional <typing.Optional>`\[Scalar]
             type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
-            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm/s', 'velocity')
+            heat_transfer_coefficient: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            overall_heat_transfer_coefficient: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            fluid_velocity: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'm/s', 'velocity')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position: 
-                value: number
-                unit: string
-            temperature: 
-                value: number
-                unit: string
+            position: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            temperature: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
             type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
-            heat_transfer_coefficient:  # optional
-                value: number
-                unit: string
-            overall_heat_transfer_coefficient:  # optional
-                value: number
-                unit: string
-            fluid_velocity:  # optional
-                value: number
-                unit: string
+            heat_transfer_coefficient: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            overall_heat_transfer_coefficient: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            fluid_velocity: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional

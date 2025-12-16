@@ -7,13 +7,13 @@
         class MaterialDescription
             name: str
             material_type: \ :class:`MaterialType <alfasim_sdk._internal.constants.MaterialType>`\  = MaterialType.Solid
-            density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/m3', 'density')
-            thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m.degC', 'thermal conductivity')
-            heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'J/kg.degC', 'specific heat capacity')
-            inner_emissivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'emissivity')
-            outer_emissivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'emissivity')
-            expansion: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '1/K', 'volumetric thermal expansion')
-            viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'cP', 'dynamic viscosity')
+            density: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, 'kg/m3', 'density')
+            thermal_conductivity: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'W/m.degC', 'thermal conductivity')
+            heat_capacity: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'J/kg.degC', 'specific heat capacity')
+            inner_emissivity: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'emissivity')
+            outer_emissivity: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'emissivity')
+            expansion: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '1/K', 'volumetric thermal expansion')
+            viscosity: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'cP', 'dynamic viscosity')
 
 .. tab:: Schema
 
@@ -21,24 +21,10 @@
 
             name: string
             material_type: \ :class:`MaterialType <alfasim_sdk._internal.constants.MaterialType>`\  # optional
-            density:  # optional
-                value: number
-                unit: string
-            thermal_conductivity:  # optional
-                value: number
-                unit: string
-            heat_capacity:  # optional
-                value: number
-                unit: string
-            inner_emissivity:  # optional
-                value: number
-                unit: string
-            outer_emissivity:  # optional
-                value: number
-                unit: string
-            expansion:  # optional
-                value: number
-                unit: string
-            viscosity:  # optional
-                value: number
-                unit: string
+            density: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            thermal_conductivity: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            heat_capacity: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            inner_emissivity: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            outer_emissivity: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            expansion: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            viscosity: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional

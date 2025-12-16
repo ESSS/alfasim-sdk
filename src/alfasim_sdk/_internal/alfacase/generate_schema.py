@@ -156,9 +156,7 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
         lines.append(UNSAFE_OR_VALIDATOR)
         for type_ in complex_types:
             schema_generator = COMPLEX_SCHEMAS[type_]
-            value = (
-                f"{INDENTANTION * map_items_indent}{schema_generator(type_, indent=0)},"
-            )
+            value = f"{INDENTANTION * (map_items_indent - 1)}{schema_generator(type_, indent=0)},"
             lines.append(value)
         lines.append(f"{INDENTANTION * indent})")
 
