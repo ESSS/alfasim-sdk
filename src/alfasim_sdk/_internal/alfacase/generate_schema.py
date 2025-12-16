@@ -18,7 +18,10 @@ from strictyaml.utils import flatten
 from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
-from alfasim_sdk._internal.alfacase.case_description_attributes import ScalarExpression
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    FloatExpression,
+    ScalarExpression,
+)
 
 INDENTANTION = "    "
 
@@ -136,26 +139,31 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
     Ex.: like str | float or List[float] | float
     """
     # StrictYaml does not accept "|" unions as described in the docs above. This specific case handle the case
-    # where users specify a Scalar | ScalarExpression as type hint.
-    COMPLEX_SCHEMAS = {
+    # where users wants to define parametric variables or expression as a value for properties.
+    PARAMETRIC_UNSAFE_TYPES = {
         Scalar: scalar_to_alfacase_schema,
         ScalarExpression: scalar_expression_to_alfacase_schema,
+        float: float_to_alfacase_schema,
+        FloatExpression: str_to_alfacase_schema,
     }
     # PvtModel Tables
     if set(type_.__args__) == {str, Path}:
         return "Str()"
 
     lines: list[str] = []
-    # Complex types are types who need a specific mapping to allocate the data from alfacase file.
-    complex_types = [type_ for type_ in type_.__args__ if type_ in COMPLEX_SCHEMAS]
-    normal_types = [type_ for type_ in type_.__args__ if type_ not in COMPLEX_SCHEMAS]
+    acceptable_unsafe_types = [
+        type_ for type_ in type_.__args__ if type_ in PARAMETRIC_UNSAFE_TYPES
+    ]
+    normal_types = [
+        type_ for type_ in type_.__args__ if type_ not in PARAMETRIC_UNSAFE_TYPES
+    ]
 
     map_items_indent = indent + 2
-    if len(complex_types) > 1:
+    if len(acceptable_unsafe_types) > 1:
         UNSAFE_OR_VALIDATOR = "UnsafeOrValidator("
         lines.append(UNSAFE_OR_VALIDATOR)
-        for type_ in complex_types:
-            schema_generator = COMPLEX_SCHEMAS[type_]
+        for type_ in acceptable_unsafe_types:
+            schema_generator = PARAMETRIC_UNSAFE_TYPES[type_]
             value = f"{INDENTANTION * (map_items_indent - 1)}{schema_generator(type_, indent=0)},"
             lines.append(value)
         lines.append(f"{INDENTANTION * indent})")

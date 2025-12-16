@@ -86,9 +86,9 @@ numerical_options:
   nonlinear_solver_type: nonlinear_solver_alfasim_quasi_newton
   tolerance: 0.0001
   maximum_iterations: 5
-  maximum_timestep_change_factor: 2.0
+  maximum_timestep_change_factor: C
   maximum_cfl_value: 1.0
-  relaxed_tolerance: 0.0
+  relaxed_tolerance: C + 1
   divergence_tolerance: -1.0
   friction_factor_evaluation_strategy: time_explicit
   simulation_mode: default

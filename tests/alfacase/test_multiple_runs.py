@@ -18,6 +18,9 @@ def test_alcase_to_case_with_multiple_runs(datadir: Path) -> None:
         "2": {"A": 1.11, "B": 2.11, "C": 3.11},
     }
 
+    assert case.numerical_options.maximum_timestep_change_factor == "C"
+    assert case.numerical_options.relaxed_tolerance == "C + 1"
+
 
 def test_physics_description_with_expressions(datadir: Path) -> None:
     alfacase_file = datadir / "test_multiple_runs.alfacase"

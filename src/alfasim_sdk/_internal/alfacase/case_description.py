@@ -14,6 +14,7 @@ from alfasim_sdk._internal import constants
 
 from ..validators import non_empty_str
 from .case_description_attributes import (
+    FloatDescriptionType,
     InvalidReferenceError,
     Numpy1DArray,
     PhaseName,
@@ -612,7 +613,7 @@ class BipDescription:
 
     component_1: str = attr.ib(validator=instance_of(str))
     component_2: str = attr.ib(validator=instance_of(str))
-    value: float = attr.ib(validator=instance_of(float), converter=float)
+    value: FloatDescriptionType = attr.ib(validator=instance_of(FloatDescriptionType))
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -2075,9 +2076,11 @@ class ControllerOutputSignalPropertiesDescription:
     network_element_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
     )
-    min_value: float = attr.ib(default=-1.0e50, converter=float)
-    max_value: float = attr.ib(default=1.0e50, converter=float)
-    max_rate_of_change: float = attr.ib(default=1.0e50, converter=float)
+    min_value: FloatDescriptionType = attr.ib(default=-1.0e50)
+    max_value: FloatDescriptionType = attr.ib(default=1.0e50)
+    max_rate_of_change: FloatDescriptionType = attr.ib(
+        default=1.0e50,
+    )
 
     @max_rate_of_change.validator
     def _validate_max_rate_of_change(self, attribute, value):
@@ -2106,8 +2109,12 @@ class ControllerNodePropertiesDescription:
     """
 
     type: constants.ControllerType = attrib_enum(default=constants.ControllerType.PID)
-    gain: float = attr.ib(default=1e-4, converter=float)
-    setpoint: float = attr.ib(default=0.0, converter=float)
+    gain: FloatDescriptionType = attr.ib(
+        default=1e-4,
+    )
+    setpoint: FloatDescriptionType = attr.ib(
+        default=0.0,
+    )
     integral_time: ScalarDescriptionType = attrib_scalar(default=Scalar(10, "s"))
     derivative_time: ScalarDescriptionType = attrib_scalar(default=Scalar(1, "s"))
 
@@ -3824,12 +3831,22 @@ class NumericalOptionsDescription:
     nonlinear_solver_type: constants.NonlinearSolverType = attrib_enum(
         default=constants.NonlinearSolverType.AlfasimQuasiNewton
     )
-    tolerance: float = attr.ib(default=1e-4, converter=float)
+    tolerance: FloatDescriptionType = attr.ib(
+        default=1e-4,
+    )
     maximum_iterations: int = attr.ib(default=5, converter=int)
-    maximum_timestep_change_factor: float = attr.ib(default=2, converter=float)
-    maximum_cfl_value: float = attr.ib(default=1.0, converter=float)
-    relaxed_tolerance: float = attr.ib(default=0.0, converter=float)
-    divergence_tolerance: float = attr.ib(default=-1.0, converter=float)
+    maximum_timestep_change_factor: FloatDescriptionType = attr.ib(
+        default=2,
+    )
+    maximum_cfl_value: FloatDescriptionType = attr.ib(
+        default=1.0,
+    )
+    relaxed_tolerance: FloatDescriptionType = attr.ib(
+        default=0.0,
+    )
+    divergence_tolerance: FloatDescriptionType = attr.ib(
+        default=-1.0,
+    )
     friction_factor_evaluation_strategy: constants.EvaluationStrategyType = attrib_enum(
         default=constants.EvaluationStrategyType.TimeExplicit
     )
@@ -3837,8 +3854,8 @@ class NumericalOptionsDescription:
         default=constants.SimulationModeType.Default
     )
     enable_solver_caching: bool = attr.ib(default=True)
-    caching_rtol: float = attr.ib(default=1e-2)
-    caching_atol: float = attr.ib(default=1e-4)
+    caching_rtol: FloatDescriptionType = attr.ib(default=1e-2)
+    caching_atol: FloatDescriptionType = attr.ib(default=1e-4)
     always_repeat_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
 
