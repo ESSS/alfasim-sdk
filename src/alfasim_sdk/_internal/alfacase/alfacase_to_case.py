@@ -18,6 +18,7 @@ from strictyaml import YAML
 
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import ScalarExpression
 from alfasim_sdk._internal.alfacase.migration import migrate_alfacase_yaml_to_latest
 
 T = TypeVar("T", bound=attr.AttrsInstance)
@@ -215,16 +216,17 @@ def get_case_description_attribute_loader_dict(
 
 def load_scalar(
     key: str, alfacase_content: DescriptionDocument, category: str
-) -> Scalar:
+) -> Scalar | ScalarExpression:
     """
     Create a barril.units.Scalar instance from the given alfacase_content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
-    return Scalar(
-        category,
-        alfacase_content[key]["value"].content.data,
-        alfacase_content[key]["unit"].content.data,
-    )
+    value = alfacase_content[key]["value"].content.data
+    unit = alfacase_content[key]["unit"].content.data
+    if isinstance(value, str):
+        return ScalarExpression(value=value, unit=unit, category=category)
+    else:
+        return Scalar(category=category, value=value, unit=unit)
 
 
 @lru_cache(maxsize=None)

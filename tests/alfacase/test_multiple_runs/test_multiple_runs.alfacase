@@ -25,10 +25,10 @@ physics:
   emulsion_relative_viscosity_model: model_default
 
   emulsion_pal_rhodes_phi_rel_100:
-    value: 0.765
+    value: A+1
     unit: '-'
   emulsion_woelflin_a:
-    value: 4.2
+    value: B + C
     unit: '-'
   emulsion_woelflin_b:
     value: 2.5
@@ -54,7 +54,7 @@ physics:
   emulsion_droplet_size_model: model_default
   emulsion_inversion_point_model: model_default
   emulsion_inversion_water_cut:
-    value: 0.4
+    value: C + A
     unit: m3/m3
   flash_model: hydrocarbon_and_water
   correlations_package: correlation_package_alfasim

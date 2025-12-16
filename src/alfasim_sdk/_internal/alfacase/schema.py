@@ -437,8 +437,14 @@ physics_description_schema = Map(
                 Map({"value": Float(), "unit": Str()}),
                 Map({"value": Str(), "unit": Str()}),
         ),
-        Optional("emulsion_woelflin_a"): Map({"value": Float(), "unit": Str()}),
-        Optional("emulsion_woelflin_b"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_woelflin_a"): UnsafeOrValidator(
+                Map({"value": Float(), "unit": Str()}),
+                Map({"value": Str(), "unit": Str()}),
+        ),
+        Optional("emulsion_woelflin_b"): UnsafeOrValidator(
+                Map({"value": Float(), "unit": Str()}),
+                Map({"value": Str(), "unit": Str()}),
+        ),
         Optional("emulsion_table_based_rel_visc_curve"): Map(
             {
                 "image": Map({"values": Seq(Float()), "unit": Str()}),
@@ -453,7 +459,10 @@ physics_description_schema = Map(
         ),
         Optional("emulsion_droplet_size_model"): Enum(['hinze1955', 'sleicher1962', 'brauner2001', 'boxall2012']),
         Optional("emulsion_inversion_point_model"): Enum(['brauner_and_ullmann_2002', 'brinkman1952_and_yeh1964', 'constant']),
-        Optional("emulsion_inversion_water_cut"): Map({"value": Float(), "unit": Str()}),
+        Optional("emulsion_inversion_water_cut"): UnsafeOrValidator(
+                Map({"value": Float(), "unit": Str()}),
+                Map({"value": Str(), "unit": Str()}),
+        ),
         Optional("friction_factor_correlation_model"): Enum(['model_default', 'from_plugin']),
         Optional("friction_factor_correlation_plugin_id"): Str(),
         Optional("flash_model"): Enum(['hydrocarbon_only', 'hydrocarbon_and_water']),
@@ -1242,4 +1251,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 310abc7cc35049f36bedde4816d6f869) (sum: immZIfp/Lh)
+# [[[end]]] (checksum: baf26a017bcba6e27509c355ddc2ceed) (sum: immZIfp/Lh)

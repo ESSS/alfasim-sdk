@@ -17,7 +17,7 @@ from .case_description_attributes import (
     InvalidReferenceError,
     Numpy1DArray,
     PhaseName,
-    ScalarExpression,
+    ScalarDescriptionType,
     attrib_array,
     attrib_curve,
     attrib_dict_of,
@@ -3636,13 +3636,13 @@ class PhysicsDescription:
     emulsion_relative_viscosity_model: constants.EmulsionRelativeViscosityModelType = (
         attrib_enum(default=constants.EmulsionRelativeViscosityModelType.Brinkman1952)
     )
-    emulsion_pal_rhodes_phi_rel_100: Scalar | ScalarExpression = attrib_scalar(
+    emulsion_pal_rhodes_phi_rel_100: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 0.765, "-")
     )
-    emulsion_woelflin_a: Scalar = attrib_scalar(
+    emulsion_woelflin_a: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 4.2, "-")
     )
-    emulsion_woelflin_b: Scalar = attrib_scalar(
+    emulsion_woelflin_b: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 2.5, "-")
     )
     emulsion_table_based_rel_visc_curve: Curve = attrib_curve(
@@ -3667,7 +3667,7 @@ class PhysicsDescription:
             default=constants.EmulsionInversionPointModelType.BraunerUllmann2002
         )
     )
-    emulsion_inversion_water_cut: Scalar = attrib_scalar(
+    emulsion_inversion_water_cut: ScalarDescriptionType = attrib_scalar(
         default=Scalar("volume per volume", 0.4, "m3/m3")
     )
     emulsion_model_plugin_id: str = attr.ib(default="", validator=instance_of(str))
