@@ -7,7 +7,7 @@
         class BipDescription
             component_1: str
             component_2: str
-            value: float
+            value: \ :class:`Optional <typing.Optional>`\[float]
 
 .. tab:: Schema
 
@@ -15,4 +15,4 @@
 
             component_1: string
             component_2: string
-            value: number
+            value: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression

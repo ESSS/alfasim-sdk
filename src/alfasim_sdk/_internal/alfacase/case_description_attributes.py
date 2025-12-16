@@ -29,6 +29,8 @@ list_of_optional_integers = deep_iterable(
     member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
 )
 
+BUILT_IN_VARS = {"__builtins__": {}}
+
 
 class ExpressionProtocol(Protocol):
     """
@@ -46,7 +48,7 @@ class ScalarExpression:
     category: str | None = None
 
     def eval_expression(self, namespace: dict[str, float]) -> Scalar:
-        evaluated_value = eval(self.value, namespace)
+        evaluated_value = eval(self.value, BUILT_IN_VARS, namespace)
         if self.category is None:
             return Scalar((evaluated_value, self.unit))
         else:
@@ -58,7 +60,7 @@ class FloatExpression:
     value: str = attr.ib(validator=instance_of(str))
 
     def eval_expression(self, namespace: dict[str, float]) -> float:
-        evaluated_value = eval(self.value, namespace)
+        evaluated_value = eval(self.value, BUILT_IN_VARS, namespace)
         return evaluated_value
 
 
@@ -67,6 +69,7 @@ ScalarLike: TypeAlias = tuple[Number, str] | Scalar
 ScalarExpressionLike: TypeAlias = tuple[str, str] | ScalarExpression
 ArrayLike: TypeAlias = tuple[Sequence[Number], str] | Array
 CurveLike: TypeAlias = tuple[ArrayLike, ArrayLike] | Curve
+FloatDescriptionType: TypeAlias = float | FloatExpression
 
 
 def generate_multi_input(

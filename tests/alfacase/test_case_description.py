@@ -12,6 +12,7 @@ from barril.curve.curve import Curve
 from barril.units import Array, Scalar
 
 from alfasim_sdk import (
+    BipDescription,
     CaseDescription,
     MaterialDescription,
     NodeCellType,
@@ -21,6 +22,7 @@ from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     DescriptionError,
+    FloatExpression,
     InvalidReferenceError,
     ScalarExpression,
     attrib_array,
@@ -1606,3 +1608,12 @@ def test_case_description_with_expression() -> None:
     assert physics_desc.emulsion_pal_rhodes_phi_rel_100 == Scalar(
         10, "%", "dimensionless"
     )
+
+
+def test_case_description_with_float_expression() -> None:
+    expression = FloatExpression(value="A + B")
+    description = BipDescription(
+        component_1="component_1", component_2="component_2", value=expression
+    )
+    assert description.value == expression
+    assert description.value.eval_expression({"A": 1, "B": 2}) == 3

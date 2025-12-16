@@ -6,8 +6,8 @@
 
         class ControllerNodePropertiesDescription
             type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  = ControllerType.PID
-            gain: float = 0.0001
-            setpoint: float = 0.0
+            gain: \ :class:`Optional <typing.Optional>`\[float] = 0.0001
+            setpoint: \ :class:`Optional <typing.Optional>`\[float] = 0.0
             integral_time: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(10.0, 's', 'time')
             derivative_time: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, 's', 'time')
             input_signal_properties: \ :class:`ControllerInputSignalPropertiesDescription <ControllerInputSignalPropertiesDescription>`\  = ControllerInputSignalPropertiesDescription()
@@ -18,8 +18,8 @@
     .. parsed-literal::
 
             type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  # optional
-            gain: number  # optional
-            setpoint: number  # optional
+            gain: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
+            setpoint: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
             integral_time: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
             derivative_time: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
             input_signal_properties: \ :class:`controller_input_signal_properties_description_schema <ControllerInputSignalPropertiesDescription>`\  # optional

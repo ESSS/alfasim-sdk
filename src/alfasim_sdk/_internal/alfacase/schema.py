@@ -30,7 +30,10 @@ bip_description_schema = Map(
     {
         "component_1": Str(),
         "component_2": Str(),
-        "value": Float(),
+        "value": UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
     }
 )
 casing_section_description_schema = Map(
@@ -107,9 +110,18 @@ controller_output_signal_properties_description_schema = Map(
         Optional("controlled_property"): Str(),
         Optional("unit"): Str(),
         Optional("network_element_name"): Str(),
-        Optional("min_value"): Float(),
-        Optional("max_value"): Float(),
-        Optional("max_rate_of_change"): Float(),
+        Optional("min_value"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("max_value"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("max_rate_of_change"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
     }
 )
 controller_trend_description_schema = Map(
@@ -608,17 +620,38 @@ multiple_runs_description_schema = Map(
 numerical_options_description_schema = Map(
     {
         Optional("nonlinear_solver_type"): Enum(['nonlinear_solver_newton_basic', 'nonlinear_solver_newton_backtracking', 'nonlinear_solver_alfasim_quasi_newton']),
-        Optional("tolerance"): Float(),
+        Optional("tolerance"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
         Optional("maximum_iterations"): Int(),
-        Optional("maximum_timestep_change_factor"): Float(),
-        Optional("maximum_cfl_value"): Float(),
-        Optional("relaxed_tolerance"): Float(),
-        Optional("divergence_tolerance"): Float(),
+        Optional("maximum_timestep_change_factor"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("maximum_cfl_value"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("relaxed_tolerance"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("divergence_tolerance"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
         Optional("friction_factor_evaluation_strategy"): Enum(['time_explicit', 'newton_explicit', 'implicit']),
         Optional("simulation_mode"): Enum(['default', 'robust']),
         Optional("enable_solver_caching"): Bool(),
-        Optional("caching_rtol"): Float(),
-        Optional("caching_atol"): Float(),
+        Optional("caching_rtol"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("caching_atol"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
         Optional("always_repeat_timestep"): Bool(),
         Optional("enable_fast_compositional"): Bool(),
     }
@@ -1393,8 +1426,14 @@ compressor_equipment_description_schema = Map(
 controller_node_properties_description_schema = Map(
     {
         Optional("type"): Enum(['pid']),
-        Optional("gain"): Float(),
-        Optional("setpoint"): Float(),
+        Optional("gain"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("setpoint"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
         Optional("integral_time"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"value": Str(), "unit": Str()}),
@@ -1809,4 +1848,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 7b051d738887ce268f10da667efd7c77) (sum: immZIfp/Lh)
+# [[[end]]] (checksum: 6fd92ba77490f96124ca3ebc6fa95120) (sum: immZIfp/Lh)
