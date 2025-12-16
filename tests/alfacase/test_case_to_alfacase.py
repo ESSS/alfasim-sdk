@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 from barril.units import Array, Scalar
+from pytest_regressions.file_regression import FileRegressionFixture
 
 from alfasim_sdk import (
     MultiInputType,
@@ -11,6 +12,15 @@ from alfasim_sdk import (
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.alfacase import _convert_description_to_yaml
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
+from alfasim_sdk._internal.alfacase.case_description import (
+    CaseDescription,
+    MultipleRunsDescription,
+    PhysicsDescription,
+)
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    FloatExpression,
+    ScalarExpression,
+)
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
@@ -108,3 +118,29 @@ def test_convert_description_to_alfacase_with_nan_float():
     simple_case_alfacase_content = _convert_description_to_yaml(simple_case)
     assert "tolerance: .inf" in simple_case_alfacase_content
     assert "relaxed_tolerance: -.inf" in simple_case_alfacase_content
+
+
+def test_convert_case_with_multiple_runs(
+    file_regression: FileRegressionFixture,
+) -> None:
+    multiple_runs = MultipleRunsDescription(
+        variables={"A": 1.0, "B": 2.0, "C": 3.0},
+        variations={
+            "1": {"A": 1.1, "B": 2.1, "C": 3.1},
+            "2": {"A": 1.11, "B": 2.11, "C": 3.11},
+        },
+    )
+    numerical_options = NumericalOptionsDescription(
+        maximum_cfl_value=FloatExpression(value="C+2")
+    )
+    physics_description = PhysicsDescription(
+        emulsion_woelflin_a=ScalarExpression(value="A + 1", unit="-"),
+        emulsion_woelflin_b=ScalarExpression(value="A + B", unit="-"),
+    )
+    case_description = CaseDescription(
+        physics=physics_description,
+        multiple_runs=multiple_runs,
+        numerical_options=numerical_options,
+    )
+    alfacase_file = convert_description_to_alfacase(case_description)
+    file_regression.check(alfacase_file, extension=".alfacase")
