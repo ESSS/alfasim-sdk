@@ -241,9 +241,7 @@ def test_scalar_attribute():
     instance_with_tuple = Foo(position=(1, "m"))  # type:ignore[arg-type]
     assert isinstance(instance_with_tuple.position, Scalar)
 
-    expected_msg = (
-        "Expected pair (value, unit) or Scalar, got None (type: <class 'NoneType'>)"
-    )
+    expected_msg = "Expected pair (value, unit), Scalar or ScalarExpression, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
         Foo(position=None)  # type:ignore[arg-type]
 

@@ -3886,6 +3886,35 @@ class AlfasimVersionInfo:
 @attr.s(frozen=True, auto_attribs=True)
 class MultipleRunsDescription:
     """
+    The MultipleRunsDescription serves as a configuration schema for executing parametric analyses.
+    It allows users to transform a static simulation into a dynamic one by defining a set of base
+    variables and their corresponding variation.
+
+    For instance, if user define the following scenario in ALFACASE file:
+
+    .. tab:: MultipleRunsDescription
+
+        .. code-block:: yaml
+
+            multiple_runs:
+                variables:
+                    A: 1.0
+                    B: 2.0
+                variations:
+                    1:
+                        A: 1.1
+                        b: 2.1
+                    2:
+                        A: 3
+                        B: 4
+
+            physics_description:
+                emulsion_woelflin_a: A
+                emulsion_woelflin_b: B
+
+    Generates three simulation runs: a baseline using defined variable values, and two variants
+    based on the values specified for parameter A and B.
+
     .. include:: /alfacase_definitions/MultipleRunsDescription.txt
     """
 
