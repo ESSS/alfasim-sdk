@@ -187,7 +187,7 @@ def import_module(path: Path) -> ModuleType:
     """
     Import and return a module.
     """
-    import importlib
+    import importlib.util
 
     assert path.is_file()
     spec = importlib.util.spec_from_file_location(path.stem, path)
