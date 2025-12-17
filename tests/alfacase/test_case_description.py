@@ -257,6 +257,7 @@ def test_scalar_attribute():
     assert Foo(position_2=None).position_2 is None
 
     foo = Foo(position=ScalarExpression(value="A+1", unit="m"))
+    assert isinstance(foo.position, ScalarExpression)
     assert foo.position.eval_expression(namespace={"A": 1}) == Scalar(
         "length", 2.0, "m"
     )
@@ -1589,6 +1590,7 @@ def test_check_fluid_references(default_well: case_description.WellDescription) 
 
 def test_to_scalar_with_scalar_expression() -> None:
     scalar_expression = to_scalar(("A+1", "%"))
+    assert isinstance(scalar_expression, ScalarExpression)
     assert scalar_expression == ScalarExpression(value="A+1", unit="%")
 
     scalar = scalar_expression.eval_expression(namespace={"A": 10})
@@ -1616,4 +1618,5 @@ def test_case_description_with_float_expression() -> None:
         component_1="component_1", component_2="component_2", value=expression
     )
     assert description.value == expression
+    assert isinstance(description.value, FloatExpression)
     assert description.value.eval_expression({"A": 1, "B": 2}) == 3
