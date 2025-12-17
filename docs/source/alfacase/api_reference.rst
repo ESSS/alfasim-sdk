@@ -271,6 +271,11 @@ Tables
 .. autoclass:: alfasim_sdk.CvTableDescription()
 
 
+Multiple Runs
+-------------
+
+.. autoclass:: alfasim_sdk.MultipleRunsDescription()
+
 Plugins
 -------
 
