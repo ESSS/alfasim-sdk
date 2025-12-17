@@ -29,7 +29,7 @@ list_of_optional_integers = deep_iterable(
     member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
 )
 
-BUILT_IN_VARS = {"__builtins__": {}}
+BUILT_IN_VARS: dict[str, Any] = {"__builtins__": {}}
 
 
 class ExpressionProtocol(Protocol):
@@ -167,12 +167,12 @@ def to_scalar(
     match value:
         case tuple():
             if is_two_element_tuple(value):
-                value, unit = value
-                match value:
+                scalar_value, unit = value
+                match scalar_value:
                     case float() | int():
-                        return Scalar(value, unit)
+                        return Scalar(scalar_value, unit)
                     case str():
-                        return ScalarExpression(value=value, unit=unit)
+                        return ScalarExpression(value=scalar_value, unit=unit)
                     case unreachable:
                         assert_never(unreachable)
             else:
