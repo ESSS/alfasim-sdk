@@ -4,10 +4,13 @@ from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
     load_case_description,
 )
-from alfasim_sdk._internal.alfacase.case_description_attributes import ScalarExpression
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    FloatExpression,
+    ScalarExpression,
+)
 
 
-def test_alcase_to_case_with_multiple_runs(datadir: Path) -> None:
+def test_alfacase_to_case_with_multiple_runs(datadir: Path) -> None:
     alfacase_file = datadir / "test_multiple_runs.alfacase"
 
     case = load_case_description(DescriptionDocument.from_file(alfacase_file))
@@ -18,8 +21,10 @@ def test_alcase_to_case_with_multiple_runs(datadir: Path) -> None:
         "2": {"A": 1.11, "B": 2.11, "C": 3.11},
     }
 
-    assert case.numerical_options.maximum_timestep_change_factor == "C"
-    assert case.numerical_options.relaxed_tolerance == "C + 1"
+    assert case.numerical_options.maximum_timestep_change_factor == FloatExpression(
+        value="C"
+    )
+    assert case.numerical_options.relaxed_tolerance == FloatExpression(value="C + 1")
 
 
 def test_physics_description_with_expressions(datadir: Path) -> None:
