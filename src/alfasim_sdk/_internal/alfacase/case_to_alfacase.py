@@ -57,8 +57,11 @@ def _convert_value_to_valid_alfacase_format(
     :param enable_flow_style_on_numpy:
         Signalize that numpy arrays should dumped with inline list ( pressure: [1, 2] ).
     """
-    if isinstance(value, (Scalar, ScalarExpression)):
+    if isinstance(value, Scalar):
         return {"value": str(value.value), "unit": value.unit}
+
+    if isinstance(value, ScalarExpression):
+        return {"value": value.expr, "unit": value.unit}
 
     if isinstance(value, Array):
         return {"values": [str(i) for i in value.values], "unit": value.unit}
@@ -116,7 +119,7 @@ def _convert_value_to_valid_alfacase_format(
         return float_formatted_value
 
     if isinstance(value, FloatExpression):
-        return value.value
+        return value.expr
 
     return str(value)
 

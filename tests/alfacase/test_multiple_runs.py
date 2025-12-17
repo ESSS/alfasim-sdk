@@ -22,9 +22,9 @@ def test_alfacase_to_case_with_multiple_runs(datadir: Path) -> None:
     }
 
     assert case.numerical_options.maximum_timestep_change_factor == FloatExpression(
-        value="C"
+        expr="C"
     )
-    assert case.numerical_options.relaxed_tolerance == FloatExpression(value="C + 1")
+    assert case.numerical_options.relaxed_tolerance == FloatExpression(expr="C + 1")
 
 
 def test_physics_description_with_expressions(datadir: Path) -> None:
@@ -34,11 +34,11 @@ def test_physics_description_with_expressions(datadir: Path) -> None:
     physics_desc = case.physics
 
     assert physics_desc.emulsion_pal_rhodes_phi_rel_100 == ScalarExpression(
-        value="A+1", unit="-", category="dimensionless"
+        expr="A+1", unit="-", category="dimensionless"
     )
     assert physics_desc.emulsion_woelflin_a == ScalarExpression(
-        value="B + C", unit="-", category="dimensionless"
+        expr="B + C", unit="-", category="dimensionless"
     )
     assert physics_desc.emulsion_inversion_water_cut == ScalarExpression(
-        value="C + A", unit="m3/m3", category="volume per volume"
+        expr="C + A", unit="m3/m3", category="volume per volume"
     )

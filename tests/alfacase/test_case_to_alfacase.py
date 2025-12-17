@@ -131,11 +131,11 @@ def test_convert_case_with_multiple_runs(
         },
     )
     numerical_options = NumericalOptionsDescription(
-        maximum_cfl_value=FloatExpression(value="C+2")
+        maximum_cfl_value=FloatExpression(expr="C+2")
     )
     physics_description = PhysicsDescription(
-        emulsion_woelflin_a=ScalarExpression(value="A + 1", unit="-"),
-        emulsion_woelflin_b=ScalarExpression(value="A + B", unit="-"),
+        emulsion_woelflin_a=ScalarExpression(expr="A + 1", unit="-"),
+        emulsion_woelflin_b=ScalarExpression(expr="A + B", unit="-"),
     )
     case_description = CaseDescription(
         physics=physics_description,
