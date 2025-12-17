@@ -4,7 +4,7 @@ CHANGELOG
 
 1.5.0 (UNRELEASED)
 ==================
-
+* Add support for Multiple Runs: Add a ``MultipleRunsDescription`` that allows users to define parametric variables and their ranges. This enables automated simulations that vary values according to those parameters.
 
 1.4.0 (2025-11-14)
 ==================
