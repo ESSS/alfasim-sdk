@@ -569,7 +569,7 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
 
 def test_usafe_or_validator() -> None:
     """
-    Test the scenario where a unique Schema accepts both Scalar and ScalarExpression values using the.
+    Test the scenario where a unique Schema accepts both Scalar and ScalarExpression values using the
     UnsafeOrValidator to bypass the StrictYAML OR validation.
     """
     schema_1 = Map({"value": Float(), "unit": Str()})

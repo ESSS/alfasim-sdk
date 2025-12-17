@@ -33,6 +33,10 @@ BUILT_IN_VARS: dict[str, Any] = {"__builtins__": {}}
 
 @dataclass(frozen=True)
 class ScalarExpression:
+    """
+    Represents a scalar value dynamically evaluated from a mathematical expression.
+    """
+
     expr: str
     unit: str
     category: str | None = None
@@ -47,6 +51,10 @@ class ScalarExpression:
 
 @dataclass(frozen=True)
 class FloatExpression:
+    """
+    Represents a float value dynamically evaluated from a mathematical expression.
+    """
+
     expr: str = attr.ib(validator=instance_of(str))
 
     def eval_expression(self, namespace: dict[str, float]) -> float:
@@ -150,7 +158,7 @@ def to_scalar(
         return value
 
     message = prepare_error_message(
-        f"Expected pair (value, unit) or Scalar, got {value!r} (type: {type(value)})",
+        f"Expected pair (value, unit), Scalar or ScalarExpression, got {value!r} (type: {type(value)})",
         error_context,
     )
 
