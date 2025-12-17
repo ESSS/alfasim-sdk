@@ -7,7 +7,6 @@ from numbers import Number
 from typing import (
     Any,
     NewType,
-    Protocol,
     TypeAlias,
     TypeGuard,
 )
@@ -32,23 +31,14 @@ list_of_optional_integers = deep_iterable(
 BUILT_IN_VARS: dict[str, Any] = {"__builtins__": {}}
 
 
-class ExpressionProtocol(Protocol):
-    """
-    A generic protocol for any class that can evaluate a mathematical
-    expression and return a value of type T (e.g., Scalar or float).
-    """
-
-    def eval_expression(self, namespace: dict[str, float]) -> float: ...
-
-
 @dataclass(frozen=True)
 class ScalarExpression:
-    value: str
+    expr: str
     unit: str
     category: str | None = None
 
     def eval_expression(self, namespace: dict[str, float]) -> Scalar:
-        evaluated_value = eval(self.value, BUILT_IN_VARS, namespace)
+        evaluated_value = eval(self.expr, BUILT_IN_VARS, namespace)
         if self.category is None:
             return Scalar((evaluated_value, self.unit))
         else:
@@ -57,10 +47,10 @@ class ScalarExpression:
 
 @dataclass(frozen=True)
 class FloatExpression:
-    value: str = attr.ib(validator=instance_of(str))
+    expr: str = attr.ib(validator=instance_of(str))
 
     def eval_expression(self, namespace: dict[str, float]) -> float:
-        evaluated_value = eval(self.value, BUILT_IN_VARS, namespace)
+        evaluated_value = eval(self.expr, BUILT_IN_VARS, namespace)
         return evaluated_value
 
 
@@ -172,7 +162,7 @@ def to_scalar(
                     case float() | int():
                         return Scalar(scalar_value, unit)
                     case str():
-                        return ScalarExpression(value=scalar_value, unit=unit)
+                        return ScalarExpression(expr=scalar_value, unit=unit)
                     case unreachable:
                         assert_never(unreachable)
             else:

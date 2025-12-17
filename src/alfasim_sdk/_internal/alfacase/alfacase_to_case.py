@@ -229,7 +229,7 @@ def load_scalar(
     unit = alfacase_content[key]["unit"].content.data
     match value:
         case str():
-            return ScalarExpression(value=value, unit=unit, category=category)
+            return ScalarExpression(expr=value, unit=unit, category=category)
         case int() | float():
             return Scalar(category=category, value=value, unit=unit)
         case unreachable:
@@ -245,7 +245,7 @@ def load_float(
     value = alfacase_content[key].content.data
     match value:
         case str():
-            return FloatExpression(value=value)
+            return FloatExpression(expr=value)
         case float():
             return value
         case unreachable:

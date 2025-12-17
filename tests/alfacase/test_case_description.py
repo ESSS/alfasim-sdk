@@ -256,7 +256,7 @@ def test_scalar_attribute():
 
     assert Foo(position_2=None).position_2 is None
 
-    foo = Foo(position=ScalarExpression(value="A+1", unit="m"))
+    foo = Foo(position=ScalarExpression(expr="A+1", unit="m"))
     assert isinstance(foo.position, ScalarExpression)
     assert foo.position.eval_expression(namespace={"A": 1}) == Scalar(
         "length", 2.0, "m"
@@ -1591,7 +1591,7 @@ def test_check_fluid_references(default_well: case_description.WellDescription) 
 def test_to_scalar_with_scalar_expression() -> None:
     scalar_expression = to_scalar(("A+1", "%"))
     assert isinstance(scalar_expression, ScalarExpression)
-    assert scalar_expression == ScalarExpression(value="A+1", unit="%")
+    assert scalar_expression == ScalarExpression(expr="A+1", unit="%")
 
     scalar = scalar_expression.eval_expression(namespace={"A": 10})
     assert scalar == Scalar(11.0, "%", "dimensionless")
@@ -1600,7 +1600,7 @@ def test_to_scalar_with_scalar_expression() -> None:
 def test_case_description_with_expression() -> None:
     physics_desc = PhysicsDescription()
     physics_desc.emulsion_pal_rhodes_phi_rel_100 = ScalarExpression(
-        value="A+B+1", category="dimensionless", unit="%"
+        expr="A+B+1", category="dimensionless", unit="%"
     )
     em_pal_rhodes = physics_desc.emulsion_pal_rhodes_phi_rel_100
     value = em_pal_rhodes.eval_expression(namespace={"A": 1, "B": 2})
@@ -1613,7 +1613,7 @@ def test_case_description_with_expression() -> None:
 
 
 def test_case_description_with_float_expression() -> None:
-    expression = FloatExpression(value="A + B")
+    expression = FloatExpression(expr="A + B")
     description = BipDescription(
         component_1="component_1", component_2="component_2", value=expression
     )
