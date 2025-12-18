@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class ReferencedVolumeFractionsContainerDescription
-            reference_coordinate: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'm', 'length')
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
             positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
             fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\] = {}
 
@@ -13,7 +13,9 @@
 
     .. parsed-literal::
 
-            reference_coordinate: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            reference_coordinate:  # optional
+                number | expr
+                unit: str
             positions:  # optional
                 values: [number]
                 unit: string

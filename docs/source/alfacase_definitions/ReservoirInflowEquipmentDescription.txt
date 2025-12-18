@@ -6,10 +6,10 @@
 
         class ReservoirInflowEquipmentDescription
             pressure_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            pressure: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(100000.0, 'Pa', 'pressure')
+            pressure: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(100000.0, 'Pa', 'pressure')
             pressure_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Pa, s)[]
             temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            temperature: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(288.6, 'K', 'temperature')
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(288.6, 'K', 'temperature')
             temperature_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(K, s)[]
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
             tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
@@ -21,16 +21,16 @@
             volume_fractions: \ :class:`Dict <typing.Dict>`\[str, barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression] = {}
             volume_fractions_curve: \ :class:`Dict <typing.Dict>`\[str, <class 'barril.curve.curve.Curve'>] = {}
             gas_liquid_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            gas_liquid_ratio: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            gas_liquid_ratio: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
             gas_liquid_ratio_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/sm3, s)[]
             gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            gas_oil_ratio: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
+            gas_oil_ratio: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'sm3/sm3', 'standard volume per standard volume')
             gas_oil_ratio_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/sm3, s)[]
             water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            water_cut: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'volume fraction')
+            water_cut: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'volume fraction')
             water_cut_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
-            start: \ :class:`Optional <typing.Optional>`\[Scalar]
-            length: \ :class:`Optional <typing.Optional>`\[Scalar]
+            start: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             productivity_ipr: \ :class:`Optional <typing.Optional>`\[str] = None
             injectivity_ipr: \ :class:`Optional <typing.Optional>`\[str] = None
 
@@ -39,7 +39,9 @@
     .. parsed-literal::
 
             pressure_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            pressure: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            pressure:  # optional
+                number | expr
+                unit: str
             pressure_curve:  # optional
                 image:
                     values: [number]
@@ -48,7 +50,9 @@
                     values: [number]
                     unit: string
             temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            temperature: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            temperature:  # optional
+                number | expr
+                unit: str
             temperature_curve:  # optional
                 image:
                     values: [number]
@@ -72,7 +76,9 @@
             volume_fractions_curve:  # optional
                 string: Curve
             gas_liquid_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            gas_liquid_ratio: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            gas_liquid_ratio:  # optional
+                number | expr
+                unit: str
             gas_liquid_ratio_curve:  # optional
                 image:
                     values: [number]
@@ -81,7 +87,9 @@
                     values: [number]
                     unit: string
             gas_oil_ratio_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            gas_oil_ratio: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            gas_oil_ratio:  # optional
+                number | expr
+                unit: str
             gas_oil_ratio_curve:  # optional
                 image:
                     values: [number]
@@ -90,7 +98,9 @@
                     values: [number]
                     unit: string
             water_cut_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            water_cut: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            water_cut:  # optional
+                number | expr
+                unit: str
             water_cut_curve:  # optional
                 image:
                     values: [number]
@@ -98,7 +108,11 @@
                 domain:
                     values: [number]
                     unit: string
-            start: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            length: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            start: 
+                number | expr
+                unit: str
+            length: 
+                number | expr
+                unit: str
             productivity_ipr: string  # optional
             injectivity_ipr: string  # optional

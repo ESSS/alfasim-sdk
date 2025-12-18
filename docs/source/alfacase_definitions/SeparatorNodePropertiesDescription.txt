@@ -5,25 +5,33 @@
     .. parsed-literal::
 
         class SeparatorNodePropertiesDescription
-            environment_temperature: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(25.0, 'degC', 'temperature')
+            environment_temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(25.0, 'degC', 'temperature')
             geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\  = SeparatorGeometryType.VerticalCylinder
-            length: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, 'm', 'length')
-            overall_heat_transfer_coefficient: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            diameter: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, 'm', 'diameter')
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'm', 'length')
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'm', 'diameter')
             nozzles: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
             initial_phase_volume_fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {'gas': Scalar(0.5, '-', 'volume fraction'), 'oil': Scalar(0.5, '-', 'volume fraction')}
-            gas_separation_efficiency: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, '-', 'dimensionless')
-            liquid_separation_efficiency: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, '-', 'dimensionless')
+            gas_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            liquid_separation_efficiency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            environment_temperature: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            environment_temperature:  # optional
+                number | expr
+                unit: str
             geometry: \ :class:`SeparatorGeometryType <alfasim_sdk._internal.constants.SeparatorGeometryType>`\  # optional
-            length: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
-            overall_heat_transfer_coefficient: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
-            diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            length:  # optional
+                number | expr
+                unit: str
+            overall_heat_transfer_coefficient:  # optional
+                number | expr
+                unit: str
+            diameter:  # optional
+                number | expr
+                unit: str
             nozzles:  # optional
                 string: 
                     value: number
@@ -32,5 +40,9 @@
                 string: 
                     value: number
                     unit: string
-            gas_separation_efficiency: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
-            liquid_separation_efficiency: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            gas_separation_efficiency:  # optional
+                number | expr
+                unit: str
+            liquid_separation_efficiency:  # optional
+                number | expr
+                unit: str

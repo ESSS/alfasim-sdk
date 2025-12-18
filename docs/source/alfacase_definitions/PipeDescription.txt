@@ -17,7 +17,7 @@
             segments: \ :class:`PipeSegmentsDescription <PipeSegmentsDescription>`\  = PipeSegmentsDescription()
             initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\  = InitialConditionsDescription()
             flow_pattern_model: \ :class:`FlowPatternModel <alfasim_sdk._internal.constants.FlowPatternModel>`\  = FlowPatternModel.UnitCell
-            regime_capturing_mesh_threshold: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, '-', 'dimensionless')
+            regime_capturing_mesh_threshold: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -35,4 +35,6 @@
             segments: \ :class:`pipe_segments_description_schema <PipeSegmentsDescription>`\  # optional
             initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
             flow_pattern_model: \ :class:`FlowPatternModel <alfasim_sdk._internal.constants.FlowPatternModel>`\  # optional
-            regime_capturing_mesh_threshold: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            regime_capturing_mesh_threshold:  # optional
+                number | expr
+                unit: str

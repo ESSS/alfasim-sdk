@@ -6,13 +6,17 @@
 
         class CompositionDescription
             component: str
-            molar_fraction: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'mol/mol', 'mole per mole')
-            reference_enthalpy: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'J/mol', 'molar thermodynamic energy')
+            molar_fraction: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'mol/mol', 'mole per mole')
+            reference_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'J/mol', 'molar thermodynamic energy')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             component: string
-            molar_fraction: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
-            reference_enthalpy: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            molar_fraction:  # optional
+                number | expr
+                unit: str
+            reference_enthalpy:  # optional
+                number | expr
+                unit: str

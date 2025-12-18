@@ -6,9 +6,9 @@
 
         class VogelIPRDescription
             well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  = WellIndexPhaseType.Oil
-            min_pressure_difference: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'Pa', 'pressure')
+            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa', 'pressure')
             well_max_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            well_max_flow_rate: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1.0, 'sm3/d', 'standard volume per time')
+            well_max_flow_rate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'sm3/d', 'standard volume per time')
             well_max_flow_rate_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(sm3/d, s)[]
 
 .. tab:: Schema
@@ -16,9 +16,13 @@
     .. parsed-literal::
 
             well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  # optional
-            min_pressure_difference: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            min_pressure_difference:  # optional
+                number | expr
+                unit: str
             well_max_flow_rate_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            well_max_flow_rate: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            well_max_flow_rate:  # optional
+                number | expr
+                unit: str
             well_max_flow_rate_curve:  # optional
                 image:
                     values: [number]

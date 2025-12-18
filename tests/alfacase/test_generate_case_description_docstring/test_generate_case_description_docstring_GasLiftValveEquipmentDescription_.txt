@@ -5,18 +5,26 @@
     .. parsed-literal::
 
         class GasLiftValveEquipmentDescription
-            position: \ :class:`Optional <typing.Optional>`\[Scalar]
-            diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
+            position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             valve_type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`
-            delta_p_min: \ :class:`Optional <typing.Optional>`\[Scalar]
-            discharge_coefficient: \ :class:`Optional <typing.Optional>`\[Scalar]
+            delta_p_min: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            position: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            position: 
+                number | expr
+                unit: str
+            diameter: 
+                number | expr
+                unit: str
             valve_type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`
-            delta_p_min: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            discharge_coefficient: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            delta_p_min: 
+                number | expr
+                unit: str
+            discharge_coefficient: 
+                number | expr
+                unit: str

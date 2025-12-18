@@ -5,26 +5,26 @@
     .. parsed-literal::
 
         class PigEquipmentDescription
-            diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            position: \ :class:`Optional <typing.Optional>`\[Scalar]
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             launch_times: \ :class:`Array <barril.units.Array>`\  = Array(time, [0.0], s)
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            mass: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(140.0, 'kg', 'mass')
+            mass: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(140.0, 'kg', 'mass')
             mass_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(kg, s)[]
             static_force_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            static_force: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1000.0, 'N', 'force')
+            static_force: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1000.0, 'N', 'force')
             static_force_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(N, s)[]
             wall_friction_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            wall_friction: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(1000.0, 'N.s/m', 'force per velocity')
+            wall_friction: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1000.0, 'N.s/m', 'force per velocity')
             wall_friction_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(N.s/m, s)[]
             linear_friction_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            linear_friction: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(10.0, 'N.s/m', 'force per velocity')
+            linear_friction: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 'N.s/m', 'force per velocity')
             linear_friction_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(N.s/m, s)[]
             quadratic_friction_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            quadratic_friction: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'N.s2/m2', 'force per velocity squared')
+            quadratic_friction: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'N.s2/m2', 'force per velocity squared')
             quadratic_friction_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(N.s2/m2, s)[]
             trap_mode: \ :class:`PigTrappingMode <alfasim_sdk._internal.constants.PigTrappingMode>`\  = PigTrappingMode.Automatic
-            trap_position: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'm', 'length')
+            trap_position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
             trap_pipe_name: \ :class:`Optional <typing.Optional>`\[str] = None
             route_mode: \ :class:`PigRoutingMode <alfasim_sdk._internal.constants.PigRoutingMode>`\  = PigRoutingMode.Automatic
             pipe_route_names: \ :class:`Optional <typing.Optional>`\[\ :class:`List <typing.List>`\[str]] = None
@@ -33,13 +33,19 @@
 
     .. parsed-literal::
 
-            diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            position: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            diameter: 
+                number | expr
+                unit: str
+            position: 
+                number | expr
+                unit: str
             launch_times:  # optional
                 values: [number]
                 unit: string
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            mass: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            mass:  # optional
+                number | expr
+                unit: str
             mass_curve:  # optional
                 image:
                     values: [number]
@@ -48,7 +54,9 @@
                     values: [number]
                     unit: string
             static_force_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            static_force: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            static_force:  # optional
+                number | expr
+                unit: str
             static_force_curve:  # optional
                 image:
                     values: [number]
@@ -57,7 +65,9 @@
                     values: [number]
                     unit: string
             wall_friction_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            wall_friction: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            wall_friction:  # optional
+                number | expr
+                unit: str
             wall_friction_curve:  # optional
                 image:
                     values: [number]
@@ -66,7 +76,9 @@
                     values: [number]
                     unit: string
             linear_friction_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            linear_friction: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            linear_friction:  # optional
+                number | expr
+                unit: str
             linear_friction_curve:  # optional
                 image:
                     values: [number]
@@ -75,7 +87,9 @@
                     values: [number]
                     unit: string
             quadratic_friction_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            quadratic_friction: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            quadratic_friction:  # optional
+                number | expr
+                unit: str
             quadratic_friction_curve:  # optional
                 image:
                     values: [number]
@@ -84,7 +98,9 @@
                     values: [number]
                     unit: string
             trap_mode: \ :class:`PigTrappingMode <alfasim_sdk._internal.constants.PigTrappingMode>`\  # optional
-            trap_position: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            trap_position:  # optional
+                number | expr
+                unit: str
             trap_pipe_name: string  # optional
             route_mode: \ :class:`PigRoutingMode <alfasim_sdk._internal.constants.PigRoutingMode>`\  # optional
             pipe_route_names:  # optional    
