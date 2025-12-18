@@ -1,3 +1,4 @@
+import importlib
 from pathlib import Path
 from textwrap import dedent
 
@@ -5,7 +6,6 @@ import attr
 import pytest
 import strictyaml
 from barril.units import Array, Scalar
-from strictyaml import Float, Map, Optional, Str
 
 from alfasim_sdk import (
     CaseDescription,
@@ -20,7 +20,6 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     attrib_scalar,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import (
-    UnsafeOrValidator,
     _obtain_referred_type,
     generate_alfacase_schema,
     get_all_classes_that_needs_schema,
@@ -543,6 +542,7 @@ def test_obtain_referred_type():
 def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
     """
     Test a case where is necessary to have a Union type hint with complex classes like Scalar and ScalarExpression.
+    Also, validatee the generate schema with an ALFACASE file.
     """
 
     @attr.s
@@ -566,31 +566,40 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
     """)
     assert schema == expected_schema
 
+    # Creating a module with the generated schema.
+    schema_imports = dedent("""\
+    from strictyaml import Map, Float, Str, Optional\n
+    from alfasim_sdk._internal.alfacase.generate_schema import UnsafeOrValidator\n
+    """)
 
-def test_usafe_or_validator() -> None:
-    """
-    Test the scenario where a unique Schema accepts both Scalar and ScalarExpression values using the
-    UnsafeOrValidator to bypass the StrictYAML OR validation.
-    """
-    schema_1 = Map({"value": Float(), "unit": Str()})
-    schema_2 = Map({"value": Str(), "unit": Str()})
-    schema = Map({Optional("scalar"): UnsafeOrValidator(schema_1, schema_2)})
+    new_schema = schema_imports + schema
+    python_schema_file = datadir / "schema.py"
+    python_schema_file.write_text(new_schema)
 
+    spec = importlib.util.spec_from_file_location(
+        python_schema_file.stem, python_schema_file
+    )
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+
+    spec.loader.exec_module(module)
+
+    # Evaluating a ALFACASE file with the generated schema.
+    # First with Scalar value.
     yaml_content_1 = """\
-    scalar:
-        value: 1
-        unit: '-'
-    """
-
-    content_1 = strictyaml.dirty_load(yaml_content_1, schema=schema)
+        scalar:
+            value: 1
+            unit: '-'
+        """
+    content_1 = strictyaml.dirty_load(yaml_content_1, schema=module.foo_schema)
     assert content_1 == content_1.data == {"scalar": {"value": 1.0, "unit": "-"}}
 
+    # Second with a ScalarExpression.
     yaml_content_2 = """\
     scalar:
         value: "A + B"
         unit: '-'
     """
-
-    yaml_content_2 = strictyaml.dirty_load(yaml_content_2, schema=schema)
-
+    yaml_content_2 = strictyaml.dirty_load(yaml_content_2, schema=module.foo_schema)
     assert yaml_content_2.data == {"scalar": {"unit": "-", "value": "A + B"}}
