@@ -12,9 +12,10 @@ import attr
 import typing_inspect
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
-from strictyaml import Validator
+from strictyaml import YAML, Validator
 from strictyaml.exceptions import YAMLValidationError
 from strictyaml.utils import flatten
+from strictyaml.yamllocation import YAMLChunk
 from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
@@ -190,7 +191,7 @@ def scalar_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_scalar_expression(type_: type) -> bool:
-    return inspect.isclass(type_) and issubclass(type_, ScalarExpression)
+    return type_ is ScalarExpression
 
 
 def scalar_expression_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -456,14 +457,14 @@ class UnsafeOrValidator(Validator):
     or expression like 'A+B+1' which will be evaluated for a Scalar value later.
     """
 
-    def __init__(self, validator_a, validator_b):
+    def __init__(self, validator_a: Validator, validator_b: Validator) -> None:
         assert isinstance(validator_a, Validator), "validator_a must be a Validator"
         assert isinstance(validator_b, Validator), "validator_b must be a Validator"
 
         self._validator_a = validator_a
         self._validator_b = validator_b
 
-    def __call__(self, chunk):
+    def __call__(self, chunk: YAMLChunk) -> YAML:
         try:
             result = self._validator_a(chunk)
             result._selected_validator = result._validator
