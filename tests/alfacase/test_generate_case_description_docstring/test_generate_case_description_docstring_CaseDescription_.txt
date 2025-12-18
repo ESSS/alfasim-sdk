@@ -21,6 +21,7 @@
             wells: \ :class:`List <typing.List>`\[\ :class:`WellDescription <WellDescription>`\] = []
             materials: \ :class:`List <typing.List>`\[\ :class:`MaterialDescription <MaterialDescription>`\] = []
             walls: \ :class:`List <typing.List>`\[\ :class:`WallDescription <WallDescription>`\] = []
+            multiple_runs: \ :class:`MultipleRunsDescription <MultipleRunsDescription>`\  = MultipleRunsDescription()
 
 .. tab:: Schema
 
@@ -48,3 +49,4 @@
                 - \ :class:`material_description_schema <MaterialDescription>`
             walls:  # optional
                 - \ :class:`wall_description_schema <WallDescription>`
+            multiple_runs: \ :class:`multiple_runs_description_schema <MultipleRunsDescription>`\  # optional

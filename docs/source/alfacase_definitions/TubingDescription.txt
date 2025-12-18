@@ -6,10 +6,10 @@
 
         class TubingDescription
             name: str
-            length: \ :class:`Scalar <barril.units.Scalar>`
-            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`
-            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             material: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
@@ -18,15 +18,15 @@
 
             name: string
             length: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             outer_diameter: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             inner_diameter: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             inner_roughness: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             material: string  # optional
