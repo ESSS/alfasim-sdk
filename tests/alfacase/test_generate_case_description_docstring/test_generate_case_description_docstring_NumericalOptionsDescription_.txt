@@ -6,17 +6,17 @@
 
         class NumericalOptionsDescription
             nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._internal.constants.NonlinearSolverType>`\  = NonlinearSolverType.AlfasimQuasiNewton
-            tolerance: \ :class:`Optional <typing.Optional>`\[float] = 0.0001
+            tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0001
             maximum_iterations: int = 5
-            maximum_timestep_change_factor: \ :class:`Optional <typing.Optional>`\[float] = 2
-            maximum_cfl_value: \ :class:`Optional <typing.Optional>`\[float] = 1.0
-            relaxed_tolerance: \ :class:`Optional <typing.Optional>`\[float] = 0.0
-            divergence_tolerance: \ :class:`Optional <typing.Optional>`\[float] = -1.0
+            maximum_timestep_change_factor: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 2
+            maximum_cfl_value: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 1.0
+            relaxed_tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0
+            divergence_tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = -1.0
             friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  = EvaluationStrategyType.TimeExplicit
             simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  = SimulationModeType.Default
             enable_solver_caching: bool = True
-            caching_rtol: \ :class:`Optional <typing.Optional>`\[float] = 0.01
-            caching_atol: \ :class:`Optional <typing.Optional>`\[float] = 0.0001
+            caching_rtol: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.01
+            caching_atol: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0001
             always_repeat_timestep: bool = False
             enable_fast_compositional: bool = True
 
@@ -25,16 +25,23 @@
     .. parsed-literal::
 
             nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._internal.constants.NonlinearSolverType>`\  # optional
-            tolerance: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
+            tolerance:  # optional
+                number | expr
             maximum_iterations: number  # optional
-            maximum_timestep_change_factor: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
-            maximum_cfl_value: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
-            relaxed_tolerance: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
-            divergence_tolerance: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
+            maximum_timestep_change_factor:  # optional
+                number | expr
+            maximum_cfl_value:  # optional
+                number | expr
+            relaxed_tolerance:  # optional
+                number | expr
+            divergence_tolerance:  # optional
+                number | expr
             friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  # optional
             simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  # optional
             enable_solver_caching: boolean  # optional
-            caching_rtol: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
-            caching_atol: float | alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression  # optional
+            caching_rtol:  # optional
+                number | expr
+            caching_atol:  # optional
+                number | expr
             always_repeat_timestep: boolean  # optional
             enable_fast_compositional: boolean  # optional

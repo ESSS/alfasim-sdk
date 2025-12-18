@@ -194,6 +194,10 @@ def is_scalar_expression(type_: type) -> bool:
     return type_ is ScalarExpression
 
 
+def is_float_expression(type_: type) -> bool:
+    return type_ is FloatExpression
+
+
 def scalar_expression_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"value": Str(), "unit": Str()})'
 

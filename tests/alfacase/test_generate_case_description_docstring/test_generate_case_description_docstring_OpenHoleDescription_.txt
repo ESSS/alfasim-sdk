@@ -6,15 +6,21 @@
 
         class OpenHoleDescription
             name: str
-            length: \ :class:`Optional <typing.Optional>`\[Scalar]
-            diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            inner_roughness: \ :class:`Optional <typing.Optional>`\[Scalar]
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             name: string
-            length: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            inner_roughness: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            length: 
+                number | expr
+                unit: str
+            diameter: 
+                number | expr
+                unit: str
+            inner_roughness: 
+                number | expr
+                unit: str

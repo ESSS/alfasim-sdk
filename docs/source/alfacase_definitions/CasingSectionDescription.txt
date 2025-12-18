@@ -6,14 +6,14 @@
 
         class CasingSectionDescription
             name: str
-            hanger_depth: \ :class:`Optional <typing.Optional>`\[Scalar]
-            settings_depth: \ :class:`Optional <typing.Optional>`\[Scalar]
-            hole_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            outer_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            inner_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            inner_roughness: \ :class:`Optional <typing.Optional>`\[Scalar]
+            hanger_depth: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            settings_depth: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            hole_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             material: \ :class:`Optional <typing.Optional>`\[str] = None
-            top_of_filler: \ :class:`Optional <typing.Optional>`\[Scalar]
+            top_of_filler: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             filler_material: \ :class:`Optional <typing.Optional>`\[str] = None
             material_above_filler: \ :class:`Optional <typing.Optional>`\[str] = None
 
@@ -22,13 +22,27 @@
     .. parsed-literal::
 
             name: string
-            hanger_depth: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            settings_depth: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            hole_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            outer_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            inner_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            inner_roughness: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            hanger_depth: 
+                number | expr
+                unit: str
+            settings_depth: 
+                number | expr
+                unit: str
+            hole_diameter: 
+                number | expr
+                unit: str
+            outer_diameter: 
+                number | expr
+                unit: str
+            inner_diameter: 
+                number | expr
+                unit: str
+            inner_roughness: 
+                number | expr
+                unit: str
             material: string  # optional
-            top_of_filler: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            top_of_filler: 
+                number | expr
+                unit: str
             filler_material: string  # optional
             material_above_filler: string  # optional

@@ -5,20 +5,26 @@
     .. parsed-literal::
 
         class HeatSourceEquipmentDescription
-            start: \ :class:`Optional <typing.Optional>`\[Scalar]
-            length: \ :class:`Optional <typing.Optional>`\[Scalar]
+            start: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             power_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            power: \ :class:`Optional <typing.Optional>`\[Scalar] = Scalar(0.0, 'W', 'power')
+            power: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'W', 'power')
             power_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(W, s)[]
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            start: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            length: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            start: 
+                number | expr
+                unit: str
+            length: 
+                number | expr
+                unit: str
             power_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
-            power: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression  # optional
+            power:  # optional
+                number | expr
+                unit: str
             power_curve:  # optional
                 image:
                     values: [number]

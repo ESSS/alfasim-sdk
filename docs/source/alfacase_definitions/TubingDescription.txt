@@ -6,10 +6,10 @@
 
         class TubingDescription
             name: str
-            length: \ :class:`Optional <typing.Optional>`\[Scalar]
-            outer_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            inner_diameter: \ :class:`Optional <typing.Optional>`\[Scalar]
-            inner_roughness: \ :class:`Optional <typing.Optional>`\[Scalar]
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            outer_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             material: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
@@ -17,8 +17,16 @@
     .. parsed-literal::
 
             name: string
-            length: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            outer_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            inner_diameter: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
-            inner_roughness: barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression
+            length: 
+                number | expr
+                unit: str
+            outer_diameter: 
+                number | expr
+                unit: str
+            inner_diameter: 
+                number | expr
+                unit: str
+            inner_roughness: 
+                number | expr
+                unit: str
             material: string  # optional
