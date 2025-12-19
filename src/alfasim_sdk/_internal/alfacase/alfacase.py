@@ -22,7 +22,7 @@ def generate_alfacase_file(
         alfacase_description, alfacase_file
     )
 
-    alfacase_file_content = convert_description_to_alfacase(alfacase_description)
+    alfacase_file_content = _convert_description_to_yaml(alfacase_description)
     alfacase_file.write_text(alfacase_file_content, encoding="utf-8")
 
 
@@ -45,7 +45,7 @@ def _generate_alfatable_file_for_pvt_models_description(
     pvt_models.pt_table_parameters.clear()
 
 
-def convert_description_to_alfacase(
+def _convert_description_to_yaml(
     alfacase_description: case_description.CaseDescription
     | case_description.PvtModelPtTableParametersDescription
     | case_description.PvtModelsDescription
@@ -57,7 +57,12 @@ def convert_description_to_alfacase(
 ) -> str:
     """
     Convert a given case (decorated with attrs) to YAML representation.
+
     The strictyaml conversion ("as_yaml") requires that all items from dict are strings.
+
+    The conversion is not fully complete: for the fully alfacase file we need to convert data via
+    `dump_file_contents_and_update_plugins`, which dumps embedded files (like alfatable) and updates the
+    case description to point to those files. For this reason, to obtain alfacase data use `generate_alfacase_file`.
 
     :param alfacase_description:
         Alfasim case description.

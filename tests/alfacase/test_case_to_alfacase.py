@@ -7,9 +7,9 @@ from barril.units import Array, Scalar
 from alfasim_sdk import (
     MultiInputType,
     NumericalOptionsDescription,
-    convert_description_to_alfacase,
 )
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase import _convert_description_to_yaml
 from alfasim_sdk._internal.alfacase.alfacase_to_case import DescriptionDocument
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
@@ -39,7 +39,7 @@ def test_convert_description_to_alfacase_with_empty_dict(datadir: Path) -> None:
             )
         ],
     )
-    simple_case_alfacase_content = convert_description_to_alfacase(simple_case)
+    simple_case_alfacase_content = _convert_description_to_yaml(simple_case)
     assert "wall_description: {}" not in simple_case_alfacase_content
     assert "tables: {}" not in simple_case_alfacase_content
     # Smoke check, ensures that the alfacase is loaded correctly without errors
@@ -62,7 +62,7 @@ def test_remove_redundant_input_type_data_option(
     mass_source_equipment_description = case_description.MassSourceEquipmentDescription(
         position=Scalar(0, "m"), temperature_input_type=input_type
     )
-    yaml = convert_description_to_alfacase(
+    yaml = _convert_description_to_yaml(
         mass_source_equipment_description, remove_redundant_input_type_data=remove
     )
 
@@ -96,7 +96,7 @@ def test_convert_description_to_alfacase_with_nan_float():
             tolerance=float("inf"), relaxed_tolerance=float("nan")
         )
     )
-    simple_case_alfacase_content = convert_description_to_alfacase(simple_case)
+    simple_case_alfacase_content = _convert_description_to_yaml(simple_case)
     assert "relaxed_tolerance: .nan" in simple_case_alfacase_content
     assert "tolerance: .inf" in simple_case_alfacase_content
 
@@ -105,6 +105,6 @@ def test_convert_description_to_alfacase_with_nan_float():
             tolerance=float("+inf"), relaxed_tolerance=float("-inf")
         )
     )
-    simple_case_alfacase_content = convert_description_to_alfacase(simple_case)
+    simple_case_alfacase_content = _convert_description_to_yaml(simple_case)
     assert "tolerance: .inf" in simple_case_alfacase_content
     assert "relaxed_tolerance: -.inf" in simple_case_alfacase_content

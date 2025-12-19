@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.alfacase import _convert_description_to_yaml
 from alfasim_sdk._internal.alfacase.alfacase_to_case import get_category_for
 from alfasim_sdk._internal.alfacase.case_description_attributes import Numpy1DArray
 
@@ -16,9 +17,7 @@ def generate_alfatable_file(
     """
     from boltons.strutils import slugify
 
-    from alfasim_sdk import convert_description_to_alfacase
-
-    alfatable_content = convert_description_to_alfacase(
+    alfatable_content = _convert_description_to_yaml(
         description, enable_flow_style_on_numpy=True
     )
     alfatable_file = (

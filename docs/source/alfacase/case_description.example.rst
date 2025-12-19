@@ -301,7 +301,7 @@ Full Case
 
 This section brings together all the previous sections, showing the full example of a
 Description with a project configuration and being converted to a ``.alfacase`` file, using
-`convert_description_to_alfacase` making this project ready to be imported by the application.
+`generate_alfacase_file` making this project ready to be imported by the application.
 
 .. code-block:: python
 
@@ -408,16 +408,13 @@ Description with a project configuration and being converted to a ``.alfacase`` 
         ),
     )
 
-And the ``case_description`` above can be converted to a ``.alfacase`` file using ``convert_description_to_alfacase``.
+And the ``case_description`` above can be converted to a ``.alfacase`` file using ``generate_alfacase_file``.
 
 .. code-block:: python
 
     from pathlib import Path
-    from alfasim_sdk import convert_description_to_alfacase
+    from alfasim_sdk import generate_alfacase_file
 
     case_description = CaseDescription(  [...] )
-    alfacase_content = convert_description_to_alfacase(case_description)
-
-    # Dump the content to a file
     alfacase_file = Path("c:\\user\\") / 'my_project.alfacase'
-    alfacase_file.write_text(data=alfacase_content, encoding='UTF-8')
+    generate_alfacase_file(case_description, alfacase_file)

@@ -57,8 +57,7 @@ must be a string of one of the options available on :py:class:`NodeCellType <alf
 As already informed at the beginning of the section, ALFAsim accepts only ``.alfacase`` files, the description classes
 are only tools that help the creation and manipulation of a project programmatically in an easier way.
 
-To convert a ``Description`` to alfacase you can use the function ``convert_description_to_alfacase`` and to convert a
-``.alfacase`` file to ``Description`` you can use the function ``convert_alfacase_to_description``.
+To convert a ``Description`` to alfacase you can use the function ``generate_alfacase_file``.
 
 
 Convert an ALFAsim Project to a Description

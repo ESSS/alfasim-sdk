@@ -10,8 +10,8 @@ from barril.units import Array, Scalar
 from strictyaml import YAML
 from strictyaml.ruamel.comments import CommentedMap
 
-from alfasim_sdk import convert_description_to_alfacase
 from alfasim_sdk._internal.alfacase import alfacase_to_case, case_description, schema
+from alfasim_sdk._internal.alfacase.alfacase import _convert_description_to_yaml
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
     get_array_loader,
@@ -83,7 +83,7 @@ def alfacase_to_case_helper(tmp_path):
             """
             Helper method to generate a "Description" from the given alfacase_config
             """
-            alfacase_string = convert_description_to_alfacase(
+            alfacase_string = _convert_description_to_yaml(
                 alfacase_config.description_expected,
                 remove_redundant_input_type_data=remove_redundant_input_type_data,
             )
@@ -695,7 +695,7 @@ def description_document_for_pvt_tables_test(tmp_path):
     case = case_description.PvtModelsDescription(
         tables={"acme": "acme.tab", "acme_2": "acme.tab"}
     )
-    alfacase_string = convert_description_to_alfacase(case)
+    alfacase_string = _convert_description_to_yaml(case)
     alfacase_file_path = tmp_path / "test_case.alfacase"
     shutil.copy2(get_acme_tab_file_path(), tmp_path)
     alfacase_content = strictyaml.dirty_load(
@@ -867,7 +867,7 @@ def test_convert_alfacase_to_description_restart_file_path(tmp_path):
         filled_case_descriptions.PHYSICS_DESCRIPTION, restart_filepath=restart_file
     )
 
-    alfacase_string = convert_description_to_alfacase(physics_with_restart_file)
+    alfacase_string = _convert_description_to_yaml(physics_with_restart_file)
     restart_file_relative_path = restart_file.relative_to(alfacase_file.parent)
     assert f"restart_filepath: {restart_file.absolute()}" in alfacase_string
     alfacase_string = alfacase_string.replace(

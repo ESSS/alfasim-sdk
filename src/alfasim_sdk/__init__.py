@@ -36,7 +36,6 @@ def get_alfasim_sdk_api_path():
 # ALFACase: Utilities
 from alfasim_sdk._internal.alfacase.alfacase import (
     convert_alfacase_to_description,
-    convert_description_to_alfacase,
     generate_alfacase_file,
 )
 from alfasim_sdk._internal.alfacase.alfatable import (
@@ -496,7 +495,6 @@ __all__ = [
     "console_main",
     "container_model",
     "convert_alfacase_to_description",
-    "convert_description_to_alfacase",
     "data_model",
     "generate_alfacase_file",
     "generate_alfatable_file",
