@@ -49,7 +49,7 @@ from .case_description_attributes import (
 #   cog.out(code)
 #
 # ]]]
-# [[[end]]] (checksum: d41d8cd98f00b204e9800998ecf8427e) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg)
+# [[[end]]] (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -372,7 +372,7 @@ class _MassSourceCommon:
         default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 36eec9d7cfeeca5d2b1988767baa76ce) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
+    # [[[end]]] (sum: Nu7J18/uyl) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
 
     source_type: constants.MassSourceType = attrib_enum(
         default=constants.MassSourceType.MassFlowRates
@@ -392,7 +392,7 @@ class _MassSourceCommon:
         metadata={"type": "curve_dict", "category": 'standard volume per time'},
     )
     # fmt: on
-    # [[[end]]] (checksum: 2c711303f325eb1d8d0b1f25b85cacf3) (sum: LHETA/Ml6x) (sum: LHETA/Ml6x)
+    # [[[end]]] (sum: LHETA/Ml6x) (sum: LHETA/Ml6x) (sum: LHETA/Ml6x)
 
     # [[[cog
     # cog_out_multi_input_dict("mass_flow_rates", "mass flow rate")
@@ -408,7 +408,7 @@ class _MassSourceCommon:
         metadata={"type": "curve_dict", "category": 'mass flow rate'},
     )
     # fmt: on
-    # [[[end]]] (checksum: 4dd51a245e894bea8f763169ce32cd7b) (sum: TdUaJF6JS+) (sum: TdUaJF6JS+)
+    # [[[end]]] (sum: TdUaJF6JS+) (sum: TdUaJF6JS+) (sum: TdUaJF6JS+)
 
     # [[[cog
     # cog_out_multi_input("total_mass_flow_rate", "mass flow rate", 1.0, "kg/s")
@@ -422,7 +422,7 @@ class _MassSourceCommon:
         default=Curve(Array('mass flow rate', [], 'kg/s'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: cf48708c4bb8457576769694eee229a0) (sum: z0hwjEu4RX) (sum: z0hwjEu4RX)
+    # [[[end]]] (sum: z0hwjEu4RX) (sum: z0hwjEu4RX) (sum: z0hwjEu4RX)
 
     # [[[cog
     # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
@@ -436,7 +436,7 @@ class _MassSourceCommon:
         default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: e4baf07b2f90a2d9a01065e5b11c7e2c) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
+    # [[[end]]] (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
 
     # [[[cog
     # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -450,7 +450,7 @@ class _MassSourceCommon:
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 4af2b7d9618d8a5957f0df76497e26e8) (sum: SvK32WGNil) (sum: SvK32WGNil)
+    # [[[end]]] (sum: SvK32WGNil) (sum: SvK32WGNil) (sum: SvK32WGNil)
 
 
 @attr.s(kw_only=True, auto_attribs=True)
@@ -476,7 +476,7 @@ class _PressureSourceCommon:
         default=Curve(Array('pressure', [], 'Pa'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: fe0aecae34c286913db71e81d0b64de8) (sum: /grsrjTChp) (sum: /grsrjTChp)
+    # [[[end]]] (sum: /grsrjTChp) (sum: /grsrjTChp) (sum: /grsrjTChp)
 
     # [[[cog
     # cog_out_multi_input("temperature", "temperature", constants.DEFAULT_TEMPERATURE_IN_K, "K")
@@ -490,7 +490,7 @@ class _PressureSourceCommon:
         default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 36eec9d7cfeeca5d2b1988767baa76ce) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
+    # [[[end]]] (sum: Nu7J18/uyl) (sum: Nu7J18/uyl) (sum: Nu7J18/uyl)
 
     fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
@@ -518,7 +518,7 @@ class _PressureSourceCommon:
         metadata={"type": "curve_dict", "category": 'mass fraction'},
     )
     # fmt: on
-    # [[[end]]] (checksum: debc8ca806e39772d4a20569869a4655) (sum: 3ryMqAbjl3) (sum: 3ryMqAbjl3)
+    # [[[end]]] (sum: 3ryMqAbjl3) (sum: 3ryMqAbjl3) (sum: 3ryMqAbjl3)
 
     # [[[cog
     # cog_out_multi_input_dict("volume_fractions", "volume fraction")
@@ -534,7 +534,7 @@ class _PressureSourceCommon:
         metadata={"type": "curve_dict", "category": 'volume fraction'},
     )
     # fmt: on
-    # [[[end]]] (checksum: ae291714c26138281dadee1d613b610c) (sum: rikXFMJhOC) (sum: rikXFMJhOC)
+    # [[[end]]] (sum: rikXFMJhOC) (sum: rikXFMJhOC) (sum: rikXFMJhOC)
 
     # [[[cog
     # cog_out_multi_input("gas_liquid_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -548,7 +548,7 @@ class _PressureSourceCommon:
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: cb3b16929b1c03d48380d4d83416260e) (sum: yzsWkpscA9) (sum: yzsWkpscA9)
+    # [[[end]]] (sum: yzsWkpscA9) (sum: yzsWkpscA9) (sum: yzsWkpscA9)
 
     # [[[cog
     # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -562,7 +562,7 @@ class _PressureSourceCommon:
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 4af2b7d9618d8a5957f0df76497e26e8) (sum: SvK32WGNil) (sum: SvK32WGNil)
+    # [[[end]]] (sum: SvK32WGNil) (sum: SvK32WGNil) (sum: SvK32WGNil)
 
     # [[[cog
     # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
@@ -576,7 +576,7 @@ class _PressureSourceCommon:
         default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: e4baf07b2f90a2d9a01065e5b11c7e2c) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
+    # [[[end]]] (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot) (sum: 5Lrwey+Qot)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -843,7 +843,7 @@ class PumpEquipmentDescription:
         default=Curve(Array('angle per time', [], 'Hz'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 771667f1bb93ca194cfbd6d9d0bdf142) (sum: dxZn8buTyh) (sum: dxZn8buTyh)
+    # [[[end]]] (sum: dxZn8buTyh) (sum: dxZn8buTyh) (sum: dxZn8buTyh)
     esp_number_of_stages: int = attr.ib(default=1, validator=instance_of(int))
     esp_reference_density: Scalar = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
@@ -987,7 +987,7 @@ class PigEquipmentDescription:
         default=Curve(Array('mass', [], 'kg'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 05d6649a53deb426a4994942ef832481) (sum: BdZkmlPetC) (sum: BdZkmlPetC)
+    # [[[end]]] (sum: BdZkmlPetC) (sum: BdZkmlPetC) (sum: BdZkmlPetC)
 
     # [[[cog
     # cog_out_multi_input("static_force", "force", 1000.0, "N")
@@ -1001,7 +1001,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force', [], 'N'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 409fe45d1b77c811bee669ded70381e2) (sum: QJ/kXRt3yB) (sum: QJ/kXRt3yB)
+    # [[[end]]] (sum: QJ/kXRt3yB) (sum: QJ/kXRt3yB) (sum: QJ/kXRt3yB)
 
     # [[[cog
     # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "N.s/m")
@@ -1015,7 +1015,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: c18bbaf817458dcdc08daf023ebd2c4e) (sum: wYu6+BdFjc) (sum: wYu6+BdFjc)
+    # [[[end]]] (sum: wYu6+BdFjc) (sum: wYu6+BdFjc) (sum: wYu6+BdFjc)
 
     # [[[cog
     # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "N.s/m")
@@ -1029,7 +1029,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: ed5518774184459e8f36e3c1cc54fcd2) (sum: 7VUYd0GERZ) (sum: 7VUYd0GERZ)
+    # [[[end]]] (sum: 7VUYd0GERZ) (sum: 7VUYd0GERZ) (sum: 7VUYd0GERZ)
 
     # [[[cog
     # cog_out_multi_input("quadratic_friction", "force per velocity squared", 0.0, "N.s2/m2")
@@ -1043,7 +1043,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force per velocity squared', [], 'N.s2/m2'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 6d2f7c8c5023fc1aef42273bd66d8e92) (sum: bS98jFAj/B) (sum: bS98jFAj/B)
+    # [[[end]]] (sum: bS98jFAj/B) (sum: bS98jFAj/B) (sum: bS98jFAj/B)
 
     trap_mode: constants.PigTrappingMode = attrib_enum(
         default=constants.PigTrappingMode.Automatic
@@ -1163,7 +1163,7 @@ class LeakEquipmentDescription:
         default=Curve(Array('dimensionless', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: dab1f6c15c15ee59d41984a7be583fdb) (sum: 2rH2wVwV7l) (sum: 2rH2wVwV7l)
+    # [[[end]]] (sum: 2rH2wVwV7l) (sum: 2rH2wVwV7l) (sum: 2rH2wVwV7l)
 
     target_pipe_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
@@ -1231,7 +1231,7 @@ class LinearIPRDescription(CommonIPR):
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: af7535d91fbb09855f640560f9fc40df) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
+    # [[[end]]] (sum: r3U12R+7CY) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1257,7 +1257,7 @@ class VogelIPRDescription(CommonIPR):
         default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: 06c5189f07d7cf65f91791c7209627a6) (sum: BsUYnwfXz2) (sum: BsUYnwfXz2)
+    # [[[end]]] (sum: BsUYnwfXz2) (sum: BsUYnwfXz2) (sum: BsUYnwfXz2)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1284,7 +1284,7 @@ class FetkovichIPRDescription(CommonIPR):
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: af7535d91fbb09855f640560f9fc40df) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
+    # [[[end]]] (sum: r3U12R+7CY) (sum: r3U12R+7CY) (sum: r3U12R+7CY)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1419,7 +1419,7 @@ class HeatSourceEquipmentDescription:
         default=Curve(Array('power', [], 'W'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (checksum: d25d528e4e4866ea6d8297491dcd8a40) (sum: 0l1Sjk5IZu) (sum: 0l1Sjk5IZu)
+    # [[[end]]] (sum: 0l1Sjk5IZu) (sum: 0l1Sjk5IZu) (sum: 0l1Sjk5IZu)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
