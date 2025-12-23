@@ -10,7 +10,8 @@ def generate_alfatable_file(
     alfacase_file: Path,
     alfatable_filename: str,
     description: case_description.CaseDescription
-    | case_description.PvtModelPtTableParametersDescription,
+    | case_description.PvtModelPtTableParametersDescription
+    | case_description.PvtModelPhTableParametersDescription,
 ) -> Path:
     """
     Create `.alfatable` file for the given description.
