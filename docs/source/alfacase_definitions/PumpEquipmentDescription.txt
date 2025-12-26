@@ -16,6 +16,10 @@
             speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
             speed_type: \ :class:`PumpSpeedType <alfasim_sdk._internal.constants.PumpSpeedType>`\  = PumpSpeedType.Constant
             constant_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(500.0, 'rpm', 'angle per time')
+            pcp_reference_viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.001, 'Pa.s', 'dynamic viscosity')
+            pcp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1000.0, 'kg/m3', 'density')
+            pcp_reference_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(60.0, 'degC', 'temperature')
+            pcp_viscosity_correction_enabled: bool = False
             esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             esp_speed_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             esp_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Hz', 'angle per time')
@@ -50,6 +54,16 @@
             constant_speed:  # optional
                 value: number
                 unit: string
+            pcp_reference_viscosity:  # optional
+                value: number
+                unit: string
+            pcp_reference_density:  # optional
+                value: number
+                unit: string
+            pcp_reference_temperature:  # optional
+                value: number
+                unit: string
+            pcp_viscosity_correction_enabled: boolean  # optional
             esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
             esp_speed_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             esp_speed:  # optional
