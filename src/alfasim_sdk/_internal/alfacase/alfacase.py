@@ -48,6 +48,7 @@ def _generate_alfatable_file_for_pvt_models_description(
 def _convert_description_to_yaml(
     alfacase_description: case_description.CaseDescription
     | case_description.PvtModelPtTableParametersDescription
+    | case_description.PvtModelPhTableParametersDescription
     | case_description.PvtModelsDescription
     | case_description.PhysicsDescription
     | case_description.MassSourceEquipmentDescription,
