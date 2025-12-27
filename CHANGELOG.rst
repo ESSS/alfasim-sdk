@@ -12,6 +12,11 @@ CHANGELOG
 * Add ``pcp_reference_viscosity`` attribute to ``PumpEquipmentDescription``.
 * Add ``pcp_reference_density`` attribute to ``PumpEquipmentDescription``.
 * Add ``pcp_reference_temperature`` attribute to ``PumpEquipmentDescription``.
+* Add ``plunger_diameter`` attribute to ``PumpEquipmentDescription``.
+* Add ``stroke_length`` attribute to ``PumpEquipmentDescription``.
+* Add ``pump_speed`` attribute to ``PumpEquipmentDescription``.
+* Add ``slip_coefficient`` attribute to ``PumpEquipmentDescription``.
+* Add ``volumetric_efficiency`` attribute to ``PumpEquipmentDescription``.
 
 
 1.4.0 (2025-11-14)

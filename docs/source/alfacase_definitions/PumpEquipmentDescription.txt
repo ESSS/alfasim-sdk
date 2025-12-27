@@ -11,6 +11,17 @@
             thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  = PumpThermalEfficiencyModel.Constant
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  = PumpType.ConstantPressure
             pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
+            liquid_level_depth_in_annulus: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1000.0, 'm', 'length')
+            flowing_tubing_head_pressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
+            plunger_diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.01, 'm', 'length')
+            rod_diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.001, 'm', 'length')
+            stroke_length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            pump_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 'spm', 'stroke frequency')
+            slip_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1e-12, 'm3/Pa.s', 'slip coefficient')
+            crank_length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            pitman_length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
+            volumetric_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
+            safety_factor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
             table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\  = SpeedCurveDescription()
             speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
@@ -45,6 +56,39 @@
             thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  # optional
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  # optional
             pressure_boost:  # optional
+                value: number
+                unit: string
+            liquid_level_depth_in_annulus:  # optional
+                value: number
+                unit: string
+            flowing_tubing_head_pressure:  # optional
+                value: number
+                unit: string
+            plunger_diameter:  # optional
+                value: number
+                unit: string
+            rod_diameter:  # optional
+                value: number
+                unit: string
+            stroke_length:  # optional
+                value: number
+                unit: string
+            pump_speed:  # optional
+                value: number
+                unit: string
+            slip_coefficient:  # optional
+                value: number
+                unit: string
+            crank_length:  # optional
+                value: number
+                unit: string
+            pitman_length:  # optional
+                value: number
+                unit: string
+            volumetric_efficiency:  # optional
+                value: number
+                unit: string
+            safety_factor:  # optional
                 value: number
                 unit: string
             table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
