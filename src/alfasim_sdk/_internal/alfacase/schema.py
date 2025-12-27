@@ -1013,8 +1013,19 @@ pump_equipment_description_schema = Map(
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("thermal_efficiency"): Map({"value": Float(), "unit": Str()}),
         Optional("thermal_efficiency_model"): Enum(['constant', 'efficiency_curve_based']),
-        Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump', 'progressive_cavity_pump']),
+        Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump', 'progressive_cavity_pump', 'sucker_rod_pump']),
         Optional("pressure_boost"): Map({"value": Float(), "unit": Str()}),
+        Optional("liquid_level_depth_in_annulus"): Map({"value": Float(), "unit": Str()}),
+        Optional("flowing_tubing_head_pressure"): Map({"value": Float(), "unit": Str()}),
+        Optional("plunger_diameter"): Map({"value": Float(), "unit": Str()}),
+        Optional("rod_diameter"): Map({"value": Float(), "unit": Str()}),
+        Optional("stroke_length"): Map({"value": Float(), "unit": Str()}),
+        Optional("pump_speed"): Map({"value": Float(), "unit": Str()}),
+        Optional("slip_coefficient"): Map({"value": Float(), "unit": Str()}),
+        Optional("crank_length"): Map({"value": Float(), "unit": Str()}),
+        Optional("pitman_length"): Map({"value": Float(), "unit": Str()}),
+        Optional("pump_volumetric_efficiency"): Map({"value": Float(), "unit": Str()}),
+        Optional("safety_factor"): Map({"value": Float(), "unit": Str()}),
         Optional("table"): table_pump_description_schema,
         Optional("speed_curve"): speed_curve_description_schema,
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
@@ -1230,4 +1241,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: pPP2WuWNdo)
+# [[[end]]] (checksum: 1eef470d30bae6c57808cec321328430)
