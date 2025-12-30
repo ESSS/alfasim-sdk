@@ -808,9 +808,6 @@ class PumpEquipmentDescription:
     plunger_diameter: Scalar = attrib_scalar(
         category="length", default=Scalar("length", 0.01, "m")
     )
-    rod_diameter: Scalar = attrib_scalar(
-        category="length", default=Scalar("length", 0.001, "m")
-    )
     stroke_length: Scalar = attrib_scalar(
         category="length", default=Scalar("length", 1.0, "m")
     )
@@ -821,16 +818,7 @@ class PumpEquipmentDescription:
         category="slip coefficient",
         default=Scalar("slip coefficient", 1.0e-12, "m3/Pa.s"),
     )
-    crank_length: Scalar = attrib_scalar(
-        category="length", default=Scalar("length", 1.0, "m")
-    )
-    pitman_length: Scalar = attrib_scalar(
-        category="length", default=Scalar("length", 1.0, "m")
-    )
     volumetric_efficiency: Scalar = attrib_scalar(
-        category="dimensionless", default=Scalar("dimensionless", 1.0, "-")
-    )
-    safety_factor: Scalar = attrib_scalar(
         category="dimensionless", default=Scalar("dimensionless", 1.0, "-")
     )
 
