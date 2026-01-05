@@ -6,10 +6,10 @@
 
         class ControllerNodePropertiesDescription
             type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  = ControllerType.PID
-            gain: float = 0.0001
-            setpoint: float = 0.0
-            integral_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
-            derivative_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 's', 'time')
+            gain: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0001
+            setpoint: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0
+            integral_time: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 's', 'time')
+            derivative_time: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 's', 'time')
             input_signal_properties: \ :class:`ControllerInputSignalPropertiesDescription <ControllerInputSignalPropertiesDescription>`\  = ControllerInputSignalPropertiesDescription()
             output_signal_properties: \ :class:`ControllerOutputSignalPropertiesDescription <ControllerOutputSignalPropertiesDescription>`\  = ControllerOutputSignalPropertiesDescription()
 
@@ -18,13 +18,15 @@
     .. parsed-literal::
 
             type: \ :class:`ControllerType <alfasim_sdk._internal.constants.ControllerType>`\  # optional
-            gain: number  # optional
-            setpoint: number  # optional
+            gain:  # optional
+                number | expr
+            setpoint:  # optional
+                number | expr
             integral_time:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             derivative_time:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             input_signal_properties: \ :class:`controller_input_signal_properties_description_schema <ControllerInputSignalPropertiesDescription>`\  # optional
             output_signal_properties: \ :class:`controller_output_signal_properties_description_schema <ControllerOutputSignalPropertiesDescription>`\  # optional

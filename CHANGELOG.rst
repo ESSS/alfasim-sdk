@@ -6,7 +6,7 @@ CHANGELOG
 ==================
 
 * **Breaking Change**: The function ``convert_description_to_alfacase`` has been removed from the public API, use ``generate_alfacase_file`` instead.
-
+* Add support for Multiple Runs: Add a ``MultipleRunsDescription`` that allows users to define parametric variables and their ranges. This enables automated simulations that vary values according to those parameters.
 
 1.4.0 (2025-11-14)
 ==================

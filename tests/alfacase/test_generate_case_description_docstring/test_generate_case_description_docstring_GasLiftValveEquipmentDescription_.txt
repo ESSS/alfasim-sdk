@@ -5,26 +5,26 @@
     .. parsed-literal::
 
         class GasLiftValveEquipmentDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`
-            diameter: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             valve_type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`
-            delta_p_min: \ :class:`Scalar <barril.units.Scalar>`
-            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`
+            delta_p_min: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             position: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             diameter: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             valve_type: \ :class:`ValveType <alfasim_sdk._internal.constants.ValveType>`
             delta_p_min: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             discharge_coefficient: 
-                value: number
-                unit: string
+                number | expr
+                unit: str

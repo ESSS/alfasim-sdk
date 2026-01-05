@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class WallLayerDescription
-            thickness: \ :class:`Scalar <barril.units.Scalar>`
+            thickness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             material_name: \ :class:`Optional <typing.Optional>`\[str] = None
             has_annulus_flow: bool = False
 
@@ -14,7 +14,7 @@
     .. parsed-literal::
 
             thickness: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             material_name: string  # optional
             has_annulus_flow: boolean  # optional
