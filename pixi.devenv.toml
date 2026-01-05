@@ -1,0 +1,14 @@
+[devenv.dependencies]
+attrs = ">=24.3.0"
+barril = "*"
+boltons = "*"
+click = "*"
+h5py = "*"
+# Supports non-ascii paths (ASIM-5880).
+hdf5 = ">=1.10"
+typing_inspect = "*"
+
+[devenv.env-vars]
+PATH = ["${{ devenv_project_dir }}/bin"]
+PYTHONPATH = ["${{ devenv_project_dir }}/src", "${{ devenv_project_dir }}/tests/common_testing"]
+MYPYPATH = ["${{ devenv_project_dir }}/src"]
