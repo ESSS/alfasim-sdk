@@ -1,0 +1,17 @@
+.. admonition:: Available units for category 'torque'
+    :class: dropdown
+
+    :"daN.m": decanewton metres
+    :"dN.m": decinewton metres
+    :"ft.lbf": foot pounds force
+    :"J": joule
+    :"kft.lbf": thousand foot pounds force
+    :"kgf.m": kilogram force metres
+    :"kN.m": kilonewton metres
+    :"lbf.ft": foot pounds force
+    :"lbf.in": inch pounds force
+    :"lbm.ft2/s2": pounds mass square feet/second squared
+    :"N.m": newton metre
+    :"pdl.ft": foot poundal
+    :"tonfUS.ft": US tons force feet
+    :"tonfUS.mi": US tons force miles

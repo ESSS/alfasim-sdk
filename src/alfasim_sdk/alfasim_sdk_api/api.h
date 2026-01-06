@@ -986,7 +986,7 @@ DLL_EXPORT int get_wall_material_name(void* ctx, char** material_name, int contr
 
     @param[in] ctx ALFAsim's plugins context.
     @param[out] wall_material_type Informs if the wall layer material type [1 - is fluid; 0 - is not fluid]
-    @param[in] control_volume Control volume id.
+    @param[in] control_volume_id Control volume id.
     @param[out] size Size of the `wall_material_type` array.
     @return An #error_code value.
 */
