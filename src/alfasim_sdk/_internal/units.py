@@ -144,6 +144,16 @@ def register_units() -> None:
         override=True,
     )
 
+    # Notice that productivity index and slip coefficient are both flow rate / pressure.
+    # So, we decided that they have the same quantity type in the barril implementation.
+    # Hence, here we just add a category with the units valid for the productivity_index.
+    db.AddCategory(
+        "slip coefficient",
+        quantity_type="productivity index",
+        valid_units=productivity_index_units,
+        override=True,
+    )
+
     # Creating separate categories for some Gas properties, so they are plotted in a separate axis
     std_volume_per_time_units = db.GetValidUnits("standard volume per time")
     db.AddCategory(

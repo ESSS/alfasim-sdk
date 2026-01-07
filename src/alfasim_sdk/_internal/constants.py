@@ -378,6 +378,7 @@ class PumpType(Enum):
     TableInterpolation = "table_interpolation"
     ElectricSubmersiblePump = "electric_submersible_pump"
     ProgressiveCavityPump = "progressive_cavity_pump"
+    RodPump = "rod_pump"
 
 
 class ValveOpeningType(Enum):
