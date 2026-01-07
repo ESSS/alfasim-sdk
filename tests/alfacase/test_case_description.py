@@ -101,6 +101,26 @@ def test_table_pump_description_length():
             powers=Array([1], "W"),
         )
 
+    # Test torques validation separately
+    expected_msg_torques = dedent(
+        """\
+    torques must be either empty or have the same size as other fields, got:
+        - 2 items expected
+        - 1 items for torques
+    """
+    )
+    with pytest.raises(ValueError, match=re.escape(expected_msg_torques)):
+        case_description.TablePumpDescription(
+            speeds=Array([1, 2], "rpm"),
+            void_fractions=Array([1, 2], "-"),
+            flow_rates=Array([1, 2], "m3/s"),
+            pressure_boosts=Array([1, 2], "bar"),
+            heads=Array([1, 2], "m"),
+            efficiencies=Array([1, 2], "-"),
+            powers=Array([1, 2], "W"),
+            torques=Array([1], "N.m"),
+        )
+
     # Check if the defaults values works well
     case_description.TablePumpDescription()
 

@@ -787,6 +787,7 @@ table_pump_description_schema = Map(
         Optional("heads"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("efficiencies"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("powers"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("torques"): Map({"values": Seq(Float()), "unit": Str()}),
     }
 )
 temperatures_container_description_schema = Map(
@@ -1012,13 +1013,17 @@ pump_equipment_description_schema = Map(
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("thermal_efficiency"): Map({"value": Float(), "unit": Str()}),
         Optional("thermal_efficiency_model"): Enum(['constant', 'efficiency_curve_based']),
-        Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump']),
+        Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump', 'progressive_cavity_pump']),
         Optional("pressure_boost"): Map({"value": Float(), "unit": Str()}),
         Optional("table"): table_pump_description_schema,
         Optional("speed_curve"): speed_curve_description_schema,
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
         Optional("speed_type"): Enum(['constant', 'curve']),
         Optional("constant_speed"): Map({"value": Float(), "unit": Str()}),
+        Optional("pcp_reference_viscosity"): Map({"value": Float(), "unit": Str()}),
+        Optional("pcp_reference_density"): Map({"value": Float(), "unit": Str()}),
+        Optional("pcp_reference_temperature"): Map({"value": Float(), "unit": Str()}),
+        Optional("pcp_viscosity_correction_enabled"): Bool(),
         Optional("esp_table"): table_pump_description_schema,
         Optional("esp_speed_input_type"): Enum(['constant', 'curve']),
         Optional("esp_speed"): Map({"value": Float(), "unit": Str()}),
@@ -1229,4 +1234,4 @@ case_description_schema = Map(
         Optional("walls"): Seq(wall_description_schema),
     }
 )
-# [[[end]]] (sum: immZIfp/Lh)
+# [[[end]]] (sum: Wg9A9M78xw) (sum: pPP2WuWNdo)

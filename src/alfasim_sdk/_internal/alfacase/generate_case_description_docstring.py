@@ -68,6 +68,7 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
         "temperature",
         "thermal conductivity",
         "time",
+        "torque",
         "velocity",
         "volume flow rate",
         "volume fraction",
