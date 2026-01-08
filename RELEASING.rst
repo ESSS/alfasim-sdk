@@ -12,8 +12,8 @@ Releasing
 
 5. Once the PR has been **approved** and **all tests are passing**:
 
-   1. Push a tag named ``v<release-version>``.
-   2. Merge the PR -- make sure  to **merge** (as opposed to squash), as we want to preserve the commit where the tag was applied.
+   1. Create a tag named ``v<release-version>`` pointing to the **PR commit** and push.
+   2. Merge the PR -- make sure to **merge** (as opposed to squash), as we want to preserve the commit where the tag was applied.
 
 6. Create a new branch and:
 
