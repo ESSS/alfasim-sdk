@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-1.5.0 (UNRELEASED)
+1.5.1 (2026-01-08)
 ==================
 
 * **Breaking Change**: The function ``convert_description_to_alfacase`` has been removed from the public API, use ``generate_alfacase_file`` instead.
