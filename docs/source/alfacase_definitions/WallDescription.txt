@@ -6,7 +6,7 @@
 
         class WallDescription
             name: str
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
             wall_layer_container: \ :class:`List <typing.List>`\[\ :class:`WallLayerDescription <WallLayerDescription>`\] = []
 
 .. tab:: Schema
@@ -15,7 +15,7 @@
 
             name: string
             inner_roughness:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             wall_layer_container:  # optional
                 - \ :class:`wall_layer_description_schema <WallLayerDescription>`

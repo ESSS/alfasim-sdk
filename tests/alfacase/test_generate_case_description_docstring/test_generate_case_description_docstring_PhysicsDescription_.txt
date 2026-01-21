@@ -15,14 +15,14 @@
             keep_former_results: bool = False
             emulsion_model_enabled: bool = True
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  = EmulsionRelativeViscosityModelType.Brinkman1952
-            emulsion_pal_rhodes_phi_rel_100: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.765, '-', 'dimensionless')
-            emulsion_woelflin_a: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(4.2, '-', 'dimensionless')
-            emulsion_woelflin_b: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(2.5, '-', 'dimensionless')
+            emulsion_pal_rhodes_phi_rel_100: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.765, '-', 'dimensionless')
+            emulsion_woelflin_a: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(4.2, '-', 'dimensionless')
+            emulsion_woelflin_b: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(2.5, '-', 'dimensionless')
             emulsion_table_based_rel_visc_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, m3/m3)[(1.0, 0.0)]
             emulsion_relative_viscosity_tuning_factor: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, m3/m3)[(1.0, 0.0)]
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  = EmulsionDropletSizeModelType.Brauner2001
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  = EmulsionInversionPointModelType.BraunerUllmann2002
-            emulsion_inversion_water_cut: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.4, 'm3/m3', 'volume per volume')
+            emulsion_inversion_water_cut: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.4, 'm3/m3', 'volume per volume')
             friction_factor_correlation_model: \ :class:`FrictionFactorCorrelationModelType <alfasim_sdk._internal.constants.FrictionFactorCorrelationModelType>`\  = FrictionFactorCorrelationModelType.ModelDefault
             friction_factor_correlation_plugin_id: str = ''
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  = FlashModel.HydrocarbonAndWater
@@ -45,14 +45,14 @@
             emulsion_model_enabled: boolean  # optional
             emulsion_relative_viscosity_model: \ :class:`EmulsionRelativeViscosityModelType <alfasim_sdk._internal.constants.EmulsionRelativeViscosityModelType>`\  # optional
             emulsion_pal_rhodes_phi_rel_100:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             emulsion_woelflin_a:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             emulsion_woelflin_b:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             emulsion_table_based_rel_visc_curve:  # optional
                 image:
                     values: [number]
@@ -70,8 +70,8 @@
             emulsion_droplet_size_model: \ :class:`EmulsionDropletSizeModelType <alfasim_sdk._internal.constants.EmulsionDropletSizeModelType>`\  # optional
             emulsion_inversion_point_model: \ :class:`EmulsionInversionPointModelType <alfasim_sdk._internal.constants.EmulsionInversionPointModelType>`\  # optional
             emulsion_inversion_water_cut:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             friction_factor_correlation_model: \ :class:`FrictionFactorCorrelationModelType <alfasim_sdk._internal.constants.FrictionFactorCorrelationModelType>`\  # optional
             friction_factor_correlation_plugin_id: string  # optional
             flash_model: \ :class:`FlashModel <alfasim_sdk._internal.constants.FlashModel>`\  # optional
