@@ -14,6 +14,10 @@ Case
 
 .. autoclass:: alfasim_sdk.AlfasimVersionInfo()
 
+.. autoclass:: alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression()
+
+.. autoclass:: alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression()
+
 .. _alfacase-reference-options-section:
 
 Options
@@ -270,6 +274,11 @@ Tables
 
 .. autoclass:: alfasim_sdk.CvTableDescription()
 
+
+Multiple Runs
+-------------
+
+.. autoclass:: alfasim_sdk.MultipleRunsDescription()
 
 Plugins
 -------
