@@ -341,20 +341,20 @@ def test_generate_strict_yaml_schema_for_class():
             {
                 "position": UnsafeOrValidator(
                     Map({"value": Float(), "unit": Str()}),
-                    Map({"value": Str(), "unit": Str()}),
+                    Map({"expr": Str(), "unit": Str()}),
                 ),
                 Optional("speed_curve"): speed_curve_description_schema,
                 Optional("reference_pressure"): UnsafeOrValidator(
                     Map({"value": Float(), "unit": Str()}),
-                    Map({"value": Str(), "unit": Str()}),
+                    Map({"expr": Str(), "unit": Str()}),
                 ),
                 Optional("reference_temperature"): UnsafeOrValidator(
                     Map({"value": Float(), "unit": Str()}),
-                    Map({"value": Str(), "unit": Str()}),
+                    Map({"expr": Str(), "unit": Str()}),
                 ),
                 Optional("constant_speed"): UnsafeOrValidator(
                     Map({"value": Float(), "unit": Str()}),
-                    Map({"value": Str(), "unit": Str()}),
+                    Map({"expr": Str(), "unit": Str()}),
                 ),
                 Optional("compressor_type"): Enum(['speed_curve', 'constant_speed']),
                 Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
@@ -559,7 +559,7 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
         {
             Optional("scalar"): UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         }
     )
@@ -598,8 +598,8 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
     # Second with a ScalarExpression.
     yaml_content_2 = """\
     scalar:
-        value: "A + B"
+        expr: "A + B"
         unit: '-'
     """
     yaml_content_2 = strictyaml.dirty_load(yaml_content_2, schema=module.foo_schema)
-    assert yaml_content_2.data == {"scalar": {"unit": "-", "value": "A + B"}}
+    assert yaml_content_2.data == {"scalar": {"unit": "-", "expr": "A + B"}}

@@ -307,7 +307,8 @@ def union_formatted(value: Any) -> str:
     Note that all usages of union on CaseDescription are from the Optional module.
     """
 
-    # Specific handle to deal with unsafe type unions.
+    # Handle with the specific case where multiple types are allowed for some
+    # properties (e.g., Scalar and ScalarExpression).
     def get_float_reference() -> str:
         return "float"
 
@@ -416,7 +417,8 @@ def union_formatted_for_schema(value: Any) -> str:
     is not mandatory.
     """
 
-    # Specific handle to deal with unsafe type unions.
+    # Handle with the specific case where multiple types are allowed for some
+    # properties (e.g., Scalar and ScalarExpression).
     PARAMETRIC_UNSAFE_TYPES = {Scalar, ScalarExpression, float, FloatExpression}
     types = [type_ for type_ in value.__args__ if type_ in PARAMETRIC_UNSAFE_TYPES]
     if len(types) > 1:
@@ -464,14 +466,14 @@ def scalar_expression_formatted_for_schema(
     Return a string showing how to configure a ScalarExpression.
     """
     block_indentation = BASE_INDENT + INDENT * number_of_indent
-    return f"\n{block_indentation}value: expr\n{block_indentation}unit: string\n"
+    return f"\n{block_indentation}expr: str\n{block_indentation}unit: string\n"
 
 
 def float_expression_formatted_for_schema(
     value: type[FloatExpression], *, number_of_indent: int = 1
 ) -> str:
     block_indentation = BASE_INDENT + INDENT * number_of_indent
-    return f"\n{block_indentation}value: expr\n"
+    return f"\n{block_indentation}expr: str\n"
 
 
 def array_formatted_for_schema(value: type[Array], *, number_of_indent=1) -> str:

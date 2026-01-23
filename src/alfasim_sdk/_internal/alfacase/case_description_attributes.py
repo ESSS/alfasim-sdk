@@ -136,10 +136,10 @@ def collapse_array_repr(value: Any) -> str:
 
 def to_scalar(
     value: ScalarLike | ScalarExpressionLike,
-    is_optional: bool = False,
     *,
+    is_optional: bool = False,
     error_context: str | None = None,
-) -> Scalar | ScalarExpression:
+) -> ScalarDescriptionType:
     """
     Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
     by `attrib_scalar`.

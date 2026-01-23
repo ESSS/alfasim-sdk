@@ -12,10 +12,10 @@ physics:
     value: 0.765
     unit: '-'
   emulsion_woelflin_a:
-    value: A + 1
+    expr: A + 1
     unit: '-'
   emulsion_woelflin_b:
-    value: A + B
+    expr: A + B
     unit: '-'
   emulsion_table_based_rel_visc_curve:
     image:
@@ -78,7 +78,7 @@ numerical_options:
     value: 2.0
     unit: '-'
   maximum_cfl_value:
-    value: C+2
+    expr: C+2
     unit: m
   relaxed_tolerance: 0.0
   divergence_tolerance: -1.0

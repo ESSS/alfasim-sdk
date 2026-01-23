@@ -18,7 +18,15 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
 
 ATTRIBUTES = Union[
-    Scalar, ScalarExpression, Array, Curve, Enum, np.ndarray, list, list[Enum]
+    Scalar,
+    ScalarExpression,
+    FloatExpression,
+    Array,
+    Curve,
+    Enum,
+    np.ndarray,
+    list,
+    list[Enum],
 ]
 
 NON_FININTE_VALUES_TO_STRING = [
@@ -61,7 +69,7 @@ def _convert_value_to_valid_alfacase_format(
         return {"value": str(value.value), "unit": value.unit}
 
     if isinstance(value, ScalarExpression):
-        return {"value": value.expr, "unit": value.unit}
+        return {"expr": value.expr, "unit": value.unit}
 
     if isinstance(value, Array):
         return {"values": [str(i) for i in value.values], "unit": value.unit}

@@ -225,7 +225,11 @@ def load_scalar(
     Create a barril.units.Scalar or ScalarExpression instance from the given alfacase_content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
-    value = alfacase_content[key]["value"].content.data
+    try:
+        value = alfacase_content[key]["value"].content.data
+    except KeyError:
+        value = alfacase_content[key]["expr"].content.data
+
     unit = alfacase_content[key]["unit"].content.data
     match value:
         case str():

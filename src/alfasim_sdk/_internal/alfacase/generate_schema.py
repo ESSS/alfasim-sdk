@@ -199,7 +199,7 @@ def is_float_expression(type_: type) -> bool:
 
 
 def scalar_expression_to_alfacase_schema(type_: type, indent: int) -> str:
-    return 'Map({"value": Str(), "unit": Str()})'
+    return 'Map({"expr": Str(), "unit": Str()})'
 
 
 def is_array(type_: type) -> bool:

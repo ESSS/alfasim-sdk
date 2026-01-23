@@ -37,8 +37,20 @@ def test_migrate_emulsion_enums(datadir: Path) -> None:
 
 def test_migrate_numerical_options_float_to_scalar(datadir: Path) -> None:
     """
-    Test the case where users define a float for numerical options properties and it is updated
-    to be a Scalar in NumericalOptionsDescription.
+    Some properties in NumericOptions were changed from a plain `float` to a `Scalar` (ASIM-5436):
+
+    numeric_options:
+      maximum_timestep_change_factor: 1.0
+      maximum_cfl_value: 100.0
+
+    To:
+    numeric_options:
+      maximum_timestep_change_factor:
+        value: 1.0
+        unit: "-"
+      maximum_cfl_value:
+        value: 100.0
+        unit: "-"
     """
     alfacase_file = datadir / "test_migrate_emulsion_enums.alfacase"
     case = load_case_description(DescriptionDocument.from_file(alfacase_file))

@@ -41,32 +41,32 @@ casing_section_description_schema = Map(
         "name": Str(),
         "hanger_depth": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "settings_depth": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "hole_diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "outer_diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "inner_diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "inner_roughness": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("material"): Str(),
         "top_of_filler": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("filler_material"): Str(),
         Optional("material_above_filler"): Str(),
@@ -82,11 +82,11 @@ composition_description_schema = Map(
         Optional("component"): Str(),
         Optional("molar_fraction"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("reference_enthalpy"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -141,24 +141,24 @@ environment_property_description_schema = Map(
     {
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "temperature": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "type": Enum(['walls_and_environment_heat_transfer_coefficient', 'walls_and_water_heat_transfer_coefficient_model', 'walls_and_air_heat_transfer_coefficient_model', 'overall_heat_transfer_coefficient_model', 'walls_without_environment_heat_transfer_coefficient']),
         Optional("heat_transfer_coefficient"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("overall_heat_transfer_coefficient"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("fluid_velocity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -174,16 +174,16 @@ fetkovich_ipr_description_schema = Map(
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
         Optional("min_pressure_difference"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("bubble_point_pressure"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_index_input_type"): Enum(['constant', 'curve']),
         Optional("well_index"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_index_curve"): Map(
             {
@@ -199,43 +199,43 @@ forchheimer_ipr_description_schema = Map(
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
         Optional("min_pressure_difference"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_viscosity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_z_factor"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("reservoir_permeability"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("drainage_radius"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_radius"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_skin_factor"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("non_darcy_parameter"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("B_coeff"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("C_coeff"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -244,7 +244,7 @@ formation_layer_description_schema = Map(
         "name": Str(),
         "start": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("material"): Str(),
     }
@@ -253,20 +253,20 @@ gas_lift_valve_equipment_description_schema = Map(
     {
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "valve_type": Enum(['perkins_valve', 'choke_valve_with_flow_coefficient', 'check_valve']),
         "delta_p_min": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "discharge_coefficient": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -280,16 +280,16 @@ heat_source_equipment_description_schema = Map(
     {
         "start": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "length": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("power_input_type"): Enum(['constant', 'curve']),
         Optional("power"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("power_curve"): Map(
             {
@@ -305,11 +305,11 @@ heavy_component_description_schema = Map(
         "scn": Int(),
         Optional("MW"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("rho"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -335,51 +335,51 @@ light_component_description_schema = Map(
         "name": Str(),
         Optional("Pc"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Tc"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Vc"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("omega"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("MW"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Tb"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Parachor"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Cp_0"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Cp_1"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Cp_2"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Cp_3"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("Cp_4"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -388,12 +388,12 @@ linear_ipr_description_schema = Map(
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
         Optional("min_pressure_difference"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_index_input_type"): Enum(['constant', 'curve']),
         Optional("well_index"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_index_curve"): Map(
             {
@@ -410,7 +410,7 @@ mass_source_equipment_description_schema = Map(
         Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("temperature_curve"): Map(
             {
@@ -424,7 +424,7 @@ mass_source_equipment_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("volumetric_flow_rates_std_curve"): MapPattern(
@@ -441,7 +441,7 @@ mass_source_equipment_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("mass_flow_rates_curve"): MapPattern(
@@ -456,7 +456,7 @@ mass_source_equipment_description_schema = Map(
         Optional("total_mass_flow_rate_input_type"): Enum(['constant', 'curve']),
         Optional("total_mass_flow_rate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("total_mass_flow_rate_curve"): Map(
             {
@@ -467,7 +467,7 @@ mass_source_equipment_description_schema = Map(
         Optional("water_cut_input_type"): Enum(['constant', 'curve']),
         Optional("water_cut"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_cut_curve"): Map(
             {
@@ -478,7 +478,7 @@ mass_source_equipment_description_schema = Map(
         Optional("gas_oil_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_oil_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_ratio_curve"): Map(
             {
@@ -488,7 +488,7 @@ mass_source_equipment_description_schema = Map(
         ),
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -499,7 +499,7 @@ mass_source_node_properties_description_schema = Map(
         Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("temperature_curve"): Map(
             {
@@ -513,7 +513,7 @@ mass_source_node_properties_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("volumetric_flow_rates_std_curve"): MapPattern(
@@ -530,7 +530,7 @@ mass_source_node_properties_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("mass_flow_rates_curve"): MapPattern(
@@ -545,7 +545,7 @@ mass_source_node_properties_description_schema = Map(
         Optional("total_mass_flow_rate_input_type"): Enum(['constant', 'curve']),
         Optional("total_mass_flow_rate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("total_mass_flow_rate_curve"): Map(
             {
@@ -556,7 +556,7 @@ mass_source_node_properties_description_schema = Map(
         Optional("water_cut_input_type"): Enum(['constant', 'curve']),
         Optional("water_cut"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_cut_curve"): Map(
             {
@@ -567,7 +567,7 @@ mass_source_node_properties_description_schema = Map(
         Optional("gas_oil_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_oil_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_ratio_curve"): Map(
             {
@@ -583,31 +583,31 @@ material_description_schema = Map(
         Optional("material_type"): Enum(['solid', 'fluid']),
         Optional("density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("thermal_conductivity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("heat_capacity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("inner_emissivity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("outer_emissivity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("expansion"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("viscosity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -627,11 +627,11 @@ numerical_options_description_schema = Map(
         Optional("maximum_iterations"): Int(),
         Optional("maximum_timestep_change_factor"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("maximum_cfl_value"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("relaxed_tolerance"): UnsafeOrValidator(
             Float(),
@@ -661,15 +661,15 @@ open_hole_description_schema = Map(
         "name": Str(),
         "length": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "inner_roughness": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -686,7 +686,7 @@ packer_description_schema = Map(
         "name": Str(),
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("material_above"): Str(),
     }
@@ -705,15 +705,15 @@ physics_description_schema = Map(
         Optional("emulsion_relative_viscosity_model"): Enum(['taylor1932', 'brinkman1952', 'mooney1951a', 'mooney1951b', 'pal_rhodes1989', 'ronningsen1995', 'volumetric_weight', 'woelflin_1942', 'barnea_mizrahi1976', 'table_based', 'from_plugin']),
         Optional("emulsion_pal_rhodes_phi_rel_100"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("emulsion_woelflin_a"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("emulsion_woelflin_b"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("emulsion_table_based_rel_visc_curve"): Map(
             {
@@ -731,7 +731,7 @@ physics_description_schema = Map(
         Optional("emulsion_inversion_point_model"): Enum(['brauner_and_ullmann_2002', 'brinkman1952_and_yeh1964', 'constant']),
         Optional("emulsion_inversion_water_cut"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("friction_factor_correlation_model"): Enum(['model_default', 'from_plugin']),
         Optional("friction_factor_correlation_plugin_id"): Str(),
@@ -745,17 +745,17 @@ pig_equipment_description_schema = Map(
     {
         "diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("launch_times"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("mass_input_type"): Enum(['constant', 'curve']),
         Optional("mass"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("mass_curve"): Map(
             {
@@ -766,7 +766,7 @@ pig_equipment_description_schema = Map(
         Optional("static_force_input_type"): Enum(['constant', 'curve']),
         Optional("static_force"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("static_force_curve"): Map(
             {
@@ -777,7 +777,7 @@ pig_equipment_description_schema = Map(
         Optional("wall_friction_input_type"): Enum(['constant', 'curve']),
         Optional("wall_friction"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("wall_friction_curve"): Map(
             {
@@ -788,7 +788,7 @@ pig_equipment_description_schema = Map(
         Optional("linear_friction_input_type"): Enum(['constant', 'curve']),
         Optional("linear_friction"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("linear_friction_curve"): Map(
             {
@@ -799,7 +799,7 @@ pig_equipment_description_schema = Map(
         Optional("quadratic_friction_input_type"): Enum(['constant', 'curve']),
         Optional("quadratic_friction"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("quadratic_friction_curve"): Map(
             {
@@ -810,7 +810,7 @@ pig_equipment_description_schema = Map(
         Optional("trap_mode"): Enum(['automatic', 'user_defined']),
         Optional("trap_position"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("trap_pipe_name"): Str(),
         Optional("route_mode"): Enum(['automatic', 'user_defined']),
@@ -844,7 +844,7 @@ pressure_node_properties_description_schema = Map(
         Optional("pressure_input_type"): Enum(['constant', 'curve']),
         Optional("pressure"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pressure_curve"): Map(
             {
@@ -855,7 +855,7 @@ pressure_node_properties_description_schema = Map(
         Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("temperature_curve"): Map(
             {
@@ -871,7 +871,7 @@ pressure_node_properties_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("mass_fractions_curve"): MapPattern(
@@ -888,7 +888,7 @@ pressure_node_properties_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("volume_fractions_curve"): MapPattern(
@@ -903,7 +903,7 @@ pressure_node_properties_description_schema = Map(
         Optional("gas_liquid_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_liquid_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_liquid_ratio_curve"): Map(
             {
@@ -914,7 +914,7 @@ pressure_node_properties_description_schema = Map(
         Optional("gas_oil_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_oil_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_ratio_curve"): Map(
             {
@@ -925,7 +925,7 @@ pressure_node_properties_description_schema = Map(
         Optional("water_cut_input_type"): Enum(['constant', 'curve']),
         Optional("water_cut"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_cut_curve"): Map(
             {
@@ -946,71 +946,71 @@ pvt_model_constant_properties_description_schema = Map(
     {
         Optional("gas_density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_viscosity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_viscosity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_viscosity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_specific_heat"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_specific_heat"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_specific_heat"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_thermal_conductivity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_thermal_conductivity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_thermal_conductivity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_surface_tension"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_water_surface_tension"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_water_surface_tension"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_specific_enthalpy"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_specific_enthalpy"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("has_water"): Bool(),
     }
@@ -1019,24 +1019,24 @@ pvt_model_correlation_description_schema = Map(
     {
         Optional("oil_density_std"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_density_std"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("rs_sat"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pvt_correlation_package"): Enum(['pvt_correlation_package_lasater', 'pvt_correlation_package_standing', 'pvt_correlation_package_vazquez_beggs', 'pvt_correlation_package_glaso']),
         Optional("h2s_mol_frac"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("co2_mol_frac"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("oil_viscosity"): Enum(['Egbogah']),
         Optional("gas_viscosity"): Enum(['Lee Gonzalez Eakin']),
@@ -1047,7 +1047,7 @@ referenced_pressure_container_description_schema = Map(
     {
         Optional("reference_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("pressures"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -1057,7 +1057,7 @@ referenced_temperatures_container_description_schema = Map(
     {
         Optional("reference_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("temperatures"): Map({"values": Seq(Float()), "unit": Str()}),
@@ -1067,7 +1067,7 @@ referenced_tracers_mass_fractions_container_description_schema = Map(
     {
         Optional("reference_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("tracers_mass_fractions"): Seq(Map({"values": Seq(Float()), "unit": Str()})),
@@ -1077,7 +1077,7 @@ referenced_velocities_container_description_schema = Map(
     {
         Optional("reference_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("velocities"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
@@ -1087,7 +1087,7 @@ referenced_volume_fractions_container_description_schema = Map(
     {
         Optional("reference_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
         Optional("fractions"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
@@ -1098,7 +1098,7 @@ reservoir_inflow_equipment_description_schema = Map(
         Optional("pressure_input_type"): Enum(['constant', 'curve']),
         Optional("pressure"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pressure_curve"): Map(
             {
@@ -1109,7 +1109,7 @@ reservoir_inflow_equipment_description_schema = Map(
         Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("temperature_curve"): Map(
             {
@@ -1125,7 +1125,7 @@ reservoir_inflow_equipment_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("mass_fractions_curve"): MapPattern(
@@ -1142,7 +1142,7 @@ reservoir_inflow_equipment_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("volume_fractions_curve"): MapPattern(
@@ -1157,7 +1157,7 @@ reservoir_inflow_equipment_description_schema = Map(
         Optional("gas_liquid_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_liquid_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_liquid_ratio_curve"): Map(
             {
@@ -1168,7 +1168,7 @@ reservoir_inflow_equipment_description_schema = Map(
         Optional("gas_oil_ratio_input_type"): Enum(['constant', 'curve']),
         Optional("gas_oil_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_ratio_curve"): Map(
             {
@@ -1179,7 +1179,7 @@ reservoir_inflow_equipment_description_schema = Map(
         Optional("water_cut_input_type"): Enum(['constant', 'curve']),
         Optional("water_cut"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("water_cut_curve"): Map(
             {
@@ -1189,11 +1189,11 @@ reservoir_inflow_equipment_description_schema = Map(
         ),
         "start": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "length": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("productivity_ipr"): Str(),
         Optional("injectivity_ipr"): Str(),
@@ -1203,42 +1203,42 @@ separator_node_properties_description_schema = Map(
     {
         Optional("environment_temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("geometry"): Enum(['vertical_cylinder', 'horizontal_cylinder', 'sphere']),
         Optional("length"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("overall_heat_transfer_coefficient"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("diameter"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("nozzles"): MapPattern(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("initial_phase_volume_fractions"): MapPattern(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
         Optional("gas_separation_efficiency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("liquid_separation_efficiency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -1288,31 +1288,31 @@ time_options_description_schema = Map(
         Optional("automatic_restart_autosave_frequency"): Bool(),
         Optional("initial_time"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("final_time"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("initial_timestep"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("minimum_timestep"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("maximum_timestep"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("restart_autosave_frequency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("minimum_time_for_steady_state_stop"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -1322,7 +1322,7 @@ tracer_model_constant_coefficients_description_schema = Map(
             Str(),
             UnsafeOrValidator(
                 Map({"value": Float(), "unit": Str()}),
-                Map({"value": Str(), "unit": Str()}),
+                Map({"expr": Str(), "unit": Str()}),
             ),
         ),
     }
@@ -1338,19 +1338,19 @@ tubing_description_schema = Map(
         "name": Str(),
         "length": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "outer_diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "inner_diameter": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         "inner_roughness": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("material"): Str(),
     }
@@ -1366,12 +1366,12 @@ vogel_ipr_description_schema = Map(
         Optional("well_index_phase"): Enum(['well_index_phase_gas', 'well_index_phase_oil', 'well_index_phase_water', 'well_index_phase_liquid']),
         Optional("min_pressure_difference"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_max_flow_rate_input_type"): Enum(['constant', 'curve']),
         Optional("well_max_flow_rate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("well_max_flow_rate_curve"): Map(
             {
@@ -1391,7 +1391,7 @@ wall_layer_description_schema = Map(
     {
         "thickness": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("material_name"): Str(),
         Optional("has_annulus_flow"): Bool(),
@@ -1421,20 +1421,20 @@ compressor_equipment_description_schema = Map(
     {
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("speed_curve"): speed_curve_description_schema,
         Optional("reference_pressure"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("reference_temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("constant_speed"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("compressor_type"): Enum(['speed_curve', 'constant_speed']),
         Optional("speed_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
@@ -1455,11 +1455,11 @@ controller_node_properties_description_schema = Map(
         ),
         Optional("integral_time"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("derivative_time"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("input_signal_properties"): controller_input_signal_properties_description_schema,
         Optional("output_signal_properties"): controller_output_signal_properties_description_schema,
@@ -1471,7 +1471,7 @@ environment_description_schema = Map(
         Optional("position_input_mode"): Enum(['position_by_tvd', 'position_by_md']),
         Optional("reference_y_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("md_properties_table"): Seq(environment_property_description_schema),
         Optional("tvd_properties_table"): Seq(environment_property_description_schema),
@@ -1481,7 +1481,7 @@ formation_description_schema = Map(
     {
         "reference_y_coordinate": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("layers"): Seq(formation_layer_description_schema),
     }
@@ -1530,41 +1530,41 @@ leak_equipment_description_schema = Map(
     {
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("model"): Enum(['orifice', 'flow_coefficient', 'gas_lift_valve']),
         Optional("type"): Enum(['internal', 'external']),
         Optional("diameter"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("discharge_coefficient"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("cv_table"): cv_table_description_schema,
         Optional("gas_lift_valve_opening_type"): Enum(['minimum_pressure_difference', 'pressure_operated']),
         Optional("minimum_pressure_difference"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("bellows_reference_pressure"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("bellows_reference_temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("port_to_bellows_area_ratio"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("opening_input_type"): Enum(['constant', 'curve']),
         Optional("opening"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("opening_curve"): Map(
             {
@@ -1575,13 +1575,13 @@ leak_equipment_description_schema = Map(
         Optional("target_pipe_name"): Str(),
         Optional("target_position"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("target_location"): Enum(['main', 'annulus', 'not_defined']),
         Optional("backflow"): Bool(),
         Optional("backpressure"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -1605,38 +1605,38 @@ pump_equipment_description_schema = Map(
     {
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("thermal_efficiency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("thermal_efficiency_model"): Enum(['constant', 'efficiency_curve_based']),
         Optional("type"): Enum(['constant_pressure', 'table_interpolation', 'electric_submersible_pump', 'progressive_cavity_pump', 'rod_pump']),
         Optional("pressure_boost"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("plunger_diameter"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("stroke_length"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pump_speed"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("slip_coefficient"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("volumetric_efficiency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("table"): table_pump_description_schema,
         Optional("speed_curve"): speed_curve_description_schema,
@@ -1644,26 +1644,26 @@ pump_equipment_description_schema = Map(
         Optional("speed_type"): Enum(['constant', 'curve']),
         Optional("constant_speed"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pcp_reference_viscosity"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pcp_reference_density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pcp_reference_temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("pcp_viscosity_correction_enabled"): Bool(),
         Optional("esp_table"): table_pump_description_schema,
         Optional("esp_speed_input_type"): Enum(['constant', 'curve']),
         Optional("esp_speed"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("esp_speed_curve"): Map(
             {
@@ -1674,7 +1674,7 @@ pump_equipment_description_schema = Map(
         Optional("esp_number_of_stages"): Int(),
         Optional("esp_reference_density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("esp_manufacturer"): Str(),
         Optional("esp_model"): Str(),
@@ -1703,18 +1703,18 @@ valve_equipment_description_schema = Map(
     {
         "position": UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("type"): Enum(['perkins_valve', 'choke_valve_with_flow_coefficient', 'check_valve']),
         Optional("diameter"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("flow_direction"): Enum(['forward', 'backward']),
         Optional("opening_type"): Enum(['constant_opening', 'table_interpolation']),
         Optional("opening"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("opening_curve_interpolation_type"): Enum(['constant', 'linear', 'quadratic']),
         Optional("opening_curve"): Map(
@@ -1731,7 +1731,7 @@ wall_description_schema = Map(
         "name": Str(),
         Optional("inner_roughness"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("wall_layer_container"): Seq(wall_layer_description_schema),
     }
@@ -1820,13 +1820,13 @@ case_output_description_schema = Map(
         Optional("trends"): trends_output_description_schema,
         Optional("trend_frequency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("automatic_profile_frequency"): Bool(),
         Optional("profiles"): Seq(profile_output_description_schema),
         Optional("profile_frequency"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -1846,7 +1846,7 @@ pipe_description_schema = Map(
         Optional("flow_pattern_model"): Enum(['unit_cell', 'regime_capturing']),
         Optional("regime_capturing_mesh_threshold"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
-            Map({"value": Str(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
         ),
     }
 )
@@ -1897,4 +1897,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)
+# [[[end]]] (sum: t3kslRAFDB) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)

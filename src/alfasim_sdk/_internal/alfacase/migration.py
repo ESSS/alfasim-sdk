@@ -70,7 +70,7 @@ def migrate_numeric_options(data: dict[str, Any]) -> None:
             return
 
         value = numerical_options[property_name]
-        if not isinstance(value, dict):
+        if isinstance(value, str):
             numerical_options[property_name] = {
                 "value": str(value),
                 "unit": "-",
