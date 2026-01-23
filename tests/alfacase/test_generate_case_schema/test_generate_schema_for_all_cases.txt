@@ -620,7 +620,7 @@ material_description_schema = Map(
 
 multiple_runs_description_schema = Map(
     {
-        Optional("variables"): MapPattern(Str(), Float()),
+        Optional("variables"): MapPattern(Str(), Any()),
         Optional("variations"): MapPattern(Str(), MapPattern(Str(), Float())),
     }
 )

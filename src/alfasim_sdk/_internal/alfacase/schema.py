@@ -613,7 +613,7 @@ material_description_schema = Map(
 )
 multiple_runs_description_schema = Map(
     {
-        Optional("variables"): MapPattern(Str(), Float()),
+        Optional("variables"): MapPattern(Str(), Any()),
         Optional("variations"): MapPattern(Str(), MapPattern(Str(), Float())),
     }
 )
@@ -1897,4 +1897,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)
+# [[[end]]] (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)

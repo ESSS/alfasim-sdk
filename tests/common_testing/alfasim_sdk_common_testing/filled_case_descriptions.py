@@ -737,7 +737,7 @@ ALFASIM_VERSION_INFO = case_description.AlfasimVersionInfo(
     date="2024-04-02 12:00",
 )
 MULTIPLE_RUNS_DESCRIPTION = case_description.MultipleRunsDescription(
-    variables={"A": 1.0, "B": 2.0, "C": 3.0},
+    variables={"A": "1.0", "B": "2.0", "C": "3.0"},
     variations={
         "1": {"A": 1.1, "B": 2.1, "C": 3.1},
         "2": {"A": 1.11, "B": 2.11, "C": 3.11},
