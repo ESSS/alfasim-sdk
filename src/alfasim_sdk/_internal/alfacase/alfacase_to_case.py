@@ -451,9 +451,27 @@ def load_dict_with_scalar(
     key: str,
     alfacase_content: DescriptionDocument,
     category: str,
-) -> dict[str, Scalar]:
+) -> dict[str, Scalar | ScalarExpression]:
+    def TryObtainScalarExpression(
+        dict_item: dict[str, Any],
+    ) -> ScalarExpression | Scalar:
+        value: str | float
+        unit: str = dict_item["unit"]
+        try:
+            value = dict_item["value"]
+            assert isinstance(value, (float, int)), (
+                f"Scalar must receive a float or int type. Current received type {type(value)}"
+            )
+            return Scalar(category, value, unit)
+        except KeyError:
+            value = dict_item["expr"]
+            assert isinstance(value, str), (
+                f"ScalarExpression must receive a string as expression. Current received type{type(value)}"
+            )
+            return ScalarExpression(expr=value, unit=unit, category=category)
+
     return {
-        key: Scalar(category, value["value"], value["unit"])
+        key: TryObtainScalarExpression(value)
         for key, value in alfacase_content[key].content.data.items()
     }
 
