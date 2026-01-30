@@ -7,9 +7,9 @@
         class SurgeVolumeOptionsDescription
             time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`\  = SurgeVolumeTimeMode.AllSimulation
             drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`\  = DrainageRateMode.Automatic
-            start_time: \ :class:`Optional <typing.Optional>`\[Scalar] = None
-            end_time: \ :class:`Optional <typing.Optional>`\[Scalar] = None
-            maximum_drainage_rate: \ :class:`Optional <typing.Optional>`\[Scalar] = None
+            start_time: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = None
+            end_time: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = None
+            maximum_drainage_rate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = None
 
 .. tab:: Schema
 
@@ -18,11 +18,11 @@
             time_mode: \ :class:`SurgeVolumeTimeMode <alfasim_sdk._internal.constants.SurgeVolumeTimeMode>`\  # optional
             drainage_mode: \ :class:`DrainageRateMode <alfasim_sdk._internal.constants.DrainageRateMode>`\  # optional
             start_time:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             end_time:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             maximum_drainage_rate:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

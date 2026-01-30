@@ -561,6 +561,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.leak_equipment_description_schema,
         is_dict=False,
     ),
+    "MultipleRunsDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.MULTIPLE_RUNS_DESCRIPTION,
+        schema=schema.multiple_runs_description_schema,
+    ),
 }
 
 ALL_CLASSES_THAT_NEEDS_SCHEMA = get_all_classes_that_needs_schema(
