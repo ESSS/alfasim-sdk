@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class ReferencedTracersMassFractionsContainerDescription
-            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
             positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
             tracers_mass_fractions: \ :class:`List <typing.List>`\[Array] = []
 
@@ -14,8 +14,8 @@
     .. parsed-literal::
 
             reference_coordinate:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             positions:  # optional
                 values: [number]
                 unit: string

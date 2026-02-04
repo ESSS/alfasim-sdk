@@ -6,9 +6,9 @@
 
         class OpenHoleDescription
             name: str
-            length: \ :class:`Scalar <barril.units.Scalar>`
-            diameter: \ :class:`Scalar <barril.units.Scalar>`
-            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            inner_roughness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
 
 .. tab:: Schema
 
@@ -16,11 +16,11 @@
 
             name: string
             length: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             diameter: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             inner_roughness: 
-                value: number
-                unit: string
+                number | expr
+                unit: str

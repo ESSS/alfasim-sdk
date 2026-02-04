@@ -5,23 +5,23 @@
     .. parsed-literal::
 
         class PvtModelConstantPropertiesDescription
-            gas_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/m3', 'density')
-            oil_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1000.0, 'kg/m3', 'density')
-            water_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1000.0, 'kg/m3', 'density')
-            gas_viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(5e-06, 'Pa.s', 'mass per time per length')
-            oil_viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'Pa.s', 'mass per time per length')
-            water_viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'Pa.s', 'mass per time per length')
-            gas_specific_heat: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1010.0, 'J/kg.K', 'specific heat capacity')
-            oil_specific_heat: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(4181.3, 'J/kg.K', 'specific heat capacity')
-            water_specific_heat: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(4181.3, 'J/kg.K', 'specific heat capacity')
-            gas_thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.024, 'W/m.K', 'thermal conductivity')
-            oil_thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.591, 'W/m.K', 'thermal conductivity')
-            water_thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.591, 'W/m.K', 'thermal conductivity')
-            gas_oil_surface_tension: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.07197, 'N/m', 'force per length')
-            gas_water_surface_tension: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.07197, 'N/m', 'force per length')
-            oil_water_surface_tension: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.07197, 'N/m', 'force per length')
-            gas_specific_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(2260000.0, 'J/kg', 'specific energy')
-            oil_specific_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(104860.0, 'J/kg', 'specific energy')
+            gas_density: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'kg/m3', 'density')
+            oil_density: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1000.0, 'kg/m3', 'density')
+            water_density: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1000.0, 'kg/m3', 'density')
+            gas_viscosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(5e-06, 'Pa.s', 'mass per time per length')
+            oil_viscosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.05, 'Pa.s', 'mass per time per length')
+            water_viscosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.05, 'Pa.s', 'mass per time per length')
+            gas_specific_heat: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1010.0, 'J/kg.K', 'specific heat capacity')
+            oil_specific_heat: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(4181.3, 'J/kg.K', 'specific heat capacity')
+            water_specific_heat: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(4181.3, 'J/kg.K', 'specific heat capacity')
+            gas_thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.024, 'W/m.K', 'thermal conductivity')
+            oil_thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.591, 'W/m.K', 'thermal conductivity')
+            water_thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.591, 'W/m.K', 'thermal conductivity')
+            gas_oil_surface_tension: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.07197, 'N/m', 'force per length')
+            gas_water_surface_tension: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.07197, 'N/m', 'force per length')
+            oil_water_surface_tension: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.07197, 'N/m', 'force per length')
+            gas_specific_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(2260000.0, 'J/kg', 'specific energy')
+            oil_specific_enthalpy: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(104860.0, 'J/kg', 'specific energy')
             has_water: bool = False
 
 .. tab:: Schema
@@ -29,54 +29,54 @@
     .. parsed-literal::
 
             gas_density:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_density:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             water_density:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_viscosity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_viscosity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             water_viscosity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_specific_heat:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_specific_heat:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             water_specific_heat:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_thermal_conductivity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_thermal_conductivity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             water_thermal_conductivity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_oil_surface_tension:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_water_surface_tension:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_water_surface_tension:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_specific_enthalpy:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_specific_enthalpy:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             has_water: boolean  # optional

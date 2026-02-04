@@ -5,61 +5,61 @@
     .. parsed-literal::
 
         class LeakEquipmentDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  = LeakModel.Orifice
             type: \ :class:`LeakType <alfasim_sdk._internal.constants.LeakType>`\  = LeakType.Internal
-            diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.05, 'm', 'diameter')
-            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.85, '-', 'dimensionless')
+            diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.05, 'm', 'diameter')
+            discharge_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.85, '-', 'dimensionless')
             cv_table: \ :class:`CvTableDescription <CvTableDescription>`\  = CvTableDescription()
             gas_lift_valve_opening_type: \ :class:`GasLiftValveOpeningType <alfasim_sdk._internal.constants.GasLiftValveOpeningType>`\  = GasLiftValveOpeningType.MinimumPressureDifference
-            minimum_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
-            bellows_reference_pressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 'bar', 'pressure')
-            bellows_reference_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(15.0, 'degC', 'temperature')
-            port_to_bellows_area_ratio: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, '-', 'dimensionless')
+            minimum_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa', 'pressure')
+            bellows_reference_pressure: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 'bar', 'pressure')
+            bellows_reference_temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(15.0, 'degC', 'temperature')
+            port_to_bellows_area_ratio: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, '-', 'dimensionless')
             opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            opening: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
+            opening: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
             opening_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(-, s)[]
             target_pipe_name: \ :class:`Optional <typing.Optional>`\[str] = None
-            target_position: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
+            target_position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  = OutputAttachmentLocation.Main
             backflow: bool = False
-            backpressure: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'bar', 'pressure')
+            backpressure: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'bar', 'pressure')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             position: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  # optional
             model: \ :class:`LeakModel <alfasim_sdk._internal.constants.LeakModel>`\  # optional
             type: \ :class:`LeakType <alfasim_sdk._internal.constants.LeakType>`\  # optional
             diameter:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             discharge_coefficient:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             cv_table: \ :class:`cv_table_description_schema <CvTableDescription>`\  # optional
             gas_lift_valve_opening_type: \ :class:`GasLiftValveOpeningType <alfasim_sdk._internal.constants.GasLiftValveOpeningType>`\  # optional
             minimum_pressure_difference:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             bellows_reference_pressure:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             bellows_reference_temperature:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             port_to_bellows_area_ratio:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             opening_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             opening:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             opening_curve:  # optional
                 image:
                     values: [number]
@@ -69,10 +69,10 @@
                     unit: string
             target_pipe_name: string  # optional
             target_position:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             target_location: \ :class:`OutputAttachmentLocation <alfasim_sdk._internal.constants.OutputAttachmentLocation>`\  # optional
             backflow: boolean  # optional
             backpressure:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

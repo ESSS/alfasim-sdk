@@ -5,32 +5,32 @@
     .. parsed-literal::
 
         class PumpEquipmentDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  = FlowDirection.Forward
-            thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100.0, '%', 'dimensionless')
+            thermal_efficiency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(100.0, '%', 'dimensionless')
             thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  = PumpThermalEfficiencyModel.Constant
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  = PumpType.ConstantPressure
-            pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(100000.0, 'Pa', 'pressure')
-            plunger_diameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.01, 'm', 'length')
-            stroke_length: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'm', 'length')
-            pump_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 'spm', 'stroke frequency')
-            slip_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1e-12, 'm3/Pa.s', 'slip coefficient')
-            volumetric_efficiency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, '-', 'dimensionless')
+            pressure_boost: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(100000.0, 'Pa', 'pressure')
+            plunger_diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.01, 'm', 'length')
+            stroke_length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'm', 'length')
+            pump_speed: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 'spm', 'stroke frequency')
+            slip_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1e-12, 'm3/Pa.s', 'slip coefficient')
+            volumetric_efficiency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
             table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             speed_curve: \ :class:`SpeedCurveDescription <SpeedCurveDescription>`\  = SpeedCurveDescription()
             speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  = InterpolationType.Constant
             speed_type: \ :class:`PumpSpeedType <alfasim_sdk._internal.constants.PumpSpeedType>`\  = PumpSpeedType.Constant
-            constant_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(500.0, 'rpm', 'angle per time')
-            pcp_reference_viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.001, 'Pa.s', 'dynamic viscosity')
-            pcp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1000.0, 'kg/m3', 'density')
-            pcp_reference_temperature: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(60.0, 'degC', 'temperature')
+            constant_speed: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(500.0, 'rpm', 'angle per time')
+            pcp_reference_viscosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.001, 'Pa.s', 'dynamic viscosity')
+            pcp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1000.0, 'kg/m3', 'density')
+            pcp_reference_temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(60.0, 'degC', 'temperature')
             pcp_viscosity_correction_enabled: bool = False
             esp_table: \ :class:`TablePumpDescription <TablePumpDescription>`\  = TablePumpDescription()
             esp_speed_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            esp_speed: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Hz', 'angle per time')
+            esp_speed: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Hz', 'angle per time')
             esp_speed_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(Hz, s)[]
             esp_number_of_stages: int = 1
-            esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/m3', 'density')
+            esp_reference_density: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'kg/m3', 'density')
             esp_manufacturer: \ :class:`Optional <typing.Optional>`\[str] = ''
             esp_model: str = ''
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  = PumpViscosityModel.NoModel
@@ -41,54 +41,54 @@
     .. parsed-literal::
 
             position: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             flow_direction: \ :class:`FlowDirection <alfasim_sdk._internal.constants.FlowDirection>`\  # optional
             thermal_efficiency:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             thermal_efficiency_model: \ :class:`PumpThermalEfficiencyModel <alfasim_sdk._internal.constants.PumpThermalEfficiencyModel>`\  # optional
             type: \ :class:`PumpType <alfasim_sdk._internal.constants.PumpType>`\  # optional
             pressure_boost:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             plunger_diameter:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             stroke_length:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             pump_speed:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             slip_coefficient:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             volumetric_efficiency:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
             speed_curve: \ :class:`speed_curve_description_schema <SpeedCurveDescription>`\  # optional
             speed_curve_interpolation_type: \ :class:`InterpolationType <alfasim_sdk._internal.constants.InterpolationType>`\  # optional
             speed_type: \ :class:`PumpSpeedType <alfasim_sdk._internal.constants.PumpSpeedType>`\  # optional
             constant_speed:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             pcp_reference_viscosity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             pcp_reference_density:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             pcp_reference_temperature:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             pcp_viscosity_correction_enabled: boolean  # optional
             esp_table: \ :class:`table_pump_description_schema <TablePumpDescription>`\  # optional
             esp_speed_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             esp_speed:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             esp_speed_curve:  # optional
                 image:
                     values: [number]
@@ -98,8 +98,8 @@
                     unit: string
             esp_number_of_stages: number  # optional
             esp_reference_density:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             esp_manufacturer: string  # optional
             esp_model: string  # optional
             esp_viscosity_model: \ :class:`PumpViscosityModel <alfasim_sdk._internal.constants.PumpViscosityModel>`\  # optional

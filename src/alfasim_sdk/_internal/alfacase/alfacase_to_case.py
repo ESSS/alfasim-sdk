@@ -15,9 +15,14 @@ from attr.validators import instance_of
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar, UnitDatabase
 from strictyaml import YAML
+from typing_extensions import assert_never
 
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    FloatExpression,
+    ScalarExpression,
+)
 from alfasim_sdk._internal.alfacase.migration import migrate_alfacase_yaml_to_latest
 
 T = TypeVar("T", bound=attr.AttrsInstance)
@@ -215,16 +220,40 @@ def get_case_description_attribute_loader_dict(
 
 def load_scalar(
     key: str, alfacase_content: DescriptionDocument, category: str
-) -> Scalar:
+) -> Scalar | ScalarExpression:
     """
-    Create a barril.units.Scalar instance from the given alfacase_content.
+    Create a barril.units.Scalar or ScalarExpression instance from the given alfacase_content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
-    return Scalar(
-        category,
-        alfacase_content[key]["value"].content.data,
-        alfacase_content[key]["unit"].content.data,
-    )
+    try:
+        value = alfacase_content[key]["value"].content.data
+    except KeyError:
+        value = alfacase_content[key]["expr"].content.data
+
+    unit = alfacase_content[key]["unit"].content.data
+    match value:
+        case str():
+            return ScalarExpression(expr=value, unit=unit, category=category)
+        case int() | float():
+            return Scalar(category=category, value=value, unit=unit)
+        case unreachable:
+            assert_never(unreachable)
+
+
+def load_float(
+    key: str, alfacase_content: DescriptionDocument
+) -> float | FloatExpression:
+    """
+    Obtain the float data or create a FloatExpression.
+    """
+    value = alfacase_content[key].content.data
+    match value:
+        case str():
+            return FloatExpression(expr=value)
+        case float():
+            return value
+        case unreachable:
+            assert_never(unreachable)
 
 
 @lru_cache(maxsize=None)
@@ -422,9 +451,27 @@ def load_dict_with_scalar(
     key: str,
     alfacase_content: DescriptionDocument,
     category: str,
-) -> dict[str, Scalar]:
+) -> dict[str, Scalar | ScalarExpression]:
+    def TryObtainScalarExpression(
+        dict_item: dict[str, Any],
+    ) -> ScalarExpression | Scalar:
+        value: str | float
+        unit: str = dict_item["unit"]
+        try:
+            value = dict_item["value"]
+            assert isinstance(value, (float, int)), (
+                f"Scalar must receive a float or int type. Current received type {type(value)}"
+            )
+            return Scalar(category, value, unit)
+        except KeyError:
+            value = dict_item["expr"]
+            assert isinstance(value, str), (
+                f"ScalarExpression must receive a string as expression. Current received type{type(value)}"
+            )
+            return ScalarExpression(expr=value, unit=unit, category=category)
+
     return {
-        key: Scalar(category, value["value"], value["unit"])
+        key: TryObtainScalarExpression(value)
         for key, value in alfacase_content[key].content.data.items()
     }
 
@@ -608,7 +655,7 @@ def load_bip_description(
     alfacase_to_case_description: dict[str, Any] = {
         "component_1": load_value,
         "component_2": load_value,
-        "value": load_value,
+        "value": load_float,
     }
 
     def generate_bip_description(alfacase_document: DescriptionDocument):
@@ -1931,22 +1978,22 @@ def load_numerical_options_description(
     document: DescriptionDocument,
 ) -> case_description.NumericalOptionsDescription:
     alfacase_to_case_description: dict[str, Any] = {
-        "tolerance": load_value,
+        "tolerance": load_float,
         "maximum_iterations": load_value,
-        "maximum_timestep_change_factor": load_value,
-        "maximum_cfl_value": load_value,
+        "maximum_timestep_change_factor": get_scalar_loader(from_unit="-"),
+        "maximum_cfl_value": get_scalar_loader(from_unit="-"),
         "nonlinear_solver_type": get_enum_loader(
             enum_class=constants.NonlinearSolverType
         ),
-        "relaxed_tolerance": load_value,
-        "divergence_tolerance": load_value,
+        "relaxed_tolerance": load_float,
+        "divergence_tolerance": load_float,
         "friction_factor_evaluation_strategy": get_enum_loader(
             enum_class=constants.EvaluationStrategyType
         ),
         "simulation_mode": get_enum_loader(enum_class=constants.SimulationModeType),
         "enable_solver_caching": load_value,
-        "caching_rtol": load_value,
-        "caching_atol": load_value,
+        "caching_rtol": load_float,
+        "caching_atol": load_float,
         "always_repeat_timestep": load_value,
         "enable_fast_compositional": load_value,
     }
@@ -2007,6 +2054,17 @@ def load_tracers_description(
     return update_multi_input_flags(document, item_description)
 
 
+def load_multiple_runs_description(
+    document: DescriptionDocument,
+) -> case_description.MultipleRunsDescription:
+    alfacase_to_case_description: dict[str, Any] = {
+        "variables": load_value,
+        "runs": load_value,
+    }
+    case_values = to_case_values(document, alfacase_to_case_description)
+    return case_description.MultipleRunsDescription(**case_values)
+
+
 def load_case_description(
     document: DescriptionDocument,
 ) -> case_description.CaseDescription:
@@ -2036,6 +2094,7 @@ def load_case_description(
         "pipes": load_pipe_description,
         "walls": load_wall_description,
         "wells": load_well_description,
+        "multiple_runs": load_multiple_runs_description,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.CaseDescription(**case_values)

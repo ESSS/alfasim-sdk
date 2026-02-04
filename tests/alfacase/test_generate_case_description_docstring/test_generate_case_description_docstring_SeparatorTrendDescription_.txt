@@ -7,7 +7,7 @@
         class SeparatorTrendDescription
             name: \ :class:`Optional <typing.Optional>`\[str] = None
             curve_names: \ :class:`List <typing.List>`\[str]
-            element_name: str
+            element_name: \ :class:`Optional <typing.Optional>`\[str] = None
 
 .. tab:: Schema
 
@@ -16,4 +16,4 @@
             name: string  # optional
             curve_names: 
                 - str
-            element_name: string
+            element_name: string  # optional

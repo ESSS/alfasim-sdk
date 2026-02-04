@@ -9,6 +9,10 @@ from barril.curve.curve import Curve
 from barril.units import Array
 from barril.units._scalar import Scalar
 
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    FloatExpression,
+    ScalarExpression,
+)
 from alfasim_sdk._internal.alfacase.generate_schema import (
     IGNORED_PROPERTIES,
     is_array,
@@ -18,10 +22,12 @@ from alfasim_sdk._internal.alfacase.generate_schema import (
     is_dict,
     is_enum,
     is_float,
+    is_float_expression,
     is_int,
     is_list,
     is_path,
     is_scalar,
+    is_scalar_expression,
     is_str,
     is_union,
     obtain_schema_name,
@@ -216,6 +222,20 @@ def _get_scalar_reference() -> str:
     return _get_class_with_reference(visible_name="Scalar", ref="barril.units.Scalar")
 
 
+def _get_scalar_expression_reference() -> str:
+    return _get_class_with_reference(
+        visible_name="ScalarExpression",
+        ref="alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression",
+    )
+
+
+def _get_float_expression_reference() -> str:
+    return _get_class_with_reference(
+        visible_name="FloatExpression",
+        ref="alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression",
+    )
+
+
 def _get_array_reference() -> str:
     """Return a string with a cross-reference to Array documentation."""
     return _get_class_with_reference(visible_name="Array", ref="barril.units.Array")
@@ -286,6 +306,27 @@ def union_formatted(value: Any) -> str:
     Return a string with a cross-referencing link for the Optional module.
     Note that all usages of union on CaseDescription are from the Optional module.
     """
+
+    # Handle with the specific case where multiple types are allowed for some
+    # properties (e.g., Scalar and ScalarExpression).
+    def get_float_reference() -> str:
+        return "float"
+
+    PARAMETRIC_UNSAFE_TYPES = {
+        Scalar: _get_scalar_reference,
+        ScalarExpression: _get_scalar_expression_reference,
+        float: get_float_reference,
+        FloatExpression: _get_float_expression_reference,
+    }
+    types = [
+        PARAMETRIC_UNSAFE_TYPES[type_]()
+        for type_ in value.__args__
+        if type_ in PARAMETRIC_UNSAFE_TYPES
+    ]
+    if len(types) > 1:
+        name = " | ".join(type_ for type_ in types)
+        return name
+
     optional_with_reference = _get_optional_reference()
     ref_value = value.__args__[0]
 
@@ -375,6 +416,18 @@ def union_formatted_for_schema(value: Any) -> str:
     return a string showing parameters with a label '# optional' indicating that this field could be
     is not mandatory.
     """
+
+    # Handle with the specific case where multiple types are allowed for some
+    # properties (e.g., Scalar and ScalarExpression).
+    PARAMETRIC_UNSAFE_TYPES = {Scalar, ScalarExpression, float, FloatExpression}
+    types = [type_ for type_ in value.__args__ if type_ in PARAMETRIC_UNSAFE_TYPES]
+    if len(types) > 1:
+        name = f"\n{BASE_INDENT + INDENT}number | expr"
+        if Scalar in value.__args__ or ScalarExpression in value.__args__:
+            unit = "unit: str"
+            name = f"{name}\n{BASE_INDENT + INDENT}{unit}"
+        return name
+
     parameter = value.__args__[0]
     if value.__args__ in ((str, type(None)), (Path, type(None))):
         name = "string"
@@ -404,6 +457,23 @@ def scalar_formatted_for_schema(value: type[Scalar], *, number_of_indent=1) -> s
     """
     block_indentation = BASE_INDENT + INDENT * number_of_indent
     return f"\n{block_indentation}value: number\n{block_indentation}unit: string"
+
+
+def scalar_expression_formatted_for_schema(
+    value: type[ScalarExpression], *, number_of_indent: int = 1
+) -> str:
+    """
+    Return a string showing how to configure a ScalarExpression.
+    """
+    block_indentation = BASE_INDENT + INDENT * number_of_indent
+    return f"\n{block_indentation}expr: str\n{block_indentation}unit: string\n"
+
+
+def float_expression_formatted_for_schema(
+    value: type[FloatExpression], *, number_of_indent: int = 1
+) -> str:
+    block_indentation = BASE_INDENT + INDENT * number_of_indent
+    return f"\n{block_indentation}expr: str\n"
 
 
 def array_formatted_for_schema(value: type[Array], *, number_of_indent=1) -> str:
@@ -447,6 +517,8 @@ LIST_OF_CASE_ATTRIBUTES: list[tuple[Callable, Callable]] = [
     (is_curve, lambda value: _get_curve_reference()),
     (is_int, lambda value: value.__name__),
     (is_path, lambda value: value.__name__),
+    (is_float_expression, lambda value: _get_float_expression_reference()),
+    (is_scalar_expression, lambda value: _get_scalar_expression_reference()),
 ]
 
 
@@ -455,11 +527,13 @@ LIST_OF_CASE_SCHEMAS: list[tuple[Callable, Callable]] = [
     (is_attrs, attrs_formatted_for_schema),
     (is_list, list_formatted_for_schema),
     (is_float, lambda value: "number"),
+    (is_float_expression, float_expression_formatted_for_schema),
     (is_str, lambda value: "string"),
     (is_boolean, lambda value: "boolean"),
     (is_dict, dict_formatted_for_schema),
     (is_union, union_formatted_for_schema),
     (is_scalar, scalar_formatted_for_schema),
+    (is_scalar_expression, scalar_expression_formatted_for_schema),
     (is_array, array_formatted_for_schema),
     (is_curve, curve_formatted_for_schema),
     (is_int, lambda value: "number"),

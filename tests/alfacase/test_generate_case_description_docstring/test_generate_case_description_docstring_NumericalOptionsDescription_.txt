@@ -6,17 +6,17 @@
 
         class NumericalOptionsDescription
             nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._internal.constants.NonlinearSolverType>`\  = NonlinearSolverType.AlfasimQuasiNewton
-            tolerance: float = 0.0001
+            tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0001
             maximum_iterations: int = 5
-            maximum_timestep_change_factor: float = 2
-            maximum_cfl_value: float = 1.0
-            relaxed_tolerance: float = 0.0
-            divergence_tolerance: float = -1.0
+            maximum_timestep_change_factor: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(2.0, '-', 'dimensionless')
+            maximum_cfl_value: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            relaxed_tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0
+            divergence_tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = -1.0
             friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  = EvaluationStrategyType.TimeExplicit
             simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  = SimulationModeType.Default
             enable_solver_caching: bool = True
-            caching_rtol: float = 0.01
-            caching_atol: float = 0.0001
+            caching_rtol: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.01
+            caching_atol: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 0.0001
             always_repeat_timestep: bool = False
             enable_fast_compositional: bool = True
 
@@ -25,16 +25,25 @@
     .. parsed-literal::
 
             nonlinear_solver_type: \ :class:`NonlinearSolverType <alfasim_sdk._internal.constants.NonlinearSolverType>`\  # optional
-            tolerance: number  # optional
+            tolerance:  # optional
+                number | expr
             maximum_iterations: number  # optional
-            maximum_timestep_change_factor: number  # optional
-            maximum_cfl_value: number  # optional
-            relaxed_tolerance: number  # optional
-            divergence_tolerance: number  # optional
+            maximum_timestep_change_factor:  # optional
+                number | expr
+                unit: str
+            maximum_cfl_value:  # optional
+                number | expr
+                unit: str
+            relaxed_tolerance:  # optional
+                number | expr
+            divergence_tolerance:  # optional
+                number | expr
             friction_factor_evaluation_strategy: \ :class:`EvaluationStrategyType <alfasim_sdk._internal.constants.EvaluationStrategyType>`\  # optional
             simulation_mode: \ :class:`SimulationModeType <alfasim_sdk._internal.constants.SimulationModeType>`\  # optional
             enable_solver_caching: boolean  # optional
-            caching_rtol: number  # optional
-            caching_atol: number  # optional
+            caching_rtol:  # optional
+                number | expr
+            caching_atol:  # optional
+                number | expr
             always_repeat_timestep: boolean  # optional
             enable_fast_compositional: boolean  # optional

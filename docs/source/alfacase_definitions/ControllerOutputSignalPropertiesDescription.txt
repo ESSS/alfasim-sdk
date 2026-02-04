@@ -8,9 +8,9 @@
             controlled_property: \ :class:`Optional <typing.Optional>`\[str] = None
             unit: \ :class:`Optional <typing.Optional>`\[str] = None
             network_element_name: \ :class:`Optional <typing.Optional>`\[str] = None
-            min_value: float = -1e+50
-            max_value: float = 1e+50
-            max_rate_of_change: float = 1e+50
+            min_value: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = -1e+50
+            max_value: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 1e+50
+            max_rate_of_change: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 1e+50
 
 .. tab:: Schema
 
@@ -19,6 +19,9 @@
             controlled_property: string  # optional
             unit: string  # optional
             network_element_name: string  # optional
-            min_value: number  # optional
-            max_value: number  # optional
-            max_rate_of_change: number  # optional
+            min_value:  # optional
+                number | expr
+            max_value:  # optional
+                number | expr
+            max_rate_of_change:  # optional
+                number | expr

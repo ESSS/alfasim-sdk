@@ -6,18 +6,18 @@
 
         class LightComponentDescription
             name: str
-            Pc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
-            Tc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
-            Vc: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm3/mol', 'molar volume')
-            omega: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            MW: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'kg/mol', 'mass per mol')
-            Tb: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'K', 'temperature')
-            Parachor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            Pc: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa', 'pressure')
+            Tc: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'K', 'temperature')
+            Vc: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm3/mol', 'molar volume')
+            omega: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            MW: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'kg/mol', 'mass per mol')
+            Tb: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'K', 'temperature')
+            Parachor: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_0: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_1: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_2: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_3: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            Cp_4: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -25,38 +25,38 @@
 
             name: string
             Pc:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Tc:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Vc:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             omega:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             MW:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Tb:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Parachor:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Cp_0:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Cp_1:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Cp_2:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Cp_3:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             Cp_4:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

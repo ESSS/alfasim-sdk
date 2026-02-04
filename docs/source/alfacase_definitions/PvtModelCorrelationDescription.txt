@@ -5,12 +5,12 @@
     .. parsed-literal::
 
         class PvtModelCorrelationDescription
-            oil_density_std: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(850.0, 'kg/m3', 'density')
-            gas_density_std: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.9, 'kg/m3', 'density')
-            rs_sat: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(150.0, 'sm3/sm3', 'standard volume per standard volume')
+            oil_density_std: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(850.0, 'kg/m3', 'density')
+            gas_density_std: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.9, 'kg/m3', 'density')
+            rs_sat: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(150.0, 'sm3/sm3', 'standard volume per standard volume')
             pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._internal.constants.CorrelationPackage>`\  = CorrelationPackage.Standing
-            h2s_mol_frac: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            co2_mol_frac: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
+            h2s_mol_frac: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            co2_mol_frac: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
             oil_viscosity: \ :class:`CorrelationsOilViscosity <alfasim_sdk._internal.constants.CorrelationsOilViscosity>`\  = CorrelationsOilViscosity.Egbogah
             gas_viscosity: \ :class:`CorrelationsGasViscosity <alfasim_sdk._internal.constants.CorrelationsGasViscosity>`\  = CorrelationsGasViscosity.LeeGonzalezEakin
             surface_tension: \ :class:`CorrelationsSurfaceTension <alfasim_sdk._internal.constants.CorrelationsSurfaceTension>`\  = CorrelationsSurfaceTension.BakerSwerdloff
@@ -20,21 +20,21 @@
     .. parsed-literal::
 
             oil_density_std:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_density_std:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             rs_sat:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             pvt_correlation_package: \ :class:`CorrelationPackage <alfasim_sdk._internal.constants.CorrelationPackage>`\  # optional
             h2s_mol_frac:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             co2_mol_frac:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             oil_viscosity: \ :class:`CorrelationsOilViscosity <alfasim_sdk._internal.constants.CorrelationsOilViscosity>`\  # optional
             gas_viscosity: \ :class:`CorrelationsGasViscosity <alfasim_sdk._internal.constants.CorrelationsGasViscosity>`\  # optional
             surface_tension: \ :class:`CorrelationsSurfaceTension <alfasim_sdk._internal.constants.CorrelationsSurfaceTension>`\  # optional

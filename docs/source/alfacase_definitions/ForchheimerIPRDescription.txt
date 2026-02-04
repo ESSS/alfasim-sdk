@@ -7,16 +7,16 @@
         class ForchheimerIPRDescription
             calculate_coeff_option: \ :class:`ForchheimerCoefficientsOption <alfasim_sdk._internal.constants.ForchheimerCoefficientsOption>`\  = ForchheimerCoefficientsOption.ReservoirParameters
             well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  = WellIndexPhaseType.Gas
-            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa', 'pressure')
-            gas_viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa.s', 'dynamic viscosity')
-            gas_z_factor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            reservoir_permeability: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm2', 'permeability rock')
-            drainage_radius: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
-            well_radius: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm', 'length')
-            well_skin_factor: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'dimensionless')
-            non_darcy_parameter: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa.s/m6', 'nonDarcy flow coefficient')
-            B_coeff: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa2.s/scm', 'forchheimer linear productivity index')
-            C_coeff: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'Pa2.s2/scm2', 'forchheimer quadratic productivity index')
+            min_pressure_difference: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa', 'pressure')
+            gas_viscosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa.s', 'dynamic viscosity')
+            gas_z_factor: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            reservoir_permeability: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm2', 'permeability rock')
+            drainage_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
+            well_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
+            well_skin_factor: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            non_darcy_parameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa.s/m6', 'nonDarcy flow coefficient')
+            B_coeff: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa2.s/scm', 'forchheimer linear productivity index')
+            C_coeff: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'Pa2.s2/scm2', 'forchheimer quadratic productivity index')
 
 .. tab:: Schema
 
@@ -25,32 +25,32 @@
             calculate_coeff_option: \ :class:`ForchheimerCoefficientsOption <alfasim_sdk._internal.constants.ForchheimerCoefficientsOption>`\  # optional
             well_index_phase: \ :class:`WellIndexPhaseType <alfasim_sdk._internal.constants.WellIndexPhaseType>`\  # optional
             min_pressure_difference:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_viscosity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             gas_z_factor:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             reservoir_permeability:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             drainage_radius:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             well_radius:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             well_skin_factor:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             non_darcy_parameter:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             B_coeff:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             C_coeff:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

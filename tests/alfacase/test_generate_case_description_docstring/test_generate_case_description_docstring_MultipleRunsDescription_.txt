@@ -1,0 +1,18 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class MultipleRunsDescription
+            variables: \ :class:`Dict <typing.Dict>`\[str, Any] = {}
+            runs: \ :class:`Dict <typing.Dict>`\[str, dict[str, float]] = {}
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            variables:  # optional
+                string: Any
+            runs:  # optional
+                string: dict

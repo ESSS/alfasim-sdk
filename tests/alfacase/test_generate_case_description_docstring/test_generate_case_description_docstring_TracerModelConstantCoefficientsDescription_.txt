@@ -5,13 +5,11 @@
     .. parsed-literal::
 
         class TracerModelConstantCoefficientsDescription
-            partition_coefficients: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Scalar <barril.units.Scalar>`\] = {}
+            partition_coefficients: \ :class:`Dict <typing.Dict>`\[str, barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression] = {}
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             partition_coefficients:  # optional
-                string: 
-                    value: number
-                    unit: string
+                string: Scalar | ScalarExpression
