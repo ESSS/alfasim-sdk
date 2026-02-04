@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from barril.units import Scalar
+
 from alfasim_sdk import (
     EmulsionDropletSizeModelType,
     EmulsionInversionPointModelType,
@@ -31,3 +33,30 @@ def test_migrate_emulsion_enums(datadir: Path) -> None:
         case.physics.emulsion_inversion_point_model
         is EmulsionInversionPointModelType.BraunerUllmann2002
     )
+
+
+def test_migrate_numerical_options_float_to_scalar(datadir: Path) -> None:
+    """
+    Some properties in NumericOptions were changed from a plain `float` to a `Scalar` (ASIM-5436):
+
+    numeric_options:
+      maximum_timestep_change_factor: 1.0
+      maximum_cfl_value: 100.0
+
+    To:
+    numeric_options:
+      maximum_timestep_change_factor:
+        value: 1.0
+        unit: "-"
+      maximum_cfl_value:
+        value: 100.0
+        unit: "-"
+    """
+    alfacase_file = datadir / "test_migrate_emulsion_enums.alfacase"
+    case = load_case_description(DescriptionDocument.from_file(alfacase_file))
+    numerical_options = case.numerical_options
+
+    assert numerical_options.maximum_timestep_change_factor == Scalar(
+        "dimensionless", 2, "-"
+    )
+    assert numerical_options.maximum_cfl_value == Scalar("dimensionless", 1, "-")
