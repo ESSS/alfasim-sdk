@@ -11,12 +11,20 @@ from attr._make import _CountingAttr
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
 
-from alfasim_sdk import CaseDescription, MaterialDescription, NodeCellType
+from alfasim_sdk import (
+    BipDescription,
+    CaseDescription,
+    MaterialDescription,
+    NodeCellType,
+    PhysicsDescription,
+)
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     DescriptionError,
+    FloatExpression,
     InvalidReferenceError,
+    ScalarExpression,
     attrib_array,
     attrib_curve,
     attrib_enum,
@@ -29,6 +37,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     numpy_array_validator,
     to_array,
     to_curve,
+    to_scalar,
 )
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
@@ -242,7 +251,7 @@ def test_scalar_attribute():
 
     @attr.s(kw_only=True, auto_attribs=True)
     class Foo:
-        position: Scalar = attrib_scalar(default=Scalar(1, "m"))
+        position: ScalarExpression | Scalar = attrib_scalar(default=Scalar(1, "m"))
         position_2: Scalar | None = attrib_scalar(default=None, category="length")
 
     # Check position
@@ -252,9 +261,7 @@ def test_scalar_attribute():
     instance_with_tuple = Foo(position=(1, "m"))  # type:ignore[arg-type]
     assert isinstance(instance_with_tuple.position, Scalar)
 
-    expected_msg = (
-        "Expected pair (value, unit) or Scalar, got None (type: <class 'NoneType'>)"
-    )
+    expected_msg = "Expected pair (value, unit), Scalar or ScalarExpression, got None (type: <class 'NoneType'>)"
     with pytest.raises(TypeError, match=re.escape(expected_msg)):
         Foo(position=None)  # type:ignore[arg-type]
 
@@ -266,6 +273,12 @@ def test_scalar_attribute():
     assert isinstance(instance_with_tuple.position, Scalar)
 
     assert Foo(position_2=None).position_2 is None
+
+    foo = Foo(position=ScalarExpression(expr="A+1", unit="m"))
+    assert isinstance(foo.position, ScalarExpression)
+    assert foo.position.eval_expression(namespace={"A": 1}) == Scalar(
+        "length", 2.0, "m"
+    )
 
 
 def test_enum_attribute():
@@ -1184,7 +1197,7 @@ def test_generate_multi_input():
         """\
         # fmt: off
         foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        foo: Scalar = attrib_scalar(
+        foo: ScalarDescriptionType = attrib_scalar(
             default=Scalar('length', 1.2, 'm')
         )
         foo_curve: Curve = attrib_curve(
@@ -1200,8 +1213,8 @@ def test_generate_multi_input_dict():
         """\
         # fmt: off
         foo_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
-        foo: dict[str, Scalar] = attr.ib(
-            default=attr.Factory(dict), validator=dict_of(Scalar),
+        foo: dict[str, ScalarDescriptionType] = attr.ib(
+            default=attr.Factory(dict), validator=dict_of((Scalar, ScalarExpression)),
             metadata={"type": "scalar_dict", "category": 'length'},
         )
         foo_curve: dict[str, Curve] = attr.ib(
@@ -1591,3 +1604,37 @@ def test_check_fluid_references(default_well: case_description.WellDescription) 
         )
 
         case.ensure_valid_references()
+
+
+def test_to_scalar_with_scalar_expression() -> None:
+    scalar_expression = to_scalar(("A+1", "%"))
+    assert isinstance(scalar_expression, ScalarExpression)
+    assert scalar_expression == ScalarExpression(expr="A+1", unit="%")
+
+    scalar = scalar_expression.eval_expression(namespace={"A": 10})
+    assert scalar == Scalar(11.0, "%", "dimensionless")
+
+
+def test_case_description_with_expression() -> None:
+    physics_desc = PhysicsDescription()
+    physics_desc.emulsion_pal_rhodes_phi_rel_100 = ScalarExpression(
+        expr="A+B+1", category="dimensionless", unit="%"
+    )
+    em_pal_rhodes = physics_desc.emulsion_pal_rhodes_phi_rel_100
+    value = em_pal_rhodes.eval_expression(namespace={"A": 1, "B": 2})
+    assert value == Scalar(4.0, "%", "dimensionless")
+
+    physics_desc.emulsion_pal_rhodes_phi_rel_100 = Scalar("dimensionless", 10, "%")
+    assert physics_desc.emulsion_pal_rhodes_phi_rel_100 == Scalar(
+        10, "%", "dimensionless"
+    )
+
+
+def test_case_description_with_float_expression() -> None:
+    expression = FloatExpression(expr="A + B")
+    description = BipDescription(
+        component_1="component_1", component_2="component_2", value=expression
+    )
+    assert description.value == expression
+    assert isinstance(description.value, FloatExpression)
+    assert description.value.eval_expression({"A": 1, "B": 2}) == 3

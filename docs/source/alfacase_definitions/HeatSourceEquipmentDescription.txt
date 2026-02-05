@@ -5,10 +5,10 @@
     .. parsed-literal::
 
         class HeatSourceEquipmentDescription
-            start: \ :class:`Scalar <barril.units.Scalar>`
-            length: \ :class:`Scalar <barril.units.Scalar>`
+            start: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            length: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             power_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
-            power: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W', 'power')
+            power: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'W', 'power')
             power_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(W, s)[]
 
 .. tab:: Schema
@@ -16,15 +16,15 @@
     .. parsed-literal::
 
             start: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             length: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             power_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             power:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             power_curve:  # optional
                 image:
                     values: [number]

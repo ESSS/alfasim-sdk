@@ -5,30 +5,30 @@
     .. parsed-literal::
 
         class EnvironmentPropertyDescription
-            position: \ :class:`Scalar <barril.units.Scalar>`
-            temperature: \ :class:`Scalar <barril.units.Scalar>`
+            position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
-            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
-            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'm/s', 'velocity')
+            heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            overall_heat_transfer_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'W/m2.K', 'heat transfer coefficient')
+            fluid_velocity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm/s', 'velocity')
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             position: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             temperature: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             type: \ :class:`PipeEnvironmentHeatTransferCoefficientModelType <alfasim_sdk._internal.constants.PipeEnvironmentHeatTransferCoefficientModelType>`
             heat_transfer_coefficient:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             overall_heat_transfer_coefficient:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             fluid_velocity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

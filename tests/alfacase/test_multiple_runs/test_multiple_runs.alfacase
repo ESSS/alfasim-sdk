@@ -1,0 +1,1964 @@
+multiple_runs:
+    variables:
+        A: 1
+        B: 2
+        C: 3
+        D: A + B
+    runs:
+        1:
+            A: 1.1
+            B: 2.1
+            C: 3.1
+        2:
+            A: 1.11
+            B: 2.11
+            C: 3.11
+
+physics:
+  hydrodynamic_model: hydrodynamic_model_4_fields
+  simulation_regime: simulation_regime_transient
+  energy_model: global_model
+  solids_model: no_model
+  solids_model_plugin_id:
+  initial_condition_strategy: constant
+  keep_former_results: False
+  emulsion_model_enabled: False
+  emulsion_relative_viscosity_model: model_default
+
+  emulsion_pal_rhodes_phi_rel_100:
+    expr: A+1
+    unit: '-'
+  emulsion_woelflin_a:
+    expr: B + C
+    unit: '-'
+  emulsion_woelflin_b:
+    value: 2.5
+    unit: '-'
+  emulsion_table_based_rel_visc_curve:
+    image:
+      values:
+      - 1.0
+      unit: '-'
+    domain:
+      values:
+      - 0.0
+      unit: m3/m3
+  emulsion_relative_viscosity_tuning_factor:
+    image:
+      values:
+      - 1.0
+      unit: '-'
+    domain:
+      values:
+      - 0.0
+      unit: m3/m3
+  emulsion_droplet_size_model: model_default
+  emulsion_inversion_point_model: model_default
+  emulsion_inversion_water_cut:
+    expr: C + A
+    unit: m3/m3
+  flash_model: hydrocarbon_and_water
+  correlations_package: correlation_package_alfasim
+time_options:
+  stop_on_steady_state: False
+  automatic_restart_autosave_frequency: True
+  initial_time:
+    value: 0.0
+    unit: h
+  final_time:
+    value: 1.0
+    unit: h
+  initial_timestep:
+    value: 0.0001
+    unit: s
+  minimum_timestep:
+    value: 0.0001
+    unit: s
+  maximum_timestep:
+    value: 5.0
+    unit: s
+  restart_autosave_frequency:
+    value: 1.0
+    unit: h
+  minimum_time_for_steady_state_stop:
+    value: 0.0
+    unit: s
+numerical_options:
+  nonlinear_solver_type: nonlinear_solver_alfasim_quasi_newton
+  tolerance: 0.0001
+  maximum_iterations: 5
+  maximum_timestep_change_factor:
+    expr: C
+    unit: '-'
+  maximum_cfl_value:
+    value: 1.0
+    unit: '-'
+  relaxed_tolerance: C + 1
+  divergence_tolerance: -1.0
+  friction_factor_evaluation_strategy: time_explicit
+  simulation_mode: default
+  enable_solver_caching: True
+  caching_rtol: 0.01
+  caching_atol: 0.0001
+  always_repeat_timestep: False
+plugins: []
+pvt_models:
+  correlations:
+    Correlations 1:
+      oil_density_std:
+        value: 850.0
+        unit: kg/m3
+      gas_density_std:
+        value: 0.9
+        unit: kg/m3
+      rs_sat:
+        value: 150.0
+        unit: sm3/sm3
+      pvt_correlation_package: pvt_correlation_package_standing
+      h2s_mol_frac:
+        value: 0.0
+        unit: '-'
+      co2_mol_frac:
+        value: 0.0
+        unit: '-'
+      oil_viscosity: Egbogah
+      gas_viscosity: Lee Gonzalez Eakin
+      surface_tension: Baker Swerdloff
+outputs:
+  automatic_trend_frequency: True
+  trends:
+    positional_pipe_trends: []
+    overall_pipe_trends: []
+    global_trends:
+    - curve_names:
+      - timestep
+    equipment_trends: []
+    separator_trends: []
+    controller_trends: []
+  trend_frequency:
+    value: 1.0
+    unit: min
+  automatic_profile_frequency: True
+  profiles:
+  - curve_names:
+    - elevation
+    - flow pattern
+    - gas phase volume fraction
+    - holdup
+    - liquid mass flow rate
+    - liquid volumetric flow rate std
+    - mixture temperature
+    - oil phase volume fraction
+    - pressure
+    - total gas mass flow rate
+    - total gas volumetric flow rate std
+    - total mass flow rate
+    - total oil mass flow rate
+    - total oil volumetric flow rate std
+    location: main
+    element_name: Well 1
+  - curve_names:
+    - elevation
+    - flow pattern
+    - gas phase volume fraction
+    - holdup
+    - liquid mass flow rate
+    - liquid volumetric flow rate std
+    - mixture temperature
+    - oil phase volume fraction
+    - pressure
+    - total gas mass flow rate
+    - total gas volumetric flow rate std
+    - total mass flow rate
+    - total oil mass flow rate
+    - total oil volumetric flow rate std
+    location: annulus
+    element_name: Well 1
+  - curve_names:
+    - elevation
+    - flow pattern
+    - gas phase volume fraction
+    - holdup
+    - liquid mass flow rate
+    - liquid volumetric flow rate std
+    - mixture temperature
+    - oil phase volume fraction
+    - pressure
+    - total gas mass flow rate
+    - total gas volumetric flow rate std
+    - total mass flow rate
+    - total oil mass flow rate
+    - total oil volumetric flow rate std
+    location: main
+    element_name: Conn 1
+  - curve_names:
+    - elevation
+    - flow pattern
+    - gas phase volume fraction
+    - holdup
+    - liquid mass flow rate
+    - liquid volumetric flow rate std
+    - mixture temperature
+    - oil phase volume fraction
+    - pressure
+    - total gas mass flow rate
+    - total gas volumetric flow rate std
+    - total mass flow rate
+    - total oil mass flow rate
+    - total oil volumetric flow rate std
+    location: main
+    element_name: Conn 2
+  profile_frequency:
+    value: 5.0
+    unit: min
+pipes:
+- name: Conn 1
+  source: Well 1
+  target: Node 2
+  source_port: port
+  pvt_model: Correlations 1
+  profile:
+    x_and_y:
+      x:
+        values:
+        - 0.0
+        - 100.0
+        - 200.0
+        - 300.0
+        - 400.0
+        - 500.0
+        - 600.0
+        - 700.0
+        - 800.0
+        - 900.0
+        - 1000.0
+        unit: m
+      y:
+        values:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        unit: m
+  environment:
+    thermal_model: transient_heat_transfer
+    position_input_mode: position_by_md
+    reference_y_coordinate:
+      value: 0.0
+      unit: m
+    md_properties_table:
+    - position:
+        value: 0.0
+        unit: m
+      temperature:
+        value: 288.6
+        unit: K
+      type: walls_and_environment_heat_transfer_coefficient
+      heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      overall_heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      fluid_velocity:
+        value: 0.0
+        unit: m/s
+    tvd_properties_table:
+    - position:
+        value: 0.0
+        unit: m
+      temperature:
+        value: 288.6
+        unit: K
+      type: walls_and_environment_heat_transfer_coefficient
+      heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      overall_heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      fluid_velocity:
+        value: 0.0
+        unit: m/s
+  segments:
+    start_positions:
+      values:
+      - 0.0
+      unit: m
+    diameters:
+      values:
+      - 0.1
+      unit: m
+    roughnesses:
+      values:
+      - 0.0
+      unit: m
+    wall_names:
+    - Flowline
+  initial_conditions:
+    pressures:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        pressures:
+          values: []
+          unit: bar
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        pressures:
+          values: []
+          unit: bar
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        pressures:
+          values:
+          - 50.0
+          unit: bar
+    volume_fractions:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        fractions:
+          gas:
+            values:
+            - 0.6
+            unit: '-'
+          oil:
+            values:
+            - 0.4
+            unit: '-'
+          water:
+            values:
+            - 0.0
+            unit: '-'
+    tracers_mass_fractions:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+      table_length:
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+    velocities:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        velocities:
+          gas:
+            values:
+            - 0.0
+            unit: m/s
+          oil:
+            values:
+            - 0.0
+            unit: m/s
+          water:
+            values:
+            - 0.0
+            unit: m/s
+    temperatures:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        temperatures:
+          values: []
+          unit: degC
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        temperatures:
+          values: []
+          unit: degC
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        temperatures:
+          values:
+          - 50.0
+          unit: degC
+  flow_pattern_model: unit_cell
+  regime_capturing_mesh_threshold:
+    value: 0.0
+    unit: '-'
+- name: Conn 2
+  source: Node 1
+  target: Well 1
+  target_port: left_annulus_port
+  pvt_model: Correlations 1
+  profile:
+    x_and_y:
+      x:
+        values:
+        - 0.0
+        - 100.0
+        - 200.0
+        - 300.0
+        - 400.0
+        - 500.0
+        - 600.0
+        - 700.0
+        - 800.0
+        - 900.0
+        - 1000.0
+        unit: m
+      y:
+        values:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        unit: m
+  environment:
+    thermal_model: transient_heat_transfer
+    position_input_mode: position_by_md
+    reference_y_coordinate:
+      value: 0.0
+      unit: m
+    md_properties_table:
+    - position:
+        value: 0.0
+        unit: m
+      temperature:
+        value: 288.6
+        unit: K
+      type: walls_and_environment_heat_transfer_coefficient
+      heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      overall_heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      fluid_velocity:
+        value: 0.0
+        unit: m/s
+    tvd_properties_table:
+    - position:
+        value: 0.0
+        unit: m
+      temperature:
+        value: 288.6
+        unit: K
+      type: walls_and_environment_heat_transfer_coefficient
+      heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      overall_heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      fluid_velocity:
+        value: 0.0
+        unit: m/s
+  segments:
+    start_positions:
+      values:
+      - 0.0
+      unit: m
+    diameters:
+      values:
+      - 0.1
+      unit: m
+    roughnesses:
+      values:
+      - 0.0
+      unit: m
+    wall_names:
+    - Flowline
+  initial_conditions:
+    pressures:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        pressures:
+          values: []
+          unit: bar
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        pressures:
+          values: []
+          unit: bar
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        pressures:
+          values:
+          - 50.0
+          unit: bar
+    volume_fractions:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        fractions:
+          gas:
+            values:
+            - 0.6
+            unit: '-'
+          oil:
+            values:
+            - 0.4
+            unit: '-'
+          water:
+            values:
+            - 0.0
+            unit: '-'
+    tracers_mass_fractions:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+      table_length:
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+    velocities:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        velocities:
+          gas:
+            values:
+            - 0.0
+            unit: m/s
+          oil:
+            values:
+            - 0.0
+            unit: m/s
+          water:
+            values:
+            - 0.0
+            unit: m/s
+    temperatures:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        temperatures:
+          values: []
+          unit: degC
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        temperatures:
+          values: []
+          unit: degC
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        temperatures:
+          values:
+          - 50.0
+          unit: degC
+  flow_pattern_model: unit_cell
+  regime_capturing_mesh_threshold:
+    value: 0.0
+    unit: '-'
+nodes:
+- name: Node 1
+  node_type: mass_source_boundary
+  pvt_model: Correlations 1
+  pressure_properties:
+    pressure:
+      value: 100000.0
+      unit: Pa
+    temperature:
+      value: 288.6
+      unit: K
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    split_type: mass_inflow_split_type_constant_volume_fraction
+    gas_liquid_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    water_cut:
+      value: 0.0
+      unit: '-'
+  mass_source_properties:
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    temperature:
+      value: 50.0
+      unit: degC
+    source_type: mass_source_type_mass_flow_rates
+    volumetric_flow_rates_std:
+      gas:
+        value: 0.0
+        unit: sm3/d
+      oil:
+        value: 0.0
+        unit: sm3/d
+      water:
+        value: 0.0
+        unit: sm3/d
+    mass_flow_rates:
+      gas:
+        value: 0.002
+        unit: kg/s
+      oil:
+        value: 0.3
+        unit: kg/s
+      water:
+        value: 0.0
+        unit: kg/s
+    total_mass_flow_rate:
+      value: 1.0
+      unit: kg/s
+    water_cut:
+      value: 0.0
+      unit: '-'
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+  separator_properties:
+    environment_temperature:
+      value: 25.0
+      unit: degC
+    geometry: vertical_cylinder
+    length:
+      value: 1.0
+      unit: m
+    overall_heat_transfer_coefficient:
+      value: 0.0
+      unit: W/m2.K
+    diameter:
+      value: 1.0
+      unit: m
+    initial_phase_volume_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+    gas_separation_efficiency:
+      value: 1.0
+      unit: '-'
+    liquid_separation_efficiency:
+      value: 1.0
+      unit: '-'
+  controller_properties:
+    type: pid
+    gain: 0.0001
+    setpoint: 0.0
+    integral_time:
+      value: 10.0
+      unit: s
+    derivative_time:
+      value: 1.0
+      unit: s
+    output_signal_properties:
+      min_value: -1e+50
+      max_value: 1e+50
+      max_rate_of_change: 1e+50
+- name: Node 2
+  node_type: pressure_boundary
+  pvt_model: Correlations 1
+  pressure_properties:
+    pressure:
+      value: 50.0
+      unit: bar
+    temperature:
+      value: 50.0
+      unit: degC
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    split_type: mass_inflow_split_type_pvt
+    mass_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+      water:
+        value: 0.0
+        unit: '-'
+    volume_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+      water:
+        value: 0.0
+        unit: '-'
+    gas_liquid_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    water_cut:
+      value: 0.0
+      unit: '-'
+  mass_source_properties:
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    temperature:
+      value: 288.6
+      unit: K
+    source_type: mass_source_type_mass_flow_rates
+    total_mass_flow_rate:
+      value: 1.0
+      unit: kg/s
+    water_cut:
+      value: 0.0
+      unit: '-'
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+  separator_properties:
+    environment_temperature:
+      value: 25.0
+      unit: degC
+    geometry: vertical_cylinder
+    length:
+      value: 1.0
+      unit: m
+    overall_heat_transfer_coefficient:
+      value: 0.0
+      unit: W/m2.K
+    diameter:
+      value: 1.0
+      unit: m
+    initial_phase_volume_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+    gas_separation_efficiency:
+      value: 1.0
+      unit: '-'
+    liquid_separation_efficiency:
+      value: 1.0
+      unit: '-'
+  controller_properties:
+    type: pid
+    gain: 0.0001
+    setpoint: 0.0
+    integral_time:
+      value: 10.0
+      unit: s
+    derivative_time:
+      value: 1.0
+      unit: s
+    output_signal_properties:
+      min_value: -1e+50
+      max_value: 1e+50
+      max_rate_of_change: 1e+50
+- name: Well 1_top_node
+  node_type: internal_node
+  pvt_model: Correlations 1
+  pressure_properties:
+    pressure:
+      value: 100000.0
+      unit: Pa
+    temperature:
+      value: 288.6
+      unit: K
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    split_type: mass_inflow_split_type_constant_volume_fraction
+    gas_liquid_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    water_cut:
+      value: 0.0
+      unit: '-'
+  mass_source_properties:
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    temperature:
+      value: 288.6
+      unit: K
+    source_type: mass_source_type_mass_flow_rates
+    total_mass_flow_rate:
+      value: 1.0
+      unit: kg/s
+    water_cut:
+      value: 0.0
+      unit: '-'
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+  separator_properties:
+    environment_temperature:
+      value: 25.0
+      unit: degC
+    geometry: vertical_cylinder
+    length:
+      value: 1.0
+      unit: m
+    overall_heat_transfer_coefficient:
+      value: 0.0
+      unit: W/m2.K
+    diameter:
+      value: 1.0
+      unit: m
+    initial_phase_volume_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+    gas_separation_efficiency:
+      value: 1.0
+      unit: '-'
+    liquid_separation_efficiency:
+      value: 1.0
+      unit: '-'
+  controller_properties:
+    type: pid
+    gain: 0.0001
+    setpoint: 0.0
+    integral_time:
+      value: 10.0
+      unit: s
+    derivative_time:
+      value: 1.0
+      unit: s
+    output_signal_properties:
+      min_value: -1e+50
+      max_value: 1e+50
+      max_rate_of_change: 1e+50
+- name: Well 1_bottom_node
+  node_type: mass_source_boundary
+  pvt_model: Correlations 1
+  pressure_properties:
+    pressure:
+      value: 100000.0
+      unit: Pa
+    temperature:
+      value: 288.6
+      unit: K
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    split_type: mass_inflow_split_type_constant_volume_fraction
+    gas_liquid_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    water_cut:
+      value: 0.0
+      unit: '-'
+  mass_source_properties:
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    temperature:
+      value: 50.0
+      unit: degC
+    source_type: mass_source_type_mass_flow_rates
+    volumetric_flow_rates_std:
+      gas:
+        value: 0.0
+        unit: sm3/d
+      oil:
+        value: 0.0
+        unit: sm3/d
+      water:
+        value: 0.0
+        unit: sm3/d
+    mass_flow_rates:
+      gas:
+        value: 0.002
+        unit: kg/s
+      oil:
+        value: 0.3
+        unit: kg/s
+      water:
+        value: 0.0
+        unit: kg/s
+    total_mass_flow_rate:
+      value: 1.0
+      unit: kg/s
+    water_cut:
+      value: 0.0
+      unit: '-'
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+  separator_properties:
+    environment_temperature:
+      value: 25.0
+      unit: degC
+    geometry: vertical_cylinder
+    length:
+      value: 1.0
+      unit: m
+    overall_heat_transfer_coefficient:
+      value: 0.0
+      unit: W/m2.K
+    diameter:
+      value: 1.0
+      unit: m
+    initial_phase_volume_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+    gas_separation_efficiency:
+      value: 1.0
+      unit: '-'
+    liquid_separation_efficiency:
+      value: 1.0
+      unit: '-'
+  controller_properties:
+    type: pid
+    gain: 0.0001
+    setpoint: 0.0
+    integral_time:
+      value: 10.0
+      unit: s
+    derivative_time:
+      value: 1.0
+      unit: s
+    output_signal_properties:
+      min_value: -1e+50
+      max_value: 1e+50
+      max_rate_of_change: 1e+50
+- name: Well 1_annulus_top_node
+  node_type: internal_node
+  pvt_model: Correlations 1
+  pressure_properties:
+    pressure:
+      value: 100000.0
+      unit: Pa
+    temperature:
+      value: 288.6
+      unit: K
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    split_type: mass_inflow_split_type_constant_volume_fraction
+    gas_liquid_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+    water_cut:
+      value: 0.0
+      unit: '-'
+  mass_source_properties:
+    tracer_mass_fraction:
+      values: []
+      unit: '-'
+    temperature:
+      value: 288.6
+      unit: K
+    source_type: mass_source_type_mass_flow_rates
+    total_mass_flow_rate:
+      value: 1.0
+      unit: kg/s
+    water_cut:
+      value: 0.0
+      unit: '-'
+    gas_oil_ratio:
+      value: 0.0
+      unit: sm3/sm3
+  separator_properties:
+    environment_temperature:
+      value: 25.0
+      unit: degC
+    geometry: vertical_cylinder
+    length:
+      value: 1.0
+      unit: m
+    overall_heat_transfer_coefficient:
+      value: 0.0
+      unit: W/m2.K
+    diameter:
+      value: 1.0
+      unit: m
+    initial_phase_volume_fractions:
+      gas:
+        value: 0.5
+        unit: '-'
+      oil:
+        value: 0.5
+        unit: '-'
+    gas_separation_efficiency:
+      value: 1.0
+      unit: '-'
+    liquid_separation_efficiency:
+      value: 1.0
+      unit: '-'
+  controller_properties:
+    type: pid
+    gain: 0.0001
+    setpoint: 0.0
+    integral_time:
+      value: 10.0
+      unit: s
+    derivative_time:
+      value: 1.0
+      unit: s
+    output_signal_properties:
+      min_value: -1e+50
+      max_value: 1e+50
+      max_rate_of_change: 1e+50
+wells:
+- name: Well 1
+  pvt_model: Correlations 1
+  stagnant_fluid: Brine
+  profile:
+    x_and_y:
+      x:
+        values:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        unit: m
+      y:
+        values:
+        - 0.0
+        - 20.0
+        - 40.0
+        - 60.0
+        - 80.0
+        - 100.0
+        unit: m
+  casing:
+    casing_sections:
+    - name: Casing 1
+      hanger_depth:
+        value: 0.0
+        unit: m
+      settings_depth:
+        value: 100.0
+        unit: m
+      hole_diameter:
+        value: 1.0
+        unit: m
+      outer_diameter:
+        value: 0.8
+        unit: m
+      inner_diameter:
+        value: 0.7
+        unit: m
+      inner_roughness:
+        value: 0.0
+        unit: m
+      material: Carbon Steel
+      top_of_filler:
+        value: 0.0
+        unit: m
+      filler_material: Cement
+    tubings: []
+    packers: []
+    open_holes: []
+  annulus:
+    has_annulus_flow: False
+    pvt_model: Correlations 1
+    initial_conditions:
+      pressures:
+        position_input_type: length
+        table_x:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+          pressures:
+            values: []
+            unit: bar
+        table_y:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+          pressures:
+            values: []
+            unit: bar
+        table_length:
+          positions:
+            values:
+            - 0.0
+            unit: m
+          pressures:
+            values:
+            - 50.0
+            unit: bar
+      volume_fractions:
+        position_input_type: length
+        table_x:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+        table_y:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+        table_length:
+          positions:
+            values:
+            - 0.0
+            unit: m
+          fractions:
+            gas:
+              values:
+              - 0.6
+              unit: '-'
+            oil:
+              values:
+              - 0.4
+              unit: '-'
+            water:
+              values:
+              - 0.0
+              unit: '-'
+      tracers_mass_fractions:
+        position_input_type: length
+        table_x:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+          tracers_mass_fractions: []
+        table_y:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+          tracers_mass_fractions: []
+        table_length:
+          positions:
+            values: []
+            unit: m
+          tracers_mass_fractions: []
+      velocities:
+        position_input_type: length
+        table_x:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+        table_y:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+        table_length:
+          positions:
+            values:
+            - 0.0
+            unit: m
+          velocities:
+            gas:
+              values:
+              - 0.0
+              unit: m/s
+            oil:
+              values:
+              - 0.0
+              unit: m/s
+            water:
+              values:
+              - 0.0
+              unit: m/s
+      temperatures:
+        position_input_type: length
+        table_x:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+          temperatures:
+            values: []
+            unit: degC
+        table_y:
+          reference_coordinate:
+            value: 0.0
+            unit: m
+          positions:
+            values: []
+            unit: m
+          temperatures:
+            values: []
+            unit: degC
+        table_length:
+          positions:
+            values:
+            - 0.0
+            unit: m
+          temperatures:
+            values:
+            - 50.0
+            unit: degC
+    top_node: Well 1_annulus_top_node
+  formation:
+    reference_y_coordinate:
+      value: 0.0
+      unit: m
+    layers:
+    - name: Formation Layer 1
+      start:
+        value: -100.0
+        unit: m
+      material: Formation
+  top_node: Well 1_top_node
+  bottom_node: Well 1_bottom_node
+  environment:
+    thermal_model: transient_heat_transfer
+    position_input_mode: position_by_md
+    reference_y_coordinate:
+      value: 0.0
+      unit: m
+    md_properties_table:
+    - position:
+        value: 0.0
+        unit: m
+      temperature:
+        value: 50.0
+        unit: degC
+      type: walls_and_environment_heat_transfer_coefficient
+      heat_transfer_coefficient:
+        value: 1000.0
+        unit: W/m2.K
+      overall_heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      fluid_velocity:
+        value: 0.0
+        unit: m/s
+    - position:
+        value: 100.0
+        unit: m
+      temperature:
+        value: 288.6
+        unit: K
+      type: walls_and_environment_heat_transfer_coefficient
+      heat_transfer_coefficient:
+        value: 1000.0
+        unit: W/m2.K
+      overall_heat_transfer_coefficient:
+        value: 0.0
+        unit: W/m2.K
+      fluid_velocity:
+        value: 0.0
+        unit: m/s
+    tvd_properties_table: []
+  initial_conditions:
+    pressures:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        pressures:
+          values: []
+          unit: bar
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        pressures:
+          values: []
+          unit: bar
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        pressures:
+          values:
+          - 50.0
+          unit: bar
+    volume_fractions:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        fractions:
+          gas:
+            values:
+            - 0.6
+            unit: '-'
+          oil:
+            values:
+            - 0.4
+            unit: '-'
+          water:
+            values:
+            - 0.0
+            unit: '-'
+    tracers_mass_fractions:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+      table_length:
+        positions:
+          values: []
+          unit: m
+        tracers_mass_fractions: []
+    velocities:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        velocities:
+          gas:
+            values:
+            - 0.0
+            unit: m/s
+          oil:
+            values:
+            - 0.0
+            unit: m/s
+          water:
+            values:
+            - 0.0
+            unit: m/s
+    temperatures:
+      position_input_type: length
+      table_x:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        temperatures:
+          values: []
+          unit: degC
+      table_y:
+        reference_coordinate:
+          value: 0.0
+          unit: m
+        positions:
+          values: []
+          unit: m
+        temperatures:
+          values: []
+          unit: degC
+      table_length:
+        positions:
+          values:
+          - 0.0
+          unit: m
+        temperatures:
+          values:
+          - 50.0
+          unit: degC
+materials:
+- name: Adhesive Polypropylene
+  material_type: solid
+  density:
+    value: 897.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.225
+    unit: W/m.degC
+  heat_capacity:
+    value: 1298.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: Brine
+  material_type: fluid
+  density:
+    value: 1001.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.58
+    unit: W/m.degC
+  heat_capacity:
+    value: 4180.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.5
+    unit: '-'
+  outer_emissivity:
+    value: 0.5
+    unit: '-'
+  expansion:
+    value: 0.0001
+    unit: 1/degC
+  viscosity:
+    value: 1.0
+    unit: cP
+- name: Carbon Steel
+  material_type: solid
+  density:
+    value: 7865.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 45.0
+    unit: W/m.degC
+  heat_capacity:
+    value: 502.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: Cement
+  material_type: solid
+  density:
+    value: 1394.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.9
+    unit: W/m.degC
+  heat_capacity:
+    value: 837.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: FBE
+  material_type: solid
+  density:
+    value: 1506.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.294
+    unit: W/m.degC
+  heat_capacity:
+    value: 1591.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: Formation
+  material_type: solid
+  density:
+    value: 1634.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 3.0
+    unit: W/m.degC
+  heat_capacity:
+    value: 754.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: Gravel
+  material_type: solid
+  density:
+    value: 2650.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 1.0
+    unit: W/m.degC
+  heat_capacity:
+    value: 1800.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: KCI (completion fluid)
+  material_type: fluid
+  density:
+    value: 1114.1
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.3
+    unit: W/m.degC
+  heat_capacity:
+    value: 3686.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.5
+    unit: '-'
+  outer_emissivity:
+    value: 0.5
+    unit: '-'
+  expansion:
+    value: 0.0001
+    unit: 1/degC
+  viscosity:
+    value: 1.5
+    unit: cP
+- name: LPP5
+  material_type: solid
+  density:
+    value: 680.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.17
+    unit: W/m.degC
+  heat_capacity:
+    value: 1500.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: Lift Gas
+  material_type: fluid
+  density:
+    value: 58.63
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.028
+    unit: W/m.degC
+  heat_capacity:
+    value: 1913.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.5
+    unit: '-'
+  outer_emissivity:
+    value: 0.5
+    unit: '-'
+  expansion:
+    value: 0.0001
+    unit: 1/degC
+  viscosity:
+    value: 0.01
+    unit: cP
+- name: Mud
+  material_type: fluid
+  density:
+    value: 2110.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 1.0
+    unit: W/m.degC
+  heat_capacity:
+    value: 1300.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.5
+    unit: '-'
+  outer_emissivity:
+    value: 0.5
+    unit: '-'
+  expansion:
+    value: 0.0001
+    unit: 1/degC
+  viscosity:
+    value: 20.0
+    unit: cP
+- name: Solid Polypropylene
+  material_type: solid
+  density:
+    value: 897.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.225
+    unit: W/m.degC
+  heat_capacity:
+    value: 1256.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+- name: Synthetic Polypropylene
+  material_type: solid
+  density:
+    value: 657.0
+    unit: kg/m3
+  thermal_conductivity:
+    value: 0.168
+    unit: W/m.degC
+  heat_capacity:
+    value: 1130.0
+    unit: J/kg.degC
+  inner_emissivity:
+    value: 0.0
+    unit: '-'
+  outer_emissivity:
+    value: 0.0
+    unit: '-'
+  expansion:
+    value: 0.0
+    unit: 1/K
+  viscosity:
+    value: 0.0
+    unit: cP
+walls:
+- name: Flowline
+  inner_roughness:
+    value: 0.0
+    unit: mm
+  wall_layer_container:
+  - thickness:
+      value: 25.4
+      unit: mm
+    material_name: Carbon Steel
+    has_annulus_flow: False
+  - thickness:
+      value: 0.3
+      unit: mm
+    material_name: FBE
+    has_annulus_flow: False
+  - thickness:
+      value: 0.3
+      unit: mm
+    material_name: Adhesive Polypropylene
+    has_annulus_flow: False
+  - thickness:
+      value: 2.7
+      unit: mm
+    material_name: Solid Polypropylene
+    has_annulus_flow: False
+  - thickness:
+      value: 62.7
+      unit: mm
+    material_name: Synthetic Polypropylene
+    has_annulus_flow: False
+  - thickness:
+      value: 4.0
+      unit: mm
+    material_name: Solid Polypropylene
+    has_annulus_flow: False
+- name: Riser
+  inner_roughness:
+    value: 0.0
+    unit: mm
+  wall_layer_container:
+  - thickness:
+      value: 18.3
+      unit: mm
+    material_name: Carbon Steel
+    has_annulus_flow: False
+  - thickness:
+      value: 0.3
+      unit: mm
+    material_name: FBE
+    has_annulus_flow: False
+  - thickness:
+      value: 0.3
+      unit: mm
+    material_name: Adhesive Polypropylene
+    has_annulus_flow: False
+  - thickness:
+      value: 2.7
+      unit: mm
+    material_name: Solid Polypropylene
+    has_annulus_flow: False
+  - thickness:
+      value: 72.7
+      unit: mm
+    material_name: Synthetic Polypropylene
+    has_annulus_flow: False
+  - thickness:
+      value: 4.0
+      unit: mm
+    material_name: Solid Polypropylene
+    has_annulus_flow: False

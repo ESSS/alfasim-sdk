@@ -7,13 +7,13 @@
         class MaterialDescription
             name: str
             material_type: \ :class:`MaterialType <alfasim_sdk._internal.constants.MaterialType>`\  = MaterialType.Solid
-            density: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'kg/m3', 'density')
-            thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'W/m.degC', 'thermal conductivity')
-            heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'J/kg.degC', 'specific heat capacity')
-            inner_emissivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'emissivity')
-            outer_emissivity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '-', 'emissivity')
-            expansion: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, '1/K', 'volumetric thermal expansion')
-            viscosity: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 'cP', 'dynamic viscosity')
+            density: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'kg/m3', 'density')
+            thermal_conductivity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'W/m.degC', 'thermal conductivity')
+            heat_capacity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'J/kg.degC', 'specific heat capacity')
+            inner_emissivity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'emissivity')
+            outer_emissivity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'emissivity')
+            expansion: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '1/K', 'volumetric thermal expansion')
+            viscosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'cP', 'dynamic viscosity')
 
 .. tab:: Schema
 
@@ -22,23 +22,23 @@
             name: string
             material_type: \ :class:`MaterialType <alfasim_sdk._internal.constants.MaterialType>`\  # optional
             density:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             thermal_conductivity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             heat_capacity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             inner_emissivity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             outer_emissivity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             expansion:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             viscosity:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

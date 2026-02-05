@@ -5,7 +5,7 @@
     .. parsed-literal::
 
         class FormationDescription
-            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`
+            reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             layers: \ :class:`List <typing.List>`\[\ :class:`FormationLayerDescription <FormationLayerDescription>`\] = []
 
 .. tab:: Schema
@@ -13,7 +13,7 @@
     .. parsed-literal::
 
             reference_y_coordinate: 
-                value: number
-                unit: string
+                number | expr
+                unit: str
             layers:  # optional
                 - \ :class:`formation_layer_description_schema <FormationLayerDescription>`

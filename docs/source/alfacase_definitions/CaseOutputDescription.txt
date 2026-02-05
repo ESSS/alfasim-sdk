@@ -7,10 +7,10 @@
         class CaseOutputDescription
             automatic_trend_frequency: bool = True
             trends: \ :class:`TrendsOutputDescription <TrendsOutputDescription>`\  = TrendsOutputDescription()
-            trend_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
+            trend_frequency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, 's', 'time')
             automatic_profile_frequency: bool = True
             profiles: \ :class:`List <typing.List>`\[\ :class:`ProfileOutputDescription <ProfileOutputDescription>`\] = []
-            profile_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
+            profile_frequency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, 's', 'time')
 
 .. tab:: Schema
 
@@ -19,11 +19,11 @@
             automatic_trend_frequency: boolean  # optional
             trends: \ :class:`trends_output_description_schema <TrendsOutputDescription>`\  # optional
             trend_frequency:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             automatic_profile_frequency: boolean  # optional
             profiles:  # optional
                 - \ :class:`profile_output_description_schema <ProfileOutputDescription>`
             profile_frequency:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

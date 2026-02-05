@@ -7,13 +7,13 @@
         class TimeOptionsDescription
             stop_on_steady_state: bool = False
             automatic_restart_autosave_frequency: bool = True
-            initial_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
-            final_time: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(10.0, 's', 'time')
-            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0001, 's', 'time')
-            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1e-12, 's', 'time')
-            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.1, 's', 'time')
-            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(1.0, 'h', 'time')
-            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\  = Scalar(0.0, 's', 'time')
+            initial_time: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 's', 'time')
+            final_time: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 's', 'time')
+            initial_timestep: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0001, 's', 'time')
+            minimum_timestep: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1e-12, 's', 'time')
+            maximum_timestep: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, 's', 'time')
+            restart_autosave_frequency: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, 'h', 'time')
+            minimum_time_for_steady_state_stop: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 's', 'time')
 
 .. tab:: Schema
 
@@ -22,23 +22,23 @@
             stop_on_steady_state: boolean  # optional
             automatic_restart_autosave_frequency: boolean  # optional
             initial_time:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             final_time:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             initial_timestep:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             minimum_timestep:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             maximum_timestep:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             restart_autosave_frequency:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str
             minimum_time_for_steady_state_stop:  # optional
-                value: number
-                unit: string
+                number | expr
+                unit: str

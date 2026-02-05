@@ -11,9 +11,23 @@ from barril.units import Array, Scalar
 from alfasim_sdk import MultiInputType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    FloatExpression,
+    ScalarExpression,
+)
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
 
-ATTRIBUTES = Union[Scalar, Array, Curve, Enum, np.ndarray, list, list[Enum]]
+ATTRIBUTES = Union[
+    Scalar,
+    ScalarExpression,
+    FloatExpression,
+    Array,
+    Curve,
+    Enum,
+    np.ndarray,
+    list,
+    list[Enum],
+]
 
 NON_FININTE_VALUES_TO_STRING = [
     (math.isnan, ".nan"),
@@ -53,6 +67,9 @@ def _convert_value_to_valid_alfacase_format(
     """
     if isinstance(value, Scalar):
         return {"value": str(value.value), "unit": value.unit}
+
+    if isinstance(value, ScalarExpression):
+        return {"expr": value.expr, "unit": value.unit}
 
     if isinstance(value, Array):
         return {"values": [str(i) for i in value.values], "unit": value.unit}
@@ -108,6 +125,9 @@ def _convert_value_to_valid_alfacase_format(
             float_formatted_value = str(value)
 
         return float_formatted_value
+
+    if isinstance(value, FloatExpression):
+        return value.expr
 
     return str(value)
 
