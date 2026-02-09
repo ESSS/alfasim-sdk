@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class TemperaturesContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
-            temperatures: \ :class:`Array <barril.units.Array>`\  = Array(temperature, [288.6], K)
+            positions: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(length, [0.0], m)
+            temperatures: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(temperature, [288.6], K)
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             positions:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             temperatures:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str

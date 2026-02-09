@@ -18,6 +18,8 @@ Case
 
 .. autoclass:: alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression()
 
+.. autoclass:: alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression()
+
 .. _alfacase-reference-options-section:
 
 Options
