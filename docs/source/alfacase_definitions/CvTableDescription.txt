@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class CvTableDescription
-            opening: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
-            flow_coefficient: \ :class:`Array <barril.units.Array>`\  = Array(flow coefficient, [], (galUS/min)/(psi^0.5))
+            opening: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(dimensionless, [], -)
+            flow_coefficient: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(flow coefficient, [], (galUS/min)/(psi^0.5))
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             opening:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             flow_coefficient:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str

@@ -6,7 +6,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
 import attr
 import typing_inspect
@@ -21,7 +21,7 @@ from typing_inspect import is_optional_type
 from alfasim_sdk import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     FloatExpression,
-    ScalarExpression,
+    ScalarExpression, ArrayExpression,
 )
 
 INDENTANTION = "    "
@@ -146,6 +146,8 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
         ScalarExpression: scalar_expression_to_alfacase_schema,
         float: float_to_alfacase_schema,
         FloatExpression: str_to_alfacase_schema,
+        Array: array_to_alfacase_schema,
+        ArrayExpression: array_expression_to_alfacase_schema
     }
     # PvtModel Tables
     if set(type_.__args__) == {str, Path}:
@@ -193,6 +195,8 @@ def scalar_to_alfacase_schema(type_: type, indent: int) -> str:
 def is_scalar_expression(type_: type) -> bool:
     return type_ is ScalarExpression
 
+def is_array_expression(type_: type) -> bool:
+    return type_ is ArrayExpression
 
 def is_float_expression(type_: type) -> bool:
     return type_ is FloatExpression
@@ -209,6 +213,8 @@ def is_array(type_: type) -> bool:
 def array_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"values": Seq(Float()), "unit": Str()})'
 
+def array_expression_to_alfacase_schema(type_: type, indent: int) -> str:
+    return 'Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()})'
 
 def is_curve(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Curve)
@@ -255,6 +261,7 @@ LIST_OF_IMPLEMENTATIONS: list[tuple[Callable, Callable]] = [
     (is_scalar, scalar_to_alfacase_schema),
     (is_scalar_expression, scalar_expression_to_alfacase_schema),
     (is_array, array_to_alfacase_schema),
+    (is_array_expression, array_expression_to_alfacase_schema),
     (is_curve, curve_to_alfacase_schema),
     (is_int, int_to_alfacase_schema),
     (is_path, path_to_alfacase_schema),
@@ -267,8 +274,14 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
     If the type parameter is a "Optional" type, only the args are used (without the NoneType)
     """
     if is_optional_type(type_):
-        referred_type = typing_inspect.get_args(type_, evaluate=True)[0]
-        type_ = referred_type
+        referred_types = typing_inspect.get_args(type_, evaluate=True)
+        union_types = [type_ for type_ in referred_types if type_ is not type(None)]
+        # Ignore the NoneType in Union.
+        if len(union_types) > 1:
+            type_ = union_types[0] | union_types[1]
+        else:
+            type_ = union_types[0]
+
 
     for predicate_function, handle_function in LIST_OF_IMPLEMENTATIONS:
         if predicate_function(type_):

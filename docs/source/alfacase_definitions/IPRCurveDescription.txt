@@ -5,16 +5,16 @@
     .. parsed-literal::
 
         class IPRCurveDescription
-            pressure_difference: \ :class:`Array <barril.units.Array>`\  = Array(pressure, [0.0], Pa)
-            flow_rate: \ :class:`Array <barril.units.Array>`\  = Array(standard volume per time, [0.0], sm3/d)
+            pressure_difference: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(pressure, [0.0], Pa)
+            flow_rate: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(standard volume per time, [0.0], sm3/d)
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             pressure_difference:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             flow_rate:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str

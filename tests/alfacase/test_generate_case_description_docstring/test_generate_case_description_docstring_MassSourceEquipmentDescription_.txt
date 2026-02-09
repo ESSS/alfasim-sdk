@@ -6,7 +6,7 @@
 
         class MassSourceEquipmentDescription
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
-            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(dimensionless, [], -)
             temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(288.6, 'K', 'temperature')
             temperature_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(K, s)[]
@@ -34,8 +34,8 @@
 
             fluid: string  # optional
             tracer_mass_fraction:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             temperature_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             temperature:  # optional
                 number | expr

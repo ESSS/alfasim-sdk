@@ -6,8 +6,8 @@
 
         class ReferencedTemperaturesContainerDescription
             reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
-            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
-            temperatures: \ :class:`Array <barril.units.Array>`\  = Array(temperature, [], K)
+            positions: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(length, [], m)
+            temperatures: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(temperature, [], K)
 
 .. tab:: Schema
 
@@ -17,8 +17,8 @@
                 number | expr
                 unit: str
             positions:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             temperatures:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str

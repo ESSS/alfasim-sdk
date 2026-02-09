@@ -34,7 +34,7 @@ from .case_description_attributes import (
     float_to_scalar,
     list_of_optional_integers,
     list_of_strings,
-    numpy_array_validator,
+    numpy_array_validator, ArrayDescriptionType,
 )
 
 # [[[cog
@@ -53,7 +53,7 @@ from .case_description_attributes import (
 #   cog.out(code)
 #
 # ]]]
-# [[[end]]] (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg)
+# [[[end]]] (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg) (sum: 1B2M2Y8Asg)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -368,9 +368,9 @@ class _MassSourceCommon:
     """
 
     fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
-    tracer_mass_fraction: Array = attr.ib(
+    tracer_mass_fraction: ArrayDescriptionType = attr.ib(
         default=Array([], "-"),
-        validator=instance_of(Array),
+        validator=instance_of(ArrayDescriptionType),
         metadata={"type": "array", "category": "mass fraction"},
     )
 
@@ -386,7 +386,7 @@ class _MassSourceCommon:
         default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: Nu7J18/uyl)
+    # [[[end]]] (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: Nu7J18/uyl)
 
     source_type: constants.MassSourceType = attrib_enum(
         default=constants.MassSourceType.MassFlowRates
@@ -406,7 +406,7 @@ class _MassSourceCommon:
         metadata={"type": "curve_dict", "category": 'standard volume per time'},
     )
     # fmt: on
-    # [[[end]]] (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: LHETA/Ml6x)
+    # [[[end]]] (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: ryPvlsBfAA) (sum: LHETA/Ml6x)
 
     # [[[cog
     # cog_out_multi_input_dict("mass_flow_rates", "mass flow rate")
@@ -422,7 +422,7 @@ class _MassSourceCommon:
         metadata={"type": "curve_dict", "category": 'mass flow rate'},
     )
     # fmt: on
-    # [[[end]]] (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP)  (sum: TdUaJF6JS+)
+    # [[[end]]] (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP) (sum: Th/dj6mqXP)  (sum: TdUaJF6JS+)
 
     # [[[cog
     # cog_out_multi_input("total_mass_flow_rate", "mass flow rate", 1.0, "kg/s")
@@ -436,7 +436,7 @@ class _MassSourceCommon:
         default=Curve(Array('mass flow rate', [], 'kg/s'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: z0hwjEu4RX)
+    # [[[end]]] (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: bdPklFPWoX) (sum: z0hwjEu4RX)
 
     # [[[cog
     # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
@@ -450,7 +450,7 @@ class _MassSourceCommon:
         default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: 5Lrwey+Qot)
+    # [[[end]]] (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: 5Lrwey+Qot)
 
     # [[[cog
     # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -464,7 +464,7 @@ class _MassSourceCommon:
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: SvK32WGNil)
+    # [[[end]]] (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: SvK32WGNil)
 
 
 @attr.s(kw_only=True, auto_attribs=True)
@@ -490,7 +490,7 @@ class _PressureSourceCommon:
         default=Curve(Array('pressure', [], 'Pa'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: /grsrjTChp)
+    # [[[end]]] (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: NgSGOwktFe) (sum: /grsrjTChp)
 
     # [[[cog
     # cog_out_multi_input("temperature", "temperature", constants.DEFAULT_TEMPERATURE_IN_K, "K")
@@ -504,13 +504,13 @@ class _PressureSourceCommon:
         default=Curve(Array('temperature', [], 'K'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: Nu7J18/uyl)
+    # [[[end]]] (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: cHrgHy1ZUo) (sum: Nu7J18/uyl)
 
     fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
-    tracer_mass_fraction: Array = attr.ib(
+    tracer_mass_fraction: ArrayDescriptionType = attr.ib(
         default=Array([], "-", "mass fraction"),
-        validator=instance_of(Array),
+        validator=instance_of(ArrayDescriptionType),
         metadata={"type": "array", "category": "mass fraction"},
     )
 
@@ -532,7 +532,7 @@ class _PressureSourceCommon:
         metadata={"type": "curve_dict", "category": 'mass fraction'},
     )
     # fmt: on
-    # [[[end]]] (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW)  (sum: 3ryMqAbjl3)
+    # [[[end]]] (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW) (sum: xh4XHDXoAW)  (sum: 3ryMqAbjl3)
 
     # [[[cog
     # cog_out_multi_input_dict("volume_fractions", "volume fraction")
@@ -548,7 +548,7 @@ class _PressureSourceCommon:
         metadata={"type": "curve_dict", "category": 'volume fraction'},
     )
     # fmt: on
-    # [[[end]]] (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: rikXFMJhOC)
+    # [[[end]]] (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: YoWQpGvjkl) (sum: rikXFMJhOC)
 
     # [[[cog
     # cog_out_multi_input("gas_liquid_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -562,7 +562,7 @@ class _PressureSourceCommon:
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: yzsWkpscA9)
+    # [[[end]]] (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: 7z7g1W75CY) (sum: yzsWkpscA9)
 
     # [[[cog
     # cog_out_multi_input("gas_oil_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
@@ -576,7 +576,7 @@ class _PressureSourceCommon:
         default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: SvK32WGNil)
+    # [[[end]]] (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: Q3qUPbL4l2) (sum: SvK32WGNil)
 
     # [[[cog
     # cog_out_multi_input("water_cut", "volume fraction", 0.0, "-")
@@ -590,7 +590,7 @@ class _PressureSourceCommon:
         default=Curve(Array('volume fraction', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: 5Lrwey+Qot)
+    # [[[end]]] (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: U2CeC0W/Rq) (sum: 5Lrwey+Qot)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -670,8 +670,8 @@ class SpeedCurveDescription:
 
     """
 
-    time: Array = attrib_array(Array([0], "s"))
-    speed: Array = attrib_array(Array([500], "rpm"), category="angle per time")
+    time: ArrayDescriptionType = attrib_array(Array([0], "s"))
+    speed: ArrayDescriptionType = attrib_array(Array([500], "rpm"), category="angle per time")
 
 
 # fmt: off
@@ -715,11 +715,11 @@ class TablePumpDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     .. include:: /alfacase_definitions/list_of_unit_for_torque.txt
     """
-    speeds: Array = attrib_array(Array("angle per time", [0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'))
-    void_fractions: Array = attrib_array(Array("volume fraction", ([0.0] * 6 + [0.1] * 6) * 3, '-'))
-    flow_rates: Array = attrib_array(Array([0.0, 0.05, 0.1, 0.15, 0.2, 0.3] * 6, 'm3/s'))
+    speeds: ArrayDescriptionType = attrib_array(Array("angle per time", [0.0] * 12 + [400.0] * 12 + [600.0] * 12, 'rpm'))
+    void_fractions: ArrayDescriptionType = attrib_array(Array("volume fraction", ([0.0] * 6 + [0.1] * 6) * 3, '-'))
+    flow_rates: ArrayDescriptionType = attrib_array(Array([0.0, 0.05, 0.1, 0.15, 0.2, 0.3] * 6, 'm3/s'))
 
-    pressure_boosts: Array = attrib_array(Array(
+    pressure_boosts: ArrayDescriptionType = attrib_array(Array(
             [0.0] * 12
             +[
                 12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
@@ -730,7 +730,7 @@ class TablePumpDescription:
     )
 
 
-    heads: Array = attrib_array(Array(
+    heads: ArrayDescriptionType = attrib_array(Array(
         [0.0] * 12
         + [
             12.0, 10.0, 9.0, 7.5, 5.0, 0.0, 10.0, 9.0, 8.0, 6.0, 3.5, 0.0,
@@ -740,7 +740,7 @@ class TablePumpDescription:
     ) * 1.0e5 / (1000.0 * 9.81)
                          )
 
-    efficiencies: Array = attrib_array(Array(
+    efficiencies: ArrayDescriptionType = attrib_array(Array(
         [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
         [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180] +
         [0.000, 0.311, 0.511, 0.600, 0.578, 0.200, 0.000, 0.280, 0.460, 0.540, 0.520, 0.180],
@@ -749,7 +749,7 @@ class TablePumpDescription:
           )
 
 
-    powers: Array = attrib_array(Array(
+    powers: ArrayDescriptionType = attrib_array(Array(
         [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] +
         [160714.29, 160714.29, 176086.96, 187500.00, 173076.92, 0.00, 160714.29, 160714.29, 173913.04, 166666.67,
         134615.38, 0.00] +
@@ -759,7 +759,7 @@ class TablePumpDescription:
         )
     )
 
-    torques: Array = attrib_array(Array([], 'N.m'))
+    torques: ArrayDescriptionType = attrib_array(Array([], 'N.m'))
 
 
     def __attrs_post_init__(self):
@@ -879,7 +879,7 @@ class PumpEquipmentDescription:
         default=Curve(Array('angle per time', [], 'Hz'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: dxZn8buTyh)
+    # [[[end]]] (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: MzC/LIkTUk) (sum: dxZn8buTyh)
     esp_number_of_stages: int = attr.ib(default=1, validator=instance_of(int))
     esp_reference_density: ScalarDescriptionType = attrib_scalar(
         category="density", default=Scalar(0.0, "kg/m3")
@@ -910,10 +910,10 @@ class CompressorPressureTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    speed_entries: Array = attrib_array(Array([0], "rpm"), category="angle per time")
-    corrected_mass_flow_rate_entries: Array = attrib_array(Array([0], "kg/s"))
-    pressure_ratio_table: Array = attrib_array(Array([1.0], "-"))
-    isentropic_efficiency_table: Array = attrib_array(Array([1.0], "-"))
+    speed_entries: ArrayDescriptionType = attrib_array(Array([0], "rpm"), category="angle per time")
+    corrected_mass_flow_rate_entries: ArrayDescriptionType = attrib_array(Array([0], "kg/s"))
+    pressure_ratio_table: ArrayDescriptionType = attrib_array(Array([1.0], "-"))
+    isentropic_efficiency_table: ArrayDescriptionType = attrib_array(Array([1.0], "-"))
 
     def __attrs_post_init__(self):
         expected_length = len(self.speed_entries)
@@ -986,8 +986,8 @@ class CvTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_flow_coefficient.txt
     """
 
-    opening: Array = attrib_array(default=Array([], "-"))
-    flow_coefficient: Array = attrib_array(default=Array([], "(galUS/min)/(psi^0.5)"))
+    opening: ArrayDescriptionType = attrib_array(default=Array([], "-"))
+    flow_coefficient: ArrayDescriptionType = attrib_array(default=Array([], "(galUS/min)/(psi^0.5)"))
 
     def __attrs_post_init__(self):
         if len(self.flow_coefficient) != len(self.opening):
@@ -1013,7 +1013,7 @@ class PigEquipmentDescription:
     diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
     position: ScalarDescriptionType = attrib_scalar(category="length")
 
-    launch_times: Array = attrib_array(default=Array([0.0], "s"))
+    launch_times: ArrayDescriptionType = attrib_array(default=Array([0.0], "s"))
 
     # [[[cog
     # cog_out_multi_input("mass", "mass", 140.0, "kg")
@@ -1027,7 +1027,7 @@ class PigEquipmentDescription:
         default=Curve(Array('mass', [], 'kg'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: BdZkmlPetC)
+    # [[[end]]] (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: jyMN6kwl5z) (sum: BdZkmlPetC)
 
     # [[[cog
     # cog_out_multi_input("static_force", "force", 1000.0, "N")
@@ -1041,7 +1041,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force', [], 'N'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: QJ/kXRt3yB)
+    # [[[end]]] (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: W+n+agBmMf) (sum: QJ/kXRt3yB)
 
     # [[[cog
     # cog_out_multi_input("wall_friction", "force per velocity", 1000.0, "N.s/m")
@@ -1055,7 +1055,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: wYu6+BdFjc)
+    # [[[end]]] (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: LUZ/5RcPa2) (sum: wYu6+BdFjc)
 
     # [[[cog
     # cog_out_multi_input("linear_friction", "force per velocity", 10.0, "N.s/m")
@@ -1069,7 +1069,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force per velocity', [], 'N.s/m'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: 7VUYd0GERZ)
+    # [[[end]]] (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: jGqpTcorqS) (sum: 7VUYd0GERZ)
 
     # [[[cog
     # cog_out_multi_input("quadratic_friction", "force per velocity squared", 0.0, "N.s2/m2")
@@ -1083,7 +1083,7 @@ class PigEquipmentDescription:
         default=Curve(Array('force per velocity squared', [], 'N.s2/m2'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: bS98jFAj/B)
+    # [[[end]]] (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: wN7wzqbhWp) (sum: bS98jFAj/B)
 
     trap_mode: constants.PigTrappingMode = attrib_enum(
         default=constants.PigTrappingMode.Automatic
@@ -1213,7 +1213,7 @@ class LeakEquipmentDescription:
         default=Curve(Array('dimensionless', [], '-'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: 2rH2wVwV7l)
+    # [[[end]]] (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: AOfhRguJ6N) (sum: 2rH2wVwV7l)
 
     target_pipe_name: str | None = attr.ib(
         default=None, validator=optional(instance_of(str))
@@ -1244,11 +1244,11 @@ class IPRCurveDescription:
 
     """
 
-    pressure_difference: Array = attr.ib(
-        default=Array([0.0], "Pa"), validator=instance_of(Array)
+    pressure_difference: ArrayDescriptionType = attr.ib(
+        default=Array([0.0], "Pa"), validator=instance_of(ArrayDescriptionType)
     )
-    flow_rate: Array = attr.ib(
-        default=Array([0.0], "sm3/d"), validator=instance_of(Array)
+    flow_rate: ArrayDescriptionType = attr.ib(
+        default=Array([0.0], "sm3/d"), validator=instance_of(ArrayDescriptionType)
     )
 
 
@@ -1284,7 +1284,7 @@ class LinearIPRDescription(CommonIPR):
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: r3U12R+7CY)
+    # [[[end]]] (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: r3U12R+7CY)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1312,7 +1312,7 @@ class VogelIPRDescription(CommonIPR):
         default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: BsUYnwfXz2)
+    # [[[end]]] (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: 09Us5imZlH) (sum: BsUYnwfXz2)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1343,7 +1343,7 @@ class FetkovichIPRDescription(CommonIPR):
         default=Curve(Array('productivity index', [], 'm3/bar.d'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: r3U12R+7CY)
+    # [[[end]]] (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: +bJ7zOU82k) (sum: r3U12R+7CY)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1488,7 +1488,7 @@ class HeatSourceEquipmentDescription:
         default=Curve(Array('power', [], 'W'), Array('time', [], 's'))
     )
     # fmt: on
-    # [[[end]]] (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: 0l1Sjk5IZu)
+    # [[[end]]] (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: HC8YUfkVYj) (sum: 0l1Sjk5IZu)
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1500,9 +1500,9 @@ class PipeSegmentsDescription:
 
     """
 
-    start_positions: Array = attr.ib(validator=optional(instance_of(Array)))
-    diameters: Array = attr.ib(validator=optional(instance_of(Array)))
-    roughnesses: Array = attr.ib(validator=optional(instance_of(Array)))
+    start_positions: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
+    diameters: ArrayDescriptionType| None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
+    roughnesses: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
     wall_names: list[str | None] | None = attr.ib(
         default=None, validator=optional(list_of_strings)
     )
@@ -1518,8 +1518,8 @@ class ReferencedPressureContainerDescription:
     """
 
     reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
-    positions: Array = attr.ib(default=Array([0.0], "m"))
-    pressures: Array = attr.ib(default=Array([1e5], "Pa"))
+    positions: ArrayDescriptionType = attr.ib(default=Array([0.0], "m"))
+    pressures: ArrayDescriptionType = attr.ib(default=Array([1e5], "Pa"))
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1531,8 +1531,8 @@ class PressureContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
     """
 
-    positions: Array = attr.ib(default=Array([0.0], "m"))
-    pressures: Array = attr.ib(default=Array([1e5], "Pa"))
+    positions: ArrayDescriptionType = attr.ib(default=Array([0.0], "m"))
+    pressures: ArrayDescriptionType = attr.ib(default=Array([1e5], "Pa"))
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1566,8 +1566,8 @@ class ReferencedVolumeFractionsContainerDescription:
     """
 
     reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
-    positions: Array = attr.ib(default=Array([], "m"))
-    fractions: dict[PhaseName, Array] = attr.ib(default={})
+    positions: ArrayDescriptionType = attr.ib(default=Array([], "m"))
+    fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(default={})
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1579,8 +1579,8 @@ class VolumeFractionsContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    positions: Array = attr.ib(default=Array([0.0], "m"))
-    fractions: dict[PhaseName, Array] = attr.ib(
+    positions: ArrayDescriptionType = attr.ib(default=Array([0.0], "m"))
+    fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(
         default={
             constants.FLUID_GAS: Array([0.1], "-"),
             constants.FLUID_OIL: Array([0.9], "-"),
@@ -1619,8 +1619,8 @@ class ReferencedTracersMassFractionsContainerDescription:
     """
 
     reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
-    positions: Array = attr.ib(default=Array([], "m"))
-    tracers_mass_fractions: list[Array] = attr.ib(default=[])
+    positions: ArrayDescriptionType = attr.ib(default=Array([], "m"))
+    tracers_mass_fractions: list[ArrayDescriptionType] = attr.ib(default=[])
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1632,8 +1632,8 @@ class TracersMassFractionsContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    positions: Array = attr.ib(default=Array([], "m"))
-    tracers_mass_fractions: list[Array] = attr.ib(default=[])
+    positions: ArrayDescriptionType = attr.ib(default=Array([], "m"))
+    tracers_mass_fractions: list[ArrayDescriptionType] = attr.ib(default=[])
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1666,8 +1666,8 @@ class ReferencedVelocitiesContainerDescription:
     """
 
     reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
-    positions: Array = attr.ib(default=Array([], "m"))
-    velocities: dict[PhaseName, Array] = attr.ib(default={})
+    positions: ArrayDescriptionType = attr.ib(default=Array([], "m"))
+    velocities: dict[PhaseName, ArrayDescriptionType] = attr.ib(default={})
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1679,8 +1679,8 @@ class VelocitiesContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_velocity.txt
     """
 
-    positions: Array = attr.ib(default=Array([0.0], "m"))
-    velocities: dict[PhaseName, Array] = attr.ib(
+    positions: ArrayDescriptionType = attr.ib(default=Array([0.0], "m"))
+    velocities: dict[PhaseName, ArrayDescriptionType] = attr.ib(
         default={
             constants.FLUID_GAS: Array([1e-8], "m/s"),
             constants.FLUID_OIL: Array([1e-8], "m/s"),
@@ -1719,8 +1719,8 @@ class ReferencedTemperaturesContainerDescription:
     """
 
     reference_coordinate: ScalarDescriptionType = attr.ib(default=Scalar(0.0, "m"))
-    positions: Array = attr.ib(default=Array([], "m"))
-    temperatures: Array = attr.ib(default=Array([], "K"))
+    positions: ArrayDescriptionType = attr.ib(default=Array([], "m"))
+    temperatures: ArrayDescriptionType = attr.ib(default=Array([], "K"))
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -1732,8 +1732,8 @@ class TemperaturesContainerDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
-    positions: Array = attr.ib(default=Array([0.0], "m"))
-    temperatures: Array = attr.ib(
+    positions: ArrayDescriptionType = attr.ib(default=Array([0.0], "m"))
+    temperatures: ArrayDescriptionType = attr.ib(
         default=Array([constants.DEFAULT_TEMPERATURE_IN_K], "K")
     )
 
@@ -1793,15 +1793,15 @@ class InitialConditionArrays:
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
-    pressure: Array = attr.ib(validator=instance_of(Array))
-    volume_fractions: dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
-    velocity: dict[PhaseName, Array] = attr.ib(validator=dict_of_array)
-    temperature: dict[str, Array] = attr.ib(validator=dict_of_array)
-    x_coord_center: Array | None = attr.ib(
-        default=None, validator=optional(instance_of(Array))
+    pressure: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
+    volume_fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
+    velocity: dict[PhaseName, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
+    temperature: dict[str, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
+    x_coord_center: ArrayDescriptionType | None = attr.ib(
+        default=None, validator=optional(instance_of(ArrayDescriptionType))
     )
-    x_coord_face: Array | None = attr.ib(
-        default=None, validator=optional(instance_of(Array))
+    x_coord_face: ArrayDescriptionType | None = attr.ib(
+        default=None, validator=optional(instance_of(ArrayDescriptionType))
     )
 
 
@@ -1818,15 +1818,15 @@ class LengthAndElevationDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    length: Array = attr.ib(validator=instance_of(Array))
-    elevation: Array = attr.ib(validator=instance_of(Array))
+    length: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
+    elevation: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
 
     def iter_values_and_unit(
         self,
     ) -> Iterator[tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns an iterator containing a pair of values with length and elevation along with their units."""
-        length_values = self.length.GetValues(self.length.unit)
-        elevation_values = self.elevation.GetValues(self.elevation.unit)
+        length_values = self.length.GetValues(self.length.unit) if isinstance(self.length, Array) else self.length.exprs
+        elevation_values = self.elevation.GetValues(self.elevation.unit) if isinstance(self.elevation, Array) else self.elevation.exprs
         for length, elevation in zip(length_values, elevation_values):
             yield (length, self.length.unit), (elevation, self.elevation.unit)
 
@@ -1841,14 +1841,17 @@ class XAndYDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
     """
 
-    x: Array = attr.ib(validator=instance_of(Array))
-    y: Array = attr.ib(validator=instance_of(Array))
+    x: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
+    y: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
 
     def iter_values_and_unit(
         self,
     ) -> Iterator[tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns a pair of values with the x and y value along with their units."""
-        for x, y in zip(self.x.GetValues(self.x.unit), self.y.GetValues(self.y.unit)):
+        x_values = self.x.GetValues(self.x.unit) if isinstance(self.x, Array) else self.x.exprs
+        y_values = self.y.GetValues(self.y.unit) if isinstance(self.y, Array) else self.y.exprs
+
+        for x, y in zip(x_values, y_values):
             yield (x, self.x.unit), (y, self.y.unit)
 
 
@@ -2867,33 +2870,33 @@ class PvtModelPtTableParametersDescription:
     )
     variable_names: list[str] = attr.ib(validator=list_of_strings)
 
-    pressure_std: Scalar | None = attrib_scalar(
+    pressure_std: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(1, "bar"), is_optional=True
     )
-    temperature_std: Scalar | None = attrib_scalar(
+    temperature_std: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(15, "degC"), is_optional=True
     )
 
-    gas_density_std: Scalar | None = attrib_scalar(
+    gas_density_std: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(1, "kg/m3"), is_optional=True
     )
-    oil_density_std: Scalar | None = attrib_scalar(
+    oil_density_std: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(800, "kg/m3"), is_optional=True
     )
-    water_density_std: Scalar | None = attrib_scalar(
+    water_density_std: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(1000, "kg/m3"), is_optional=True
     )
 
-    gas_oil_ratio: Scalar | None = attrib_scalar(
+    gas_oil_ratio: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GOR
-    gas_liquid_ratio: Scalar | None = attrib_scalar(
+    gas_liquid_ratio: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(0, "sm3/sm3"), is_optional=True
     )  # GLR
-    water_cut: Scalar | None = attrib_scalar(
+    water_cut: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(0, "-"), is_optional=True
     )  # WC
-    total_water_fraction: Scalar | None = attrib_scalar(
+    total_water_fraction: ScalarDescriptionType | None = attrib_scalar(
         default=Scalar(0, "-"), is_optional=True
     )
 
@@ -3747,7 +3750,7 @@ class TracerModelConstantCoefficientsDescription:
     """
 
     partition_coefficients: dict[str, ScalarDescriptionType] = attr.ib(
-        default=attr.Factory(dict), validator=dict_of(Scalar)
+        default=attr.Factory(dict), validator=dict_of((Scalar, ScalarExpression))
     )
 
 
