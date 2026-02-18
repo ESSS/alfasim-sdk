@@ -16,7 +16,7 @@ from alfasim_sdk import (
     CaseDescription,
     MaterialDescription,
     NodeCellType,
-    PhysicsDescription,
+    PhysicsDescription, NumericalOptionsDescription,
 )
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
@@ -1638,3 +1638,16 @@ def test_case_description_with_float_expression() -> None:
     assert description.value == expression
     assert isinstance(description.value, FloatExpression)
     assert description.value.eval_expression({"A": 1, "B": 2}) == 3
+
+def test_numerical_options_backward_compatibility() -> None:
+    """
+    Test the backward compatibility scenario for NumericalOptions properties whose types
+    were altered to Scalar (see PR #523).
+    """
+    numerical_options = NumericalOptionsDescription(maximum_cfl_value=10,maximum_timestep_change_factor=20)
+    assert numerical_options.maximum_cfl_value == Scalar('dimensionless', 10.0, '-')
+    assert numerical_options.maximum_timestep_change_factor == Scalar('dimensionless', 20.0, '-')
+
+    numerical_options = NumericalOptionsDescription()
+    assert numerical_options.maximum_cfl_value == Scalar('dimensionless', 1.0, '-')
+    assert numerical_options.maximum_timestep_change_factor == Scalar('dimensionless', 2.0, '-')

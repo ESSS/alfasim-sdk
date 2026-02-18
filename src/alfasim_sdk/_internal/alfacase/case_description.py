@@ -33,8 +33,9 @@ from .case_description_attributes import (
     dict_with_scalar,
     list_of_optional_integers,
     list_of_strings,
-    numpy_array_validator,
+    numpy_array_validator, float_to_scalar,
 )
+from typing_extensions import assert_never
 
 # [[[cog
 # # This cog has no output, it just declares and imports symbols used by cogs in this module.
@@ -3900,13 +3901,8 @@ class NumericalOptionsDescription:
         default=1e-4,
     )
     maximum_iterations: int = attr.ib(default=5, converter=int)
-    maximum_timestep_change_factor: ScalarDescriptionType = attrib_scalar(
-        default=Scalar("dimensionless", 2, "-")
-    )
-
-    maximum_cfl_value: ScalarDescriptionType = attrib_scalar(
-        default=Scalar("dimensionless", 1, "-")
-    )
+    maximum_timestep_change_factor: ScalarDescriptionType = attr.ib(default=Scalar("dimensionless", 2.0, "-"),converter=float_to_scalar, metadata={"type": "scalar", "category": 'dimensionless'})
+    maximum_cfl_value: ScalarDescriptionType = attr.ib(default=Scalar("dimensionless", 1.0, "-"), converter=float_to_scalar, metadata={"type": "scalar", "category": 'dimensionless'})
     relaxed_tolerance: FloatDescriptionType = attr.ib(
         default=0.0,
     )
@@ -3924,7 +3920,6 @@ class NumericalOptionsDescription:
     caching_atol: FloatDescriptionType = attr.ib(default=1e-4)
     always_repeat_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
-
 
 @attr.s(frozen=True, auto_attribs=True)
 class AlfasimVersionInfo:
