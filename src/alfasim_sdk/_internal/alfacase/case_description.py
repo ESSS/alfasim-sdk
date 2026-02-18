@@ -31,6 +31,7 @@ from .case_description_attributes import (
     dict_of,
     dict_of_array,
     dict_with_scalar,
+    float_to_scalar,
     list_of_optional_integers,
     list_of_strings,
     numpy_array_validator,
@@ -3900,12 +3901,15 @@ class NumericalOptionsDescription:
         default=1e-4,
     )
     maximum_iterations: int = attr.ib(default=5, converter=int)
-    maximum_timestep_change_factor: ScalarDescriptionType = attrib_scalar(
-        default=Scalar("dimensionless", 2, "-")
+    maximum_timestep_change_factor: ScalarDescriptionType = attr.ib(
+        default=Scalar("dimensionless", 2.0, "-"),
+        converter=float_to_scalar,
+        metadata={"type": "scalar", "category": "dimensionless"},
     )
-
-    maximum_cfl_value: ScalarDescriptionType = attrib_scalar(
-        default=Scalar("dimensionless", 1, "-")
+    maximum_cfl_value: ScalarDescriptionType = attr.ib(
+        default=Scalar("dimensionless", 1.0, "-"),
+        converter=float_to_scalar,
+        metadata={"type": "scalar", "category": "dimensionless"},
     )
     relaxed_tolerance: FloatDescriptionType = attr.ib(
         default=0.0,
