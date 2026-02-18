@@ -292,6 +292,7 @@ def attrib_scalar(
         metadata=metadata,
     )
 
+
 def attrib_array(
     default: ArrayLike | attrs.NothingType = attr.NOTHING,
     category: str | None = None,
@@ -586,6 +587,7 @@ class InvalidPluginDataError(DescriptionError):
     Error raised when some plugin input data is not in the expected format.
     """
 
+
 def float_to_scalar(value: float | ScalarDescriptionType) -> ScalarDescriptionType:
     """
     Convert a single float value to a dimensionless Scalar.
@@ -596,6 +598,6 @@ def float_to_scalar(value: float | ScalarDescriptionType) -> ScalarDescriptionTy
         case Scalar() | ScalarExpression():
             return value
         case float() | int():
-            return Scalar('dimensionless', value, '-')
+            return Scalar("dimensionless", value, "-")
         case unreachable:
             assert_never(unreachable)
