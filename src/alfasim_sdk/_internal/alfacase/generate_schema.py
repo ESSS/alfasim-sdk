@@ -6,7 +6,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 import attr
 import typing_inspect
@@ -20,8 +20,9 @@ from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
     FloatExpression,
-    ScalarExpression, ArrayExpression,
+    ScalarExpression,
 )
 
 INDENTANTION = "    "
@@ -147,7 +148,7 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
         float: float_to_alfacase_schema,
         FloatExpression: str_to_alfacase_schema,
         Array: array_to_alfacase_schema,
-        ArrayExpression: array_expression_to_alfacase_schema
+        ArrayExpression: array_expression_to_alfacase_schema,
     }
     # PvtModel Tables
     if set(type_.__args__) == {str, Path}:
@@ -195,8 +196,10 @@ def scalar_to_alfacase_schema(type_: type, indent: int) -> str:
 def is_scalar_expression(type_: type) -> bool:
     return type_ is ScalarExpression
 
+
 def is_array_expression(type_: type) -> bool:
     return type_ is ArrayExpression
+
 
 def is_float_expression(type_: type) -> bool:
     return type_ is FloatExpression
@@ -213,8 +216,10 @@ def is_array(type_: type) -> bool:
 def array_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"values": Seq(Float()), "unit": Str()})'
 
+
 def array_expression_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()})'
+
 
 def is_curve(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Curve)
@@ -281,7 +286,6 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
             type_ = union_types[0] | union_types[1]
         else:
             type_ = union_types[0]
-
 
     for predicate_function, handle_function in LIST_OF_IMPLEMENTATIONS:
         if predicate_function(type_):

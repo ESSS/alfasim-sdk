@@ -7,16 +7,17 @@ import attr
 import numpy as np
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
+from typing_extensions import assert_never
 
 from alfasim_sdk import MultiInputType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
     FloatExpression,
-    ScalarExpression, ArrayExpression,
+    ScalarExpression,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
-from typing_extensions import assert_never
 
 ATTRIBUTES = Union[
     Scalar,
@@ -109,7 +110,10 @@ def _convert_value_to_valid_alfacase_format(
             for np_array in value
         ]
 
-    if isinstance(value, list) and all(isinstance(item, (Array, ArrayExpression)) for item in value):
+    if isinstance(value, list) and all(
+        isinstance(item, (Array, ArrayExpression)) for item in value
+    ):
+
         def ObtainDictKey(item: Array | ArrayExpression) -> str:
             match item:
                 case Array():

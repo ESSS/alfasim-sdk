@@ -6,9 +6,10 @@ from functools import partial
 from numbers import Number
 from typing import (
     Any,
+    Iterator,
     NewType,
     TypeAlias,
-    TypeGuard, Iterator,
+    TypeGuard,
 )
 
 import attr
@@ -64,13 +65,16 @@ class FloatExpression:
         evaluated_value = eval(self.expr, BUILT_IN_VARS, namespace)
         return evaluated_value
 
+
 ArrayDescriptionValue: TypeAlias = float | str
+
 
 @dataclass(frozen=True)
 class ArrayExpression:
     """
     Represents an array value dynamically evaluated from a mathematical expression.
     """
+
     exprs: list[float | str] = attr.ib(validator=instance_of(ArrayDescriptionValue))
     unit: str = attr.ib(validator=instance_of(str))
     category: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
@@ -81,7 +85,7 @@ class ArrayExpression:
                 case float() | int():
                     return value
                 case str():
-                    return eval(value,BUILT_IN_VARS, name_space)
+                    return eval(value, BUILT_IN_VARS, name_space)
                 case unreachable:
                     assert_never(unreachable)
 
@@ -89,7 +93,9 @@ class ArrayExpression:
         if self.category is None:
             return Array(values=evaluated_values, unit=self.unit)
         else:
-            return Array(category=self.category, values=evaluated_values, unit=self.unit)
+            return Array(
+                category=self.category, values=evaluated_values, unit=self.unit
+            )
 
     def __len__(self) -> int:
         return len(self.exprs)
@@ -100,19 +106,32 @@ class ArrayExpression:
     def __iter__(self) -> Iterator[float | str]:
         return iter(self.exprs)
 
+
 @dataclass(frozen=True)
 class CurveExpression:
     """
     A class used to retain image and domain expressions to be evaluated later to returns a Curve.
     """
+
     domain: ArrayExpression = attr.ib(validator=instance_of(ArrayExpression))
     image: ArrayExpression = attr.ib(validator=instance_of(ArrayExpression))
 
     def eval_expressions(self, name_space: dict[str, float]) -> Curve:
-        domain = self.domain.eval_expressions(name_space=name_space) if isinstance(self.domain, ArrayExpression) else self.domain
-        image = self.domain.eval_expressions(name_space=name_space) if isinstance(self.image, ArrayExpression) else self.image
-        assert all(isinstance(curve_array, Array) for curve_array in [domain, image]), f"Curve only accepts Array for domain and image, obtained: {type(domain)}"
+        domain = (
+            self.domain.eval_expressions(name_space=name_space)
+            if isinstance(self.domain, ArrayExpression)
+            else self.domain
+        )
+        image = (
+            self.domain.eval_expressions(name_space=name_space)
+            if isinstance(self.image, ArrayExpression)
+            else self.image
+        )
+        assert all(isinstance(curve_array, Array) for curve_array in [domain, image]), (
+            f"Curve only accepts Array for domain and image, obtained: {type(domain)}"
+        )
         return Curve(image=image, domain=domain)
+
 
 ScalarDescriptionType: TypeAlias = Scalar | ScalarExpression
 ScalarLike: TypeAlias = tuple[Number, str] | Scalar
@@ -308,7 +327,10 @@ def to_curve(
     )
     raise TypeError(message)
 
-def obtain_curve_from_arrays(image: ArrayDescriptionType, domain: ArrayDescriptionType) -> Curve | CurveExpression:
+
+def obtain_curve_from_arrays(
+    image: ArrayDescriptionType, domain: ArrayDescriptionType
+) -> Curve | CurveExpression:
     """
     Obtain a curve based on type of image and domain.
     """
@@ -318,16 +340,23 @@ def obtain_curve_from_arrays(image: ArrayDescriptionType, domain: ArrayDescripti
     # them are expressions.
     elif isinstance(domain, Array) and isinstance(image, ArrayExpression):
         new_domain_values = domain.GetValues(domain.unit)
-        array_expression_domain = ArrayExpression(exprs=new_domain_values, unit=domain.unit)
+        array_expression_domain = ArrayExpression(
+            exprs=new_domain_values, unit=domain.unit
+        )
         return CurveExpression(domain=array_expression_domain, image=image)
     elif isinstance(image, Array) and isinstance(domain, ArrayExpression):
         new_image_value = image.GetValues(domain.unit)
         array_expression_image = ArrayExpression(exprs=new_image_value, unit=image.unit)
         return CurveExpression(domain=domain, image=array_expression_image)
     else:
-        assert isinstance(image, Array), f"Curve only accepts Array as domain and image, obtained: {type(image)}"
-        assert isinstance(domain, Array), f"Curve only accepts Array as domain and image, obtained: {type(image)}"
+        assert isinstance(image, Array), (
+            f"Curve only accepts Array as domain and image, obtained: {type(image)}"
+        )
+        assert isinstance(domain, Array), (
+            f"Curve only accepts Array as domain and image, obtained: {type(image)}"
+        )
         return Curve(image, domain)
+
 
 def attrib_scalar(
     default: ScalarLike | attrs.NothingType | None = attr.NOTHING,

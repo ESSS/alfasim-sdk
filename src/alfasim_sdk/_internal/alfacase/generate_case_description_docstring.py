@@ -10,8 +10,9 @@ from barril.units import Array
 from barril.units._scalar import Scalar
 
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
     FloatExpression,
-    ScalarExpression, ArrayExpression,
+    ScalarExpression,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import (
     IGNORED_PROPERTIES,
@@ -235,6 +236,7 @@ def _get_float_expression_reference() -> str:
         ref="alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression",
     )
 
+
 def _get_array_expression_reference() -> str:
     return _get_class_with_reference(
         visible_name="ArrayExpression",
@@ -445,14 +447,31 @@ def union_formatted_for_schema(value: Any, is_list_types: bool = False) -> str:
 
     # Handle with the specific case where multiple types are allowed for some
     # properties (e.g., Scalar and ScalarExpression).
-    PARAMETRIC_UNSAFE_TYPES = {Scalar, ScalarExpression, float, FloatExpression, ArrayExpression, Array}
+    PARAMETRIC_UNSAFE_TYPES = {
+        Scalar,
+        ScalarExpression,
+        float,
+        FloatExpression,
+        ArrayExpression,
+        Array,
+    }
     types = [type_ for type_ in value.__args__ if type_ in PARAMETRIC_UNSAFE_TYPES]
     if len(types) > 1 and not is_list_types:
-        if Scalar in value.__args__ or ScalarExpression in value.__args__ or float in value.__args__ or FloatExpression in value.__args__:
+        if (
+            Scalar in value.__args__
+            or ScalarExpression in value.__args__
+            or float in value.__args__
+            or FloatExpression in value.__args__
+        ):
             name = f"\n{BASE_INDENT + INDENT}number | expr"
         else:
             name = f"\n{BASE_INDENT + INDENT}values: [number | expr]"
-        if Scalar in value.__args__ or ScalarExpression in value.__args__ or Array in value.__args__ or ArrayExpression in value.__args__:
+        if (
+            Scalar in value.__args__
+            or ScalarExpression in value.__args__
+            or Array in value.__args__
+            or ArrayExpression in value.__args__
+        ):
             unit = "unit: str"
             name = f"{name}\n{BASE_INDENT + INDENT}{unit}"
         return name

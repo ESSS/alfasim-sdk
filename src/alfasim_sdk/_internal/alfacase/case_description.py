@@ -14,6 +14,7 @@ from alfasim_sdk._internal import constants
 
 from ..validators import non_empty_str
 from .case_description_attributes import (
+    ArrayDescriptionType,
     FloatDescriptionType,
     InvalidReferenceError,
     Numpy1DArray,
@@ -34,7 +35,7 @@ from .case_description_attributes import (
     float_to_scalar,
     list_of_optional_integers,
     list_of_strings,
-    numpy_array_validator, ArrayDescriptionType,
+    numpy_array_validator,
 )
 
 # [[[cog
@@ -671,7 +672,9 @@ class SpeedCurveDescription:
     """
 
     time: ArrayDescriptionType = attrib_array(Array([0], "s"))
-    speed: ArrayDescriptionType = attrib_array(Array([500], "rpm"), category="angle per time")
+    speed: ArrayDescriptionType = attrib_array(
+        Array([500], "rpm"), category="angle per time"
+    )
 
 
 # fmt: off
@@ -910,8 +913,12 @@ class CompressorPressureTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    speed_entries: ArrayDescriptionType = attrib_array(Array([0], "rpm"), category="angle per time")
-    corrected_mass_flow_rate_entries: ArrayDescriptionType = attrib_array(Array([0], "kg/s"))
+    speed_entries: ArrayDescriptionType = attrib_array(
+        Array([0], "rpm"), category="angle per time"
+    )
+    corrected_mass_flow_rate_entries: ArrayDescriptionType = attrib_array(
+        Array([0], "kg/s")
+    )
     pressure_ratio_table: ArrayDescriptionType = attrib_array(Array([1.0], "-"))
     isentropic_efficiency_table: ArrayDescriptionType = attrib_array(Array([1.0], "-"))
 
@@ -987,7 +994,9 @@ class CvTableDescription:
     """
 
     opening: ArrayDescriptionType = attrib_array(default=Array([], "-"))
-    flow_coefficient: ArrayDescriptionType = attrib_array(default=Array([], "(galUS/min)/(psi^0.5)"))
+    flow_coefficient: ArrayDescriptionType = attrib_array(
+        default=Array([], "(galUS/min)/(psi^0.5)")
+    )
 
     def __attrs_post_init__(self):
         if len(self.flow_coefficient) != len(self.opening):
@@ -1500,9 +1509,15 @@ class PipeSegmentsDescription:
 
     """
 
-    start_positions: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
-    diameters: ArrayDescriptionType| None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
-    roughnesses: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
+    start_positions: ArrayDescriptionType | None = attr.ib(
+        validator=optional(instance_of(ArrayDescriptionType)), default=None
+    )
+    diameters: ArrayDescriptionType | None = attr.ib(
+        validator=optional(instance_of(ArrayDescriptionType)), default=None
+    )
+    roughnesses: ArrayDescriptionType | None = attr.ib(
+        validator=optional(instance_of(ArrayDescriptionType)), default=None
+    )
     wall_names: list[str | None] | None = attr.ib(
         default=None, validator=optional(list_of_strings)
     )
@@ -1793,8 +1808,12 @@ class InitialConditionArrays:
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
-    pressure: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
-    volume_fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
+    pressure: ArrayDescriptionType = attr.ib(
+        validator=instance_of(ArrayDescriptionType)
+    )
+    volume_fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(
+        validator=dict_of_array
+    )
     velocity: dict[PhaseName, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
     temperature: dict[str, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
     x_coord_center: ArrayDescriptionType | None = attr.ib(
@@ -1819,14 +1838,24 @@ class LengthAndElevationDescription:
     """
 
     length: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
-    elevation: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
+    elevation: ArrayDescriptionType = attr.ib(
+        validator=instance_of(ArrayDescriptionType)
+    )
 
     def iter_values_and_unit(
         self,
     ) -> Iterator[tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns an iterator containing a pair of values with length and elevation along with their units."""
-        length_values = self.length.GetValues(self.length.unit) if isinstance(self.length, Array) else self.length.exprs
-        elevation_values = self.elevation.GetValues(self.elevation.unit) if isinstance(self.elevation, Array) else self.elevation.exprs
+        length_values = (
+            self.length.GetValues(self.length.unit)
+            if isinstance(self.length, Array)
+            else self.length.exprs
+        )
+        elevation_values = (
+            self.elevation.GetValues(self.elevation.unit)
+            if isinstance(self.elevation, Array)
+            else self.elevation.exprs
+        )
         for length, elevation in zip(length_values, elevation_values):
             yield (length, self.length.unit), (elevation, self.elevation.unit)
 
@@ -1848,8 +1877,12 @@ class XAndYDescription:
         self,
     ) -> Iterator[tuple[ValueAndUnit, ValueAndUnit]]:
         """Returns a pair of values with the x and y value along with their units."""
-        x_values = self.x.GetValues(self.x.unit) if isinstance(self.x, Array) else self.x.exprs
-        y_values = self.y.GetValues(self.y.unit) if isinstance(self.y, Array) else self.y.exprs
+        x_values = (
+            self.x.GetValues(self.x.unit) if isinstance(self.x, Array) else self.x.exprs
+        )
+        y_values = (
+            self.y.GetValues(self.y.unit) if isinstance(self.y, Array) else self.y.exprs
+        )
 
         for x, y in zip(x_values, y_values):
             yield (x, self.x.unit), (y, self.y.unit)
