@@ -5,6 +5,7 @@ from textwrap import dedent
 import attr
 import pytest
 import strictyaml
+from attr.validators import instance_of, optional
 from barril.units import Array, Scalar
 
 from alfasim_sdk import (
@@ -12,6 +13,7 @@ from alfasim_sdk import (
     CompressorEquipmentDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayDescriptionType,
     Numpy1DArray,
     ScalarExpression,
     attrib_enum,
@@ -550,6 +552,12 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
         scalar: Scalar | ScalarExpression = attrib_scalar(
             default=Scalar("dimensionless", 4.2, "-")
         )
+        array: Array | None = attr.ib(
+            validator=optional(instance_of(Array)), default=None
+        )
+        array_expression: ArrayDescriptionType | None = attr.ib(
+            validator=optional(instance_of(ArrayDescriptionType)), default=None
+        )
 
     # Generating schema.
     schema = generate_alfacase_schema(Foo)
@@ -561,6 +569,11 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
                 Map({"value": Float(), "unit": Str()}),
                 Map({"expr": Str(), "unit": Str()}),
             ),
+            Optional("array"): Map({"values": Seq(Float()), "unit": Str()}),
+            Optional("array_expression"): UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            ),
         }
     )
     """)
@@ -568,7 +581,7 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
 
     # Creating a module with the generated schema.
     schema_imports = dedent("""\
-    from strictyaml import Map, Float, Str, Optional\n
+    from strictyaml import Map, Float, Str,Seq, Optional\n
     from alfasim_sdk._internal.alfacase.generate_schema import UnsafeOrValidator\n
     """)
 
@@ -596,10 +609,38 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
     assert content_1 == content_1.data == {"scalar": {"value": 1.0, "unit": "-"}}
 
     # Second with a ScalarExpression.
-    yaml_content_2 = """\
+    content_2 = """\
     scalar:
         expr: "A + B"
         unit: '-'
     """
-    yaml_content_2 = strictyaml.dirty_load(yaml_content_2, schema=module.foo_schema)
-    assert yaml_content_2.data == {"scalar": {"unit": "-", "expr": "A + B"}}
+    content_2 = strictyaml.dirty_load(content_2, schema=module.foo_schema)
+    assert content_2.data == {"scalar": {"unit": "-", "expr": "A + B"}}
+
+    # Third Array and None.
+    yaml_content_3 = """\
+    array:
+        values:
+            - 1
+            - 2
+            - 3
+        unit:
+            '-'
+    """
+    content_3 = strictyaml.dirty_load(yaml_content_3, schema=module.foo_schema)
+    assert content_3.data == {"array": {"values": [1, 2, 3], "unit": "-"}}
+
+    # Fourth ArrayExpression and None.
+    yaml_content_4 = """\
+        array_expression:
+            exprs:
+                - A + B
+                - 2
+                - B + C
+            unit:
+                '-'
+        """
+    content_4 = strictyaml.dirty_load(yaml_content_4, schema=module.foo_schema)
+    assert content_4.data == {
+        "array_expression": {"exprs": ["A + B", "2", "B + C"], "unit": "-"}
+    }

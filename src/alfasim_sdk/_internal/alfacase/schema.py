@@ -92,10 +92,22 @@ composition_description_schema = Map(
 )
 compressor_pressure_table_description_schema = Map(
     {
-        Optional("speed_entries"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("corrected_mass_flow_rate_entries"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("pressure_ratio_table"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("isentropic_efficiency_table"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("speed_entries"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("corrected_mass_flow_rate_entries"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("pressure_ratio_table"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("isentropic_efficiency_table"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 controller_input_signal_properties_description_schema = Map(
@@ -133,8 +145,14 @@ controller_trend_description_schema = Map(
 )
 cv_table_description_schema = Map(
     {
-        Optional("opening"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("flow_coefficient"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("opening"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("flow_coefficient"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 environment_property_description_schema = Map(
@@ -315,8 +333,14 @@ heavy_component_description_schema = Map(
 )
 ipr_curve_description_schema = Map(
     {
-        Optional("pressure_difference"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("flow_rate"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("pressure_difference"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("flow_rate"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 internal_node_properties_description_schema = Map(
@@ -326,8 +350,14 @@ internal_node_properties_description_schema = Map(
 )
 length_and_elevation_description_schema = Map(
     {
-        "length": Map({"values": Seq(Float()), "unit": Str()}),
-        "elevation": Map({"values": Seq(Float()), "unit": Str()}),
+        "length": UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        "elevation": UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 light_component_description_schema = Map(
@@ -406,7 +436,10 @@ linear_ipr_description_schema = Map(
 mass_source_equipment_description_schema = Map(
     {
         Optional("fluid"): Str(),
-        Optional("tracer_mass_fraction"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("tracer_mass_fraction"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
         Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
@@ -495,7 +528,10 @@ mass_source_equipment_description_schema = Map(
 mass_source_node_properties_description_schema = Map(
     {
         Optional("fluid"): Str(),
-        Optional("tracer_mass_fraction"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("tracer_mass_fraction"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
         Optional("temperature_input_type"): Enum(['constant', 'curve']),
         Optional("temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
@@ -751,7 +787,10 @@ pig_equipment_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("launch_times"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("launch_times"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
         Optional("mass_input_type"): Enum(['constant', 'curve']),
         Optional("mass"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
@@ -819,9 +858,18 @@ pig_equipment_description_schema = Map(
 )
 pipe_segments_description_schema = Map(
     {
-        "start_positions": Map({"values": Seq(Float()), "unit": Str()}),
-        "diameters": Map({"values": Seq(Float()), "unit": Str()}),
-        "roughnesses": Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("start_positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("diameters"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("roughnesses"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
         Optional("wall_names"): Seq(Str()),
     }
 )
@@ -835,8 +883,14 @@ plugin_description_schema = Map(
 )
 pressure_container_description_schema = Map(
     {
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("pressures"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("pressures"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 pressure_node_properties_description_schema = Map(
@@ -864,7 +918,10 @@ pressure_node_properties_description_schema = Map(
             }
         ),
         Optional("fluid"): Str(),
-        Optional("tracer_mass_fraction"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("tracer_mass_fraction"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
         Optional("split_type"): Enum(['mass_inflow_split_type_constant_volume_fraction', 'mass_inflow_split_type_constant_mass_fraction', 'mass_inflow_split_type_pvt', 'mass_inflow_split_type_pvt_user_gor_wc', 'mass_inflow_split_type_pvt_user_glr_wc']),
         Optional("mass_fractions_input_type"): Enum(['constant', 'curve']),
         Optional("mass_fractions"): MapPattern(
@@ -1049,8 +1106,14 @@ referenced_pressure_container_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("pressures"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("pressures"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 referenced_temperatures_container_description_schema = Map(
@@ -1059,8 +1122,14 @@ referenced_temperatures_container_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("temperatures"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("temperatures"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 referenced_tracers_mass_fractions_container_description_schema = Map(
@@ -1069,8 +1138,14 @@ referenced_tracers_mass_fractions_container_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("tracers_mass_fractions"): Seq(Map({"values": Seq(Float()), "unit": Str()})),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("tracers_mass_fractions"): Seq(UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            )),
     }
 )
 referenced_velocities_container_description_schema = Map(
@@ -1079,8 +1154,17 @@ referenced_velocities_container_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("velocities"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("velocities"): MapPattern(
+            Str(),
+            UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            ),
+        ),
     }
 )
 referenced_volume_fractions_container_description_schema = Map(
@@ -1089,8 +1173,17 @@ referenced_volume_fractions_container_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("fractions"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("fractions"): MapPattern(
+            Str(),
+            UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            ),
+        ),
     }
 )
 reservoir_inflow_equipment_description_schema = Map(
@@ -1118,7 +1211,10 @@ reservoir_inflow_equipment_description_schema = Map(
             }
         ),
         Optional("fluid"): Str(),
-        Optional("tracer_mass_fraction"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("tracer_mass_fraction"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
         Optional("split_type"): Enum(['mass_inflow_split_type_constant_volume_fraction', 'mass_inflow_split_type_constant_mass_fraction', 'mass_inflow_split_type_pvt', 'mass_inflow_split_type_pvt_user_gor_wc', 'mass_inflow_split_type_pvt_user_glr_wc']),
         Optional("mass_fractions_input_type"): Enum(['constant', 'curve']),
         Optional("mass_fractions"): MapPattern(
@@ -1251,35 +1347,80 @@ separator_trend_description_schema = Map(
 )
 speed_curve_description_schema = Map(
     {
-        Optional("time"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("speed"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("time"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("speed"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 surge_volume_options_description_schema = Map(
     {
         Optional("time_mode"): Enum(['all_simulation', 'user_defined']),
         Optional("drainage_mode"): Enum(['automatic', 'user_defined']),
-        Optional("start_time"): Map({"value": Float(), "unit": Str()}),
-        Optional("end_time"): Map({"value": Float(), "unit": Str()}),
-        Optional("maximum_drainage_rate"): Map({"value": Float(), "unit": Str()}),
+        Optional("start_time"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("end_time"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("maximum_drainage_rate"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
     }
 )
 table_pump_description_schema = Map(
     {
-        Optional("speeds"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("void_fractions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("flow_rates"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("pressure_boosts"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("heads"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("efficiencies"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("powers"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("torques"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("speeds"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("void_fractions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("flow_rates"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("pressure_boosts"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("heads"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("efficiencies"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("powers"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("torques"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 temperatures_container_description_schema = Map(
     {
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("temperatures"): Map({"values": Seq(Float()), "unit": Str()}),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("temperatures"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 time_options_description_schema = Map(
@@ -1329,8 +1470,14 @@ tracer_model_constant_coefficients_description_schema = Map(
 )
 tracers_mass_fractions_container_description_schema = Map(
     {
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("tracers_mass_fractions"): Seq(Map({"values": Seq(Float()), "unit": Str()})),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("tracers_mass_fractions"): Seq(UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            )),
     }
 )
 tubing_description_schema = Map(
@@ -1357,8 +1504,17 @@ tubing_description_schema = Map(
 )
 velocities_container_description_schema = Map(
     {
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("velocities"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("velocities"): MapPattern(
+            Str(),
+            UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            ),
+        ),
     }
 )
 vogel_ipr_description_schema = Map(
@@ -1383,8 +1539,17 @@ vogel_ipr_description_schema = Map(
 )
 volume_fractions_container_description_schema = Map(
     {
-        Optional("positions"): Map({"values": Seq(Float()), "unit": Str()}),
-        Optional("fractions"): MapPattern(Str(), Map({"values": Seq(Float()), "unit": Str()})),
+        Optional("positions"): UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        Optional("fractions"): MapPattern(
+            Str(),
+            UnsafeOrValidator(
+                Map({"values": Seq(Float()), "unit": Str()}),
+                Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+            ),
+        ),
     }
 )
 wall_layer_description_schema = Map(
@@ -1399,8 +1564,14 @@ wall_layer_description_schema = Map(
 )
 x_and_y_description_schema = Map(
     {
-        "x": Map({"values": Seq(Float()), "unit": Str()}),
-        "y": Map({"values": Seq(Float()), "unit": Str()}),
+        "x": UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
+        "y": UnsafeOrValidator(
+            Map({"values": Seq(Float()), "unit": Str()}),
+            Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()}),
+        ),
     }
 )
 casing_description_schema = Map(
@@ -1897,4 +2068,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (sum: Wnelm91Vs1) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)
+# [[[end]]] (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)

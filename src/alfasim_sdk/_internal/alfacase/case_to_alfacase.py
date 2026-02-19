@@ -7,11 +7,13 @@ import attr
 import numpy as np
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
+from typing_extensions import assert_never
 
 from alfasim_sdk import MultiInputType
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
     FloatExpression,
     ScalarExpression,
 )
@@ -22,6 +24,7 @@ ATTRIBUTES = Union[
     ScalarExpression,
     FloatExpression,
     Array,
+    ArrayExpression,
     Curve,
     Enum,
     np.ndarray,
@@ -71,8 +74,10 @@ def _convert_value_to_valid_alfacase_format(
     if isinstance(value, ScalarExpression):
         return {"expr": value.expr, "unit": value.unit}
 
-    if isinstance(value, Array):
-        return {"values": [str(i) for i in value.values], "unit": value.unit}
+    if isinstance(value, (Array, ArrayExpression)):
+        array_values = value.values if isinstance(value, Array) else value.exprs
+        array_key = "values" if isinstance(value, Array) else "exprs"
+        return {array_key: [str(i) for i in array_values], "unit": value.unit}
 
     if isinstance(value, Curve):
         return {
@@ -105,11 +110,23 @@ def _convert_value_to_valid_alfacase_format(
             for np_array in value
         ]
 
-    if isinstance(value, list) and all(isinstance(item, Array) for item in value):
+    if isinstance(value, list) and all(
+        isinstance(item, (Array, ArrayExpression)) for item in value
+    ):
+
+        def ObtainDictKey(item: Array | ArrayExpression) -> str:
+            match item:
+                case Array():
+                    return "values"
+                case ArrayExpression():
+                    return "exprs"
+                case unreachable:
+                    assert_never(unreachable)
+
         return [
-            {"values": [str(i) for i in item.values], "unit": item.unit}
+            {ObtainDictKey(item): [str(i) for i in item], "unit": item.unit}
             for item in value
-            if isinstance(item, Array)
+            if isinstance(item, (Array, ArrayExpression))
         ]
 
     if isinstance(value, list):

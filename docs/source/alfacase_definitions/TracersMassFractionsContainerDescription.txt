@@ -5,15 +5,15 @@
     .. parsed-literal::
 
         class TracersMassFractionsContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
-            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array] = []
+            positions: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(length, [], m)
+            tracers_mass_fractions: \ :class:`List <typing.List>`\[Array | ArrayExpression] = []
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             positions:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             tracers_mass_fractions:  # optional
-                - Array
+                - barril.units._array.Array | alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression

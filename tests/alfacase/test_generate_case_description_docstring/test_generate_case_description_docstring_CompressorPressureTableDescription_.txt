@@ -5,24 +5,24 @@
     .. parsed-literal::
 
         class CompressorPressureTableDescription
-            speed_entries: \ :class:`Array <barril.units.Array>`\  = Array(frequency, [0], rpm)
-            corrected_mass_flow_rate_entries: \ :class:`Array <barril.units.Array>`\  = Array(mass flow rate, [0], kg/s)
-            pressure_ratio_table: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [1.0], -)
-            isentropic_efficiency_table: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [1.0], -)
+            speed_entries: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(frequency, [0], rpm)
+            corrected_mass_flow_rate_entries: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(mass flow rate, [0], kg/s)
+            pressure_ratio_table: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(dimensionless, [1.0], -)
+            isentropic_efficiency_table: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(dimensionless, [1.0], -)
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             speed_entries:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             corrected_mass_flow_rate_entries:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             pressure_ratio_table:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             isentropic_efficiency_table:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str

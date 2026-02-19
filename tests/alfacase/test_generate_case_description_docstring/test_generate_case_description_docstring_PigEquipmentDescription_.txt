@@ -7,7 +7,7 @@
         class PigEquipmentDescription
             diameter: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             position: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
-            launch_times: \ :class:`Array <barril.units.Array>`\  = Array(time, [0.0], s)
+            launch_times: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(time, [0.0], s)
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             mass: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(140.0, 'kg', 'mass')
             mass_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(kg, s)[]
@@ -40,8 +40,8 @@
                 number | expr
                 unit: str
             launch_times:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             mass_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             mass:  # optional
                 number | expr

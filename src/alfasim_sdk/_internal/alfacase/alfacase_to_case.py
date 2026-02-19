@@ -6,6 +6,7 @@ from numbers import Number
 from pathlib import Path
 from typing import (
     Any,
+    Sequence,
     TypeVar,
     Union,
 )
@@ -20,8 +21,12 @@ from typing_extensions import assert_never
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayDescriptionType,
+    ArrayExpression,
+    CurveExpression,
     FloatExpression,
     ScalarExpression,
+    obtain_curve_from_arrays,
 )
 from alfasim_sdk._internal.alfacase.migration import migrate_alfacase_yaml_to_latest
 
@@ -271,16 +276,25 @@ def get_scalar_loader(
     )
 
 
-def load_array(key: str, alfacase_content: DescriptionDocument, category: str) -> Array:
+def load_array(
+    key: str, alfacase_content: DescriptionDocument, category: str
+) -> ArrayDescriptionType:
     """
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
-    return Array(
-        category,
-        alfacase_content[key]["values"].content.data,
-        alfacase_content[key]["unit"].content.data,
-    )
+    unit = alfacase_content[key]["unit"].content.data
+    array_instance: ArrayDescriptionType
+    try:
+        array_values = alfacase_content[key]["values"].content.data
+        array_instance = Array(values=array_values, category=category, unit=unit)
+    except KeyError:
+        array_values = alfacase_content[key]["exprs"].content.data
+        array_instance = ArrayExpression(
+            exprs=array_values, category=category, unit=unit
+        )
+
+    return array_instance
 
 
 @lru_cache(maxsize=None)
@@ -302,13 +316,22 @@ def load_list_of_arrays(
     key: str,
     alfacase_content: DescriptionDocument,
     category: str,
-) -> list[Array]:
+) -> list[Array | ArrayExpression]:
     """
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
+
+    def ObtainArrayValues(data: Any) -> Sequence[str | float]:
+        try:
+            return data["values"]
+        except KeyError:
+            return data["exprs"]
+
     return [
-        Array(category, entry.content.data["values"], entry.content.data["unit"])
+        Array(
+            category, ObtainArrayValues(entry.content.data), entry.content.data["unit"]
+        )
         for entry in alfacase_content[key]
     ]
 
@@ -363,16 +386,15 @@ def load_curve(
     alfacase_content: DescriptionDocument,
     category: str,
     domain_category: str = "time",
-) -> Curve:
+) -> Curve | CurveExpression:
     """
     Create a barril.curve.curve.Curve instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
     curve_in_alfacase = alfacase_content[key]
-    return Curve(
-        load_array("image", curve_in_alfacase, category),
-        load_array("domain", curve_in_alfacase, domain_category),
-    )
+    image = load_array("image", curve_in_alfacase, category)
+    domain = load_array("domain", curve_in_alfacase, domain_category)
+    return obtain_curve_from_arrays(image=image, domain=domain)
 
 
 @lru_cache(maxsize=None)
@@ -399,7 +421,7 @@ def get_curve_loader(
 
 def load_dict_of_curves(
     key: str, alfacase_content: DescriptionDocument, category: str
-) -> dict[str, Curve]:
+) -> dict[str, Curve | CurveExpression]:
     """
     Create a Dict of str to barril.curve.curve.Curve instances from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription

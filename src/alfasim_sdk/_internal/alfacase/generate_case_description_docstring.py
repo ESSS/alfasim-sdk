@@ -1,7 +1,7 @@
 import enum
 from collections.abc import Callable, Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, get_args
 
 import attr
 from attr import Attribute
@@ -10,6 +10,7 @@ from barril.units import Array
 from barril.units._scalar import Scalar
 
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
     FloatExpression,
     ScalarExpression,
 )
@@ -236,6 +237,13 @@ def _get_float_expression_reference() -> str:
     )
 
 
+def _get_array_expression_reference() -> str:
+    return _get_class_with_reference(
+        visible_name="ArrayExpression",
+        ref="alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression",
+    )
+
+
 def _get_array_reference() -> str:
     """Return a string with a cross-reference to Array documentation."""
     return _get_class_with_reference(visible_name="Array", ref="barril.units.Array")
@@ -275,11 +283,25 @@ def list_formatted(value: Any) -> str:
     """
     Return a string with a cross-referencing link for the List class and to the refer type.
     """
-    name = value.__args__[0].__name__
+    arguments_type = get_args(value.__args__[0])
     list_with_ref = _get_list_reference()
-    if is_attrs(value.__args__[0]):
-        name = attrs_formatted(value.__args__[0])
-
+    # Case a list accept only one type like list[str]
+    if len(arguments_type) == 0:
+        if is_attrs(value.__args__[0]):
+            name = attrs_formatted(value.__args__[0])
+        else:
+            name = value.__args__[0].__name__
+    else:
+        # Case a list accepts more than one type like list[Array | ArrayExpressio].
+        assert len(arguments_type) > 1, "Unions must have more than one type."
+        names = []
+        for argument in arguments_type:
+            if is_attrs(argument):
+                name = attrs_formatted(argument)
+            else:
+                name = argument.__name__
+            names.append(name)
+        name = " | ".join(names)
     return f"{list_with_ref}[{name}]"
 
 
@@ -317,6 +339,8 @@ def union_formatted(value: Any) -> str:
         ScalarExpression: _get_scalar_expression_reference,
         float: get_float_reference,
         FloatExpression: _get_float_expression_reference,
+        Array: _get_array_reference,
+        ArrayExpression: _get_array_expression_reference,
     }
     types = [
         PARAMETRIC_UNSAFE_TYPES[type_]()
@@ -381,7 +405,7 @@ def list_formatted_for_schema(value: Any) -> str:
     if is_attrs(argument):
         return f"\n{block_indentation}- {attrs_formatted_for_schema(argument)}"
     elif is_union(argument):
-        return f"\n{block_indentation}- {union_formatted_for_schema(argument)}"
+        return f"\n{block_indentation}- {union_formatted_for_schema(argument, is_list_types=True)}"
     else:
         return f"\n{block_indentation}- {argument.__name__}"
 
@@ -410,20 +434,44 @@ def dict_formatted_for_schema(value: Any) -> str:
     return lines
 
 
-def union_formatted_for_schema(value: Any) -> str:
+def union_formatted_for_schema(value: Any, is_list_types: bool = False) -> str:
     """
     All usages of union on CaseDescription are from the Optional module, so this function will
     return a string showing parameters with a label '# optional' indicating that this field could be
     is not mandatory.
+
+    :param is_list_types:
+        A flag used to indicate if the union type is come from a list and make its value be provided by
+        each type reference.
     """
 
     # Handle with the specific case where multiple types are allowed for some
     # properties (e.g., Scalar and ScalarExpression).
-    PARAMETRIC_UNSAFE_TYPES = {Scalar, ScalarExpression, float, FloatExpression}
+    PARAMETRIC_UNSAFE_TYPES = {
+        Scalar,
+        ScalarExpression,
+        float,
+        FloatExpression,
+        ArrayExpression,
+        Array,
+    }
     types = [type_ for type_ in value.__args__ if type_ in PARAMETRIC_UNSAFE_TYPES]
-    if len(types) > 1:
-        name = f"\n{BASE_INDENT + INDENT}number | expr"
-        if Scalar in value.__args__ or ScalarExpression in value.__args__:
+    if len(types) > 1 and not is_list_types:
+        if (
+            Scalar in value.__args__
+            or ScalarExpression in value.__args__
+            or float in value.__args__
+            or FloatExpression in value.__args__
+        ):
+            name = f"\n{BASE_INDENT + INDENT}number | expr"
+        else:
+            name = f"\n{BASE_INDENT + INDENT}values: [number | expr]"
+        if (
+            Scalar in value.__args__
+            or ScalarExpression in value.__args__
+            or Array in value.__args__
+            or ArrayExpression in value.__args__
+        ):
             unit = "unit: str"
             name = f"{name}\n{BASE_INDENT + INDENT}{unit}"
         return name

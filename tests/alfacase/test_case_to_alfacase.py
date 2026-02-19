@@ -21,7 +21,11 @@ from alfasim_sdk._internal.alfacase.case_description import (
     PhysicsDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
     ScalarExpression,
+)
+from alfasim_sdk._internal.alfacase.case_to_alfacase import (
+    _convert_value_to_valid_alfacase_format,
 )
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
@@ -148,6 +152,51 @@ def test_convert_case_with_multiple_runs(
     )
     alfacase_file = datadir / "my_alfacase.alfacase"
     generate_alfacase_file(case_description, alfacase_file)
+    file_regression.check(
+        alfacase_file.read_text(encoding="UTF-8"), extension=".alfacase"
+    )
+
+
+def test_convert_array_expression() -> None:
+    aray_expression = ArrayExpression(
+        category="dimensionless", unit="%", exprs=[1.0, "A", 3.0, "A + B"]
+    )
+    converted_value = _convert_value_to_valid_alfacase_format(
+        value=aray_expression, enable_flow_style_on_numpy=False
+    )
+    assert converted_value == {"exprs": ["1.0", "A", "3.0", "A + B"], "unit": "%"}
+
+
+def test_simple_case_with_array_expr(
+    datadir: Path, file_regression: FileRegressionFixture
+) -> None:
+    """
+    Teste a simple case where a simple case description has some ArrayExpressions.
+    """
+    simple_case = case_description.CaseDescription(
+        name="Simple Case",
+        pipes=[
+            case_description.PipeDescription(
+                name="pipe",
+                source="mass_source_inlet",
+                target="pressure_outlet",
+                segments=build_simple_segment(),
+                profile=case_description.ProfileDescription(
+                    x_and_y=case_description.XAndYDescription(
+                        x=ArrayExpression(
+                            category="length", exprs=["A", 2.0, "A+B", 4.0], unit="m"
+                        ),
+                        y=ArrayExpression(
+                            category="length", exprs=["A", 2.0, "A+B", 4.0], unit="m"
+                        ),
+                    )
+                ),
+            )
+        ],
+    )
+
+    alfacase_file = datadir / "my_alfacase.alfacase"
+    generate_alfacase_file(simple_case, alfacase_file)
     file_regression.check(
         alfacase_file.read_text(encoding="UTF-8"), extension=".alfacase"
     )

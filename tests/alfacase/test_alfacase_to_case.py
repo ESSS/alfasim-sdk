@@ -11,16 +11,23 @@ from strictyaml import YAML
 from strictyaml.ruamel.comments import CommentedMap
 
 from alfasim_sdk._internal.alfacase import alfacase_to_case, case_description, schema
-from alfasim_sdk._internal.alfacase.alfacase import _convert_description_to_yaml
+from alfasim_sdk._internal.alfacase.alfacase import (
+    _convert_description_to_yaml,
+    generate_alfacase_file,
+)
 from alfasim_sdk._internal.alfacase.alfacase_to_case import (
     DescriptionDocument,
     get_array_loader,
     get_scalar_loader,
+    load_case_description,
     load_mass_source_node_properties_description,
     load_physics_description,
     load_pvt_models_description,
 )
-from alfasim_sdk._internal.alfacase.case_description_attributes import DescriptionError
+from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
+    DescriptionError,
+)
 from alfasim_sdk._internal.alfacase.generate_schema import (
     IGNORED_PROPERTIES,
     convert_to_snake_case,
@@ -35,6 +42,9 @@ from alfasim_sdk._internal.constants import MultiInputType
 from ..common_testing.alfasim_sdk_common_testing import (
     filled_case_descriptions,
     get_acme_tab_file_path,
+)
+from ..common_testing.alfasim_sdk_common_testing.case_builders import (
+    build_simple_segment,
 )
 from ..common_testing.alfasim_sdk_common_testing.filled_case_descriptions import (
     ensure_descriptions_are_equal,
@@ -933,3 +943,44 @@ def test_get_case_description_attribute_loader_dict_explicit_loaders() -> None:
     assert loaders_with_explicit_loaders == loaders
     assert component_1_explicit_loader is fake_explict_loader
     assert component_1_automatic_loader is alfacase_to_case.load_value
+
+
+def test_obtain_case_description_with_exprs(datadir: Path) -> None:
+    # Setup.
+    simple_case = case_description.CaseDescription(
+        name="Simple Case",
+        pipes=[
+            case_description.PipeDescription(
+                name="pipe",
+                source="mass_source_inlet",
+                target="pressure_outlet",
+                segments=build_simple_segment(),
+                profile=case_description.ProfileDescription(
+                    x_and_y=case_description.XAndYDescription(
+                        x=ArrayExpression(
+                            category="length", exprs=["A", 2.0, "A+B", 4.0], unit="m"
+                        ),
+                        y=ArrayExpression(
+                            category="length", exprs=["A", 2.0, "A+B", 4.0], unit="m"
+                        ),
+                    )
+                ),
+            )
+        ],
+    )
+    alfacase_file = datadir / "my_alfacase.alfacase"
+    generate_alfacase_file(simple_case, alfacase_file)
+
+    # Test.
+    document = DescriptionDocument.from_file(alfacase_file)
+    loaded_case_description = load_case_description(document=document)
+    profile = loaded_case_description.pipes[0].profile
+    x_and_y_description = profile.x_and_y
+
+    assert x_and_y_description is not None
+    assert x_and_y_description.x == ArrayExpression(
+        category="length", exprs=["A", "2.0", "A+B", "4.0"], unit="m"
+    )
+    assert x_and_y_description.y == ArrayExpression(
+        category="length", exprs=["A", "2.0", "A+B", "4.0"], unit="m"
+    )
