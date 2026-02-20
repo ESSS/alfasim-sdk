@@ -759,7 +759,7 @@ class TablePumpDescription:
         )
     )
 
-    torques: Array = attrib_array(Array([], 'N.m'))
+    torques: Array = attrib_array(Array(category='moment of force',values=[],unit='N.m'))
 
 
     def __attrs_post_init__(self):
