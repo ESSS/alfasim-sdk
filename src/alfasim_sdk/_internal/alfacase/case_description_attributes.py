@@ -1,15 +1,16 @@
 import textwrap
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
 from types import UnionType
 from typing import (
     Any,
+    Iterator,
+    Mapping,
     NewType,
     TypeAlias,
-    TypeGuard, Iterator, Mapping,
+    TypeGuard,
 )
 
 import attr
@@ -18,8 +19,7 @@ import numpy as np
 from attr.validators import deep_iterable, deep_mapping, in_, instance_of, optional
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
-
-from typing_extensions import assert_never, Self
+from typing_extensions import Self, assert_never
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str
@@ -29,6 +29,7 @@ list_of_strings = deep_iterable(
 list_of_optional_integers = deep_iterable(
     member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
 )
+
 
 def list_of(type_: type | UnionType) -> Callable:
     """
@@ -44,6 +45,7 @@ def list_of(type_: type | UnionType) -> Callable:
     return deep_iterable(
         member_validator=instance_of(type_), iterable_validator=instance_of(list)
     )
+
 
 BUILT_IN_VARS: dict[str, Any] = {"__builtins__": {}}
 
@@ -81,7 +83,9 @@ class FloatExpression:
         evaluated_value = eval(self.expr, BUILT_IN_VARS, namespace)
         return evaluated_value
 
+
 ArrayDescriptionValue: TypeAlias = float | str | int
+
 
 @attrs.define(frozen=True)
 class ArrayExpression:
@@ -89,7 +93,10 @@ class ArrayExpression:
     An array where its values can be either an explicit float value or a string representing
     an expression dynamically evaluated.
     """
-    exprs: Sequence[ArrayDescriptionValue] = attr.ib(validator=list_of(ArrayDescriptionValue))
+
+    exprs: Sequence[ArrayDescriptionValue] = attr.ib(
+        validator=list_of(ArrayDescriptionValue)
+    )
     unit: str = attr.ib(validator=instance_of(str))
     category: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
@@ -99,7 +106,7 @@ class ArrayExpression:
                 case float() | int():
                     return value
                 case str():
-                    return eval(value,BUILT_IN_VARS, namespace)
+                    return eval(value, BUILT_IN_VARS, namespace)
                 case unreachable:
                     assert_never(unreachable)
 
@@ -107,7 +114,9 @@ class ArrayExpression:
         if self.category is None:
             return Array(values=evaluated_values, unit=self.unit)
         else:
-            return Array(category=self.category, values=evaluated_values, unit=self.unit)
+            return Array(
+                category=self.category, values=evaluated_values, unit=self.unit
+            )
 
     def __len__(self) -> int:
         return len(self.exprs)
@@ -123,18 +132,25 @@ class ArrayExpression:
         new_domain_values = array.GetValues(array.unit)
         return cls(exprs=new_domain_values, unit=array.unit)
 
+
 @attrs.define(frozen=True)
 class CurveExpression:
     """
     A Curve where its domain and image are represented as an ArrayExpression.
     """
-    domain: ArrayExpression = attr.ib(validator=instance_of(ArrayExpression), kw_only=True)
-    image: ArrayExpression = attr.ib(validator=instance_of(ArrayExpression), kw_only=True)
+
+    domain: ArrayExpression = attr.ib(
+        validator=instance_of(ArrayExpression), kw_only=True
+    )
+    image: ArrayExpression = attr.ib(
+        validator=instance_of(ArrayExpression), kw_only=True
+    )
 
     def eval_expressions(self, namespace: Mapping[str, float]) -> Curve:
         domain = self.domain.eval_expressions(namespace=namespace)
         image = self.image.eval_expressions(namespace=namespace)
         return Curve(image=image, domain=domain)
+
 
 ScalarDescriptionType: TypeAlias = Scalar | ScalarExpression
 ScalarLike: TypeAlias = tuple[Number, str] | Scalar
@@ -330,7 +346,10 @@ def to_curve(
     )
     raise TypeError(message)
 
-def obtain_curve_from_arrays(*,domain: ArrayDescriptionType, image: ArrayDescriptionType) -> Curve | CurveExpression:
+
+def obtain_curve_from_arrays(
+    *, domain: ArrayDescriptionType, image: ArrayDescriptionType
+) -> Curve | CurveExpression:
     """
     Obtain a curve based on type of image and domain.
     """
@@ -343,7 +362,7 @@ def obtain_curve_from_arrays(*,domain: ArrayDescriptionType, image: ArrayDescrip
         # Image is an ArrayExpression.
         case (Array() as d, ArrayExpression() as i):
             return CurveExpression(domain=ArrayExpression.FromArray(d), image=i)
-        case(ArrayExpression() as d, ArrayExpression() as i):
+        case (ArrayExpression() as d, ArrayExpression() as i):
             return CurveExpression(domain=d, image=i)
         case unreachable:
             # Workaround because mypy does not complain correctly a tuple pattern matching,

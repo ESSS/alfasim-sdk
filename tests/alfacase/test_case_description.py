@@ -23,6 +23,8 @@ from alfasim_sdk import (
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
+    CurveExpression,
     DescriptionError,
     FloatExpression,
     InvalidReferenceError,
@@ -37,9 +39,10 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     generate_multi_input,
     generate_multi_input_dict,
     numpy_array_validator,
+    obtain_curve_from_arrays,
     to_array,
     to_curve,
-    to_scalar, ArrayExpression, obtain_curve_from_arrays, CurveExpression,
+    to_scalar,
 )
 
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
@@ -1663,30 +1666,50 @@ def test_numerical_options_backward_compatibility() -> None:
         "dimensionless", 2.0, "-"
     )
 
+
 def test_convert_alfacase_with_array_expression() -> None:
 
     table_pump_description = TablePumpDescription(
-        speeds=ArrayExpression(category="angle per time", exprs=[1.0, 'A', 2.0, "B", "A+B"], unit="rpm"),
-        void_fractions=ArrayExpression(category="volume fraction", exprs=[1.0, 'A', 2, "B", "A+B"], unit="-"),
-        flow_rates=ArrayExpression(category="flow rate", exprs=[1.0, 'A', 2, "B", "A+B"], unit="m3/s"),
-        pressure_boosts=ArrayExpression(category="pressure", exprs=[1.0, 'A', 2, "B", "A+B"], unit="bar"),
-        heads=ArrayExpression(category="length", exprs=[1.0, 'A', 2, "B", "A+B"], unit="m"),
-        efficiencies=ArrayExpression(category="dimensionless", exprs=[1.0, 'A', 2, "B", "A+B"], unit="%"),
-        powers=ArrayExpression(category="power", exprs=['A', 'B', 'C', "C+A", "C+B"], unit="W"),
+        speeds=ArrayExpression(
+            category="angle per time", exprs=[1.0, "A", 2.0, "B", "A+B"], unit="rpm"
+        ),
+        void_fractions=ArrayExpression(
+            category="volume fraction", exprs=[1.0, "A", 2, "B", "A+B"], unit="-"
+        ),
+        flow_rates=ArrayExpression(
+            category="flow rate", exprs=[1.0, "A", 2, "B", "A+B"], unit="m3/s"
+        ),
+        pressure_boosts=ArrayExpression(
+            category="pressure", exprs=[1.0, "A", 2, "B", "A+B"], unit="bar"
+        ),
+        heads=ArrayExpression(
+            category="length", exprs=[1.0, "A", 2, "B", "A+B"], unit="m"
+        ),
+        efficiencies=ArrayExpression(
+            category="dimensionless", exprs=[1.0, "A", 2, "B", "A+B"], unit="%"
+        ),
+        powers=ArrayExpression(
+            category="power", exprs=["A", "B", "C", "C+A", "C+B"], unit="W"
+        ),
     )
 
     namespace = {"A": 1.0, "B": 2.0, "C": 3.0}
     speed_array = table_pump_description.speeds
     assert isinstance(speed_array, ArrayExpression)
-    assert speed_array.eval_expressions(namespace=namespace) == Array("angle per time", [1.0, 1.0, 2, 2.0, 3.0], "rpm")
+    assert speed_array.eval_expressions(namespace=namespace) == Array(
+        "angle per time", [1.0, 1.0, 2, 2.0, 3.0], "rpm"
+    )
     powers_array = table_pump_description.powers
     assert isinstance(powers_array, ArrayExpression)
-    assert powers_array.eval_expressions(namespace=namespace) == Array("power", [1.0, 2.0, 3.0, 4.0, 5.0], "W")
+    assert powers_array.eval_expressions(namespace=namespace) == Array(
+        "power", [1.0, 2.0, 3.0, 4.0, 5.0], "W"
+    )
+
 
 def test_obtain_curve_from_arrays() -> None:
 
-    my_array_1 = Array([1,2,3,4,5], '-')
-    my_array_2 = ArrayExpression(exprs=['A',2,3,4,'B'], unit='-')
+    my_array_1 = Array([1, 2, 3, 4, 5], "-")
+    my_array_2 = ArrayExpression(exprs=["A", 2, 3, 4, "B"], unit="-")
 
     curve_1 = obtain_curve_from_arrays(domain=my_array_1, image=my_array_1)
     assert isinstance(curve_1, Curve)

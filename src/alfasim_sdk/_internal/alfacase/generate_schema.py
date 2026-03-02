@@ -6,7 +6,7 @@ from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from enum import EnumMeta
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 import attr
 import typing_inspect
@@ -20,14 +20,22 @@ from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
+    CurveExpression,
     FloatExpression,
-    ScalarExpression, ArrayExpression, CurveExpression,
+    ScalarExpression,
 )
 
 INDENTANTION = "    "
 # attrs classes that are used as properties in description classes and don't need
 # to create a schema.
-NOT_DESCRIPTION_TYPES = (ArrayExpression, ScalarExpression, FloatExpression, CurveExpression)
+NOT_DESCRIPTION_TYPES = (
+    ArrayExpression,
+    ScalarExpression,
+    FloatExpression,
+    CurveExpression,
+)
+
 
 def is_enum(value: Any):
     return isinstance(value, EnumMeta)
@@ -79,7 +87,11 @@ def str_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_attrs(type_: type) -> bool:
-    return any(hasattr(i, "__attrs_attrs__") for i in flatten([type_]) if i not in NOT_DESCRIPTION_TYPES)
+    return any(
+        hasattr(i, "__attrs_attrs__")
+        for i in flatten([type_])
+        if i not in NOT_DESCRIPTION_TYPES
+    )
 
 
 def attrs_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -149,7 +161,7 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
         float: float_to_alfacase_schema,
         FloatExpression: str_to_alfacase_schema,
         Array: array_to_alfacase_schema,
-        ArrayExpression: array_expression_to_alfacase_schema
+        ArrayExpression: array_expression_to_alfacase_schema,
     }
     # PvtModel Tables
     if set(type_.__args__) == {str, Path}:
@@ -197,8 +209,10 @@ def scalar_to_alfacase_schema(type_: type, indent: int) -> str:
 def is_scalar_expression(type_: type) -> bool:
     return type_ is ScalarExpression
 
+
 def is_array_expression(type_: type) -> bool:
     return type_ is ArrayExpression
+
 
 def is_float_expression(type_: type) -> bool:
     return type_ is FloatExpression
@@ -215,8 +229,10 @@ def is_array(type_: type) -> bool:
 def array_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"values": Seq(Float()), "unit": Str()})'
 
+
 def array_expression_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()})'
+
 
 def is_curve(type_: type) -> bool:
     return inspect.isclass(type_) and issubclass(type_, Curve)
@@ -284,7 +300,6 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
         else:
             type_ = union_types[0]
 
-
     for predicate_function, handle_function in LIST_OF_IMPLEMENTATIONS:
         if predicate_function(type_):
             return handle_function(type_, indent=indent)
@@ -335,7 +350,7 @@ IGNORED_PROPERTIES = (
     "pt_table_parameters",
     "ph_table_parameters",
     "emulsion_model_plugin_id",
-    "category"
+    "category",
 )
 
 

@@ -6,8 +6,9 @@ from numbers import Number
 from pathlib import Path
 from typing import (
     Any,
+    Sequence,
     TypeVar,
-    Union, Sequence,
+    Union,
 )
 
 import attr
@@ -20,8 +21,12 @@ from typing_extensions import assert_never
 from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayDescriptionType,
+    ArrayExpression,
+    CurveExpression,
     FloatExpression,
-    ScalarExpression, ArrayExpression, ArrayDescriptionType, CurveExpression, obtain_curve_from_arrays
+    ScalarExpression,
+    obtain_curve_from_arrays,
 )
 from alfasim_sdk._internal.alfacase.migration import migrate_alfacase_yaml_to_latest
 
@@ -271,7 +276,9 @@ def get_scalar_loader(
     )
 
 
-def load_array(key: str, alfacase_content: DescriptionDocument, category: str) -> ArrayDescriptionType:
+def load_array(
+    key: str, alfacase_content: DescriptionDocument, category: str
+) -> ArrayDescriptionType:
     """
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
@@ -283,7 +290,9 @@ def load_array(key: str, alfacase_content: DescriptionDocument, category: str) -
         array_instance = Array(values=array_values, category=category, unit=unit)
     except KeyError:
         array_values = alfacase_content[key]["exprs"].content.data
-        array_instance = ArrayExpression(exprs=array_values, category=category, unit=unit)
+        array_instance = ArrayExpression(
+            exprs=array_values, category=category, unit=unit
+        )
 
     return array_instance
 
@@ -312,6 +321,7 @@ def load_list_of_arrays(
     Create a barril.units.Array instance from the given YAML content.
     # TODO: ASIM-3556: All atributes from this module should get the category from the CaseDescription
     """
+
     def ObtainArrayValues(data: Any) -> Sequence[str | float]:
         try:
             return data["values"]
@@ -319,7 +329,9 @@ def load_list_of_arrays(
             return data["exprs"]
 
     return [
-        Array(category, ObtainArrayValues(entry.content.data), entry.content.data["unit"])
+        Array(
+            category, ObtainArrayValues(entry.content.data), entry.content.data["unit"]
+        )
         for entry in alfacase_content[key]
     ]
 

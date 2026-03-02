@@ -13,12 +13,13 @@ from alfasim_sdk import (
     CompressorEquipmentDescription,
 )
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayDescriptionType,
     Numpy1DArray,
     ScalarExpression,
     attrib_enum,
     attrib_instance,
     attrib_instance_list,
-    attrib_scalar, ArrayDescriptionType,
+    attrib_scalar,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import (
     _obtain_referred_type,
@@ -551,8 +552,12 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
         scalar: Scalar | ScalarExpression = attrib_scalar(
             default=Scalar("dimensionless", 4.2, "-")
         )
-        array: Array | None = attr.ib(validator=optional(instance_of(Array)), default=None)
-        array_expression: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
+        array: Array | None = attr.ib(
+            validator=optional(instance_of(Array)), default=None
+        )
+        array_expression: ArrayDescriptionType | None = attr.ib(
+            validator=optional(instance_of(ArrayDescriptionType)), default=None
+        )
 
     # Generating schema.
     schema = generate_alfacase_schema(Foo)
@@ -636,4 +641,6 @@ def test_generate_schema_for_union_complex_schemas(datadir: Path) -> None:
                 '-'
         """
     content_4 = strictyaml.dirty_load(yaml_content_4, schema=module.foo_schema)
-    assert content_4.data == {"array_expression": {"exprs": ['A + B', '2', 'B + C'], "unit": "-"}}
+    assert content_4.data == {
+        "array_expression": {"exprs": ["A + B", "2", "B + C"], "unit": "-"}
+    }

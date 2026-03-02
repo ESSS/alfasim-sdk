@@ -2,19 +2,21 @@ from collections.abc import Iterator, Mapping
 from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
-from typing import Any, TypeAlias, Sequence, cast
-from typing_extensions import assert_never
+from typing import Any, Sequence, TypeAlias
 
 import attr
 import numpy as np
 from attr.validators import in_, instance_of, optional
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
+from typing_extensions import assert_never
 
 from alfasim_sdk._internal import constants
 
 from ..validators import non_empty_str
 from .case_description_attributes import (
+    ArrayDescriptionType,
+    ArrayExpression,
     FloatDescriptionType,
     InvalidReferenceError,
     Numpy1DArray,
@@ -35,7 +37,7 @@ from .case_description_attributes import (
     float_to_scalar,
     list_of_optional_integers,
     list_of_strings,
-    numpy_array_validator, ArrayDescriptionType, ArrayExpression,
+    numpy_array_validator,
 )
 
 # [[[cog
@@ -672,7 +674,9 @@ class SpeedCurveDescription:
     """
 
     time: ArrayDescriptionType = attrib_array(Array([0], "s"))
-    speed: ArrayDescriptionType = attrib_array(Array([500], "rpm"), category="angle per time")
+    speed: ArrayDescriptionType = attrib_array(
+        Array([500], "rpm"), category="angle per time"
+    )
 
 
 # fmt: off
@@ -910,8 +914,12 @@ class CompressorPressureTableDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
     """
 
-    speed_entries: ArrayDescriptionType = attrib_array(Array([0], "rpm"), category="angle per time")
-    corrected_mass_flow_rate_entries: ArrayDescriptionType = attrib_array(Array([0], "kg/s"))
+    speed_entries: ArrayDescriptionType = attrib_array(
+        Array([0], "rpm"), category="angle per time"
+    )
+    corrected_mass_flow_rate_entries: ArrayDescriptionType = attrib_array(
+        Array([0], "kg/s")
+    )
     pressure_ratio_table: ArrayDescriptionType = attrib_array(Array([1.0], "-"))
     isentropic_efficiency_table: ArrayDescriptionType = attrib_array(Array([1.0], "-"))
 
@@ -987,7 +995,9 @@ class CvTableDescription:
     """
 
     opening: ArrayDescriptionType = attrib_array(default=Array([], "-"))
-    flow_coefficient: ArrayDescriptionType = attrib_array(default=Array([], "(galUS/min)/(psi^0.5)"))
+    flow_coefficient: ArrayDescriptionType = attrib_array(
+        default=Array([], "(galUS/min)/(psi^0.5)")
+    )
 
     def __attrs_post_init__(self):
         if len(self.flow_coefficient) != len(self.opening):
@@ -1500,9 +1510,15 @@ class PipeSegmentsDescription:
 
     """
 
-    start_positions: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
-    diameters: ArrayDescriptionType| None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
-    roughnesses: ArrayDescriptionType | None = attr.ib(validator=optional(instance_of(ArrayDescriptionType)), default=None)
+    start_positions: ArrayDescriptionType | None = attr.ib(
+        validator=optional(instance_of(ArrayDescriptionType)), default=None
+    )
+    diameters: ArrayDescriptionType | None = attr.ib(
+        validator=optional(instance_of(ArrayDescriptionType)), default=None
+    )
+    roughnesses: ArrayDescriptionType | None = attr.ib(
+        validator=optional(instance_of(ArrayDescriptionType)), default=None
+    )
     wall_names: list[str | None] | None = attr.ib(
         default=None, validator=optional(list_of_strings)
     )
@@ -1793,8 +1809,12 @@ class InitialConditionArrays:
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     """
 
-    pressure: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
-    volume_fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
+    pressure: ArrayDescriptionType = attr.ib(
+        validator=instance_of(ArrayDescriptionType)
+    )
+    volume_fractions: dict[PhaseName, ArrayDescriptionType] = attr.ib(
+        validator=dict_of_array
+    )
     velocity: dict[PhaseName, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
     temperature: dict[str, ArrayDescriptionType] = attr.ib(validator=dict_of_array)
     x_coord_center: ArrayDescriptionType | None = attr.ib(
@@ -1809,6 +1829,7 @@ ValueAndUnit: TypeAlias = tuple[float, str]
 
 ValueExpressionAndUnit: TypeAlias = tuple[str | float, str]
 
+
 @attr.s(frozen=True, slots=True, auto_attribs=True)
 class LengthAndElevationDescription:
     """
@@ -1820,7 +1841,9 @@ class LengthAndElevationDescription:
     """
 
     length: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
-    elevation: ArrayDescriptionType = attr.ib(validator=instance_of(ArrayDescriptionType))
+    elevation: ArrayDescriptionType = attr.ib(
+        validator=instance_of(ArrayDescriptionType)
+    )
 
     def iter_values_and_unit(
         self,
@@ -1855,7 +1878,10 @@ class XAndYDescription:
         for x, y in zip(x_values, y_values):
             yield (x, self.x.unit), (y, self.y.unit)
 
-def _GetArrayDescriptionTypeValues(array: ArrayDescriptionType) -> Sequence[float | str]:
+
+def _GetArrayDescriptionTypeValues(
+    array: ArrayDescriptionType,
+) -> Sequence[float | str]:
     match array:
         case Array():
             return array.GetValues(array.unit)
@@ -1863,6 +1889,7 @@ def _GetArrayDescriptionTypeValues(array: ArrayDescriptionType) -> Sequence[floa
             return array.exprs
         case unreachable:
             assert_never(unreachable)
+
 
 @attr.s(auto_attribs=True)
 class ProfileDescription:
