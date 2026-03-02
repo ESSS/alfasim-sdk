@@ -12,7 +12,7 @@
             temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(288.6, 'K', 'temperature')
             temperature_curve: \ :class:`Curve <barril.curve.curve.Curve>`\  = Curve(K, s)[]
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
-            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\  = Array(dimensionless, [], -)
+            tracer_mass_fraction: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(dimensionless, [], -)
             split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\  = MassInflowSplitType.ConstantVolumeFraction
             mass_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  = MultiInputType.Constant
             mass_fractions: \ :class:`Dict <typing.Dict>`\[str, barril.units._scalar.Scalar | alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression] = {}
@@ -62,8 +62,8 @@
                     unit: string
             fluid: string  # optional
             tracer_mass_fraction:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             split_type: \ :class:`MassInflowSplitType <alfasim_sdk._internal.constants.MassInflowSplitType>`\  # optional
             mass_fractions_input_type: \ :class:`MultiInputType <alfasim_sdk._internal.constants.MultiInputType>`\  # optional
             mass_fractions:  # optional

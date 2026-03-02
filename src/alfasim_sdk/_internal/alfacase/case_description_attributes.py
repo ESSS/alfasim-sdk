@@ -1,11 +1,13 @@
 import textwrap
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
 from enum import EnumMeta
 from functools import partial
 from numbers import Number
+from types import UnionType
 from typing import (
     Any,
+    Iterator,
+    Mapping,
     NewType,
     TypeAlias,
     TypeGuard,
@@ -17,7 +19,7 @@ import numpy as np
 from attr.validators import deep_iterable, deep_mapping, in_, instance_of, optional
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
-from typing_extensions import assert_never
+from typing_extensions import Self, assert_never
 
 Numpy1DArray = NewType("Numpy1DArray", np.ndarray)
 PhaseName = str
@@ -28,18 +30,35 @@ list_of_optional_integers = deep_iterable(
     member_validator=optional(instance_of(int)), iterable_validator=instance_of(list)
 )
 
+
+def list_of(type_: type | UnionType) -> Callable:
+    """
+    An attr validator that performs validation of list values.
+
+    :param type_: The type to check for, can be a type or tuple of types
+
+    :raises TypeError:
+        raises a `TypeError` if the initializer is called with a wrong type for this particular attribute
+
+    :return: An attr validator that performs validation of values of a list.
+    """
+    return deep_iterable(
+        member_validator=instance_of(type_), iterable_validator=instance_of(list)
+    )
+
+
 BUILT_IN_VARS: dict[str, Any] = {"__builtins__": {}}
 
 
-@dataclass(frozen=True)
+@attrs.define(frozen=True)
 class ScalarExpression:
     """
     Represents a scalar value dynamically evaluated from a mathematical expression.
     """
 
-    expr: str
-    unit: str
-    category: str | None = None
+    expr: str = attr.ib(validator=instance_of(str))
+    unit: str = attr.ib(validator=instance_of(str))
+    category: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
     def eval_expression(self, namespace: dict[str, float]) -> Scalar:
         evaluated_value = eval(self.expr, BUILT_IN_VARS, namespace)
@@ -52,7 +71,7 @@ class ScalarExpression:
         return self.category
 
 
-@dataclass(frozen=True)
+@attrs.define(frozen=True)
 class FloatExpression:
     """
     Represents a float value dynamically evaluated from a mathematical expression.
@@ -65,12 +84,81 @@ class FloatExpression:
         return evaluated_value
 
 
+ArrayDescriptionValue: TypeAlias = float | str | int
+
+
+@attrs.define(frozen=True)
+class ArrayExpression:
+    """
+    An array where its values can be either an explicit float value or a string representing
+    an expression dynamically evaluated.
+    """
+
+    exprs: Sequence[ArrayDescriptionValue] = attr.ib(
+        validator=list_of(ArrayDescriptionValue)
+    )
+    unit: str = attr.ib(validator=instance_of(str))
+    category: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+
+    def eval_expressions(self, namespace: Mapping[str, float]) -> Array:
+        def eval_value(value: str | float) -> float:
+            match value:
+                case float() | int():
+                    return value
+                case str():
+                    return eval(value, BUILT_IN_VARS, namespace)
+                case unreachable:
+                    assert_never(unreachable)
+
+        evaluated_values = [eval_value(value) for value in self.exprs]
+        if self.category is None:
+            return Array(values=evaluated_values, unit=self.unit)
+        else:
+            return Array(
+                category=self.category, values=evaluated_values, unit=self.unit
+            )
+
+    def __len__(self) -> int:
+        return len(self.exprs)
+
+    def __getitem__(self, index: int) -> float | str:
+        return self.exprs[index]
+
+    def __iter__(self) -> Iterator[float | str]:
+        return iter(self.exprs)
+
+    @classmethod
+    def FromArray(cls, array: Array) -> Self:
+        new_domain_values = array.GetValues(array.unit)
+        return cls(exprs=new_domain_values, unit=array.unit)
+
+
+@attrs.define(frozen=True)
+class CurveExpression:
+    """
+    A Curve where its domain and image are represented as an ArrayExpression.
+    """
+
+    domain: ArrayExpression = attr.ib(
+        validator=instance_of(ArrayExpression), kw_only=True
+    )
+    image: ArrayExpression = attr.ib(
+        validator=instance_of(ArrayExpression), kw_only=True
+    )
+
+    def eval_expressions(self, namespace: Mapping[str, float]) -> Curve:
+        domain = self.domain.eval_expressions(namespace=namespace)
+        image = self.image.eval_expressions(namespace=namespace)
+        return Curve(image=image, domain=domain)
+
+
 ScalarDescriptionType: TypeAlias = Scalar | ScalarExpression
 ScalarLike: TypeAlias = tuple[Number, str] | Scalar
 ScalarExpressionLike: TypeAlias = tuple[str, str] | ScalarExpression
 ArrayLike: TypeAlias = tuple[Sequence[Number], str] | Array
-CurveLike: TypeAlias = tuple[ArrayLike, ArrayLike] | Curve
+CurveLike: TypeAlias = tuple[ArrayLike, ArrayLike] | Curve | CurveExpression
 FloatDescriptionType: TypeAlias = float | FloatExpression
+ArrayDescriptionType: TypeAlias = Array | ArrayExpression
 
 
 def generate_multi_input(
@@ -188,7 +276,7 @@ def to_scalar(
 
 def to_array(
     value: Any, is_optional: bool = False, *, error_context: str | None = None
-) -> Array | None:
+) -> ArrayDescriptionType | None:
     """
     Converter to be used with attr.ib, accepts tuples and Array as input.
     If `is_optional` is defined, the converter will also accept None, same as `to_scalar`.
@@ -207,7 +295,7 @@ def to_array(
         return value
     if is_two_element_tuple(value):
         return Array(*value)
-    elif isinstance(value, Array):
+    elif isinstance(value, (Array, ArrayExpression)):
         return value
 
     message = prepare_error_message(
@@ -219,7 +307,7 @@ def to_array(
 
 def to_curve(
     value: Any, is_optional: bool = False, *, error_context: str | None = None
-) -> Curve | None:
+) -> Curve | CurveExpression | None:
     """
     Converter to be used with attr.ib, accepts tuples and Scalar as input, is used
     by `attrib_curve`.
@@ -248,7 +336,7 @@ def to_curve(
         assert image is not None and domain is not None, (
             "Cannot fail, to_array receiving a float"
         )
-        return Curve(image, domain)
+        return obtain_curve_from_arrays(image=image, domain=domain)
     elif isinstance(value, Curve):
         return value
 
@@ -257,6 +345,30 @@ def to_curve(
         error_context,
     )
     raise TypeError(message)
+
+
+def obtain_curve_from_arrays(
+    *, domain: ArrayDescriptionType, image: ArrayDescriptionType
+) -> Curve | CurveExpression:
+    """
+    Obtain a curve based on type of image and domain.
+    """
+    match (domain, image):
+        case (Array() as d, Array() as i):
+            return Curve(domain=d, image=i)
+        # Domain is an ArrayExpression.
+        case (ArrayExpression() as d, Array() as i):
+            return CurveExpression(domain=d, image=ArrayExpression.FromArray(i))
+        # Image is an ArrayExpression.
+        case (Array() as d, ArrayExpression() as i):
+            return CurveExpression(domain=ArrayExpression.FromArray(d), image=i)
+        case (ArrayExpression() as d, ArrayExpression() as i):
+            return CurveExpression(domain=d, image=i)
+        case unreachable:
+            # Workaround because mypy does not complain correctly a tuple pattern matching,
+            # making assert_never does not understand the exhaustiveness check.
+            # Discussion link: https://github.com/python/mypy/issues/16722#issuecomment-1873455820
+            raise AssertionError(f"Expected code to be unreachable, got {unreachable}")
 
 
 def attrib_scalar(
@@ -514,22 +626,6 @@ dict_with_a_list_of_numbers = deep_mapping(
     value_validator=list_of_numbers,
     mapping_validator=instance_of(dict),
 )
-
-
-def list_of(type_: type) -> Callable:
-    """
-    An attr validator that performs validation of list values.
-
-    :param type_: The type to check for, can be a type or tuple of types
-
-    :raises TypeError:
-        raises a `TypeError` if the initializer is called with a wrong type for this particular attribute
-
-    :return: An attr validator that performs validation of values of a list.
-    """
-    return deep_iterable(
-        member_validator=instance_of(type_), iterable_validator=instance_of(list)
-    )
 
 
 def numpy_array_validator(dimension: int, is_list: bool = False) -> Callable:

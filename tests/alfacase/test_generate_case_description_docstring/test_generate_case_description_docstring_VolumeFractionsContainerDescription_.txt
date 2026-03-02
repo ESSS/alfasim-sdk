@@ -5,17 +5,15 @@
     .. parsed-literal::
 
         class VolumeFractionsContainerDescription
-            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [0.0], m)
-            fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\] = {'gas': Array(dimensionless, [0.1], -), 'oil': Array(dimensionless, [0.9], -)}
+            positions: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(length, [0.0], m)
+            fractions: \ :class:`Dict <typing.Dict>`\[str, barril.units._array.Array | alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression] = {'gas': Array(dimensionless, [0.1], -), 'oil': Array(dimensionless, [0.9], -)}
 
 .. tab:: Schema
 
     .. parsed-literal::
 
             positions:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             fractions:  # optional
-                string: 
-                    values: [number]
-                    unit: string
+                string: Array | ArrayExpression

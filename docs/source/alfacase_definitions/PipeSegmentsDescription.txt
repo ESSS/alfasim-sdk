@@ -5,23 +5,23 @@
     .. parsed-literal::
 
         class PipeSegmentsDescription
-            start_positions: \ :class:`Array <barril.units.Array>`
-            diameters: \ :class:`Array <barril.units.Array>`
-            roughnesses: \ :class:`Array <barril.units.Array>`
+            start_positions: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = None
+            diameters: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = None
+            roughnesses: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = None
             wall_names: \ :class:`Optional <typing.Optional>`\[\ :class:`List <typing.List>`\[\ :class:`Optional <typing.Optional>`\[str]]] = None
 
 .. tab:: Schema
 
     .. parsed-literal::
 
-            start_positions: 
-                values: [number]
-                unit: string
-            diameters: 
-                values: [number]
-                unit: string
-            roughnesses: 
-                values: [number]
-                unit: string
+            start_positions:  # optional
+                values: [number | expr]
+                unit: str
+            diameters:  # optional
+                values: [number | expr]
+                unit: str
+            roughnesses:  # optional
+                values: [number | expr]
+                unit: str
             wall_names:  # optional    
                 - string

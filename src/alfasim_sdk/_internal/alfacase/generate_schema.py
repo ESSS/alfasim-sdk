@@ -20,11 +20,21 @@ from typing_inspect import is_optional_type
 
 from alfasim_sdk import CaseDescription
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
+    ArrayExpression,
+    CurveExpression,
     FloatExpression,
     ScalarExpression,
 )
 
 INDENTANTION = "    "
+# attrs classes that are used as properties in description classes and don't need
+# to create a schema.
+NOT_DESCRIPTION_TYPES = (
+    ArrayExpression,
+    ScalarExpression,
+    FloatExpression,
+    CurveExpression,
+)
 
 
 def is_enum(value: Any):
@@ -77,7 +87,11 @@ def str_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_attrs(type_: type) -> bool:
-    return any(hasattr(i, "__attrs_attrs__") for i in flatten([type_]))
+    return any(
+        hasattr(i, "__attrs_attrs__")
+        for i in flatten([type_])
+        if i not in NOT_DESCRIPTION_TYPES
+    )
 
 
 def attrs_to_alfacase_schema(type_: type, indent: int) -> str:
@@ -146,6 +160,8 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
         ScalarExpression: scalar_expression_to_alfacase_schema,
         float: float_to_alfacase_schema,
         FloatExpression: str_to_alfacase_schema,
+        Array: array_to_alfacase_schema,
+        ArrayExpression: array_expression_to_alfacase_schema,
     }
     # PvtModel Tables
     if set(type_.__args__) == {str, Path}:
@@ -194,6 +210,10 @@ def is_scalar_expression(type_: type) -> bool:
     return type_ is ScalarExpression
 
 
+def is_array_expression(type_: type) -> bool:
+    return type_ is ArrayExpression
+
+
 def is_float_expression(type_: type) -> bool:
     return type_ is FloatExpression
 
@@ -208,6 +228,10 @@ def is_array(type_: type) -> bool:
 
 def array_to_alfacase_schema(type_: type, indent: int) -> str:
     return 'Map({"values": Seq(Float()), "unit": Str()})'
+
+
+def array_expression_to_alfacase_schema(type_: type, indent: int) -> str:
+    return 'Map({"exprs": Seq(UnsafeOrValidator(Str(), Float())), "unit": Str()})'
 
 
 def is_curve(type_: type) -> bool:
@@ -255,6 +279,7 @@ LIST_OF_IMPLEMENTATIONS: list[tuple[Callable, Callable]] = [
     (is_scalar, scalar_to_alfacase_schema),
     (is_scalar_expression, scalar_expression_to_alfacase_schema),
     (is_array, array_to_alfacase_schema),
+    (is_array_expression, array_expression_to_alfacase_schema),
     (is_curve, curve_to_alfacase_schema),
     (is_int, int_to_alfacase_schema),
     (is_path, path_to_alfacase_schema),
@@ -267,8 +292,13 @@ def _get_attr_value(type_: type, indent: int, key: str = "<Unknown>") -> str:
     If the type parameter is a "Optional" type, only the args are used (without the NoneType)
     """
     if is_optional_type(type_):
-        referred_type = typing_inspect.get_args(type_, evaluate=True)[0]
-        type_ = referred_type
+        referred_types = typing_inspect.get_args(type_, evaluate=True)
+        union_types = [type_ for type_ in referred_types if type_ is not type(None)]
+        # Ignore the NoneType in Union.
+        if len(union_types) > 1:
+            type_ = union_types[0] | union_types[1]
+        else:
+            type_ = union_types[0]
 
     for predicate_function, handle_function in LIST_OF_IMPLEMENTATIONS:
         if predicate_function(type_):
@@ -312,12 +342,15 @@ def _get_attr_name(key: str, value: attr.Attribute) -> str:
 
 
 # plugins:
-#   For now, Plugins inputs (GUI) will not be able to be customizable by YAML
+#   For now, Plugins inputs (GUI) will not be able to be customizable by YAML.
+# NOT_DESCRIPTION_TYPES:
+#   Prevent that the category value of a case description be placed in the alfacase file.
 
 IGNORED_PROPERTIES = (
     "pt_table_parameters",
     "ph_table_parameters",
     "emulsion_model_plugin_id",
+    "category",
 )
 
 

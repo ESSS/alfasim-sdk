@@ -6,8 +6,8 @@
 
         class ReferencedVolumeFractionsContainerDescription
             reference_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
-            positions: \ :class:`Array <barril.units.Array>`\  = Array(length, [], m)
-            fractions: \ :class:`Dict <typing.Dict>`\[str, \ :class:`Array <barril.units.Array>`\] = {}
+            positions: \ :class:`Array <barril.units.Array>`\ | \ :class:`ArrayExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression>`\  = Array(length, [], m)
+            fractions: \ :class:`Dict <typing.Dict>`\[str, barril.units._array.Array | alfasim_sdk._internal.alfacase.case_description_attributes.ArrayExpression] = {}
 
 .. tab:: Schema
 
@@ -17,9 +17,7 @@
                 number | expr
                 unit: str
             positions:  # optional
-                values: [number]
-                unit: string
+                values: [number | expr]
+                unit: str
             fractions:  # optional
-                string: 
-                    values: [number]
-                    unit: string
+                string: Array | ArrayExpression
