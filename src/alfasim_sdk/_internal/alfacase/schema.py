@@ -689,6 +689,7 @@ numerical_options_description_schema = Map(
             Str(),
         ),
         Optional("always_repeat_timestep"): Bool(),
+        Optional("damp_slug_flow"): Bool(),
         Optional("enable_fast_compositional"): Bool(),
     }
 )
@@ -2068,4 +2069,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)
+# [[[end]]] (sum: 7WvzpdbrZh) (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)

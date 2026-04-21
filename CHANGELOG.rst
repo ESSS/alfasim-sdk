@@ -6,6 +6,7 @@ CHANGELOG
 ==================
 
 * Allow users to configure parametric runs in alfacase file.
+* Added ``damp_slug_flow`` attribute to ``NumericalOptionsDescription``.
 
 1.5.1 (2026-01-08)
 ==================

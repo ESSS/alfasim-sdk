@@ -3966,6 +3966,7 @@ class NumericalOptionsDescription:
     caching_rtol: FloatDescriptionType = attr.ib(default=1e-2)
     caching_atol: FloatDescriptionType = attr.ib(default=1e-4)
     always_repeat_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
+    damp_slug_flow: bool = attr.ib(default=False, validator=instance_of(bool))
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
 
 
