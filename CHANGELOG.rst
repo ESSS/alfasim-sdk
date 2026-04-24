@@ -6,7 +6,7 @@ CHANGELOG
 ==================
 
 * Allow users to configure parametric runs in alfacase file.
-* Added ``damp_slug_flow`` attribute to ``NumericalOptionsDescription``.
+* Added ``damp_slug_flow`` attribute to ``NumericalOptionsDescription``. It controls whether the flow pattern transition involving slug flow should be dampened in a transient simulation. If it's ``True``, the flow pattern of the previous timestep will be copied to the current timestep in case the difference between the gas and liquid superficial velocities is close to that of the previous timestep.
 
 1.5.1 (2026-01-08)
 ==================
