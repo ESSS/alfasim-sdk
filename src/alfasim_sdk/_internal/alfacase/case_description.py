@@ -3930,6 +3930,12 @@ class TimeOptionsDescription:
 @attr.s(auto_attribs=True)
 class NumericalOptionsDescription:
     """
+    :ivar damp_slug_flow:
+        Control whether the flow pattern transition involving slug flow should be dampened in a
+        transient simulation. If it's ``True``, the flow pattern of the previous timestep will be
+        copied to the current timestep in case the difference between the gas and liquid superficial
+        velocities is close to that of the previous timestep.
+
     .. include:: /alfacase_definitions/NumericalOptionsDescription.txt
     """
 
