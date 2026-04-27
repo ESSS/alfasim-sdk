@@ -697,6 +697,7 @@ numerical_options_description_schema = Map(
             Str(),
         ),
         Optional("always_repeat_timestep"): Bool(),
+        Optional("damp_slug_flow"): Bool(),
         Optional("enable_fast_compositional"): Bool(),
     }
 )

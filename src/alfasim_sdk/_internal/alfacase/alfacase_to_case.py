@@ -2017,6 +2017,7 @@ def load_numerical_options_description(
         "caching_rtol": load_float,
         "caching_atol": load_float,
         "always_repeat_timestep": load_value,
+        "damp_slug_flow": load_value,
         "enable_fast_compositional": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)

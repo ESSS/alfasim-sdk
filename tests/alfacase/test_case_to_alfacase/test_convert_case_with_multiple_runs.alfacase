@@ -88,6 +88,7 @@ numerical_options:
   caching_rtol: 0.01
   caching_atol: 0.0001
   always_repeat_timestep: False
+  damp_slug_flow: False
   enable_fast_compositional: True
 plugins: []
 outputs:
