@@ -37,11 +37,12 @@ def fake_alfasim_(
         textwrap.dedent(
             f"""\
             import os
+            import shutil
             import sys
-            from distutils.dir_util import copy_tree
-            copy_tree(
+            shutil.copytree(
                 {str(results.data_folder)!r},
                 {str(results_folder)!r},
+                dirs_exist_ok=True,
             )
             return_code = os.environ.get("FAKE_ALFASIM_RUNNER_RETURN_CODE", "0")
             sys.exit(int(return_code))

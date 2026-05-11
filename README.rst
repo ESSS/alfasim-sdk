@@ -31,10 +31,6 @@ ALFAsim API/SDK
 * Documentation: https://alfasim-sdk.readthedocs.io.
 
 
-Features
---------
-
-* TODO
 
 Credits
 -------
