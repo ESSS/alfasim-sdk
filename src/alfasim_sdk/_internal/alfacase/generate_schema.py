@@ -14,7 +14,6 @@ from barril.curve.curve import Curve
 from barril.units import Array, Scalar
 from strictyaml import YAML, Validator
 from strictyaml.exceptions import YAMLValidationError
-from strictyaml.utils import flatten
 from strictyaml.yamllocation import YAMLChunk
 from typing_inspect import is_optional_type
 
@@ -87,10 +86,10 @@ def str_to_alfacase_schema(type_: type, indent: int) -> str:
 
 
 def is_attrs(type_: type) -> bool:
+    types_to_check: list = type_ if isinstance(type_, list) else [type_]
     return any(
-        hasattr(i, "__attrs_attrs__")
-        for i in flatten([type_])
-        if i not in NOT_DESCRIPTION_TYPES
+        hasattr(t, "__attrs_attrs__") and t not in NOT_DESCRIPTION_TYPES
+        for t in types_to_check
     )
 
 
@@ -448,12 +447,16 @@ def _get_classes(class_: type) -> set[type]:
         """Helper function to retrieve the attr type being referred by the type hint"""
         return type_ if is_attrs(type_) else _obtain_referred_type(type_)
 
-    classes = []
+    classes: list[type] = []
     for key, value in attr.fields_dict(class_).items():
         if needs_schema(value.type) and key not in IGNORED_PROPERTIES:
-            classes.append(get_attr_class_type(value.type))
+            result = get_attr_class_type(value.type)
+            if isinstance(result, list):
+                classes.extend(result)
+            else:
+                classes.append(result)
 
-    return set(flatten(classes))
+    return set(classes)
 
 
 def get_all_classes_that_needs_schema(class_: type) -> list[type]:
