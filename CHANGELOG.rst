@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-1.6.0 (UNRELEASED)
+1.6.0 (2026-05-18)
 ==================
 
 * Allow users to configure parametric runs in alfacase file.
