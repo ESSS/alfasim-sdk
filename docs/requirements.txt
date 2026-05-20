@@ -1,7 +1,6 @@
 sphinx
 breathe
 sphinx-click
-sphinx-invoke
 pydata-sphinx-theme
 sphinx-inline-tabs
 sphinx-copybutton

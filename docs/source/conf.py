@@ -50,7 +50,6 @@ extensions = [
     "breathe",
     "sphinx.ext.autodoc",
     "sphinx_click.ext",
-    "sphinxinvoke.ext",
     "sphinx.ext.graphviz",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
