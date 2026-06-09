@@ -18,13 +18,13 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.12"]
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-2022]
 
     steps:
     - uses: actions/checkout@v2
       with:
         lfs: true
-    - uses: ilammy/msvc-dev-cmd@v1.13.0
+    - uses: ilammy/msvc-dev-cmd@v1
       with:
         vsversion: "2022"
     - name: Set up Python ${{ matrix.python-version }}
