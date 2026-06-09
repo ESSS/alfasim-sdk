@@ -1639,7 +1639,7 @@ controller_node_properties_description_schema = Map(
 )
 environment_description_schema = Map(
     {
-        Optional("thermal_model"): Enum(['adiabatic_walls', 'steady_state_heat_transfer', 'transient_heat_transfer']),
+        Optional("thermal_model"): Enum(['adiabatic_walls', 'steady_state_heat_transfer', 'transient_heat_transfer', 'transient_heat_transfer_bidimensional']),
         Optional("position_input_mode"): Enum(['position_by_tvd', 'position_by_md']),
         Optional("reference_y_coordinate"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
@@ -2069,4 +2069,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (sum: 7WvzpdbrZh) (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)
+# [[[end]]] (sum: 7RHTMcNRr1) (sum: 7WvzpdbrZh) (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)

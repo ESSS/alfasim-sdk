@@ -221,6 +221,7 @@ class PipeThermalModelType(Enum):
     AdiabaticWalls = "adiabatic_walls"
     SteadyState = "steady_state_heat_transfer"
     Transient = "transient_heat_transfer"
+    TransientBidimensional = "transient_heat_transfer_bidimensional"
 
 
 class PipeThermalPositionInput(Enum):
