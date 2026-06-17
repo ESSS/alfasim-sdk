@@ -5,6 +5,8 @@ CHANGELOG
 1.7.0 (UNRELEASED)
 ==================
 
+* Add TransientBidimensional option to PipeThermalModelType which represents when a 2D mesh will be used to compute wall heat transfer.
+
 1.6.0 (2026-05-18)
 ==================
 
