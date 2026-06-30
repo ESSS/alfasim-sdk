@@ -11,3 +11,4 @@ e.g., SSRL-5097, SSRL-5114
 ## Checklist
 
 - [ ] Update CHANGELOG.md
+- [ ] Bump the version to `.dev` if there are user facing changes, for example `v1.6.0` -> `v1.7.0.dev`.
