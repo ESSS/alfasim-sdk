@@ -121,6 +121,12 @@ def register_units() -> None:
         "velocity", quantity_type="velocity", valid_units=velocity_units, override=True
     )
 
+    add_category_if_not_defined(
+        category="growth rate",
+        quantity_type="velocity",
+        valid_units=db.GetValidUnits("velocity"),
+    )
+
     # we don't construct volume_per_volume_units using 'volume_units' because the number of units available by
     # the dimensionless quantity type is really small
     volume_per_volume_units = ["m3/m3", "L/m3", "ft3/ft3", "volppm"]
