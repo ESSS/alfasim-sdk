@@ -230,6 +230,7 @@ def package_only(ctx, package_name="", dst=""):
     hook_specs_file_path = _get_hook_specs_file_path()
     hm = HookManGenerator(hook_spec_file_path=hook_specs_file_path)
     from alfasim_sdk._internal.alfasim_sdk_utils import (
+        get_current_python_version_tag,
         get_current_version,
         get_required_sdk_version,
     )
@@ -237,7 +238,9 @@ def package_only(ctx, package_name="", dst=""):
     plugin_id = str(plugin_dir.name)
     if not package_name:
         package_name = plugin_id
-    package_name_suffix = f"sdk-{get_current_version()}"
+    package_name_suffix = (
+        f"sdk-{get_current_version()}-{get_current_python_version_tag()}"
+    )
     requirements = {
         "alfasim_sdk": get_required_sdk_version(),
         "python": get_required_python_version(),

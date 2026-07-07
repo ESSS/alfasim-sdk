@@ -8,7 +8,10 @@ from zipfile import ZipFile
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
-from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
+from alfasim_sdk._internal.alfasim_sdk_utils import (
+    get_current_python_version_tag,
+    get_current_version,
+)
 
 plugin_id = "acme"
 invoke_cmd = shutil.which("invoke")
@@ -108,11 +111,17 @@ def test_package_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
         ],
     )
 
-    from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
+    from alfasim_sdk._internal.alfasim_sdk_utils import (
+        get_current_python_version_tag,
+        get_current_version,
+    )
 
     os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
-    package_filename = Path(f"acme-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin")
+    curr_python_tag = get_current_python_version_tag()
+    package_filename = Path(
+        f"acme-1.0.0-sdk-{curr_sdk_version}-{curr_python_tag}-{os_type}64.hmplugin"
+    )
     assert package_filename.is_file()
 
 
@@ -130,11 +139,17 @@ def test_package_task_empty_package_name(
         ],
     )
 
-    from alfasim_sdk._internal.alfasim_sdk_utils import get_current_version
+    from alfasim_sdk._internal.alfasim_sdk_utils import (
+        get_current_python_version_tag,
+        get_current_version,
+    )
 
     os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
-    package_filename = Path(f"acme-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin")
+    curr_python_tag = get_current_python_version_tag()
+    package_filename = Path(
+        f"acme-1.0.0-sdk-{curr_sdk_version}-{curr_python_tag}-{os_type}64.hmplugin"
+    )
     assert package_filename.is_file()
 
 
@@ -238,8 +253,9 @@ def create_fake_hmplugin(plugin_dir: Path, monkeypatch: MonkeyPatch) -> Path:
 
     os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
+    curr_python_tag = get_current_python_version_tag()
     hmplugin_filename = Path(
-        f"{plugin_id}-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin"
+        f"{plugin_id}-1.0.0-sdk-{curr_sdk_version}-{curr_python_tag}-{os_type}64.hmplugin"
     )
 
     with ZipFile(hmplugin_filename, "w") as package_file:
@@ -367,8 +383,9 @@ def test_clean_task(new_plugin_dir: Path, monkeypatch: MonkeyPatch):
 
     os_type = "win" if sys.platform == "win32" else "linux"
     curr_sdk_version = get_current_version()
+    curr_python_tag = get_current_python_version_tag()
     hm_plugin_file = Path(
-        f"{plugin_id}-1.0.0-sdk-{curr_sdk_version}-{os_type}64.hmplugin"
+        f"{plugin_id}-1.0.0-sdk-{curr_sdk_version}-{curr_python_tag}-{os_type}64.hmplugin"
     )
     hm_plugin_file.touch()
     assert hm_plugin_file.is_file()
