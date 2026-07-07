@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+1.8.0 (UNRELEASED)
+==================
+
+* Add ``growth rate`` category to the unit system, with units of velocity.
+
 1.7.0 (2026-06-26)
 ==================
 
