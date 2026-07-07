@@ -21,6 +21,14 @@ def test_get_extras_default_required_version(mocker, version, expected):
     assert get_required_sdk_version() == expected
 
 
+def test_get_current_python_version_tag(monkeypatch) -> None:
+    import alfasim_sdk._internal.alfasim_sdk_utils as alfasim_sdk_utils
+    from alfasim_sdk._internal.alfasim_sdk_utils import get_current_python_version_tag
+
+    monkeypatch.setattr(alfasim_sdk_utils.sys, "version_info", (3, 12, 1))
+    assert get_current_python_version_tag() == "py312"
+
+
 def test_get_metadata() -> None:
     from alfasim_sdk import data_model
     from alfasim_sdk._internal.alfasim_sdk_utils import get_metadata

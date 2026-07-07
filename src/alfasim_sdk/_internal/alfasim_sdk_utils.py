@@ -103,3 +103,12 @@ def get_required_python_version() -> str:
     # Assume most plugins will use compiled code and include an upper bound.
     major, minor, *_ = sys.version_info
     return f">={major}.{minor},<{major}.{minor + 1}"
+
+
+def get_current_python_version_tag() -> str:
+    """
+    Return the current python version as a short tag (e.g. "py312"), suitable for inclusion
+    in generated file names. Extracted to be easier to mock in tests.
+    """
+    major, minor, *_ = sys.version_info
+    return f"py{major}{minor}"
