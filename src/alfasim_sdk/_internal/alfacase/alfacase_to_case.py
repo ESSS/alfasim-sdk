@@ -2019,6 +2019,10 @@ def load_numerical_options_description(
         "always_repeat_timestep": load_value,
         "damp_slug_flow": load_value,
         "enable_fast_compositional": load_value,
+        "use_muscl_momentum_terms": load_value,
+        "muscl_slope_limiter_type": get_enum_loader(
+            enum_class=constants.MusclSlopeLimiterType
+        ),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.NumericalOptionsDescription(**case_values)

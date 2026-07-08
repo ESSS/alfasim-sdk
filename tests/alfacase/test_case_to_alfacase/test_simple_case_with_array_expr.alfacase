@@ -91,6 +91,7 @@ numerical_options:
   always_repeat_timestep: False
   damp_slug_flow: False
   enable_fast_compositional: True
+  use_muscl_momentum_terms: False
 plugins: []
 outputs:
   automatic_trend_frequency: True

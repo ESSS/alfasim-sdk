@@ -714,6 +714,7 @@ NUMERICAL_OPTIONS_DESCRIPTION = case_description.NumericalOptionsDescription(
     always_repeat_timestep=False,
     damp_slug_flow=False,
     enable_fast_compositional=True,
+    use_muscl_momentum_terms=False,
 )
 TRACER_MODEL_CONSTANT_COEFFICIENTS_DESCRIPTION = (
     case_description.TracerModelConstantCoefficientsDescription(

@@ -493,6 +493,18 @@ class EvaluationStrategyType(Enum):
     Implicit = "implicit"
 
 
+class MusclSlopeLimiterType(Enum):
+    """
+    Slope limiter used by the MUSCL face interpolation of the momentum equation, when
+    ``use_muscl_momentum_terms`` is enabled.
+    """
+
+    Minmod = "muscl_slope_limiter_minmod"
+    Superbee = "muscl_slope_limiter_superbee"
+    Charm = "muscl_slope_limiter_charm"
+    Ospre = "muscl_slope_limiter_ospre"
+
+
 class WellConnectionPort(Enum):
     """
     Available ports for connecting to a Well node.

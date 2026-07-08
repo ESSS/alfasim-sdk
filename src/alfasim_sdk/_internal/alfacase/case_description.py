@@ -3974,6 +3974,10 @@ class NumericalOptionsDescription:
     always_repeat_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
     damp_slug_flow: bool = attr.ib(default=False, validator=instance_of(bool))
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
+    use_muscl_momentum_terms: bool = attr.ib(default=False, validator=instance_of(bool))
+    muscl_slope_limiter_type: constants.MusclSlopeLimiterType = attrib_enum(
+        default=constants.MusclSlopeLimiterType.Superbee
+    )
 
 
 @attr.s(frozen=True, auto_attribs=True)

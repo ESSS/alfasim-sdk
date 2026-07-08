@@ -691,6 +691,8 @@ numerical_options_description_schema = Map(
         Optional("always_repeat_timestep"): Bool(),
         Optional("damp_slug_flow"): Bool(),
         Optional("enable_fast_compositional"): Bool(),
+        Optional("use_muscl_momentum_terms"): Bool(),
+        Optional("muscl_slope_limiter_type"): Enum(['muscl_slope_limiter_minmod', 'muscl_slope_limiter_superbee', 'muscl_slope_limiter_charm', 'muscl_slope_limiter_ospre']),
     }
 )
 open_hole_description_schema = Map(
