@@ -890,6 +890,8 @@ def load_formation_layer_description(
         "name": load_value,
         "start": get_scalar_loader(from_unit="m"),
         "material": load_value,
+        "porosity": get_scalar_loader(from_unit="-"),
+        "pore_fluid_material": load_value,
     }
 
     def generate_formation_layer_description(document: DescriptionDocument):
