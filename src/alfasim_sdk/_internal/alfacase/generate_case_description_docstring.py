@@ -57,6 +57,7 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
         "forchheimer quadratic productivity index",
         "heat transfer coefficient",
         "length",
+        "per length",
         "mass",
         "mass flow rate",
         "mass fraction",

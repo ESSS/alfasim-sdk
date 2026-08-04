@@ -1228,6 +1228,9 @@ def load_material_description(
         "outer_emissivity": get_scalar_loader(category="emissivity"),
         "expansion": get_scalar_loader(from_unit="1/K"),
         "viscosity": get_scalar_loader(from_unit="cP"),
+        "initial_porosity": get_scalar_loader(from_unit="-"),
+        "compaction_coefficient": get_scalar_loader(from_unit="1/m"),
+        "pore_fluid_material": load_value,
     }
 
     def generate_materials_description(document: DescriptionDocument):

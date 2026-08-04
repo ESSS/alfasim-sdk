@@ -2607,6 +2607,8 @@ class MaterialDescription:
     .. include:: /alfacase_definitions/list_of_unit_for_emissivity.txt
     .. include:: /alfacase_definitions/list_of_unit_for_volumetric_thermal_expansion.txt
     .. include:: /alfacase_definitions/list_of_unit_for_dynamic_viscosity.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_per_length.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -2626,6 +2628,9 @@ class MaterialDescription:
     )
     expansion: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "1/K"))
     viscosity: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "cP"))
+    initial_porosity: ScalarDescriptionType = attrib_scalar(default=Scalar("dimensionless", 0.0, "-"))
+    compaction_coefficient: ScalarDescriptionType = attrib_scalar(default=Scalar("per length", 0.0, "1/m"))
+    pore_fluid_material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
     def as_dict(self) -> Mapping[str, Any | ValueAndUnit]:
         """

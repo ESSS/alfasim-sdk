@@ -1,0 +1,12 @@
+.. admonition:: Available units for category 'per length'
+    :class: dropdown
+
+    :"1/angstrom": per angstrom
+    :"1/cm": per centimetre
+    :"1/ft": per foot
+    :"1/in": per inch
+    :"1/m": per metre
+    :"1/mi": per mile
+    :"1/mm": per millimetre
+    :"1/nm": per nanometre
+    :"1/yd": per yard
