@@ -22,6 +22,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     ArrayExpression,
     CurveExpression,
     FloatExpression,
+    IntExpression,
     ScalarExpression,
 )
 
@@ -32,6 +33,7 @@ NOT_DESCRIPTION_TYPES = (
     ArrayExpression,
     ScalarExpression,
     FloatExpression,
+    IntExpression,
     CurveExpression,
 )
 
@@ -159,6 +161,8 @@ def union_to_alfacase_schema(type_: Any, *, indent=0) -> str:
         ScalarExpression: scalar_expression_to_alfacase_schema,
         float: float_to_alfacase_schema,
         FloatExpression: str_to_alfacase_schema,
+        int: int_to_alfacase_schema,
+        IntExpression: str_to_alfacase_schema,
         Array: array_to_alfacase_schema,
         ArrayExpression: array_expression_to_alfacase_schema,
     }
@@ -215,6 +219,10 @@ def is_array_expression(type_: type) -> bool:
 
 def is_float_expression(type_: type) -> bool:
     return type_ is FloatExpression
+
+
+def is_int_expression(type_: type) -> bool:
+    return type_ is IntExpression
 
 
 def scalar_expression_to_alfacase_schema(type_: type, indent: int) -> str:

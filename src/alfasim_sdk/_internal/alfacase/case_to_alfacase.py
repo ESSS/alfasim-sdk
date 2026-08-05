@@ -15,6 +15,7 @@ from alfasim_sdk._internal.alfacase import case_description
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     ArrayExpression,
     FloatExpression,
+    IntExpression,
     ScalarExpression,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import IGNORED_PROPERTIES, is_attrs
@@ -23,6 +24,7 @@ ATTRIBUTES = Union[
     Scalar,
     ScalarExpression,
     FloatExpression,
+    IntExpression,
     Array,
     ArrayExpression,
     Curve,
@@ -143,7 +145,7 @@ def _convert_value_to_valid_alfacase_format(
 
         return float_formatted_value
 
-    if isinstance(value, FloatExpression):
+    if isinstance(value, (FloatExpression, IntExpression)):
         return value.expr
 
     return str(value)

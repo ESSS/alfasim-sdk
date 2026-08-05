@@ -25,6 +25,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     ArrayExpression,
     CurveExpression,
     FloatExpression,
+    IntExpression,
     ScalarExpression,
     obtain_curve_from_arrays,
 )
@@ -256,6 +257,20 @@ def load_float(
         case str():
             return FloatExpression(expr=value)
         case float():
+            return value
+        case unreachable:
+            assert_never(unreachable)
+
+
+def load_int(key: str, alfacase_content: DescriptionDocument) -> int | IntExpression:
+    """
+    Obtain the int data or create an IntExpression.
+    """
+    value = alfacase_content[key].content.data
+    match value:
+        case str():
+            return IntExpression(expr=value)
+        case int():
             return value
         case unreachable:
             assert_never(unreachable)
@@ -1804,6 +1819,9 @@ def load_environment_description(
         "reference_y_coordinate": get_scalar_loader(from_unit="m"),
         "md_properties_table": load_environment_property_description,
         "tvd_properties_table": load_environment_property_description,
+        "wall_layer_n_internal_nodes": load_int,
+        "formation_n_layers": load_int,
+        "formation_thickness_ratio": get_scalar_loader(from_unit="-"),
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.EnvironmentDescription(**case_values)

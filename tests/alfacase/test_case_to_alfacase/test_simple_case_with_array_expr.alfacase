@@ -137,6 +137,11 @@ pipes:
       unit: m
     md_properties_table: []
     tvd_properties_table: []
+    wall_layer_n_internal_nodes: 0
+    formation_n_layers: 8
+    formation_thickness_ratio:
+      value: 2.0
+      unit: '-'
   segments:
     start_positions:
       values:
