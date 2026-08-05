@@ -635,10 +635,10 @@ PIPE_DESCRIPTION = case_description.PipeDescription(
     target="pressure_node",
 )
 FORMATION_LAYER_DESCRIPTION = case_description.FormationLayerDescription(
-    name="f", start=Scalar(1, "m"), material="Carbon Steel", porosity=Scalar("dimensionless", 0.0, "-"), pore_fluid_material="Brine"
+    name="f", start=Scalar(category="length", value=1, unit="m"), material="Carbon Steel", porosity=Scalar(category="dimensionless", value=0.0, unit="-"), pore_fluid_material=constants.PoreFluidMaterialType.Brine
 )
 FORMATION_LAYER_DESCRIPTION_1 = case_description.FormationLayerDescription(
-    name="f (1)", start=Scalar(1, "m"), material="Carbon Steel", porosity=Scalar("dimensionless", 0.0, "-"), pore_fluid_material="Brine"
+    name="f (1)", start=Scalar(category="length", value=1, unit="m"), material="Carbon Steel", porosity=Scalar(category="dimensionless", value=0.0, unit="-"), pore_fluid_material=constants.PoreFluidMaterialType.Brine
 )
 FORMATION_DESCRIPTION = case_description.FormationDescription(
     reference_y_coordinate=Scalar(1, "m"),

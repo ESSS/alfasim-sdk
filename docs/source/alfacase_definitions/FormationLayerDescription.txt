@@ -9,7 +9,7 @@
             start: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             material: \ :class:`Optional <typing.Optional>`\[str] = None
             porosity: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
-            pore_fluid_material: str = "Brine"
+            pore_fluid_material: \ :class:`PoreFluidMaterialType <alfasim_sdk._internal.constants.PoreFluidMaterialType>`\  = PoreFluidMaterialType.Brine
 .. tab:: Schema
 
     .. parsed-literal::
@@ -22,4 +22,4 @@
             porosity: # optional
                 number | expr
                 unit: str
-            pore_fluid_material: string
+            pore_fluid_material: \ :class:`PoreFluidMaterialType <alfasim_sdk._internal.constants.PoreFluidMaterialType>`\  # optional

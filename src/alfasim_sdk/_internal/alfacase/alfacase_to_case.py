@@ -891,7 +891,7 @@ def load_formation_layer_description(
         "start": get_scalar_loader(from_unit="m"),
         "material": load_value,
         "porosity": get_scalar_loader(from_unit="-"),
-        "pore_fluid_material": load_value,
+        "pore_fluid_material": get_enum_loader(enum_class=constants.PoreFluidMaterialType),
     }
 
     def generate_formation_layer_description(document: DescriptionDocument):

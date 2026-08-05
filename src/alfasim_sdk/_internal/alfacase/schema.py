@@ -269,7 +269,7 @@ formation_layer_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("pore_fluid_material"): Str(),
+        Optional("pore_fluid_material"): Enum(['Brine']),
     }
 )
 gas_lift_valve_equipment_description_schema = Map(
