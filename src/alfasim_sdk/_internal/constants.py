@@ -590,6 +590,7 @@ class SteadyStateGuessInitializationType(Enum):
     # UserDefined: Uses user-defined initial guess calculation
     UserDefined = "user_defined"
 
+
 class PoreFluidMaterialType(Enum):
     """
     Fluid material that fills the pores of the formation layer.
