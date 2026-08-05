@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+1.9.0 (UNRELEASED)
+==================
+
+* Add ``porosity`` attribute to ``FormationLayerDescription``. It represents the porosity of the formation layer, which is used in the calculation of the formation properties (density, heat capacity, thermal conductivity).
+* Add ``pore_fluid_material`` attribute to ``FormationLayerDescription``. It represents the fluid material that fills the pores of the formation layer, which is used in the calculation of the formation properties (density, heat capacity, thermal conductivity).
+
 1.8.0 (2026-07-17)
 ==================
 

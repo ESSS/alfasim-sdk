@@ -2282,6 +2282,12 @@ class FormationLayerDescription:
     name: str = attr.ib(validator=instance_of(str))
     start: ScalarDescriptionType = attrib_scalar(category="length")
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    porosity: ScalarDescriptionType = attrib_scalar(
+        category="dimensionless", default=Scalar("dimensionless", 0.0, "-")
+    )
+    pore_fluid_material: constants.PoreFluidMaterialType = attrib_enum(
+        default=constants.PoreFluidMaterialType.Brine
+    )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
