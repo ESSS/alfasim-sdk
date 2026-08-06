@@ -7,6 +7,7 @@ CHANGELOG
 
 * Add ``wall_layer_n_internal_nodes`` attribute to ``EnvironmentDescription``. It refines the radial mesh within each wall layer for the transient wall heat transfer models.
 * Add ``formation_n_layers`` and ``formation_thickness_ratio`` attributes to ``EnvironmentDescription``. They control the discretization of the rock formation surrounding a well for heat transfer purposes.
+* Add ``get_wall_layer_center_temperature`` solver API function. It gets the temperature at the radial center of a wall layer, for a given control volume, using the layer's nearest radial node(s).
 
 1.8.0 (2026-07-17)
 ==================

@@ -74,6 +74,13 @@ using get_wall_interfaces_temperature_func = int (*)(
     enum TimestepScope ts_scope,
     int* size
     );
+using get_wall_layer_center_temperature_func = int (*)(
+    void* ctx,
+    double* out,
+    int control_volume,
+    int layer_index,
+    enum TimestepScope ts_scope
+    );
 using get_wall_properties_func = int (*) (
     void* ctx,
     double** prop_values,
@@ -184,6 +191,7 @@ struct ALFAsimSDK_API {
     get_tracer_partition_coefficient_func get_tracer_partition_coefficient;
 
     get_wall_interfaces_temperature_func get_wall_interfaces_temperature;
+    get_wall_layer_center_temperature_func get_wall_layer_center_temperature;
 
     get_wall_properties_func get_wall_properties;
     set_wall_properties_func set_wall_properties;
