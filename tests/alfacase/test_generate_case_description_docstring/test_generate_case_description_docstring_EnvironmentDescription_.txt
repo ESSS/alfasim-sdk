@@ -10,6 +10,9 @@
             reference_y_coordinate: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, 'm', 'length')
             md_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\] = []
             tvd_properties_table: \ :class:`List <typing.List>`\[\ :class:`EnvironmentPropertyDescription <EnvironmentPropertyDescription>`\] = []
+            wall_layer_n_internal_nodes: int | \ :class:`IntExpression <alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression>`\  = 0
+            formation_n_layers: int | \ :class:`IntExpression <alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression>`\  = 8
+            formation_thickness_ratio: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(2.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -24,3 +27,10 @@
                 - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`
             tvd_properties_table:  # optional
                 - \ :class:`environment_property_description_schema <EnvironmentPropertyDescription>`
+            wall_layer_n_internal_nodes:  # optional
+                number | expr
+            formation_n_layers:  # optional
+                number | expr
+            formation_thickness_ratio:  # optional
+                number | expr
+                unit: str

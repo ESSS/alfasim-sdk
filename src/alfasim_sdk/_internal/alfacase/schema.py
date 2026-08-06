@@ -1647,6 +1647,18 @@ environment_description_schema = Map(
         ),
         Optional("md_properties_table"): Seq(environment_property_description_schema),
         Optional("tvd_properties_table"): Seq(environment_property_description_schema),
+        Optional("wall_layer_n_internal_nodes"): UnsafeOrValidator(
+            Int(),
+            Str(),
+        ),
+        Optional("formation_n_layers"): UnsafeOrValidator(
+            Int(),
+            Str(),
+        ),
+        Optional("formation_thickness_ratio"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
     }
 )
 formation_description_schema = Map(
@@ -2069,4 +2081,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (sum: 7RHTMcNRr1) (sum: 7WvzpdbrZh) (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)
+# [[[end]]] (sum: gpiXiYjGjz) (sum: oec1+mvW48) (sum: 7RHTMcNRr1) (sum: 7WvzpdbrZh) (sum: nKADAAI2zz) (sum: CQyFck5z5A) (sum: aeP0PSYoMl) (sum: aeP0PSYoMl) (sum: tXfZ94z3lP) (sum: tXfZ94z3lP)

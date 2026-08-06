@@ -84,6 +84,19 @@ class FloatExpression:
         return evaluated_value
 
 
+@attrs.define(frozen=True)
+class IntExpression:
+    """
+    Represents an int value dynamically evaluated from a mathematical expression.
+    """
+
+    expr: str = attr.ib(validator=instance_of(str))
+
+    def eval_expression(self, namespace: dict[str, float]) -> int:
+        evaluated_value = eval(self.expr, BUILT_IN_VARS, namespace)
+        return int(evaluated_value)
+
+
 ArrayDescriptionValue: TypeAlias = float | str | int
 
 
@@ -158,6 +171,7 @@ ScalarExpressionLike: TypeAlias = tuple[str, str] | ScalarExpression
 ArrayLike: TypeAlias = tuple[Sequence[Number], str] | Array
 CurveLike: TypeAlias = tuple[ArrayLike, ArrayLike] | Curve | CurveExpression
 FloatDescriptionType: TypeAlias = float | FloatExpression
+IntDescriptionType: TypeAlias = int | IntExpression
 ArrayDescriptionType: TypeAlias = Array | ArrayExpression
 
 

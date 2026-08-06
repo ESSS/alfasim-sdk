@@ -614,6 +614,8 @@ ENVIRONMENT_DESCRIPTION = case_description.EnvironmentDescription(
     position_input_mode=constants.PipeThermalPositionInput.Tvd,
     md_properties_table=[ENVIRONMENT_PROPERTY_DESCRIPTION],
     tvd_properties_table=[ENVIRONMENT_PROPERTY_DESCRIPTION],
+    formation_n_layers=5,
+    formation_thickness_ratio=Scalar(1.5, "-"),
 )
 
 X_AND_Y_DESCRIPTION = case_description.XAndYDescription(

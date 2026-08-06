@@ -12,6 +12,7 @@ from barril.units._scalar import Scalar
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     ArrayExpression,
     FloatExpression,
+    IntExpression,
     ScalarExpression,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import (
@@ -25,6 +26,7 @@ from alfasim_sdk._internal.alfacase.generate_schema import (
     is_float,
     is_float_expression,
     is_int,
+    is_int_expression,
     is_list,
     is_path,
     is_scalar,
@@ -237,6 +239,13 @@ def _get_float_expression_reference() -> str:
     )
 
 
+def _get_int_expression_reference() -> str:
+    return _get_class_with_reference(
+        visible_name="IntExpression",
+        ref="alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression",
+    )
+
+
 def _get_array_expression_reference() -> str:
     return _get_class_with_reference(
         visible_name="ArrayExpression",
@@ -334,11 +343,16 @@ def union_formatted(value: Any) -> str:
     def get_float_reference() -> str:
         return "float"
 
+    def get_int_reference() -> str:
+        return "int"
+
     PARAMETRIC_UNSAFE_TYPES = {
         Scalar: _get_scalar_reference,
         ScalarExpression: _get_scalar_expression_reference,
         float: get_float_reference,
         FloatExpression: _get_float_expression_reference,
+        int: get_int_reference,
+        IntExpression: _get_int_expression_reference,
         Array: _get_array_reference,
         ArrayExpression: _get_array_expression_reference,
     }
@@ -452,6 +466,8 @@ def union_formatted_for_schema(value: Any, *, is_list_types: bool = False) -> st
         ScalarExpression,
         float,
         FloatExpression,
+        int,
+        IntExpression,
         ArrayExpression,
         Array,
     }
@@ -462,6 +478,8 @@ def union_formatted_for_schema(value: Any, *, is_list_types: bool = False) -> st
             or ScalarExpression in value.__args__
             or float in value.__args__
             or FloatExpression in value.__args__
+            or int in value.__args__
+            or IntExpression in value.__args__
         ):
             name = f"\n{BASE_INDENT + INDENT}number | expr"
         else:
@@ -524,6 +542,13 @@ def float_expression_formatted_for_schema(
     return f"\n{block_indentation}expr: str\n"
 
 
+def int_expression_formatted_for_schema(
+    value: type[IntExpression], *, number_of_indent: int = 1
+) -> str:
+    block_indentation = BASE_INDENT + INDENT * number_of_indent
+    return f"\n{block_indentation}expr: str\n"
+
+
 def array_formatted_for_schema(value: type[Array], *, number_of_indent=1) -> str:
     """
     Return a string showing how to configure a Array.
@@ -566,6 +591,7 @@ LIST_OF_CASE_ATTRIBUTES: list[tuple[Callable, Callable]] = [
     (is_int, lambda value: value.__name__),
     (is_path, lambda value: value.__name__),
     (is_float_expression, lambda value: _get_float_expression_reference()),
+    (is_int_expression, lambda value: _get_int_expression_reference()),
     (is_scalar_expression, lambda value: _get_scalar_expression_reference()),
 ]
 
@@ -585,5 +611,6 @@ LIST_OF_CASE_SCHEMAS: list[tuple[Callable, Callable]] = [
     (is_array, array_formatted_for_schema),
     (is_curve, curve_formatted_for_schema),
     (is_int, lambda value: "number"),
+    (is_int_expression, int_expression_formatted_for_schema),
     (is_path, lambda value: value.__name__),
 ]

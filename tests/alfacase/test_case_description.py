@@ -27,6 +27,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     CurveExpression,
     DescriptionError,
     FloatExpression,
+    IntExpression,
     InvalidReferenceError,
     ScalarExpression,
     attrib_array,
@@ -1645,6 +1646,21 @@ def test_case_description_with_float_expression() -> None:
     assert description.value == expression
     assert isinstance(description.value, FloatExpression)
     assert description.value.eval_expression({"A": 1, "B": 2}) == 3
+
+
+def test_case_description_with_int_expression() -> None:
+    expression = IntExpression(expr="A + B")
+    description = case_description.EnvironmentDescription(
+        wall_layer_n_internal_nodes=expression
+    )
+    assert description.wall_layer_n_internal_nodes == expression
+    assert isinstance(description.wall_layer_n_internal_nodes, IntExpression)
+    assert (
+        description.wall_layer_n_internal_nodes.eval_expression({"A": 1, "B": 2}) == 3
+    )
+
+    description = attr.evolve(description, wall_layer_n_internal_nodes=3)
+    assert description.wall_layer_n_internal_nodes == 3
 
 
 def test_numerical_options_backward_compatibility() -> None:
