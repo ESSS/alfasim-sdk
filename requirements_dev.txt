@@ -1,4 +1,4 @@
-cogapp
+cogapp==3.3.0  # exact pin: conda-forge (used by EDEN/GUI env) is stuck at 3.3.0, PyPI keeps releasing newer, drifting versions rewrite the generated checksum tags
 colorama
 coverage
 invoke
