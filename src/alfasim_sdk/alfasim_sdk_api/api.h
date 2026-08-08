@@ -742,6 +742,26 @@ DLL_EXPORT int get_wall_interfaces_temperature(
 );
 
 /*!
+    Gets the temperature at the radial center of a wall layer, for a given control volume.
+    Returns the exact value of a radial node if the mesh has one at the layer's center,
+    otherwise linearly interpolates between the two nearest radial nodes of that layer.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Wall layer center temperature value.
+    @param[in] control_volume Control Volume ID.
+    @param[in] layer_index Wall layer index (0-based, from inner to outer).
+    @param[in] ts_scope #TimestepScope value.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_wall_layer_center_temperature(
+    void* ctx,
+    double* out,
+    int control_volume,
+    int layer_index,
+    enum TimestepScope ts_scope
+);
+
+/*!
     Gets the current UCM (unit cell model) input data for friction factor calculation.
     Any available variable by this function is considered for a unit cell, which means
     that there are variables with one value and there are variables with two values
