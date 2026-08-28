@@ -2,7 +2,7 @@
 CHANGELOG
 =========
 
-1.9.0 (UNRELEASED)
+1.9.0 (2026-08-28)
 ==================
 
 * Add ``wall_layer_n_internal_nodes`` attribute to ``EnvironmentDescription``. It refines the radial mesh within each wall layer for the transient wall heat transfer models.
