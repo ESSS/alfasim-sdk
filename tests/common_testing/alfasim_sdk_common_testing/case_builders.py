@@ -14,7 +14,7 @@ def build_simple_segment():
     return case_description.PipeSegmentsDescription(
         start_positions=Array([0.0], "m"),
         diameters=Array([0.1], "m"),
-        roughnesses=Array([1e-5], "m"),
+        roughnesses=Array("roughness", [1e-5], "m"),
     )
 
 
