@@ -42,6 +42,12 @@ def register_units() -> None:
         "length", quantity_type="length", valid_units=length_units, override=True
     )
 
+    add_category_if_not_defined(
+        category="roughness",
+        quantity_type="length",
+        valid_units=["m", "mm", "cm", "um", "in"],
+    )
+
     pressure_units = ["bar", "Pa", "kPa", "MPa", "psi", "kgf/cm2", "atm"]
     db.AddCategory(
         "pressure", quantity_type="pressure", valid_units=pressure_units, override=True

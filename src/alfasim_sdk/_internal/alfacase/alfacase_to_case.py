@@ -854,7 +854,7 @@ def load_casing_section_description(
         "hole_diameter": get_scalar_loader(category="diameter"),
         "outer_diameter": get_scalar_loader(category="diameter"),
         "inner_diameter": get_scalar_loader(category="diameter"),
-        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(category="roughness"),
         "material": load_value,
         "top_of_filler": get_scalar_loader(from_unit="m"),
         "filler_material": load_value,
@@ -1344,7 +1344,7 @@ def load_pipe_segments_description(
     alfacase_to_case_description: dict[str, Any] = {
         "start_positions": get_array_loader(from_unit="m"),
         "diameters": get_array_loader(from_unit="m"),
-        "roughnesses": get_array_loader(from_unit="m"),
+        "roughnesses": get_array_loader(category="roughness"),
         "wall_names": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
@@ -1650,7 +1650,7 @@ def load_tubing_description(
         "length": get_scalar_loader(from_unit="m"),
         "outer_diameter": get_scalar_loader(category="diameter"),
         "inner_diameter": get_scalar_loader(category="diameter"),
-        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(category="roughness"),
         "material": load_value,
     }
 
@@ -1731,7 +1731,7 @@ def load_open_hole_description(
         "name": load_value,
         "length": get_scalar_loader(from_unit="m"),
         "diameter": get_scalar_loader(category="diameter"),
-        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(category="roughness"),
     }
 
     def generate_open_hole_description(document: DescriptionDocument):
@@ -1889,7 +1889,7 @@ def load_wall_description(
 ) -> list[case_description.WallDescription]:
     alfacase_to_case_description: dict[str, Any] = {
         "name": load_value,
-        "inner_roughness": get_scalar_loader(from_unit="m"),
+        "inner_roughness": get_scalar_loader(category="roughness"),
         "wall_layer_container": load_wall_layer_description,
     }
 
