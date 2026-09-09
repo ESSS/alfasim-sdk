@@ -5,6 +5,8 @@ CHANGELOG
 1.10.0 (UNRELEASED)
 ==================
 
+* Add ``roughness`` category to the unit system, with a curated set of units (``m``, ``mm``, ``cm``, ``um`` and ``in``) more appropriate for roughness magnitudes than the full ``length`` unit list. ``inner_roughness`` (in ``CasingSectionDescription``, ``TubingDescription``, ``OpenHoleDescription`` and ``WallDescription``) and ``roughnesses`` (in ``PipeSegmentsDescription``) now use this category instead of ``length``.
+
 1.9.0 (2026-08-28)
 ==================
 

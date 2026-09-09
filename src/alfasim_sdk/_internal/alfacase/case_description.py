@@ -1509,6 +1509,7 @@ class PipeSegmentsDescription:
 
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
 
+    .. include:: /alfacase_definitions/list_of_unit_for_roughness.txt
     """
 
     start_positions: ArrayDescriptionType | None = attr.ib(
@@ -2314,6 +2315,8 @@ class CasingSectionDescription:
     .. include:: /alfacase_definitions/CasingSectionDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_roughness.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
@@ -2322,7 +2325,7 @@ class CasingSectionDescription:
     hole_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
     outer_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
     inner_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
-    inner_roughness: ScalarDescriptionType = attrib_scalar(category="length")
+    inner_roughness: ScalarDescriptionType = attrib_scalar(category="roughness")
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     top_of_filler: ScalarDescriptionType = attrib_scalar(category="length")
     filler_material: str | None = attr.ib(
@@ -2347,13 +2350,15 @@ class TubingDescription:
     .. include:: /alfacase_definitions/TubingDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_roughness.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
     length: ScalarDescriptionType = attrib_scalar(category="length")
     outer_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
     inner_diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
-    inner_roughness: ScalarDescriptionType = attrib_scalar(category="length")
+    inner_roughness: ScalarDescriptionType = attrib_scalar(category="roughness")
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
     @outer_diameter.validator
@@ -2385,12 +2390,14 @@ class OpenHoleDescription:
     .. include:: /alfacase_definitions/OpenHoleDescription.txt
 
     .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_roughness.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
     length: ScalarDescriptionType = attrib_scalar(category="length")
     diameter: ScalarDescriptionType = attrib_scalar(category="diameter")
-    inner_roughness: ScalarDescriptionType = attrib_scalar(category="length")
+    inner_roughness: ScalarDescriptionType = attrib_scalar(category="roughness")
 
     @diameter.validator
     def _validate_diameter(self, attribute, value):
@@ -2565,11 +2572,13 @@ class WallDescription:
     """
     .. include:: /alfacase_definitions/WallDescription.txt
 
-    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_roughness.txt
     """
 
     name: str = attr.ib(validator=instance_of(str))
-    inner_roughness: ScalarDescriptionType = attrib_scalar(default=Scalar(0, "m"))
+    inner_roughness: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("roughness", 0, "m")
+    )
     wall_layer_container: list[WallLayerDescription] = attrib_instance_list(
         WallLayerDescription
     )

@@ -1,0 +1,8 @@
+.. admonition:: Available units for category 'roughness'
+    :class: dropdown
+
+    :"cm": centimetre
+    :"in": inch
+    :"m": metre
+    :"mm": millimetres
+    :"um": microns

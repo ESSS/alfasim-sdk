@@ -147,7 +147,7 @@ CASING_SECTION_DESCRIPTION = case_description.CasingSectionDescription(
     hole_diameter=Scalar("diameter", 2.0, "m"),
     outer_diameter=Scalar("diameter", 0.65, "m"),
     inner_diameter=Scalar("diameter", 0.6, "m"),
-    inner_roughness=Scalar(0.0, "m"),
+    inner_roughness=Scalar("roughness", 0.0, "m"),
     material="Carbon Steel",
     top_of_filler=Scalar(0.0, "m"),
     filler_material="Cement",
@@ -335,12 +335,12 @@ OPEN_HOLE_DESCRIPTION = case_description.OpenHoleDescription(
     name="Open Hole 1",
     length=Scalar(101.0, "m"),
     diameter=Scalar("diameter", 102.0, "m"),
-    inner_roughness=Scalar(103.0, "m"),
+    inner_roughness=Scalar("roughness", 103.0, "m"),
 )
 PIPE_WALL_DESCRIPTION = case_description.PipeSegmentsDescription(
     start_positions=Array([0.0, 300.0], "m"),
     diameters=Array([0.1, 0.1], "m"),
-    roughnesses=Array([1e-5, 1e-5], "m"),
+    roughnesses=Array("roughness", [1e-5, 1e-5], "m"),
     wall_names=["Riser", "Flowline"],
 )
 PROFILE_OUTPUT_DESCRIPTION = case_description.ProfileOutputDescription(
@@ -475,7 +475,7 @@ TUBING_DESCRIPTION = case_description.TubingDescription(
     length=Scalar(42, "m"),
     outer_diameter=Scalar("diameter", 0.35, "m"),
     inner_diameter=Scalar("diameter", 0.3, "m"),
-    inner_roughness=Scalar(0.0, "m"),
+    inner_roughness=Scalar("roughness", 0.0, "m"),
     material="Carbon Steel",
 )
 WALL_LAYER_DESCRIPTION = case_description.WallLayerDescription(
@@ -563,7 +563,7 @@ VALVE_DESCRIPTION_CONSTANT_OPENING = case_description.ValveEquipmentDescription(
 )
 WALL_DESCRIPTION = case_description.WallDescription(
     name="Flowline",
-    inner_roughness=Scalar(1, "mm"),
+    inner_roughness=Scalar("roughness", 1, "mm"),
     wall_layer_container=[WALL_LAYER_DESCRIPTION, WALL_LAYER_DESCRIPTION],
 )
 LEAK_EQUIPMENT_DESCRIPTION = case_description.LeakEquipmentDescription(

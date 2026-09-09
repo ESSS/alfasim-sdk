@@ -69,6 +69,7 @@ CATEGORIES_USED_ON_DESCRIPTION = sorted(
         "power",
         "pressure",
         "productivity index",
+        "roughness",
         "specific energy",
         "specific heat capacity",
         "standard volume per standard volume",

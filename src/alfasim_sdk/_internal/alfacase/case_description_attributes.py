@@ -434,7 +434,6 @@ def attrib_array(
 
     :param category:
         Name of the array category.
-
     """
     if isinstance(default, Array):
         if category is None:
