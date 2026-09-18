@@ -752,7 +752,7 @@ DLL_EXPORT int get_wall_interfaces_temperature(
     @param[out] out Radial node temperature values array.
     @param[in] control_volume Control Volume ID.
     @param[in] ts_scope #TimestepScope value.
-    @param[in] size Size of `out` array of values.
+    @param[out] size Size of `out` array of values.
     @return An #error_code value.
 */
 DLL_EXPORT int get_wall_radial_nodes_temperature(
