@@ -742,6 +742,28 @@ DLL_EXPORT int get_wall_interfaces_temperature(
 );
 
 /*!
+    Gets the temperature of every radial mesh node for a given control volume, from innermost to
+    outermost. When the wall's radial mesh is refined (`wall_layer_n_internal_nodes > 0`, see
+    `EnvironmentDescription`), this includes both the layer-boundary interfaces and the internal
+    nodes within each layer -- use #get_wall_interfaces_temperature instead if only the
+    layer-boundary temperatures are needed.
+
+    @param[in] ctx ALFAsim's plugins context.
+    @param[out] out Radial node temperature values array.
+    @param[in] control_volume Control Volume ID.
+    @param[in] ts_scope #TimestepScope value.
+    @param[in] size Size of `out` array of values.
+    @return An #error_code value.
+*/
+DLL_EXPORT int get_wall_radial_nodes_temperature(
+    void* ctx,
+    double** out,
+    int control_volume,
+    enum TimestepScope ts_scope,
+    int* size
+);
+
+/*!
     Gets the temperature at the radial center of a wall layer, for a given control volume.
     Returns the exact value of a radial node if the mesh has one at the layer's center,
     otherwise linearly interpolates between the two nearest radial nodes of that layer.
