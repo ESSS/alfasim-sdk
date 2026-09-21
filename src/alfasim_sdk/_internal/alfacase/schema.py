@@ -691,6 +691,7 @@ numerical_options_description_schema = Map(
         Optional("always_repeat_timestep"): Bool(),
         Optional("damp_slug_flow"): Bool(),
         Optional("enable_fast_compositional"): Bool(),
+        Optional("enable_fourier_timestep"): Bool(),
     }
 )
 open_hole_description_schema = Map(

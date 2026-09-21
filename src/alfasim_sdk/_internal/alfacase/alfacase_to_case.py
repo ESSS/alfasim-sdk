@@ -2037,6 +2037,7 @@ def load_numerical_options_description(
         "always_repeat_timestep": load_value,
         "damp_slug_flow": load_value,
         "enable_fast_compositional": load_value,
+        "enable_fourier_timestep": load_value,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.NumericalOptionsDescription(**case_values)

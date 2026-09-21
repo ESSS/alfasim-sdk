@@ -91,6 +91,7 @@ numerical_options:
   always_repeat_timestep: False
   damp_slug_flow: False
   enable_fast_compositional: True
+  enable_fourier_timestep: False
 plugins: []
 outputs:
   automatic_trend_frequency: True
