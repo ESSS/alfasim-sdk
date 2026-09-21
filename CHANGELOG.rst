@@ -6,6 +6,7 @@ CHANGELOG
 ==================
 
 * Add ``roughness`` category to the unit system, with a curated set of units (``m``, ``mm``, ``cm``, ``um`` and ``in``) more appropriate for roughness magnitudes than the full ``length`` unit list. ``inner_roughness`` (in ``CasingSectionDescription``, ``TubingDescription``, ``OpenHoleDescription`` and ``WallDescription``) and ``roughnesses`` (in ``PipeSegmentsDescription``) now use this category instead of ``length``.
+* Add ``get_wall_radial_nodes_temperature`` solver API function. It gets the temperature of every radial mesh node for a given control volume, including nodes internal to a wall layer when the radial mesh is refined.
 
 1.9.0 (2026-08-28)
 ==================
