@@ -7,7 +7,7 @@ CHANGELOG
 
 * Add ``roughness`` category to the unit system, with a curated set of units (``m``, ``mm``, ``cm``, ``um`` and ``in``) more appropriate for roughness magnitudes than the full ``length`` unit list. ``inner_roughness`` (in ``CasingSectionDescription``, ``TubingDescription``, ``OpenHoleDescription`` and ``WallDescription``) and ``roughnesses`` (in ``PipeSegmentsDescription``) now use this category instead of ``length``.
 * Add ``get_wall_radial_nodes_temperature`` solver API function. It gets the temperature of every radial mesh node for a given control volume, including nodes internal to a wall layer when the radial mesh is refined.
-* Add ``enable_fourier_timestep`` attribute to ``NumericalOptionsDescription``. It controls whether pipes using the transient bidimensional wall model may have their timestep governed by the Fourier condition instead of only CFL. Such condition is apply to conditions which fluid is (near) stagnant (e.g. during a well shut-in).
+* Add ``enable_fourier_timestep`` attribute to ``NumericalOptionsDescription``. It controls whether pipes using the transient bidimensional wall model may have their timestep governed by the Fourier condition instead of only CFL. The Fourier timestep control is applied when the fluid is (nearly) stagnant, such as during a well shut-in.
 
 1.9.0 (2026-08-28)
 ==================
