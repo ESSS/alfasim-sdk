@@ -3958,7 +3958,7 @@ class NumericalOptionsDescription:
     :ivar enable_fourier_timestep:
         Control whether pipes using the transient bidimensional wall model may have their timestep
         governed by the wall's Fourier (radial conduction) condition instead of only CFL, for
-        control volumes where the fluid is (near) stagnant -- e.g. during a well shut-in. 
+        control volumes where the fluid is (near) stagnant -- e.g. during a well shut-in.
         Defaults to ``False``.
 
     .. include:: /alfacase_definitions/NumericalOptionsDescription.txt
