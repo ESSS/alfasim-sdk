@@ -716,6 +716,7 @@ NUMERICAL_OPTIONS_DESCRIPTION = case_description.NumericalOptionsDescription(
     always_repeat_timestep=False,
     damp_slug_flow=False,
     enable_fast_compositional=True,
+    enable_fourier_timestep=False,
 )
 TRACER_MODEL_CONSTANT_COEFFICIENTS_DESCRIPTION = (
     case_description.TracerModelConstantCoefficientsDescription(

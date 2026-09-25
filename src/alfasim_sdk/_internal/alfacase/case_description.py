@@ -3955,6 +3955,12 @@ class NumericalOptionsDescription:
         copied to the current timestep in case the difference between the gas and liquid superficial
         velocities is close to that of the previous timestep.
 
+    :ivar enable_fourier_timestep:
+        Control whether pipes using the transient bidimensional wall model may have their timestep
+        governed by the wall's Fourier (radial conduction) condition instead of only CFL, for
+        control volumes where the fluid is (near) stagnant -- e.g. during a well shut-in.
+        Defaults to ``False``.
+
     .. include:: /alfacase_definitions/NumericalOptionsDescription.txt
     """
 
@@ -3993,6 +3999,7 @@ class NumericalOptionsDescription:
     always_repeat_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
     damp_slug_flow: bool = attr.ib(default=False, validator=instance_of(bool))
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
+    enable_fourier_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
 
 
 @attr.s(frozen=True, auto_attribs=True)

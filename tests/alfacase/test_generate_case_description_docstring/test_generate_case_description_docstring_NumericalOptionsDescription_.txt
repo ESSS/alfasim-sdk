@@ -20,6 +20,7 @@
             always_repeat_timestep: bool = False
             damp_slug_flow: bool = False
             enable_fast_compositional: bool = True
+            enable_fourier_timestep: bool = False
 
 .. tab:: Schema
 
@@ -49,3 +50,4 @@
             always_repeat_timestep: boolean  # optional
             damp_slug_flow: boolean  # optional
             enable_fast_compositional: boolean  # optional
+            enable_fourier_timestep: boolean  # optional
