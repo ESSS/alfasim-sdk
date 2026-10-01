@@ -26,8 +26,13 @@ repo's pixi-devenv env), then run `pre-commit install` once.
 
 Never push to `master`. Branch as `fb-<PROJECT-KEY>-<ISSUE>-<name>` (use `mu checkout -b`
 from the app repo, since the branch must span the whole repo group) and open a PR on
-`ESSS/alfasim-sdk` following `.github/PULL_REQUEST_TEMPLATE.md`: update `CHANGELOG.rst`, and
-bump the version to `.dev` for user-facing changes.
+`ESSS/alfasim-sdk` following `.github/PULL_REQUEST_TEMPLATE.md`. For user-facing changes:
+
+- Add an entry to the `UNRELEASED` section of `CHANGELOG.rst` (create it if missing).
+- Check `__version__` in `src/alfasim_sdk/_internal/version.py`. If it is a released version
+  (e.g. `1.6.0`), bump it to the next minor with a `.dev` suffix (`1.7.0.dev`). If it already
+  ends in `.dev`, an earlier change already did that since the last release, so leave it
+  alone. Releases themselves follow `RELEASING.rst`.
 
 ## API, downstream usage and the changelog
 
