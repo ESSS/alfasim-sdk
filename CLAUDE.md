@@ -53,18 +53,35 @@ prefixed with `**Breaking Change**:` and state what users should use instead.
 A change is breaking if existing `.alfacase` files, Python code using the SDK, or compiled
 plugins stop working or silently behave differently. In particular:
 
-- **`.alfacase` / `*Description`:** removing or renaming an attribute, class or enum member,
-  changing an enum's serialized value, changing an attribute's type or structure (e.g. a
-  scalar becoming a dict), or changing a default value (old files load fine but simulate
-  differently). Whenever old files would fail to load, also add a migration function to
-  `_internal/alfacase/migration.py` so they keep loading.
-- **Plugin hooks:** changing a hook's signature or return semantics, or adding a hook that
-  plugins are required to implement.
-- **C/C++ solver API (`alfasim_sdk_api/`):** changing a function's signature, a struct or
-  enum layout, or error codes, which breaks plugins compiled against the previous headers.
-- **Units:** removing a unit category or restricting the units allowed in one.
-- **Python API:** removing or renaming anything exported from `alfasim_sdk`, or changing
-  signatures/return types (e.g. in `result_reader`).
+**`.alfacase` / `*Description`** (whenever old files would fail to load, also add a
+migration function to `_internal/alfacase/migration.py` so they keep loading):
+
+- Removing or renaming an attribute, class or enum member.
+- Changing an enum's serialized value.
+- Changing an attribute's type or structure (e.g. a scalar becoming a dict).
+- Changing a default value (old files load fine but simulate differently).
+
+**Plugin hooks:**
+
+- Changing a hook's signature or return semantics.
+- Adding a hook that plugins are required to implement.
+
+**C/C++ solver API (`alfasim_sdk_api/`)**, which breaks plugins compiled against the previous
+headers:
+
+- Changing a function's signature.
+- Changing a struct or enum layout.
+- Changing error codes.
+
+**Units:**
+
+- Removing a unit category.
+- Restricting the units allowed in a category.
+
+**Python API:**
+
+- Removing or renaming anything exported from `alfasim_sdk`.
+- Changing signatures or return types (e.g. in `result_reader`).
 
 Purely additive changes (a new optional attribute with a backward-compatible default, a new
 enum member, a new optional hook or API function) are not breaking, but still go in the
