@@ -265,6 +265,11 @@ formation_layer_description_schema = Map(
             Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("material"): Str(),
+        Optional("porosity"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("pore_fluid_material"): Enum(['Brine']),
     }
 )
 gas_lift_valve_equipment_description_schema = Map(
@@ -2082,4 +2087,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 1fb08d15c91559a27418f53d23271fe8)
+# [[[end]]] (checksum: 0cf2130b98139bc1bbabae7d55fd1078)
