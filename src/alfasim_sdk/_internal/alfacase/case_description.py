@@ -1502,6 +1502,97 @@ class HeatSourceEquipmentDescription:
     # [[[end]]] (checksum: 1c2f1851f9156238464f93070019929c)
 
 
+@attr.s(slots=True, auto_attribs=True)
+class NearWellEquipmentDescription:
+    """
+    .. include:: /alfacase_definitions/NearWellEquipmentDescription.txt
+
+    .. include:: /alfacase_definitions/list_of_unit_for_length.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_volume_fraction.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_permeability_rock.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_dimensionless.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_pressure.txt
+    .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
+    """
+
+    start: ScalarDescriptionType = attrib_scalar(category="length")
+    fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+    material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
+
+    well_radius: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("length", 0.1, "m")
+    )
+    influence_radius: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("length", 100.0, "m")
+    )
+    reservoir_thickness: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("length", 10.0, "m")
+    )
+    radial_divisions: int = attr.ib(default=20, validator=instance_of(int))
+    angular_divisions: int = attr.ib(default=4, validator=instance_of(int))
+
+    porosity_at_well: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("volume fraction", 0.2, "-")
+    )
+    porosity_at_influence_radius: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("volume fraction", 0.2, "-")
+    )
+    base_permeability: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("permeability rock", 1.0e-13, "m2")
+    )
+    permeability_anisotropy_ratio: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+    permeability_porosity_coefficient: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 0.0, "-")
+    )
+
+    connate_water_saturation: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("volume fraction", 0.0, "-")
+    )
+    residual_oil_saturation: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("volume fraction", 0.0, "-")
+    )
+    water_corey_exponent: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 2.0, "-")
+    )
+    oil_corey_exponent: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 2.0, "-")
+    )
+    water_corey_endpoint: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+    oil_corey_endpoint: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+
+    initial_pressure: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("pressure", 60.0, "bar")
+    )
+    initial_temperature: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("temperature", 50.0, "degC")
+    )
+    initial_composition_type: constants.NearWellCompositionType = attrib_enum(
+        default=constants.NearWellCompositionType.OilSaturation
+    )
+    initial_composition: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+
+    reservoir_pressure: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("pressure", 60.0, "bar")
+    )
+    reservoir_temperature: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("temperature", 50.0, "degC")
+    )
+    reservoir_composition_type: constants.NearWellCompositionType = attrib_enum(
+        default=constants.NearWellCompositionType.OilSaturation
+    )
+    reservoir_composition: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+
+
 @attr.s(frozen=True, slots=True, auto_attribs=True)
 class PipeSegmentsDescription:
     """
@@ -1951,6 +2042,9 @@ class EquipmentDescription:
         LeakEquipmentDescription
     )
     pigs: dict[str, PigEquipmentDescription] = attrib_dict_of(PigEquipmentDescription)
+    near_wells: dict[str, NearWellEquipmentDescription] = attrib_dict_of(
+        NearWellEquipmentDescription
+    )
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
@@ -4304,10 +4398,29 @@ class CaseDescription:
                 well.annulus.initial_conditions,
                 f"Annulus from {well.name}",
             )
+            for name, near_well in well.equipment.near_wells.items():
+                _handle_invalid_fluid(near_well, f"{name} from {well.name}")
 
         if elements_with_invalid_fluid:
             raise InvalidReferenceError(
                 f"The following elements have an invalid fluid assigned: {', '.join(sorted(elements_with_invalid_fluid))}.\n"
+            )
+
+    def _check_near_well_placement(self) -> None:
+        """
+        Checks that no pipe holds a near-well, a near-well being the reservoir around a well.
+
+        Not part of `reset_invalid_references`: the near-well is kept, and the application flags it.
+        """
+        near_wells_on_pipes = [
+            f"'{name} from {pipe.name}'"
+            for pipe in self.pipes
+            for name in pipe.equipment.near_wells
+        ]
+        if near_wells_on_pipes:
+            raise InvalidReferenceError(
+                f"A near-well can only be placed on a well, but the following are on a pipe: "
+                f"{', '.join(sorted(near_wells_on_pipes))}.\n"
             )
 
     def ensure_valid_references(self) -> None:
@@ -4321,6 +4434,7 @@ class CaseDescription:
         self._check_pvt_model_references()
         self._check_restart_file()
         self._check_fluid_references()
+        self._check_near_well_placement()
         self.ensure_unique_names()
 
     def reset_invalid_references(self):

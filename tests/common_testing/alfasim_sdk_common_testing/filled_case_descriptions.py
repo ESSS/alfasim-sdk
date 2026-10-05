@@ -1,3 +1,4 @@
+import attr
 import numpy as np
 from barril.curve.curve import Curve
 from barril.units import Array, Scalar
@@ -167,6 +168,35 @@ HEAT_SOURCE_DESCRIPTION = case_description.HeatSourceEquipmentDescription(
     power_curve=Curve(
         Array("power", [2e4, 2.1e4, 2.3e4], "W"), Array("time", [0, 10, 20], "h")
     ),
+)
+NEAR_WELL_DESCRIPTION = case_description.NearWellEquipmentDescription(
+    start=Scalar("length", 900.0, "m"),
+    fluid="fluid_1",
+    material="Formation",
+    well_radius=Scalar("length", 0.15, "m"),
+    influence_radius=Scalar("length", 250.0, "m"),
+    reservoir_thickness=Scalar("length", 30.0, "m"),
+    radial_divisions=40,
+    angular_divisions=8,
+    porosity_at_well=Scalar("volume fraction", 0.25, "-"),
+    porosity_at_influence_radius=Scalar("volume fraction", 0.18, "-"),
+    base_permeability=Scalar("permeability rock", 5.0e-13, "m2"),
+    permeability_anisotropy_ratio=Scalar("dimensionless", 2.0, "-"),
+    permeability_porosity_coefficient=Scalar("dimensionless", 0.5, "-"),
+    connate_water_saturation=Scalar("volume fraction", 0.2, "-"),
+    residual_oil_saturation=Scalar("volume fraction", 0.25, "-"),
+    water_corey_exponent=Scalar("dimensionless", 3.0, "-"),
+    oil_corey_exponent=Scalar("dimensionless", 2.5, "-"),
+    water_corey_endpoint=Scalar("dimensionless", 0.4, "-"),
+    oil_corey_endpoint=Scalar("dimensionless", 0.9, "-"),
+    initial_pressure=Scalar("pressure", 250.0, "bar"),
+    initial_temperature=Scalar("temperature", 85.0, "degC"),
+    initial_composition_type=constants.NearWellCompositionType.OilMassFraction,
+    initial_composition=Scalar("dimensionless", 0.75, "-"),
+    reservoir_pressure=Scalar("pressure", 260.0, "bar"),
+    reservoir_temperature=Scalar("temperature", 90.0, "degC"),
+    reservoir_composition_type=constants.NearWellCompositionType.OilSaturation,
+    reservoir_composition=Scalar("dimensionless", 0.8, "-"),
 )
 INITIAL_CONDITIONS_DESCRIPTION = case_description.InitialConditionsDescription(
     pressures=case_builders.build_constant_initial_pressure_description(50.0, "bar"),
@@ -589,6 +619,10 @@ EQUIPMENT_DESCRIPTION = case_description.EquipmentDescription(
     pigs={"PIG": PIG_DESCRIPTION},
     leaks={"LEAK": LEAK_EQUIPMENT_DESCRIPTION},
 )
+# A near-well can only be placed on a well, so only the well equipment carries one.
+WELL_EQUIPMENT_DESCRIPTION = attr.evolve(
+    EQUIPMENT_DESCRIPTION, near_wells={"NEAR-WELL": NEAR_WELL_DESCRIPTION}
+)
 ANNULUS_EQUIPMENT_DESCRIPTION = case_description.AnnulusEquipmentDescription(
     leaks={"ANNULUS LEAK": LEAK_EQUIPMENT_DESCRIPTION},
     gas_lift_valves={"GAS LIFT VALVE": GAS_LIST_VALVE_DESCRIPTION},
@@ -667,7 +701,7 @@ WELL_DESCRIPTION = case_description.WellDescription(
     bottom_node="pressure_node",
     environment=ENVIRONMENT_DESCRIPTION,
     initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
-    equipment=EQUIPMENT_DESCRIPTION,
+    equipment=WELL_EQUIPMENT_DESCRIPTION,
 )
 TIME_OPTIONS_DESCRIPTION = case_description.TimeOptionsDescription(
     stop_on_steady_state=True,
