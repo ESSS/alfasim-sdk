@@ -13,6 +13,7 @@
             compressors: \ :class:`Dict <typing.Dict>`\[str, \ :class:`CompressorEquipmentDescription <CompressorEquipmentDescription>`\] = {}
             leaks: \ :class:`Dict <typing.Dict>`\[str, \ :class:`LeakEquipmentDescription <LeakEquipmentDescription>`\] = {}
             pigs: \ :class:`Dict <typing.Dict>`\[str, \ :class:`PigEquipmentDescription <PigEquipmentDescription>`\] = {}
+            near_wells: \ :class:`Dict <typing.Dict>`\[str, \ :class:`NearWellEquipmentDescription <NearWellEquipmentDescription>`\] = {}
 
 .. tab:: Schema
 
@@ -34,3 +35,5 @@
                 string: \ :class:`leak_equipment_description_schema <LeakEquipmentDescription>`
             pigs:  # optional
                 string: \ :class:`pig_equipment_description_schema <PigEquipmentDescription>`
+            near_wells:  # optional
+                string: \ :class:`near_well_equipment_description_schema <NearWellEquipmentDescription>`

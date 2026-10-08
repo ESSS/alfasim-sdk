@@ -461,6 +461,7 @@ def test_get_cases_class():
         "MassSourceNodePropertiesDescription",
         "MaterialDescription",
         "MultipleRunsDescription",
+        "NearWellEquipmentDescription",
         "NodeDescription",
         "NumericalOptionsDescription",
         "OpenHoleDescription",

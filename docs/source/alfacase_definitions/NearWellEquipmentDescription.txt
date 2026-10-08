@@ -1,0 +1,108 @@
+.. rubric:: Definitions
+
+.. tab:: CaseDescription
+
+    .. parsed-literal::
+
+        class NearWellEquipmentDescription
+            start: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
+            fluid: \ :class:`Optional <typing.Optional>`\[str] = None
+            material: \ :class:`Optional <typing.Optional>`\[str] = None
+            well_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, 'm', 'length')
+            influence_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(100.0, 'm', 'length')
+            reservoir_thickness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 'm', 'length')
+            radial_divisions: int = 20
+            angular_divisions: int = 4
+            porosity_at_well: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.2, '-', 'volume fraction')
+            porosity_at_influence_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.2, '-', 'volume fraction')
+            base_permeability: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1e-13, 'm2', 'permeability rock')
+            permeability_anisotropy_ratio: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            permeability_porosity_coefficient: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            connate_water_saturation: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'volume fraction')
+            residual_oil_saturation: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'volume fraction')
+            water_corey_exponent: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(2.0, '-', 'dimensionless')
+            oil_corey_exponent: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(2.0, '-', 'dimensionless')
+            water_corey_endpoint: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            oil_corey_endpoint: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            initial_pressure: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(60.0, 'bar', 'pressure')
+            initial_temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(50.0, 'degC', 'temperature')
+            initial_composition_type: \ :class:`NearWellCompositionType <alfasim_sdk._internal.constants.NearWellCompositionType>`\  = NearWellCompositionType.OilSaturation
+            initial_composition: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            reservoir_pressure: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(60.0, 'bar', 'pressure')
+            reservoir_temperature: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(50.0, 'degC', 'temperature')
+            reservoir_composition_type: \ :class:`NearWellCompositionType <alfasim_sdk._internal.constants.NearWellCompositionType>`\  = NearWellCompositionType.OilSaturation
+            reservoir_composition: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+
+.. tab:: Schema
+
+    .. parsed-literal::
+
+            start: 
+                number | expr
+                unit: str
+            fluid: string  # optional
+            material: string  # optional
+            well_radius:  # optional
+                number | expr
+                unit: str
+            influence_radius:  # optional
+                number | expr
+                unit: str
+            reservoir_thickness:  # optional
+                number | expr
+                unit: str
+            radial_divisions: number  # optional
+            angular_divisions: number  # optional
+            porosity_at_well:  # optional
+                number | expr
+                unit: str
+            porosity_at_influence_radius:  # optional
+                number | expr
+                unit: str
+            base_permeability:  # optional
+                number | expr
+                unit: str
+            permeability_anisotropy_ratio:  # optional
+                number | expr
+                unit: str
+            permeability_porosity_coefficient:  # optional
+                number | expr
+                unit: str
+            connate_water_saturation:  # optional
+                number | expr
+                unit: str
+            residual_oil_saturation:  # optional
+                number | expr
+                unit: str
+            water_corey_exponent:  # optional
+                number | expr
+                unit: str
+            oil_corey_exponent:  # optional
+                number | expr
+                unit: str
+            water_corey_endpoint:  # optional
+                number | expr
+                unit: str
+            oil_corey_endpoint:  # optional
+                number | expr
+                unit: str
+            initial_pressure:  # optional
+                number | expr
+                unit: str
+            initial_temperature:  # optional
+                number | expr
+                unit: str
+            initial_composition_type: \ :class:`NearWellCompositionType <alfasim_sdk._internal.constants.NearWellCompositionType>`\  # optional
+            initial_composition:  # optional
+                number | expr
+                unit: str
+            reservoir_pressure:  # optional
+                number | expr
+                unit: str
+            reservoir_temperature:  # optional
+                number | expr
+                unit: str
+            reservoir_composition_type: \ :class:`NearWellCompositionType <alfasim_sdk._internal.constants.NearWellCompositionType>`\  # optional
+            reservoir_composition:  # optional
+                number | expr
+                unit: str

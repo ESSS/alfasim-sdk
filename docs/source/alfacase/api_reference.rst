@@ -260,6 +260,8 @@ Equipment
 
 .. autoclass:: alfasim_sdk.HeatSourceEquipmentDescription()
 
+.. autoclass:: alfasim_sdk.NearWellEquipmentDescription()
+
 .. autoclass:: alfasim_sdk.CompressorEquipmentDescription()
 
 .. autoclass:: alfasim_sdk.SpeedCurveDescription()

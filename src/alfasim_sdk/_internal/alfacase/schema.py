@@ -653,6 +653,100 @@ multiple_runs_description_schema = Map(
         Optional("runs"): MapPattern(Str(), MapPattern(Str(), Float())),
     }
 )
+near_well_equipment_description_schema = Map(
+    {
+        "start": UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("fluid"): Str(),
+        Optional("material"): Str(),
+        Optional("well_radius"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("influence_radius"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("reservoir_thickness"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("radial_divisions"): Int(),
+        Optional("angular_divisions"): Int(),
+        Optional("porosity_at_well"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("porosity_at_influence_radius"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("base_permeability"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("permeability_anisotropy_ratio"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("permeability_porosity_coefficient"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("connate_water_saturation"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("residual_oil_saturation"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("water_corey_exponent"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("oil_corey_exponent"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("water_corey_endpoint"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("oil_corey_endpoint"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("initial_pressure"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("initial_temperature"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("initial_composition_type"): Enum(['oil_mass_fraction', 'oil_saturation']),
+        Optional("initial_composition"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("reservoir_pressure"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("reservoir_temperature"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("reservoir_composition_type"): Enum(['oil_mass_fraction', 'oil_saturation']),
+        Optional("reservoir_composition"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+    }
+)
 numerical_options_description_schema = Map(
     {
         Optional("nonlinear_solver_type"): Enum(['nonlinear_solver_newton_basic', 'nonlinear_solver_newton_backtracking', 'nonlinear_solver_alfasim_quasi_newton']),
@@ -1937,6 +2031,7 @@ equipment_description_schema = Map(
         Optional("compressors"): MapPattern(Str(), compressor_equipment_description_schema),
         Optional("leaks"): MapPattern(Str(), leak_equipment_description_schema),
         Optional("pigs"): MapPattern(Str(), pig_equipment_description_schema),
+        Optional("near_wells"): MapPattern(Str(), near_well_equipment_description_schema),
     }
 )
 ipr_models_description_schema = Map(
@@ -2082,4 +2177,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 1fb08d15c91559a27418f53d23271fe8)
+# [[[end]]] (checksum: ab7560486a2be5a54af8a8a6ef2fc7fa)

@@ -1361,9 +1361,51 @@ def test_invalid_fluid_reference_on_pipes():
     assert pipe.equipment.reservoir_inflows["Reservoir"].fluid is None
 
 
+def test_near_well_on_a_pipe() -> None:
+    """
+    A near-well is the reservoir around a well, so a pipe holding one is refused. Resetting the
+    invalid references keeps it, for the application to flag.
+    """
+    case = case_description.CaseDescription(
+        pvt_models=case_description.PvtModelsDescription(
+            default_model="PVT",
+            compositional={
+                "PVT": case_description.PvtModelCompositionalDescription(
+                    fluids={"Fluid 1": case_description.CompositionalFluidDescription()}
+                )
+            },
+        ),
+        pipes=[
+            case_description.PipeDescription(
+                name="Pipe 1",
+                source="",
+                target="",
+                segments=build_simple_segment(),
+                equipment=case_description.EquipmentDescription(
+                    near_wells={
+                        "NearWell": case_description.NearWellEquipmentDescription(
+                            start=Scalar("length", 1, "m")
+                        )
+                    },
+                ),
+            )
+        ],
+    )
+    expected_error = (
+        "A near-well can only be placed on a well, but the following are on a pipe: "
+        "'NearWell from Pipe 1'."
+    )
+    with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
+        case.ensure_valid_references()
+
+    case.reset_invalid_references()
+    assert list(case.pipes[0].equipment.near_wells) == ["NearWell"]
+
+
 def test_invalid_fluid_reference_on_wells(default_well):
     """
-    Ensure that only declared Fluids can be used on WellDescription and AnnulusDescription.
+    Ensure that only declared Fluids can be used on WellDescription, AnnulusDescription and
+    NearWellEquipmentDescription.
     """
     case = case_description.CaseDescription(
         pvt_models=case_description.PvtModelsDescription(
@@ -1388,10 +1430,17 @@ def test_invalid_fluid_reference_on_wells(default_well):
                         fluid="acme",
                     ),
                 ),
+                equipment=case_description.EquipmentDescription(
+                    near_wells={
+                        "NearWell": case_description.NearWellEquipmentDescription(
+                            start=Scalar("length", 1, "m"), fluid="acme"
+                        )
+                    },
+                ),
             )
         ],
     )
-    expected_error = "The following elements have an invalid fluid assigned: 'Annulus from Well 1', 'Well 1'."
+    expected_error = "The following elements have an invalid fluid assigned: 'Annulus from Well 1', 'NearWell from Well 1', 'Well 1'."
     with pytest.raises(InvalidReferenceError, match=re.escape(expected_error)):
         case.ensure_valid_references()
 
@@ -1399,6 +1448,7 @@ def test_invalid_fluid_reference_on_wells(default_well):
     well = case.wells[0]
     assert well.initial_conditions.fluid is None
     assert well.annulus.initial_conditions.fluid is None
+    assert well.equipment.near_wells["NearWell"].fluid is None
 
 
 def test_case_description_duplicate_names(default_well):

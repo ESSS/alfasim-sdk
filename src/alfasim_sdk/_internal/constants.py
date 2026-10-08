@@ -208,6 +208,15 @@ class WellIndexPhaseType(Enum):
     Liquid = "well_index_phase_liquid"
 
 
+class NearWellCompositionType(Enum):
+    """
+    How a near-well composition is given: as the oil mass fraction or as the oil saturation.
+    """
+
+    OilMassFraction = "oil_mass_fraction"
+    OilSaturation = "oil_saturation"
+
+
 class MassSourceType(Enum):
     MassFlowRates = "mass_source_type_mass_flow_rates"
     AllVolumetricFlowRates = "mass_source_type_all_volumetric_flow_rates"

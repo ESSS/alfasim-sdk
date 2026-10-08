@@ -190,6 +190,10 @@ ALFACASE_TEST_CONFIG_MAP = {
         schema=schema.heat_source_equipment_description_schema,
         is_dict=True,
     ),
+    "NearWellEquipmentDescription": AlfacaseTestConfig(
+        description_expected=filled_case_descriptions.NEAR_WELL_DESCRIPTION,
+        schema=schema.near_well_equipment_description_schema,
+    ),
     "HeavyComponentDescription": AlfacaseTestConfig(
         description_expected=filled_case_descriptions.HEAVY_COMPONENT_DESCRIPTION,
         schema=schema.heavy_component_description_schema,
