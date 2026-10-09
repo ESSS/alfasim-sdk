@@ -1250,6 +1250,9 @@ def test_material_description_as_dict():
         "outer_emissivity": (0.0, "-"),
         "thermal_conductivity": (0.0, "W/m.degC"),
         "viscosity": (0.0, "cP"),
+        "initial_porosity": (0.0, "-"),
+        "compaction_coefficient": (0.0, "1/m"),
+        "pore_fluid_material": None,
     }
 
 

@@ -622,7 +622,7 @@ mass_source_node_properties_description_schema = Map(
 material_description_schema = Map(
     {
         "name": Str(),
-        Optional("material_type"): Enum(['solid', 'fluid']),
+        Optional("material_type"): Enum(['solid', 'fluid', 'formation']),
         Optional("density"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
@@ -651,6 +651,15 @@ material_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
+        Optional("initial_porosity"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("compaction_coefficient"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("pore_fluid_material"): Str(),
     }
 )
 

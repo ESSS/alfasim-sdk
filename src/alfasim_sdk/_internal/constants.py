@@ -254,6 +254,7 @@ class PVTCompositionalViscosityModel(Enum):
 class MaterialType(Enum):
     Solid = "solid"
     Fluid = "fluid"
+    Formation = "formation"
 
 
 FLUID_GAS = "gas"

@@ -263,6 +263,9 @@ MATERIAL_DESCRIPTION = case_description.MaterialDescription(
     outer_emissivity=Scalar("emissivity", 0.5, "-"),
     expansion=Scalar("volumetric thermal expansion", 0.0001, "1/degC"),
     viscosity=Scalar("dynamic viscosity", 20, "cP"),
+    initial_porosity=Scalar("dimensionless", 0.3, "-"),
+    compaction_coefficient=Scalar("per length", 0.0005, "1/m"),
+    pore_fluid_material="Brine",
 )
 MASS_SOURCE_NODE_PROPERTIES_DESCRIPTION = (
     case_description.MassSourceNodePropertiesDescription(
@@ -671,10 +674,14 @@ PIPE_DESCRIPTION = case_description.PipeDescription(
     target="pressure_node",
 )
 FORMATION_LAYER_DESCRIPTION = case_description.FormationLayerDescription(
-    name="f", start=Scalar(1, "m"), material="Carbon Steel"
+    name="f",
+    start=Scalar(category="length", value=1, unit="m"),
+    material="Carbon Steel",
 )
 FORMATION_LAYER_DESCRIPTION_1 = case_description.FormationLayerDescription(
-    name="f (1)", start=Scalar(1, "m"), material="Carbon Steel"
+    name="f (1)",
+    start=Scalar(category="length", value=1, unit="m"),
+    material="Carbon Steel",
 )
 FORMATION_DESCRIPTION = case_description.FormationDescription(
     reference_y_coordinate=Scalar(1, "m"),

@@ -9,6 +9,10 @@ CHANGELOG
 * Add ``get_wall_radial_nodes_temperature`` solver API function. It gets the temperature of every radial mesh node for a given control volume, including nodes internal to a wall layer when the radial mesh is refined.
 * Add ``enable_fourier_timestep`` attribute to ``NumericalOptionsDescription``. It controls whether pipes using the transient bidimensional wall model may have their timestep governed by the Fourier condition instead of only CFL. The Fourier timestep control is applied when the fluid is (nearly) stagnant, such as during a well shut-in.
 * Add ``NearWellEquipmentDescription`` and the ``near_wells`` attribute to ``EquipmentDescription``, for the near-well equipment: a two-phase (water and oil) reservoir simulation around the well. Add the ``NearWellCompositionType`` enum, which states whether a near-well composition is given as the oil mass fraction or the oil saturation. ``CaseDescription.ensure_valid_references`` raises ``InvalidReferenceError`` for a near-well placed on a pipe.
+* Add ``initial_porosity`` attribute to ``MaterialDescription``. It is the porosity of the material at the surface and, together with ``compaction_coefficient``, determines the porosity of a formation layer made of this material, which is used to calculate its effective properties (density, heat capacity and thermal conductivity).
+* Add ``compaction_coefficient`` attribute to ``MaterialDescription``. It describes how the porosity of the material decreases with depth due to compaction.
+* Add ``pore_fluid_material`` attribute to ``MaterialDescription``. It is the name of the fluid-type material (``MaterialType.Fluid``) that fills the pores of the material. Any fluid material of the case can be used, either a default one that comes from ``DEFAULT_MATERIALS`` or a user-defined one. If not given, ``Brine`` is used.
+* Add ``Formation`` option to ``MaterialType``. It represents a porous rock material used in the formation layers of a well, and is the only type for which ``initial_porosity``, ``compaction_coefficient`` and ``pore_fluid_material`` are used.
 
 1.9.0 (2026-08-28)
 ==================
