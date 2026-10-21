@@ -11,8 +11,8 @@
             well_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, 'm', 'length')
             influence_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(100.0, 'm', 'length')
             reservoir_thickness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 'm', 'length')
-            radial_divisions: int = 20
-            angular_divisions: int = 4
+            radial_divisions: int | \ :class:`IntExpression <alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression>`\  = 20
+            angular_divisions: int | \ :class:`IntExpression <alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression>`\  = 4
             porosity_at_well: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.2, '-', 'volume fraction')
             porosity_at_influence_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.2, '-', 'volume fraction')
             base_permeability: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1e-13, 'm2', 'permeability rock')
@@ -51,8 +51,10 @@
             reservoir_thickness:  # optional
                 number | expr
                 unit: str
-            radial_divisions: number  # optional
-            angular_divisions: number  # optional
+            radial_divisions:  # optional
+                number | expr
+            angular_divisions:  # optional
+                number | expr
             porosity_at_well:  # optional
                 number | expr
                 unit: str

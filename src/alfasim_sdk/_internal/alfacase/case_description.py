@@ -1528,8 +1528,12 @@ class NearWellEquipmentDescription:
     reservoir_thickness: ScalarDescriptionType = attrib_scalar(
         default=Scalar("length", 10.0, "m")
     )
-    radial_divisions: int = attr.ib(default=20, validator=instance_of(int))
-    angular_divisions: int = attr.ib(default=4, validator=instance_of(int))
+    radial_divisions: IntDescriptionType = attr.ib(
+        default=20, validator=instance_of(IntDescriptionType)
+    )
+    angular_divisions: IntDescriptionType = attr.ib(
+        default=4, validator=instance_of(IntDescriptionType)
+    )
 
     porosity_at_well: ScalarDescriptionType = attrib_scalar(
         default=Scalar("volume fraction", 0.2, "-")
@@ -4066,6 +4070,12 @@ class NumericalOptionsDescription:
         control volumes where the fluid is (near) stagnant -- e.g. during a well shut-in.
         Defaults to ``False``.
 
+    :ivar near_well_tolerance:
+        Relative tolerance of the near-well non-linear solver.
+
+    :ivar near_well_maximum_iterations:
+        Maximum number of iterations of the near-well non-linear solver.
+
     .. include:: /alfacase_definitions/NumericalOptionsDescription.txt
     """
 
@@ -4105,6 +4115,10 @@ class NumericalOptionsDescription:
     damp_slug_flow: bool = attr.ib(default=False, validator=instance_of(bool))
     enable_fast_compositional: bool = attr.ib(default=True, validator=instance_of(bool))
     enable_fourier_timestep: bool = attr.ib(default=False, validator=instance_of(bool))
+    near_well_tolerance: FloatDescriptionType = attr.ib(default=1e-6)
+    near_well_maximum_iterations: IntDescriptionType = attr.ib(
+        default=10, validator=instance_of(IntDescriptionType)
+    )
 
 
 @attr.s(frozen=True, auto_attribs=True)

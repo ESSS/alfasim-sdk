@@ -92,6 +92,8 @@ numerical_options:
   damp_slug_flow: False
   enable_fast_compositional: True
   enable_fourier_timestep: False
+  near_well_tolerance: 1e-06
+  near_well_maximum_iterations: 10
 plugins: []
 outputs:
   automatic_trend_frequency: True
