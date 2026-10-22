@@ -6,9 +6,10 @@ from numbers import Number
 from pathlib import Path
 from typing import (
     Any,
+    Mapping,
     Sequence,
     TypeVar,
-    Union, Mapping,
+    Union,
 )
 
 import attr
