@@ -1519,9 +1519,6 @@ class NearWellEquipmentDescription:
     fluid: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
     material: str | None = attr.ib(default=None, validator=optional(instance_of(str)))
 
-    well_radius: ScalarDescriptionType = attrib_scalar(
-        default=Scalar("length", 0.1, "m")
-    )
     influence_radius: ScalarDescriptionType = attrib_scalar(
         default=Scalar("length", 100.0, "m")
     )

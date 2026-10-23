@@ -173,7 +173,6 @@ NEAR_WELL_DESCRIPTION = case_description.NearWellEquipmentDescription(
     start=Scalar("length", 900.0, "m"),
     fluid="fluid_1",
     material="Formation",
-    well_radius=Scalar("length", 0.15, "m"),
     influence_radius=Scalar("length", 250.0, "m"),
     reservoir_thickness=Scalar("length", 30.0, "m"),
     radial_divisions=40,
