@@ -8,7 +8,6 @@
             start: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`
             fluid: \ :class:`Optional <typing.Optional>`\[str] = None
             material: \ :class:`Optional <typing.Optional>`\[str] = None
-            well_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.1, 'm', 'length')
             influence_radius: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(100.0, 'm', 'length')
             reservoir_thickness: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(10.0, 'm', 'length')
             radial_divisions: int | \ :class:`IntExpression <alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression>`\  = 20
@@ -42,9 +41,6 @@
                 unit: str
             fluid: string  # optional
             material: string  # optional
-            well_radius:  # optional
-                number | expr
-                unit: str
             influence_radius:  # optional
                 number | expr
                 unit: str
