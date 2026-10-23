@@ -670,10 +670,6 @@ near_well_equipment_description_schema = Map(
         ),
         Optional("fluid"): Str(),
         Optional("material"): Str(),
-        Optional("well_radius"): UnsafeOrValidator(
-            Map({"value": Float(), "unit": Str()}),
-            Map({"expr": Str(), "unit": Str()}),
-        ),
         Optional("influence_radius"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
@@ -2200,4 +2196,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 5075d3f3bf9b5fbabb550c7424e1714a)
+# [[[end]]] (checksum: 0584177e10e6eb81f5430b41145e0bab)
