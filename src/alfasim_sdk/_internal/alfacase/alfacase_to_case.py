@@ -6,6 +6,7 @@ from numbers import Number
 from pathlib import Path
 from typing import (
     Any,
+    Mapping,
     Sequence,
     TypeVar,
     Union,
@@ -1906,10 +1907,30 @@ def load_wall_description(
     ]
 
 
+def load_near_wells_description(
+    document: DescriptionDocument,
+) -> Mapping[str, case_description.NearWellEquipmentDescription]:
+    return {
+        key.data: load_instance(
+            DescriptionDocument(value, document.file_path),
+            case_description.NearWellEquipmentDescription,
+            explicit_loaders={
+                "radial_divisions": load_int,
+                "angular_divisions": load_int,
+            },
+        )
+        for key, value in document.content.items()
+    }
+
+
 def load_equipment_description(
     document: DescriptionDocument,
 ) -> case_description.EquipmentDescription:
-    return load_instance(document, case_description.EquipmentDescription)
+    return load_instance(
+        document,
+        case_description.EquipmentDescription,
+        explicit_loaders={"near_wells": load_near_wells_description},
+    )
 
 
 def load_x_and_y_description(
@@ -2041,6 +2062,8 @@ def load_numerical_options_description(
         "damp_slug_flow": load_value,
         "enable_fast_compositional": load_value,
         "enable_fourier_timestep": load_value,
+        "near_well_tolerance": load_float,
+        "near_well_maximum_iterations": load_int,
     }
     case_values = to_case_values(document, alfacase_to_case_description)
     item_description = case_description.NumericalOptionsDescription(**case_values)

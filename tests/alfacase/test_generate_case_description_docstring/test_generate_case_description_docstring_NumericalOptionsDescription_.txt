@@ -21,6 +21,8 @@
             damp_slug_flow: bool = False
             enable_fast_compositional: bool = True
             enable_fourier_timestep: bool = False
+            near_well_tolerance: float | \ :class:`FloatExpression <alfasim_sdk._internal.alfacase.case_description_attributes.FloatExpression>`\  = 1e-06
+            near_well_maximum_iterations: int | \ :class:`IntExpression <alfasim_sdk._internal.alfacase.case_description_attributes.IntExpression>`\  = 10
 
 .. tab:: Schema
 
@@ -51,3 +53,7 @@
             damp_slug_flow: boolean  # optional
             enable_fast_compositional: boolean  # optional
             enable_fourier_timestep: boolean  # optional
+            near_well_tolerance:  # optional
+                number | expr
+            near_well_maximum_iterations:  # optional
+                number | expr

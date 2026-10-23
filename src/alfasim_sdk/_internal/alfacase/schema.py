@@ -682,8 +682,14 @@ near_well_equipment_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("radial_divisions"): Int(),
-        Optional("angular_divisions"): Int(),
+        Optional("radial_divisions"): UnsafeOrValidator(
+            Int(),
+            Str(),
+        ),
+        Optional("angular_divisions"): UnsafeOrValidator(
+            Int(),
+            Str(),
+        ),
         Optional("porosity_at_well"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
@@ -795,6 +801,14 @@ numerical_options_description_schema = Map(
         Optional("damp_slug_flow"): Bool(),
         Optional("enable_fast_compositional"): Bool(),
         Optional("enable_fourier_timestep"): Bool(),
+        Optional("near_well_tolerance"): UnsafeOrValidator(
+            Float(),
+            Str(),
+        ),
+        Optional("near_well_maximum_iterations"): UnsafeOrValidator(
+            Int(),
+            Str(),
+        ),
     }
 )
 open_hole_description_schema = Map(
@@ -2186,4 +2200,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 92cc78589ea36eb03c8c6bcbb160b008)
+# [[[end]]] (checksum: 5075d3f3bf9b5fbabb550c7424e1714a)
