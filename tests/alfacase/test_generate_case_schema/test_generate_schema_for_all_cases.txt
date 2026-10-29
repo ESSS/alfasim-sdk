@@ -678,10 +678,6 @@ near_well_equipment_description_schema = Map(
         ),
         Optional("fluid"): Str(),
         Optional("material"): Str(),
-        Optional("well_radius"): UnsafeOrValidator(
-            Map({"value": Float(), "unit": Str()}),
-            Map({"expr": Str(), "unit": Str()}),
-        ),
         Optional("influence_radius"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
