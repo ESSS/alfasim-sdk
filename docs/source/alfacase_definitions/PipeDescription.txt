@@ -18,6 +18,8 @@
             initial_conditions: \ :class:`InitialConditionsDescription <InitialConditionsDescription>`\  = InitialConditionsDescription()
             flow_pattern_model: \ :class:`FlowPatternModel <alfasim_sdk._internal.constants.FlowPatternModel>`\  = FlowPatternModel.UnitCell
             regime_capturing_mesh_threshold: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(0.0, '-', 'dimensionless')
+            wall_friction_tuning_factor: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
+            interfacial_friction_tuning_factor: \ :class:`Scalar <barril.units.Scalar>`\ | \ :class:`ScalarExpression <alfasim_sdk._internal.alfacase.case_description_attributes.ScalarExpression>`\  = Scalar(1.0, '-', 'dimensionless')
 
 .. tab:: Schema
 
@@ -36,5 +38,11 @@
             initial_conditions: \ :class:`initial_conditions_description_schema <InitialConditionsDescription>`\  # optional
             flow_pattern_model: \ :class:`FlowPatternModel <alfasim_sdk._internal.constants.FlowPatternModel>`\  # optional
             regime_capturing_mesh_threshold:  # optional
+                number | expr
+                unit: str
+            wall_friction_tuning_factor:  # optional
+                number | expr
+                unit: str
+            interfacial_friction_tuning_factor:  # optional
                 number | expr
                 unit: str

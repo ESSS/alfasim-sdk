@@ -27,6 +27,7 @@ from alfasim_sdk._internal.alfacase.alfacase_to_case import (
 from alfasim_sdk._internal.alfacase.case_description_attributes import (
     ArrayExpression,
     DescriptionError,
+    ScalarExpression,
 )
 from alfasim_sdk._internal.alfacase.generate_schema import (
     IGNORED_PROPERTIES,
@@ -988,3 +989,36 @@ def test_obtain_case_description_with_array_exprs(datadir: Path) -> None:
     assert x_and_y_description.y == ArrayExpression(
         category="length", exprs=["A", "2.0", "A+B", "4.0"], unit="m"
     )
+
+
+@pytest.mark.parametrize(
+    "base_description, description_schema",
+    [
+        (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
+        (filled_case_descriptions.WELL_DESCRIPTION, schema.well_description_schema),
+    ],
+)
+def test_load_friction_tuning_factor_exprs(
+    alfacase_to_case_helper,
+    base_description: case_description.PipeDescription
+    | case_description.WellDescription,
+    description_schema: strictyaml.Map,
+) -> None:
+    wall_expr = ScalarExpression(expr="f_wall", unit="-", category="dimensionless")
+    interfacial_expr = ScalarExpression(
+        expr="f_int", unit="-", category="dimensionless"
+    )
+    alfacase_config = AlfacaseTestConfig(
+        description_expected=attr.evolve(
+            base_description,
+            wall_friction_tuning_factor=wall_expr,
+            interfacial_friction_tuning_factor=interfacial_expr,
+        ),
+        schema=description_schema,
+        is_sequence=True,
+    )
+
+    [loaded_description] = alfacase_to_case_helper.generate_description(alfacase_config)
+
+    assert loaded_description.wall_friction_tuning_factor == wall_expr
+    assert loaded_description.interfacial_friction_tuning_factor == interfacial_expr
