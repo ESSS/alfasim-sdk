@@ -671,6 +671,8 @@ PIPE_DESCRIPTION = case_description.PipeDescription(
     segments=PIPE_WALL_DESCRIPTION,
     source="mass_source_node",
     target="pressure_node",
+    wall_friction_tuning_factor=Scalar("dimensionless", 1.1, "-"),
+    interfacial_friction_tuning_factor=Scalar("dimensionless", 0.9, "-"),
 )
 FORMATION_LAYER_DESCRIPTION = case_description.FormationLayerDescription(
     name="f",
@@ -708,6 +710,8 @@ WELL_DESCRIPTION = case_description.WellDescription(
     environment=ENVIRONMENT_DESCRIPTION,
     initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
     equipment=WELL_EQUIPMENT_DESCRIPTION,
+    wall_friction_tuning_factor=Scalar("dimensionless", 1.2, "-"),
+    interfacial_friction_tuning_factor=Scalar("dimensionless", 0.8, "-"),
 )
 TIME_OPTIONS_DESCRIPTION = case_description.TimeOptionsDescription(
     stop_on_steady_state=True,

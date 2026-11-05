@@ -312,6 +312,12 @@ pipes:
   regime_capturing_mesh_threshold:
     value: 0.0
     unit: '-'
+  wall_friction_tuning_factor:
+    value: 1.0
+    unit: '-'
+  interfacial_friction_tuning_factor:
+    value: 1.0
+    unit: '-'
 nodes: []
 wells: []
 materials: []

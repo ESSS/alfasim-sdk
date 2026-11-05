@@ -1,3 +1,4 @@
+import math
 import re
 import textwrap
 from collections.abc import Callable
@@ -46,6 +47,7 @@ from alfasim_sdk._internal.alfacase.case_description_attributes import (
     to_scalar,
 )
 
+from ..common_testing.alfasim_sdk_common_testing import filled_case_descriptions
 from ..common_testing.alfasim_sdk_common_testing.case_builders import (
     build_simple_segment,
 )
@@ -1791,3 +1793,47 @@ def test_obtain_curve_from_arrays() -> None:
 
     curve_4 = obtain_curve_from_arrays(domain=my_array_2, image=my_array_2)
     assert isinstance(curve_4, CurveExpression)
+
+
+@pytest.mark.parametrize(
+    "base_description",
+    [
+        filled_case_descriptions.PIPE_DESCRIPTION,
+        filled_case_descriptions.WELL_DESCRIPTION,
+    ],
+)
+@pytest.mark.parametrize(
+    "attribute_name",
+    ["wall_friction_tuning_factor", "interfacial_friction_tuning_factor"],
+)
+@pytest.mark.parametrize("invalid_value", [0.0, -0.5, math.nan, math.inf])
+def test_friction_tuning_factor_validation(
+    base_description: case_description.PipeDescription
+    | case_description.WellDescription,
+    attribute_name: str,
+    invalid_value: float,
+) -> None:
+    def evolve_attribute(
+        value: Any,
+    ) -> case_description.PipeDescription | case_description.WellDescription:
+        changes: dict[str, Any] = {attribute_name: value}
+        return attr.evolve(base_description, **changes)
+
+    default = attr.fields_dict(type(base_description))[attribute_name].default
+    assert default == Scalar("dimensionless", 1.0, "-")
+
+    with pytest.raises(
+        AssertionError, match=f"{attribute_name} must be positive and finite"
+    ):
+        evolve_attribute(Scalar("dimensionless", invalid_value, "-"))
+
+    with pytest.raises(
+        AssertionError,
+        match=f"{attribute_name} must be dimensionless, got category 'length'",
+    ):
+        evolve_attribute(Scalar(1.0, "m"))
+
+    # Expressions are only evaluated by the application, so they are not validated here.
+    expression = ScalarExpression(expr="f", unit="-", category="dimensionless")
+    description = evolve_attribute(expression)
+    assert getattr(description, attribute_name) == expression
