@@ -14,6 +14,7 @@ CHANGELOG
 * Add ``compaction_coefficient`` attribute to ``MaterialDescription``. It describes how the porosity of the material decreases with depth due to compaction.
 * Add ``pore_fluid_material`` attribute to ``MaterialDescription``. It is the name of the fluid-type material (``MaterialType.Fluid``) that fills the pores of the material. Any fluid material of the case can be used, either a default one that comes from ``DEFAULT_MATERIALS`` or a user-defined one. If not given, ``Brine`` is used.
 * Add ``Formation`` option to ``MaterialType``. It represents a porous rock material used in the formation layers of a well, and is the only type for which ``initial_porosity``, ``compaction_coefficient`` and ``pore_fluid_material`` are used.
+* Add ``wall_friction_tuning_factor`` and ``interfacial_friction_tuning_factor`` attributes to ``PipeDescription`` and ``WellDescription``. They are dimensionless multipliers (default ``1.0``, must be positive) applied to the wall and interfacial friction factors of the pipe or well.
 
 1.9.0 (2026-08-28)
 ==================

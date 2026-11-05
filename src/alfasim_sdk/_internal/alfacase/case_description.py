@@ -2114,9 +2114,25 @@ class EnvironmentDescription:
             return self.tvd_properties_table
 
 
+def _validate_positive_tuning_factor(attribute, value):
+    # Expressions are evaluated only when the case is loaded by the application.
+    if isinstance(value, Scalar):
+        assert value.GetCategory() == "dimensionless", (
+            f"{attribute.name} must be dimensionless, got category {value.GetCategory()!r}"
+        )
+        assert value.GetValue("-") > 0.0, f"{attribute.name} must be positive"
+
+
 @attr.s(slots=True, auto_attribs=True)
 class PipeDescription:
     """
+    :ivar wall_friction_tuning_factor:
+        Multiplier applied to the wall friction factors of the pipe.
+        Must be positive. Defaults to 1.0 (no change).
+    :ivar interfacial_friction_tuning_factor:
+        Multiplier applied to the interfacial friction factors of the pipe.
+        Must be positive. Defaults to 1.0 (no change).
+
     .. include:: /alfacase_definitions/PipeDescription.txt
     """
 
@@ -2146,6 +2162,17 @@ class PipeDescription:
     regime_capturing_mesh_threshold: ScalarDescriptionType = attrib_scalar(
         default=Scalar(0.0, "-")
     )
+    wall_friction_tuning_factor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+    interfacial_friction_tuning_factor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+
+    @wall_friction_tuning_factor.validator
+    @interfacial_friction_tuning_factor.validator
+    def _validate_friction_tuning_factor(self, attribute, value):
+        _validate_positive_tuning_factor(attribute, value)
 
 
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
@@ -2576,6 +2603,13 @@ class AnnulusDescription:
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
 class WellDescription:
     """
+    :ivar wall_friction_tuning_factor:
+        Multiplier applied to the wall friction factors of the well.
+        Must be positive. Defaults to 1.0 (no change).
+    :ivar interfacial_friction_tuning_factor:
+        Multiplier applied to the interfacial friction factors of the well.
+        Must be positive. Defaults to 1.0 (no change).
+
     .. include:: /alfacase_definitions/WellDescription.txt
     """
 
@@ -2595,6 +2629,17 @@ class WellDescription:
         InitialConditionsDescription
     )
     equipment: EquipmentDescription = attrib_instance(EquipmentDescription)
+    wall_friction_tuning_factor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+    interfacial_friction_tuning_factor: ScalarDescriptionType = attrib_scalar(
+        default=Scalar("dimensionless", 1.0, "-")
+    )
+
+    @wall_friction_tuning_factor.validator
+    @interfacial_friction_tuning_factor.validator
+    def _validate_friction_tuning_factor(self, attribute, value):
+        _validate_positive_tuning_factor(attribute, value)
 
 
 @attr.s(frozen=True, slots=True, kw_only=True, auto_attribs=True)
