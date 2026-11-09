@@ -1,5 +1,6 @@
 import shutil
 import textwrap
+from collections.abc import Sequence
 from pathlib import Path
 
 import attr
@@ -10,6 +11,7 @@ from barril.units import Array, Scalar
 from strictyaml import YAML
 from strictyaml.ruamel.comments import CommentedMap
 
+from alfasim_sdk._internal import constants
 from alfasim_sdk._internal.alfacase import alfacase_to_case, case_description, schema
 from alfasim_sdk._internal.alfacase.alfacase import (
     _convert_description_to_yaml,
@@ -90,9 +92,14 @@ def alfacase_to_case_helper(tmp_path):
             self,
             alfacase_config: AlfacaseTestConfig,
             remove_redundant_input_type_data: bool = False,
+            removed_keys: Sequence[str] = (),
         ):
             """
             Helper method to generate a "Description" from the given alfacase_config
+
+            :param removed_keys:
+                Keys removed from the generated alfacase before loading it, to emulate files
+                that don't define them.
             """
             alfacase_string = _convert_description_to_yaml(
                 alfacase_config.description_expected,
@@ -103,6 +110,8 @@ def alfacase_to_case_helper(tmp_path):
                 schema=alfacase_config.schema,
                 allow_flow_style=True,
             )
+            for key in removed_keys:
+                del alfacase_content[key]
 
             # 'LoadPvtModelsDescription' is special case and the DescriptionDocument doesn't need a FakeKey
             skip_dict = (
@@ -1022,3 +1031,62 @@ def test_load_friction_tuning_factor_exprs(
 
     assert loaded_description.wall_friction_tuning_factor == wall_expr
     assert loaded_description.interfacial_friction_tuning_factor == interfacial_expr
+
+
+@pytest.mark.parametrize(
+    "base_description, description_schema",
+    [
+        (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
+    ],
+)
+def test_load_regime_capturing_mesh_threshold_expr(
+    alfacase_to_case_helper,
+    base_description: case_description.PipeDescription,
+    description_schema: strictyaml.Map,
+) -> None:
+    threshold_expr = ScalarExpression(
+        expr="rc_threshold", unit="-", category="dimensionless"
+    )
+    alfacase_config = AlfacaseTestConfig(
+        description_expected=attr.evolve(
+            base_description, regime_capturing_mesh_threshold=threshold_expr
+        ),
+        schema=description_schema,
+        is_sequence=True,
+    )
+
+    [loaded_description] = alfacase_to_case_helper.generate_description(alfacase_config)
+
+    assert loaded_description.regime_capturing_mesh_threshold == threshold_expr
+
+
+@pytest.mark.parametrize(
+    "base_description, description_schema",
+    [
+        (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
+    ],
+)
+def test_load_flow_pattern_model_defaults(
+    alfacase_to_case_helper,
+    base_description: case_description.PipeDescription,
+    description_schema: strictyaml.Map,
+) -> None:
+    """
+    Alfacase files written before the flow pattern model could be set keep loading, with the
+    defaults.
+    """
+    alfacase_config = AlfacaseTestConfig(
+        description_expected=base_description,
+        schema=description_schema,
+        is_sequence=True,
+    )
+
+    [loaded_description] = alfacase_to_case_helper.generate_description(
+        alfacase_config,
+        removed_keys=["flow_pattern_model", "regime_capturing_mesh_threshold"],
+    )
+
+    assert loaded_description.flow_pattern_model == constants.FlowPatternModel.UnitCell
+    assert loaded_description.regime_capturing_mesh_threshold == Scalar(
+        "dimensionless", 0.0, "-"
+    )

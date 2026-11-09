@@ -1988,6 +1988,8 @@ def load_pipe_description(
         "target": load_value,
         "source_port": get_enum_loader(enum_class=constants.WellConnectionPort),
         "target_port": get_enum_loader(enum_class=constants.WellConnectionPort),
+        "flow_pattern_model": get_enum_loader(enum_class=constants.FlowPatternModel),
+        "regime_capturing_mesh_threshold": get_scalar_loader(category="dimensionless"),
         "wall_friction_tuning_factor": get_scalar_loader(category="dimensionless"),
         "interfacial_friction_tuning_factor": get_scalar_loader(
             category="dimensionless"

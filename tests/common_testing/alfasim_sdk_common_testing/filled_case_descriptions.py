@@ -671,6 +671,8 @@ PIPE_DESCRIPTION = case_description.PipeDescription(
     segments=PIPE_WALL_DESCRIPTION,
     source="mass_source_node",
     target="pressure_node",
+    flow_pattern_model=constants.FlowPatternModel.RegimeCapturing,
+    regime_capturing_mesh_threshold=Scalar("dimensionless", 0.5, "-"),
     wall_friction_tuning_factor=Scalar("dimensionless", 1.1, "-"),
     interfacial_friction_tuning_factor=Scalar("dimensionless", 0.9, "-"),
 )

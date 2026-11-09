@@ -2132,6 +2132,11 @@ def _validate_positive_tuning_factor(
 @attr.s(slots=True, auto_attribs=True)
 class PipeDescription:
     """
+    :ivar flow_pattern_model:
+        Model used to identify the flow pattern along the pipe.
+    :ivar regime_capturing_mesh_threshold:
+        Mesh threshold used by the regime capturing model. Only used when
+        ``flow_pattern_model`` is ``FlowPatternModel.RegimeCapturing``.
     :ivar wall_friction_tuning_factor:
         Multiplier applied to the wall friction factors of the pipe.
         Must be positive. Defaults to 1.0 (no change).
