@@ -2181,6 +2181,11 @@ well_description_schema = Map(
         Optional("environment"): environment_description_schema,
         Optional("initial_conditions"): initial_conditions_description_schema,
         Optional("equipment"): equipment_description_schema,
+        Optional("flow_pattern_model"): Enum(['unit_cell', 'regime_capturing']),
+        Optional("regime_capturing_mesh_threshold"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
         Optional("wall_friction_tuning_factor"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
@@ -2212,4 +2217,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 4e8e1a1e85ea8f992de72cd997c20f5d)
+# [[[end]]] (checksum: b1cd2bdc539d1aa9fa5ab12359a9f9da)

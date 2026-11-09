@@ -1000,12 +1000,14 @@ def test_obtain_case_description_with_array_exprs(datadir: Path) -> None:
     )
 
 
+PIPE_AND_WELL_DESCRIPTIONS_AND_SCHEMAS = [
+    (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
+    (filled_case_descriptions.WELL_DESCRIPTION, schema.well_description_schema),
+]
+
+
 @pytest.mark.parametrize(
-    "base_description, description_schema",
-    [
-        (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
-        (filled_case_descriptions.WELL_DESCRIPTION, schema.well_description_schema),
-    ],
+    "base_description, description_schema", PIPE_AND_WELL_DESCRIPTIONS_AND_SCHEMAS
 )
 def test_load_friction_tuning_factor_exprs(
     alfacase_to_case_helper,
@@ -1034,14 +1036,12 @@ def test_load_friction_tuning_factor_exprs(
 
 
 @pytest.mark.parametrize(
-    "base_description, description_schema",
-    [
-        (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
-    ],
+    "base_description, description_schema", PIPE_AND_WELL_DESCRIPTIONS_AND_SCHEMAS
 )
 def test_load_regime_capturing_mesh_threshold_expr(
     alfacase_to_case_helper,
-    base_description: case_description.PipeDescription,
+    base_description: case_description.PipeDescription
+    | case_description.WellDescription,
     description_schema: strictyaml.Map,
 ) -> None:
     threshold_expr = ScalarExpression(
@@ -1061,14 +1061,12 @@ def test_load_regime_capturing_mesh_threshold_expr(
 
 
 @pytest.mark.parametrize(
-    "base_description, description_schema",
-    [
-        (filled_case_descriptions.PIPE_DESCRIPTION, schema.pipe_description_schema),
-    ],
+    "base_description, description_schema", PIPE_AND_WELL_DESCRIPTIONS_AND_SCHEMAS
 )
 def test_load_flow_pattern_model_defaults(
     alfacase_to_case_helper,
-    base_description: case_description.PipeDescription,
+    base_description: case_description.PipeDescription
+    | case_description.WellDescription,
     description_schema: strictyaml.Map,
 ) -> None:
     """
