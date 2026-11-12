@@ -671,6 +671,8 @@ PIPE_DESCRIPTION = case_description.PipeDescription(
     segments=PIPE_WALL_DESCRIPTION,
     source="mass_source_node",
     target="pressure_node",
+    flow_pattern_model=constants.FlowPatternModel.RegimeCapturing,
+    regime_capturing_mesh_threshold=Scalar("dimensionless", 0.5, "-"),
     wall_friction_tuning_factor=Scalar("dimensionless", 1.1, "-"),
     interfacial_friction_tuning_factor=Scalar("dimensionless", 0.9, "-"),
 )
@@ -710,6 +712,8 @@ WELL_DESCRIPTION = case_description.WellDescription(
     environment=ENVIRONMENT_DESCRIPTION,
     initial_conditions=INITIAL_CONDITIONS_DESCRIPTION,
     equipment=WELL_EQUIPMENT_DESCRIPTION,
+    flow_pattern_model=constants.FlowPatternModel.RegimeCapturing,
+    regime_capturing_mesh_threshold=Scalar("dimensionless", 0.7, "-"),
     wall_friction_tuning_factor=Scalar("dimensionless", 1.2, "-"),
     interfacial_friction_tuning_factor=Scalar("dimensionless", 0.8, "-"),
 )

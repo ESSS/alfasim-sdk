@@ -2255,6 +2255,11 @@ well_description_schema = Map(
         Optional("environment"): environment_description_schema,
         Optional("initial_conditions"): initial_conditions_description_schema,
         Optional("equipment"): equipment_description_schema,
+        Optional("flow_pattern_model"): Enum(['unit_cell', 'regime_capturing']),
+        Optional("regime_capturing_mesh_threshold"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
         Optional("wall_friction_tuning_factor"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),

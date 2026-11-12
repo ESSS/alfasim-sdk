@@ -2132,6 +2132,11 @@ def _validate_positive_tuning_factor(
 @attr.s(slots=True, auto_attribs=True)
 class PipeDescription:
     """
+    :ivar flow_pattern_model:
+        Model used to identify the flow pattern along the pipe.
+    :ivar regime_capturing_mesh_threshold:
+        Mesh threshold used by the regime capturing model. Only used when
+        ``flow_pattern_model`` is ``FlowPatternModel.RegimeCapturing``.
     :ivar wall_friction_tuning_factor:
         Multiplier applied to the wall friction factors of the pipe.
         Must be positive. Defaults to 1.0 (no change).
@@ -2613,6 +2618,12 @@ class AnnulusDescription:
 @attr.s(slots=True, kw_only=True, auto_attribs=True)
 class WellDescription:
     """
+    :ivar flow_pattern_model:
+        Model used to identify the flow pattern along the well tubing. The annulus, if
+        any, uses the same model.
+    :ivar regime_capturing_mesh_threshold:
+        Mesh threshold used by the regime capturing model. Only used when
+        ``flow_pattern_model`` is ``FlowPatternModel.RegimeCapturing``.
     :ivar wall_friction_tuning_factor:
         Multiplier applied to the wall friction factors of the well.
         Must be positive. Defaults to 1.0 (no change).
@@ -2639,6 +2650,12 @@ class WellDescription:
         InitialConditionsDescription
     )
     equipment: EquipmentDescription = attrib_instance(EquipmentDescription)
+    flow_pattern_model: constants.FlowPatternModel = attrib_enum(
+        default=constants.FlowPatternModel.UnitCell
+    )
+    regime_capturing_mesh_threshold: ScalarDescriptionType = attrib_scalar(
+        default=Scalar(0.0, "-")
+    )
     wall_friction_tuning_factor: ScalarDescriptionType = attrib_scalar(
         default=Scalar("dimensionless", 1.0, "-")
     )
