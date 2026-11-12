@@ -451,7 +451,7 @@ mass_source_equipment_description_schema = Map(
                 "domain": Map({"values": Seq(Float()), "unit": Str()}),
             }
         ),
-        Optional("source_type"): Enum(['mass_source_type_mass_flow_rates', 'mass_source_type_all_volumetric_flow_rates', 'mass_source_type_flow_rate_oil_gor_wc', 'mass_source_type_flow_rate_gas_gor_wc', 'mass_source_type_flow_rate_water_gor_wc', 'mass_source_type_total_mass_flow_rate_pvt_split']),
+        Optional("source_type"): Enum(['mass_source_type_mass_flow_rates', 'mass_source_type_all_volumetric_flow_rates', 'mass_source_type_flow_rate_oil_gor_wc', 'mass_source_type_flow_rate_gas_gor_wc', 'mass_source_type_flow_rate_water_gor_wc', 'mass_source_type_flow_rate_liquid_glr_wc', 'mass_source_type_total_mass_flow_rate_pvt_split']),
         Optional("volumetric_flow_rates_std_input_type"): Enum(['constant', 'curve']),
         Optional("volumetric_flow_rates_std"): MapPattern(
             Str(),
@@ -514,6 +514,28 @@ mass_source_equipment_description_schema = Map(
             Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_ratio_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("liquid_volumetric_flow_rate_std_input_type"): Enum(['constant', 'curve']),
+        Optional("liquid_volumetric_flow_rate_std"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("liquid_volumetric_flow_rate_std_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("gas_liquid_ratio_input_type"): Enum(['constant', 'curve']),
+        Optional("gas_liquid_ratio"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("gas_liquid_ratio_curve"): Map(
             {
                 "image": Map({"values": Seq(Float()), "unit": Str()}),
                 "domain": Map({"values": Seq(Float()), "unit": Str()}),
@@ -543,7 +565,7 @@ mass_source_node_properties_description_schema = Map(
                 "domain": Map({"values": Seq(Float()), "unit": Str()}),
             }
         ),
-        Optional("source_type"): Enum(['mass_source_type_mass_flow_rates', 'mass_source_type_all_volumetric_flow_rates', 'mass_source_type_flow_rate_oil_gor_wc', 'mass_source_type_flow_rate_gas_gor_wc', 'mass_source_type_flow_rate_water_gor_wc', 'mass_source_type_total_mass_flow_rate_pvt_split']),
+        Optional("source_type"): Enum(['mass_source_type_mass_flow_rates', 'mass_source_type_all_volumetric_flow_rates', 'mass_source_type_flow_rate_oil_gor_wc', 'mass_source_type_flow_rate_gas_gor_wc', 'mass_source_type_flow_rate_water_gor_wc', 'mass_source_type_flow_rate_liquid_glr_wc', 'mass_source_type_total_mass_flow_rate_pvt_split']),
         Optional("volumetric_flow_rates_std_input_type"): Enum(['constant', 'curve']),
         Optional("volumetric_flow_rates_std"): MapPattern(
             Str(),
@@ -606,6 +628,28 @@ mass_source_node_properties_description_schema = Map(
             Map({"expr": Str(), "unit": Str()}),
         ),
         Optional("gas_oil_ratio_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("liquid_volumetric_flow_rate_std_input_type"): Enum(['constant', 'curve']),
+        Optional("liquid_volumetric_flow_rate_std"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("liquid_volumetric_flow_rate_std_curve"): Map(
+            {
+                "image": Map({"values": Seq(Float()), "unit": Str()}),
+                "domain": Map({"values": Seq(Float()), "unit": Str()}),
+            }
+        ),
+        Optional("gas_liquid_ratio_input_type"): Enum(['constant', 'curve']),
+        Optional("gas_liquid_ratio"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("gas_liquid_ratio_curve"): Map(
             {
                 "image": Map({"values": Seq(Float()), "unit": Str()}),
                 "domain": Map({"values": Seq(Float()), "unit": Str()}),
@@ -2217,4 +2261,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: b1cd2bdc539d1aa9fa5ab12359a9f9da)
+# [[[end]]] (checksum: 2745e470c26e046cbb580322f3cec292)
