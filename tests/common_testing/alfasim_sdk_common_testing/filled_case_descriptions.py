@@ -225,6 +225,8 @@ MASS_SOURCE_DESCRIPTION = case_description.MassSourceEquipmentDescription(
     position=Scalar(10, "m"),
     gas_oil_ratio=Scalar(100.0, "sm3/sm3", get_category_for("sm3/sm3")),
     water_cut=Scalar(0.2, "-", "volume fraction"),
+    gas_liquid_ratio=Scalar(80.0, "sm3/sm3", get_category_for("sm3/sm3")),
+    liquid_volumetric_flow_rate_std=Scalar(41.0, "sm3/d"),
     volumetric_flow_rates_std_input_type=constants.MultiInputType.Constant,
     volumetric_flow_rates_std={
         "gas": Scalar(1000.5, "sm3/d"),
@@ -273,6 +275,15 @@ MASS_SOURCE_NODE_PROPERTIES_DESCRIPTION = (
         source_type=constants.MassSourceType.TotalMassFlowRatePvtSplit,
         total_mass_flow_rate_input_type=constants.MultiInputType.Constant,
         total_mass_flow_rate=Scalar(0.05, "kg/s"),
+        liquid_volumetric_flow_rate_std_input_type=constants.MultiInputType.Curve,
+        liquid_volumetric_flow_rate_std_curve=Curve(
+            Array([70.0, 90.0], "sm3/d"), Array([0, 10], "s")
+        ),
+        gas_liquid_ratio_input_type=constants.MultiInputType.Curve,
+        gas_liquid_ratio_curve=Curve(
+            Array([10.0, 12.0], "sm3/sm3", get_category_for("sm3/sm3")),
+            Array([0, 10], "s"),
+        ),
         volumetric_flow_rates_std={
             constants.FLUID_GAS: Scalar(10.0, "sm3/d"),
             constants.FLUID_OIL: Scalar(20, "sm3/d"),
