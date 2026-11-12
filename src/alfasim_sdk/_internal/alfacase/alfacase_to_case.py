@@ -1988,6 +1988,10 @@ def load_pipe_description(
         "target": load_value,
         "source_port": get_enum_loader(enum_class=constants.WellConnectionPort),
         "target_port": get_enum_loader(enum_class=constants.WellConnectionPort),
+        "wall_friction_tuning_factor": get_scalar_loader(category="dimensionless"),
+        "interfacial_friction_tuning_factor": get_scalar_loader(
+            category="dimensionless"
+        ),
     }
 
     def generate_pipes_description(document: DescriptionDocument):
@@ -2016,6 +2020,10 @@ def load_well_description(
         "environment": load_environment_description,
         "equipment": load_equipment_description,
         "formation": load_formation_description,
+        "wall_friction_tuning_factor": get_scalar_loader(category="dimensionless"),
+        "interfacial_friction_tuning_factor": get_scalar_loader(
+            category="dimensionless"
+        ),
     }
 
     def generate_wells_description(document: DescriptionDocument):

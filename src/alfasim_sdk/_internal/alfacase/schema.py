@@ -2147,6 +2147,14 @@ pipe_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
+        Optional("wall_friction_tuning_factor"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("interfacial_friction_tuning_factor"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
     }
 )
 pvt_models_description_schema = Map(
@@ -2173,6 +2181,14 @@ well_description_schema = Map(
         Optional("environment"): environment_description_schema,
         Optional("initial_conditions"): initial_conditions_description_schema,
         Optional("equipment"): equipment_description_schema,
+        Optional("wall_friction_tuning_factor"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
+        Optional("interfacial_friction_tuning_factor"): UnsafeOrValidator(
+            Map({"value": Float(), "unit": Str()}),
+            Map({"expr": Str(), "unit": Str()}),
+        ),
     }
 )
 case_description_schema = Map(
@@ -2196,4 +2212,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 0584177e10e6eb81f5430b41145e0bab)
+# [[[end]]] (checksum: 4e8e1a1e85ea8f992de72cd997c20f5d)
