@@ -364,6 +364,13 @@ class _MassSourceCommon:
             - constants.MassSourceType.FlowRateGasGorWc
             - constants.MassSourceType.FlowRateOilGorWc
             - constants.MassSourceType.FlowRateWaterGorWc
+            - constants.MassSourceType.FlowRateLiquidGlrWc
+
+    :ivar liquid_volumetric_flow_rate_std:
+        Used when source_type == constants.MassSourceType.FlowRateLiquidGlrWc
+
+    :ivar gas_liquid_ratio:
+        Used when source_type == constants.MassSourceType.FlowRateLiquidGlrWc
 
     .. include:: /alfacase_definitions/list_of_unit_for_temperature.txt
     .. include:: /alfacase_definitions/list_of_unit_for_volume_flow_rate.txt
@@ -470,6 +477,34 @@ class _MassSourceCommon:
     )
     # fmt: on
     # [[[end]]] (checksum: 437a943db2f8976e463c22301c8e0f4b)
+
+    # [[[cog
+    # cog_out_multi_input("liquid_volumetric_flow_rate_std", "standard volume per time", 0.0, "sm3/d")
+    # ]]]
+    # fmt: off
+    liquid_volumetric_flow_rate_std_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
+    liquid_volumetric_flow_rate_std: ScalarDescriptionType = attrib_scalar(
+        default=Scalar('standard volume per time', 0.0, 'sm3/d')
+    )
+    liquid_volumetric_flow_rate_std_curve: Curve = attrib_curve(
+        default=Curve(Array('standard volume per time', [], 'sm3/d'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: 5517f9f8eed4e30c601869581cf10a0c)
+
+    # [[[cog
+    # cog_out_multi_input("gas_liquid_ratio", "standard volume per standard volume", 0.0, "sm3/sm3")
+    # ]]]
+    # fmt: off
+    gas_liquid_ratio_input_type: constants.MultiInputType = attrib_enum(default=constants.MultiInputType.Constant)
+    gas_liquid_ratio: ScalarDescriptionType = attrib_scalar(
+        default=Scalar('standard volume per standard volume', 0.0, 'sm3/sm3')
+    )
+    gas_liquid_ratio_curve: Curve = attrib_curve(
+        default=Curve(Array('standard volume per standard volume', [], 'sm3/sm3'), Array('time', [], 's'))
+    )
+    # fmt: on
+    # [[[end]]] (checksum: ef3ee0d56ef9098755c542250aa956cb)
 
 
 @attr.s(kw_only=True, auto_attribs=True)

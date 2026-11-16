@@ -223,6 +223,7 @@ class MassSourceType(Enum):
     FlowRateOilGorWc = "mass_source_type_flow_rate_oil_gor_wc"
     FlowRateGasGorWc = "mass_source_type_flow_rate_gas_gor_wc"
     FlowRateWaterGorWc = "mass_source_type_flow_rate_water_gor_wc"
+    FlowRateLiquidGlrWc = "mass_source_type_flow_rate_liquid_glr_wc"
     TotalMassFlowRatePvtSplit = "mass_source_type_total_mass_flow_rate_pvt_split"
 
 
