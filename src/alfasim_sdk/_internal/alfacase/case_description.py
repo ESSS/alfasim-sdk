@@ -1603,9 +1603,6 @@ class NearWellEquipmentDescription:
         default=Scalar("dimensionless", 1.0, "-")
     )
 
-    initial_pressure: ScalarDescriptionType = attrib_scalar(
-        default=Scalar("pressure", 60.0, "bar")
-    )
     initial_temperature: ScalarDescriptionType = attrib_scalar(
         default=Scalar("temperature", 50.0, "degC")
     )

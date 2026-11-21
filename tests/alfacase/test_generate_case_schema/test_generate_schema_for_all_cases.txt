@@ -782,10 +782,6 @@ near_well_equipment_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("initial_pressure"): UnsafeOrValidator(
-            Map({"value": Float(), "unit": Str()}),
-            Map({"expr": Str(), "unit": Str()}),
-        ),
         Optional("initial_temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
