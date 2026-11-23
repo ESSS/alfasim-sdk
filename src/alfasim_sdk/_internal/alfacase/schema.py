@@ -934,6 +934,7 @@ physics_description_schema = Map(
         Optional("correlations_package"): Enum(['correlation_package_classical', 'correlation_package_alfasim', 'correlation_package_isdb_tests']),
         Optional("fluid_material_convection_correlation"): Enum(['Hasan and Kabir 1994', 'Hasan and Kabir 2002', 'Fuzong Zhou 2013', 'Holman 1981']),
         Optional("steady_state_guess_initialization"): Enum(['quasi_hydrostatic', 'user_defined']),
+        Optional("inner_heat_transfer_conduction_enabled"): Bool(),
     }
 )
 pig_equipment_description_schema = Map(
@@ -2261,4 +2262,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 2745e470c26e046cbb580322f3cec292)
+# [[[end]]] (checksum: fff2119674d65e6c4db54168d68fca8c)

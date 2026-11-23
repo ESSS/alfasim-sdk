@@ -757,6 +757,7 @@ PHYSICS_DESCRIPTION = case_description.PhysicsDescription(
     emulsion_droplet_size_model=constants.EmulsionDropletSizeModelType.Brauner2001,
     emulsion_inversion_point_model=constants.EmulsionInversionPointModelType.Brinkman1952AndYeh1964,
     flash_model=constants.FlashModel.HydrocarbonOnly,
+    inner_heat_transfer_conduction_enabled=True,
 )
 
 NUMERICAL_OPTIONS_DESCRIPTION = case_description.NumericalOptionsDescription(
