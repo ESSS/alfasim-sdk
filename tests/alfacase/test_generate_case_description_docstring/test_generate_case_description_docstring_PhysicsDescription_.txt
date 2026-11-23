@@ -29,6 +29,7 @@
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  = CorrelationPackageType.Classical
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  = FluidMaterialConvectionCorrelation.HasanKabir1994
             steady_state_guess_initialization: \ :class:`SteadyStateGuessInitializationType <alfasim_sdk._internal.constants.SteadyStateGuessInitializationType>`\  = SteadyStateGuessInitializationType.QuasiHydrostatic
+            inner_heat_transfer_conduction_enabled: bool = False
 
 .. tab:: Schema
 
@@ -78,3 +79,4 @@
             correlations_package: \ :class:`CorrelationPackageType <alfasim_sdk._internal.constants.CorrelationPackageType>`\  # optional
             fluid_material_convection_correlation: \ :class:`FluidMaterialConvectionCorrelation <alfasim_sdk._internal.constants.FluidMaterialConvectionCorrelation>`\  # optional
             steady_state_guess_initialization: \ :class:`SteadyStateGuessInitializationType <alfasim_sdk._internal.constants.SteadyStateGuessInitializationType>`\  # optional
+            inner_heat_transfer_conduction_enabled: boolean  # optional

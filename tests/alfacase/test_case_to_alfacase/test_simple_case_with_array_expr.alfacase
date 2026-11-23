@@ -47,6 +47,7 @@ physics:
   correlations_package: correlation_package_classical
   fluid_material_convection_correlation: Hasan and Kabir 1994
   steady_state_guess_initialization: quasi_hydrostatic
+  inner_heat_transfer_conduction_enabled: False
 time_options:
   stop_on_steady_state: False
   automatic_restart_autosave_frequency: True

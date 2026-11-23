@@ -4128,6 +4128,9 @@ class PhysicsDescription:
             default=constants.SteadyStateGuessInitializationType.QuasiHydrostatic
         )
     )
+    inner_heat_transfer_conduction_enabled: bool = attr.ib(
+        default=False, validator=instance_of(bool)
+    )
 
 
 @attr.s(auto_attribs=True)
