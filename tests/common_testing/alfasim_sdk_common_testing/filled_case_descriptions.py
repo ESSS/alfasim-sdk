@@ -188,7 +188,6 @@ NEAR_WELL_DESCRIPTION = case_description.NearWellEquipmentDescription(
     oil_corey_exponent=Scalar("dimensionless", 2.5, "-"),
     water_corey_endpoint=Scalar("dimensionless", 0.4, "-"),
     oil_corey_endpoint=Scalar("dimensionless", 0.9, "-"),
-    initial_pressure=Scalar("pressure", 250.0, "bar"),
     initial_temperature=Scalar("temperature", 85.0, "degC"),
     initial_composition_type=constants.NearWellCompositionType.OilMassFraction,
     initial_composition=Scalar("dimensionless", 0.75, "-"),

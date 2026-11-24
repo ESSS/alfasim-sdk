@@ -774,10 +774,6 @@ near_well_equipment_description_schema = Map(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
         ),
-        Optional("initial_pressure"): UnsafeOrValidator(
-            Map({"value": Float(), "unit": Str()}),
-            Map({"expr": Str(), "unit": Str()}),
-        ),
         Optional("initial_temperature"): UnsafeOrValidator(
             Map({"value": Float(), "unit": Str()}),
             Map({"expr": Str(), "unit": Str()}),
@@ -2261,4 +2257,4 @@ case_description_schema = Map(
         Optional("multiple_runs"): multiple_runs_description_schema,
     }
 )
-# [[[end]]] (checksum: 2745e470c26e046cbb580322f3cec292)
+# [[[end]]] (checksum: d0c378c1c4fd4f4d386cc948917dbcd6)
